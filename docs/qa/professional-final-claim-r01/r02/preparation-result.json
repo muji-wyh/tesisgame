@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "status": "completed_once_proposal_unexecuted",
+  "started_at": "2026-10-16T20:27:49.419Z",
+  "completed_at": "2026-10-16T20:27:51.375Z",
+  "source_sha256": "6313310db8ef55a7619276b5e6a0b0cd6f8289ab88cb3e774d3d51a56237e62e",
+  "executed_source_equality_verified": true,
+  "predecessor_source_files_verified": 7,
+  "predecessor_attempt_files_verified": 13,
+  "inherited_inputs_verified": 559,
+  "inherited_input_drift": 0,
+  "retained_json_deep_equal": true,
+  "godot_parser_run": false,
+  "native_or_runner_dispatch": false,
+  "production_mutated": false
+}

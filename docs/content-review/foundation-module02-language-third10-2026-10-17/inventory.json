@@ -1,0 +1,383 @@
+{
+  "schema": 1,
+  "status": "transaction_afterimage_inventory_excluding_self_and_postcommit_evidence",
+  "files": [
+    {
+      "path": "data/professional/provenance/foundation-module02-language-third10-2026-10-17.json",
+      "sha256": "f264f845f89647880ea280aff7fcbadc66b6c28bb4c52f7aba5a950b7518213d",
+      "bytes": 1059797
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/committed-evidence.test.cjs",
+      "sha256": "7b3bb20de53ac5cc50f3632ae7f5a6e945abfaabe91ab76a762b78be8fd5219a",
+      "bytes": 477
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/evidence-contract.cjs",
+      "sha256": "6ab049a0544a0b5cc6e2db711bbdc91b6c84f9ec4ef68846c9180b355504e18c",
+      "bytes": 21458
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained-files.json",
+      "sha256": "54dc926169c7c472c722980a35215c367cf188ede00171806c8609b36fad5bd7",
+      "bytes": 27990
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/guarded-transaction.cjs",
+      "sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "bytes": 21544
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-proposal-r02/author-inventory.json",
+      "sha256": "174d4f9e7b1570a6199361f5fd3ab8e750e9bf3619ca0080b22653d1ba52bd35",
+      "bytes": 1618
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-proposal-r02/commit.cjs",
+      "sha256": "20ff01bea2ea5027abbe7d02459a9e6caf24e74ea85d22e678bc813545476824",
+      "bytes": 8705
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-proposal-r02/committed-evidence.test.cjs",
+      "sha256": "7b3bb20de53ac5cc50f3632ae7f5a6e945abfaabe91ab76a762b78be8fd5219a",
+      "bytes": 477
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-proposal-r02/evidence-contract.cjs",
+      "sha256": "6ab049a0544a0b5cc6e2db711bbdc91b6c84f9ec4ef68846c9180b355504e18c",
+      "bytes": 21458
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-proposal-r02/INPUTS.md",
+      "sha256": "f737e4cfcc3596d746eea48dcc819998c87d81e49c1eb84d2124f292f12b9081",
+      "bytes": 7967
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-proposal-r02/root-commit-input.example.json",
+      "sha256": "809ed1296b0221fad47fc8cc1383d87bb07f4c703fb0e34a39ee0cecb48c353c",
+      "bytes": 1259
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r01/result.json",
+      "sha256": "cb83dc13933486d7ce6c7d9a78ea37dc490609281bb2f50800bcc42ec7b6663d",
+      "bytes": 133647
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r01/start.json",
+      "sha256": "18a56787e2274695ffb641d40c29ad460acf2f9fbf8ce7ec861b95507f7f5893",
+      "bytes": 120653
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r02/result.json",
+      "sha256": "7abb85e5c5b6e2a8cb38d344655198176e2eb7a2e532ecbf8a462ac34d20bf6c",
+      "bytes": 133093
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r02/start.json",
+      "sha256": "43a47a7098f8f4b4148ce287bb02690e42b5cdcd9c42cb3274372fc79c738af2",
+      "bytes": 121911
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r01/inventory.json",
+      "sha256": "827b5cdfd2fc2ca486734b4713c306aedee34159d3f7ec4e81705e7d121ea0d3",
+      "bytes": 5115
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r01/probe.cjs",
+      "sha256": "3625a6202b7a22b95f19982ec84ee74839acb437ea92975eaa8f6d9f14c94ec2",
+      "bytes": 20961
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r01/README.md",
+      "sha256": "b2f278380172c6d01253838bada2f83fc6cc91fe0bffb23b605966e3d1c6199b",
+      "bytes": 4886
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r01/review.json",
+      "sha256": "e599598db023bd1d34448e07010917647a62c2aee6a62844543f956ea5fb7cae",
+      "bytes": 2822
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r02/evidence-verification.json",
+      "sha256": "0e6dfdd49382e271fc046cbac02e3d35a4b304db01adabf875dfe59298ee1645",
+      "bytes": 5279
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r02/README.md",
+      "sha256": "9b6ecc91d57e9f629bd351ccd57ac661cf8e42929713e17666207667087bfef1",
+      "bytes": 3216
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r02/review.json",
+      "sha256": "60c63318b1a1987ad4065f44e0cec58a55c4a6d7563223555d81bf4a767394cb",
+      "bytes": 6648
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-commit-review-r02/static-review.json",
+      "sha256": "ce0f56c110873fa4fb49b43bec2004987dc28e0bcb329b3f0befaf997c55d8a8",
+      "bytes": 4488
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/author-inventory.json",
+      "sha256": "86e566de767f23aa074db5c1fa276efec30a053674af9ca9791af4fe5498c653",
+      "bytes": 2693
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/accepted-language.json",
+      "sha256": "33302bdeec9ef12a96d498ad1aff76ce48916d48d001ebce7fd691022d4a36dd",
+      "bytes": 1028865
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/execution-end.json",
+      "sha256": "57a1124ab9387dd983ad63297d4e6d90dfa01492146a71845e6c04f7a87dbb09",
+      "bytes": 1414
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/execution-start.json",
+      "sha256": "72cf0abbb0248b38dc8a33c1f80412e9960c1bae6c7f3e1e43272238b68916bf",
+      "bytes": 1566
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/foundation-module02.json.after",
+      "sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad",
+      "bytes": 267505
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/foundation-module02.json.before",
+      "sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41",
+      "bytes": 220456
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/measured-inputs-before.json",
+      "sha256": "05d09b1d120f500e118e39f5915794eb4ba3cb5fc1399fc1773a7f2c015b29a6",
+      "bytes": 84822
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/preparation-receipt.json",
+      "sha256": "85dbe20d23ef135b2aad24b64834b3adf50b711962ac2f0ed43b526db7868ec4",
+      "bytes": 160867
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/professional_retail_morphology_tests.gd.after",
+      "sha256": "226160e3d454d1d19f2bb1c4e81a0c9749dcd354e4a8a71f21799f9ede0eb945",
+      "bytes": 111030
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/professional_retail_morphology_tests.gd.before",
+      "sha256": "7cd10db267b373fea44ac287924ef67de0d47fa13d4a5c4e2c299afaeea6008c",
+      "bytes": 107018
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/professional-content.test.cjs.after",
+      "sha256": "7ed495e35df7d66d646ba8a0090aee32e81b51759e278defc07da71f61e9473b",
+      "bytes": 332257
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/professional-content.test.cjs.before",
+      "sha256": "64d754533e5b7aa329ab4c044bce454e7c641fa6afe0257e7f76134586c67fa7",
+      "bytes": 321015
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/professional-retail-morphology.test.cjs.after",
+      "sha256": "04a5d72b3a7c5e3add28ef23e5e1db23fb30bcfd74d79a2e69efd28874c08282",
+      "bytes": 85308
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/professional-retail-morphology.test.cjs.before",
+      "sha256": "c7bc3e1448ee006c6441c9cf1eb0fb3be875efc9c762f1a78d9c0c478a62135f",
+      "bytes": 83238
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/projection-checks.json",
+      "sha256": "b61a838e1d385f710b2eebad8735b91f4a3d274482b6e238f9c39e53aa477295",
+      "bytes": 45978
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/sources.json.after",
+      "sha256": "268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58",
+      "bytes": 781399
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/sources.json.before",
+      "sha256": "148f9191f91891a564bb79dbce428c60b3b4b1a07e1374135cc0d6a0619165b9",
+      "bytes": 745572
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/execution-r01/test-patches.json",
+      "sha256": "406c042bf15604cc4da75f40560a763f09659e267adf6dff162533b96aa8db3e",
+      "bytes": 6986
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/HANDOFF.md",
+      "sha256": "9e3446444a8b4ec8b8e285331852616d7abe9f088df3fd530abd5294631b3e17",
+      "bytes": 5816
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/input-pins.json",
+      "sha256": "b47f2ded5171cf76c3426fb65cfe38dd1356fc51aab64504951dc47ad20b6837",
+      "bytes": 4572
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/prepare.cjs",
+      "sha256": "f318e537c4b8d7f332a6ca98f15cd6054711a33d649d3b5de9cb0ad36dc96c8a",
+      "bytes": 8828
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/projection.cjs",
+      "sha256": "ad1143ca6951aa7851a0991fd7fc61711cfe7fc13516557f99b07c99e5b7a4f5",
+      "bytes": 16981
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/test-transforms.cjs",
+      "sha256": "f311764bac315212c3e24f22fe799c69bd151ff96331192187d4988fd80cd52f",
+      "bytes": 19215
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-preparation-r01/TRANSACTION.md",
+      "sha256": "e597a6d497697abb8421b477f5c89b19be040231dfb25849544e3b8a36d5c9bb",
+      "bytes": 7482
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-delivery-static-review-r01/report.md",
+      "sha256": "3474eda1dd4142ccaedaa9a0673ae3a60b28fccead26a64278ce6b07ff23bee7",
+      "bytes": 5954
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-prepared-review-r01/binding.json",
+      "sha256": "3139e35a051f9fd4eb38dfca0b122fedc87bf602784c621ce56415006c37ad44",
+      "bytes": 166547
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-prepared-review-r01/inspect.cjs",
+      "sha256": "4b0b98d340a836f96db69008da720e8a4739106ab2b923fd86dd51522019af3a",
+      "bytes": 13823
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-prepared-review-r01/inspection.json",
+      "sha256": "c805a2a7229a22592e5556709ba8de00af8eef0a3bd170fcbd4d442e6cd414cb",
+      "bytes": 8069
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-prepared-review-r01/review.json",
+      "sha256": "f56dc5115e95c76ffd61a32a875ab42ad25bb911e014a5561d08c21075743507",
+      "bytes": 8656
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-root-prepare-r01/execution/command-1.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-root-prepare-r01/execution/command-2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-root-prepare-r01/execution/command-3.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-root-prepare-r01/execution/command-4.log",
+      "sha256": "0510cee05e8016089dc00427c5eb9b14272f2f6dbc9df3bfc64ed66193dd3a57",
+      "bytes": 294
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-root-prepare-r01/execution/receipt.json",
+      "sha256": "e67c73a1197237ba2b0cb4ef1d720d603fef0cbd3343fd162075cc591e902e9d",
+      "bytes": 5136
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-root-prepare-r01/invoke.cjs",
+      "sha256": "019e3ad19608824b6e43c48db4c2b750b00ebeb4feaefc2402e2f83859fcc2ad",
+      "bytes": 3007
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/baseline/command-1.log",
+      "sha256": "1fbaf9802773cf2d3c72882f5337c363eb280ca08b6a4e2e6a7e03042b55f4ad",
+      "bytes": 23427
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/baseline/command-2.log",
+      "sha256": "8124d5f953fa561bb76db3d0b177a20b19b33832f00763ebc51c0bf3c91daa4d",
+      "bytes": 130
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/baseline/receipt.json",
+      "sha256": "3a2873b6be182b117e83ff516d2aae68b8d8603462ff921c196a5f9c5c69a687",
+      "bytes": 85988
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/candidate-command.log",
+      "sha256": "c7024aceb937cf2f027a86bd4e94df1ac7a9fba1aedb61d878a6751653e5a509",
+      "bytes": 1548
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/candidate-start.json",
+      "sha256": "f52bc40037648378a5c23d6625061cdd7b14a6f8e1280dd185199be2bf56aac7",
+      "bytes": 1145
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/candidate/command-1.log",
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "bytes": 73
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/candidate/command-2.log",
+      "sha256": "e3d9702396ad1581242c30762bf38a29e2fdba813db35be19060646bb32bf028",
+      "bytes": 130
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/candidate/copied-inputs.json",
+      "sha256": "2ec12fad03e5d40aa23864c686a7910856916e44bd0e3de50474c136f2e338a5",
+      "bytes": 108961
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/candidate/receipt.json",
+      "sha256": "fcba82f121c313f79e50f8a11c6c047ea27d878e6025d5c631a35643fdcb6abc",
+      "bytes": 86328
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/executed-source-observed.cjs",
+      "sha256": "38b8936ad6a325fb9c4078e7ef977010fa5a3cc5ce18631d01b1998288bb98fd",
+      "bytes": 6633
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/invoke.cjs",
+      "sha256": "38b8936ad6a325fb9c4078e7ef977010fa5a3cc5ce18631d01b1998288bb98fd",
+      "bytes": 6633
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/root-witness.json",
+      "sha256": "8751130cf9903e8fee5641f4ab679528944332bdc479b28620b2f1a7630f215e",
+      "bytes": 2614
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/run-candidate.cjs",
+      "sha256": "02d30688ef3f5387abb965249c30f3ed9200d1fb6ebb468cf96709d31d1be234",
+      "bytes": 3766
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/foundation02-third10-scoped-validation-r01/source-observation.json",
+      "sha256": "04d08c0191d2aa2c49a6354938b8105ff473a8c95dc1c7a735047af3f21b716d",
+      "bytes": 883
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/retained/build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+      "sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+      "bytes": 1638
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/root-commit-input.json",
+      "sha256": "8b0f70e5009f00603e15743ae5ede56886db03eec99a3431386ddacf5d98320f",
+      "bytes": 1371
+    }
+  ],
+  "self_excluded": true,
+  "postcommit_evidence_files": [
+    "docs/content-review/foundation-module02-language-third10-2026-10-17/execution-start.json",
+    "docs/content-review/foundation-module02-language-third10-2026-10-17/transaction-intent.json",
+    "docs/content-review/foundation-module02-language-third10-2026-10-17/commit-receipt.json",
+    "docs/content-review/foundation-module02-language-third10-2026-10-17/postcommit-inventory.json"
+  ]
+}

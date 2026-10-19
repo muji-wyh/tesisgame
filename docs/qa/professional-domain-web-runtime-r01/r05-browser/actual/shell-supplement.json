@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "ok": true,
+  "started_at": "2026-10-16T20:59:29.640Z",
+  "finished_at": "2026-10-16T20:59:30.291Z",
+  "stage": "copy_existing_export_and_change_shell_resize_policy",
+  "harness_inventory": {
+    "path": "inventory.json",
+    "bytes": 2060,
+    "sha256": "86978ca1b5921ef3a945c806d0c6c92d25bf2b467c636d820bf8b9c1168e4a24"
+  },
+  "inherited_export_receipt": {
+    "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/export-receipt.json",
+    "bytes": 175806,
+    "sha256": "6af2c3e988b0cec313f8ff73d51d2416618d4cca3ca5302b7a0e8d3198c452bb"
+  },
+  "inherited_inputs": {
+    "path": "inherited-inputs.json",
+    "bytes": 11062,
+    "sha256": "e38f78572410065afc3c5bfc4f8053b332e9c911c6e9af83c1824a72a85af432"
+  },
+  "shell_change": {
+    "file": "index.html",
+    "byte_offset": 4139,
+    "before": {
+      "bytes": 4869,
+      "sha256": "49d50d73655a10c8ce93045d2d491e0740d31837742032bc690989dd879b5177"
+    },
+    "after": {
+      "bytes": 4869,
+      "sha256": "5cd253ab1dc2a2b3deb96fa4cbd383edcfe501aabb5d683c919883a6845847ce"
+    },
+    "exact_before": "\"canvasResizePolicy\":2",
+    "exact_after": "\"canvasResizePolicy\":1",
+    "changed_bytes": 1
+  },
+  "changed_outputs": [
+    "index.html"
+  ],
+  "outputs": [
+    {
+      "path": "index.audio.position.worklet.js",
+      "bytes": 2973,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+    },
+    {
+      "path": "index.audio.worklet.js",
+      "bytes": 7298,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+    },
+    {
+      "path": "index.html",
+      "bytes": 4869,
+      "sha256": "5cd253ab1dc2a2b3deb96fa4cbd383edcfe501aabb5d683c919883a6845847ce"
+    },
+    {
+      "path": "index.js",
+      "bytes": 281121,
+      "sha256": "3e39bb03d73bdfbf927ffb0b58d4a07ef3359c436ae6dca9add84076865cebaf"
+    },
+    {
+      "path": "index.pck",
+      "bytes": 1526148,
+      "sha256": "2ddb1228eaf5126e5983a849edfa2a7be42a2a61f1bdeefe586c15995fc9c01f"
+    },
+    {
+      "path": "index.png",
+      "bytes": 21443,
+      "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+    },
+    {
+      "path": "index.wasm",
+      "bytes": 39509339,
+      "sha256": "7eda98958eb09135a1acb54a4323a00b1a55af1997f15fa1cdc2b93e3df46656"
+    },
+    {
+      "path": "professional-media.js",
+      "bytes": 11851,
+      "sha256": "db9ac8f3aeaaafb8f1ac411a56d56f0bfd6d8ad2862348868d42666d3021630a"
+    },
+    {
+      "path": "professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png",
+      "bytes": 357001,
+      "sha256": "202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+    },
+    {
+      "path": "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+      "bytes": 82598,
+      "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3"
+    },
+    {
+      "path": "professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png",
+      "bytes": 79563,
+      "sha256": "8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8"
+    },
+    {
+      "path": "professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png",
+      "bytes": 120608,
+      "sha256": "afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c"
+    },
+    {
+      "path": "professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png",
+      "bytes": 91063,
+      "sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae"
+    },
+    {
+      "path": "professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+      "bytes": 148338,
+      "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe"
+    },
+    {
+      "path": "professional-progress.js",
+      "bytes": 19082,
+      "sha256": "e1b1ae3f2045c3bfaa4fde84703f30617547817a9409d602444d2c2e4f1ec8c9"
+    }
+  ],
+  "inherited_inputs_unchanged": true,
+  "export_performed": false,
+  "preparation_performed": false,
+  "native_proof_replayed": false,
+  "browser_dispatched": false,
+  "scope": "Copy the reviewed r04 actual Web export; change only the shell canvas resize policy from 2 to 1. This is not a new export or runtime result."
+}

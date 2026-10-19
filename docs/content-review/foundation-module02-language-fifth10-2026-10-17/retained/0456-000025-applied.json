@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 25,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "5eac796ebe7535ea66eefe99f4f8f69c5653a8719ef834ac2f1cc24a25b909b0",
+  "recorded_at": "2026-10-16T22:48:02.680Z",
+  "index": 11,
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-3.log"
+}

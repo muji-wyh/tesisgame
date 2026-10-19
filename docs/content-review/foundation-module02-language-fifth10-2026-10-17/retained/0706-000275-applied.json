@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 275,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "37b360174231e62c1fa0ff12614037a0737c75a4c9a8dda7e4717fd45de1cc69",
+  "recorded_at": "2026-10-16T22:49:02.679Z",
+  "index": 136,
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/finalizer-input-review-r01.json"
+}

@@ -81,6 +81,94 @@ func reset(vocabulary: Array, age_band: String, seed_value: int = -1) -> bool:
 	return true
 
 
+func reset_professional(expressions: Array, seed_value: int = -1) -> bool:
+	# Each occurrence owns a separate movable tile. Equal written tokens remain
+	# interchangeable when assessing the sentence, including repeated articles.
+	var prepared: Array[Dictionary] = []
+	var token_banks: Dictionary = {}
+	var seen: Dictionary = {}
+	for expression in expressions:
+		if not expression is Dictionary or not _valid_expression(expression) or seen.has(expression.id):
+			return _fail("Phrase Builder needs complete expressions with valid token positions.")
+		seen[expression.id] = true
+		var targets: Array[String] = []
+		var bank: Array[Dictionary] = []
+		for token in expression.tokens:
+			var id: String = "%s:token:%d" % [expression.id, token.index]
+			targets.append(id)
+			bank.append({"id": id, "text": token.text, "image": "", "audio": "",
+				"track": "professional", "token_index": token.index})
+		token_banks[expression.id] = bank
+		prepared.append({"id": expression.id, "text": expression.text, "words": targets,
+			"audio": expression.get("audio", expression.get("media", {}).get("audio", {}).get("path", "")),
+			"picture_id": "", "track": "professional", "tokens": expression.tokens.duplicate(true),
+			"focus_lexeme_ids": expression.focus_lexeme_ids.duplicate()})
+	if prepared.size() < QUESTION_COUNT:
+		return _fail("Phrase Builder needs at least three professional expressions.")
+	var rng := RandomNumberGenerator.new()
+	if seed_value < 0:
+		rng.randomize()
+	else:
+		rng.seed = seed_value
+	_shuffle(prepared, rng)
+	var next_questions: Array[Dictionary] = []
+	next_questions.assign(prepared.slice(0, QUESTION_COUNT))
+	var next_banks: Array = []
+	for question in next_questions:
+		var bank: Array[Dictionary] = []
+		bank.assign(token_banks[question.id].duplicate(true))
+		var target_texts: Array = bank.map(func(token: Dictionary) -> String: return token.text.to_lower())
+		var distractors: Array[Dictionary] = []
+		var distractor_texts: Array[String] = []
+		for other in prepared:
+			if other.id == question.id:
+				continue
+			for token in token_banks[other.id]:
+				var normalized: String = str(token.text).to_lower()
+				if not target_texts.has(normalized) and not distractor_texts.has(normalized):
+					distractors.append(token.duplicate(true))
+					distractor_texts.append(normalized)
+		_shuffle(distractors, rng)
+		bank.append_array(distractors.slice(0, mini(DISTRACTOR_COUNT, distractors.size())))
+		_shuffle(bank, rng)
+		_avoid_ordered_targets(bank, question.words)
+		next_banks.append(bank)
+	questions = next_questions
+	_question_options = next_banks
+	question_index = 0
+	completed = 0
+	mistakes = 0
+	error = ""
+	_start_question()
+	changed.emit()
+	return true
+
+
+func _valid_expression(expression: Dictionary) -> bool:
+	for key in ["id", "text"]:
+		if not expression.get(key) is String or str(expression[key]).strip_edges().is_empty():
+			return false
+	if not expression.get("tokens") is Array or expression.tokens.size() < 2 \
+		or not expression.get("focus_lexeme_ids") is Array or expression.focus_lexeme_ids.is_empty():
+		return false
+	var audio: Variant = expression.get("audio", expression.get("media", {}).get("audio", {}).get("path", ""))
+	if not audio is String or audio.is_empty():
+		return false
+	var previous_end: int = 0
+	for index in range(expression.tokens.size()):
+		var token: Variant = expression.tokens[index]
+		if not token is Dictionary or token.get("index") != index or not token.get("text") is String:
+			return false
+		var start: int = int(token.get("start", -1))
+		var end: int = int(token.get("end", -1))
+		if start < previous_end or end <= start or end > expression.text.length() \
+			or expression.text.substr(start, end - start) != token.text \
+			or not expression.text.substr(previous_end, start - previous_end).strip_edges().is_empty():
+			return false
+		previous_end = end
+	return expression.text.substr(previous_end).strip_edges().is_empty()
+
+
 func current_question() -> Dictionary:
 	if question_index < 0 or question_index >= questions.size():
 		return {}
@@ -142,7 +230,12 @@ func check_answer() -> String:
 	else:
 		var matches: bool = true
 		for index in range(target.size()):
-			if answer[index] < 0 or answer[index] >= options.size() or options[answer[index]].id != target[index]:
+			if answer[index] < 0 or answer[index] >= options.size():
+				matches = false
+			elif current_question().get("track") == "professional":
+				if options[answer[index]].text != current_question().tokens[index].text:
+					matches = false
+			elif options[answer[index]].id != target[index]:
 				matches = false
 		if matches:
 			completed += 1

@@ -1,0 +1,127 @@
+{
+  "id": "verify.establish-accuracy.v",
+  "text": "verify",
+  "display_text": "verify",
+  "pos": "verb",
+  "definition": "To establish that information is accurate by checking suitable evidence.",
+  "example": "Please verify the reference number against the order record.",
+  "difficulty": "A2",
+  "accepted_forms": [
+    "verify"
+  ],
+  "regions": [
+    "general"
+  ],
+  "practice_modes": [
+    "word_jelly",
+    "phrase"
+  ],
+  "media": {
+    "image": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "brief": "A reference number compared with an authoritative order record.",
+      "picture_suitable": false,
+      "available_animations": [],
+      "adaptations": []
+    },
+    "audio": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "morphology": {
+    "schema": 1,
+    "id": "verify.establish-accuracy.v.analysis.v1",
+    "lexeme_id": "verify.establish-accuracy.v",
+    "text": "verify",
+    "kind": "morphological",
+    "review": {
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "notes": "The source explicitly gives the true-related veri- combining form and -fy family. Preserve those constituents rather than syllable cuts, and review their relationship to checking accuracy. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+      "references": [
+        "https://www.merriam-webster.com/dictionary/verify",
+        "https://www.dictionary.com/browse/verify"
+      ]
+    },
+    "parts": [
+      {
+        "id": "p1",
+        "canonical_id": "morph.veri",
+        "type": "combining_form",
+        "canonical": "veri",
+        "surface": "veri"
+      },
+      {
+        "id": "p2",
+        "canonical_id": "affix.fy.suffix",
+        "type": "suffix",
+        "canonical": "fy",
+        "surface": "fy"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "n1",
+        "left": "p1",
+        "right": "p2",
+        "surface": "verify",
+        "rule": "latinate_combining_form_suffix"
+      }
+    ],
+    "roots": [
+      "n1"
+    ]
+  },
+  "review": {
+    "status": "pending",
+    "language": "pending",
+    "domain": "not_required",
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "references": [
+    {
+      "source_id": "british-council-requests",
+      "status": "pending_term_check",
+      "scope": "Workplace communication context only; this original definition and example await term-level review."
+    },
+    {
+      "source_id": "foundation-mw-verify",
+      "status": "pending_term_check",
+      "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+    },
+    {
+      "source_id": "foundation-dictionary-verify",
+      "status": "pending_term_check",
+      "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+    }
+  ],
+  "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+}

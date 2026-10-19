@@ -1,0 +1,152 @@
+{
+  "id": "cash-register.sales-device.n",
+  "text": "cash register",
+  "display_text": "cash register",
+  "pos": "noun",
+  "definition": "A machine used to record sales and handle payments.",
+  "example": "This cash register prints a receipt after each sale.",
+  "difficulty": "A2",
+  "accepted_forms": [
+    "cash register"
+  ],
+  "regions": [
+    "general"
+  ],
+  "practice_modes": [
+    "match",
+    "memory",
+    "pop",
+    "jelly",
+    "word_jelly",
+    "phrase"
+  ],
+  "media": {
+    "image": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "brief": "Use a dedicated three-quarter view of a complete retail register with sale display, physical keys, and the drawer base visible as one machine. Make the machine fill the frame. Keep any receipt secondary; exclude a detached drawer, a handheld scanner, or an isolated payment reader. Inspect the Mini Market cash-register lead before making the term render.",
+      "picture_suitable": true,
+      "available_animations": [],
+      "adaptations": []
+    },
+    "audio": {
+      "status": "integrated",
+      "path": "res://professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+      "sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763",
+      "source": "res://docs/assets/sources/professional-retail-ava/acquisition.json",
+      "creator": "Microsoft Ava Neural; original project texts",
+      "license": "Microsoft Services Agreement applies to synthesized output; the client LGPL license does not confer separate rights to speech. No additional license claim.",
+      "acquisition_status": "integrated",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "User (exact sample listening approval in tesis-iter-2; provenance: listening-approval-2026-10-16.json)",
+        "reviewed_at": "2026-10-16"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "morphology": {
+    "schema": 1,
+    "id": "professional.cash-register.sales-device.n.morphology.retail03.proposal.v2",
+    "lexeme_id": "cash-register.sales-device.n",
+    "text": "cash register",
+    "kind": "phrase",
+    "parts": [
+      {
+        "id": "p1",
+        "canonical_id": "morph.cash",
+        "canonical": "cash",
+        "type": "word",
+        "surface": "cash",
+        "break_offsets": []
+      },
+      {
+        "id": "p2",
+        "canonical_id": "morph.register",
+        "canonical": "register",
+        "type": "stem",
+        "surface": "register",
+        "break_offsets": []
+      }
+    ],
+    "nodes": [
+      {
+        "id": "whole",
+        "left": "p1",
+        "right": "p2",
+        "surface": "cash register",
+        "rule": "preserve-word-boundary",
+        "break_offsets": [
+          5
+        ]
+      }
+    ],
+    "roots": [
+      "whole"
+    ],
+    "review": {
+      "status": "reviewed",
+      "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+      "notes": "Explicitly selected modern compound depth: cash plus the current register stem. The register history through regesta/regerere includes re- and gerere and an analogically added second r influenced by -istrum forms. That history is documented, but this graph does not invent regist plus agent-er or a free gister tile. The current recording-device sense is consistent with both Retail and Food Service memberships; workflow permission remains a separate domain review.",
+      "references": [
+        "https://www.dictionary.com/browse/cash",
+        "https://www.merriam-webster.com/dictionary/register",
+        "https://www.etymonline.com/word/register"
+      ],
+      "source_record_ids": [
+        "retail03-morph-dcom-cash",
+        "retail03-morph-mw-register",
+        "retail03-morph-etym-register"
+      ],
+      "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+      "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+      "reviewed_at": "2026-10-16",
+      "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+    }
+  },
+  "review": {
+    "status": "pending",
+    "language": "reviewed",
+    "domain": "pending",
+    "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+    "reviewed_at": "2026-10-16"
+  },
+  "references": [
+    {
+      "source_id": "bls-cashiers",
+      "status": "pending_term_check",
+      "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+    },
+    {
+      "source_id": "bls-food-preparation",
+      "status": "pending_term_check",
+      "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+    },
+    {
+      "source_id": "retail03-mw-cash-register",
+      "status": "verified",
+      "scope": "Selected passage consulted: Noun definition. The business machine records transactions and displays sales; a money drawer is a typical component. Selected lexical sense only; pronunciation recordings and images were not acquired. Headword syllable dots do not establish morphology. This editorial proposal does not approve language, morphology, domain practice, or media."
+    },
+    {
+      "source_id": "retail03-square-printers",
+      "status": "verified",
+      "scope": "Selected passage consulted: Printer types: countertop receipt, dual cash drawer/printer and barcode label printers. Receipt printers, barcode label printers and combined drawer/printer units are separate hardware categories. Only category descriptions support these nouns. Product requirements and connections are not universal instructions. No artwork acquired. This editorial proposal does not approve language, morphology, domain practice, or media."
+    }
+  ],
+  "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the sales-recording machine noun. The example describes this particular register printing a receipt, not a universal feature of every model. Retain cash register; do not equate the entire machine with its cash drawer or a separate card reader. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-media production remain pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+}

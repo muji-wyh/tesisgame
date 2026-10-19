@@ -1,0 +1,1495 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.transport_delivery.module04.01",
+      "text": "The package contains a crate and a sack; please confirm the recorded quantity.",
+      "meaning": "Clarify the contents and number of units in a shipment.",
+      "context": "Checking the goods record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "package",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "contains",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "crate",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "sack",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 9,
+          "text": "please",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "confirm",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "recorded",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "quantity",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 77,
+          "end": 78
+        }
+      ],
+      "focus_lexeme_ids": [
+        "package.wrapped-or-contained-goods-unit.n",
+        "crate.rigid-container-for-goods.n",
+        "sack.large-flexible-goods-bag.n",
+        "quantity.amount-expressed-with-unit.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module04.02",
+      "text": "The seal is broken, and the label does not match the consignment record.",
+      "meaning": "Describe observed packaging and identification differences.",
+      "context": "Reporting a shipment discrepancy.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "seal",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 9,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "broken",
+          "start": 12,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 7,
+          "text": "label",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": "does",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 9,
+          "text": "not",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 10,
+          "text": "match",
+          "start": 43,
+          "end": 48
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 12,
+          "text": "consignment",
+          "start": 53,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "record",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 71,
+          "end": 72
+        }
+      ],
+      "focus_lexeme_ids": [
+        "seal.closure-strip.n",
+        "label.attached-information-marker.n",
+        "consignment.sent-goods-group.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module04.03",
+      "text": "The courier has asked the recipient to confirm the driver's destination before the journey.",
+      "meaning": "Request confirmation of the place to which the driver will travel.",
+      "context": "Clarifying delivery details before travel.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "courier",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "asked",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "recipient",
+          "start": 26,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 36,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "confirm",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "driver's",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "destination",
+          "start": 60,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "before",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "journey",
+          "start": 83,
+          "end": 90
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "courier.person-or-service-delivering-parcels-or-documents.n",
+        "recipient.person-receiving-message-or-item.n",
+        "destination.place-to-which-person-is-traveling.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module04.04",
+      "text": "The original packaging is listed in the return request, and the photo shows damaged packaging.",
+      "meaning": "Distinguish the packaging supplied with goods from its current condition.",
+      "context": "Reviewing a return request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "original",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "packaging",
+          "start": 13,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 23,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "listed",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "in",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "return",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "request",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "photo",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "shows",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "damaged",
+          "start": 76,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "packaging",
+          "start": 84,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "original-packaging.supplied-product-packaging.n",
+        "damaged-packaging.harmed-package.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module04.05",
+      "text": "One dimension is missing from the cargo record, so the payload information needs review.",
+      "meaning": "Identify an incomplete physical measurement without calculating a load allowance.",
+      "context": "Checking transport information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "One",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "dimension",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "missing",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "from",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "cargo",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "record",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "so",
+          "start": 48,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "payload",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "information",
+          "start": 63,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "needs",
+          "start": 75,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "review",
+          "start": 81,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "dimension.physical-measurement.n",
+        "cargo.goods-carried-by-transport-vehicle.n",
+        "payload.load-carried-by-vehicle-excluding-vehicle-itself.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module04.06",
+      "text": "The item is fragile and oversized; confirm the carrier's current handling requirements.",
+      "meaning": "Describe two item characteristics and request applicable information.",
+      "context": "Reviewing a shipment before acceptance.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "item",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 9,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "fragile",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "oversized",
+          "start": 24,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "confirm",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "carrier's",
+          "start": 47,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "current",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "handling",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "requirements",
+          "start": 74,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fragile.easily-broken-or-damaged.a",
+        "oversized.larger-than-stated-size-limit.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module04.07",
+      "text": "The handling note says upright; please clarify how that instruction applies to this item.",
+      "meaning": "Ask for a clear meaning instead of assuming a handling method.",
+      "context": "Clarifying a package orientation note.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "handling",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "note",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "says",
+          "start": 18,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "upright",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": ";",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "please",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "clarify",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "how",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "that",
+          "start": 51,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "instruction",
+          "start": 56,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "applies",
+          "start": 68,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 76,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "this",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "item",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "upright.in-vertical-position-with-top-uppermost.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module04.08",
+      "text": "Please confirm the postal code, house number, and apartment number with the sender.",
+      "meaning": "Check the separate parts of an address.",
+      "context": "Resolving incomplete destination information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "postal",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "code",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "house",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "number",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "apartment",
+          "start": 50,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "number",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "with",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "sender",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "postal-code.code-identifying-postal-area-or-address.n",
+        "house-number.number-identifying-building-on-street.n",
+        "apartment-number.number-identifying-unit-within-building.n",
+        "sender.person-sending-message-or-item.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module04.09",
+      "text": "The order includes perishable goods, so its temperature-sensitive contents need the agreed transport arrangements.",
+      "meaning": "Identify goods that require product-specific arrangements.",
+      "context": "Passing shipment requirements to the responsible team.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "order",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "includes",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "perishable",
+          "start": 19,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "goods",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "so",
+          "start": 37,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "its",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "temperature-sensitive",
+          "start": 44,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "contents",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 10,
+          "text": "need",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": "agreed",
+          "start": 84,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": "transport",
+          "start": 91,
+          "end": 100
+        },
+        {
+          "index": 14,
+          "text": "arrangements",
+          "start": 101,
+          "end": 113
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 113,
+          "end": 114
+        }
+      ],
+      "focus_lexeme_ids": [
+        "perishable-goods.goods-likely-to-spoil-without-suitable-conditions.n",
+        "temperature-sensitive.affected-by-changes-in-temperature.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module04.10",
+      "text": "The delivery charge and delivery zone are shown in the current service details.",
+      "meaning": "Identify the price component and area covered by the service.",
+      "context": "Explaining available delivery information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "delivery",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "charge",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "delivery",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "zone",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "shown",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "in",
+          "start": 48,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "current",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "service",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "details",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 78,
+          "end": 79
+        }
+      ],
+      "focus_lexeme_ids": [
+        "delivery-charge.fee-for-transporting-order-to-recipient.n",
+        "delivery-zone.area-covered-by-delivery-service.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

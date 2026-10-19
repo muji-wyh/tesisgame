@@ -1,0 +1,251 @@
+{
+  "schema": 1,
+  "status": "reviewer_authored_spelling_variant_pending_root_independent_acceptance",
+  "date": "2026-10-16",
+  "author": "Codex foundation_review",
+  "scope": "Exact coordinator accepted_forms addition only, separately proposed after immutable independent-review-r01 spelling hold. No production or review-field change.",
+  "parent_review_json_sha256": "04fa8aa0c3f831e0aea367475f8fa8b2a9a5927281e482df979fc28e2f865fa7",
+  "parent_review_raw_sha256": "849fb6af65055e74802af8ad24ade1740dc4a9e75f7cfce38d205d2e06911202",
+  "source_provenance_json_sha256": "69df7d7099314bd68ac8b3f3f40737748f3115addbf6cd693b49a80bfcdce243",
+  "source_provenance_raw_sha256": "1e6fb834d16620d1f412c96da3b7faf6eaee38c3f8861412c0a50fc524710a0b",
+  "id": "coordinator.organizer.n",
+  "base_candidate_json_sha256": "ce3e79bd65b8ee12bb0c8a11e2b5878af4776431a6177951c6a178a513e32c40",
+  "candidate_entry_json_sha256": "4418216d47c4ddf15bd3b253d8951ff1fabf3ee0e491c6a3d9fe3cb66b0e1047",
+  "production_before_entry_json_sha256": "10f79aed11be722ea98f2ee2153386ea1ea46df695559a990e3d69d216f3916b",
+  "changed_fields": [
+    "accepted_forms"
+  ],
+  "before_accepted_forms": [
+    "coordinator"
+  ],
+  "proposed_accepted_forms": [
+    "coordinator",
+    "co-ordinator"
+  ],
+  "regions_before": [
+    "general"
+  ],
+  "regions_after": [
+    "general"
+  ],
+  "spelling_evidence": {
+    "source_id": "foundation01-language-second10-oxford-coordinator",
+    "url": "https://www.oxfordlearnersdictionaries.com/definition/english/coordinator",
+    "consulted_on": "2026-10-16",
+    "observed_alternative": "co-ordinator",
+    "observed_region": "British English",
+    "observation": "The Oxford coordinator entry explicitly lists co-ordinator as an additional British spelling of the same organizer noun. The reviewed specification requires accepted reviewed British variants. This is a spelling form, not a new meaning, lexeme, morphological segmentation or pronunciation request."
+  },
+  "region_decision": "Retain general because the canonical coordinator headword remains generally used. The British label describes this spelling alternative, recorded in provenance; it does not restrict the entire shared lexeme to Britain.",
+  "language_relationship": "The immutable parent review already accepts the wording, example and editorial B1 placement separately, while holding complete acceptance for this spelling omission. Root can independently review this exact additive variant and combine that review with the parent evidence in a later guarded delivery.",
+  "candidate_entry": {
+    "id": "coordinator.organizer.n",
+    "text": "coordinator",
+    "display_text": "coordinator",
+    "pos": "noun",
+    "definition": "A person who organizes activities so that people and tasks work together.",
+    "example": "The coordinator confirmed the training times.",
+    "difficulty": "B1",
+    "accepted_forms": [
+      "coordinator",
+      "co-ordinator"
+    ],
+    "regions": [
+      "general"
+    ],
+    "practice_modes": [
+      "word_jelly",
+      "phrase"
+    ],
+    "media": {
+      "image": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "A coordinator aligning several teams on one shared schedule.",
+        "picture_suitable": false,
+        "available_animations": [],
+        "adaptations": []
+      },
+      "audio": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      }
+    },
+    "morphology": {
+      "schema": 1,
+      "id": "coordinator.organizer.n.analysis.v1",
+      "lexeme_id": "coordinator.organizer.n",
+      "text": "coordinator",
+      "kind": "morphological",
+      "review": {
+        "status": "pending",
+        "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p1",
+          "type": "stem",
+          "canonical": "coordinate",
+          "surface": "coordinate",
+          "canonical_id": "morph.coordinate"
+        },
+        {
+          "id": "p2",
+          "type": "suffix",
+          "canonical": "-or",
+          "surface": "or",
+          "canonical_id": "affix.or.suffix"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "n1",
+          "left": "p1",
+          "right": "p2",
+          "surface": "coordinator",
+          "rule": "drop_final_e_before_suffix"
+        }
+      ],
+      "roots": [
+        "n1"
+      ]
+    },
+    "review": {
+      "status": "pending",
+      "language": "pending",
+      "domain": "not_required",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    "references": [
+      {
+        "source_id": "british-council-meetings",
+        "status": "pending_term_check",
+        "scope": "Workplace communication context only; this original definition and example await term-level review."
+      },
+      {
+        "source_id": "foundation01-language-second10-oxford-coordinator",
+        "status": "pending_term_check",
+        "scope": "Selected ordinary coordinator noun and bounded source evidence consulted for this original language proposal; independent language acceptance, morphology and all domain/media gates remain unchanged."
+      }
+    ],
+    "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only candidate prepared from selected dictionary passages; independent acceptance remains pending. No selected coordinator level was observed. Stored B1 remains provisional, and no component footer B2 is transferred. Oxford explicitly lists British co-ordinator. Keep the current coordinator-only accepted_forms and general region label unchanged in this bounded draft, but hold spelling acceptance until an independent reviewer decides whether the exercise should accept that variant. Do not claim that no variant was found."
+  },
+  "memberships": [
+    {
+      "course_id": "caregiving",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "retail",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "food_service",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "nursing",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "customer_support",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "office_admin",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "warehouse_logistics",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "hospitality_tourism",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "transport_delivery",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "construction_trades",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "cleaning_facilities",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "education_childcare",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "manufacturing_maintenance",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "it_support",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "software_data",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "accounting_finance",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "sales_marketing",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "hr_recruitment",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "clinical_medicine",
+      "module_id": "module01"
+    },
+    {
+      "course_id": "legal_paralegal",
+      "module_id": "module01"
+    }
+  ],
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "native_runtime_executed": false,
+  "all_existing_review_fields_exact": true,
+  "limits": [
+    "No dictionary CEFR is inferred for coordinator.",
+    "No normalization, audio, morphology, rendering or native exercise behavior is certified by schema validation.",
+    "No new source record is necessary: the exact Oxford source is already in the frozen author additive source set.",
+    "The original coordinator-only candidate and spelling hold remain immutable; only this new proposal may close that hold after root review."
+  ]
+}

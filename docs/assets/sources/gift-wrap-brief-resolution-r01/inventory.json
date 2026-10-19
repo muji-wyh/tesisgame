@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "status": "frozen_brief_resolution_evidence_no_integration",
+  "files": [
+    {
+      "path": "docs/assets/sources/gift-wrap-brief-resolution-r01/baseline-observation.json",
+      "bytes": 1554,
+      "sha256": "bfdd660a0e81bbf8bc8cd8c4923d870e3cf5555e9aff4bb6dc95cc4018c3b10e"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-brief-resolution-r01/freesvg-187259-alpha-crop.png",
+      "bytes": 36970,
+      "sha256": "c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-brief-resolution-r01/freesvg-187259-displayed-raster.png",
+      "bytes": 1442999,
+      "sha256": "da47681a1d8721d1c177772be79bec683a09315a025aa4375379889f2ec27b7a"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-brief-resolution-r01/review.json",
+      "bytes": 16352,
+      "sha256": "a94da229bb67838d251f08b145c4c89e573d89684955884c67cd1bde9931581e"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-brief-resolution-r01/SOURCE.md",
+      "bytes": 3250,
+      "sha256": "bd416ccb1126199906c8978d7e40a2055ed1e1765bb7756440fcebbdc1695e5c"
+    }
+  ]
+}

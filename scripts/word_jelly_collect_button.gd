@@ -130,7 +130,7 @@ func _update_accessibility() -> void:
 	if _active:
 		description = "Collecting words. %d of %d remaining" % [_remaining, _total]
 	elif _count == 0:
-		description = "Collect completed words. Merge letter jellies to make a word first"
+		description = "Collect completed words. Join word parts to complete more words"
 	set("accessibility_name", description)
 
 

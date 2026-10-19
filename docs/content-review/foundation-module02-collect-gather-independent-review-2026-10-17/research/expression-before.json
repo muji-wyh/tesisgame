@@ -1,0 +1,148 @@
+{
+  "id": "expr.foundation.module02.08",
+  "text": "Could you assist me while I collect the documents from reception and return the key?",
+  "meaning": "Ask for help with picking up documents and giving a key back.",
+  "context": "A worker coordinates routine errands with a colleague.",
+  "tokens": [
+    {
+      "index": 0,
+      "text": "Could",
+      "start": 0,
+      "end": 5
+    },
+    {
+      "index": 1,
+      "text": "you",
+      "start": 6,
+      "end": 9
+    },
+    {
+      "index": 2,
+      "text": "assist",
+      "start": 10,
+      "end": 16
+    },
+    {
+      "index": 3,
+      "text": "me",
+      "start": 17,
+      "end": 19
+    },
+    {
+      "index": 4,
+      "text": "while",
+      "start": 20,
+      "end": 25
+    },
+    {
+      "index": 5,
+      "text": "I",
+      "start": 26,
+      "end": 27
+    },
+    {
+      "index": 6,
+      "text": "collect",
+      "start": 28,
+      "end": 35
+    },
+    {
+      "index": 7,
+      "text": "the",
+      "start": 36,
+      "end": 39
+    },
+    {
+      "index": 8,
+      "text": "documents",
+      "start": 40,
+      "end": 49
+    },
+    {
+      "index": 9,
+      "text": "from",
+      "start": 50,
+      "end": 54
+    },
+    {
+      "index": 10,
+      "text": "reception",
+      "start": 55,
+      "end": 64
+    },
+    {
+      "index": 11,
+      "text": "and",
+      "start": 65,
+      "end": 68
+    },
+    {
+      "index": 12,
+      "text": "return",
+      "start": 69,
+      "end": 75
+    },
+    {
+      "index": 13,
+      "text": "the",
+      "start": 76,
+      "end": 79
+    },
+    {
+      "index": 14,
+      "text": "key",
+      "start": 80,
+      "end": 83
+    },
+    {
+      "index": 15,
+      "text": "?",
+      "start": 83,
+      "end": 84
+    }
+  ],
+  "focus_lexeme_ids": [
+    "assist.help.v",
+    "collect.gather.v",
+    "return.send-back.v"
+  ],
+  "practice_modes": [
+    "phrase"
+  ],
+  "media": {
+    "audio": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "review": {
+    "status": "pending",
+    "language": "pending",
+    "domain": "not_required",
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "references": [
+    {
+      "source_id": "british-council-requests",
+      "status": "pending_term_check",
+      "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+    }
+  ]
+}

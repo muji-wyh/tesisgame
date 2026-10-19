@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "status": "frozen_unexecuted_source_proposal_pending_independent_review",
+  "author": "Codex morph_review",
+  "inspection": "Complete raw source readback only; no syntax check, module import, guard probe, project test, native execution or transaction dispatch.",
+  "files": [
+    {
+      "path": "build/professional-english/shopping-bag-commit-proposal-r01/commit.cjs",
+      "bytes": 27037,
+      "sha256": "b522c987354d2e526cc9194b0dd5239b2592b07aa30f4ddd7bd16261e2c3c087"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-proposal-r01/README.md",
+      "bytes": 7293,
+      "sha256": "8e40a4d8f02d8035e318d8a889c4d8be3bf949db2ce1d474932f32ea72f9ecbc"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-proposal-r01/input.template.json",
+      "bytes": 1656,
+      "sha256": "15def0e5e0a19e7ca6abbae797e07f1996b494f851288cca3423fa3e5fae0350"
+    }
+  ]
+}

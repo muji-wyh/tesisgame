@@ -1,13 +1,14 @@
 const { test, expect } = require('@playwright/test');
 const {
-  THEME_IDS, THEME_COLORS, metrics, tap, rendered, openGame, enterGame,
-  chooseTheme, openRewards, collectionHeaderRect,
+  metrics, tap, rendered, openGame, enterGame,
+  openRewards, collectionHeaderRect, activateLibraryControl,
   discoverMatchCards, boardPoint, resultPoint, visibleColorCount, acceptCelebration
 } = require('./game-ui.cjs');
 
 const ROOM_KEY = 'wordBuddies.playroom';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
 const OLD_COUNTS = { 'spring-1': 3, 'summer-2': 1, 'autumn-6': 2 };
+const learningThemes = require('../../data/professional/themes.json').profiles;
 
 async function record(page, key = ROOM_KEY) {
   return page.evaluate(key => localStorage.getItem(key), key);
@@ -20,9 +21,10 @@ async function counts(page) {
 }
 
 async function seedPriorSave(page) {
-  const medals = `[medals]\nversion=1\ncounts=${JSON.stringify(OLD_COUNTS)}\n`;
+  const medals = `[medals]\nversion=1\ncounts=${JSON.stringify(OLD_COUNTS)}\n` +
+    '[pair_chests]\nversion=1\nstate={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":0,"round":{}}}\n';
   const room = '[playroom]\nversion=1\ntoy="toy-ball"\nbackdrop="backdrop-home"\nfavorite="spring-1"\n\n' +
-    '[journey]\nrecent_topic_ids=[]\npreferred_theme_id="spring"\ngoal_item_id=""\n\n' +
+    '[journey]\nrecent_topic_ids=[]\npreferred_theme_id="candy"\ngoal_item_id=""\n\n' +
     '[stickers]\nword_ids=["cat","apple"]\ndisplay_word_id=""\n\n[learning]\nage_band="4-6"\n';
   await page.addInitScript(({ medals, room, medalKey, roomKey }) => {
     // Existing progress is the fixture. The new piece must come from a real win
@@ -78,16 +80,17 @@ function persistentFields(saved) {
     'word_ids', 'display_word_id', 'age_band'].map(field => [field, saved.match(new RegExp(`^${field}=(.*)$`, 'm'))?.[1]]));
 }
 
-test('the chest settles over its selected world and preserves its saved reward through Home, growth and reload', async ({ page }, testInfo) => {
+test('the chest settles over its learning path and preserves its saved reward through career previews, growth and reload', async ({ page }, testInfo) => {
   test.setTimeout(180000);
   await seedPriorSave(page);
   const errors = await openGame(page, { reducedMotion: 'reduce' });
   expect(await counts(page)).toEqual(OLD_COUNTS);
-  await chooseTheme(page, THEME_IDS.indexOf('candy'));
+  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
   await winMatch(page);
   const beforeClaim = await record(page, MEDAL_KEY);
   expect(await counts(page), 'Winning alone does not claim the chest.').toEqual(OLD_COUNTS);
-  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[7]);
+  const growthPalette = learningThemes.find(profile => profile.id === 'growth_garden').palette;
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', growthPalette.background.toLowerCase());
   await captureSettlement(page, testInfo, 'closed');
 
   await page.emulateMedia({ reducedMotion: 'no-preference' });
@@ -103,7 +106,7 @@ test('the chest settles over its selected world and preserves its saved reward t
   }
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await rendered(page);
-  // Match awards a tier-one Spring chest independently of the chosen world.
+  // Match awards one ordinary chest independently of the historical preference.
   const earnedCounts = { ...OLD_COUNTS, 'spring-2': 1 };
   expect(await counts(page), 'Holding awards one frozen chest reward and preserves previous medals.').toEqual(earnedCounts);
   const earnedSave = await record(page, MEDAL_KEY);
@@ -112,17 +115,23 @@ test('the chest settles over its selected world and preserves its saved reward t
 
   await openRewards(page);
   await closeRewards(page);
-  await chooseTheme(page, THEME_IDS.indexOf('jungle'));
+  await activateLibraryControl(page, 'ChangeLearningPath');
+  await activateLibraryControl(page, 'ProfessionalPath');
+  await activateLibraryControl(page, 'Career_retail');
+  await expect.poll(async () => (await metrics(page)).library.learning.course_id).toBe('retail');
+  const retailPalette = learningThemes.find(profile => profile.id === 'professional_retail').palette;
+  await expect.poll(() => page.locator('#game').evaluate(element => element.style.getPropertyValue('--voice-accent').toLowerCase()))
+    .toBe(retailPalette.accent.toLowerCase());
   expect(await record(page, MEDAL_KEY)).toBe(earnedSave);
   const savedRoom = persistentFields(await record(page));
   await page.reload();
   await enterGame(page);
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
-  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[6]);
-  expect(await counts(page), 'Reload keeps the earned chest reward and selected world.').toEqual(earnedCounts);
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', growthPalette.background.toLowerCase());
+  expect(await counts(page), 'Reload keeps the earned chest reward and saved learning path.').toEqual(earnedCounts);
   expect(persistentFields(await record(page)), 'Reload preserves owned items, stickers and learning settings.').toEqual(savedRoom);
   await openRewards(page);
   await page.screenshot({ path: testInfo.outputPath('settlement-reloaded-growth.png'), scale: 'css' });
-  expect(await record(page, MEDAL_KEY)).toBe(earnedSave);
+  expect(await counts(page)).toEqual(earnedCounts);
   expect(errors).toEqual([]);
 });

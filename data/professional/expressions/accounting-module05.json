@@ -1,0 +1,1873 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.accounting_finance.module05.01",
+      "text": "Please calculate the amounts, total the listed entries, subtract the credit, and count the receipts.",
+      "meaning": "Request a check of a fictional numerical summary.",
+      "context": "Reviewing an illustrative expense list.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "calculate",
+          "start": 7,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "amounts",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "total",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "listed",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "entries",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "subtract",
+          "start": 56,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "credit",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 75,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "count",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "receipts",
+          "start": 91,
+          "end": 99
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 99,
+          "end": 100
+        }
+      ],
+      "focus_lexeme_ids": [
+        "calculate.work-out-number.v",
+        "total.add-amounts.v",
+        "subtract.take-one-number-away-from-another.v",
+        "count.find-number.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module05.02",
+      "text": "Please multiply the quantity by its price, divide the total by the stated units, and round using the specified rule.",
+      "meaning": "Explain the arithmetic being checked in a teaching example.",
+      "context": "Reviewing an illustrative unit calculation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "multiply",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "quantity",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "by",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "its",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "price",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "divide",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "total",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "by",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "stated",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "units",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": "round",
+          "start": 85,
+          "end": 90
+        },
+        {
+          "index": 18,
+          "text": "using",
+          "start": 91,
+          "end": 96
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 97,
+          "end": 100
+        },
+        {
+          "index": 20,
+          "text": "specified",
+          "start": 101,
+          "end": 110
+        },
+        {
+          "index": 21,
+          "text": "rule",
+          "start": 111,
+          "end": 115
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 115,
+          "end": 116
+        }
+      ],
+      "focus_lexeme_ids": [
+        "multiply.find-product-of-numbers.v",
+        "divide.find-how-many-times-one-number-fits-into-another.v",
+        "round.express-number-at-chosen-level-of-precision.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module05.03",
+      "text": "Please record and code the transaction, then ask the authorized reviewer when to post and reconcile it.",
+      "meaning": "Request recorded information and an appropriately assigned review.",
+      "context": "Discussing a fictional record's workflow.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "record",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "code",
+          "start": 18,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "transaction",
+          "start": 27,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "then",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "ask",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "authorized",
+          "start": 53,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "reviewer",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "when",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "to",
+          "start": 78,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "post",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": "reconcile",
+          "start": 90,
+          "end": 99
+        },
+        {
+          "index": 17,
+          "text": "it",
+          "start": 100,
+          "end": 102
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "record.store-observed-information.v",
+        "code.assign-identifier-to-item-for-recording-or-classification.v",
+        "post.enter-transaction-in-accounting-record.v",
+        "reconcile.match-financial-records.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module05.04",
+      "text": "Before we allocate funds or budget for this work, please estimate, analyze and compare the assumptions.",
+      "meaning": "Request analysis before making a resource plan.",
+      "context": "Preparing a proposed budget for review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Before",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "we",
+          "start": 7,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "allocate",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "funds",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "or",
+          "start": 25,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "budget",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "this",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "work",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "please",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "estimate",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 65,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "analyze",
+          "start": 67,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "compare",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "assumptions",
+          "start": 91,
+          "end": 102
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "allocate.assign-stock-to-specified-demand.v",
+        "budget.plan-available-funds-and-intended-spending.v",
+        "estimate.make-informed-approximation.v",
+        "analyze.examine-information-to-understand-patterns-or-meaning.v",
+        "compare.examine-differences.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module05.05",
+      "text": "Please review whether to accrue or defer the amount and explain the applicable basis.",
+      "meaning": "Refer an accounting-treatment question for qualified review.",
+      "context": "Preparing a question about period recognition.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "review",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "whether",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "accrue",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "or",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "defer",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "amount",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "explain",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "applicable",
+          "start": 68,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "basis",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "accrue.recognize-income-or-expense-before-related-cash-movement.v",
+        "defer.postpone-recognition-to-later-accounting-period.v",
+        "review.reconsider-care-information.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module05.06",
+      "text": "Please explain how we consolidate group figures, depreciate equipment, amortize software, and capitalize eligible costs under the applicable accounting basis.",
+      "meaning": "Request an explanation of the stated accounting methods.",
+      "context": "Discussing a fictional report with a qualified reviewer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "how",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "we",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "consolidate",
+          "start": 22,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "group",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "figures",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "depreciate",
+          "start": 49,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "equipment",
+          "start": 60,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "amortize",
+          "start": 71,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "software",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 88,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "capitalize",
+          "start": 94,
+          "end": 104
+        },
+        {
+          "index": 16,
+          "text": "eligible",
+          "start": 105,
+          "end": 113
+        },
+        {
+          "index": 17,
+          "text": "costs",
+          "start": 114,
+          "end": 119
+        },
+        {
+          "index": 18,
+          "text": "under",
+          "start": 120,
+          "end": 125
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 126,
+          "end": 129
+        },
+        {
+          "index": 20,
+          "text": "applicable",
+          "start": 130,
+          "end": 140
+        },
+        {
+          "index": 21,
+          "text": "accounting",
+          "start": 141,
+          "end": 151
+        },
+        {
+          "index": 22,
+          "text": "basis",
+          "start": 152,
+          "end": 157
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 157,
+          "end": 158
+        }
+      ],
+      "focus_lexeme_ids": [
+        "consolidate.prepare-group-financial-information-as-one-economic-entity.v",
+        "depreciate.allocate-depreciable-asset-amount-over-useful-life.v",
+        "amortize.allocate-intangible-asset-amount-over-useful-life.v",
+        "capitalize.recognize-cost-as-part-of-asset.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module05.07",
+      "text": "Please confirm the terms before we invoice the customer, pay the supplier or receive the agreed funds.",
+      "meaning": "Request agreement information before payment-related work.",
+      "context": "Coordinating an authorized transaction.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "terms",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "before",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "we",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "invoice",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "customer",
+          "start": 47,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "pay",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "supplier",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "or",
+          "start": 74,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "receive",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "agreed",
+          "start": 89,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "funds",
+          "start": 96,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "invoice.issue-invoice-to-request-payment.v",
+        "pay.give-or-transfer-money-to-meet-amount-due.v",
+        "receive.take-delivery-of-incoming-goods.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module05.08",
+      "text": "Who may authorize us to reimburse, transfer, deposit or withdraw these funds under the current arrangements?",
+      "meaning": "Ask which authorization applies to the proposed fund movements.",
+      "context": "Clarifying assigned financial responsibilities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Who",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "may",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "authorize",
+          "start": 8,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "us",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 21,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "reimburse",
+          "start": 24,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "transfer",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "deposit",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "withdraw",
+          "start": 56,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "these",
+          "start": 65,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "funds",
+          "start": 71,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "under",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "current",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "arrangements",
+          "start": 95,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": "?",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "authorize.give-transaction-permission.v",
+        "reimburse.pay-back-cost-incurred-on-another-partys-behalf.v",
+        "transfer.move-funds-between-accounts-or-parties.v",
+        "deposit.put-money-into-account.v",
+        "withdraw.take-money-out-of-account.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module05.09",
+      "text": "The outstanding item needs review before we settle, offset or write off any amount, or balance the account.",
+      "meaning": "Refer an unresolved amount for appropriate review.",
+      "context": "Discussing a fictional reconciliation query.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "outstanding",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "item",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "needs",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "review",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "we",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "settle",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "offset",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 59,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "write",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "off",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "any",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "amount",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 82,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "or",
+          "start": 84,
+          "end": 86
+        },
+        {
+          "index": 17,
+          "text": "balance",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 19,
+          "text": "account",
+          "start": 99,
+          "end": 106
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 106,
+          "end": 107
+        }
+      ],
+      "focus_lexeme_ids": [
+        "outstanding.not-yet-completed.a",
+        "settle.discharge-amount-owed-by-payment-or-agreed-arrangement.v",
+        "offset.use-one-amount-to-counterbalance-another.v",
+        "write-off.remove-amount-from-recognized-account-balance.v",
+        "balance.determine-or-check-accounting-totals-and-difference.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module05.10",
+      "text": "Please trace the source, retain the evidence and disclose the uncertainty before deciding whether to restate earlier figures.",
+      "meaning": "Request traceable evidence and explanation before a reporting decision.",
+      "context": "Preparing information for a qualified reviewer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "trace",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "source",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "retain",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "evidence",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "disclose",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "uncertainty",
+          "start": 62,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "before",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "deciding",
+          "start": 81,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "whether",
+          "start": 90,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": "to",
+          "start": 98,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "restate",
+          "start": 101,
+          "end": 108
+        },
+        {
+          "index": 17,
+          "text": "earlier",
+          "start": 109,
+          "end": 116
+        },
+        {
+          "index": 18,
+          "text": "figures",
+          "start": 117,
+          "end": 124
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "trace.follow-execution-path.v",
+        "retain.keep-person-in-employment-or-organization.v",
+        "disclose.make-information-known-to-another-party.v",
+        "restate.present-revised-financial-information-for-earlier-period.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

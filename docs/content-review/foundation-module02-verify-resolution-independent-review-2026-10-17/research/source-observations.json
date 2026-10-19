@@ -1,0 +1,53 @@
+{
+  "status": "author_consultation_only_unaccepted",
+  "date_local": "2026-10-17",
+  "rendered_pages": [
+    {
+      "id": "O-verify",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/verify",
+      "selected_section": "Verb senses 1 and 2",
+      "observation": "Checking truth/accuracy is distinct from showing or stating truth. Both raw selected sense tags carry cefr=c1. Formal register. Rendered Scientific research C1 belongs to sense 1. Footer reasonably B2 is excluded."
+    },
+    {
+      "id": "C-verify",
+      "url": "https://www.collinsdictionary.com/dictionary/english/verify",
+      "selected_section": "COBUILD verb senses 1 and 2",
+      "observation": "Careful examination/investigation supports the current evidence-checking meaning; a separate sense states or confirms truth. Neither selected sense displays a level. Context fit is not lower-level evidence."
+    },
+    {
+      "id": "O-ensure",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/ensure",
+      "selected_section": "Outcome/certainty verb; ensure_sng_1",
+      "observation": "Making an event happen or a condition definite. Selected certainty topic is B2, and raw tag has fkcefr=b2, not cefr=b2. Ensure-that is attested. Insure is also admitted especially in North American English. Historical borrowing is not a reviewed teaching analysis."
+    },
+    {
+      "id": "C-ensure",
+      "url": "https://www.collinsdictionary.com/dictionary/english/ensure",
+      "selected_section": "COBUILD verb, rendered lines 218-237",
+      "observation": "Outcome verb explicitly B2, formal, with a that-clause pattern. Other dictionary sections discuss protection and insurance senses, which the proposed meaning excludes. No automatic examples or publisher recordings were acquired."
+    }
+  ],
+  "raw_http_evidence": "fresh-http-metadata.json",
+  "search_conclusion": "No reliable A2-B2 selected-sense evidence for verify was established. Do not average away Oxford C1 or infer a level from teacher wording, learner comments, collocation headwords, exam verification pages or unrelated page navigation.",
+  "failed_retrievals": [
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/ensure",
+      "method": "web open",
+      "result": "Internal Error; no inspected Cambridge sense or level evidence claimed."
+    },
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/verify",
+      "method": "web open",
+      "result": "Internal Error; no inspected Cambridge sense or level evidence claimed."
+    }
+  ],
+  "retrieval_correction": "A web open with an unsupported num_lines parameter was rejected before retrieval; the corrected request yielded Collins verify and the two Cambridge errors above.",
+  "acquisition": {
+    "publisher_documents_saved": false,
+    "selected_metadata_and_one_profile_row_only": true,
+    "artwork_acquired": false,
+    "recordings_acquired": false,
+    "pronunciation_played": false,
+    "publisher_content_redistribution_license_acquired": false
+  }
+}

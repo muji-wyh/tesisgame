@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const {
-  THEME_IDS, enterGame, chooseMode, rendered, metrics, openGame, chooseTheme,
+  enterGame, chooseMode, rendered, metrics, openGame, openModeMenu, activateLibraryControl,
   tap, boardPoint, discoverMatchCards, acceptCelebration,
   resultPoint, visibleColorCount
 } = require('./game-ui.cjs');
@@ -17,7 +17,6 @@ const BATCHES = [
   { id: 'model-smoke-sea', themes: ['autumn', 'ocean', 'space'], types: ['harvest', 'tide', 'nebula'] },
   { id: 'model-smoke-relic', themes: ['jungle', 'candy'], types: ['bramble', 'bonbon'] }
 ];
-const MODEL_THEMES = BATCHES.flatMap(batch => batch.themes);
 
 async function seedPendingTreasure(page, batch) {
   const saved = `[treasure]\nversion=1\nround_id="${batch.id}"\n` +
@@ -163,7 +162,7 @@ for (const batch of BATCHES) {
     });
     const saved = await seedPendingTreasure(page, batch);
     await page.goto('/');
-    await enterGame(page, { onboarding: false });
+    await enterGame(page, { home: true });
     await chooseMode(page, 'pop');
     await expect.poll(async () => {
       const room = await roomState(page);
@@ -208,31 +207,36 @@ async function captureThemedStage(page, info, theme, phase) {
   expect(await visibleColorCount(page, png), `${theme}/${phase} includes the actual rendered stage`).toBeGreaterThan(20);
 }
 
-test('all five replacement designs fit direct settlement, and a claimed chest survives theme changes', async ({ page }, info) => {
+test('the earned Match chest fits compact settlements and its saved reward survives career previews', async ({ page }, info) => {
   test.setTimeout(480000);
+  await page.addInitScript(() => {
+    if (localStorage.getItem('wordBuddies.medalProgress') === null) localStorage.setItem('wordBuddies.medalProgress',
+      '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\nstate={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":0,"round":{}}}\n');
+  });
   const errors = await openGame(page, { reducedMotion: 'reduce' });
-  await chooseTheme(page, THEME_IDS.indexOf(MODEL_THEMES[0]));
   await winMatch(page);
   const miniatures = [];
   const before = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
-  for (const theme of MODEL_THEMES) {
-    await chooseTheme(page, THEME_IDS.indexOf(theme));
-    await acceptCelebration(page);
+  const viewports = [{ width: 320, height: 568 }, { width: 390, height: 650 },
+    { width: 844, height: 390 }, { width: 834, height: 1194 }, { width: 1280, height: 800 }];
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await rendered(page);
     const bounds = await metrics(page);
-    expect(bounds.library.theme_id).toBe(theme);
+    expect(bounds.library.learning.selection.track).toBe('growth');
     const control = bounds.growth.result.controls.find(item => item.name === 'OpenSettlementChest');
     expect(control).toMatchObject({ visible: true, disabled: false });
     const [x, y, width, height] = control.rect;
     expect(width).toBeGreaterThan(30);
     expect(height).toBeGreaterThan(30);
     expect(insideViewport({ x, y, width, height }, { x: 0, y: 0, width: bounds.width, height: bounds.height }),
-      `${theme} chest remains inside the game viewport`).toBe(true);
-    miniatures.push({ theme, rect: control.rect });
-    await captureThemedStage(page, info, theme, 'closed');
+      `${viewport.width}x${viewport.height} chest remains inside the game viewport`).toBe(true);
+    miniatures.push({ viewport, rect: control.rect });
+    await captureThemedStage(page, info, `growth-${viewport.width}x${viewport.height}`, 'closed');
     expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress')),
-      'Previewing closed designs does not award a reward').toBe(before);
+      'Resizing a closed chest does not award a reward').toBe(before);
   }
-  await info.attach('themed-settlement-chests.json', { body: JSON.stringify(miniatures, null, 2), contentType: 'application/json' });
+  await info.attach('growth-settlement-chests.json', { body: JSON.stringify(miniatures, null, 2), contentType: 'application/json' });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await rendered(page);
   const bounds = await metrics(page), point = resultPoint(bounds, 'chest');
@@ -246,15 +250,30 @@ test('all five replacement designs fit direct settlement, and a claimed chest su
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const claimed = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
   expect(claimed).not.toBe(before);
-  // Candy was selected when this reward was claimed. Its opened chest stays
-  // attached to the reward while the surrounding stage follows theme changes.
-  // Each design's own opened model is covered by the restored-batch holds above.
-  for (const theme of MODEL_THEMES) {
-    await chooseTheme(page, THEME_IDS.indexOf(theme));
+  // Each historical design's own opened model is covered by real restored-batch
+  // holds above. Current Match settlement uses its earned ordinary chest.
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await rendered(page);
     await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!');
-    await captureThemedStage(page, info, theme, 'opened');
+    await captureThemedStage(page, info, `growth-${viewport.width}x${viewport.height}`, 'opened');
     expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress')),
-      'Changing the opened stage does not duplicate the claimed reward').toBe(claimed);
+      'Resizing the opened stage does not duplicate the claimed reward').toBe(claimed);
   }
+  await openModeMenu(page);
+  await activateLibraryControl(page, 'ChangeLearningPath');
+  await activateLibraryControl(page, 'ProfessionalPath');
+  for (const [index, career] of ['caregiving', 'retail', 'food_service'].entries()) {
+    if (index) await activateLibraryControl(page, 'ChangeCareer');
+    await activateLibraryControl(page, `Career_${career}`);
+    await expect.poll(async () => (await metrics(page)).library.learning.course_id).toBe(career);
+    expect(await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress')),
+      'Career previews preserve the claimed chest and never duplicate its reward').toBe(claimed);
+  }
+  await page.reload();
+  await enterGame(page);
+  const restored = await page.evaluate(() => localStorage.getItem('wordBuddies.medalProgress'));
+  expect(restored.match(/^counts=.*$/m)?.[0],
+    'Reload preserves the earned chest while reserving a fresh Growth round').toBe(claimed.match(/^counts=.*$/m)?.[0]);
   expect(errors).toEqual([]);
 });

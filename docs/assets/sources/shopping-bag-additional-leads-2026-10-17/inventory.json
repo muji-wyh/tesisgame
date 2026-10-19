@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "status": "frozen_source_research_only_no_production_acceptance",
+  "files": [
+    {
+      "path": "acquired/3dicons-bag-dynamic-color.png",
+      "bytes": 2963534,
+      "sha256": "93065262e9028397705eb2ddcaf985942eb3ae81abf21dc5187e331ea5e004da"
+    },
+    {
+      "path": "additional-leads.json",
+      "bytes": 4125,
+      "sha256": "9db75a818d732093b6275d47628abdced453809b199657a1bcdaddc57e91cdc6"
+    },
+    {
+      "path": "candidate-stage-authorization.json",
+      "bytes": 633,
+      "sha256": "519ff50df9d544ddad6e200884f599655cab3761bb0bcf239d8c68e1085f68f5"
+    },
+    {
+      "path": "prepare-source-review.py",
+      "bytes": 6488,
+      "sha256": "b59a15e3518cb641bce4d745b7fda4aac3c11e4178a245b8fc636b863504d74b"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7506,
+      "sha256": "c9cfe94e88e6c4648f07e182f00ea1814c8e12b9cc9ef7ce11acbffdabe2579c"
+    },
+    {
+      "path": "size-study/bag-crop-512-study.png",
+      "bytes": 135843,
+      "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb"
+    },
+    {
+      "path": "size-study/measurements.json",
+      "bytes": 5019,
+      "sha256": "76ed8eec7632ecdffcdf094c8f286f5bfe9fa6d3a39484a78d380e82314b6d79"
+    },
+    {
+      "path": "size-study/source-size-comparison-3x.png",
+      "bytes": 97384,
+      "sha256": "25c43c902e8ada5d4813362d278acd55a4ea144144bf30eccfdd542b8e604dfa"
+    },
+    {
+      "path": "size-study/source-size-comparison.png",
+      "bytes": 62755,
+      "sha256": "d6280c9e6fbbfff092e2e99f4010f3a4c7fed6929777c5f97bde3e3fa1917749"
+    },
+    {
+      "path": "source-evidence/CC0-1.0-legalcode.txt",
+      "bytes": 7048,
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+    },
+    {
+      "path": "source-evidence/icon-page.html",
+      "bytes": 73501,
+      "sha256": "4e3fa8944f1c528f496f165cf189d719614d8377684ec699af6135751d389aac"
+    },
+    {
+      "path": "source-evidence/library-v1-license-page.html",
+      "bytes": 71695,
+      "sha256": "096190ee4db963fbe0373a6cb37ca7411835bdfa38d3e4150b5bf0d349be3cdc"
+    },
+    {
+      "path": "source-evidence/retrievals.json",
+      "bytes": 1323,
+      "sha256": "2b0dced40546248ef9b899e9ae0b7991ca8e12e48edcd3a2e7e6878977d6645a"
+    },
+    {
+      "path": "source-record.json",
+      "bytes": 4055,
+      "sha256": "208f160c8b25f1c27f3d458be20db7f11d23680b6f7dc6f14df7c565e060d62e"
+    }
+  ],
+  "inventory_excludes_itself": true
+}

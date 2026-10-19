@@ -1,0 +1,104 @@
+{
+  "schema": 1,
+  "status": "accepted_independent_technical_review",
+  "reviewer": "Codex recover_delivery independent AI technical reviewer",
+  "reviewed_at_utc": "2026-10-16T18:12:28.095Z",
+  "scope": "Read-only review of the exact eleven-line attendance historical-comparison insertion and completed verification evidence. No new native dispatch, test execution, production changes, delivery or gate approvals.",
+  "finding_count": 0,
+  "findings": [],
+  "decision": "The correction restores the intended historical comparison without bypassing the protected donor. It requires exactly one scoped attendance language patch, requires complete live equality with the accepted after value, then deep-copies before. The existing complete protected-preimage equality, pending morphology/compiler checks and resolver checks remain byte-for-byte intact. Exactly two new check calls explain the count increase from 2837 to 2839.",
+  "reviewed_code": {
+    "path": "tests/godot/professional_retail_morphology_tests.gd",
+    "lines": [
+      333,
+      343
+    ],
+    "before_raw_sha256": "3e000bea8af8529f4b215576f70b5a46ba7b734455cb518b8c2d56261e403dc9",
+    "after_raw_sha256": "f0bd041c0c50413b9f0b399df1abb89aea7d66062c5f4ad5fcbc30290e4208f1",
+    "raw_comparison": "Deleting only the eleven-line attendance branch from current raw text exactly reproduces the saved preimage; no line-ending normalization was required.",
+    "permitted_delta_vs_failed_R32": [
+      "tests/godot/professional_retail_morphology_tests.gd"
+    ]
+  },
+  "evidence": {
+    "receipt": {
+      "path": "build/professional-english/r32-native-attendance-correction-r01/receipt.json",
+      "sha256": "87eb0fbefbf573c68fbd06f7c539a11c1c3c2b7fe1913b31a62bf994476013db",
+      "ok": true,
+      "checks": 2839,
+      "failures": 0
+    },
+    "failed_historical_R32": {
+      "path": "build/professional-english/continuation-validation-r32.json",
+      "sha256": "951167226fbfa4e362dbb415146385785fdc682115e0591b28e3cb30f81253d9",
+      "ok": false,
+      "native_checks": 2837,
+      "native_failures": 1,
+      "sole_native_failure": "Persisted legacy entry equals its protected preimage: attendance.presence-record.n",
+      "node_pass": 249,
+      "node_fail": 0,
+      "audio_checks": 141,
+      "audio_failures": 0
+    },
+    "execution_inputs": {
+      "path": "build/professional-english/r32-native-attendance-correction-r01/execution-inputs.json",
+      "sha256": "dfd859293e087f3bd66e63af901406ae90bc052d57bfe3ae940cc33c7da6b266",
+      "frozen_harness_sha256": "eb015cbdc1d4378833e1dbda093396b894b52688c68364c5011ca647dc0f3748",
+      "bound_input_count": 679
+    },
+    "native_log": {
+      "path": "build/professional-english/r32-native-attendance-correction-r01/native.log",
+      "sha256": "dd51e93694bb3822ff769a49c4d32718bd7b9c3525d8adfa502eed8e634309da"
+    }
+  },
+  "independent_checks": [
+    "Verified raw hashes of failed R32 and all three original logs; the failed run remains retained and is not relabeled.",
+    "Verified corrected receipt, native log, execution inventory and frozen harness hashes; arguments and input maps agree.",
+    "Verified all 679 current measured input hashes against the corrected run; before and after maps are equal. Against failed R32, only the native test path differs.",
+    "Verified exactly one attendance patch and live entry; full current entry equals patch.after, patch.before equals the protected historical donor, both stored patch hashes recompute, and morphology is identical and still pending.",
+    "Independently recomputed the live registry hash and matched failed R32, corrected before and corrected after values.",
+    "Verified all five correction evidence files and the two retained failed-R32 files are exact durable copies.",
+    "Inspected the frozen harness without replaying it; its raw-file insertion assertion, sole allowed baseline delta, input stability checks, registry checks and native status/count checks support the receipt."
+  ],
+  "attendance_patch": {
+    "before_json_sha256": "a7699c3e58649791eaee79817f87879c2ce6b2418e729768c6f1a43c19b3594e",
+    "after_json_sha256": "66fedbf3ee3565e1e3bddf2df322ccd0bb3e18bf7228e392e10384445c544b81",
+    "morphology_unchanged": true
+  },
+  "registry_sha256": "8574160412f2cdbb0e3891421f995ded387f108fd2727d66eb13fd83d2959a67",
+  "durable_evidence": {
+    "path": "docs/qa/r32-native-attendance-correction-r01",
+    "readme_sha256": "183c60321c8ada2d9f750f359dd1207fd05d63236f7d8a771a348e8960ebeb5c",
+    "exact_copies": [
+      {
+        "name": "execution-inputs.json",
+        "sha256": "dfd859293e087f3bd66e63af901406ae90bc052d57bfe3ae940cc33c7da6b266"
+      },
+      {
+        "name": "native.log",
+        "sha256": "dd51e93694bb3822ff769a49c4d32718bd7b9c3525d8adfa502eed8e634309da"
+      },
+      {
+        "name": "professional_retail_morphology_tests.before.gd",
+        "sha256": "3e000bea8af8529f4b215576f70b5a46ba7b734455cb518b8c2d56261e403dc9"
+      },
+      {
+        "name": "receipt.json",
+        "sha256": "87eb0fbefbf573c68fbd06f7c539a11c1c3c2b7fe1913b31a62bf994476013db"
+      },
+      {
+        "name": "validate.cjs",
+        "sha256": "eb015cbdc1d4378833e1dbda093396b894b52688c68364c5011ca647dc0f3748"
+      },
+      {
+        "name": "continuation-validation-r32.json",
+        "sha256": "951167226fbfa4e362dbb415146385785fdc682115e0591b28e3cb30f81253d9"
+      },
+      {
+        "name": "continuation-native-r32.log",
+        "sha256": "cca44d8b7dee87fa51c2d9dd49769f2b52071fd483c88a589551ef58477c3a4b"
+      }
+    ]
+  },
+  "limits": "Acceptance is limited to the historical native comparison correction and evidence consistency. R32 remains failed; the subsequent focused native run passed. Node/audio suites were not rerun by the reviewer, and no browser, performance, human listening, morphology promotion, module readiness or release claim is made."
+}

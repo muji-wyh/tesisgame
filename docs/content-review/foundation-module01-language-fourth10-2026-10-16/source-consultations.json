@@ -1,0 +1,556 @@
+{
+  "schema": 1,
+  "status": "frozen_source_consultation_evidence_not_acceptance",
+  "date": "2026-10-16",
+  "production_mutated": false,
+  "preimages_json_sha256": "8561aac1ac5f64688f74d10694bc7063b7e8e57c099809a260fc1b463293179f",
+  "supporting_direct_pages": 20,
+  "consultations": [
+    {
+      "id": "foundation01-language-fourth10-oxford-announcement",
+      "title": "Oxford Advanced Learner's Dictionary: announcement",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/announcement",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Countable statement sense1 and usage comparison, lines105-164",
+      "finding": "The selected noun names information stated to an audience, in speech or writing. The opening-hours example fits. The separate uncountable act of announcing is excluded. No selected CEFR label was visible; footer B2 belonged to enhance.",
+      "observed_selected_sense_level": null,
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-announcement",
+      "title": "Collins English Dictionary / COBUILD: announcement",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/announcement",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "COBUILD sense1, lines222-246; British senses lines275-295",
+      "finding": "The public-information statement sense visibly carries B1+. The label is retained with its plus sign and is not a B1 or B2 certification. Notices and the act of announcing are distinguished. The audience can be a workplace group rather than national news.",
+      "observed_selected_sense_level": "B1+",
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-message",
+      "title": "Oxford Advanced Learner's Dictionary: message",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/message_1",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Ordinary communication sense1 and electronic sense2, lines107-172; other meanings lines195-250",
+      "finding": "Information sent or left for a recipient is the selected A1 sense. Electronic communications also carry A1. The main idea of a work, neural signals, regional advertising and Scottish/Irish shopping meanings are separate. Existing delivery-team wording fits.",
+      "observed_selected_sense_level": "A1",
+      "other_sense_labels_not_applied": {
+        "literary_theme": "B1",
+        "advertisement": "C1"
+      },
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-message",
+      "title": "Collins English Dictionary / COBUILD: message",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/message",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "COBUILD noun sense1, lines224-253; verb and theme for contrast",
+      "finding": "The recipient-directed communication noun is A1. B2 labels the central-idea sense, while B1+ labels the messaging verb. Neither changes the selected noun label. Information may include a request.",
+      "observed_selected_sense_level": "A1",
+      "other_sense_labels_not_applied": {
+        "theme": "B2",
+        "verb": "B1+"
+      },
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-email",
+      "title": "Oxford Advanced Learner's Dictionary: email",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/email_1",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Headword variant lines103; system sense1 lines107-132; message sense2 lines157-224",
+      "finding": "Email and e-mail are observed spellings. The countable message is separate from the uncountable communication service. Sending details in an email fits the selected message. The visible A1 topic label occurs under the system sense; no separate selected-message label was visible in the inspected passage. Mail is a contextual synonym, not an added answer.",
+      "observed_selected_sense_level": null,
+      "other_sense_labels_not_applied": {
+        "system": "A1"
+      },
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-email",
+      "title": "Collins English Dictionary / COBUILD: email",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/email",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "COBUILD variable noun lines220-245; American message sense lines282-303",
+      "finding": "The combined variable-noun entry carries A1, defines the system and includes a countable message example. The American section explicitly distinguishes message(s) from the system. Email, e-mail and E-mail are attested; verb A2 is separate. No region restriction is stated for the ordinary message.",
+      "observed_selected_sense_level": "A1",
+      "other_sense_labels_not_applied": {
+        "verb": "A2"
+      },
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-phone-call",
+      "title": "Oxford Advanced Learner's Dictionary: phone call",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/phone-call",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Headword and telephone call alternative, lines101-111",
+      "finding": "The noun describes speaking through a telephone connection and carries A1. Telephone call is a more formal lexical alternative; it is not automatically an additional exercise form. No fixed landline technology or region is required.",
+      "observed_selected_sense_level": "A1",
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-phone-call",
+      "title": "Collins English Dictionary / COBUILD: phone call",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/phone-call",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "COBUILD countable noun lines220-228",
+      "finding": "The selected telephone-conversation noun carries A1. The source supports making a call to another person, including the booking-confirmation example. An unsuccessful dialing attempt and a broad call for action are not the exact conversational focus.",
+      "observed_selected_sense_level": "A1",
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-voicemail",
+      "title": "Oxford Advanced Learner's Dictionary: voicemail",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/voicemail",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Uncountable system entry and topic label, lines101-112",
+      "finding": "The inspected Oxford entry defines the electronic recording system and labels that system B1. It does not independently define the selected countable message. V-mail is presented as a trademark alternative, not a general spelling or answer. The system label is not transferred to the message.",
+      "observed_selected_sense_level": null,
+      "other_sense_labels_not_applied": {
+        "recording_system": "B1"
+      },
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-voicemail",
+      "title": "Collins English Dictionary / COBUILD: voicemail",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/voicemail",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "British system entry, lines219-227",
+      "finding": "The passage defines a storage/transfer system for telephone messages, with no visible CEFR label. It supplies contrast evidence for the system meaning, not independent selected-message meaning or difficulty evidence.",
+      "observed_selected_sense_level": null,
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-mw-voicemail",
+      "title": "Merriam-Webster Dictionary: voicemail",
+      "publisher": "Merriam-Webster, Incorporated",
+      "url": "https://www.merriam-webster.com/dictionary/voice%20mail",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Headword/variants lines31-38, system sense1 and message senses2a/2b lines42-72",
+      "finding": "The entry explicitly distinguishes the system, messages collectively, and a single message. The countable message supports the selected lexeme and caller example. Voicemail is the headword; voice mail and voice-mail are less common variants. No CEFR label or region restriction is stated.",
+      "observed_selected_sense_level": null,
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-extension",
+      "title": "Oxford Advanced Learner's Dictionary: extension",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/extension",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Phone sense10 and topic, lines262-272; other senses191-261",
+      "finding": "The telephone sense concerns a numbered line within a larger phone system and carries C1. Examples identify a requested extension by number. Ext. is an abbreviation. Building, extra-time, computing, electrical and education senses and their regional labels are separate.",
+      "observed_selected_sense_level": "C1",
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-extension",
+      "title": "Collins English Dictionary / COBUILD: extension",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/extension",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "COBUILD phone sense5, lines248-253; other senses224-260",
+      "finding": "The selected numbered telephone line carries B2, explicitly differing from Oxford C1. Asking for an extension by number supports the internal-number focus. Ext. is a written abbreviation. The B2 labels on extra time and broader development are not the basis for this observation.",
+      "observed_selected_sense_level": "B2",
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-introduction",
+      "title": "Oxford Advanced Learner's Dictionary: introduction",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/introduction",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Of people sense2, lines138-161; book/speech sense1 lines104-133 and later contrasts",
+      "finding": "The selected act makes people known by name. The source supports a people-specific example. A2 belongs to the book/speech opening, not the people sense; no people-sense CEFR label was visible. Bringing products into use, first experience and introductory courses remain separate.",
+      "observed_selected_sense_level": null,
+      "other_sense_labels_not_applied": {
+        "book_or_speech_opening": "A2"
+      },
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-introduction",
+      "title": "Collins English Dictionary / COBUILD: introduction",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/introduction",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "British people-presentation sense2, lines281-301; COBUILD openings/course senses224-244",
+      "finding": "Presenting a person to others is independently attested without a visible selected CEFR label. The B2 labels visible in COBUILD describe introductory text and beginner subject books, not people meeting. This supports revising the ambiguous original meeting-opening example.",
+      "observed_selected_sense_level": null,
+      "other_sense_labels_not_applied": {
+        "book_or_talk_opening": "B2",
+        "introductory_subject_book": "B2"
+      },
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-greeting",
+      "title": "Oxford Advanced Learner's Dictionary: greeting",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/greeting",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Welcome/acknowledgment sense1 lines105-129; wishes sense2 lines135-154",
+      "finding": "The selected greeting can be words or a gesture when meeting. The visitor example fits. Plural good wishes and seasonal messages are separate uses; no selected CEFR label was visible. The footer B2 word was reasonably.",
+      "observed_selected_sense_level": null,
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-greeting",
+      "title": "Collins English Dictionary / COBUILD: greeting",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/greeting",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "COBUILD selected noun sense1, lines224-240; British and American sections269-310",
+      "finding": "The friendly meeting acknowledgment carries B1+, which is retained literally. The source includes both spoken and gestural greetings. Good wishes sent by an absent person are distinct; no ordinary meeting-sense region restriction was observed.",
+      "observed_selected_sense_level": "B1+",
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-conversation",
+      "title": "Oxford Advanced Learner's Dictionary: conversation",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/conversation",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Selected spoken exchange, lines103-147; regional collocations112-113",
+      "finding": "The ordinary noun is usually informal talk between people. Discussion is contrasted as more focused or detailed. British versus North American article choices belong to specific collocations, not a region restriction on the noun. No selected CEFR label was visible. Text-only chat is not silently included in the stored spoken sense.",
+      "observed_selected_sense_level": null,
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-conversation",
+      "title": "Collins English Dictionary / COBUILD: conversation",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/conversation",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "COBUILD sense1, lines224-241; British spoken-information passage268-282",
+      "finding": "The informal talking sense carries A2 and supports the schedule example. The general speech-exchange meaning supports the existing semantic focus. Archaic or legal meanings elsewhere are outside the workplace lesson.",
+      "observed_selected_sense_level": "A2",
+      "other_sense_labels_not_applied": {},
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-discussion",
+      "title": "Oxford Advanced Learner's Dictionary: discussion",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/discussion",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex foundation_review (fourth10 author)",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Conversation sense1 lines107-190; written/speech treatment sense2 lines226-241",
+      "finding": "The selected topic-focused exchange carries A2. Delivery problems are a natural conversational topic. A separate sense names a speech or written treatment and also carries A2, but that label does not merge the senses. No domain procedure or permission follows from discussing a topic.",
+      "observed_selected_sense_level": "A2",
+      "other_sense_labels_not_applied": {
+        "written_or_spoken_treatment": "A2"
+      },
+      "limits": "AI author consultation only. No dictionary text, audio, images or license acquired. Visible selected-sense labels are separate from editorial teaching levels. Frequency bands, footer words, OPAL membership and other-sense labels are excluded. Independent acceptance remains pending."
+    }
+  ],
+  "failed_accesses": [
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/voicemail",
+      "attempted_on": "2026-10-16",
+      "result": "403 Forbidden through direct web open",
+      "source_evidence_used": false,
+      "level_or_meaning_inferred": false
+    },
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/announcement",
+      "attempted_on": "2026-10-16",
+      "result": "403 Forbidden through direct web open",
+      "source_evidence_used": false,
+      "level_or_meaning_inferred": false
+    },
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/introduction",
+      "attempted_on": "2026-10-16",
+      "result": "403 Forbidden through direct web open",
+      "source_evidence_used": false,
+      "level_or_meaning_inferred": false
+    }
+  ],
+  "proposed_additive_source_records": [
+    {
+      "id": "foundation01-language-fourth10-oxford-announcement",
+      "title": "Oxford Advanced Learner's Dictionary: announcement",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/announcement",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-announcement",
+      "title": "Collins English Dictionary / COBUILD: announcement",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/announcement",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-message",
+      "title": "Oxford Advanced Learner's Dictionary: message",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/message_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-message",
+      "title": "Collins English Dictionary / COBUILD: message",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/message",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-email",
+      "title": "Oxford Advanced Learner's Dictionary: email",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/email_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-email",
+      "title": "Collins English Dictionary / COBUILD: email",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/email",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-phone-call",
+      "title": "Oxford Advanced Learner's Dictionary: phone call",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/phone-call",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-phone-call",
+      "title": "Collins English Dictionary / COBUILD: phone call",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/phone-call",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-voicemail",
+      "title": "Oxford Advanced Learner's Dictionary: voicemail",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/voicemail",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-voicemail",
+      "title": "Collins English Dictionary / COBUILD: voicemail",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/voicemail",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-mw-voicemail",
+      "title": "Merriam-Webster Dictionary: voicemail",
+      "publisher": "Merriam-Webster, Incorporated",
+      "url": "https://www.merriam-webster.com/dictionary/voice%20mail",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-extension",
+      "title": "Oxford Advanced Learner's Dictionary: extension",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/extension",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-extension",
+      "title": "Collins English Dictionary / COBUILD: extension",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/extension",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-introduction",
+      "title": "Oxford Advanced Learner's Dictionary: introduction",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/introduction",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-introduction",
+      "title": "Collins English Dictionary / COBUILD: introduction",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/introduction",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-greeting",
+      "title": "Oxford Advanced Learner's Dictionary: greeting",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/greeting",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-greeting",
+      "title": "Collins English Dictionary / COBUILD: greeting",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/greeting",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-conversation",
+      "title": "Oxford Advanced Learner's Dictionary: conversation",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/conversation",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-conversation",
+      "title": "Collins English Dictionary / COBUILD: conversation",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/conversation",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-discussion",
+      "title": "Oxford Advanced Learner's Dictionary: discussion",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/discussion",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    }
+  ],
+  "rights_boundary": "Only short original observations are retained. Page consultation grants no right to redistribute dictionary entries, examples, images or audio.",
+  "level_boundary": "Literal B1+ and C1 observations are never converted into schema values. Oxford voicemail B1 labels the system; Oxford/Collins introduction A2/B2 labels other senses. These labels do not certify the selected message or people senses. Editorial course choices are explicit and independently reviewable."
+}

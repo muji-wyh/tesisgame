@@ -1,0 +1,339 @@
+{
+  "schema": 1,
+  "status": "static_source_delta_and_marker_inspection_only",
+  "reviewer": "/root/recover_delivery",
+  "reviewed_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/source-inventory.json",
+    "bytes": 1546,
+    "raw_sha256": "e3b9cd630ccb4edfc3985ba8e5925029911f853616d2730935c944cfab8c1c78"
+  },
+  "reviewed_guard": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/guard.cjs",
+    "bytes": 45818,
+    "raw_sha256": "e34fd6419b8904f936d54253360b7a3d60681391624a54385545a9980d4659bf"
+  },
+  "unique_input_pins": 49,
+  "reference_dependency_pins": 41,
+  "lineage": {
+    "recorded_edits": 14,
+    "edit_occurrences": [
+      {
+        "edit": 1,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 2,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 3,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 4,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 5,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 6,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 7,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 8,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 9,
+        "expected_occurrences": 2,
+        "observed_occurrences": 2
+      },
+      {
+        "edit": 10,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 11,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 12,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 13,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      },
+      {
+        "edit": 14,
+        "expected_occurrences": 1,
+        "observed_occurrences": 1
+      }
+    ],
+    "exact_after_newline_normalization": true,
+    "raw_reconstruction_equal": false,
+    "prior_crlf_count": 0,
+    "revision_crlf_count": 584,
+    "note": "The fourteen textual edits reconstruct r02 exactly after normalizing CRLF to LF; r02 additionally changes line endings to CRLF. Exact frozen hashes retain the raw-byte difference."
+  },
+  "marker_inspection": {
+    "method": "Raw quoted-fragment extraction plus explicitly constructed three command-field marker strings. No JavaScript source parsing or execution.",
+    "unique_complete_markers": 37,
+    "all_unique_in_frozen_binding": true,
+    "each_contains_one_assertion": true,
+    "all_one_line_spans": true,
+    "sites": [
+      {
+        "fragment": "assert.equal(typeof value, 'string', 'Named independent reviewer required');",
+        "line": 41,
+        "column_start": 3,
+        "column_end": 79
+      },
+      {
+        "fragment": "assert(value.length > 0 && value === value.trim(), 'Nonempty exact reviewer identity required');",
+        "line": 42,
+        "column_start": 3,
+        "column_end": 99
+      },
+      {
+        "fragment": "assert(![AUTHOR, INHERITED_AUTHOR, DISPATCHER].includes(value), 'Author or dispatcher cannot accept preparation');",
+        "line": 44,
+        "column_start": 3,
+        "column_end": 117
+      },
+      {
+        "fragment": "assert.match(value, /^\\/root\\/[a-z0-9_]+$/, 'Use the canonical independent agent identity');",
+        "line": 43,
+        "column_start": 3,
+        "column_end": 95
+      },
+      {
+        "fragment": "assert.equal(review.reviewer, binding.roles.independent_reviewer);",
+        "line": 190,
+        "column_start": 3,
+        "column_end": 69
+      },
+      {
+        "fragment": "assert.deepEqual(review.actual_binding, input.binding);",
+        "line": 191,
+        "column_start": 69,
+        "column_end": 124
+      },
+      {
+        "fragment": "assert.deepEqual(review.source_inventory, input.source_inventory);",
+        "line": 191,
+        "column_start": 3,
+        "column_end": 69
+      },
+      {
+        "fragment": "assert.equal(pin.raw_sha256, expectedHash, key);",
+        "line": 68,
+        "column_start": 58,
+        "column_end": 106
+      },
+      {
+        "fragment": "assert.equal(journal.prepared_sha256, selected.prepared_sha256);",
+        "line": 79,
+        "column_start": 77,
+        "column_end": 141
+      },
+      {
+        "fragment": "assert.equal(sha(serialize(prepared.plan)), prepared.plan_sha256, 'Prepared plan bytes do not match their identity');",
+        "line": 82,
+        "column_start": 3,
+        "column_end": 120
+      },
+      {
+        "fragment": "assert.equal(prepared.plan_sha256, selected.plan_sha256, 'Receipt and journal plan identities differ');",
+        "line": 83,
+        "column_start": 3,
+        "column_end": 106
+      },
+      {
+        "fragment": "if (selected.target_manifest) assert.deepEqual(manifest, selected.target_manifest, 'Receipt target manifest differs from prepared plan');",
+        "line": 85,
+        "column_start": 33,
+        "column_end": 140
+      },
+      {
+        "fragment": "assert.deepEqual(sorted(stage.installed_targets), sorted(complete), 'Installed target pins must equal the complete authoritative bag manifest');",
+        "line": 144,
+        "column_start": 5,
+        "column_end": 149
+      },
+      {
+        "fragment": "assert.equal(new Set(stage.installed_targets.map(pin => pin.path.toLowerCase())).size, stage.installed_targets.length);",
+        "line": 140,
+        "column_start": 5,
+        "column_end": 124
+      },
+      {
+        "fragment": "assert.equal(bytes.length, pin.bytes, pin.path);",
+        "line": 29,
+        "column_start": 3,
+        "column_end": 51
+      },
+      {
+        "fragment": "assert.deepEqual(stage.journal_copies, copies, 'Explicit exact-content journal-copy binding required; no unused aliases');",
+        "line": 78,
+        "column_start": 3,
+        "column_end": 125
+      },
+      {
+        "fragment": "assert.deepEqual(bytes, original, 'Durable journal copy differs from actual original');",
+        "line": 71,
+        "column_start": 40,
+        "column_end": 127
+      },
+      {
+        "fragment": "assert.equal(stage.receipt_schema, 'shopping_bag_top_level_commit_and_persisted_input_v1');",
+        "line": 115,
+        "column_start": 5,
+        "column_end": 96
+      },
+      {
+        "fragment": "assert.equal(Object.hasOwn(commit, 'result'), false, 'Use the genuine top-level bag receipt');",
+        "line": 116,
+        "column_start": 42,
+        "column_end": 136
+      },
+      {
+        "fragment": "assert.equal(stage.persisted_input.raw_sha256, persisted.input_sha256);",
+        "line": 122,
+        "column_start": 5,
+        "column_end": 76
+      },
+      {
+        "fragment": "assert.equal(stage.persisted_source.raw_sha256, persisted.source_sha256);",
+        "line": 121,
+        "column_start": 5,
+        "column_end": 78
+      },
+      {
+        "fragment": "assert.equal(persistedInput.commit_receipt.path, stage.committed_receipt.path);",
+        "line": 125,
+        "column_start": 5,
+        "column_end": 84
+      },
+      {
+        "fragment": "assert.equal(persistedInput.committed_journal.sha256, commit.state.sha256);",
+        "line": 126,
+        "column_start": 93,
+        "column_end": 168
+      },
+      {
+        "fragment": "for (const row of commit.target_manifest) assert.equal(persistedInput.expected_inputs[row.path], row.after.sha256, 'Persisted input omits or changes a committed target: ' + row.path);",
+        "line": 135,
+        "column_start": 47,
+        "column_end": 188
+      },
+      {
+        "fragment": "assert.equal(sha(read(log)), command.log_sha256, log);",
+        "line": 152,
+        "column_start": 5,
+        "column_end": 59
+      },
+      {
+        "fragment": "assert.equal(persisted.postcheck_error, null);",
+        "line": 120,
+        "column_start": 5,
+        "column_end": 51
+      },
+      {
+        "fragment": "for (const key of ['fail', 'cancelled', 'skipped']) assert.equal(persisted.tests[key], 0);",
+        "line": 132,
+        "column_start": 57,
+        "column_end": 95
+      },
+      {
+        "fragment": "assert.equal(names.at(-1), path.posix.basename(canonicalState), 'Selected committed state is not the latest actual journal state');",
+        "line": 93,
+        "column_start": 3,
+        "column_end": 134
+      },
+      {
+        "fragment": "const names = fs.readdirSync(at(path.posix.dirname(state))).filter(name => /^\\d{6}-[a-z-]+\\.json$/.test(name)).sort();assert.equal(names.at(-1), path.posix.basename(state));",
+        "line": 210,
+        "column_start": 127,
+        "column_end": 182
+      },
+      {
+        "fragment": "assert.equal(input.status, 'root_authorized_one_shot_scratch_preparation');",
+        "line": 167,
+        "column_start": 3,
+        "column_end": 78
+      },
+      {
+        "fragment": "assert.equal(binding.status, 'root_bound_actual_post_bag_persisted_baseline');",
+        "line": 171,
+        "column_start": 3,
+        "column_end": 81
+      },
+      {
+        "fragment": "assert.match(inputHash, /^[a-f0-9]{64}$/);",
+        "line": 164,
+        "column_start": 3,
+        "column_end": 45
+      },
+      {
+        "fragment": "const inputBytes = fs.readFileSync(at(inputPath));assert.equal(sha(inputBytes), inputHash);",
+        "line": 165,
+        "column_start": 53,
+        "column_end": 94
+      },
+      {
+        "fragment": "assert(pin && /^[a-f0-9]{64}$/.test(pin.raw_sha256));",
+        "line": 26,
+        "column_start": 3,
+        "column_end": 56
+      },
+      {
+        "fragment": "assert.equal(command.exit_code, 0);",
+        "line": 149,
+        "column_start": 5,
+        "column_end": 40
+      },
+      {
+        "fragment": "assert.equal(command.error, null);",
+        "line": 149,
+        "column_start": 40,
+        "column_end": 74
+      },
+      {
+        "fragment": "assert.equal(command.signal, null);",
+        "line": 149,
+        "column_start": 74,
+        "column_end": 109
+      }
+    ]
+  },
+  "findings_resolved": [
+    "r01/F01",
+    "r01/F02"
+  ],
+  "source_modules_imported": false,
+  "syntax_checks_run": false,
+  "source_or_vm_executed": false,
+  "guard_cases_run": false,
+  "actual_binding_inspected_or_accepted": false,
+  "preparation_execution_accepted": false,
+  "production_mutated": false
+}

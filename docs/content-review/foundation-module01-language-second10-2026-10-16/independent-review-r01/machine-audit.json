@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "status": "independent_machine_scope_and_decision_checks_passed",
+  "date": "2026-10-16",
+  "reviewer": "Codex foundation_review (independent AI editorial language review; not human or subject-matter approval)",
+  "checks_passed": 5390,
+  "input_json_sha256": {
+    "preimages.json": "374e9b75aa44fca2b1b6f5f2d64ecb523f49c36d1b345c8576548e435507a324",
+    "source-consultations.json": "e9f97e97014ffc915d8a9d37030d8911e7ce72d729bca154848acc7e925e40ee",
+    "expression-use-review.json": "6612249e4f0bdb113d1ac4a850184319475040ad8410d8c1a0d1c12e652504f0",
+    "language-ledger.json": "459a4f18ee76f142e1191d3c39df6bdf81344f6cef701d8121107c6b0bd52fa8",
+    "structural-audit.json": "0817339dffabe0652173a3a7e534503c9b0629e3dc16fba94ba294e4186ca1e3"
+  },
+  "input_raw_sha256": {
+    "HANDOFF.md": "10203d4fec43ef4096e2f60f2c8f9fd515b1e1c9cd9469e23c064f5ee252c817",
+    "capture-preimages.cjs": "701c6e45e124fd643a262b38bcd4b2fa3f16ab8f0db4e8bd3c1ccc6a4919bab1",
+    "decision-notes.cjs": "15180d0507a2442151aa4197a824655100f0ca361148fb2980600bc394613a1a",
+    "expression-notes.cjs": "366a590ae64c465cbc7e0c42aeab6beb896292b4aaaf59230764f88bd5bcf959",
+    "expression-use-review.json": "dff39bd6b0f1d4c73e5beac7c30024017055ee598001994260f658efa2b04b91",
+    "language-ledger.json": "dc41b9c2cf20c04beecbd513e76a48cdeb3133d5481c028b4a29e7807775d06c",
+    "preimages.json": "6acfeb073a50c3af7da1059ccc704dc6cfcd79cda58315daf37b23d9aa02c5ab",
+    "prepare-ledger.cjs": "5c00e396117d8ef73d6800a3793eeb093345f005de5a13e16f526ff8647de32c",
+    "source-consultations.json": "691bedae6f4165d63d6df46322108c466616e458e95c8530f8ec93d441caadde",
+    "source-notes.cjs": "5fd3f0c73e9f77335ba946bf56ab73b21ae07089ab066be6ee06e676173ed33f",
+    "structural-audit.json": "28eee41803f6c9a6e5a7aa2519c6df648eeafda853b547165885ccef0035f95f"
+  },
+  "review_dependency_raw_sha256": {
+    "tools/validate-professional-content.cjs": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd",
+    "data/professional/schemas/lexeme.schema.json": "8837fa8779894d7b0d67e9e46d97aefdd7e952b476715df436db03ead4b4ff60",
+    "data/professional/schemas/common.schema.json": "4d27b5255e854f57be7a1778bc3aec6c467d0777c44f79ec8219ae617f6c8113",
+    "data/professional/schemas/morphology.schema.json": "5248a5e3fbbbcc70b63dbb13072f6ae0148a6ba2871eb9e44739bb94f4bbda6c",
+    "docs/plans/2026-10-15-professional-english-and-morphology.md": "2248f6b2ce2cc2bf62940535ff150c0af72a18149ac05dd5036ba163ccf1a476"
+  },
+  "proposal_json_sha256": "04fa8aa0c3f831e0aea367475f8fa8b2a9a5927281e482df979fc28e2f865fa7",
+  "source_provenance_json_sha256": "69df7d7099314bd68ac8b3f3f40737748f3115addbf6cd693b49a80bfcdce243",
+  "context_audit_json_sha256": "3b0e907d4155642fe5f197a70ea3d4879e781a7a70a230791dae95df7011bc6b",
+  "counts": {
+    "selected_entries": 10,
+    "full_language_acceptance_proposals": 9,
+    "full_language_holds": 1,
+    "author_definition_changes": 3,
+    "author_difficulty_changes": 2,
+    "reviewer_difficulty_refinements": 2,
+    "example_changes": 0,
+    "author_candidate_schema_errors": 0,
+    "reviewed_candidate_schema_errors": 0,
+    "selected_memberships": 200,
+    "complete_protected_entries": 163,
+    "neighboring_entries": 64,
+    "complete_protected_expressions": 118,
+    "matching_expressions": 114,
+    "expression_memberships": 266,
+    "selected_focus_expressions": 6,
+    "other_local_expressions": 4,
+    "modules": 108,
+    "existing_source_records": 133,
+    "growth_files": 10,
+    "fresh_source_pages": 13,
+    "contact_route_holds": 2,
+    "supplier_scope_holds": 6,
+    "additional_supplier_scope_holds": 4,
+    "physical_contact_exclusions": 3
+  },
+  "scoped_records_exact_before_and_after": true,
+  "all_author_files_preserved": 11,
+  "registry_hashes_informational": {
+    "capture": "bdd07516c489f2f728f8ad09912b0cbc01d97765a04e2403373de13238ee2bbf",
+    "review_start": "bdd07516c489f2f728f8ad09912b0cbc01d97765a04e2403373de13238ee2bbf",
+    "review_end": "bdd07516c489f2f728f8ad09912b0cbc01d97765a04e2403373de13238ee2bbf"
+  },
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "native_runtime_executed": false,
+  "limits": [
+    "Assertions validate exact scope and recorded decisions, not the correctness of language judgment; the latter is documented separately.",
+    "No gate promotion, serializer, native runtime, shared test edit or full suite execution occurred.",
+    "Independent AI lexical review does not imply human, domain, morphology, media, module or release acceptance."
+  ]
+}

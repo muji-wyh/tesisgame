@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "status": "committed",
+  "recorded_at": "2026-10-16T17:48:02.135Z",
+  "execution_date_local": "2026-10-17",
+  "timezone": "Asia/Shanghai",
+  "historical_frozen_integrated_on": "2026-10-16",
+  "date_note": "The reviewed serializer and provenance retain their October 16 preparation date. The actual guarded commit occurred on October 17 in the user timezone; this additive receipt corrects the execution chronology without modifying frozen evidence.",
+  "journal": {
+    "path": "build/professional-english/transactions/foundation02-language-first10-r01/states/000050-committed.json",
+    "sha256": "01b49e5e15c1b3f4e9c456805c9c9d356d77f668f53db73a25f4679e113db835",
+    "recorded_at": "2026-10-16T17:46:12.581Z"
+  },
+  "commit_receipt": {
+    "path": "build/professional-english/foundation-module02-language-review/first10/delivery-r01/commit-receipt.json",
+    "sha256": "60aa38c8f037c63ad188b804d74a850881760b1697d815a570b2d063c214d7fb"
+  },
+  "registry_after_sha256": "14e65b3155e22372c6756e2b994bc443348f9c7bb6a2a9b906344a09928273df",
+  "target_count": 24,
+  "continued_from_thread": "01a144df-5c22-7d53-808c-44407709f481",
+  "continuation_thread": "01a145cc-f809-78c2-b2ad-ff66644deebc"
+}

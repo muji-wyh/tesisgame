@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 113,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "8b3362317c22e59cfaaabf3ae84b438876226be40fcab20122f681a38df5cfd8",
+  "recorded_at": "2026-10-16T22:48:13.028Z",
+  "index": 55,
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.after"
+}

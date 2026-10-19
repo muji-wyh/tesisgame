@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "status": "independent_read_only_inspector_failed_before_review",
+  "source": {
+    "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspect-r03.ps1",
+    "sha256": "313f777fa63952df2a37678f76ef63a0f2476ecc8016462523badafff4d9d345"
+  },
+  "error": "Direct dependency edges differ from root inspection.",
+  "diagnosis": "The independent generic quoted-script scan finds the same 22 scripts and all 33 root direct-load edges plus three constant-string load edges. All additional targets are in that same script closure. Exact edge equality was too restrictive for a broader independent scan.",
+  "additional_edges": [
+    "res://fixture/professional_domain_pack_verifier.gd|res://scripts/professional_domain_release.gd",
+    "res://scripts/professional_domain_catalog.gd|res://scripts/professional_catalog.gd",
+    "res://scripts/professional_domain_owner.gd|res://scripts/professional_domain_release.gd"
+  ],
+  "correction": "Fresh inspect-r04.ps1 requires every root edge and records the additional literal edges explicitly.",
+  "fixture_runtime_replayed": false
+}

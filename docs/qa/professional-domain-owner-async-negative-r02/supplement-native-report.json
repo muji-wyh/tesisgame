@@ -1,0 +1,273 @@
+{
+	"authority": "none",
+	"cases": [
+		{
+			"id": "malformed",
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Invalid professional fixture context.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 3,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 1,
+				"cached_modules": 1,
+				"configured": true,
+				"encoded_bytes_read": 396398,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 10,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 8,
+				"publications": 1,
+				"selection": 3,
+				"steps": 43
+			}
+		},
+		{
+			"id": "draft",
+			"result": {
+				"code": "content_pending",
+				"error": "This fixture module is unavailable.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 5,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 1,
+				"cached_modules": 1,
+				"configured": true,
+				"encoded_bytes_read": 396398,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 10,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 11,
+				"publications": 2,
+				"selection": 5,
+				"steps": 48
+			}
+		},
+		{
+			"id": "foreign-course",
+			"result": {
+				"code": "content_pending",
+				"error": "This fixture module is unavailable.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 7,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 1,
+				"cached_modules": 1,
+				"configured": true,
+				"encoded_bytes_read": 396398,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 10,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 14,
+				"publications": 3,
+				"selection": 7,
+				"steps": 53
+			}
+		},
+		{
+			"id": "wrong-revision",
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Fixture curriculum revision mismatch.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 9,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 1,
+				"cached_modules": 1,
+				"configured": true,
+				"encoded_bytes_read": 396398,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 10,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 17,
+				"publications": 4,
+				"selection": 9,
+				"steps": 59
+			}
+		},
+		{
+			"id": "unavailable-mode",
+			"result": {
+				"code": "mode_unavailable",
+				"error": "This module does not have enough eligible content for this game.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 11,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 1,
+				"cached_modules": 1,
+				"configured": true,
+				"encoded_bytes_read": 396398,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 10,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 21,
+				"publications": 5,
+				"selection": 11,
+				"steps": 65
+			}
+		}
+	],
+	"checks": [
+		{
+			"check": "Godot empty-substring predicate explains the retained harness failure",
+			"passed": true
+		},
+		{
+			"check": "malformed: valid predecessor is prepared",
+			"passed": true
+		},
+		{
+			"check": "malformed: invalid replacement revokes predecessor token immediately",
+			"passed": true
+		},
+		{
+			"check": "malformed: failed replacement cannot return predecessor success",
+			"passed": true
+		},
+		{
+			"check": "malformed: previously verified cache remains data without replacement authority",
+			"passed": true
+		},
+		{
+			"check": "malformed: immutable installed data handles rejection without extra owner I/O",
+			"passed": true
+		},
+		{
+			"check": "draft: valid predecessor is prepared",
+			"passed": true
+		},
+		{
+			"check": "draft: invalid replacement revokes predecessor token immediately",
+			"passed": true
+		},
+		{
+			"check": "draft: failed replacement cannot return predecessor success",
+			"passed": true
+		},
+		{
+			"check": "draft: previously verified cache remains data without replacement authority",
+			"passed": true
+		},
+		{
+			"check": "draft: immutable installed data handles rejection without extra owner I/O",
+			"passed": true
+		},
+		{
+			"check": "foreign-course: valid predecessor is prepared",
+			"passed": true
+		},
+		{
+			"check": "foreign-course: invalid replacement revokes predecessor token immediately",
+			"passed": true
+		},
+		{
+			"check": "foreign-course: failed replacement cannot return predecessor success",
+			"passed": true
+		},
+		{
+			"check": "foreign-course: previously verified cache remains data without replacement authority",
+			"passed": true
+		},
+		{
+			"check": "foreign-course: immutable installed data handles rejection without extra owner I/O",
+			"passed": true
+		},
+		{
+			"check": "wrong-revision: valid predecessor is prepared",
+			"passed": true
+		},
+		{
+			"check": "wrong-revision: invalid replacement revokes predecessor token immediately",
+			"passed": true
+		},
+		{
+			"check": "wrong-revision: failed replacement cannot return predecessor success",
+			"passed": true
+		},
+		{
+			"check": "wrong-revision: previously verified cache remains data without replacement authority",
+			"passed": true
+		},
+		{
+			"check": "wrong-revision: immutable installed data handles rejection without extra owner I/O",
+			"passed": true
+		},
+		{
+			"check": "unavailable-mode: valid predecessor is prepared",
+			"passed": true
+		},
+		{
+			"check": "unavailable-mode: invalid replacement revokes predecessor token immediately",
+			"passed": true
+		},
+		{
+			"check": "unavailable-mode: failed replacement cannot return predecessor success",
+			"passed": true
+		},
+		{
+			"check": "Mode replacement keeps actual production mode gate",
+			"passed": true
+		},
+		{
+			"check": "unavailable-mode: previously verified cache remains data without replacement authority",
+			"passed": true
+		},
+		{
+			"check": "unavailable-mode: immutable installed data handles rejection without extra owner I/O",
+			"passed": true
+		},
+		{
+			"check": "A subsequent valid request recovers after all rejected replacements",
+			"passed": true
+		}
+	],
+	"count": 28,
+	"failures": 0,
+	"schema": 1,
+	"scope": "Affected invalid-replacement-request supplement only. No package-negative rerun; original 214-check run remains failed. Exact unchanged owner and production scripts. No app trust, media fetch, browser, memory or latency acceptance."
+}

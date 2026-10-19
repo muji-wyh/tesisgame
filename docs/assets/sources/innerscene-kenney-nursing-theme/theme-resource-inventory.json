@@ -1,0 +1,49 @@
+{
+  "notice": "Four exact Nursing theme records only. Actual lesson manifests must add all required lesson media and validate grouped delivery; this is not a module manifest.",
+  "resources": [
+    {
+      "id": "sha256:712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9",
+      "sha256": "712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9",
+      "path": "professional-media/712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 132580,
+      "decoded_bytes": 8388608,
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "sha256:65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973",
+      "sha256": "65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973",
+      "path": "professional-media/65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 191183,
+      "decoded_bytes": 8388608,
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "sha256:41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5",
+      "sha256": "41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5",
+      "path": "professional-media/41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 189671,
+      "decoded_bytes": 8388608,
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "sha256:3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714",
+      "sha256": "3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714",
+      "path": "professional-media/3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 259369,
+      "decoded_bytes": 7109632,
+      "width": 1048,
+      "height": 848
+    }
+  ]
+}

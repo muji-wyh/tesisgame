@@ -328,7 +328,9 @@ func _tap_growth_checks(directory: String) -> void:
 
 func _jelly_cue_playing(audio, cue: String = "") -> bool:
 	for player: AudioStreamPlayer in audio._jelly_players:
-		if player.playing and player.stream != null and (cue.is_empty() or player.stream.resource_path == audio.JELLY_PATHS[cue]):
+		if player.playing and player.stream != null and (cue.is_empty()
+			or (cue == "pop" and player.stream.resource_path in audio.JELLY_COLLECTION_PATHS)
+			or (audio.JELLY_PATHS.has(cue) and player.stream.resource_path == audio.JELLY_PATHS[cue])):
 			return true
 	return false
 

@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "id": "ensure.make-certain.v.analysis.alternative.atomic.v1",
+  "lexeme_id": "ensure.make-certain.v",
+  "text": "ensure",
+  "kind": "atomic",
+  "review": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewed_at": null,
+    "notes": "Nonselected fallback candidate only if independent review finds en- plus sure pedagogically unsuitable for this selected sense. Keeping the entire word is structurally possible but supplies whole-form exposure rather than composition mastery. This alternative is mutually exclusive with the preferred two-part analysis for the same target and is not authority to install either. Accepted lexical variant insure remains unchanged.",
+    "references": [
+      "https://www.oxfordlearnersdictionaries.com/definition/english/ensure",
+      "https://www.oxfordlearnersdictionaries.com/definition/english/en_1",
+      "https://www.oxfordlearnersdictionaries.com/definition/english/sure_1",
+      "https://www.collinsdictionary.com/dictionary/english/ensure",
+      "https://www.collinsdictionary.com/dictionary/english/en"
+    ]
+  },
+  "parts": [
+    {
+      "id": "p1",
+      "canonical_id": "english.atomic.ensure.make-certain",
+      "type": "atomic",
+      "canonical": "ensure",
+      "surface": "ensure",
+      "break_offsets": []
+    }
+  ],
+  "nodes": [],
+  "roots": [
+    "p1"
+  ]
+}

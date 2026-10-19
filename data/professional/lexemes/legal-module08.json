@@ -1,0 +1,2262 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "conflict-check.review-for-potential-conflicting-interests-or-duties.n",
+      "text": "conflict check",
+      "display_text": "conflict check",
+      "pos": "noun",
+      "definition": "A review intended to identify potentially conflicting interests or duties.",
+      "example": "The conflict check remains open pending further information.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "conflict check"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a fictional relationship review with unresolved status, not a declaration that representation is permitted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "conflict-check.review-for-potential-conflicting-interests-or-duties.n.analysis.v1",
+        "lexeme_id": "conflict-check.review-for-potential-conflicting-interests-or-duties.n",
+        "text": "conflict check",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.conflict",
+            "type": "stem",
+            "canonical": "conflict",
+            "surface": "conflict"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.check",
+            "type": "stem",
+            "canonical": "check",
+            "surface": "check"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "conflict check",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "own-interest-conflict.conflict-between-professional-duty-and-own-interest.n",
+      "text": "own-interest conflict",
+      "display_text": "own-interest conflict",
+      "pos": "noun",
+      "definition": "A conflict between a professional's duty and that professional's own interest, under the relevant rules.",
+      "example": "The SRA example concerns a possible own-interest conflict.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "own-interest conflict"
+      ],
+      "regions": [
+        "England and Wales"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a neutral fictional duty-and-personal-interest comparison, without teaching an exception or permission to act.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "own-interest-conflict.conflict-between-professional-duty-and-own-interest.n.analysis.v1",
+        "lexeme_id": "own-interest-conflict.conflict-between-professional-duty-and-own-interest.n",
+        "text": "own-interest conflict",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.own",
+            "type": "stem",
+            "canonical": "own",
+            "surface": "own"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.interest",
+            "type": "stem",
+            "canonical": "interest",
+            "surface": "interest"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.conflict",
+            "type": "stem",
+            "canonical": "conflict",
+            "surface": "conflict"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "own-interest",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "own-interest conflict",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "client-conflict.conflict-between-duties-owed-to-different-clients.n",
+      "text": "client conflict",
+      "display_text": "client conflict",
+      "pos": "noun",
+      "definition": "A conflict between duties owed to different clients under the relevant professional rules.",
+      "example": "The reviewer will assess whether there is a client conflict.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "client conflict"
+      ],
+      "regions": [
+        "England and Wales"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show separate fictional client duties with a review question, without assuming consent resolves the issue.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "client-conflict.conflict-between-duties-owed-to-different-clients.n.analysis.v1",
+        "lexeme_id": "client-conflict.conflict-between-duties-owed-to-different-clients.n",
+        "text": "client conflict",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.client",
+            "type": "stem",
+            "canonical": "client",
+            "surface": "client"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.conflict",
+            "type": "stem",
+            "canonical": "conflict",
+            "surface": "conflict"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "client conflict",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "information-barrier.arrangements-limiting-information-flow-between-people-or-teams.n",
+      "text": "information barrier",
+      "display_text": "information barrier",
+      "pos": "noun",
+      "definition": "Arrangements intended to limit information flow between people or teams.",
+      "example": "The information barrier's purpose and effectiveness require review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "information barrier"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show separated fictional information access groups, without suggesting a barrier cures every conflict.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "information-barrier.arrangements-limiting-information-flow-between-people-or-teams.n.analysis.v1",
+        "lexeme_id": "information-barrier.arrangements-limiting-information-flow-between-people-or-teams.n",
+        "text": "information barrier",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.information",
+            "type": "stem",
+            "canonical": "information",
+            "surface": "information"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.barrier",
+            "type": "stem",
+            "canonical": "barrier",
+            "surface": "barrier"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "information barrier",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "legal-professional-privilege.protection-for-qualifying-legal-communications-or-material.n",
+      "text": "legal professional privilege",
+      "display_text": "legal professional privilege",
+      "pos": "noun",
+      "definition": "Protection for qualifying legal communications or material from compelled disclosure, under the applicable law.",
+      "example": "The England and Wales note distinguishes legal professional privilege from confidentiality.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "legal professional privilege"
+      ],
+      "regions": [
+        "England and Wales"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show fictional protected-material review with scope unresolved; do not apply a universal privilege stamp.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "legal-professional-privilege.protection-for-qualifying-legal-communications-or-material.n.analysis.v1",
+        "lexeme_id": "legal-professional-privilege.protection-for-qualifying-legal-communications-or-material.n",
+        "text": "legal professional privilege",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.legal",
+            "type": "stem",
+            "canonical": "legal",
+            "surface": "legal"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.profession",
+            "type": "stem",
+            "canonical": "profession",
+            "surface": "profession"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.al.suffix",
+            "type": "suffix",
+            "canonical": "al",
+            "surface": "al"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.privilege",
+            "type": "stem",
+            "canonical": "privilege",
+            "surface": "privilege"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "professional",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "legal professional",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "legal professional privilege",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "attorney-client-privilege.us-protection-for-qualifying-lawyer-client-communications.n",
+      "text": "attorney-client privilege",
+      "display_text": "attorney-client privilege",
+      "pos": "noun",
+      "definition": "A U.S. evidentiary protection for qualifying lawyer-client communications, with scope and exceptions governed by applicable law.",
+      "example": "The U.S. reviewer will assess the attorney-client privilege question.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "attorney-client privilege"
+      ],
+      "regions": [
+        "US"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a fictional U.S. lawyer-client communication under review, without assuming every message qualifies.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "attorney-client-privilege.us-protection-for-qualifying-lawyer-client-communications.n.analysis.v1",
+        "lexeme_id": "attorney-client-privilege.us-protection-for-qualifying-lawyer-client-communications.n",
+        "text": "attorney-client privilege",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.attorney",
+            "type": "stem",
+            "canonical": "attorney",
+            "surface": "attorney"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.client",
+            "type": "stem",
+            "canonical": "client",
+            "surface": "client"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.privilege",
+            "type": "stem",
+            "canonical": "privilege",
+            "surface": "privilege"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "attorney-client",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "attorney-client privilege",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "litigation-privilege.protection-for-qualifying-material-connected-with-litigation.n",
+      "text": "litigation privilege",
+      "display_text": "litigation privilege",
+      "pos": "noun",
+      "definition": "Protection for qualifying material connected with litigation under the applicable law.",
+      "example": "The England and Wales example raises a litigation privilege question.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "litigation privilege"
+      ],
+      "regions": [
+        "England and Wales"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a fictional litigation-related record under review, not a method to make material privileged.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "litigation-privilege.protection-for-qualifying-material-connected-with-litigation.n.analysis.v1",
+        "lexeme_id": "litigation-privilege.protection-for-qualifying-material-connected-with-litigation.n",
+        "text": "litigation privilege",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.litigate",
+            "type": "stem",
+            "canonical": "litigate",
+            "surface": "litigat"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ion.suffix",
+            "type": "suffix",
+            "canonical": "ion",
+            "surface": "ion"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.privilege",
+            "type": "stem",
+            "canonical": "privilege",
+            "surface": "privilege"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "litigation",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "litigation privilege",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "privileged-document.document-to-which-applicable-legal-privilege-attaches.n",
+      "text": "privileged document",
+      "display_text": "privileged document",
+      "pos": "noun",
+      "definition": "A document to which an applicable legal privilege attaches.",
+      "example": "The lawyer will determine whether this is a privileged document.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "privileged document"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a fictional document with determination pending, avoiding any suggestion that a label creates privilege.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "privileged-document.document-to-which-applicable-legal-privilege-attaches.n.analysis.v1",
+        "lexeme_id": "privileged-document.document-to-which-applicable-legal-privilege-attaches.n",
+        "text": "privileged document",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.privilege",
+            "type": "stem",
+            "canonical": "privilege",
+            "surface": "privileg"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.document",
+            "type": "stem",
+            "canonical": "document",
+            "surface": "document"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "privileged",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "privileged document",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "disclosure.provision-or-identification-of-information-in-legal-process.n",
+      "text": "disclosure",
+      "display_text": "disclosure",
+      "pos": "noun",
+      "definition": "The provision or identification of information in a legal process under applicable duties or directions.",
+      "example": "The proposed disclosure needs review of its scope and authority.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "disclosure"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a fictional information-release review with recipient and scope unresolved, not a disclosure procedure.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "disclosure.provision-or-identification-of-information-in-legal-process.n.analysis.v1",
+        "lexeme_id": "disclosure.provision-or-identification-of-information-in-legal-process.n",
+        "text": "disclosure",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.disclose",
+            "type": "stem",
+            "canonical": "disclose",
+            "surface": "disclos"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ure.suffix",
+            "type": "suffix",
+            "canonical": "ure",
+            "surface": "ure"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "disclosure",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "legal-hold.direction-to-preserve-material-for-legal-purpose.n",
+      "text": "legal hold",
+      "display_text": "legal hold",
+      "pos": "noun",
+      "definition": "A direction to preserve relevant material for a legal purpose under applicable arrangements.",
+      "example": "The team asked the responsible lawyer about the legal hold's scope.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "legal hold"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show fictional records marked for preservation review, without retention periods or deletion instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "legal-hold.direction-to-preserve-material-for-legal-purpose.n.analysis.v1",
+        "lexeme_id": "legal-hold.direction-to-preserve-material-for-legal-purpose.n",
+        "text": "legal hold",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.legal",
+            "type": "stem",
+            "canonical": "legal",
+            "surface": "legal"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.hold",
+            "type": "stem",
+            "canonical": "hold",
+            "surface": "hold"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "legal hold",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "deletion-request.request-to-remove-specified-information.n",
+      "text": "deletion request",
+      "display_text": "deletion request",
+      "pos": "noun",
+      "definition": "A request to remove specified information, whose handling depends on applicable requirements.",
+      "example": "The deletion request must be reviewed alongside any preservation duties.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "deletion request"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a fictional request pending review, without implying an unconditional right or immediate deletion.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "deletion-request.request-to-remove-specified-information.n.analysis.v1",
+        "lexeme_id": "deletion-request.request-to-remove-specified-information.n",
+        "text": "deletion request",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.delete",
+            "type": "stem",
+            "canonical": "delete",
+            "surface": "delet"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ion.suffix",
+            "type": "suffix",
+            "canonical": "ion",
+            "surface": "ion"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.request",
+            "type": "stem",
+            "canonical": "request",
+            "surface": "request"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "deletion",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "deletion request",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "secure-disposal.disposal-using-protections-suited-to-material-and-requirements.n",
+      "text": "secure disposal",
+      "display_text": "secure disposal",
+      "pos": "noun",
+      "definition": "Disposal using protections suited to the material and applicable requirements.",
+      "example": "The secure disposal proposal is awaiting authorization.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "secure disposal"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show closed fictional confidential-material containers and authorization status, without operational destruction steps.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "secure-disposal.disposal-using-protections-suited-to-material-and-requirements.n.analysis.v1",
+        "lexeme_id": "secure-disposal.disposal-using-protections-suited-to-material-and-requirements.n",
+        "text": "secure disposal",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.secure",
+            "type": "stem",
+            "canonical": "secure",
+            "surface": "secure"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.dispose",
+            "type": "stem",
+            "canonical": "dispose",
+            "surface": "dispos"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.al.suffix",
+            "type": "suffix",
+            "canonical": "al",
+            "surface": "al"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "disposal",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "secure disposal",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "disclosure-log.record-of-information-disclosures-and-relevant-context.n",
+      "text": "disclosure log",
+      "display_text": "disclosure log",
+      "pos": "noun",
+      "definition": "A record of information disclosures and relevant context such as recipients, dates, and authority.",
+      "example": "The disclosure log records the stated recipient and scope.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "disclosure log"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a fictional log with minimal nonpersonal entries, without presenting the log as proof of lawfulness.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "disclosure-log.record-of-information-disclosures-and-relevant-context.n.analysis.v1",
+        "lexeme_id": "disclosure-log.record-of-information-disclosures-and-relevant-context.n",
+        "text": "disclosure log",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.disclose",
+            "type": "stem",
+            "canonical": "disclose",
+            "surface": "disclos"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ure.suffix",
+            "type": "suffix",
+            "canonical": "ure",
+            "surface": "ure"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.log",
+            "type": "stem",
+            "canonical": "log",
+            "surface": "log"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "disclosure",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "disclosure log",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "recipient-check.verification-that-intended-recipient-details-match-authorized-destination.n",
+      "text": "recipient check",
+      "display_text": "recipient check",
+      "pos": "noun",
+      "definition": "A check that intended recipient details match the authorized destination for information.",
+      "example": "The recipient check found a discrepancy in the address.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "recipient check"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show fictional intended and entered recipient details being compared, with no real contact information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "recipient-check.verification-that-intended-recipient-details-match-authorized-destination.n.analysis.v1",
+        "lexeme_id": "recipient-check.verification-that-intended-recipient-details-match-authorized-destination.n",
+        "text": "recipient check",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.recipient",
+            "type": "stem",
+            "canonical": "recipient",
+            "surface": "recipient"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.check",
+            "type": "stem",
+            "canonical": "check",
+            "surface": "check"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "recipient check",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "professional-duty.obligation-arising-from-professional-role-and-applicable-rules.n",
+      "text": "professional duty",
+      "display_text": "professional duty",
+      "pos": "noun",
+      "definition": "An obligation arising from a professional role and its applicable rules.",
+      "example": "The lawyer will explain the relevant professional duty.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "professional duty"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a fictional role-and-obligation reference, without universal regulatory or disclosure rules.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional-duty.obligation-arising-from-professional-role-and-applicable-rules.n.analysis.v1",
+        "lexeme_id": "professional-duty.obligation-arising-from-professional-role-and-applicable-rules.n",
+        "text": "professional duty",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.profession",
+            "type": "stem",
+            "canonical": "profession",
+            "surface": "profession"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.al.suffix",
+            "type": "suffix",
+            "canonical": "al",
+            "surface": "al"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.duty",
+            "type": "stem",
+            "canonical": "duty",
+            "surface": "duty"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "professional",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "professional duty",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "conflict-register.record-of-identified-potential-or-actual-conflicts.n",
+      "text": "conflict register",
+      "display_text": "conflict register",
+      "pos": "noun",
+      "definition": "A record of identified potential or actual conflicts and related review information.",
+      "example": "The conflict register records that the issue remains under review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "conflict register"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show fictional conflict records with status and assigned reviewer, without client identities.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "conflict-register.record-of-identified-potential-or-actual-conflicts.n.analysis.v1",
+        "lexeme_id": "conflict-register.record-of-identified-potential-or-actual-conflicts.n",
+        "text": "conflict register",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.conflict",
+            "type": "stem",
+            "canonical": "conflict",
+            "surface": "conflict"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.register",
+            "type": "stem",
+            "canonical": "register",
+            "surface": "register"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "conflict register",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "reporting-channel.designated-means-for-submitting-report-or-concern.n",
+      "text": "reporting channel",
+      "display_text": "reporting channel",
+      "pos": "noun",
+      "definition": "A designated means for submitting a report or concern.",
+      "example": "The policy identifies the appropriate reporting channel.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "reporting channel"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show clearly labelled fictional reporting options, without bypassing the applicable arrangements.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "reporting-channel.designated-means-for-submitting-report-or-concern.n.analysis.v1",
+        "lexeme_id": "reporting-channel.designated-means-for-submitting-report-or-concern.n",
+        "text": "reporting channel",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, affixes, compounds, and word boundaries. Reconstruction is not linguistic approval. Intact bases, legal lexicalization, Latinate forms, and deeper analyses require qualified review. Latin phrases and unknown analyses remain null; no syllable or length-based splitting is used.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.report",
+            "type": "stem",
+            "canonical": "report",
+            "surface": "report"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.channel",
+            "type": "stem",
+            "canonical": "channel",
+            "surface": "channel"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "reporting",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "reporting channel",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Legal & Paralegal communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal advice or a procedural guide. No filing method, deadline, time calculation, qualification equivalence, disclosure authority, conflict exception, contract wording, legal validity determination, eligibility decision, or case outcome is approved. Jurisdictions, roles, privileges, and procedures differ. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

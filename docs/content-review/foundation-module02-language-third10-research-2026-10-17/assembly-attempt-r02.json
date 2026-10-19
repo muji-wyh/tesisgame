@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T18:56:19.799Z",
+  "completed_at": "2026-10-16T18:56:30.681Z",
+  "entrypoint": "build/professional-english/foundation-module02-language-review/third10-research-r01/assemble-r02.cjs",
+  "source_files": [
+    {
+      "path": "build/professional-english/foundation-module02-language-review/third10-research-r01/collect-html-metadata.cjs",
+      "raw_sha256": "9bbcc9b3534bfcf8febd2bb5de05d15c5ae9e23085987ebfe228ceccc62dfb03"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/third10-research-r01/oxford-html-metadata.json",
+      "raw_sha256": "33efde1aabcb5cef8c82fb455fd2d0a0ae3c77f78d3ff49d11dd9e9b06244b7f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/third10-research-r01/research-notes.json",
+      "raw_sha256": "4e996e65b2bf54d9f466e7c91f8ea45036a2e05b1723bb29aa1f0d2bb240566e"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/third10-research-r01/assemble-r02.cjs",
+      "raw_sha256": "c44e4799e6e713f30bb519fb9bf241bea2a4953741039b5d67a8b2a6adaa99f5"
+    }
+  ],
+  "assembly_start_raw_sha256": "7f7bfa6480180bfe0f393f83213776f05f68ac49ada59639efe76a49e628fef1",
+  "inventory_raw_sha256": "22300622a4d3497aae3622d555a950577b0322a784c3ea64f1e5a77c762123c6",
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": "{\"status\":\"frozen_draft_pending_independent_acceptance\",\"inventory\":\"build/professional-english/foundation-module02-language-review/third10-research-r01/inventory.json\",\"inventory_sha256\":\"22300622a4d3497aae3622d555a950577b0322a784c3ea64f1e5a77c762123c6\",\"candidate_ledger_sha256\":\"939bfedea01a17bce2bf97b29dcc607d29423a8622b855107e73b4402b2fa026\",\"context_screen_sha256\":\"ca6775e8ac2a10fad0ef761a73004956873c97866cff138e08879ee2fe044c0c\",\"proposals\":8,\"holds\":2,\"actual_content_changes\":7,\"context\":{\"selected_entries\":10,\"memberships\":200,\"containing_modules\":20,\"expressions_scanned\":1620,\"surface_hit_expressions\":39,\"surface_lexeme_expression_pairs\":42,\"existing_focus_expressions\":4,\"related_identities\":43,\"inherited_expression_holds\":17,\"prior_lexical_holds\":2,\"source_files\":353,\"new_expression_acceptances\":0,\"new_scored_bindings\":0},\"audit\":{\"summary\":{\"courses\":20,\"modules\":200,\"themes\":21,\"unique_lexemes\":4939,\"vocabulary_memberships\":10000,\"vocabulary_memberships_target\":10000,\"vocabulary_memberships_remaining\":0,\"expressions\":1620,\"expression_memberships\":2000,\"expression_memberships_target\":2000,\"expression_memberships_remaining\":0,\"ready_modules\":0,\"reviewed_lexemes\":130,\"morphology_authored\":4045,\"morphology_reviewed\":89,\"integrated_word_images\":8,\"integrated_word_audio\":12,\"release_ready\":false},\"errors\":0,\"warnings\":29432},\"production_mutated\":false,\"native_execution\":false}\n",
+  "stderr": "",
+  "executed_source_equality_verified": true,
+  "witness_verification_error": null,
+  "production_mutated": false
+}

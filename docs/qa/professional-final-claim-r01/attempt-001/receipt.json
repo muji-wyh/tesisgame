@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "probe": "final-claim-after-preflight-r01",
+  "started_at": "2026-10-16T20:18:10.949Z",
+  "status": "failed",
+  "root": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+  "attempt": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\final-claim-after-preflight-r01\\attempt-001",
+  "inventory_sha256": "96d02fb46ab915a5c519b9ba3591f7a208b054df5b20d7bd5aa5a62ecf483280",
+  "executable": {
+    "path": "C:\\Users\\yaohuiwang\\AppData\\Local\\Microsoft\\WinGet\\Links\\godot.exe",
+    "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8"
+  },
+  "steps": [
+    {
+      "name": "check-ui",
+      "command": "C:\\Users\\yaohuiwang\\AppData\\Local\\Microsoft\\WinGet\\Links\\godot.exe",
+      "args": [
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--check-only",
+        "--script",
+        "res://build/professional-english/final-claim-after-preflight-r01/probe_ui.gd"
+      ],
+      "cwd": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+      "started_at": "2026-10-16T20:18:12.674Z",
+      "duration_ms": 6977,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "check-ui.stdout.log",
+      "stderr": "check-ui.stderr.log",
+      "stdout_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "check-probe",
+      "command": "C:\\Users\\yaohuiwang\\AppData\\Local\\Microsoft\\WinGet\\Links\\godot.exe",
+      "args": [
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--check-only",
+        "--script",
+        "res://build/professional-english/final-claim-after-preflight-r01/probe.gd"
+      ],
+      "cwd": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+      "started_at": "2026-10-16T20:18:21.758Z",
+      "duration_ms": 1723,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "check-probe.stdout.log",
+      "stderr": "check-probe.stderr.log",
+      "stdout_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "native-probe",
+      "command": "C:\\Users\\yaohuiwang\\AppData\\Local\\Microsoft\\WinGet\\Links\\godot.exe",
+      "args": [
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://build/professional-english/final-claim-after-preflight-r01/probe.gd",
+        "--",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\final-claim-after-preflight-r01\\attempt-001"
+      ],
+      "cwd": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+      "started_at": "2026-10-16T20:18:24.925Z",
+      "duration_ms": 15581,
+      "status": 1,
+      "signal": null,
+      "error": null,
+      "stdout": "native-probe.stdout.log",
+      "stderr": "native-probe.stderr.log",
+      "stdout_sha256": "87f12009d2eb4ffa4febe52b747a7618dad69f42ce717257c1c08f5de4f3f153",
+      "stderr_sha256": "cf455c196a0b2fa6ba1a72662bac7e353ab5b51050e04aaecf9579d965fe1cc4"
+    }
+  ],
+  "verification": [
+    {
+      "label": "initial",
+      "at": "2026-10-16T20:18:11.973Z",
+      "count": 566
+    },
+    {
+      "label": "before-check-ui",
+      "at": "2026-10-16T20:18:12.674Z",
+      "count": 566
+    },
+    {
+      "label": "after-check-ui",
+      "at": "2026-10-16T20:18:20.636Z",
+      "count": 566
+    },
+    {
+      "label": "before-check-probe",
+      "at": "2026-10-16T20:18:21.758Z",
+      "count": 566
+    },
+    {
+      "label": "after-check-probe",
+      "at": "2026-10-16T20:18:24.268Z",
+      "count": 566
+    },
+    {
+      "label": "before-native-probe",
+      "at": "2026-10-16T20:18:24.925Z",
+      "count": 566
+    },
+    {
+      "label": "after-native-probe",
+      "at": "2026-10-16T20:18:41.267Z",
+      "count": 566
+    }
+  ],
+  "error": {
+    "name": "Error",
+    "message": "The native-probe process failed. Retain this attempt and review its logs; do not rerun r01.",
+    "stack": "Error: The native-probe process failed. Retain this attempt and review its logs; do not rerun r01.\n    at dispatch (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\final-claim-after-preflight-r01\\run-once.cjs:85:11)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\final-claim-after-preflight-r01\\run-once.cjs:97:3)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)\n    at Module.load (node:internal/modules/cjs/loader:1525:32)\n    at Module._load (node:internal/modules/cjs/loader:1327:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47"
+  },
+  "finished_at": "2026-10-16T20:18:41.268Z"
+}

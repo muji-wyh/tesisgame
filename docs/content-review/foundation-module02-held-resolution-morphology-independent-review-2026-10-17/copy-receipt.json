@@ -1,0 +1,223 @@
+{
+  "schema": 1,
+  "status": "passed_exact_durable_copy",
+  "copied_at": "2026-10-16T22:16:22.237Z",
+  "author": "Codex morph_review",
+  "destination": "docs/content-review/foundation-module02-held-resolution-morphology-independent-review-2026-10-17",
+  "source_inventories": [
+    {
+      "path": "build/professional-english/foundation02-held-resolution-morphology-research-r01/inventory.json",
+      "sha256": "9ecff44931f5512774c98ef4781d1720d3fdb416855dd53e6e56b065cb0d6741"
+    },
+    {
+      "path": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/inventory.json",
+      "sha256": "474dd910308eef8dcf9542099f35023e19b482a238e6cd731632e07a7a84735b"
+    }
+  ],
+  "evidence_files": 30,
+  "copy_script_files": 1,
+  "total_exact_copies": 31,
+  "copies": [
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/accepted-language-basis.json",
+      "destination": "research/accepted-language-basis.json",
+      "bytes": 1398,
+      "sha256": "4506b69b74320a11a9b1943b0251a41229c37434ba80b662b037de398f047e6f"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/analyses.proposed.json",
+      "destination": "research/analyses.proposed.json",
+      "bytes": 4824,
+      "sha256": "b8723c310b12b8885604d40e148c81a696866c270b455b36aefbdf07912f50c2"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/canonical-family-contexts.before.json",
+      "destination": "research/canonical-family-contexts.before.json",
+      "bytes": 116929,
+      "sha256": "211e0e42a1c3af2dc32ab96f32f1de225efe32c0b40360a24ca0bc7be42dc71e"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/canonical-family-scan.json",
+      "destination": "research/canonical-family-scan.json",
+      "bytes": 11698,
+      "sha256": "5fe1c127d4f26d9e89c9efc35992d0fdf945f6952136e0f3bdfb718fdb645b44"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/ensure.atomic-alternative.proposed.json",
+      "destination": "research/ensure.atomic-alternative.proposed.json",
+      "bytes": 1346,
+      "sha256": "71a3e1abc849221c4d471953a0b686f8ecd8dd1d56d98d82be133115bad20999"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/HANDOFF.md",
+      "destination": "research/HANDOFF.md",
+      "bytes": 2548,
+      "sha256": "76fc826a5dd4f05148ddff083740468b4bfba239dcb077cd218929e57345c00f"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/input-pins.json",
+      "destination": "research/input-pins.json",
+      "bytes": 50032,
+      "sha256": "e668a6d0d70c9f6284288710b2ff07fdce4e348bd6ad864cb364e4f07080fac6"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/proposal.json",
+      "destination": "research/proposal.json",
+      "bytes": 8046,
+      "sha256": "951b8f4f1397261dfd05786fcb1f847d8ab4acfd34cb8b53bf4fa3a4aed3222c"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/protected-contexts.additional.json",
+      "destination": "research/protected-contexts.additional.json",
+      "bytes": 22015,
+      "sha256": "3566d3d797165ed000e9ac5fa28cdce42f218e7c7ec6fa746b5622d0f7ba89a0"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/README.md",
+      "destination": "research/README.md",
+      "bytes": 4523,
+      "sha256": "13e4ae6ae5fd1f96aaa137f7cc72a8ac4a3b5a816c24b97fda9a126e912a3af4"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/SOURCE-LEDGER.md",
+      "destination": "research/SOURCE-LEDGER.md",
+      "bytes": 5362,
+      "sha256": "d79e60a06be5a6846ce6db606e692ea96e7c156790976a15aad7d3cffd648289"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/source-observations.json",
+      "destination": "research/source-observations.json",
+      "bytes": 6199,
+      "sha256": "aaac9f93f8a8e185f3e619e8734b93b114d73e5f69700f3ce0e75974fdfd8ad6"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/source-records.proposed.json",
+      "destination": "research/source-records.proposed.json",
+      "bytes": 7630,
+      "sha256": "ec5e2bb5b54f0eecf2394dc45d0da9cb9a4b53b00b8aa513bbb45b0d52e27418"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/static-observations.json",
+      "destination": "research/static-observations.json",
+      "bytes": 2256,
+      "sha256": "e35eede2153578a9b53340bb911a8de05efca5e6105889b7aa985d3ee49f052d"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-research-r01/inventory.json",
+      "destination": "research/inventory.json",
+      "bytes": 2591,
+      "sha256": "9ecff44931f5512774c98ef4781d1720d3fdb416855dd53e6e56b065cb0d6741"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/accepted-analysis-structure.json",
+      "destination": "independent-review/accepted-analysis-structure.json",
+      "bytes": 1559,
+      "sha256": "a14730c9239eff17513700bc126e960a68c2a8f0100e259a7b297a92acc4dd6c"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/capture-attempt.json",
+      "destination": "independent-review/capture-attempt.json",
+      "bytes": 169,
+      "sha256": "d8bdf6c7418ff060ecbf33aef72111c3b61b6b9ea6bf00b1cc7d497852630390"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/capture-failure.json",
+      "destination": "independent-review/capture-failure.json",
+      "bytes": 717102,
+      "sha256": "b64cbabe7d926efec66140b396b2ac2a9f6d44078b04a8b8dba1fe4144e51bea"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/capture-r02-attempt.json",
+      "destination": "independent-review/capture-r02-attempt.json",
+      "bytes": 169,
+      "sha256": "76ba7f740cf9a48129b79b9fd06bf2f18d4e7693245ab65c71acce0204926434"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/capture-r02-result.json",
+      "destination": "independent-review/capture-r02-result.json",
+      "bytes": 712034,
+      "sha256": "faf3ceb2b1632f5d135633bcd07038fd137b2ae256257f60a32ee8bc9f7a9f65"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/capture-r02.cjs",
+      "destination": "independent-review/capture-r02.cjs",
+      "bytes": 10900,
+      "sha256": "6ab3b22ef7572b0502a42e562a8adb58051cc2a4344658cf6509c79b61f73886"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/capture.cjs",
+      "destination": "independent-review/capture.cjs",
+      "bytes": 10854,
+      "sha256": "64740771c6e13eb0ffd0a1b38d2d9e4ae020cac25b8a80ff5d4c1eea86ac1586"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/family-supplement.cjs",
+      "destination": "independent-review/family-supplement.cjs",
+      "bytes": 2516,
+      "sha256": "edb6c1c925e7198bec2647f264ab9fbcf5d690d9b762dda3db5b12e823bad365"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/family-supplement.json",
+      "destination": "independent-review/family-supplement.json",
+      "bytes": 51203,
+      "sha256": "8cffbf8510f76c687000c3d2a3dde5a037ded09699559dd93b5e240be23f1463"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/freeze-checks.json",
+      "destination": "independent-review/freeze-checks.json",
+      "bytes": 299,
+      "sha256": "3136367a37bec888f9a24ce5114882506df8a0ee9dfd425d2f4dd3085993a848"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/input-pins.json",
+      "destination": "independent-review/input-pins.json",
+      "bytes": 50655,
+      "sha256": "65e0628cb925409db2d0ca7674f2e63c057c8975229b4af8bcdd9f8e6ed92918"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/README.md",
+      "destination": "independent-review/README.md",
+      "bytes": 3084,
+      "sha256": "0f6f486b4d0b45a8cfaaadcdcfefbe0fff3dc9bb9bafab42fd621d4e363fedd1"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/review.json",
+      "destination": "independent-review/review.json",
+      "bytes": 9459,
+      "sha256": "b330dc32283ccb3498a355e3233c844364a65d4b52b7ffedb7e65351f8d53123"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/source-observations.json",
+      "destination": "independent-review/source-observations.json",
+      "bytes": 5053,
+      "sha256": "f953cfe0de68e63fbb7ee89cd4b587f5e993fda40dba0fe6b6953110b1cdea8f"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-independent-review-r01/inventory.json",
+      "destination": "independent-review/inventory.json",
+      "bytes": 2470,
+      "sha256": "474dd910308eef8dcf9542099f35023e19b482a238e6cd731632e07a7a84735b"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-resolution-morphology-durable-copy-r01/copy.cjs",
+      "destination": "copy-source.cjs",
+      "bytes": 9200,
+      "sha256": "83320e35b1b08d6947246565a36d4db1fce744d7a739f71224b4cafffc2630fa"
+    }
+  ],
+  "readme": {
+    "path": "README.md",
+    "bytes": 3407,
+    "sha256": "fceb34e8bd9b74675410ac7442deeb677f33e65906240b8820ef308390a4d63e"
+  },
+  "source_rows_verified_before_copy": true,
+  "source_and_destination_rechecked_after_copy": true,
+  "failed_capture_preserved": true,
+  "fresh_r02_capture_preserved": true,
+  "author_or_review_evidence_changed": false,
+  "project_code_tests_native_or_browser_executed": false,
+  "production_or_shared_files_changed": false,
+  "live_saves_inspected": false,
+  "graphs_activated": false,
+  "final_live_binding": "UNBOUND"
+}

@@ -1,0 +1,1569 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.nursing.module07.01",
+      "text": "The care plan links the nursing assessment, nursing diagnosis, goal, intervention, and outcome.",
+      "meaning": "Describe the structure of a fictional care plan.",
+      "context": "A team explains its local care-documentation framework.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "care",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "plan",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "links",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "nursing",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "assessment",
+          "start": 32,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "nursing",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "diagnosis",
+          "start": 52,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "goal",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "intervention",
+          "start": 69,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "outcome",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "care-plan.individualized-care-arrangement.n",
+        "nursing-assessment.nursing-information-evaluation.n",
+        "nursing-diagnosis.nursing-clinical-judgment.n",
+        "goal.intended-care-result.n",
+        "intervention.care-action.n",
+        "outcome.result-of-care-or-condition-course.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ahrq-sbar",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module07.02",
+      "text": "Please explain the clinical diagnosis, record the presenting complaint in the patient's own words where appropriate, and describe their usual functional status.",
+      "meaning": "Request an explanation and accurate documentation of the person's concern and usual activities.",
+      "context": "A patient and clinician review a fictional record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "clinical",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "diagnosis",
+          "start": 28,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "record",
+          "start": 39,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "presenting",
+          "start": 50,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "complaint",
+          "start": 61,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": "in",
+          "start": 71,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "patient's",
+          "start": 78,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "own",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 14,
+          "text": "words",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": "where",
+          "start": 98,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "appropriate",
+          "start": 104,
+          "end": 115
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 115,
+          "end": 116
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 117,
+          "end": 120
+        },
+        {
+          "index": 19,
+          "text": "describe",
+          "start": 121,
+          "end": 129
+        },
+        {
+          "index": 20,
+          "text": "their",
+          "start": 130,
+          "end": 135
+        },
+        {
+          "index": 21,
+          "text": "usual",
+          "start": 136,
+          "end": 141
+        },
+        {
+          "index": 22,
+          "text": "functional",
+          "start": 142,
+          "end": 152
+        },
+        {
+          "index": 23,
+          "text": "status",
+          "start": 153,
+          "end": 159
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 159,
+          "end": 160
+        }
+      ],
+      "focus_lexeme_ids": [
+        "clinical-diagnosis.identified-health-condition.n",
+        "presenting-complaint.reason-for-seeking-care.n",
+        "functional-status.daily-activity-ability.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ahrq-sbar",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module07.03",
+      "text": "The medical history, allergy history, and medication history need clarification.",
+      "meaning": "Identify information requiring verification.",
+      "context": "A team reviews an incomplete fictional history.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "medical",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "history",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 19,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "allergy",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "history",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "medication",
+          "start": 42,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "history",
+          "start": 53,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "need",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "clarification",
+          "start": 66,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "medical-history.past-health-information.n",
+        "allergy-history.previous-allergy-information.n",
+        "medication-history.previous-and-current-medicine-information.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ahrq-sbar",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module07.04",
+      "text": "Compare the observation and finding with the documented baseline, and distinguish subjective data from objective data.",
+      "meaning": "Ask for clear evidence and attribution.",
+      "context": "A team reviews a fictional assessment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Compare",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "observation",
+          "start": 12,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "finding",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "with",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "documented",
+          "start": 45,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "baseline",
+          "start": 56,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "distinguish",
+          "start": 70,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "subjective",
+          "start": 82,
+          "end": 92
+        },
+        {
+          "index": 13,
+          "text": "data",
+          "start": 93,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": "from",
+          "start": 98,
+          "end": 102
+        },
+        {
+          "index": 15,
+          "text": "objective",
+          "start": 103,
+          "end": 112
+        },
+        {
+          "index": 16,
+          "text": "data",
+          "start": 113,
+          "end": 117
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "observation.recorded-measurement-or-case.n",
+        "finding.assessment-information-result.n",
+        "baseline.usual-or-initial-comparison-state.n",
+        "subjective-data.person-reported-care-information.n",
+        "objective-data.observed-or-measured-care-information.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ahrq-sbar",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module07.05",
+      "text": "The progress note and nursing note explain the rationale for the documented care.",
+      "meaning": "Describe what a care entry communicates.",
+      "context": "A nurse reviews documentation quality.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "progress",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "note",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "nursing",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "note",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "explain",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "rationale",
+          "start": 47,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "for",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "documented",
+          "start": 65,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "care",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "progress-note.ongoing-care-entry.n",
+        "nursing-note.nursing-care-entry.n",
+        "rationale.reason-for-care-decision.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ahrq-sbar",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module07.06",
+      "text": "The admission note, discharge summary, referral letter, and handover note serve different communication needs.",
+      "meaning": "Distinguish records used across a care episode.",
+      "context": "A learner discusses documentation types.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "admission",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "note",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "discharge",
+          "start": 20,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "summary",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "referral",
+          "start": 39,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "letter",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "handover",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "note",
+          "start": 69,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "serve",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "different",
+          "start": 80,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "communication",
+          "start": 90,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "needs",
+          "start": 104,
+          "end": 109
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "admission-note.care-entry-at-admission.n",
+        "discharge-summary.care-episode-summary.n",
+        "referral-letter.written-professional-referral.n",
+        "handover-note.care-responsibility-transfer-record.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ahrq-sbar",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module07.07",
+      "text": "SBAR organizes the situation, background, assessment, and recommendation or request.",
+      "meaning": "Describe a communication structure.",
+      "context": "A team practices with a fictional scenario.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "SBAR",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "organizes",
+          "start": 5,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "situation",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "background",
+          "start": 30,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "assessment",
+          "start": 42,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "recommendation",
+          "start": 58,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "or",
+          "start": 73,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "request",
+          "start": 76,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "sbar.structured-clinical-communication-format.n",
+        "situation.current-care-communication-context.n",
+        "background.relevant-prior-care-context.n",
+        "assessment.clinical-information-interpretation.n",
+        "recommendation.proposed-care-related-next-step.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ahrq-sbar",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module07.08",
+      "text": "We will practice read-back, check-back, teach-back, and closed-loop communication using fictional information.",
+      "meaning": "Introduce communication exercises.",
+      "context": "A trainer discusses ways to check understanding.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 3,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "practice",
+          "start": 8,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "read-back",
+          "start": 17,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "check-back",
+          "start": 28,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "teach-back",
+          "start": 40,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "closed-loop",
+          "start": 56,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "communication",
+          "start": 68,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "using",
+          "start": 82,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "fictional",
+          "start": 88,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": "information",
+          "start": 98,
+          "end": 109
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "read-back.spoken-information-verification.n",
+        "check-back.closed-loop-message-confirmation.n",
+        "teach-back.understanding-check-in-own-words.n",
+        "closed-loop-communication.message-confirmation-cycle.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ahrq-sbar",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module07.09",
+      "text": "The team sought appropriate advice about informed consent, refusal, capacity, and the advance directive.",
+      "meaning": "Communicate the need for qualified assessment and local requirements.",
+      "context": "A fictional care-planning discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "team",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "sought",
+          "start": 9,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "appropriate",
+          "start": 16,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "advice",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "about",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "informed",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "consent",
+          "start": 50,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "refusal",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "capacity",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "advance",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "directive",
+          "start": 94,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "informed-consent.informed-voluntary-care-agreement.n",
+        "refusal.declining-proposed-care.n",
+        "capacity.decision-making-ability.n",
+        "advance-directive.future-care-wishes-document.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ahrq-sbar",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module07.10",
+      "text": "Respect the person's care preference, privacy, confidentiality, cultural need, and requested reasonable adjustment.",
+      "meaning": "Describe respectful communication priorities.",
+      "context": "A team discusses individualized support.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Respect",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "person's",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "care",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "preference",
+          "start": 26,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "privacy",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "confidentiality",
+          "start": 47,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "cultural",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "need",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "requested",
+          "start": 83,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "reasonable",
+          "start": 93,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "adjustment",
+          "start": 104,
+          "end": 114
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "care-preference.person-preferred-care-approach.n",
+        "privacy.personal-space-and-information-control.n",
+        "confidentiality.authorized-information-disclosure.n",
+        "cultural-need.culture-related-care-consideration.n",
+        "reasonable-adjustment.access-support-change.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ahrq-sbar",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

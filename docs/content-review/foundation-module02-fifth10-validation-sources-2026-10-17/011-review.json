@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "status": "accepted_for_one_root_owned_fifth10_native_candidate",
+  "reviewer": "/root",
+  "source_execution_accepted": true,
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/source-inventory.json",
+    "bytes": 1874,
+    "raw_sha256": "7ee9da67778fe717537c9ae35331a49f334660307a3bef5b330a1e9096387f18"
+  },
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "source_members_verified": 9,
+  "baseline_files_verified": 490,
+  "review_basis": "Manual inspection of the complete runner, contract, templates, guard design and native test resource references; built-in raw-byte and JSON checks only.",
+  "findings": [],
+  "checks": [
+    "Raw source and full 490-file native copy closure agree with the accepted 12,443-input binding; four future overlays remain unbound.",
+    "Source review excludes native runner author; output review excludes both preparation authors and dispatcher, with complete five-artifact pin equality.",
+    "The real successful preparation receipt, all artifact hashes, exact target closure, absent destinations and preimage hashes are required before output creation.",
+    "Whole donor history, actual bag PNG and semantic bag entry are preserved; projected registry and construction lineage are checked.",
+    "Direct regular-file absolute executable pin is rehashed before each child; no PATH-based dispatch or project execution occurs during gates.",
+    "One isolated project contains all exact baseline files and accepted overlays; check-only precedes the suite.",
+    "Successful suite requires zero exit/error/signal, no ERROR or FAIL line and exactly one positive-check zero-failure native summary.",
+    "Source files, copied files, executable and absent production destinations are rechecked after each child and in final cleanup, retaining failure evidence.",
+    "Writes are confined to the single-use proposal execution directory; no production replacement, project Node test or publication is implemented."
+  ],
+  "scope": "Source acceptance only. Actual preparation afterimage acceptance, syntax and native dispatch remain separate. No actual native outcome or installed delivery accepted."
+}

@@ -1,0 +1,1703 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.nursing.module06.01",
+      "text": "Please describe the symptom and any distress in your own words; the team will also record each observable sign.",
+      "meaning": "Invite the patient's account and distinguish observable findings.",
+      "context": "A patient describes a concern to the team.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "describe",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "symptom",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "any",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "distress",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "in",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "your",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "own",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "words",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "team",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "will",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "also",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": "record",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "each",
+          "start": 90,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "observable",
+          "start": 95,
+          "end": 105
+        },
+        {
+          "index": 19,
+          "text": "sign",
+          "start": 106,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 110,
+          "end": 111
+        }
+      ],
+      "focus_lexeme_ids": [
+        "symptom.person-experienced-health-change.n",
+        "sign.observable-clinical-finding.n",
+        "distress.marked-physical-or-emotional-discomfort.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module06.02",
+      "text": "Where do you notice the pain, discomfort, or tenderness, and when was the onset?",
+      "meaning": "Ask for a description and timing.",
+      "context": "A fictional assessment conversation without diagnosis.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Where",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "do",
+          "start": 6,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "you",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "notice",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "pain",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": "discomfort",
+          "start": 30,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "or",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 10,
+          "text": "tenderness",
+          "start": 45,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 13,
+          "text": "when",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 14,
+          "text": "was",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 16,
+          "text": "onset",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 17,
+          "text": "?",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "pain.unpleasant-sensory-emotional-experience.n",
+        "discomfort.physical-or-emotional-unease.n",
+        "tenderness.pain-with-touch-or-pressure.n",
+        "onset.beginning-of-symptom-or-condition.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module06.03",
+      "text": "The patient reported headache, nausea, vomiting, and dizziness, and the nurse relayed the exact words.",
+      "meaning": "Communicate reported experiences accurately.",
+      "context": "A team reviews a fictional patient account.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "reported",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "headache",
+          "start": 21,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "nausea",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "vomiting",
+          "start": 39,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "dizziness",
+          "start": 53,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "nurse",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "relayed",
+          "start": 78,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "exact",
+          "start": 90,
+          "end": 95
+        },
+        {
+          "index": 18,
+          "text": "words",
+          "start": 96,
+          "end": 101
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "headache.pain-in-head.n",
+        "nausea.feeling-of-possible-vomiting.n",
+        "vomiting.expulsion-of-stomach-contents.n",
+        "dizziness.unsteady-faint-or-spinning-feeling.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module06.04",
+      "text": "The patient described fatigue, weakness, and breathlessness; the clinician recorded the wheeze separately.",
+      "meaning": "Separate the person's report from a clinical finding.",
+      "context": "A fictional observation handover.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "described",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "fatigue",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "weakness",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "breathlessness",
+          "start": 45,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": ";",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "clinician",
+          "start": 65,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "recorded",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "wheeze",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "separately",
+          "start": 95,
+          "end": 105
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 105,
+          "end": 106
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fatigue.marked-tiredness.n",
+        "weakness.reduced-strength-experience.n",
+        "breathlessness.uncomfortable-breathing-experience.n",
+        "wheeze.musical-breathing-sound.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module06.05",
+      "text": "Please clarify the reported fever, chills, rash, and swelling without assuming a cause.",
+      "meaning": "Request precise information rather than a diagnosis.",
+      "context": "A team discusses incomplete observation notes.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "clarify",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "reported",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "fever",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "chills",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "rash",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "swelling",
+          "start": 53,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "without",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "assuming",
+          "start": 70,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "a",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "cause",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fever.raised-body-temperature-state.n",
+        "chills.cold-feeling-with-shivering.n",
+        "rash.visible-skin-change.n",
+        "swelling.increase-in-body-area-size.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module06.06",
+      "text": "The note describes the wound, incision, and pressure injury separately and records their locations.",
+      "meaning": "Distinguish terms used in a care record.",
+      "context": "A team reviews fictional documentation without treatment instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "note",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "describes",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "wound",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "incision",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "pressure",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "injury",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "separately",
+          "start": 60,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "records",
+          "start": 75,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "their",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "locations",
+          "start": 89,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "wound.body-tissue-injury.n",
+        "incision.deliberate-surgical-cut.n",
+        "pressure-injury.pressure-related-tissue-damage.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module06.07",
+      "text": "The nurse asked about appetite, thirst, intake, output, and the hydration assessment.",
+      "meaning": "Gather information for the care team.",
+      "context": "A fictional conversation about daily needs.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "nurse",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "asked",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "about",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "appetite",
+          "start": 22,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "thirst",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "intake",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "output",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 14,
+          "text": "hydration",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 15,
+          "text": "assessment",
+          "start": 74,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "appetite.desire-to-eat.n",
+        "thirst.desire-for-fluid.n",
+        "intake.recorded-consumption-or-input.n",
+        "output.recorded-body-fluid-loss.n",
+        "hydration.body-fluid-status.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module06.08",
+      "text": "The patient requested privacy to discuss a bowel movement, constipation, diarrhea, and incontinence.",
+      "meaning": "Respect privacy during a sensitive conversation.",
+      "context": "A patient asks about care concerns.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "requested",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "privacy",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "discuss",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "bowel",
+          "start": 43,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "movement",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "constipation",
+          "start": 59,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "diarrhea",
+          "start": 73,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "incontinence",
+          "start": 87,
+          "end": 99
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 99,
+          "end": 100
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bowel-movement.passage-of-stool.n",
+        "constipation.difficult-or-infrequent-stool-passage.n",
+        "diarrhea.loose-or-watery-stool-passage.n",
+        "incontinence.involuntary-urine-or-stool-loss.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module06.09",
+      "text": "Please describe the change in mobility, balance, or orientation, any confusion, and any altered sensation, numbness, or tingling.",
+      "meaning": "Ask for a description of reported changes.",
+      "context": "A worker gathers information for professional assessment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "describe",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "change",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "in",
+          "start": 27,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "mobility",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "balance",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "or",
+          "start": 49,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "orientation",
+          "start": 52,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "any",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "confusion",
+          "start": 69,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 78,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "any",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "altered",
+          "start": 88,
+          "end": 95
+        },
+        {
+          "index": 18,
+          "text": "sensation",
+          "start": 96,
+          "end": 105
+        },
+        {
+          "index": 19,
+          "text": ",",
+          "start": 105,
+          "end": 106
+        },
+        {
+          "index": 20,
+          "text": "numbness",
+          "start": 107,
+          "end": 115
+        },
+        {
+          "index": 21,
+          "text": ",",
+          "start": 115,
+          "end": 116
+        },
+        {
+          "index": 22,
+          "text": "or",
+          "start": 117,
+          "end": 119
+        },
+        {
+          "index": 23,
+          "text": "tingling",
+          "start": 120,
+          "end": 128
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 128,
+          "end": 129
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mobility.ability-to-move.n",
+        "balance.ability-to-maintain-stability.n",
+        "sensation.perception-of-body-stimulus.n",
+        "numbness.reduced-or-absent-sensation.n",
+        "tingling.prickling-sensation.n",
+        "orientation.awareness-of-person-place-time-situation.n",
+        "confusion.difficulty-with-clear-thinking.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module06.10",
+      "text": "The vital signs record includes body temperature, pulse, respiratory rate, blood pressure, and oxygen saturation with their methods and units.",
+      "meaning": "Describe the contents of a fictional observation record.",
+      "context": "A team checks documentation completeness.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "vital",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "signs",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "record",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "includes",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "body",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "temperature",
+          "start": 37,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "pulse",
+          "start": 50,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "respiratory",
+          "start": 57,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "rate",
+          "start": 69,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "blood",
+          "start": 75,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "pressure",
+          "start": 81,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 89,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "oxygen",
+          "start": 95,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": "saturation",
+          "start": 102,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": "with",
+          "start": 113,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "their",
+          "start": 118,
+          "end": 123
+        },
+        {
+          "index": 21,
+          "text": "methods",
+          "start": 124,
+          "end": 131
+        },
+        {
+          "index": 22,
+          "text": "and",
+          "start": 132,
+          "end": 135
+        },
+        {
+          "index": 23,
+          "text": "units",
+          "start": 136,
+          "end": 141
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 141,
+          "end": 142
+        }
+      ],
+      "focus_lexeme_ids": [
+        "vital-signs.basic-physiological-observations.n",
+        "body-temperature.body-heat-measurement.n",
+        "pulse.arterial-pressure-wave.n",
+        "respiratory-rate.breathing-frequency.n",
+        "blood-pressure.arterial-blood-pressure-measure.n",
+        "oxygen-saturation.oxygen-bound-hemoglobin-proportion.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

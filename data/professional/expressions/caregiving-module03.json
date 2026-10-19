@@ -1,0 +1,1415 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.caregiving.module03.01",
+      "text": "Would you prefer to talk in the living room or the dining room?",
+      "meaning": "Offer a choice of meeting space.",
+      "context": "A home visitor asks where the person is comfortable.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Would",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "prefer",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 17,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "talk",
+          "start": 20,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "in",
+          "start": 25,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "living",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "room",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "or",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 11,
+          "text": "dining",
+          "start": 51,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "room",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "?",
+          "start": 62,
+          "end": 63
+        }
+      ],
+      "focus_lexeme_ids": [
+        "living-room.home-shared-sitting-space.n",
+        "dining-room.room-for-eating-meals.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module03.02",
+      "text": "Please show me where you keep the cup, plate, kettle, and cutlery in the kitchen.",
+      "meaning": "Ask where everyday kitchen items are kept.",
+      "context": "A person identifies their preferred household items.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "show",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "me",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "where",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "you",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "keep",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "cup",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 9,
+          "text": "plate",
+          "start": 39,
+          "end": 44
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 11,
+          "text": "kettle",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 14,
+          "text": "cutlery",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 15,
+          "text": "in",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 17,
+          "text": "kitchen",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "kitchen.food-preparation-room.n",
+        "cup.small-drinking-vessel.n",
+        "plate.flat-food-serving-dish.n",
+        "kettle.water-heating-vessel.n",
+        "cutlery.eating-utensil-collection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module03.03",
+      "text": "The bedroom contains her own pillow, blanket, and bedsheet.",
+      "meaning": "Describe familiar possessions respectfully.",
+      "context": "Staff discuss the person's preferred bedroom items.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "bedroom",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "contains",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "her",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "own",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "pillow",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "blanket",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "bedsheet",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 58,
+          "end": 59
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bedroom.sleeping-room.n",
+        "pillow.head-supporting-cushion.n",
+        "blanket.bed-covering.n",
+        "bedsheet.bed-covering-fabric.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module03.04",
+      "text": "The bathroom has a grab rail and a shower chair listed in the plan.",
+      "meaning": "Identify equipment without teaching its use.",
+      "context": "A worker checks the names of assessed equipment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "bathroom",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "grab",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "rail",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 8,
+          "text": "shower",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "chair",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "listed",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "in",
+          "start": 55,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "plan",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 66,
+          "end": 67
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bathroom.personal-washing-room.n",
+        "grab-rail.fixed-support-handhold.n",
+        "shower-chair.seat-designed-for-showering.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module03.05",
+      "text": "The damaged stair, handrail, ramp, and doorway need to be discussed with the assessor.",
+      "meaning": "Identify access features requiring assessment.",
+      "context": "An access concern is referred for assessment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "damaged",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "stair",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "handrail",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "ramp",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 9,
+          "text": "doorway",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "need",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "to",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 12,
+          "text": "be",
+          "start": 55,
+          "end": 57
+        },
+        {
+          "index": 13,
+          "text": "discussed",
+          "start": 58,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": "with",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 16,
+          "text": "assessor",
+          "start": 77,
+          "end": 85
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "handrail.support-rail-along-route.n",
+        "ramp.sloping-route-between-levels.n",
+        "doorway.door-opening-space.n",
+        "stair.one-step-of-staircase.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module03.06",
+      "text": "Please help me locate my denture, hearing aid, spectacles, and remote control.",
+      "meaning": "Ask for help locating personal items.",
+      "context": "A person chooses which belongings they need.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "help",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "me",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "locate",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "my",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "denture",
+          "start": 25,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "hearing",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "aid",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "spectacles",
+          "start": 47,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "remote",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "control",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 77,
+          "end": 78
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hearing-aid.hearing-support-device.n",
+        "spectacles.vision-correcting-glasses.n",
+        "remote-control.wireless-device-controller.n",
+        "denture.removable-tooth-replacement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module03.07",
+      "text": "I have reported a fault with the washing machine and vacuum cleaner.",
+      "meaning": "Describe household equipment faults.",
+      "context": "A worker contacts the responsible service.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "have",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "reported",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "fault",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "with",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "washing",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "machine",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "vacuum",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "cleaner",
+          "start": 60,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 67,
+          "end": 68
+        }
+      ],
+      "focus_lexeme_ids": [
+        "washing-machine.automatic-laundry-appliance.n",
+        "vacuum-cleaner.suction-cleaning-appliance.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module03.08",
+      "text": "Please show me which soap, towel, and washcloth you prefer.",
+      "meaning": "Ask about personal care items.",
+      "context": "A person chooses their usual washing supplies.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "show",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "me",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "which",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "soap",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "towel",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 9,
+          "text": "washcloth",
+          "start": 38,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "you",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "prefer",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 58,
+          "end": 59
+        }
+      ],
+      "focus_lexeme_ids": [
+        "soap.washing-cleaning-substance.n",
+        "towel.absorbent-drying-cloth.n",
+        "washcloth.small-body-washing-cloth.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module03.09",
+      "text": "The wheelchair, walker, and transfer board are named in the equipment record.",
+      "meaning": "Confirm equipment names without directing a transfer.",
+      "context": "A worker reviews the individual equipment list.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "wheelchair",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 14,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "walker",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "transfer",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "board",
+          "start": 37,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "are",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "named",
+          "start": 47,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "in",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "equipment",
+          "start": 60,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "record",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "wheelchair.mobility-chair.n",
+        "walker.mobility-frame.n",
+        "transfer-board.mobility-aid.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module03.10",
+      "text": "Please explain how the personal alarm service differs from this call button.",
+      "meaning": "Clarify two help-request arrangements.",
+      "context": "A person asks the provider about their devices.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "how",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "personal",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "alarm",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "service",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "differs",
+          "start": 46,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "from",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "call",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "button",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 75,
+          "end": 76
+        }
+      ],
+      "focus_lexeme_ids": [
+        "personal-alarm.help-request-alert-device.n",
+        "call-button.assistance-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "status": "failed_r01_preserved_all_inputs_unchanged",
+  "failed_receipt": {
+    "path": "build/professional-english/shopping-bag-projected-validation-r01/attempt-001/receipt.json",
+    "sha256": "e5d4b2cf9a9ac657b92404f4f4f0b7a57ed460f058fc30ee550a92734d26a978"
+  },
+  "callback_count": 0,
+  "audit_summary": null,
+  "unchanged_expected_inputs": 5097,
+  "unchanged_evidence_files": 76,
+  "production_mutated": false,
+  "cause": "Twenty existing professional career preview PNGs were not pinned. The audit caught both media.path and theme.preview_path checks for each. No callback ran.",
+  "recorded_at": "2026-10-16T22:22:07.208Z"
+}

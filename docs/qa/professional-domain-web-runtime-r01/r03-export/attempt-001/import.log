@@ -1,0 +1,203 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Project initialization (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Scanning file structure...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Loading global class names...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verifying GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Creating autoload scripts...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Initializing plugins...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Starting file scan...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Registering global classes... (25 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   3% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   7% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  11% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  15% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  19% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  23% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  26% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  30% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  34% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  38% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  42% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  46% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  50% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  53% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  57% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  61% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  65% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  69% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  73% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  76% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  80% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  84% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  88% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  92% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Started Scanning actions... (49 steps)[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | spring.wav[39m[0m
+[   2% ] [90m[1m_update_scan_actions[22m | accounting-finance.png[39m[0m
+[   4% ] [90m[1m_update_scan_actions[22m | caregiving.png[39m[0m
+[   6% ] [90m[1m_update_scan_actions[22m | cleaning-facilities.png[39m[0m
+[   8% ] [90m[1m_update_scan_actions[22m | clinical-medicine.png[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | construction-trades.png[39m[0m
+[  12% ] [90m[1m_update_scan_actions[22m | customer-support.png[39m[0m
+[  14% ] [90m[1m_update_scan_actions[22m | education-childcare.png[39m[0m
+[  16% ] [90m[1m_update_scan_actions[22m | food-service.png[39m[0m
+[  18% ] [90m[1m_update_scan_actions[22m | hospitality-tourism.png[39m[0m
+[  20% ] [90m[1m_update_scan_actions[22m | hr-recruitment.png[39m[0m
+[  22% ] [90m[1m_update_scan_actions[22m | it-support.png[39m[0m
+[  24% ] [90m[1m_update_scan_actions[22m | legal-paralegal.png[39m[0m
+[  26% ] [90m[1m_update_scan_actions[22m | manufacturing-maintenance.png[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | nursing.png[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | office-admin.png[39m[0m
+[  32% ] [90m[1m_update_scan_actions[22m | retail.png[39m[0m
+[  34% ] [90m[1m_update_scan_actions[22m | sales-marketing.png[39m[0m
+[  36% ] [90m[1m_update_scan_actions[22m | software-data.png[39m[0m
+[  38% ] [90m[1m_update_scan_actions[22m | transport-delivery.png[39m[0m
+[  40% ] [90m[1m_update_scan_actions[22m | warehouse-logistics.png[39m[0m
+[  42% ] [90m[1m_update_scan_actions[22m | 0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav[39m[0m
+[  44% ] [90m[1m_update_scan_actions[22m | 01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav[39m[0m
+[  46% ] [90m[1m_update_scan_actions[22m | 3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png[39m[0m
+[  48% ] [90m[1m_update_scan_actions[22m | 6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav[39m[0m
+[  50% ] [90m[1m_update_scan_actions[22m | 8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f.wav[39m[0m
+[  52% ] [90m[1m_update_scan_actions[22m | 39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav[39m[0m
+[  54% ] [90m[1m_update_scan_actions[22m | 41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | 65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | 202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png[39m[0m
+[  60% ] [90m[1m_update_scan_actions[22m | 685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav[39m[0m
+[  62% ] [90m[1m_update_scan_actions[22m | 778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3.wav[39m[0m
+[  64% ] [90m[1m_update_scan_actions[22m | 3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | 7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8.png[39m[0m
+[  68% ] [90m[1m_update_scan_actions[22m | 8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png[39m[0m
+[  70% ] [90m[1m_update_scan_actions[22m | 150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56.wav[39m[0m
+[  72% ] [90m[1m_update_scan_actions[22m | 712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png[39m[0m
+[  74% ] [90m[1m_update_scan_actions[22m | a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav[39m[0m
+[  78% ] [90m[1m_update_scan_actions[22m | acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav[39m[0m
+[  80% ] [90m[1m_update_scan_actions[22m | afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png[39m[0m
+[  82% ] [90m[1m_update_scan_actions[22m | b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png[39m[0m
+[  86% ] [90m[1m_update_scan_actions[22m | bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04.png[39m[0m
+[  88% ] [90m[1m_update_scan_actions[22m | c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png[39m[0m
+[  90% ] [90m[1m_update_scan_actions[22m | cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav[39m[0m
+[  92% ] [90m[1m_update_scan_actions[22m | eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png[39m[0m
+[  94% ] [90m[1m_update_scan_actions[22m | f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png[39m[0m
+[  96% ] [90m[1m_update_scan_actions[22m | fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png[39m[0m
+[92m[ DONE ][39m [1m_update_scan_actions[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started (Re)Importing Assets (49 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   2% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   4% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   6% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   8% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  10% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  12% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  14% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  16% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  18% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  20% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  22% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  24% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  26% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  28% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  30% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  32% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  34% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  36% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  38% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  40% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  42% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  44% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  46% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  48% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  50% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  52% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  54% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  56% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  58% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  60% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  62% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  64% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  66% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  68% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  70% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  72% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  74% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  76% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  78% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  80% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  82% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  84% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  86% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  88% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  90% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  92% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  94% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[  96% ] [90m[1mreimport[22m | Preparing files to reimport...[39m[0m
+[   0% ] [90m[1mreimport[22m | Executing pre-reimport operations...[39m[0m
+[   0% ] [90m[1mreimport[22m | software-data.png[39m[0m
+[   2% ] [90m[1mreimport[22m | transport-delivery.png[39m[0m
+[   4% ] [90m[1mreimport[22m | warehouse-logistics.png[39m[0m
+[   6% ] [90m[1mreimport[22m | f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png[39m[0m
+[   8% ] [90m[1mreimport[22m | eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png[39m[0m
+[  10% ] [90m[1mreimport[22m | 3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png[39m[0m
+[  12% ] [90m[1mreimport[22m | c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png[39m[0m
+[  14% ] [90m[1mreimport[22m | bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04.png[39m[0m
+[  16% ] [90m[1mreimport[22m | 41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png[39m[0m
+[  18% ] [90m[1mreimport[22m | 65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png[39m[0m
+[  20% ] [90m[1mreimport[22m | 202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png[39m[0m
+[  22% ] [90m[1mreimport[22m | b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png[39m[0m
+[  24% ] [90m[1mreimport[22m | b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png[39m[0m
+[  26% ] [90m[1mreimport[22m | afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png[39m[0m
+[  28% ] [90m[1mreimport[22m | 7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8.png[39m[0m
+[  30% ] [90m[1mreimport[22m | 8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png[39m[0m
+[  32% ] [90m[1mreimport[22m | 712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png[39m[0m
+[  34% ] [90m[1mreimport[22m | a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png[39m[0m
+[  36% ] [90m[1mreimport[22m | fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png[39m[0m
+[  38% ] [90m[1mreimport[22m | accounting-finance.png[39m[0m
+[  40% ] [90m[1mreimport[22m | caregiving.png[39m[0m
+[  42% ] [90m[1mreimport[22m | cleaning-facilities.png[39m[0m
+[  44% ] [90m[1mreimport[22m | clinical-medicine.png[39m[0m
+[  46% ] [90m[1mreimport[22m | construction-trades.png[39m[0m
+[  48% ] [90m[1mreimport[22m | customer-support.png[39m[0m
+[  50% ] [90m[1mreimport[22m | education-childcare.png[39m[0m
+[  52% ] [90m[1mreimport[22m | food-service.png[39m[0m
+[  54% ] [90m[1mreimport[22m | hospitality-tourism.png[39m[0m
+[  56% ] [90m[1mreimport[22m | hr-recruitment.png[39m[0m
+[  58% ] [90m[1mreimport[22m | it-support.png[39m[0m
+[  60% ] [90m[1mreimport[22m | legal-paralegal.png[39m[0m
+[  62% ] [90m[1mreimport[22m | manufacturing-maintenance.png[39m[0m
+[  64% ] [90m[1mreimport[22m | nursing.png[39m[0m
+[  66% ] [90m[1mreimport[22m | office-admin.png[39m[0m
+[  68% ] [90m[1mreimport[22m | retail.png[39m[0m
+[  70% ] [90m[1mreimport[22m | sales-marketing.png[39m[0m
+[  72% ] [90m[1mreimport[22m | software-data.png[39m[0m
+[  74% ] [90m[1mreimport[22m | transport-delivery.png[39m[0m
+[  76% ] [90m[1mreimport[22m | warehouse-logistics.png[39m[0m
+[  78% ] [90m[1mreimport[22m | f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png[39m[0m
+[  80% ] [90m[1mreimport[22m | eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png[39m[0m
+[  82% ] [90m[1mreimport[22m | 3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png[39m[0m
+[  84% ] [90m[1mreimport[22m | c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png[39m[0m
+[  86% ] [90m[1mreimport[22m | bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04.png[39m[0m
+[  88% ] [90m[1mreimport[22m | 41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png[39m[0m
+[  90% ] [90m[1mreimport[22m | 65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png[39m[0m
+[  92% ] [90m[1mreimport[22m | 202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png[39m[0m
+[  94% ] [90m[1mreimport[22m | b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png[39m[0m
+[  96% ] [90m[1mreimport[22m | b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png[39m[0m
+[  98% ] [90m[1mreimport[22m | Finalizing Asset Import...[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started (Re)Importing Assets (49 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | Executing post-reimport operations...[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Loading editor (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Loading editor layout...[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Loading docks...[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m

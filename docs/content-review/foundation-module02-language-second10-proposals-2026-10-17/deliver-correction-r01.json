@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "status": "author_correction_independent_acceptance_pending",
+  "author_role": "Codex attendance_review language candidate author; not human, specialist, or independent reviewer",
+  "created_on": "2026-10-17",
+  "supersedes_only": {
+    "artifact": "candidate-ledger.json",
+    "artifact_sha256": "2e1e09b0d3c602b1da4d163159a8482154df0ce819ba361d2d04a699e44a19ed",
+    "entry_id": "deliver.take-to-recipient.v",
+    "field": "definition",
+    "old_content_projection_sha256": "642cbae48b421f56383d5aa08f557f987249d6c61ca41e4db907e4259eea85e4",
+    "old_definition": "To take a parcel, goods, or a letter to the person or place it is meant for."
+  },
+  "reason": "Independent reviewer identified that singular it in the disjunction a parcel, goods, or a letter does not naturally cover plural goods. This correction uses a plural referent while preserving the selected physical-item scope.",
+  "proposed_fields": {
+    "definition": "To take physical items to the person or place they are intended for.",
+    "example": "The courier will deliver the parcel this afternoon.",
+    "difficulty": "B1"
+  },
+  "content_projection": {
+    "id": "deliver.take-to-recipient.v",
+    "text": "deliver",
+    "display_text": "deliver",
+    "pos": "verb",
+    "definition": "To take physical items to the person or place they are intended for.",
+    "example": "The courier will deliver the parcel this afternoon.",
+    "difficulty": "B1",
+    "accepted_forms": [
+      "deliver"
+    ],
+    "regions": [
+      "general"
+    ],
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "jelly",
+      "word_jelly"
+    ],
+    "media": {
+      "image": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "A parcel being handed to its intended recipient.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": []
+      },
+      "audio": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      }
+    },
+    "morphology": {
+      "schema": 1,
+      "id": "deliver.take-to-recipient.v.analysis.v1",
+      "lexeme_id": "deliver.take-to-recipient.v",
+      "text": "deliver",
+      "kind": "atomic",
+      "review": {
+        "status": "pending",
+        "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p1",
+          "type": "atomic",
+          "canonical": "deliver",
+          "surface": "deliver",
+          "canonical_id": "morph.deliver"
+        }
+      ],
+      "nodes": [],
+      "roots": [
+        "p1"
+      ]
+    },
+    "review": {
+      "status": "pending",
+      "language": "pending",
+      "domain": "not_required",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    "references": [
+      {
+        "source_id": "british-council-requests",
+        "status": "pending_term_check",
+        "scope": "Workplace communication context only; this original definition and example await term-level review."
+      }
+    ],
+    "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+  },
+  "content_projection_sha256": "bf7339125c5ec83bd6c1f8170bb68e731fb89d7a8713d36491208677290864ea",
+  "before_entry_sha256": "050062d35201cd6982446a987dbd3d4e7929fcc75dedfa5044f0ed23602634d0",
+  "source_ids": [
+    "foundation02-language-second10-oxford-deliver",
+    "foundation02-language-second10-collins-deliver"
+  ],
+  "unchanged_scope": "Oxford and Collins selected physical-delivery senses 1. Information transmission, speech/performance, promise fulfilment and childbirth remain excluded. All review, reference, media, morphology and domain fields remain exact preimages. No production integration or acceptance is claimed."
+}

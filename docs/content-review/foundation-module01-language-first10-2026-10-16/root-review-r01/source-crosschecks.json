@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "scope": "Independent lexical/difficulty observations before exact candidate review",
+  "sources": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/colleague",
+      "publisher": "Oxford University Press",
+      "section": "Workmate noun and Working life label",
+      "selected_sense_level": "A2",
+      "observation": "The relationship is working with others in business or a profession; it is not restricted to employees of one organization.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/employee",
+      "publisher": "Oxford University Press",
+      "section": "Ordinary paid-worker noun and Working life label",
+      "selected_sense_level": "A2",
+      "observation": "Paid work for another person supports the ordinary lexical meaning. This review does not classify employment under law.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/employer",
+      "publisher": "Oxford University Press",
+      "section": "Paying person/company noun and Business/Working life labels",
+      "selected_sense_level": "A2",
+      "observation": "A person as well as an organization can be the employer. Universal duties or training provisions do not follow from this lexical definition.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/supervisor",
+      "publisher": "Oxford University Press",
+      "section": "Oversight noun and Working life/Jobs labels",
+      "selected_sense_level": "C1",
+      "observation": "The role involves supervision of people or activities. Selected topic labels are C1, so the stored A2 level cannot receive full source-backed difficulty approval from this evidence.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/manager",
+      "publisher": "Oxford University Press",
+      "section": "Work-role sense 1 and Jobs/Business/Shopping labels",
+      "selected_sense_level": "A2",
+      "observation": "Responsibility can concern running an entire organization or one part. Entertainment and sports senses remain separate.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/team_1",
+      "publisher": "Oxford University Press",
+      "section": "Working-group sense 2 and noun grammar heading",
+      "selected_sense_level": null,
+      "observation": "The chosen sense is people cooperating on a job; no separate CEFR topic label is shown here. Singular/plural agreement is allowed. Sports A1 and animal C2 labels are irrelevant.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/department",
+      "publisher": "Oxford University Press",
+      "section": "Organizational section and topic labels",
+      "selected_sense_level": "A2",
+      "observation": "The organizational section may belong to business, university, government or a store. Dept is an abbreviation, not automatically a spelling replacement for the full term.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/customer",
+      "publisher": "Oxford University Press",
+      "section": "Buyer sense 1 and Shopping/Business labels",
+      "selected_sense_level": "A1",
+      "observation": "Both people and organizations can buy either goods or services. A2 can only be an editorial course floor, not an exact quote of the observed dictionary level.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/client",
+      "publisher": "Oxford University Press",
+      "section": "Professional-services sense 1 and Business label",
+      "selected_sense_level": "B1",
+      "observation": "A recipient of professional advice/services may be an individual or organization. The meaning does not require a lasting relationship. Computing C2 belongs to another sense.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/visitor",
+      "publisher": "Oxford University Press",
+      "section": "Physical-visit sense 1 and Holidays label",
+      "selected_sense_level": "A1",
+      "observation": "The physical visit may concern a person or place; website visitors are a separate meaning. An absolute prohibition on the visitor normally working at the place is unsupported.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/supervise",
+      "publisher": "Oxford University Press",
+      "section": "Oversight verb and Jobs label",
+      "selected_sense_level": "C1",
+      "observation": "The verb explains the supervisor role through overseeing and checking work; this does not supply a particular safety procedure or legal authority.",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex root independent reviewer",
+      "access": "direct_page_selected_passages_via_web_open",
+      "limits": "Original short paraphrase only; no source examples, audio, images or full dictionary entries acquired. Word-of-the-Day footer labels excluded. This consultation does not approve pending candidates, morphology or subject-matter gates."
+    }
+  ],
+  "production_mutated": false
+}

@@ -1,0 +1,300 @@
+{
+  "schema": 1,
+  "created_on": "2026-10-16",
+  "author": "Codex root research author",
+  "status": "proposal_pending_independent_language_review",
+  "lexeme_id": "attendance.presence-record.n",
+  "before": {
+    "id": "attendance.presence-record.n",
+    "text": "attendance",
+    "display_text": "attendance",
+    "pos": "noun",
+    "definition": "Being present at work, a meeting, or another scheduled activity.",
+    "example": "The trainer recorded attendance at the session.",
+    "difficulty": "A2",
+    "accepted_forms": [
+      "attendance"
+    ],
+    "regions": [
+      "general"
+    ],
+    "practice_modes": [
+      "word_jelly"
+    ],
+    "media": {
+      "image": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "A small group present at a fictional workplace meeting beside its corresponding attendance record. The concept is being present, not the sheet by itself; use invented names and no biometric or private data.",
+        "picture_suitable": false,
+        "available_animations": [],
+        "adaptations": []
+      },
+      "audio": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      }
+    },
+    "morphology": {
+      "schema": 1,
+      "id": "attendance.presence-record.n.analysis.v1",
+      "lexeme_id": "attendance.presence-record.n",
+      "text": "attendance",
+      "kind": "morphological",
+      "review": {
+        "status": "pending",
+        "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p1",
+          "type": "stem",
+          "canonical": "attend",
+          "surface": "attend",
+          "canonical_id": "morph.attend"
+        },
+        {
+          "id": "p2",
+          "type": "suffix",
+          "canonical": "-ance",
+          "surface": "ance",
+          "canonical_id": "affix.ance.suffix"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "n1",
+          "left": "p1",
+          "right": "p2",
+          "surface": "attendance",
+          "rule": "suffix_attachment"
+        }
+      ],
+      "roots": [
+        "n1"
+      ]
+    },
+    "review": {
+      "status": "pending",
+      "language": "pending",
+      "domain": "not_required",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    "references": [
+      {
+        "source_id": "british-council-meetings",
+        "status": "pending_term_check",
+        "scope": "Workplace communication context only; this original definition and example await term-level review."
+      }
+    ],
+    "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The legacy canonical ID is retained for progress continuity. The definition concerns presence, while the image connects presence with its record; the ID wording does not create a second record-object sense."
+  },
+  "before_json_sha256": "a7699c3e58649791eaee79817f87879c2ce6b2418e729768c6f1a43c19b3594e",
+  "proposed_content": {
+    "id": "attendance.presence-record.n",
+    "text": "attendance",
+    "display_text": "attendance",
+    "pos": "noun",
+    "definition": "Being present at work, a meeting, or another scheduled activity.",
+    "example": "The trainer recorded attendance at the session.",
+    "difficulty": "B2",
+    "accepted_forms": [
+      "attendance"
+    ],
+    "regions": [
+      "general"
+    ],
+    "practice_modes": [
+      "word_jelly"
+    ],
+    "media": {
+      "image": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "A small group present at a fictional workplace meeting beside its corresponding attendance record. The concept is being present, not the sheet by itself; use invented names and no biometric or private data.",
+        "picture_suitable": false,
+        "available_animations": [],
+        "adaptations": []
+      },
+      "audio": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      }
+    },
+    "morphology": {
+      "schema": 1,
+      "id": "attendance.presence-record.n.analysis.v1",
+      "lexeme_id": "attendance.presence-record.n",
+      "text": "attendance",
+      "kind": "morphological",
+      "review": {
+        "status": "pending",
+        "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p1",
+          "type": "stem",
+          "canonical": "attend",
+          "surface": "attend",
+          "canonical_id": "morph.attend"
+        },
+        {
+          "id": "p2",
+          "type": "suffix",
+          "canonical": "-ance",
+          "surface": "ance",
+          "canonical_id": "affix.ance.suffix"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "n1",
+          "left": "p1",
+          "right": "p2",
+          "surface": "attendance",
+          "rule": "suffix_attachment"
+        }
+      ],
+      "roots": [
+        "n1"
+      ]
+    },
+    "review": {
+      "status": "pending",
+      "language": "pending",
+      "domain": "not_required",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    "references": [
+      {
+        "source_id": "british-council-meetings",
+        "status": "pending_term_check",
+        "scope": "Workplace communication context only; this original definition and example await term-level review."
+      }
+    ],
+    "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The legacy canonical ID is retained for progress continuity. The definition concerns presence, while the image connects presence with its record; the ID wording does not create a second record-object sense."
+  },
+  "proposed_content_json_sha256": "b7c42d9ce09b8ad3c2a322cd7f6272eb1432a6ef935fc1abf83c0fea333813d1",
+  "proposed_changes": [
+    {
+      "field": "difficulty",
+      "before": "A2",
+      "after": "B2"
+    }
+  ],
+  "reasoning": "B2 is proposed as an explicit course editorial choice: the exact noun is B2 in the inspected CEFR-J v1.5 headword/POS list and is taught in a B1-B2 workplace lesson. Oxford labels its selected presence topics C1, so the new evidence does not make the sense unanimously or dictionary-certified B2. The existing original definition/example fit ordinary presence, not a paper record or crowd headcount.",
+  "preserved": "Stable ID, definition, example, forms, memberships, image/audio/morphology/domain gates, practice modes, and all expressions remain unchanged. This proposal does not itself mark language reviewed.",
+  "sources": [
+    {
+      "id": "cefrj-wordlist-1.5-attendance",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "creator": "Yukio Tono / Tono Laboratory, Tokyo University of Foreign Studies; redistributed by Open Language Profiles",
+      "consulted": "2026-10-16",
+      "observed_label": "B2",
+      "label_scope": "Headword and part of speech only; no sense definition in the row.",
+      "header": "headword,pos,CEFR,CoreInventory 1,CoreInventory 2,Threshold",
+      "exact_row": "attendance,noun,B2,,,",
+      "raw_csv_bytes": 233214,
+      "raw_csv_sha256": "b0dd3c635f1c9a4fdf1490c7e5b7c48e8bbe55b652ad0c9860a95f98e10ae498",
+      "license": "CEFR-J permits research and commercial use without charge with proper source acknowledgement. This is distinct from the separate Octanove CC BY-SA dataset.",
+      "readme_url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "raw_readme_sha256": "8b69f7366fa3c7be328cb9ba02ceb7b3725697f36125bb75b85131d664b5e359",
+      "citation": "The CEFR-J Wordlist Version 1.5. Compiled by Yukio Tono, Tokyo University of Foreign Studies. Retrieved via Open Language Profiles on 2026-10-16.",
+      "acquisition": "Consulted exact CSV bytes; retained one row and hash only; not imported as production content."
+    },
+    {
+      "id": "cefrj-official-methodology",
+      "url": "https://www.cefr-j.org/download.html",
+      "consulted": "2026-10-16",
+      "observation": "Official page describes textbook-corpus and English Vocabulary Profile comparisons, POS-level entries, and attribution terms. It lists version 1.6 and its changes. This proposal directly inspected version 1.5, not a downloaded 1.6 workbook."
+    },
+    {
+      "id": "oxford-attendance-presence-recheck",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/attendance",
+      "consulted": "2026-10-16",
+      "observed_label": "C1",
+      "label_scope": "Working life and Education topics attached to the ordinary presence sense.",
+      "observation": "Sense 1 concerns presence at a place and includes recording students attendance; sense 2 separately concerns headcount. Selected C1 is retained as conflicting evidence."
+    },
+    {
+      "id": "collins-attendance-presence-recheck",
+      "url": "https://www.collinsdictionary.com/dictionary/english/attendance",
+      "consulted": "2026-10-16",
+      "observed_label": null,
+      "observation": "Selected uncountable sense covers being present at an event or regular participation in an institution; the headcount meaning is separately listed. No selected CEFR label was observed."
+    },
+    {
+      "id": "englishflows-attendance-workplace-lesson",
+      "url": "https://theenglishflows.com/lesson-plans/attendance-time-off-and-absenteeism/",
+      "consulted": "2026-10-16",
+      "observed_label": "B1 / B2",
+      "label_scope": "Whole lesson, not word-level certification.",
+      "observation": "Public publisher overview explicitly teaches attendance-policy vocabulary and workplace absence communication at B1-B2. Only the overview was inspected; subscriber worksheets and videos were not acquired."
+    }
+  ],
+  "excluded_leads": [
+    {
+      "url": "https://www.hueber.de/media/36/Laser-B2-3rd-Wordlist_D.pdf",
+      "reason": "Publisher B2 word-family example uses the headcount meaning, not the selected ordinary-presence sense; not used for selected-sense support."
+    },
+    {
+      "url": "https://learnenglishteens.britishcouncil.org/skills/listening/b1-listening/sports-centres",
+      "reason": "Search lead uses in attendance for a lifeguard; not directly inspected and not used as ordinary-presence evidence."
+    }
+  ],
+  "language_accepted": false,
+  "production_changed": false
+}

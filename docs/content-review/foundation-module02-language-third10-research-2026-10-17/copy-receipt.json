@@ -1,0 +1,210 @@
+{
+  "schema": 1,
+  "status": "exact_frozen_research_copy_verified",
+  "recorded_at_utc": "2026-10-16T19:01:10.068Z",
+  "scope": "Durable preservation of author research only. At research freeze, all eight proposals were pending independent AI language review. No production integration or approval is granted by this copy.",
+  "source_directory": "build/professional-english/foundation-module02-language-review/third10-research-r01",
+  "destination_directory": "docs/content-review/foundation-module02-language-third10-research-2026-10-17",
+  "copied_artifacts": 15,
+  "inventory_listed_artifacts": 13,
+  "source_inventory_raw_sha256": "22300622a4d3497aae3622d555a950577b0322a784c3ea64f1e5a77c762123c6",
+  "destination_inventory_raw_sha256": "22300622a4d3497aae3622d555a950577b0322a784c3ea64f1e5a77c762123c6",
+  "source_inventory_unchanged": true,
+  "all_source_artifacts_unchanged": true,
+  "all_copied_artifacts_byte_equal": true,
+  "execution_evidence": {
+    "failed_first_assembly": {
+      "status": 1,
+      "start_raw_sha256": "47bb204e6dc01c94f6dc562abbd1aef4268d45db44dcd0df599a7380b83fa4a7",
+      "completion_raw_sha256": "02d0c2d32a5223286c3d5c42f518fd6c547e8cbe7f0ebf3503f5b10ed49fe133",
+      "recorded_executed_source_equality_verified": false,
+      "copied_executed_sources_match_recorded_hashes": true,
+      "original_failure_preserved": true
+    },
+    "successful_r02_assembly": {
+      "status": 0,
+      "start_raw_sha256": "7f7bfa6480180bfe0f393f83213776f05f68ac49ada59639efe76a49e628fef1",
+      "completion_raw_sha256": "fe0932d4dd61c5a66357b922ed16c96e580372ca5fd7452b34b923519c908c2e",
+      "recorded_executed_source_equality_verified": true,
+      "copied_executed_sources_match_recorded_hashes": true,
+      "inventory_matches_completion_witness": true
+    },
+    "scripts_executed_during_copy": false
+  },
+  "boundaries": {
+    "research_freeze_proposals_pending_independent_review": 8,
+    "whole_entry_holds": [
+      "postpone",
+      "verify",
+      "collect",
+      "notify"
+    ],
+    "inherited_expression_holds": 17,
+    "production_writes": 0,
+    "review_transitions": 0,
+    "references_added": 0,
+    "source_registrations": 0,
+    "native_execution": false,
+    "shared_tests_changed": false,
+    "shared_checkpoint_changed": false
+  },
+  "artifacts": [
+    {
+      "path": "collect-html-metadata.cjs",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/collect-html-metadata.cjs",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/collect-html-metadata.cjs",
+      "bytes": 2784,
+      "source_raw_sha256": "9bbcc9b3534bfcf8febd2bb5de05d15c5ae9e23085987ebfe228ceccc62dfb03",
+      "destination_raw_sha256": "9bbcc9b3534bfcf8febd2bb5de05d15c5ae9e23085987ebfe228ceccc62dfb03",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "oxford-html-metadata.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/oxford-html-metadata.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/oxford-html-metadata.json",
+      "bytes": 17096,
+      "source_raw_sha256": "33efde1aabcb5cef8c82fb455fd2d0a0ae3c77f78d3ff49d11dd9e9b06244b7f",
+      "destination_raw_sha256": "33efde1aabcb5cef8c82fb455fd2d0a0ae3c77f78d3ff49d11dd9e9b06244b7f",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "research-notes.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/research-notes.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/research-notes.json",
+      "bytes": 29521,
+      "source_raw_sha256": "4e996e65b2bf54d9f466e7c91f8ea45036a2e05b1723bb29aa1f0d2bb240566e",
+      "destination_raw_sha256": "4e996e65b2bf54d9f466e7c91f8ea45036a2e05b1723bb29aa1f0d2bb240566e",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "assemble.cjs",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/assemble.cjs",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/assemble.cjs",
+      "bytes": 23675,
+      "source_raw_sha256": "59b301a8a8b0860bcfb289a5cc5f5df08a788b6e27471d4ece5c8b5277ccd4f9",
+      "destination_raw_sha256": "59b301a8a8b0860bcfb289a5cc5f5df08a788b6e27471d4ece5c8b5277ccd4f9",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "assembly-start.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/assembly-start.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/assembly-start.json",
+      "bytes": 1173,
+      "source_raw_sha256": "47bb204e6dc01c94f6dc562abbd1aef4268d45db44dcd0df599a7380b83fa4a7",
+      "destination_raw_sha256": "47bb204e6dc01c94f6dc562abbd1aef4268d45db44dcd0df599a7380b83fa4a7",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "assembly-attempt-001.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/assembly-attempt-001.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/assembly-attempt-001.json",
+      "bytes": 3543,
+      "source_raw_sha256": "02d0c2d32a5223286c3d5c42f518fd6c547e8cbe7f0ebf3503f5b10ed49fe133",
+      "destination_raw_sha256": "02d0c2d32a5223286c3d5c42f518fd6c547e8cbe7f0ebf3503f5b10ed49fe133",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "assemble-r02.cjs",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/assemble-r02.cjs",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/assemble-r02.cjs",
+      "bytes": 24087,
+      "source_raw_sha256": "c44e4799e6e713f30bb519fb9bf241bea2a4953741039b5d67a8b2a6adaa99f5",
+      "destination_raw_sha256": "c44e4799e6e713f30bb519fb9bf241bea2a4953741039b5d67a8b2a6adaa99f5",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "assembly-start-r02.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/assembly-start-r02.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/assembly-start-r02.json",
+      "bytes": 1181,
+      "source_raw_sha256": "7f7bfa6480180bfe0f393f83213776f05f68ac49ada59639efe76a49e628fef1",
+      "destination_raw_sha256": "7f7bfa6480180bfe0f393f83213776f05f68ac49ada59639efe76a49e628fef1",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "candidate-ledger.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/candidate-ledger.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/candidate-ledger.json",
+      "bytes": 93512,
+      "source_raw_sha256": "939bfedea01a17bce2bf97b29dcc607d29423a8622b855107e73b4402b2fa026",
+      "destination_raw_sha256": "939bfedea01a17bce2bf97b29dcc607d29423a8622b855107e73b4402b2fa026",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "source-index.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/source-index.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/source-index.json",
+      "bytes": 29659,
+      "source_raw_sha256": "3aa44ebf382d9e71d9ca3064b4f77c928c1c39603fba58781d6b266104287d46",
+      "destination_raw_sha256": "3aa44ebf382d9e71d9ca3064b4f77c928c1c39603fba58781d6b266104287d46",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "context-screen.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/context-screen.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/context-screen.json",
+      "bytes": 815160,
+      "source_raw_sha256": "ca6775e8ac2a10fad0ef761a73004956873c97866cff138e08879ee2fe044c0c",
+      "destination_raw_sha256": "ca6775e8ac2a10fad0ef761a73004956873c97866cff138e08879ee2fe044c0c",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "mechanical-checks.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/mechanical-checks.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/mechanical-checks.json",
+      "bytes": 2649,
+      "source_raw_sha256": "b2138cf48d6ed04e7f9ad8ff18b100adf669e0c2229b5d3aa6ec2733d36fb067",
+      "destination_raw_sha256": "b2138cf48d6ed04e7f9ad8ff18b100adf669e0c2229b5d3aa6ec2733d36fb067",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "HANDOFF.md",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/HANDOFF.md",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/HANDOFF.md",
+      "bytes": 3025,
+      "source_raw_sha256": "22f2b62649521d6946cb9d71291dda48e6c33693ce6784fd973816018d9e683c",
+      "destination_raw_sha256": "22f2b62649521d6946cb9d71291dda48e6c33693ce6784fd973816018d9e683c",
+      "byte_equal": true,
+      "inventory_listed": true
+    },
+    {
+      "path": "inventory.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/inventory.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/inventory.json",
+      "bytes": 2576,
+      "source_raw_sha256": "22300622a4d3497aae3622d555a950577b0322a784c3ea64f1e5a77c762123c6",
+      "destination_raw_sha256": "22300622a4d3497aae3622d555a950577b0322a784c3ea64f1e5a77c762123c6",
+      "byte_equal": true,
+      "inventory_listed": false
+    },
+    {
+      "path": "assembly-attempt-r02.json",
+      "source": "build/professional-english/foundation-module02-language-review/third10-research-r01/assembly-attempt-r02.json",
+      "destination": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/assembly-attempt-r02.json",
+      "bytes": 3043,
+      "source_raw_sha256": "fe0932d4dd61c5a66357b922ed16c96e580372ca5fd7452b34b923519c908c2e",
+      "destination_raw_sha256": "fe0932d4dd61c5a66357b922ed16c96e580372ca5fd7452b34b923519c908c2e",
+      "byte_equal": true,
+      "inventory_listed": false
+    }
+  ],
+  "new_documentation": [
+    {
+      "path": "README.md",
+      "bytes": 3774,
+      "raw_sha256": "26af800497510ea11c890f7e4eab58d30e9544b830476fe8fb1f549ed51727c0"
+    }
+  ]
+}

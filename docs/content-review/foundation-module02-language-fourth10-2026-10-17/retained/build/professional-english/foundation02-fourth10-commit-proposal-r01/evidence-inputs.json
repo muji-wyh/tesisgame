@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "status": "actual_evidence_references_for_unexecuted_commit_proposal",
+  "author": "Codex runtime_recovery",
+  "native": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/run.cjs",
+      "bytes": 5991,
+      "sha256": "5e53f7cdeb13a9d45a031f1aec08e46b9752fc445cc0f6815cc6163e657664e2"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/dispatch-source.json",
+      "bytes": 4184,
+      "sha256": "785b9464468b9231d72e35264a6a3928325ac56cc33609f021f757570f407fc0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/start.json",
+      "bytes": 125214,
+      "sha256": "4723eb0c7395f311c564119748edca6e559b0b4af394fc3e34ab0c6dec8e4a80"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/receipt.json",
+      "bytes": 6069,
+      "sha256": "1dbb1e3a9d34226b77381502edd6a9d745605f0e05d320297519e45106c5bc0c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/copied-inputs.json",
+      "bytes": 109274,
+      "sha256": "9c8005d0a81412dc9186cd8ae8f58008a9d8cd855e54edd4d5ab7b70c06dc029"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/command-1.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/command-2.log",
+      "bytes": 130,
+      "sha256": "c04bf5168c4951be761afab31633b5a6d5e4fdb537a8a4f81c74f259bdfb09a2"
+    }
+  ],
+  "prior_baseline": [
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/invoke.cjs",
+      "bytes": 4529,
+      "sha256": "3582fb89265590dd9d0c323b477b6956ce82f4739fcbef4e526ac9db079d0314"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/source-review.json",
+      "bytes": 810,
+      "sha256": "3c78c938e2ee0374cde51ea078d0c00b30e6ff154d579682486055a2adf212f8"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/start.json",
+      "bytes": 85433,
+      "sha256": "540a33d87769d9202ebbb1c2c5828bcd5f9e7ffaa40cb7fb5d56b58898fce1ab"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/receipt.json",
+      "bytes": 2816,
+      "sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-1.log",
+      "bytes": 591,
+      "sha256": "00800ad6139ddb4f9836c27309c2e3f73dbcd14e9d38f86099dd9cdaf96554d3"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-2.log",
+      "bytes": 24098,
+      "sha256": "20c016aeb906f07f939b8199db26857b10202efae48ec77075fef92d57333f82"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-3.log",
+      "bytes": 130,
+      "sha256": "e3d9702396ad1581242c30762bf38a29e2fdba813db35be19060646bb32bf028"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-4.log",
+      "bytes": 238,
+      "sha256": "899fc4405b303da4c304f337feddfb9116f2d4bf678ea482effca4a15b86614a"
+    }
+  ],
+  "prior_committed_receipt": {
+    "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/commit-receipt.json",
+    "bytes": 2474,
+    "sha256": "e247462f7d41a03b2b00b1dee17314987954d26df82f4b6949ddc2982fbbea35"
+  },
+  "scope": "Prior persisted results establish only the unchanged baseline dependency. The fourth batch has independent 230 projected callbacks and its own native candidate receipt. Fresh fourth-batch persisted checks remain required."
+}

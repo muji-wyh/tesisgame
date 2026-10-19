@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "sequence": 12,
+  "status": "committed",
+  "prepared_sha256": "282358803374c9810602b1b4e0c1c42b01389cfcfd52a6303e12a92c308dd8b6",
+  "previous_state_sha256": "a7c9e703c9043d219adae1c9baeb2084011153b524f498a84abd4ff87740e545",
+  "recorded_at": "2026-10-16T11:59:31.072Z",
+  "targets": [
+    {
+      "path": "tests/professional-content.test.cjs",
+      "bytes": 266094,
+      "sha256": "37d469c627c45fb76414267c4b94a244589ea31fcf72d5275c4394002693fd5a",
+      "noop": false
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "bytes": 74529,
+      "sha256": "75e6db92598a676560ce4cc92fb931bc219178db28988b7f8985061f69f3521d",
+      "noop": false
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "bytes": 37116,
+      "sha256": "7cda7edce2ec79e8ab2ac645729b56db1f71841680119befc56d14c53f87c7c5",
+      "noop": false
+    },
+    {
+      "path": "tests/professional-approved-audio.test.cjs",
+      "bytes": 4063,
+      "sha256": "172e6fd20c931657fd804369efa45cabf209c9171dfcb1ca58df9a1a090076c4",
+      "noop": false
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/persisted-tests-update-receipt.json",
+      "bytes": 1695,
+      "sha256": "79266748bf43e1f49434a2162244ffde6ba9c2c8463b52c87506186497fa4104",
+      "noop": false
+    }
+  ]
+}

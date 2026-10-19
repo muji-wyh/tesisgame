@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "status": "research_only_unaccepted",
+  "author_role": "AI language researcher; not an independent reviewer or specialist",
+  "automatic_application_permitted": false,
+  "scope": "Candidate language fields and alternatives only. No acceptance flags, source-registry entries, expression tokens, migration or production transaction are supplied.",
+  "narrow_candidates": [
+    {
+      "id": "postpone.delay-until-later.v",
+      "before_object_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+      "proposed_fields": {
+        "difficulty": "B2",
+        "editorial_notes": "Selected sense: moving a planned activity to a later time. B2 is proposed using CEFR-J v1.5 headword/POS evidence and the bounded scheduling context. Collins labels the selected sense B1+; Oxford labels it C1. Those source labels are preserved rather than converted. Language placement awaits independent review; morphology, media and expression acceptance remain separate."
+      },
+      "retain_definition": "To arrange for a planned activity to happen later.",
+      "retain_example": "The team decided to postpone the review until next week.",
+      "source_ids": ["O-postpone", "C-postpone", "P-CSV", "P-TERMS", "P-METHOD"],
+      "source_level_disagreement": ["Oxford selected sense fkcefr=c1", "Collins selected sense B1+", "CEFR-J v1.5 headword/POS B2"],
+      "dependent_focus_expression_id": "expr.foundation.module02.07",
+      "domain_status_preserved": "not_required"
+    },
+    {
+      "id": "unsafe.presenting-danger.adj",
+      "before_object_sha256": "b03ac8acf04932b9dfc3d44775939399ad37f73a1149faf72b708f244fc23286",
+      "proposed_fields": {
+        "difficulty": "B2",
+        "editorial_notes": "Selected sense: a place, thing or activity presenting danger, excluding personal vulnerability and legal-evidence senses. B2 is proposed from CEFR-J v1.5 headword/POS evidence, triangulated with Oxford and Collins meaning evidence. Neither inspected dictionary sense supplies a level. Language placement awaits independent review; safety domain, morphology, image suitability, media and expression acceptance remain pending."
+      },
+      "retain_definition": "Presenting a risk of harm in the situation.",
+      "retain_example": "The worker reported an unsafe storage area.",
+      "source_ids": ["O-unsafe", "C-unsafe", "P-CSV", "P-TERMS", "P-METHOD"],
+      "source_level_disagreement": ["Oxford selected sense has no cefr/fkcefr", "Collins selected sense has no observed level", "CEFR-J v1.5 headword/POS B2"],
+      "dependent_focus_expression_id": "expr.foundation.module02.09",
+      "domain_status_preserved": "pending"
+    },
+    {
+      "id": "hazard.possible-harm.n",
+      "before_object_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+      "proposed_fields": {
+        "difficulty": "B2",
+        "editorial_notes": "Selected noun sense: a potential cause of harm, kept distinct from an incident that has occurred. B2 is proposed for the bounded teaching context using a British Council B2 lesson that explicitly teaches the possible-accident noun and CEFR-J v1.5 headword/POS B1 evidence. Oxford labels the sense C1; Collins supplies no selected level. These source differences remain explicit. Language placement awaits independent review; safety domain, morphology, image suitability, media and expression acceptance remain pending."
+      },
+      "retain_definition": "Something with the potential to cause harm.",
+      "retain_example": "The loose cable was reported as a trip hazard.",
+      "source_ids": ["O-hazard", "C-hazard", "P-CSV", "P-TERMS", "P-METHOD", "L-HAZARD"],
+      "source_level_disagreement": ["Oxford selected sense fkcefr=c1", "Collins selected sense has no observed level", "CEFR-J v1.5 headword/POS B1", "British Council lesson B2 with explicit target noun; lesson-level evidence"],
+      "dependent_focus_expression_id": "expr.foundation.module02.10",
+      "domain_status_preserved": "pending"
+    }
+  ],
+  "coordinated_revision_options": [
+    {
+      "id": "collect.gather.v",
+      "before_object_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "preferred_option": "Retain gathering identity and consistently assess gathering; requires separate expression and pending picture-brief revisions.",
+      "proposed_language_fields": {
+        "definition": "To bring items from several people or places into one group.",
+        "example": "Please collect one completed form from each team.",
+        "difficulty": "B1",
+        "editorial_notes": "Selected sense: gathering items from several people or places. Oxford labels this sense A2 and Collins B1; B1 is the proposed teaching placement. Reception pickup, hobby collecting and collecting payments are excluded. Image, morphology and expression acceptance remain separate."
+      },
+      "proposed_pending_image_brief": "A friendly worker receiving fictional completed forms from three different teams and placing them together in one folder; clearly show several sources and one gathered set, without private information.",
+      "dependent_expression_candidate": {
+        "id": "expr.foundation.module02.08",
+        "text": "Could you assist me while I collect one form from each team and return the key?",
+        "state": "Unaccepted prose only; meaning, context, tokens and neighbor-sense compatibility not reviewed."
+      },
+      "source_ids": ["O-collect", "C-collect"],
+      "alternate_option": {
+        "proposed_unreserved_id": "collect.pick-up-items.v",
+        "scope": "New pickup identity with explicit regional usage note; no proposed complete entry or automatic migration.",
+        "source_labels": ["Oxford pickup cefr=b1 with person-specific British examples", "Collins pickup A2, British; American preference for pick up"],
+        "requires": ["Canonical identity decision", "20 module02 membership decisions", "Expression focus revision", "Morphology/media identity review", "Requirements revision and saved-progress decisions without automatic sense mastery transfer"]
+      }
+    },
+    {
+      "id": "notify.inform.v",
+      "before_object_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "current_entry_recommendation": "Retain whole-entry hold.",
+      "alternative": {
+        "proposed_unreserved_id": "inform.give-information.v",
+        "text": "inform",
+        "pos": "verb",
+        "definition": "To give someone information about something.",
+        "example": "Please inform the team if the meeting time changes.",
+        "difficulty": "B2",
+        "source_ids": ["O-inform", "C-inform", "P-CSV", "P-TERMS", "P-METHOD"],
+        "source_labels": ["Oxford selected sense associated with B2 topic; raw tag not fetched", "Collins selected sense B1+", "CEFR-J v1.5 headword/POS B1"],
+        "dependent_expression_candidate": {
+          "id": "expr.foundation.module02.02",
+          "text": "Please contact the supplier to confirm the delivery time, and inform us of any delay.",
+          "state": "Unaccepted prose only; focus identity, meaning, context and tokens not revised."
+        },
+        "requires": ["New entry and source provenance review", "Canonical duplicate and coverage review", "20 one-for-one module02 membership decisions", "Expression focus and token review", "Fresh morphology and media authoring/review", "Requirements revision and saved-progress decision; no automatic synonym mastery transfer"]
+      },
+      "rejected_shortcut": "The British Council interview article is tagged A2 through C1; its notify usage does not establish B2 for this entry."
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "verify.establish-accuracy.v",
+      "before_object_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "recommendation": "Retain whole-entry hold unchanged.",
+      "reason": "Oxford checking sense is C1; Collins supplies no selected level; CEFR-J v1.5 has no exact verify row. No suitable lower-level evidence was established in this pass.",
+      "source_ids": ["O-verify", "C-verify", "P-CSV"],
+      "replacement_constraints": ["check.examine.v is already reviewed A2 in Foundation02", "The same focus expression already contains check", "A replacement must preserve unique course coverage", "double-check adds a repetition meaning and has no established lower-level evidence here"]
+    }
+  ],
+  "protected_fields": ["review", "references", "accepted_forms", "regions", "practice_modes", "morphology", "media", "course memberships", "all expressions", "source registry", "all historical reviews and holds"],
+  "protection_note": "Protected fields remain unchanged in production. Collect image-brief and expression text and notify replacement above are explicit dependent research options, not permissions to apply them or changes to review gates."
+}

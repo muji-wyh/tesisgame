@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "status": "original_source_inspection_passed_pending_visual_review",
+  "native_error": null,
+  "guard_error": null,
+  "elapsed_ms": 8012,
+  "guarded_production_files": 1074,
+  "inputs": {
+    "source-record.json": "3e6184da75cd0fa51efaad7a47369c291b8ed920f1659a3c0d5b891e691149f0",
+    "archive-inventory.json": "4f064bef95e9e8b66a5d35c95cf3f7ad8c9bb767452c081ca338a13c22844565",
+    "primary-capture-receipt.json": "db93e8f6affcd90cd9c7307212e27f5f5ae31f0d2ba090a76e8f287ce54acd3d",
+    "inspect-source.gd": "cbc572d48d465601c5d502d6343c8300c3473007f80d7bc52a4cdd1954f886a6",
+    "run-inspection.cjs": "286d39a673ea856ec69dd9b66f21f574859f065e83bd336e57ec49d78a842bfc"
+  },
+  "source_files": 7,
+  "captures": 6,
+  "report_sha256": "57ac8c3ad5da2ff28ad86b15017137bda4ce47509543c46a80da2b8885412976",
+  "log_sha256": "048dc9289bfa2e3c99b39cec65617ab1a68b46684b88b5fe576397fbb315cdfa",
+  "production_changes": false
+}

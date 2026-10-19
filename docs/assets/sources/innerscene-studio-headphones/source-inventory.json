@@ -1,0 +1,49 @@
+{
+  "id": "studio-headphones",
+  "folder": "innerscene-studio-headphones",
+  "theme": "sales-marketing",
+  "source_url": "https://www.innerscene.com/tools/library/3d-parts/monitor-cans-studio-headphones-215d0bbe",
+  "download_url": "https://www.innerscene.com/api/library/monitor-cans-studio-headphones-215d0bbe/download",
+  "creator": "Innerscene",
+  "acquired_on": "2026-10-16",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "terms_url": "https://www.innerscene.com/tools/library/terms",
+  "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+  "filename": "studio-headphones.glb",
+  "bytes": 153276,
+  "sha256": "509a8fd537249e3389f36c68df5bbc2d23fd1d672e55c2c6d7785b90e590a46a",
+  "acquisition_status": "downloaded_from_original_source_for_review",
+  "integration_status": "retained_for_reviewed_static_home_composition",
+  "review_status": "actual_source_front_and_rear_views_inspected",
+  "mesh_count": 7,
+  "triangle_count": 2884,
+  "material_count": 3,
+  "image_count": 4,
+  "available_animations": [],
+  "skin_count": 0,
+  "external_dependencies": [],
+  "node_names": [
+    "Ear cup metal yoke",
+    "Ear cup metal yoke.001",
+    "Ear cup outer shell",
+    "Ear cup outer shell.001",
+    "Padded headband arch",
+    "Soft ear cushion",
+    "Soft ear cushion.001",
+    "Monitor Cans"
+  ],
+  "asset_metadata": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0"
+  },
+  "visual_review": {
+    "reviewer": "finish_difficulty",
+    "reviewed_on": "2026-10-16",
+    "basis": "Saved Godot front/rear source renders at 296 x 185, displayed without scaling in source-review-sheet-1.png through source-review-sheet-3.png.",
+    "notes": "The saved views show the upright arch and two earcups. No microphone is present; do not identify this object as a support headset.",
+    "scope": "Source geometry and material inspection only. No composition, Home integration, animation, or full-theme approval."
+  },
+  "source_review": "build/professional-english/remaining-theme-review/source-visual-review.json",
+  "composition_review": "build/professional-english/remaining-theme-review/composition-visual-review.json"
+}

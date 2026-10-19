@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 178,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "cdf1c75f78366380ee50db391828608af09099f1d1e8a8df6ae4b85584338f85",
+  "recorded_at": "2026-10-16T22:48:27.091Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/test-edit-ledger.json",
+  "work": "work/3a41ad11-eca5-48af-b3e9-9e65c04184da.bin"
+}

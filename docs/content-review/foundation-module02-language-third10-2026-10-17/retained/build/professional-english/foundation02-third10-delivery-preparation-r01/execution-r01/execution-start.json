@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "status": "preparation_dispatch_recorded",
+  "recorded_at": "2026-10-16T20:04:25.911Z",
+  "entrypoint": "build/professional-english/foundation02-third10-delivery-preparation-r01/prepare.cjs",
+  "source_files": [
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/input-pins.json",
+      "raw_sha256": "b47f2ded5171cf76c3426fb65cfe38dd1356fc51aab64504951dc47ad20b6837"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/projection.cjs",
+      "raw_sha256": "ad1143ca6951aa7851a0991fd7fc61711cfe7fc13516557f99b07c99e5b7a4f5"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/test-transforms.cjs",
+      "raw_sha256": "f311764bac315212c3e24f22fe799c69bd151ff96331192187d4988fd80cd52f"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/prepare.cjs",
+      "raw_sha256": "f318e537c4b8d7f332a6ca98f15cd6054711a33d649d3b5de9cb0ad36dc96c8a"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/HANDOFF.md",
+      "raw_sha256": "9e3446444a8b4ec8b8e285331852616d7abe9f088df3fd530abd5294631b3e17"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/TRANSACTION.md",
+      "raw_sha256": "e597a6d497697abb8421b477f5c89b19be040231dfb25849544e3b8a36d5c9bb"
+    }
+  ],
+  "production_mutated": false,
+  "native_dispatched": false,
+  "historical_scripts_replayed": false
+}

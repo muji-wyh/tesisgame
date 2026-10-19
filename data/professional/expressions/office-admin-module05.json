@@ -1,0 +1,1881 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.office_admin.module05.01",
+      "text": "Please type the agreed wording, compare it with the source, and proofread it before you review and edit the approved text.",
+      "meaning": "Compare and review wording before editing.",
+      "context": "An administrator prepares a controlled document revision.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "type",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "agreed",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "wording",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "compare",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "it",
+          "start": 40,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "with",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "source",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "proofread",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "it",
+          "start": 74,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "before",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "you",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "review",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 19,
+          "text": "edit",
+          "start": 99,
+          "end": 103
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 21,
+          "text": "approved",
+          "start": 108,
+          "end": 116
+        },
+        {
+          "index": 22,
+          "text": "text",
+          "start": 117,
+          "end": 121
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 121,
+          "end": 122
+        }
+      ],
+      "focus_lexeme_ids": [
+        "type.enter-text-with-keyboard.v",
+        "proofread.check-text-for-surface-errors.v",
+        "edit.revise-written-or-digital-content.v",
+        "compare.examine-differences.v",
+        "review.reconsider-care-information.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module05.02",
+      "text": "Please select and format the headings consistently, then inspect the page layout before you print or photocopy the confirmed version.",
+      "meaning": "Choose formatting and inspect the document before copying.",
+      "context": "An administrator prepares an approved document for distribution.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "select",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "format",
+          "start": 18,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "headings",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "consistently",
+          "start": 38,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "then",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "inspect",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "page",
+          "start": 69,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "layout",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "before",
+          "start": 81,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "you",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "print",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "or",
+          "start": 98,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "photocopy",
+          "start": 101,
+          "end": 110
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 111,
+          "end": 114
+        },
+        {
+          "index": 19,
+          "text": "confirmed",
+          "start": 115,
+          "end": 124
+        },
+        {
+          "index": 20,
+          "text": "version",
+          "start": 125,
+          "end": 132
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 132,
+          "end": 133
+        }
+      ],
+      "focus_lexeme_ids": [
+        "format.arrange-presentation-of-content.v",
+        "print.produce-text-or-images-on-material.v",
+        "photocopy.make-paper-copy-with-copier.v",
+        "select.choose-option.v",
+        "inspect.examine-visually.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module05.03",
+      "text": "Please count and collate the pages, sort the records, file each approved record under its reference, and tidy the workspace.",
+      "meaning": "Organize records and restore an orderly workspace.",
+      "context": "An administrator completes a filing task.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "count",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "collate",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "pages",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "sort",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "records",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "file",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "each",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "approved",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "record",
+          "start": 73,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "under",
+          "start": 80,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "its",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "reference",
+          "start": 90,
+          "end": 99
+        },
+        {
+          "index": 18,
+          "text": ",",
+          "start": 99,
+          "end": 100
+        },
+        {
+          "index": 19,
+          "text": "and",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 20,
+          "text": "tidy",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 21,
+          "text": "the",
+          "start": 110,
+          "end": 113
+        },
+        {
+          "index": 22,
+          "text": "workspace",
+          "start": 114,
+          "end": 123
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 123,
+          "end": 124
+        }
+      ],
+      "focus_lexeme_ids": [
+        "collate.arrange-pages-in-required-sequence.v",
+        "file.place-record-in-organized-storage.v",
+        "count.find-number.v",
+        "sort.group-by-kind.v",
+        "tidy.put-things-in-order.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module05.04",
+      "text": "Retrieve the current record, evaluate whether to redact or compress the proposed copy, and ask the records manager whether the original is ready to archive.",
+      "meaning": "Consider copy preparation separately from archiving the original.",
+      "context": "An administrator seeks records-management guidance before changing or retaining information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Retrieve",
+          "start": 0,
+          "end": 8
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "current",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "record",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "evaluate",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "whether",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 46,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "redact",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "or",
+          "start": 56,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "compress",
+          "start": 59,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "proposed",
+          "start": 72,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "copy",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 85,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "ask",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": "records",
+          "start": 99,
+          "end": 106
+        },
+        {
+          "index": 19,
+          "text": "manager",
+          "start": 107,
+          "end": 114
+        },
+        {
+          "index": 20,
+          "text": "whether",
+          "start": 115,
+          "end": 122
+        },
+        {
+          "index": 21,
+          "text": "the",
+          "start": 123,
+          "end": 126
+        },
+        {
+          "index": 22,
+          "text": "original",
+          "start": 127,
+          "end": 135
+        },
+        {
+          "index": 23,
+          "text": "is",
+          "start": 136,
+          "end": 138
+        },
+        {
+          "index": 24,
+          "text": "ready",
+          "start": 139,
+          "end": 144
+        },
+        {
+          "index": 25,
+          "text": "to",
+          "start": 145,
+          "end": 147
+        },
+        {
+          "index": 26,
+          "text": "archive",
+          "start": 148,
+          "end": 155
+        },
+        {
+          "index": 27,
+          "text": ".",
+          "start": 155,
+          "end": 156
+        }
+      ],
+      "focus_lexeme_ids": [
+        "retrieve.find-and-obtain-stored-item.v",
+        "archive.move-material-into-managed-long-term-storage.v",
+        "evaluate.judge-care-information.v",
+        "redact.remove-or-obscure-sensitive-content.v",
+        "compress.reduce-representation-size.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "nara-records-scheduling",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module05.05",
+      "text": "Ask who may authorize distribution before you circulate the approved minutes or distribute the accessible handouts through the agreed channel.",
+      "meaning": "Confirm authority before distributing documents.",
+      "context": "An administrator checks the approved recipients and channel.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "who",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "may",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "authorize",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "distribution",
+          "start": 22,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "you",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "circulate",
+          "start": 46,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "approved",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "minutes",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "or",
+          "start": 77,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "distribute",
+          "start": 80,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 14,
+          "text": "accessible",
+          "start": 95,
+          "end": 105
+        },
+        {
+          "index": 15,
+          "text": "handouts",
+          "start": 106,
+          "end": 114
+        },
+        {
+          "index": 16,
+          "text": "through",
+          "start": 115,
+          "end": 122
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 123,
+          "end": 126
+        },
+        {
+          "index": 18,
+          "text": "agreed",
+          "start": 127,
+          "end": 133
+        },
+        {
+          "index": 19,
+          "text": "channel",
+          "start": 134,
+          "end": 141
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 141,
+          "end": 142
+        }
+      ],
+      "focus_lexeme_ids": [
+        "circulate.send-material-around-recipient-group.v",
+        "distribute.give-material-to-intended-recipients.v",
+        "authorize.give-transaction-permission.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module05.06",
+      "text": "Please identify the recipient, acknowledge their request, and confirm the destination before you dispatch the parcel.",
+      "meaning": "Check the request and destination before sending a parcel.",
+      "context": "An administrator prepares an outgoing delivery.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "identify",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "recipient",
+          "start": 20,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "acknowledge",
+          "start": 31,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "their",
+          "start": 43,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "request",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "confirm",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "destination",
+          "start": 74,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": "before",
+          "start": 86,
+          "end": 92
+        },
+        {
+          "index": 14,
+          "text": "you",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "dispatch",
+          "start": 97,
+          "end": 105
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 106,
+          "end": 109
+        },
+        {
+          "index": 17,
+          "text": "parcel",
+          "start": 110,
+          "end": 116
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 116,
+          "end": 117
+        }
+      ],
+      "focus_lexeme_ids": [
+        "dispatch.send-item-toward-destination.v",
+        "identify.establish-identity-or-nature.v",
+        "acknowledge.recognize-receipt-or-stated-concern.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module05.07",
+      "text": "Please listen as I dictate the corrected introduction, then transcribe the approved recording and clarify any unclear wording.",
+      "meaning": "Agree on transcription and clarification of spoken content.",
+      "context": "An administrator prepares a written version of approved material.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "listen",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "as",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "I",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "dictate",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "corrected",
+          "start": 31,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "introduction",
+          "start": 41,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "then",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "transcribe",
+          "start": 60,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "approved",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "recording",
+          "start": 84,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": "clarify",
+          "start": 98,
+          "end": 105
+        },
+        {
+          "index": 16,
+          "text": "any",
+          "start": 106,
+          "end": 109
+        },
+        {
+          "index": 17,
+          "text": "unclear",
+          "start": 110,
+          "end": 117
+        },
+        {
+          "index": 18,
+          "text": "wording",
+          "start": 118,
+          "end": 125
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 125,
+          "end": 126
+        }
+      ],
+      "focus_lexeme_ids": [
+        "transcribe.convert-spoken-content-into-writing.v",
+        "dictate.speak-content-for-transcription.v",
+        "listen.attend-to-spoken-information.v",
+        "clarify.make-meaning-or-detail-clearer.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module05.08",
+      "text": "Please minute the agreed decision, record its assigned owner, and document the reasons as the participants describe them.",
+      "meaning": "Record the decision, responsibility, and stated reasoning.",
+      "context": "An administrator prepares an accurate meeting record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "minute",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "agreed",
+          "start": 18,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "decision",
+          "start": 25,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "record",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "its",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "assigned",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "owner",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "document",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "reasons",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "as",
+          "start": 87,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "participants",
+          "start": 94,
+          "end": 106
+        },
+        {
+          "index": 18,
+          "text": "describe",
+          "start": 107,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": "them",
+          "start": 116,
+          "end": 120
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 120,
+          "end": 121
+        }
+      ],
+      "focus_lexeme_ids": [
+        "minute.record-business-in-meeting-minutes.v",
+        "record.store-observed-information.v",
+        "document.make-care-record.v",
+        "describe.give-details-in-words.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module05.09",
+      "text": "Please calculate the booking cost and reconcile the payment records before you book the room or reserve the equipment.",
+      "meaning": "Check costs and payment records before a booking.",
+      "context": "An administrator checks the authorized arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "calculate",
+          "start": 7,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "booking",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "cost",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "reconcile",
+          "start": 38,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "payment",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "records",
+          "start": 60,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "you",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "book",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "room",
+          "start": 88,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "or",
+          "start": 93,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "reserve",
+          "start": 96,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": "equipment",
+          "start": 108,
+          "end": 117
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "book.arrange-reservation-for-service-or-place.v",
+        "reserve.hold-for-customer.v",
+        "calculate.work-out-number.v",
+        "reconcile.match-financial-records.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module05.10",
+      "text": "The manager will delegate and assign the work, clarify who should respond, and explain when to forward or escalate a request.",
+      "meaning": "Clarify responsibility for handling and referring requests.",
+      "context": "A manager assigns administrative work within agreed responsibilities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "manager",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "delegate",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "assign",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "work",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "clarify",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "who",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "should",
+          "start": 59,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "respond",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "explain",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "when",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 92,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "forward",
+          "start": 95,
+          "end": 102
+        },
+        {
+          "index": 19,
+          "text": "or",
+          "start": 103,
+          "end": 105
+        },
+        {
+          "index": 20,
+          "text": "escalate",
+          "start": 106,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": "a",
+          "start": 115,
+          "end": 116
+        },
+        {
+          "index": 22,
+          "text": "request",
+          "start": 117,
+          "end": 124
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "delegate.entrust-task-to-another-person.v",
+        "assign.give-work-or-responsibility-to-person.v",
+        "respond.give-reply-or-reaction.v",
+        "forward.send-received-message-onward.v",
+        "escalate.refer-for-higher-or-specialist-attention.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

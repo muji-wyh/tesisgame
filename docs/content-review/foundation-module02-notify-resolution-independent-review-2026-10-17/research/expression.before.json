@@ -1,0 +1,155 @@
+{
+  "id": "expr.foundation.module02.02",
+  "text": "Please contact the supplier to confirm the delivery time, and notify us of any delay.",
+  "meaning": "Ask someone to communicate with the provider and pass on timing changes.",
+  "context": "A team coordinates an expected delivery.",
+  "tokens": [
+    {
+      "index": 0,
+      "text": "Please",
+      "start": 0,
+      "end": 6
+    },
+    {
+      "index": 1,
+      "text": "contact",
+      "start": 7,
+      "end": 14
+    },
+    {
+      "index": 2,
+      "text": "the",
+      "start": 15,
+      "end": 18
+    },
+    {
+      "index": 3,
+      "text": "supplier",
+      "start": 19,
+      "end": 27
+    },
+    {
+      "index": 4,
+      "text": "to",
+      "start": 28,
+      "end": 30
+    },
+    {
+      "index": 5,
+      "text": "confirm",
+      "start": 31,
+      "end": 38
+    },
+    {
+      "index": 6,
+      "text": "the",
+      "start": 39,
+      "end": 42
+    },
+    {
+      "index": 7,
+      "text": "delivery",
+      "start": 43,
+      "end": 51
+    },
+    {
+      "index": 8,
+      "text": "time",
+      "start": 52,
+      "end": 56
+    },
+    {
+      "index": 9,
+      "text": ",",
+      "start": 56,
+      "end": 57
+    },
+    {
+      "index": 10,
+      "text": "and",
+      "start": 58,
+      "end": 61
+    },
+    {
+      "index": 11,
+      "text": "notify",
+      "start": 62,
+      "end": 68
+    },
+    {
+      "index": 12,
+      "text": "us",
+      "start": 69,
+      "end": 71
+    },
+    {
+      "index": 13,
+      "text": "of",
+      "start": 72,
+      "end": 74
+    },
+    {
+      "index": 14,
+      "text": "any",
+      "start": 75,
+      "end": 78
+    },
+    {
+      "index": 15,
+      "text": "delay",
+      "start": 79,
+      "end": 84
+    },
+    {
+      "index": 16,
+      "text": ".",
+      "start": 84,
+      "end": 85
+    }
+  ],
+  "focus_lexeme_ids": [
+    "contact.communicate-with.v",
+    "confirm.verify-arrangement.v",
+    "notify.inform.v",
+    "delay.late-occurrence.n"
+  ],
+  "practice_modes": [
+    "phrase"
+  ],
+  "media": {
+    "audio": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "review": {
+    "status": "pending",
+    "language": "pending",
+    "domain": "not_required",
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "references": [
+    {
+      "source_id": "british-council-requests",
+      "status": "pending_term_check",
+      "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "status": "exact_frozen_source_and_review_copies",
+  "files": [
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/accepted-contract.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/accepted-contract.json",
+      "bytes": 414984,
+      "sha256": "e930b6e65c44daa4ab27b44523241edc41e10942d92b25f2254f47073acd2235"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/actual-baseline-binding.template.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/actual-baseline-binding.template.json",
+      "bytes": 671,
+      "sha256": "4e918929f6222881440afa5c4cd3412d9bc1c43ed9a0887793fa43960ef7e2b9"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/author-observations.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/author-observations.json",
+      "bytes": 43657,
+      "sha256": "c6afb0acba234b42762447169f94547cd21aebba44467b9a5dbc0cb133586012"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/BINDING-CONTRACT.md",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/BINDING-CONTRACT.md",
+      "bytes": 7942,
+      "sha256": "6801bc017e13c37d963aefd14065b6d096de1031d1bc2b498c6a9d1be8fa1886"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/binding.cjs",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/binding.cjs",
+      "bytes": 8080,
+      "sha256": "90f45769c16ba4e6e40bb7fd177e7906dc4c141d70b7c616bca3dbe76caba703"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/CALL-GRAPH.md",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/CALL-GRAPH.md",
+      "bytes": 3633,
+      "sha256": "1bc79f6ba80f61799e73f1683f97e95e7a4f00dac31652f85f56b0485e40be0f"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/context-contract.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/context-contract.json",
+      "bytes": 1751439,
+      "sha256": "5cf815fb77ebdc45325063e40eb2b1940718e721ed18f46f347277689dd2993a"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/donor-row-contract.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/donor-row-contract.json",
+      "bytes": 224067,
+      "sha256": "119814498724b14dd5d272a005ecdcc19f646651d321dd78dcafef0fe1c3d638"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/prepare.cjs",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/prepare.cjs",
+      "bytes": 7472,
+      "sha256": "0d736bb531a7ab9dbe767e78015881a5d994f057958bd1b53ad17a28bc97fcf1"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/projection.cjs",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/projection.cjs",
+      "bytes": 15663,
+      "sha256": "27794f6f3cde0a2e1e5185813e496502c1385a00ddc760f135a2c339810d6302"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/README.md",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/README.md",
+      "bytes": 3817,
+      "sha256": "912eab6904f2db36bdd3e27165da9dd13a9390f6dbb88afd8d93f603293b9ace"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/root-input.template.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/root-input.template.json",
+      "bytes": 432,
+      "sha256": "8d0ec8e557e750a1874774be3aad2ab5792a80a7ef743aae3a1023da17b25b42"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/source-inventory.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/source-inventory.json",
+      "bytes": 2485,
+      "sha256": "21df8c149742cb4fc63acecb033bfb7d499e10310b5467c8ff81bd715db73598"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/test-transforms.cjs",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/source/test-transforms.cjs",
+      "bytes": 27566,
+      "sha256": "e2812802f2146bfe63fcb346db6ee49c2dc1523176d1d28ce03255d34deafd37"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/capture-attempt-r01/inputs.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/review/capture-attempt-r01/inputs.json",
+      "bytes": 18201,
+      "sha256": "2c95ee9e07187164636730f4ffd1b108f807346a28974a1a2d228e7e25732857"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/capture-attempt-r01/inspection.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/review/capture-attempt-r01/inspection.json",
+      "bytes": 48811,
+      "sha256": "0440f986b2826f7df0d43f8f8cf65b91a2923fccd93e12a3ff9c2569d1a2cf96"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/capture-attempt-r01/start.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/review/capture-attempt-r01/start.json",
+      "bytes": 259,
+      "sha256": "287fb3515879b373c038eb33b89b0b561ba1ded6c2519ed8e98ce26310129977"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/capture.ps1",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/review/capture.ps1",
+      "bytes": 11386,
+      "sha256": "a3111a9a66c08350fb71c678324ef40842487cfd93e693d81f8f5acbd6b48588"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/inventory.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/review/inventory.json",
+      "bytes": 1368,
+      "sha256": "9ff8e10e22f6b91063bd8966b9381fc4002f84ccdf2c224a32c70638b9ef752c"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/README.md",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/review/README.md",
+      "bytes": 1875,
+      "sha256": "f3f9e1c02a71606f189203c7abd894f1909d78c6334ba4ddd329dfa30a1c9dc0"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/review.json",
+      "target": "docs/content-review/foundation-module02-fifth10-preparation-source-review-2026-10-17/r02/review/review.json",
+      "bytes": 8929,
+      "sha256": "b5f9389ea3344d8ce84dd39af20f7b6f0a92a04b00453fca1c8c1c5c25d444c0"
+    }
+  ],
+  "readme_sha256": "958887b649d4a4796cd7bbe4d06ac189ffe3174f05cc018adf0fc1a843d74f7c",
+  "source_review_sha256": "b5f9389ea3344d8ce84dd39af20f7b6f0a92a04b00453fca1c8c1c5c25d444c0",
+  "project_execution": false,
+  "production_mutated": false
+}

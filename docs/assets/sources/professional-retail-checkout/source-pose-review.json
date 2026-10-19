@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-16",
+  "status": "accepted_for_composition_probe",
+  "sense_id": "checkout.payment-area.n",
+  "source_inspection_report_sha256": "c7ce7596f86dd9195beeeba97628f337ca3942f720053695ac078e339f35ebda",
+  "contact_sha256": "2e89249292d24907e8577228d9d3708c0b82455ae422373115d9385de44b9d27",
+  "source_native_receipt_sha256": "b815d58fff38a1b16a1a52b56d322a538bc23605939302f3e692a1a254abf78e",
+  "employee_pose": {
+    "clip": "idle",
+    "seconds": 0
+  },
+  "shopper_pose": {
+    "clip": "interact-right",
+    "seconds": 0.333
+  },
+  "views_reviewed": {
+    "all_source_captures": 18,
+    "method": "Viewed complete contact sheet of all 18 captures, plus full-size station high, employee static/idle-start/interact-middle, shopper interact-middle/front and side."
+  },
+  "observations": [
+    "Original station clearly contains a broad dark belt and a compact terminal/display; the model is usable as part of one complete checkout lane.",
+    "Both complete characters retain friendly faces, original clothes, hair, skeletons and materials. Green-and-white employee and yellow/purple shopper are visually distinct.",
+    "Static clip arms are extended sideways and are less suitable than the selected idle and interact-right samples.",
+    "Employee idle-start has relaxed arms. Shopper interact-right at 0.333 seconds extends the right hand naturally forward; it can support presenting purchases when positioned near the belt.",
+    "Generic carton and apple source models are recognizable and have no readable credentials or brand wordmarks. Complete original floor tiles may be compared, but are optional composition context."
+  ],
+  "remaining_checks": [
+    "The employee must visibly occupy the terminal side and the shopper the goods side.",
+    "Verify body/station clearance, both foot positions, hand-to-belt relationship and groceries touching the actual belt.",
+    "The terminal must not dominate the whole place; no isolated-register interpretation.",
+    "Judge belt, groceries and two roles in actual Match/Memory native-size states, including matched badge and alpha.",
+    "The source probe validates selected still poses only, not all 32 animation clips or an animated final asset."
+  ],
+  "source_changes": "None; no mesh/material/texture/skin/child-node edits. Proposed poses use only original included animation clips.",
+  "production_integration": false,
+  "composition_run": false,
+  "acceptance_scope": "Root and author independently inspected the source contact and selected poses. Scoped AI source suitability only; not human review, final image acceptance, or production integration.",
+  "root_review": "Root confirmed the belt-and-terminal station, friendly/distinct character roles, and usability of the forward interact-middle arm; static T-like arms remain unused. Hand/terminal intersections and role recognition still require actual 102x52 composition review.",
+  "proposal_sha256": "ee6bc84dc016b3aef9ca09c4689d5004fef721d0750618ed0bfa65b37253c4aa"
+}

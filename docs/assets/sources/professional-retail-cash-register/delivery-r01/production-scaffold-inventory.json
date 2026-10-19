@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "status": "root_run_probe_sources_frozen_without_execution",
+  "files": {
+    "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/HANDOFF.md": "f623fd07004635d1723af3d222ef2fcaef9ab35a37ef0115aa5d9c0413072274",
+    "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/expected-crop-pixels.json": "33bdef154c9a5f8aacc1922a176848fd14db2602c32c8364bdbaf16d86aa8e72",
+    "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/preparation-receipt.json": "605d833fcdc6b894dd25362159e989e8c6d37cf55b9b16c317493a28706a93cc",
+    "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/prepare-delivery-check.cjs": "b81fe23cf11b5622ff1b1073157108d0742159a90b823fb6dfe31e762cb9a3f1",
+    "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/run-production-check.cjs": "4beeae6977bf0e436da8b41103451c6b87d0a33c08e9f7d8f7be0b8b38bc6fd5",
+    "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/scaffold-origin.json": "d34f465fa4533ce1ebd06b8d995c3d603c8dbb270184c0f6813b9c228452a3c6",
+    "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/verify-production.template.gd": "08df31ee3d50059192bb840f28fc683bf1905d8056b73655902bb78987d85d58"
+  }
+}

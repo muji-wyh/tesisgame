@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "status": "sealed_research_only_unaccepted",
+  "created_at": "2026-10-16T21:26:50.191Z",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 4984,
+      "sha256": "dbb8116858b6852efe39e8d08fa3c772c6ec7b679b7cf002f6f0dd350555f1a7"
+    },
+    {
+      "file": "REVIEW-HANDOFF.md",
+      "bytes": 3087,
+      "sha256": "df0f263d40c6f57fa22ca1a4e689f1fa90e6f35b1a6e0516096f28647ea2bc0e"
+    },
+    {
+      "file": "SOURCE-LEDGER.md",
+      "bytes": 3569,
+      "sha256": "61d8a076820506cb787089904efab62bed8ea7ad5dfbbae85c0b3726b25e5b75"
+    },
+    {
+      "file": "assemble-research.cjs",
+      "bytes": 43462,
+      "sha256": "65a1e395d3f4a0ff1f7133d131e625af3dd6e9a173baaaec88c4ed0e31051749"
+    },
+    {
+      "file": "context.json",
+      "bytes": 473458,
+      "sha256": "620b9a8328805b61c5dd1c0f07d8d44a5a2a03e717507e3326016ea2a909a4f0"
+    },
+    {
+      "file": "expression-after.proposed.json",
+      "bytes": 4050,
+      "sha256": "0b83f0d1876ffba662c00217b3e49d77d04d7bb769d7b3ecefff29d7fe69655c"
+    },
+    {
+      "file": "expression-before.json",
+      "bytes": 3056,
+      "sha256": "f6f87710cf3147075c91b809101d683d3ba5a4f9ea332195243bd9fd9156034a"
+    },
+    {
+      "file": "fresh-http-metadata.json",
+      "bytes": 3047,
+      "sha256": "71e11d2dd32d14ccc0357abc72d5eda51067a58f117eff077e9bfec37eb25fae"
+    },
+    {
+      "file": "history-pins.json",
+      "bytes": 2623,
+      "sha256": "c8507e9dbb6138d46a49044d49d6ebab25fecfbdbb9048a3976bf488019f7a2b"
+    },
+    {
+      "file": "impact-decisions.json",
+      "bytes": 17804,
+      "sha256": "fec00460c93f31dd40f0c64dd2122ab8f0f7373ee702c4694c654096e70a479a"
+    },
+    {
+      "file": "lexeme-after.proposed.json",
+      "bytes": 3443,
+      "sha256": "c8d2ffd65dc11977a720f26f033b9c151fd720bd83834ff87098b3e5f8145df1"
+    },
+    {
+      "file": "lexeme-before.json",
+      "bytes": 3747,
+      "sha256": "d1e04e3e47ea46bf41479a3ad795a94b9884baf5620a5a166d2f393be99f39f4"
+    },
+    {
+      "file": "membership-substitutions.proposed.json",
+      "bytes": 31942,
+      "sha256": "cf0bc93b90e84fba76df4a22dd9e3fa04e949c5e4120d450c6c394f60466fc95"
+    },
+    {
+      "file": "patches.proposed.json",
+      "bytes": 1540,
+      "sha256": "1c394ca503477d23abdf854b73d89aab29e8f84565badba552791a28b43311f7"
+    },
+    {
+      "file": "progress-revision-decision.proposed.json",
+      "bytes": 3433,
+      "sha256": "70e6ef7ff2395f9bd80f43d9d5e910bf68db10557b994feb898e9f459a1b040a"
+    },
+    {
+      "file": "retirement-decision.proposed.json",
+      "bytes": 2253,
+      "sha256": "39279b9931a9ce7363bf35b60eedb1218bdcb6114d56583ee14270606f093703"
+    },
+    {
+      "file": "source-additions.proposed.json",
+      "bytes": 2339,
+      "sha256": "dadbce10eb1dcb9e80827fa4e92eda18d40ffced082e7d6a3175e7acd0027375"
+    },
+    {
+      "file": "source-observations.json",
+      "bytes": 3052,
+      "sha256": "c63979aea6b2528baa65e15a576be499f3af9de662264c899e20b331898b2904"
+    },
+    {
+      "file": "token-and-binding-review.json",
+      "bytes": 3082,
+      "sha256": "9d44a18d1f12533d6adf318ba457784cebaefbf964cafa91df9eff7acd85ce59"
+    }
+  ]
+}

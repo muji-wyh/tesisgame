@@ -1,0 +1,203 @@
+{
+  "schema": 1,
+  "status": "acquired_sources_independently_inspected_for_selected_static_candidate_not_integrated",
+  "sense_id": "barcode.product-code.n",
+  "packs": [
+    {
+      "title": "Barcode",
+      "source": "https://openclipart.org/detail/38797/netalloy-barcode",
+      "acquired_from": "https://www.clipsafari.com/clips/o38797-barcode",
+      "creator": "netalloy",
+      "license": "CC0 1.0 Universal",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_source_downloaded": false,
+      "license_evidence": "ClipSafari explicitly attributes netalloy and labels this exact downloadable SVG CC0. The Openclipart original timed out and is not claimed acquired.",
+      "available_animations": []
+    },
+    {
+      "title": "Car Kit 3.1 parcel",
+      "source": "https://kenney.nl/assets/car-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "local_version": "Car Kit 3.1; license creation 2026-04-02 14:03; acquired All-in-1 3.7.0 library",
+      "available_animations": []
+    }
+  ],
+  "files": [
+    {
+      "retained_path": "source-page.html",
+      "bytes": 18772,
+      "sha256": "9420d428b25cda51497073fc921ad030eb695ec920f683e842b49f6771945e55"
+    },
+    {
+      "retained_path": "cc0-deed.html",
+      "bytes": 30248,
+      "sha256": "abb4d48fc8b85de52b377dd105532c6c549f515d492a8e1712bc99e7316a1f12"
+    },
+    {
+      "retained_path": "barcode.svg",
+      "bytes": 2291,
+      "sha256": "0dc559c59bd63c4e812e7f3e31562a533cf59603d93c299218fe07eece297303"
+    },
+    {
+      "retained_path": "source/parcel/original/box.glb",
+      "bytes": 14108,
+      "sha256": "b773815c791d2708a2a70f1a9bb6d197d7211269ad96e273f9e364ea536c1b18"
+    },
+    {
+      "retained_path": "source/parcel/original/Textures/colormap.png",
+      "bytes": 12371,
+      "sha256": "f3622a03a20c6696065cae9cbe391351be873508af190c2ebd1d420c055787a5"
+    },
+    {
+      "retained_path": "source/parcel/previews/box.png",
+      "bytes": 2167,
+      "sha256": "09f15ddc812880968ec354f09c8cdd03adc95c407471ba5d3cf32734562c1d73"
+    },
+    {
+      "retained_path": "source/parcel/License.txt",
+      "bytes": 696,
+      "sha256": "c33b7f6453d134deae7b1b8493717d9ccfa754c25ab97f6de89b88f8fda19b00"
+    }
+  ],
+  "parcel_model": {
+    "asset": {
+      "generator": "UnityGLTF",
+      "version": "2.0"
+    },
+    "nodes": [
+      {
+        "mesh": 0,
+        "name": "box"
+      }
+    ],
+    "meshes": [
+      {
+        "primitives": [
+          {
+            "attributes": {
+              "POSITION": 0,
+              "NORMAL": 1,
+              "TANGENT": 2,
+              "TEXCOORD_0": 3
+            },
+            "indices": 4,
+            "material": 0
+          }
+        ],
+        "name": "box"
+      }
+    ],
+    "materials": [
+      {
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0,
+            "extensions": {
+              "KHR_texture_transform": {
+                "texCoord": 0
+              }
+            }
+          },
+          "metallicFactor": 0
+        },
+        "doubleSided": true,
+        "name": "colormap"
+      }
+    ],
+    "images": [
+      {
+        "uri": "Textures/colormap.png",
+        "name": "colormap"
+      }
+    ],
+    "animations": [],
+    "skins": [],
+    "accessor_bounds": [
+      {
+        "index": 0,
+        "count": 248,
+        "type": "VEC3",
+        "min": [
+          -0.35749998688697815,
+          0,
+          -0.35749998688697815
+        ],
+        "max": [
+          0.35749998688697815,
+          0.7149999737739563,
+          0.35749998688697815
+        ]
+      },
+      {
+        "index": 1,
+        "count": 248,
+        "type": "VEC3",
+        "min": [
+          -0.9914832711219788,
+          -1,
+          -0.9991419315338135
+        ],
+        "max": [
+          0.9914832711219788,
+          1,
+          0.9991419315338135
+        ]
+      },
+      {
+        "index": 2,
+        "count": 248,
+        "type": "VEC4",
+        "min": [
+          -1,
+          -0.39371371269226074,
+          -0.9957506656646729,
+          1
+        ],
+        "max": [
+          1,
+          0.39371371269226074,
+          0.9957506656646729,
+          1
+        ]
+      },
+      {
+        "index": 3,
+        "count": 248,
+        "type": "VEC2",
+        "min": [
+          0.21875,
+          0.2749999761581421
+        ],
+        "max": [
+          0.96875,
+          0.7250000238418579
+        ]
+      },
+      {
+        "index": 4,
+        "count": 372,
+        "type": "SCALAR",
+        "min": [
+          0
+        ],
+        "max": [
+          247
+        ]
+      }
+    ]
+  },
+  "adaptations": [
+    "Change only source SVG viewBox from 0 0 300 300 to 92 79 173 88, retaining every original bar and space. The narrow border is cropped at its edge; no barcode strokes are fabricated.",
+    "Rasterize this source crop at 692 by 352, then apply it as a planar artwork surface on the unchanged complete Kenney parcel.",
+    "Use recorded camera and lighting with an intentional package-edge close-up; preserve all original parcel nodes, geometry, materials, texture and child transforms.",
+    "Downscale the 768 by 440 rendered composition proportionally to 512 by 293."
+  ],
+  "available_animations": [],
+  "limitations": [
+    "Original Openclipart endpoint was unavailable; acquisition and exact SVG licensing evidence are from ClipSafari.",
+    "This is an illustrative barcode pattern, not a verified usable product code or machine-readability claim.",
+    "The delivered candidate is a static PNG."
+  ]
+}

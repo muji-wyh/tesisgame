@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 65,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "d7b9029c8df71e3d27bf54fafb5d7ec990cfbcd49928d316ccdd8800f0a89249",
+  "recorded_at": "2026-10-16T22:48:05.841Z",
+  "index": 31,
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/rebase-contract.json"
+}

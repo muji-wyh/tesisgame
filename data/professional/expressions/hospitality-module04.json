@@ -1,0 +1,1531 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hospitality_tourism.module04.01",
+      "text": "The single room and double room have different bed arrangements; please check the actual room details.",
+      "meaning": "Distinguish room categories from their specific features.",
+      "context": "Clarifying a booking request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "single",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "room",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "double",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "room",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "have",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "different",
+          "start": 37,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "bed",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "arrangements",
+          "start": 51,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "please",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "check",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "actual",
+          "start": 82,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "room",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "details",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "single-room.guest-room-booked-for-one-person.n",
+        "double-room.guest-room-category-usually-for-two-people.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module04.02",
+      "text": "The twin room has separate beds, while the suite has the layout shown in the description.",
+      "meaning": "Describe the provider's actual room features.",
+      "context": "Comparing accommodation options.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "twin",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "room",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "has",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "separate",
+          "start": 18,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "beds",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "while",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "suite",
+          "start": 43,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "has",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "layout",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "shown",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "in",
+          "start": 70,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 16,
+          "text": "description",
+          "start": 77,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "twin-room.guest-room-with-two-separate-beds.n",
+        "suite.guest-accommodation-with-linked-living-and-sleeping-spaces.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module04.03",
+      "text": "Ask which accessible room and connecting room arrangement can meet the guest's stated requirements.",
+      "meaning": "Request specific access features rather than assuming a category is sufficient.",
+      "context": "Reviewing a guest's room needs.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "which",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "accessible",
+          "start": 10,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "room",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "connecting",
+          "start": 30,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "room",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "arrangement",
+          "start": 46,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "can",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "meet",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "guest's",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "stated",
+          "start": 79,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": "requirements",
+          "start": 86,
+          "end": 98
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "accessible-room.guest-room-with-specified-accessibility-features.n",
+        "connecting-room.guest-room-with-internal-door-to-another-room.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module04.04",
+      "text": "The guest has requested a clean mug, cup, drinking glass, and napkin.",
+      "meaning": "Identify requested drinking vessels and a meal-use cloth or paper.",
+      "context": "A worker checks a guest request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "guest",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "requested",
+          "start": 14,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "clean",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "mug",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 8,
+          "text": "cup",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 10,
+          "text": "drinking",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 11,
+          "text": "glass",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 14,
+          "text": "napkin",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 68,
+          "end": 69
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mug.drinking-vessel-usually-with-handle.n",
+        "drinking-glass.glass-vessel-for-drinks.n",
+        "cup.small-drinking-vessel.n",
+        "napkin.meal-use-cloth-or-paper.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module04.05",
+      "text": "Please confirm the requested duvet, pillow, pillowcase, and mattress information with housekeeping.",
+      "meaning": "Clarify bedding and head-support details.",
+      "context": "A worker checks the actual bedding request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "requested",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "duvet",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "pillow",
+          "start": 36,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "pillowcase",
+          "start": 44,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "mattress",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "information",
+          "start": 69,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "with",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "housekeeping",
+          "start": 86,
+          "end": 98
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "duvet.filled-soft-bed-covering.n",
+        "pillowcase.removable-cover-for-pillow.n",
+        "mattress.padded-supporting-part-of-bed.n",
+        "pillow.head-supporting-cushion.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ada-lodging-low-vision",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module04.06",
+      "text": "The guest has asked whether a bathrobe, slippers, and a towel are included.",
+      "meaning": "Ask which bathing and room-use items are supplied.",
+      "context": "A worker checks the actual room inclusions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "guest",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "asked",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "whether",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "bathrobe",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "slippers",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "a",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 12,
+          "text": "towel",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "are",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 14,
+          "text": "included",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 74,
+          "end": 75
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bathrobe.loose-garment-worn-before-or-after-bathing.n",
+        "slippers.light-footwear-for-indoor-use.n",
+        "towel.absorbent-drying-cloth.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module04.07",
+      "text": "Please check which toiletries are supplied, including soap, shampoo, and hair conditioner.",
+      "meaning": "Identify supplied washing and personal-care products.",
+      "context": "A worker checks the current toiletries list.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "which",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "toiletries",
+          "start": 19,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "are",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "supplied",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "including",
+          "start": 44,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "soap",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "shampoo",
+          "start": 60,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "hair",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "conditioner",
+          "start": 78,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "toiletries.products-for-personal-washing-and-care.n",
+        "shampoo.product-used-for-washing-hair.n",
+        "conditioner.product-used-to-condition-hair.n",
+        "soap.washing-cleaning-substance.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module04.08",
+      "text": "The iron, kettle, and hair dryer have been reported as unavailable; ask about the approved alternatives.",
+      "meaning": "Report unavailable room appliances and request alternatives.",
+      "context": "A worker refers the actual equipment availability.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "iron",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 8,
+          "end": 9
+        },
+        {
+          "index": 3,
+          "text": "kettle",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 6,
+          "text": "hair",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 7,
+          "text": "dryer",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 8,
+          "text": "have",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 9,
+          "text": "been",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 10,
+          "text": "reported",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "as",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 12,
+          "text": "unavailable",
+          "start": 55,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": "ask",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 15,
+          "text": "about",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 17,
+          "text": "approved",
+          "start": 82,
+          "end": 90
+        },
+        {
+          "index": 18,
+          "text": "alternatives",
+          "start": 91,
+          "end": 103
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "iron.heated-appliance-for-smoothing-fabric.n",
+        "hair-dryer.electrical-appliance-for-drying-hair.n",
+        "kettle.water-heating-vessel.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module04.09",
+      "text": "The curtain and blind do not close fully, and the thermostat needs review.",
+      "meaning": "Report three observed room-equipment concerns.",
+      "context": "Passing a room-maintenance request to the responsible team.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "curtain",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "blind",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "do",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "not",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "close",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "fully",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 11,
+          "text": "thermostat",
+          "start": 50,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "needs",
+          "start": 61,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "review",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "curtain.hanging-fabric-window-or-space-covering.n",
+        "blind.adjustable-window-covering.n",
+        "thermostat.control-regulating-temperature-to-setting.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module04.10",
+      "text": "The wardrobe contains the spare blanket; please confirm where the luggage rack is stored.",
+      "meaning": "Identify ordinary room-storage locations.",
+      "context": "Helping a guest locate room items.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "wardrobe",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "contains",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "spare",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "blanket",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "please",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "confirm",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "where",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "luggage",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "rack",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "is",
+          "start": 79,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "stored",
+          "start": 82,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "wardrobe.cupboard-for-storing-clothes.n",
+        "blanket.bed-covering.n",
+        "luggage-rack.stand-or-framework-supporting-luggage.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

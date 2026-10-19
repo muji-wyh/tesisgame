@@ -1,0 +1,39 @@
+{
+  "attempt_dir": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01",
+  "output_dir": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01",
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-native-route-repair-proposal-r01/source-inventory.json",
+    "bytes": 1628,
+    "raw_sha256": "4dd4ce123daba7f38f4e4f6669a1a4ed3a0c100ac07e1f6c6dc4375ccd2fe067"
+  },
+  "original_output_manifest": {
+    "path": "build/professional-english/foundation02-fifth10-native-route-repair-proposal-r01/original-output-manifest.json",
+    "bytes": 137795,
+    "raw_sha256": "9271e84a409cbc3c54fdc5545d0a3d8296331c5c42ffd86933d2a03f0ed7bcd2"
+  },
+  "route_edit": {
+    "path": "build/professional-english/foundation02-fifth10-native-route-repair-proposal-r01/native-route-edit.json",
+    "bytes": 1675,
+    "raw_sha256": "1bacee0671c03590d8efe8516ba42e0f114e7da3f9298250f8b7d335e44ecfc5"
+  },
+  "corrected_native_afterimage": {
+    "path": "build/professional-english/foundation02-fifth10-native-route-repair-proposal-r01/corrected-native-afterimage.gd",
+    "bytes": 119476,
+    "raw_sha256": "9472e72651070de7f9fb38614fbf6e736978370580d6890bd210be2e0e59b832"
+  },
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "failed_native_receipt": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/receipt.json",
+    "bytes": 10577,
+    "raw_sha256": "878a6ec5298b553831454c250900c6c552e2d0005a1c97cd5df6a1e9ac9584fb"
+  },
+  "failed_candidate_review": {
+    "path": "build/professional-english/foundation02-fifth10-validation-results-review-r01/review.json",
+    "bytes": 11962,
+    "raw_sha256": "efdcada5be292d3a2205f344354adaaba3aa978502906ff2fabe61b8e29ce25e"
+  }
+}

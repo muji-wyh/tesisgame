@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_static_source_review_for_root_scratch_dispatch_only",
+  "recorded_at": "2026-10-16T21:00:21.9827957Z",
+  "reviewer": "Codex recover_delivery",
+  "author_inventory_sha256": "b4e418aaaec0c4748b32264438c66e0ba6f65944e97f3f31988a430f570e0f04",
+  "blockers_to_scratch_preparation": 0,
+  "artifacts": [
+    {
+      "path": "evidence-summary.json",
+      "raw_sha256": "502015bac4c0be20a077bea6b8e893111e49ab09898c0dc562869fd61bf0b51e",
+      "bytes": 9857
+    },
+    {
+      "path": "README.md",
+      "raw_sha256": "d583ea88d24177390bb6618b55a579a6ae2f493883730705acb3c5f565ab1c80",
+      "bytes": 2633
+    },
+    {
+      "path": "review.json",
+      "raw_sha256": "c5c0d17720fc7e02a52c9623ad08c0546f8e6c00c6787cdd25ed08403dfa034d",
+      "bytes": 10186
+    },
+    {
+      "path": "static-measurements.json",
+      "raw_sha256": "d1df61937309599f0538a13933ae13afb697d5b4afdaf3d9c93d311666e590a0",
+      "bytes": 277205
+    }
+  ],
+  "self_excluded": true,
+  "implementation_imported": false,
+  "syntax_or_tests_dispatched": false,
+  "preparation_dispatched": false,
+  "native_dispatched": false,
+  "production_modified": false
+}

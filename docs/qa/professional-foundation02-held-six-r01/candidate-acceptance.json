@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "created_at": "2026-10-17T02:32:49.311Z",
+  "scope": "Held-six candidate source, current logic and rendered Home checks; full curriculum and release remain incomplete",
+  "validation": {
+    "path": "build/professional-english/foundation02-held-six-work-r01/validation-r04/receipt.json",
+    "bytes": 20479,
+    "sha256": "718fa6dcd529b40885cb81bede24a871b1a00165804ae3883dea61f9619be8c0"
+  },
+  "visual_receipt": {
+    "path": "build/professional-english/foundation02-held-six-work-r01/visual-r01/receipt.json",
+    "bytes": 1892,
+    "sha256": "bb85482cd6826b0883461ecc5907899aed4651ad14943c1521925ca2d0463a32"
+  },
+  "visual_report": {
+    "path": "build/professional-english/foundation02-held-six-work-r01/candidate/build/professional-english/held-six-selector-history-r01-render-report.json",
+    "bytes": 50676,
+    "sha256": "078bd2892121ae0227e65be78ab1aa1286fdf2551dbc33c749ea1a4059a447e3"
+  },
+  "compile_report": {
+    "path": "build/professional-english/foundation02-held-six-work-r01/compile-report.json",
+    "bytes": 1694,
+    "sha256": "183c7b89432fbe2a53648724c845633d9a62418ee17bc25e87750250230b991b"
+  },
+  "test_correction": {
+    "path": "build/professional-english/foundation02-held-six-work-r01/candidate-test-correction.json",
+    "bytes": 2207,
+    "sha256": "d535e0e933bd36a340c40f5085810672226d4234ed97ecf0e3a5203d5080c6cf"
+  },
+  "native_wallet_correction": {
+    "path": "build/professional-english/foundation02-held-six-work-r01/native-wallet-correction-r01/receipt.json",
+    "bytes": 1821,
+    "sha256": "ba6cd501b3499b460d1ef9240a94998ecf705b15c9141aebfafa466f4e3868f0"
+  },
+  "native_route_correction": {
+    "path": "build/professional-english/foundation02-held-six-work-r01/native-route-correction-r01/receipt.json",
+    "bytes": 943,
+    "sha256": "cfd87838fff4884a955c38b5c158840d1880083c17c759d56b07e2f68fa4cc9e"
+  },
+  "failed_validations": [
+    {
+      "path": "build/professional-english/foundation02-held-six-work-r01/validation-r01/receipt.json",
+      "bytes": 8278,
+      "sha256": "a8c7c1f185139807d98eacb025d54633a87be1264ef55361afd9ca767f132483"
+    },
+    {
+      "path": "build/professional-english/foundation02-held-six-work-r01/validation-r02/receipt.json",
+      "bytes": 11692,
+      "sha256": "4935597463198440e3b1aebfa97ed68c97515a66a96c14c63c3bb7112d928bf6"
+    },
+    {
+      "path": "build/professional-english/foundation02-held-six-work-r01/validation-r03/receipt.json",
+      "bytes": 15451,
+      "sha256": "d9d6a0f9e004a8321632ec85850c1baef9b4e42d83dd800ec5b13454545dbdbd"
+    }
+  ],
+  "source_capture": {
+    "path": "build/professional-english/foundation02-held-six-work-r01/compile-source-capture.json",
+    "bytes": 157466,
+    "sha256": "f420afc65a640c3746ecb74cc8d3e44a959365d985015c8643466aee8f60d95b"
+  },
+  "historical_snapshot": {
+    "path": "build/professional-english/foundation02-held-six-work-r01/snapshot-receipt.json",
+    "bytes": 534595,
+    "sha256": "36525ad03cdb11a50c33219d0f17934c635952d16ce68014b2e60caa7cddc4eb"
+  },
+  "source_review_map": {
+    "path": "build/professional-english/foundation02-held-six-overlay-review-r01/target-source-map.json",
+    "bytes": 24386,
+    "sha256": "0885d159b747256b900fddcc994d1526ec3f4df174f4206768b207a037afbe80"
+  },
+  "ready_modules": 0,
+  "persistence_policy": "Keep all historical sense evidence, achievements, events, outbox and wallet records. New sense IDs receive no migrated evidence.",
+  "listening_acceptance": false,
+  "physical_device_acceptance": false
+}

@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T18:25:54.153Z",
+  "reviewer": "Codex root visual source screening",
+  "evidence_kind": "Direct browser screenshots of publisher thumbnails; source page and download UI for strongest lead",
+  "screenshot_files_saved": false,
+  "source_preview_only": true,
+  "model_downloaded": false,
+  "converted": false,
+  "integrated": false,
+  "visual_acceptance": false,
+  "gameplay_size_acceptance": false,
+  "animation": "Metadata reports zero animations for each candidate; no model animation inspected.",
+  "source_records": [
+    {
+      "file": "receipt.json",
+      "source": "build/professional-english/retail-term-art-review/card-reader-source-leads-2026-10-17-r01/receipt.json",
+      "sha256": "80529b62120bd92ba17a169fd7b278c01313a7b9753f7beed7243551b7172566"
+    },
+    {
+      "file": "12376a29b015453da5f7a0deede21dd8.metadata-response",
+      "source": "build/professional-english/retail-term-art-review/card-reader-source-leads-2026-10-17-r01/12376a29b015453da5f7a0deede21dd8.metadata-response",
+      "sha256": "1351f0cb263a56b74993d4964e804aac35041427954ca58543aaa00a75912fed"
+    },
+    {
+      "file": "ccc9d1a3f47b4537ac5b8cf75196c40c.metadata-response",
+      "source": "build/professional-english/retail-term-art-review/card-reader-source-leads-2026-10-17-r01/ccc9d1a3f47b4537ac5b8cf75196c40c.metadata-response",
+      "sha256": "28c4a032c68c2491bcd8bd2b2ba2880b38ce464c25e393ff6df6e3d1346a7189"
+    },
+    {
+      "file": "71b6c4de982e4681a711da9ea6475d32.metadata-response",
+      "source": "build/professional-english/retail-term-art-review/card-reader-source-leads-2026-10-17-r01/71b6c4de982e4681a711da9ea6475d32.metadata-response",
+      "sha256": "a038a20e949b8dec5c1f9841fd9383fb1ba342d2007abc4c0bfa5933a750c9c7"
+    }
+  ],
+  "observations": [
+    {
+      "id": "12376a29b015453da5f7a0deede21dd8",
+      "observed": "Black elongated payment terminal with a large keypad privacy shield, small green screen and prominent receipt-printer body. Realistic worn material, no visible inserted card or payment gesture.",
+      "disposition": "Not selected for the current warm, clear isolated learning image. Dark retro styling and missing payment cue would require substantial adaptation."
+    },
+    {
+      "id": "ccc9d1a3f47b4537ac5b8cf75196c40c",
+      "observed": "Rounded gray terminal with large blank screen, numeric keypad and red/yellow/green keys on a dark support. Small brand/model text is visible. No inserted card or contactless gesture.",
+      "disposition": "Strongest bounded source lead for further model inspection. Still needs an identifiable card/payment cue, branding treatment and matching lighting/composition; no gameplay-size or downloaded-model approval.",
+      "acquisition_observed": "Original publisher page loaded in Edge. It describes a credit card (chip and PIN) reader, 12.9k triangles and 8.2k vertices, CC Attribution with CC BY 4.0 link. Clicking Download 3D Model opened a login dialog. No sign-in, model download or terms acceptance occurred."
+    },
+    {
+      "id": "71b6c4de982e4681a711da9ea6475d32",
+      "observed": "Dark angular rectangular unit with a broad blank upper face and a gray lower panel outlined in red. No visible numeric keypad, card, payment action or useful screen content.",
+      "disposition": "Not selected from this preview: payment meaning is visually ambiguous and styling does not fit the established retail props."
+    }
+  ],
+  "limits": "These are source preview observations, not acquired material, rendered WordCard acceptance, or permission to use trademarks. CC BY 4.0 and commercial attribution requirement were observed in publisher metadata; the strongest source page independently showed the same license link."
+}

@@ -1,0 +1,163 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T11:50:34.543Z",
+  "status": "accepted_exact_candidate_for_guarded_image_only_integration",
+  "reviewer": "Codex root (independent AI picture review; not a human recognition study)",
+  "sense_id": "cash-register.sales-device.n",
+  "definition": "A machine used to record sales and handle payments.",
+  "brief": "Use a dedicated three-quarter view of a complete retail register with sale display, physical keys, and the drawer base visible as one machine. Make the machine fill the frame. Keep any receipt secondary; exclude a detached drawer, a handheld scanner, or an isolated payment reader. Inspect the Mini Market cash-register lead before making the term render.",
+  "before_entry_json_sha256": "5dad80878e66b64cd5f4ea28a9c76c4ffdb86a3a7360a16bb5b229415f8a9933",
+  "source": {
+    "url": "https://tinytreats.itch.io/bakery-interior",
+    "creator": "Isa Lousberg",
+    "license": "CC0 1.0",
+    "acquired": true,
+    "animations": [],
+    "source_modified": false
+  },
+  "candidate": {
+    "compressed_bytes": 172442,
+    "decoded_bytes": 2519040,
+    "format": "png",
+    "height": 615,
+    "id": "sha256:f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+    "kind": "image",
+    "path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+    "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+    "width": 512
+  },
+  "candidate_rgba_pixel_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+  "inputs_raw_sha256": {
+    "source-record.json": "3e6184da75cd0fa51efaad7a47369c291b8ed920f1659a3c0d5b891e691149f0",
+    "source/original/License.txt": "af97867b174afc18500d5c79c3d49b9e8d97e3aefe10ca748cdfa0cadaa0121a",
+    "inspection-receipt.json": "37ad32ab7877e8cc8b30f598fbc7df3e8d96ca6d60874fdd92052b6fc6742abe",
+    "candidate-r02/frozen-inputs.json": "5392fcd6c7d5313ce24b62ed9f01944ca8d85c8a6fc70a03ec9309f4f11e6357",
+    "candidate-r02/candidate-receipt.json": "8242ae2aaa7947b14d09da55bd1b080358418bab5acb0f9cee09af715fca67f2",
+    "candidate-r02/entry-preimage.json": "8399da42142941b27cdb7b869d316fbdb504c47454f01ff630d05dfa13b99515",
+    "candidate-r02/output/report.json": "1ed30fc6fbe96ff1acf5a484c83301accfddd681f4c2634a05ed5f8bfe9d116e",
+    "candidate-r02/output/cash-register.png": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+    "candidate-r02/output/actual-word-card-contact.png": "5c131c5fc8c77aafb6d046875b0180bb414cb1867ad32e3f670e09f9749e692f",
+    "candidate-r02/output/style-comparison-native-crops.png": "d68c0763b31e36ff1ff580e250dc42eeb421904c370cc756cb4fd7e3989a9b55"
+  },
+  "validation": {
+    "path": "build/professional-english/continuation-validation-r26.json",
+    "raw_sha256": "697a8981d12014ba1e6726ce5043256b12b11e424bfa04986c622aed110f29f8"
+  },
+  "observation": "Root inspected all six original-source views, the full 512 x 615 transparent candidate, the native 704 x 250 four-card contact and its unchanged cart/basket style comparison. The native contact was inspected before its enlarged aid. The complete upright machine, dark front display, raised physical key bank and broad lower drawer front with central handle remain distinguishable in all four minimum crops. The receipt remains secondary. The matched badge does not cover the machine; its actual 0.68-alpha presentation retains those cues. Soft lavender shading and rounded proportions fit the existing sourced toy-like artwork.",
+  "captures": [
+    {
+      "state": "match-unmatched",
+      "raw_sha256": "dbe7d62c3a1a2060f261fe8bd57ade724da013a66158db6ef0c7c540b0de61cb",
+      "rgba_pixel_sha256": "afc659ec2a36fddf8e606340f7ec39e870f2b5c57b70ef8f027a48457d4c81db",
+      "card_size": [
+        126,
+        72
+      ],
+      "picture_size": [
+        102,
+        52
+      ],
+      "badge_visible": false,
+      "picture_alpha": 1,
+      "visual_decision": "accepted_for_this_exact_cash_register_candidate",
+      "cues": {
+        "complete_machine": "visible",
+        "front_display_face": "visible",
+        "physical_key_bank": "visible",
+        "drawer_front_and_handle": "visible",
+        "secondary_receipt": "present_but_not_required_for_recognition"
+      }
+    },
+    {
+      "state": "match-matched",
+      "raw_sha256": "620e636eafd3138e50d22fb8f415ec13e4d136dfa5645222db1bad9ee7708f5a",
+      "rgba_pixel_sha256": "4df22479113adb02dda600889c3638203bd5a9dc03c8b9d41234184e62c79d32",
+      "card_size": [
+        126,
+        72
+      ],
+      "picture_size": [
+        102,
+        52
+      ],
+      "badge_visible": true,
+      "picture_alpha": 0.680000007152557,
+      "visual_decision": "accepted_for_this_exact_cash_register_candidate",
+      "cues": {
+        "complete_machine": "visible",
+        "front_display_face": "visible",
+        "physical_key_bank": "visible",
+        "drawer_front_and_handle": "visible",
+        "secondary_receipt": "present_but_not_required_for_recognition"
+      }
+    },
+    {
+      "state": "memory-unmatched",
+      "raw_sha256": "061f44ac132a8fb5b9b7cfc5c1bd3cef35c0521dac7f382ea4d77ce9530d147a",
+      "rgba_pixel_sha256": "375afee4028a8a96bd7498ce8670be3a20a3b493b6257a2f92523bc864f923ff",
+      "card_size": [
+        144,
+        74
+      ],
+      "picture_size": [
+        120,
+        54
+      ],
+      "badge_visible": false,
+      "picture_alpha": 1,
+      "visual_decision": "accepted_for_this_exact_cash_register_candidate",
+      "cues": {
+        "complete_machine": "visible",
+        "front_display_face": "visible",
+        "physical_key_bank": "visible",
+        "drawer_front_and_handle": "visible",
+        "secondary_receipt": "present_but_not_required_for_recognition"
+      }
+    },
+    {
+      "state": "memory-matched",
+      "raw_sha256": "15f257e70cc015128b8f94d98288bd075a26ea5a93d1c6a7b25f0ab7b79886e3",
+      "rgba_pixel_sha256": "cd0a9999610025779f93797f7ebff315cfe11b1b1e31fa398b9e8f669a9ac50d",
+      "card_size": [
+        144,
+        74
+      ],
+      "picture_size": [
+        120,
+        54
+      ],
+      "badge_visible": true,
+      "picture_alpha": 0.680000007152557,
+      "visual_decision": "accepted_for_this_exact_cash_register_candidate",
+      "cues": {
+        "complete_machine": "visible",
+        "front_display_face": "visible",
+        "physical_key_bank": "visible",
+        "drawer_front_and_handle": "visible",
+        "secondary_receipt": "present_but_not_required_for_recognition"
+      }
+    }
+  ],
+  "source_and_semantics": "One complete standalone register depicts the sales/payment machine sense. Its attached display, keys and integrated drawer provide the required context. No sale digits, source geometry, texture detail or motion were fabricated.",
+  "allowed_next_step": "Prepare an exact image-only integration proposal and production delivery probe against a successful current baseline. Copy accepted bytes without rerendering. Retain source/license/adaptations, immutable failed attempts and exact native reference crops.",
+  "preserve": [
+    "definition",
+    "example",
+    "difficulty",
+    "accepted_forms",
+    "regions",
+    "memberships",
+    "practice_modes",
+    "picture exclusion decisions",
+    "morphology",
+    "existing Ava audio bytes and approval",
+    "language/domain/overall review",
+    "module readiness",
+    "Growth and collection audio"
+  ],
+  "production_mutated": false,
+  "production_delivery_verified": false,
+  "domain_acceptance": null,
+  "module_acceptance": null,
+  "limits": "This is a scoped still-image judgment and technical scratch delivery result. It does not establish human picture-recognition accuracy, continuous animation, audio listening, whole-game delivery, subject review or module readiness."
+}

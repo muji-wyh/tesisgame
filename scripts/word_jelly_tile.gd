@@ -1,7 +1,16 @@
 extends "res://scripts/jelly_tile.gd"
 ## The existing painted skin stretches with mass; letters and artwork do not.
 
+signal read_requested(id: int)
+
 var valid_word: bool = false
+var requires_read: bool = false
+var _authored: bool = false
+var _authored_lines: Array = []
+var _authored_columns: int = 1
+var _authored_rows: int = 1
+var _reserved_width: float = 0.0
+var _read_button := Button.new()
 var fragments: int = 0
 var _fragment_badges: Array[TextureRect] = []
 var _fragment_texture: Texture2D
@@ -17,6 +26,18 @@ var completion_hint: bool = false
 var completion_scale: float = 1.0
 var _completion_glow: TextureRect
 var _completion_glints: Array[TextureRect] = []
+
+func _init() -> void:
+	super()
+	_read_button.name = "ReadSpelling"
+	_read_button.text = "Read"
+	_read_button.focus_mode = Control.FOCUS_ALL
+	_read_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	Style.button(_read_button, Style.GOOD)
+	_read_button.custom_minimum_size = Vector2.ZERO
+	_read_button.pressed.connect(func() -> void: read_requested.emit(tile_id))
+	add_child(_read_button)
+	_read_button.hide()
 
 func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	var was_active: bool = completion_hint
@@ -81,7 +102,13 @@ func set_palette(index: int, hue: float) -> void:
 	_gel.set_shader_parameter("palette_hue", hue)
 
 func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: Texture2D, accent: Color, show_both: bool = false) -> void:
-	valid_word = not cell.get("word", {}).is_empty() and int(cell.get("mass", 1)) > 1
+	_authored = not cell.get("composition", {}).is_empty()
+	valid_word = not cell.get("word", {}).is_empty() and (_authored or int(cell.get("mass", 1)) > 1)
+	requires_read = _authored and bool(cell.get("requires_read", false))
+	_authored_lines = cell.get("label_lines", [str(cell.get("text", ""))]).duplicate()
+	_authored_columns = int(cell.get("preferred_width", cell.get("width", 1)))
+	_authored_rows = int(cell.get("preferred_height", cell.get("height", 1)))
+	_reserved_width = float(cell.get("label_reserved_width", 0.0))
 	fragments = int(cell.get("fragments", 0))
 	var face: Dictionary = cell.duplicate(true)
 	face.word = {"text": str(cell.get("text", ""))} if not valid_word else cell.word
@@ -111,6 +138,8 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 		"Word complete. Press to collect, with a 1% chance of bonus coins, or drag to keep building." if valid_word
 		else "Drag this part before another part to build a word.",
 		" %d chest fragments." % fragments if fragments > 0 else ""])
+	if requires_read:
+		set("accessibility_name", str(get("accessibility_name")) + " Use Read to pause and inspect the full spelling.")
 	_layout()
 	_refresh_feedback()
 
@@ -138,6 +167,10 @@ func _layout() -> void:
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
 	_unit = minf(size.y, size.x)
 	_layout_fragment_badge()
+	_read_button.visible = requires_read and not _projection
+	if _authored:
+		_layout_authored_label()
+		return
 	_picture.visible = valid_word and not _projection
 	_label.visible = not _projection
 	var side_by_side: bool = valid_word and size.x > size.y * 1.45
@@ -173,6 +206,45 @@ func _layout() -> void:
 		or _label.get_line_count() * _label.get_line_height() > _label.size.y):
 		pixels -= 1
 		_label.add_theme_font_size_override("font_size", pixels)
+
+func _layout_authored_label() -> void:
+	# These dimensions were measured once by JellyFootprint. Keep the authored
+	# lines and reference reservations instead of squeezing text after a resize.
+	var scale_factor: float = minf(size.x / maxf(1.0, _authored_columns * 32.0 - 3.0),
+		size.y / maxf(1.0, _authored_rows * 32.0 - 3.0))
+	var s: float = Style.ui_scale(self)
+	var reserved: float = _reserved_width * scale_factor
+	_label.visible = not _projection
+	_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	_label.add_theme_font_size_override("font_size", maxi(ceili(16.0 / s), floori(16.0 * scale_factor)))
+	_label.text = "\n".join(_authored_lines)
+	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	# Apply the measured font and lines before the rectangle. Label minimum
+	# height otherwise retains the base tile's larger font while resizing and
+	# pushes authored text below the acquired gel skin.
+	_label.position = Vector2(4.0 * scale_factor + reserved, 3.0 * scale_factor)
+	_label.size = Vector2(maxf(0, size.x - 8.0 * scale_factor - reserved), maxf(0, size.y - 6.0 * scale_factor))
+	_picture.visible = valid_word and not _projection
+	_picture.size = Vector2.ONE * minf(24.0 * scale_factor, size.y - 6.0 * scale_factor)
+	_picture.position = Vector2(4.0 * scale_factor, (size.y - _picture.size.y) * 0.5)
+	if _fragment_holder != null:
+		_fragment_holder.visible = fragments > 0 and not _projection
+		var badge_fit: float = minf(1.0, 10.0 * scale_factor / maxf(1.0, _fragment_holder.size.x))
+		_fragment_holder.set_meta("fit", badge_fit)
+		_fragment_holder.scale = Vector2.ONE * badge_fit
+		_fragment_holder.pivot_offset = Vector2.ZERO
+		_fragment_holder.position = Vector2((28.0 if valid_word else 4.0) * scale_factor,
+			(size.y - _fragment_holder.size.y * badge_fit) * 0.5)
+	if requires_read:
+		# The complete spelling remains in the detail and accessibility name.
+		# Read shares the row so its 44-pixel target never covers the label on
+		# the minimum supported two-row footprint.
+		_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		_read_button.size = Vector2(74.0, 44.0) / s
+		_read_button.position = Vector2(size.x - _read_button.size.x - 4.0 / s, (size.y - _read_button.size.y) * 0.5)
+		_label.size.x = maxf(0.0, _read_button.position.x - 4.0 / s - _label.position.x)
+		_read_button.add_theme_font_size_override("font_size", ceili(16.0 / s))
 
 func _layout_fragment_badge() -> void:
 	if _fragment_holder == null:
@@ -227,7 +299,7 @@ func fragment_badge_snapshot() -> Dictionary:
 	if _fragment_holder == null:
 		return {"icons": 0, "count_text": "", "rect": [0.0, 0.0, 0.0, 0.0], "visible": false, "scale": 1.0}
 	var extent: Vector2 = _fragment_holder.size * _fragment_holder.scale
-	var origin: Vector2 = _fragment_holder.position + (_fragment_holder.size - extent) * 0.5
+	var origin: Vector2 = _fragment_holder.position + _fragment_holder.pivot_offset * (Vector2.ONE - _fragment_holder.scale)
 	return {"icons": visible_fragment_badges(), "count_text": _fragment_count.text if _fragment_count.visible else "",
 		"rect": [origin.x, origin.y, extent.x, extent.y], "visible": _fragment_holder.visible,
 		"scale": _fragment_holder.scale.x}

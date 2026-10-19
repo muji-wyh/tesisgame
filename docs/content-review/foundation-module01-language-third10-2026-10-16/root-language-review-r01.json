@@ -1,0 +1,234 @@
+{
+  "schema": 1,
+  "status": "root_nine_scoped_language_acceptances_one_hold_pending_guarded_delivery",
+  "date": "2026-10-16T10:51:05.567Z",
+  "reviewer": "Codex root (independent AI language review; not human or specialist approval)",
+  "root_review_recorded": true,
+  "author_ledger_json_sha256": "4517fbb347f59056b589bc5dd7b26ce3b4b0255ca2ab2fad0b0241094756eb4d",
+  "context_review_json_sha256": "f34ed83ddb41b16dd8082190cc2609d740781773007d14b1765a88ea294c7dd6",
+  "decisions": [
+    {
+      "id": "deadline.final-time.n",
+      "text": "deadline",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "e690755ad3c7817559a1bc5c9b099180924b1098570d318e63850af134dfa593",
+      "before_entry_json_sha256": "e0e94df155a735682ecf8a7ff2f3d27969863d2b23c1fb90a5875ad76dc125c3",
+      "reason": "The existing latest-time definition and form example are precise. Accept B2 with the observed selected Collins label; unrelated page-footer levels provide no evidence.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "B2"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "break.work-pause.n",
+      "text": "break",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "3275311b273743efe23a503a74c8087f3b7e9542831d89ec02e6c0cf438a101f",
+      "before_entry_json_sha256": "cd8129700ba8595c8ce69b43be46fa1f1d446e0b2984ae6235d76f139d4295eb",
+      "reason": "The revised short-pause definition covers food as well as rest. Accept the explicit A2 curriculum floor while retaining the actual selected Oxford A1 observation.",
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": "A1"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "overtime.additional-work-time.n",
+      "text": "overtime",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "d397f43c44376df9103951488ca22e259ac2deb64be4b11ba5fcf5c635c28700",
+      "before_entry_json_sha256": "3e4194d118971d3dc7baf398e82c588b3866e25408124a45d34bc3e16a4a1e67",
+      "reason": "The hours-explicit example removes time-versus-pay ambiguity. Accept editorial B2 for ordinary additional working time, supported by Collins B2 and retaining the conflicting Oxford C1. No work entitlement or pay rule follows.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": "C1",
+        "collins": "B2"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "attendance.presence-record.n",
+      "text": "attendance",
+      "decision": "hold_entire_entry_unchanged",
+      "candidate_entry_json_sha256": "60c07266fa1e4f344872e2afe8b0ac55475922be389b7c0b8c278790f37e2189",
+      "before_entry_json_sha256": "a7699c3e58649791eaee79817f87879c2ce6b2418e729768c6f1a43c19b3594e",
+      "reason": "The ordinary presence meaning and trainer example are clear, but current A2 lacks support and the observed selected Oxford C1 lies outside the current schema. Keep this entire production entry unchanged and language pending. Do not clamp C1 or infer B2 from a footer, related word, or search snippet.",
+      "editorial_difficulty": null,
+      "observed_source_levels": {
+        "oxford": "C1",
+        "collins": null
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "availability.free-time.n",
+      "text": "availability",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "b3dcb2fa44d64112a5f4f164f20a3445563c7420ebbd6c2bf80e2ca518f7ae71",
+      "before_entry_json_sha256": "9dea224787f333dd31e0f2ede31a4666c6103aaf29157317d290983ebe3b4843",
+      "reason": "The revised definition selects whether and when a person is free, distinct from resource/system availability. Accept editorial B1 for this scheduling request; no consulted source certifies the level.",
+      "editorial_difficulty": "B1",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": null
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "calendar.date-organizer.n",
+      "text": "calendar",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "40b42e25182cb2ed1a36e66a9147390891692d7059dbb5931e91cb6985bc969f",
+      "before_entry_json_sha256": "3ece0eb13fe06b226c4bbee563d831f0ca0d0325ad4d308f1b103dacdc79cb1a",
+      "reason": "The revised organizer definition correctly includes books and applications. Accept B1 from the selected Collins date-display/software evidence and retain general region; especially North American is not exclusive usage.",
+      "editorial_difficulty": "B1",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "B1"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "agenda.meeting-plan.n",
+      "text": "agenda",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "d7982c0c7e9b53cf780bc8118784decd79765b7ebc1253c973dbff9706ae7e56",
+      "before_entry_json_sha256": "777f640a566aaaa4db929c0e5f1c68d20ab58a850b52ca48c4a0dc5e932dc522",
+      "reason": "The meeting-topic-list definition and staffing-item example fit. Accept B2 from the selected Oxford Working life label; policy priorities and hidden intentions remain separate.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": "B2"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "invitation.attendance-request.n",
+      "text": "invitation",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "05a5a72208cb510cee5b12d629d9bef21d4c2dde1857436afd5ec55e276f6a42",
+      "before_entry_json_sha256": "d1ff331e72f1cfe944d11ce8ad4993ed3f466d057e634a384a1ce0f07addb415",
+      "reason": "The revised request definition explicitly includes speech and writing. Accept A2 from the selected Collins request sense. A physical card, invitation-to-treat or credentials are not additional answers.",
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "A2"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "update.current-information.n",
+      "text": "update",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "a2f533cc73c3e7592dca103c1e9c761049aa7eed6ca62363adf76801801ef265",
+      "before_entry_json_sha256": "bde18c844cd9ddf76a747a479a5d7fcf494e447ff59b3f4153a6098dc963f8e5",
+      "reason": "The revised countable report definition fits the original order-progress question and avoids treating every revision as this noun. Accept editorial B1, explicitly without source-level certification; three report-versus-change contexts stay held.",
+      "editorial_difficulty": "B1",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": null
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "reminder.memory-prompt.n",
+      "text": "reminder",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "29c107d5c41d5a24a2e50250955afe706f984ec1a9df11e11dcb7a4bc733256e",
+      "before_entry_json_sha256": "2c46cea3d9b5ca2701f96576cdb052ccc9951692a08591aac619a5adfeb2ad4f",
+      "reason": "The existing message/signal definition includes a calendar notification before an event. Accept editorial B1 without source-level certification; the narrower British overdue-note usage does not restrict the general noun.",
+      "editorial_difficulty": "B1",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": null
+      },
+      "production_acceptance": false
+    }
+  ],
+  "accepted_candidates": [
+    {
+      "id": "deadline.final-time.n",
+      "candidate_json_sha256": "e690755ad3c7817559a1bc5c9b099180924b1098570d318e63850af134dfa593",
+      "scope": "Ordinary language wording, example and editorial difficulty; no new spelling."
+    },
+    {
+      "id": "break.work-pause.n",
+      "candidate_json_sha256": "3275311b273743efe23a503a74c8087f3b7e9542831d89ec02e6c0cf438a101f",
+      "scope": "Ordinary language wording, example and editorial difficulty; no new spelling."
+    },
+    {
+      "id": "overtime.additional-work-time.n",
+      "candidate_json_sha256": "d397f43c44376df9103951488ca22e259ac2deb64be4b11ba5fcf5c635c28700",
+      "scope": "Ordinary language wording, example and editorial difficulty; no new spelling."
+    },
+    {
+      "id": "availability.free-time.n",
+      "candidate_json_sha256": "b3dcb2fa44d64112a5f4f164f20a3445563c7420ebbd6c2bf80e2ca518f7ae71",
+      "scope": "Ordinary language wording, example and editorial difficulty; no new spelling."
+    },
+    {
+      "id": "calendar.date-organizer.n",
+      "candidate_json_sha256": "40b42e25182cb2ed1a36e66a9147390891692d7059dbb5931e91cb6985bc969f",
+      "scope": "Ordinary language wording, example and editorial difficulty; no new spelling."
+    },
+    {
+      "id": "agenda.meeting-plan.n",
+      "candidate_json_sha256": "d7982c0c7e9b53cf780bc8118784decd79765b7ebc1253c973dbff9706ae7e56",
+      "scope": "Ordinary language wording, example and editorial difficulty; no new spelling."
+    },
+    {
+      "id": "invitation.attendance-request.n",
+      "candidate_json_sha256": "05a5a72208cb510cee5b12d629d9bef21d4c2dde1857436afd5ec55e276f6a42",
+      "scope": "Ordinary language wording, example and editorial difficulty; no new spelling."
+    },
+    {
+      "id": "update.current-information.n",
+      "candidate_json_sha256": "a2f533cc73c3e7592dca103c1e9c761049aa7eed6ca62363adf76801801ef265",
+      "scope": "Ordinary language wording, example and editorial difficulty; no new spelling."
+    },
+    {
+      "id": "reminder.memory-prompt.n",
+      "candidate_json_sha256": "29c107d5c41d5a24a2e50250955afe706f984ec1a9df11e11dcb7a4bc733256e",
+      "scope": "Ordinary language wording, example and editorial difficulty; no new spelling."
+    }
+  ],
+  "preserved_entry_ids": [
+    "attendance.presence-record.n"
+  ],
+  "root_direct_source_crosschecks": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/attendance",
+      "finding": "Selected presence meaning carries C1; the page-footer B2 belongs to another word. Presence and number present remain distinct."
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/overtime",
+      "finding": "Selected additional-work-time noun carries B2, distinct from pay and sporting uses."
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/calendar",
+      "finding": "Date-display/software entry carries B1 and illustrates phone organizing; British appointment registers also appear."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/agenda",
+      "finding": "Selected meeting-list meaning carries Working life B2."
+    }
+  ],
+  "further_access_limits": [
+    "Direct Cambridge attendance access returned an internal error. Search results did not establish a selected reliable lower CEFR label and are not accepted evidence."
+  ],
+  "context_decision": "All 53 actual expression texts and contextual observations, six existing selected-focus expressions, and 58 related-term definitions/boundaries were inspected. Preserve all exact expression records and focus bindings; all five ambiguity holds and related policy-update alternative remain.",
+  "integration_scope": [
+    "Integrate only the nine accepted candidates after guarded delivery review. Keep attendance byte-for-byte equivalent as a parsed full entry; retain its source/evidence hold in durable history rather than promoting it.",
+    "Only source records referenced by the accepted nine enter the production source registry. Attendance-only sources remain historical scratch evidence.",
+    "Set language review only for the accepted nine and their narrowly scoped lexical reference statuses. Overall status may follow existing domain-not-required rules; media and morphology remain separate gates.",
+    "Replace or qualify only exact superseded pending-language editorial clauses. Preserve original notes in before snapshots and explain acceptance in current notes.",
+    "Preserve all definitions/examples except the exact candidate changes, all forms/regions, identity, practice modes, memberships, morphology, media, Growth, domain requirements and module release gates."
+  ],
+  "tests_executed": false,
+  "native_runtime_executed": false,
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "baseline_bound": false,
+  "next_step": "Prepare a current-preimage delivery proposal; root must review and serialize it against the latest successful continuation baseline."
+}

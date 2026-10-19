@@ -1,0 +1,1449 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.caregiving.module09.01",
+      "text": "Please check my preferred name and contact details with me.",
+      "meaning": "Verify information with the person.",
+      "context": "A worker reviews a fictional record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "my",
+          "start": 13,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "preferred",
+          "start": 16,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "name",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "contact",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "details",
+          "start": 43,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "with",
+          "start": 51,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "me",
+          "start": 56,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 58,
+          "end": 59
+        }
+      ],
+      "focus_lexeme_ids": [
+        "preferred-name.person-chosen-address-name.n",
+        "contact-details.communication-contact-information.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module09.02",
+      "text": "The visit record should show the actual arrival time, departure time, and visit duration.",
+      "meaning": "Describe accurate visit documentation.",
+      "context": "A supervisor explains a record's fields.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "visit",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "should",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "show",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "actual",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "arrival",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "time",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "departure",
+          "start": 54,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "time",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "visit",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "duration",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "visit-record.account-of-support-visit.n",
+        "arrival-time.time-of-reaching-place.n",
+        "departure-time.time-of-leaving-place.n",
+        "visit-duration.length-of-visit-time.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module09.03",
+      "text": "Only completed work belongs in the completed section of this task checklist.",
+      "meaning": "Avoid recording unperformed work.",
+      "context": "A worker reviews the status of assigned tasks.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Only",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "completed",
+          "start": 5,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "work",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "belongs",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "in",
+          "start": 28,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "completed",
+          "start": 35,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "section",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "of",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 56,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "task",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "checklist",
+          "start": 66,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 75,
+          "end": 76
+        }
+      ],
+      "focus_lexeme_ids": [
+        "task-checklist.list-for-checking-agreed-tasks.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module09.04",
+      "text": "The daily log and handover note should distinguish my observations from the person's own words.",
+      "meaning": "Clarify attribution in records.",
+      "context": "A staff member prepares a factual report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "daily",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "log",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "handover",
+          "start": 18,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "note",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "should",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "distinguish",
+          "start": 39,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "my",
+          "start": 51,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "observations",
+          "start": 54,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "from",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "person's",
+          "start": 76,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "own",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "words",
+          "start": 89,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "daily-log.day-by-day-activity-record.n",
+        "handover-note.care-responsibility-transfer-record.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module09.05",
+      "text": "Please explain who may read the communication book under the data privacy policy.",
+      "meaning": "Clarify authorized information access.",
+      "context": "A worker asks about sharing arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "who",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "may",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "read",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "communication",
+          "start": 32,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "book",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "under",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "data",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "privacy",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "policy",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "communication-book.shared-written-message-record.n",
+        "data-privacy.personal-information-protection.n",
+        "policy.organizational-rule-or-position.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module09.06",
+      "text": "The care plan links to a risk screening form and a consent form requiring review.",
+      "meaning": "Identify current documents without assuming consent from a signature.",
+      "context": "A worker checks which documents need attention.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "care",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "plan",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "links",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 6,
+          "text": "risk",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": "screening",
+          "start": 30,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "form",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 11,
+          "text": "consent",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "form",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "requiring",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "review",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "care-plan.individualized-care-arrangement.n",
+        "risk-screening-form.initial-risk-check-document.n",
+        "consent-form.agreement-documentation-form.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module09.07",
+      "text": "The prescription, medication list, and medication administration record have different purposes; please ask the responsible professional to explain them.",
+      "meaning": "Distinguish medication-related documents.",
+      "context": "A worker seeks clarification from the responsible professional.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "prescription",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "medication",
+          "start": 18,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "list",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "medication",
+          "start": 39,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "administration",
+          "start": 50,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": "record",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 10,
+          "text": "have",
+          "start": 72,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "different",
+          "start": 77,
+          "end": 86
+        },
+        {
+          "index": 12,
+          "text": "purposes",
+          "start": 87,
+          "end": 95
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 95,
+          "end": 96
+        },
+        {
+          "index": 14,
+          "text": "please",
+          "start": 97,
+          "end": 103
+        },
+        {
+          "index": 15,
+          "text": "ask",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": "responsible",
+          "start": 112,
+          "end": 123
+        },
+        {
+          "index": 18,
+          "text": "professional",
+          "start": 124,
+          "end": 136
+        },
+        {
+          "index": 19,
+          "text": "to",
+          "start": 137,
+          "end": 139
+        },
+        {
+          "index": 20,
+          "text": "explain",
+          "start": 140,
+          "end": 147
+        },
+        {
+          "index": 21,
+          "text": "them",
+          "start": 148,
+          "end": 152
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 152,
+          "end": 153
+        }
+      ],
+      "focus_lexeme_ids": [
+        "medication-list.recorded-medicine-inventory.n",
+        "medication-administration-record.medicine-giving-documentation.n",
+        "prescription.authorized-treatment-order.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module09.08",
+      "text": "Please use the correction entry process so the version history remains clear.",
+      "meaning": "Request an authorized record correction.",
+      "context": "A supervisor reviews a fictional documentation error.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "use",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "correction",
+          "start": 15,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "entry",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "process",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "so",
+          "start": 40,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "version",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "history",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "remains",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "clear",
+          "start": 71,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "correction-entry.record-amendment-entry.n",
+        "version-history.record-of-document-changes.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module09.09",
+      "text": "I need help with this mandatory field and the attachment before I submit the record.",
+      "meaning": "Ask for assistance with a digital form.",
+      "context": "A worker uses a fictional care system.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "need",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "help",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "with",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "this",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "mandatory",
+          "start": 22,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "field",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "attachment",
+          "start": 46,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "I",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "submit",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "record",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mandatory-field.required-input-item.n",
+        "attachment.linked-file.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module09.10",
+      "text": "The personal belongings list and expenditure record should be checked with the person as agreed.",
+      "meaning": "Support transparency about possessions and spending.",
+      "context": "An adult reviews their own records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "personal",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "belongings",
+          "start": 13,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "list",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "expenditure",
+          "start": 33,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "record",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "should",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 8,
+          "text": "be",
+          "start": 59,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "checked",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "with",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "person",
+          "start": 79,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": "as",
+          "start": 86,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "agreed",
+          "start": 89,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "personal-belongings-list.record-of-personal-possessions.n",
+        "expenditure-record.record-of-money-spent.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

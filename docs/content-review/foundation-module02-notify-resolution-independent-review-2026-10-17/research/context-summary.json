@@ -1,0 +1,19 @@
+{
+  "status": "author_research_snapshot_not_final_delivery_binding",
+  "captured_at": "2026-10-16T21:39:23.8700755Z",
+  "curriculum_revision": "professional-v1",
+  "lexeme_count": 4939,
+  "expression_count": 1620,
+  "course_count": 20,
+  "notify_id": "notify.inform.v",
+  "notify_memberships": 20,
+  "focus_expression_memberships": 20,
+  "notify_inform_lexical_contexts": 15,
+  "notify_inform_expression_contexts": 16,
+  "related_headwords": 76,
+  "exact_inform_headwords": 0,
+  "input_count": 347,
+  "changed_inputs_during_capture": [],
+  "source_pattern": "\\b(?:notif(?:y|ies|ied|ying)|inform(?:s|ed|ing)?)\\b",
+  "capture_method": "PowerShell built-in raw reads, JSON parsing and SHA256 only; no project imports, tests or validators."
+}

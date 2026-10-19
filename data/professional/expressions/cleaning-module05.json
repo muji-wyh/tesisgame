@@ -1,0 +1,1903 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.cleaning_facilities.module05.01",
+      "text": "Does this request mean to clean or wash the item, rinse it, wipe the surface, or scrub a mark?",
+      "meaning": "Clarify the intended action rather than guess a method.",
+      "context": "Discussing an ambiguous task description.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Does",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "this",
+          "start": 5,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "request",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "mean",
+          "start": 18,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 23,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "clean",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "or",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "wash",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "item",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 11,
+          "text": "rinse",
+          "start": 50,
+          "end": 55
+        },
+        {
+          "index": 12,
+          "text": "it",
+          "start": 56,
+          "end": 58
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 14,
+          "text": "wipe",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 16,
+          "text": "surface",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 18,
+          "text": "or",
+          "start": 78,
+          "end": 80
+        },
+        {
+          "index": 19,
+          "text": "scrub",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 20,
+          "text": "a",
+          "start": 87,
+          "end": 88
+        },
+        {
+          "index": 21,
+          "text": "mark",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 22,
+          "text": "?",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "clean.remove-dirt-or-unwanted-material.v",
+        "wash.clean-with-liquid.v",
+        "rinse.remove-residue-with-liquid.v",
+        "wipe.move-cloth-or-similar-item-across-surface.v",
+        "scrub.rub-surface-firmly-to-clean-it.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module05.02",
+      "text": "Please clarify whether the plan says to sweep, mop, vacuum, dust, or polish this area.",
+      "meaning": "Distinguish cleaning-action verbs in a request.",
+      "context": "Checking the assigned scope.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "clarify",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "whether",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "plan",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "says",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 37,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "sweep",
+          "start": 40,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "mop",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "vacuum",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 13,
+          "text": "dust",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 15,
+          "text": "or",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 16,
+          "text": "polish",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 17,
+          "text": "this",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 18,
+          "text": "area",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "sweep.clean-with-broom.v",
+        "mop.clean-floor-with-mop.v",
+        "vacuum.clean-by-suction.v",
+        "dust.remove-dust-from-surface.v",
+        "polish.rub-or-treat-surface-to-improve-smoothness-or-shine.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module05.03",
+      "text": "Does the approved description distinguish sanitize from disinfect and explain whether staff should dry, soak, or wring the fabric?",
+      "meaning": "Ask for the actual approved wording and fabric restrictions.",
+      "context": "Reviewing a task description without setting a procedure.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Does",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 5,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "approved",
+          "start": 9,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "description",
+          "start": 18,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "distinguish",
+          "start": 30,
+          "end": 41
+        },
+        {
+          "index": 5,
+          "text": "sanitize",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 6,
+          "text": "from",
+          "start": 51,
+          "end": 55
+        },
+        {
+          "index": 7,
+          "text": "disinfect",
+          "start": 56,
+          "end": 65
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 9,
+          "text": "explain",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 10,
+          "text": "whether",
+          "start": 78,
+          "end": 85
+        },
+        {
+          "index": 11,
+          "text": "staff",
+          "start": 86,
+          "end": 91
+        },
+        {
+          "index": 12,
+          "text": "should",
+          "start": 92,
+          "end": 98
+        },
+        {
+          "index": 13,
+          "text": "dry",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 102,
+          "end": 103
+        },
+        {
+          "index": 15,
+          "text": "soak",
+          "start": 104,
+          "end": 108
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 108,
+          "end": 109
+        },
+        {
+          "index": 17,
+          "text": "or",
+          "start": 110,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": "wring",
+          "start": 113,
+          "end": 118
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 119,
+          "end": 122
+        },
+        {
+          "index": 20,
+          "text": "fabric",
+          "start": 123,
+          "end": 129
+        },
+        {
+          "index": 21,
+          "text": "?",
+          "start": 129,
+          "end": 130
+        }
+      ],
+      "focus_lexeme_ids": [
+        "sanitize.reduce-microorganisms-to-required-level.v",
+        "disinfect.reduce-specified-microorganisms.v",
+        "dry.remove-moisture.v",
+        "soak.leave-item-in-liquid-for-period.v",
+        "wring.twist-or-press-fabric-to-remove-liquid.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module05.04",
+      "text": "The request says to empty the container and refill the dispenser; who will replenish, sort, and separate the supplies?",
+      "meaning": "Clarify responsibility for supply-related actions.",
+      "context": "Coordinating assigned routine work.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "request",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "says",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 17,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "empty",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "container",
+          "start": 30,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "refill",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "dispenser",
+          "start": 55,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "who",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "will",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "replenish",
+          "start": 75,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "sort",
+          "start": 86,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 90,
+          "end": 91
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 19,
+          "text": "separate",
+          "start": 96,
+          "end": 104
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 105,
+          "end": 108
+        },
+        {
+          "index": 21,
+          "text": "supplies",
+          "start": 109,
+          "end": 117
+        },
+        {
+          "index": 22,
+          "text": "?",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "empty.remove-contents-from-container-or-space.v",
+        "refill.fill-container-again.v",
+        "replenish.restore-supply.v",
+        "sort.group-by-kind.v",
+        "separate.keep-or-place-things-apart.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module05.05",
+      "text": "Before anyone agrees to fold, hang, store, move, or lift these items, please confirm the assigned responsibilities.",
+      "meaning": "Clarify scope and responsibility for handling actions.",
+      "context": "Checking an assignment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Before",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "anyone",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "agrees",
+          "start": 14,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 21,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "fold",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "hang",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 8,
+          "text": "store",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 10,
+          "text": "move",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 12,
+          "text": "or",
+          "start": 49,
+          "end": 51
+        },
+        {
+          "index": 13,
+          "text": "lift",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 14,
+          "text": "these",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 15,
+          "text": "items",
+          "start": 63,
+          "end": 68
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 17,
+          "text": "please",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 18,
+          "text": "confirm",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 20,
+          "text": "assigned",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 21,
+          "text": "responsibilities",
+          "start": 98,
+          "end": 114
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fold.bend-cloth-neatly.v",
+        "hang.suspend-item.v",
+        "store.keep-goods-in-suitable-location.v",
+        "move.change-physical-position-or-location-of-item.v",
+        "lift.raise-item.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module05.06",
+      "text": "Who is authorized to lower, carry, push, or pull this equipment, and who will inspect its condition?",
+      "meaning": "Clarify authorization and inspection responsibility.",
+      "context": "Planning communication about equipment movement.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Who",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "is",
+          "start": 4,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "authorized",
+          "start": 7,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "lower",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "carry",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 8,
+          "text": "push",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 11,
+          "text": "pull",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 12,
+          "text": "this",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 13,
+          "text": "equipment",
+          "start": 54,
+          "end": 63
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 16,
+          "text": "who",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 17,
+          "text": "will",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 18,
+          "text": "inspect",
+          "start": 78,
+          "end": 85
+        },
+        {
+          "index": 19,
+          "text": "its",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 20,
+          "text": "condition",
+          "start": 90,
+          "end": 99
+        },
+        {
+          "index": 21,
+          "text": "?",
+          "start": 99,
+          "end": 100
+        }
+      ],
+      "focus_lexeme_ids": [
+        "lower.move-to-lower-position.v",
+        "carry.hold-and-move.v",
+        "push.apply-force-to-move-object-away.v",
+        "pull.apply-force-to-draw-object-toward-source.v",
+        "inspect.examine-visually.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module05.07",
+      "text": "Please identify the information needed to measure the item, record the result, document the issue, and review the request.",
+      "meaning": "Clarify information and record-related work.",
+      "context": "Discussing an observation record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "identify",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "information",
+          "start": 20,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "needed",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": "to",
+          "start": 39,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "measure",
+          "start": 42,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "item",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "record",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "result",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "document",
+          "start": 79,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "issue",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 97,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 19,
+          "text": "review",
+          "start": 103,
+          "end": 109
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 110,
+          "end": 113
+        },
+        {
+          "index": 21,
+          "text": "request",
+          "start": 114,
+          "end": 121
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 121,
+          "end": 122
+        }
+      ],
+      "focus_lexeme_ids": [
+        "identify.establish-identity-or-nature.v",
+        "measure.find-dimensions.v",
+        "record.store-observed-information.v",
+        "document.make-care-record.v",
+        "review.reconsider-care-information.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module05.08",
+      "text": "Before staff tidy the room, confirm whether it is accessible, occupied, vacant, or available for service.",
+      "meaning": "Distinguish appearance, access, occupancy, and service availability.",
+      "context": "Clarifying room status.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Before",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "staff",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "tidy",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "room",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "confirm",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "whether",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "it",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "is",
+          "start": 47,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "accessible",
+          "start": 50,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "occupied",
+          "start": 62,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "vacant",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 78,
+          "end": 79
+        },
+        {
+          "index": 16,
+          "text": "or",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "index": 17,
+          "text": "available",
+          "start": 83,
+          "end": 92
+        },
+        {
+          "index": 18,
+          "text": "for",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 19,
+          "text": "service",
+          "start": 97,
+          "end": 104
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 104,
+          "end": 105
+        }
+      ],
+      "focus_lexeme_ids": [
+        "tidy.put-things-in-order.v",
+        "accessible.able-to-be-reached-entered-or-used.a",
+        "occupied.currently-being-used-or-held-by-person.a",
+        "vacant.not-currently-occupied.a",
+        "available.ready-or-permitted-for-use-at-stated-time.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module05.09",
+      "text": "The area is unavailable while its condition is checked; the report must distinguish wet, damp, dry, and slippery.",
+      "meaning": "Describe surface conditions without assuming safety.",
+      "context": "Reviewing access and observations.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "area",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 9,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "unavailable",
+          "start": 12,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "while",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "its",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "condition",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "is",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "checked",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": ";",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "report",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "must",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "distinguish",
+          "start": 72,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "wet",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 87,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "damp",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 93,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "dry",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 19,
+          "text": ",",
+          "start": 98,
+          "end": 99
+        },
+        {
+          "index": 20,
+          "text": "and",
+          "start": 100,
+          "end": 103
+        },
+        {
+          "index": 21,
+          "text": "slippery",
+          "start": 104,
+          "end": 112
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "unavailable.not-available-for-use-at-stated-time.a",
+        "wet.covered-or-saturated-with-liquid.a",
+        "damp.slightly-wet.a",
+        "dry.free-from-noticeable-moisture.a",
+        "slippery.having-surface-with-little-grip.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module05.10",
+      "text": "The reusable item is soiled and stained; a spotless or streak-free appearance would not establish disinfection.",
+      "meaning": "Distinguish visible condition from an unverified hygiene outcome.",
+      "context": "Discussing an inspection note.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "reusable",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "item",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "soiled",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "stained",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": ";",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "spotless",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "streak-free",
+          "start": 55,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "appearance",
+          "start": 67,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "would",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "not",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "establish",
+          "start": 88,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "disinfection",
+          "start": 98,
+          "end": 110
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 110,
+          "end": 111
+        }
+      ],
+      "focus_lexeme_ids": [
+        "reusable.intended-for-repeated-use.a",
+        "soiled.marked-by-dirt-or-body-material.a",
+        "stained.marked-by-discoloration.a",
+        "spotless.without-visible-dirt-or-marks.a",
+        "streak-free.without-visible-long-smear-marks.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

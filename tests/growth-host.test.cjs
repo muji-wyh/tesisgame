@@ -123,11 +123,18 @@ test('growth snapshots distinguish level progress, Pip age, and vocabulary maste
   assert.doesNotMatch(status.textContent, /waiting to be saved/);
 });
 
-test('retired identity and room interfaces are absent while the old theme is only read for migration', () => {
+test('retired interfaces stay absent and saved themes cannot override learning-path startup', () => {
   for (const method of ['leaderboardState', 'saveLeaderboardState', 'leaderboardStatus', 'playroomState', 'savePlayroomState', 'favoriteReward', 'connectVirtualKeyboardNavigation']) {
     assert.doesNotMatch(shell, new RegExp(`\\b${method}\\(`));
   }
-  assert.match(shell, /loadingPreferences\.preferred_theme \|\| \(localStorage\.getItem\('wordBuddies\.playroom'\)/);
+  const startup = shell.match(/      let selectedTheme = [^\n]+/)?.[0];
+  assert.ok(startup, 'The loading shell initializes its temporary theme');
+  const selected = vm.runInNewContext(`${startup}\nselectedTheme`, {
+    loadingPreferences: { preferred_theme: 'candy' },
+    localStorage: { getItem() { throw Error('Historical room choices must not select a learning path'); } }
+  });
+  assert.equal(selected, 'spring');
+  assert.doesNotMatch(shell, /loadingPreferences\.preferred_theme|getItem\('wordBuddies\.playroom'\)/);
   assert.doesNotMatch(shell, /setItem\('wordBuddies\.(?:playroom|leaderboards|favoriteReward)'/);
   assert.match(shell, /<title>Grow with Pip<\/title>/);
 });

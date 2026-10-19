@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "status": "UNBOUND_DO_NOT_EXECUTE",
+  "dispatcher": "/root",
+  "author": "/root/recover_delivery",
+  "entrypoint": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/capture.cjs",
+  "output": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01",
+  "execute_project_or_preparation_code": false,
+  "root_confirms_actual_bag_persisted_success": false,
+  "root_confirms_original_fourth10_lineage": false,
+  "guards": {
+    "production_writers_yielded": false,
+    "complete_inputs_frozen": false,
+    "final_destinations_reviewed": false
+  },
+  "independent_actual_binding_reviewer": "/root/morph_review",
+  "helper_source_inventory": null,
+  "independent_helper_source_review": null,
+  "bag_persisted_receipt": null,
+  "additional_review_evidence": [],
+  "required_status_after_root_review": "root_authorized_one_shot_fifth10_actual_binding_capture",
+  "note": "No successful bag persisted r02 result or actual binding is selected. The failed r01 receipt and rejected helper r01 remain frozen history. Root must supply complete pins and true guards only after independent helper-r02 source review and genuine bag persisted r02 success."
+}

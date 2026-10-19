@@ -1,0 +1,23 @@
+{
+  "status": "integrated",
+  "path": "res://professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+  "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+  "source": "https://kenney.nl/assets/mini-market",
+  "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+  "license": "CC0 1.0",
+  "acquisition_status": "integrated",
+  "review": {
+    "status": "reviewed",
+    "reviewer": "Codex source inspection and independent root physical-sense picture review at actual minimum Match and Memory card sizes",
+    "reviewed_at": "2026-10-16"
+  },
+  "brief": "Show a full-size retail trolley in a three-quarter side view with basket, push handle, lower frame, and four wheels legible. Keep it mostly empty so its structure is visible. Exclude a hand-carried basket, flat warehouse trolley, wheelchair, or online cart icon. Inspect the Mini Market shopping-cart lead before rendering.",
+  "picture_suitable": true,
+  "available_animations": [],
+  "adaptations": [
+    "Rendered the acquired Mini Market shopping-cart mesh with its original geometry, materials and external colormap; no model parts or textures were invented.",
+    "Near-eye-level three-quarter side camera preserves the empty basket, orange push handle, lower frame and four wheel silhouettes. One rear wheel is partly occluded by the frame; this perspective limitation was explicitly accepted during independent root review.",
+    "768 by 768 transparent source render, alpha-bounds crop with a 16-pixel margin, and Lanczos reduction to 512 by 415. The exact accepted PNG is retained without further conversion.",
+    "Independently inspected in actual native WordCard at Match 126 by 72 and Memory 144 by 74, both unmatched and matched with the real badge and alpha tint. This is picture suitability review only; see docs/assets/professional-retail-shopping-cart.md for provenance and separate delivery verification."
+  ]
+}

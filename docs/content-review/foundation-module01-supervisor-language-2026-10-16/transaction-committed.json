@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "committed",
+  "recorded_at": "2026-10-16T14:06:28.537Z",
+  "prepared_sha256": "141728469da320a0e35f1fb48d547417928855f1a7b60b6ba49a2e78af5813df",
+  "registry_after_sha256": "9030a86673b18539cab08848d1f1d893be5247b446fa4d615e729b1245d2404c",
+  "writes": [
+    {
+      "path": "data/professional/lexemes/foundation-module01.json",
+      "before_sha256": "718a853ccc94ddcc145f36de5181ae98685190c84c122747aadece7b08d1dfcd",
+      "after_sha256": "c45ade46efad495e5aaaf9da48673c3fb9f08f380b9ce15f625640de01b8d438"
+    },
+    {
+      "path": "data/professional/sources.json",
+      "before_sha256": "77c995308c9beb28435a09a561cf699913f7c53fb0ad4afb60d370f7c77f19c7",
+      "after_sha256": "f9d31cb87b7b2ec3c4650bec2e93ade247b87f3153773c21e249c6715f4f8854"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-supervisor-language-2026-10-16.json",
+      "before_sha256": null,
+      "after_sha256": "2a7c020cad817b427ccc718c67aec77bda96e43b4c6c8614ad8231b13e576062"
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "before_sha256": "34a1ad2c48df656b665e522ee5dc1046fe1beb88a3e76e3d3aba88102eed6c54",
+      "after_sha256": "83ccbe17e57bcd9ee8216f1416de68abcaae8ca79c54e493eaf0007d6e74440e"
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "before_sha256": "86773940915510679915fc173ae4c377d397b28fc8bb2f93d600d9a3bd77b73e",
+      "after_sha256": "445ace67e25d2be472f58e41eb507cc2e96ca15a61f815d8a4583fe80c28650f"
+    }
+  ],
+  "preserved_baseline_inputs": 672,
+  "unrelated_entries_preserved": 4938,
+  "other_gates_preserved": true,
+  "git_commit_created": false
+}

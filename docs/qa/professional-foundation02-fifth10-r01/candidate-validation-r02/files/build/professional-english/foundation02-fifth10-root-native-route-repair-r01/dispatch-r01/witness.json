@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "kind": "native-route-repair",
+  "dispatcher": "/root",
+  "finished_at": "2026-10-17T00:05:40.644Z",
+  "command": [
+    "C:\\nvm4w\\nodejs\\node.exe",
+    "build/professional-english/foundation02-fifth10-native-route-repair-proposal-r01/repair.cjs",
+    "--root-input",
+    "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/input.json",
+    "--root-input-sha256",
+    "e5533d9c5876251b97df37e3c3dd2965b91eb711ecc67dc60cc24981d3b410fc",
+    "--dispatch-token",
+    "<ephemeral token omitted>"
+  ],
+  "source": {
+    "path": "build/professional-english/foundation02-fifth10-native-route-repair-proposal-r01/repair.cjs",
+    "bytes": 24759,
+    "raw_sha256": "24ec0c9df7b0101fbb39e05d314a9a6ad08983af7cdaaa8ea1f54ccbe44cf4e0"
+  },
+  "input": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/input.json",
+    "bytes": 2659,
+    "raw_sha256": "e5533d9c5876251b97df37e3c3dd2965b91eb711ecc67dc60cc24981d3b410fc"
+  },
+  "contract": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/contract.json",
+    "bytes": 2030,
+    "raw_sha256": "d5704db3738ac08e4cfdb17f06a8dcdc1cc98475c8f263f038dbf33de90d2479"
+  },
+  "review": {
+    "path": "build/professional-english/foundation02-fifth10-native-route-repair-independent-review-r01/review.json",
+    "bytes": 5119,
+    "raw_sha256": "adf51eade6a466d24f1cc6e3b10471f99386b5bd6733c4642fa6fbc55e0492fb"
+  },
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/dispatch-r01/stdout.log",
+    "bytes": 317,
+    "raw_sha256": "be6a4e80627170f96c255d9d2d19f5d16bfc542cc6ac180d8dc8aa9a94c947db"
+  },
+  "stderr": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/dispatch-r01/stderr.log",
+    "bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "receipt": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01/correction-receipt.json",
+    "bytes": 6458,
+    "raw_sha256": "539f1ecce9a3ff4bf72c299251f4f44b3981e164ddc0105324ba2ecc498e91f8"
+  },
+  "attempt_end": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01/attempt-end.json",
+    "bytes": 202,
+    "raw_sha256": "fdefa34ad5be6d7e5f65d6a0728ec102c2578d98a9b9ad45ea7fab26b5856f7e"
+  },
+  "token_retained": false,
+  "replay_allowed": false
+}

@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "frozen_unexecuted_binding_capture_sources",
+  "author": "/root/recover_delivery",
+  "required_dispatcher": "/root",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 7980,
+      "raw_sha256": "8a1afc4e302a455a896cadaf9a14c5806fe68b30d95a472472c2702422944cc8"
+    },
+    {
+      "path": "REVIEW-CONTRACT.md",
+      "bytes": 2024,
+      "raw_sha256": "542595789dd61c004a8db36967231bcdbfbd6242153812ef79c8d9cc194cc508"
+    },
+    {
+      "path": "author-observations.json",
+      "bytes": 1542,
+      "raw_sha256": "01f1376765310331f51be33e3218da101e0880e9ebb2c11c90c103efb5549659"
+    },
+    {
+      "path": "capture.cjs",
+      "bytes": 40568,
+      "raw_sha256": "884dee02200c7216fe1ed0d4b498c3b39fba005c83c511b27ba6de55a460493a"
+    },
+    {
+      "path": "closure-supplement.json",
+      "bytes": 102249,
+      "raw_sha256": "074fd5e5c3d6538c3d29f0db1831ec9c5cbbec2930ed9c11462606314819cf1b"
+    },
+    {
+      "path": "guard-cases.json",
+      "bytes": 5255,
+      "raw_sha256": "ab194e1fd2e53ee4ca8ade9ca2671af7de0b02b1f9b38e249ec6e157b98865e0"
+    },
+    {
+      "path": "root-capture-input.template.json",
+      "bytes": 1135,
+      "raw_sha256": "1126208253e5aca43d26302472f5042f364af5ad6d5f10966db37f762d5c6f7e"
+    }
+  ],
+  "actual_binding_created": false,
+  "actual_bag_persisted_success_selected": false,
+  "source_modules_imported": false,
+  "syntax_checks_run": false,
+  "guard_cases_executed": false,
+  "helper_executed": false,
+  "preparation_executed": false,
+  "project_tests_run": false,
+  "native_browser_build_run": false,
+  "production_or_shared_test_written": false,
+  "inventory_self_excluded": true
+}

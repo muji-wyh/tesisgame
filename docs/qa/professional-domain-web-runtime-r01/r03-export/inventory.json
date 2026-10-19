@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "status": "frozen_unexecuted_candidate",
+  "frozen_at": "2026-10-16T20:21:47.650Z",
+  "fixture": "domain-runtime-web-fixture-r03",
+  "write_scope": "build/professional-english/domain-runtime-web-fixture-r03/",
+  "files": [
+    {
+      "path": "browser.cjs",
+      "bytes": 10662,
+      "sha256": "275de78a9848f12aea3f4f2fa1536407ab6f19078cfa36e20c2699c57eaf2e87"
+    },
+    {
+      "path": "common.cjs",
+      "bytes": 2232,
+      "sha256": "8417a3ea866a452c48a7f72ec28a6608a4a2318cbd97a67ce61a8172c8fbb4fa"
+    },
+    {
+      "path": "export_presets.cfg",
+      "bytes": 1073,
+      "sha256": "f2c7802e705466a28535d3a31bf743a6f19f577fee3a18bcb410751b2f06f8e9"
+    },
+    {
+      "path": "export.cjs",
+      "bytes": 4794,
+      "sha256": "a119a8bc698e7b498cbb1786a9ffc2553182f57a65a8f95b9d041ac673afb6c5"
+    },
+    {
+      "path": "fixture_main.gd",
+      "bytes": 8424,
+      "sha256": "d9f7e94ca3f1aefbceec41a48456177c7fac3c7d74319c5e383ed2428061a579"
+    },
+    {
+      "path": "main.tscn",
+      "bytes": 286,
+      "sha256": "46ef50eac9560c19392b5103a966bcefcd9341167af0535bdce438e4723118b7"
+    },
+    {
+      "path": "prepare.cjs",
+      "bytes": 5512,
+      "sha256": "496375f5078ae00b7fe75468176710363eb51fc02982ccdf987ee5a878485232"
+    },
+    {
+      "path": "project.godot",
+      "bytes": 577,
+      "sha256": "af1c083a12258e060a07c020531c83c7ade2eca336674f58a283e2a2d9a49e82"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1270,
+      "sha256": "0dd85adbf9424f7ea9bdaa3eac5b7410e9b9ac0a8e3b6ae8df8bc195c7bdf6b4"
+    },
+    {
+      "path": "shell.html",
+      "bytes": 4646,
+      "sha256": "26ca9e6017a4307dda0033f7a0253f9e188eb4e9617acd1654a330c33c03699d"
+    },
+    {
+      "path": "source-references.json",
+      "bytes": 11730,
+      "sha256": "549140e0cb645496c3ba1c5b9b1e5e5474dfff65d0c22eec9cbb041297927b46"
+    },
+    {
+      "path": "static-closure-review.json",
+      "bytes": 22804,
+      "sha256": "9ddd9d588bdb298e0d87cef2f5b3bd69a1e1796163c7a0185acc4f0c3ede1e3a"
+    },
+    {
+      "path": "verify_pack.gd",
+      "bytes": 722,
+      "sha256": "2e58f414b36fc2822d35d7b2845ff24468513c43025cd4f21fed173e0825ff1d"
+    }
+  ],
+  "predecessor": {
+    "path": "build/professional-english/domain-runtime-web-fixture-r02/inventory.json",
+    "bytes": 6969,
+    "sha256": "014f1abfd7dd01c2fa12ac4d2a19cf88e1a7c660e00edf62f1c38c1fa73cb810"
+  },
+  "exact_changed_files": [
+    "README.md",
+    "prepare.cjs",
+    "source-references.json"
+  ],
+  "production_binding_changes": 0,
+  "executable_change": "Create and bind empty build/.gdignore before audit source creation; nine remaining executable/config/scene files unchanged.",
+  "execution": {
+    "preparation": false,
+    "export": false,
+    "browser": false
+  }
+}

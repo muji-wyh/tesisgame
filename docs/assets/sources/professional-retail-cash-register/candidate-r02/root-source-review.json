@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T11:47:33.508Z",
+  "status": "root_authorized_candidate_probe_only",
+  "reviewer": "Codex root; source-only visual review communicated through collaboration",
+  "recorder": "Codex source agent; records the parent instruction without upgrading its scope",
+  "root_instruction": "Root ran original-source inspection once, passed all 1,074 protected files unchanged; six views reviewed visually. Source is promising: keypad, large display, bottom drawer/handle remain clearly visible. Prefer positive-z-right-low framing for candidate (positive-z-right-high secondary).",
+  "inspection_receipt_raw_sha256": "37ad32ab7877e8cc8b30f598fbc7df3e8d96ca6d60874fdd92052b6fc6742abe",
+  "inspection_report_raw_sha256": "57ac8c3ad5da2ff28ad86b15017137bda4ce47509543c46a80da2b8885412976",
+  "preferred_view": {
+    "camera": [
+      4.68190717697144,
+      2.77446365356445,
+      6.93615913391113
+    ],
+    "file": "positive-z-right-low.png",
+    "look_at": [
+      0,
+      0,
+      0
+    ],
+    "orthographic_size": 1.78342950344086,
+    "pixels": [
+      768,
+      768
+    ],
+    "sha256": "7b90fe5375e245c81c4297e246febbff42a8f85f231d56d9f60315d263fd34f8"
+  },
+  "source_record_raw_sha256": "3e6184da75cd0fa51efaad7a47369c291b8ed920f1659a3c0d5b891e691149f0",
+  "source_review_scope": "Original source only, before candidate conversion or minimum-card review.",
+  "production_acceptance": false,
+  "cue_visibility_at_minimum_size": "pending",
+  "native_execution_owner": "Codex root"
+}

@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T21:27:09.223Z",
+  "wrapper_sha256": "5e53f7cdeb13a9d45a031f1aec08e46b9752fc445cc0f6815cc6163e657664e2",
+  "execution": false,
+  "accepted_inputs": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/binding.json",
+      "bytes": 235896,
+      "sha256": "dbacf79ca796410664a1a6af9a577172c93234109b3c33c326ba669a5394dc21"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/input-measurements.json",
+      "bytes": 352709,
+      "sha256": "8950e600b3f81f61cc72dae6e2514c4e982ca0cc6ef95e93536b86a01652dd67"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/inspect-output.cjs",
+      "bytes": 29597,
+      "sha256": "098515f301d802730db55c64be2400872d34717c9e08b91f8a74ac6a8a522b16"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/inspection.json",
+      "bytes": 29402,
+      "sha256": "edd347aa083986ce7de304c27b3ae6ccf9c5dcc047774feb5d38475ef0564cfd"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/README.md",
+      "bytes": 1769,
+      "sha256": "c15e74af4e2ed9cd37365358d845f8f6c86db01f675f353039ce1cb655669bfb"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/review.json",
+      "bytes": 3355,
+      "sha256": "38806f472694084563690f5218ff6af70c3338b3837d79d63c0a9bf3d04d0276"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/inventory.json",
+      "bytes": 1772,
+      "sha256": "53dd3887a534eac208f2beddc4e13233e8340dae02cbea4110f8c3b35a6d6378"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+      "bytes": 226840,
+      "sha256": "b6f797200a9c856b189dfcc3bf1dc20e65a8b9aac361b62bd3959ae460311f4d"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/execution-end.json",
+      "bytes": 2912,
+      "sha256": "9605da550f97858787f89e651ad5af33180ebadbd11024375efbfcf3ffa0eeb3"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/invoke.cjs",
+      "bytes": 3519,
+      "sha256": "6f565c2e6dd23d3f67582d66608a9b7d7e5ec1a4b767d8a1063db711997c6c06"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/dispatch-source.json",
+      "bytes": 485,
+      "sha256": "dee5bc7f2fbc43d649af9f48bb08744ee39eeea5f4e8368ec19b7248e06192d7"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-1.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-2.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-3.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-4.log",
+      "bytes": 295,
+      "sha256": "571ad3541c378279750bc6f3c20484f77f800a1225500848be32dc2033687f1e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/receipt.json",
+      "bytes": 8613,
+      "sha256": "b3597a51b6d3a501ddcd507471582b6370eff9c1a1904bbc557d84cfff69a82c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/start.json",
+      "bytes": 4143,
+      "sha256": "e6c5b26575b05b74c51ba658fae8dce481c3613357c178921a0102cc9216a688"
+    }
+  ],
+  "scope": "Root-owned single isolated native parse and execution, bound after actual prepared-output acceptance."
+}

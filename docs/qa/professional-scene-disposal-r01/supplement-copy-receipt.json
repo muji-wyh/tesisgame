@@ -1,0 +1,294 @@
+{
+  "schema": 1,
+  "scope": "Verified separate passing 828-check supplement and 119-check modes correction, preserved failed modes attempt and runner4/4 execution.",
+  "files": [
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/inputs-after.json",
+      "path": "first-fix-execution/inputs-after.json",
+      "bytes": 42754,
+      "sha256": "68f947e9820456b253520cff31e3beb0aecbf48ead7b746f35374e5a0f1c143e"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/inputs-before.json",
+      "path": "first-fix-execution/inputs-before.json",
+      "bytes": 42754,
+      "sha256": "68f947e9820456b253520cff31e3beb0aecbf48ead7b746f35374e5a0f1c143e"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/jelly_match_audio-runtime.json",
+      "path": "first-fix-execution/jelly_match_audio-runtime.json",
+      "bytes": 479,
+      "sha256": "507080d7a7b19b9594c299dfb621deca37e6bf969d82eb03169aca910caa2bfd"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/jelly_match_audio-runtime.log",
+      "path": "first-fix-execution/jelly_match_audio-runtime.log",
+      "bytes": 116,
+      "sha256": "7fbe77f0936bbe50db3361d56467995fa83693db42e35982e15ad46873079491"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/jelly_match_flow-runtime.json",
+      "path": "first-fix-execution/jelly_match_flow-runtime.json",
+      "bytes": 477,
+      "sha256": "dd7d18ae8b9a8099ddf8a626f46546e58741264c47ac102188e60b1eaabaa11c"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/jelly_match_flow-runtime.log",
+      "path": "first-fix-execution/jelly_match_flow-runtime.log",
+      "bytes": 115,
+      "sha256": "124edf2d77365b073a1839b05a8a5e5a6008a90e6edbbcac16636e486e20384e"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_application_flow-runtime.json",
+      "path": "first-fix-execution/professional_application_flow-runtime.json",
+      "bytes": 503,
+      "sha256": "5294fb307e0743e88ee53a9a57fd8e29b7bf0155a36def33c10c6693f737efad"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_application_flow-runtime.log",
+      "path": "first-fix-execution/professional_application_flow-runtime.log",
+      "bytes": 127,
+      "sha256": "fb28a4bbd73842f7619d3b49ec57bcadd8d3cbbacb30c17f9097ee44c2fe575f"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_play-runtime.json",
+      "path": "first-fix-execution/professional_play-runtime.json",
+      "bytes": 479,
+      "sha256": "479125da1dace715472417b124eef51c6ddb287aa9fe5a86ed665bb82fd08c66"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_play-runtime.log",
+      "path": "first-fix-execution/professional_play-runtime.log",
+      "bytes": 115,
+      "sha256": "9fa02c14826324d2e70ee9d1c381172fd8c6e9611f7389cfd48eec0a7df144b2"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_play-syntax.json",
+      "path": "first-fix-execution/professional_play-syntax.json",
+      "bytes": 498,
+      "sha256": "4b3ca7f8d1d2f67e43dfc18a827ea44935adacefc1c091729a86f857a5682d78"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_play-syntax.log",
+      "path": "first-fix-execution/professional_play-syntax.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_scene_disposal-runtime.json",
+      "path": "first-fix-execution/professional_scene_disposal-runtime.json",
+      "bytes": 499,
+      "sha256": "f40204d8a70927e92a11c0a7d123e9e8e5eddcc4f87ed39b86e5316fb91d796a"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_scene_disposal-runtime.log",
+      "path": "first-fix-execution/professional_scene_disposal-runtime.log",
+      "bytes": 2008,
+      "sha256": "b0a67001b6e0ab674a8564e7a66b99ecf247097d4d603d8ada959b937f798e63"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_scene_disposal-syntax.json",
+      "path": "first-fix-execution/professional_scene_disposal-syntax.json",
+      "bytes": 518,
+      "sha256": "5f94f7eb3a5ca9fcc7a34ce13ba5c7afa4cf13a2f3c2e6bd846c94c7eeba62fd"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_scene_disposal-syntax.log",
+      "path": "first-fix-execution/professional_scene_disposal-syntax.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_view_teardown-runtime.json",
+      "path": "first-fix-execution/professional_view_teardown-runtime.json",
+      "bytes": 497,
+      "sha256": "9b32f6a471597bcec780c23999340b0d1861af0a28b20e7c067a3e7bfa1ef44e"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/professional_view_teardown-runtime.log",
+      "path": "first-fix-execution/professional_view_teardown-runtime.log",
+      "bytes": 124,
+      "sha256": "07159dec6e5ae8d95ff29687b9903c95e597f8a01653f219781568c3084c7a96"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-disposal-fix-r01/receipt.json",
+      "path": "first-fix-execution/receipt.json",
+      "bytes": 4998,
+      "sha256": "1914b6270db19239585d5bf20760dd142acbccfdeae81cb7071933f04cccc7a3"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r01/inputs-after.json",
+      "path": "modes-failed-r01/inputs-after.json",
+      "bytes": 42934,
+      "sha256": "05346280edecc4cfbe80609960d706995e1672905350482a42ec6abed62e195f"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r01/inputs-before.json",
+      "path": "modes-failed-r01/inputs-before.json",
+      "bytes": 42934,
+      "sha256": "05346280edecc4cfbe80609960d706995e1672905350482a42ec6abed62e195f"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r01/professional_scene_modes_disposal-runtime.json",
+      "path": "modes-failed-r01/professional_scene_modes_disposal-runtime.json",
+      "bytes": 512,
+      "sha256": "aacbd37058e3b07cadac46a43a0ff5ffb0f02b1c5b4002a92d7c57690adb4763"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r01/professional_scene_modes_disposal-runtime.log",
+      "path": "modes-failed-r01/professional_scene_modes_disposal-runtime.log",
+      "bytes": 2601,
+      "sha256": "a4a06716d42fb191d16bda7c29a778e157132456146e952d14107c93176f8c0b"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r01/professional_scene_modes_disposal-syntax.json",
+      "path": "modes-failed-r01/professional_scene_modes_disposal-syntax.json",
+      "bytes": 530,
+      "sha256": "6a366aabda44d928579f335d70765a5bb238eb652787593ec0da110caa00ab12"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r01/professional_scene_modes_disposal-syntax.log",
+      "path": "modes-failed-r01/professional_scene_modes_disposal-syntax.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r01/receipt.json",
+      "path": "modes-failed-r01/receipt.json",
+      "bytes": 1636,
+      "sha256": "a97f5e64074c157ae713f159698dc62c22a7b23525ef092040006c4a20888304"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r02/inputs-after.json",
+      "path": "modes-corrected-r02/inputs-after.json",
+      "bytes": 42933,
+      "sha256": "477b3382c3a32310ec81707271e9b65c5bea05e0ce10986807fa4015365be269"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r02/inputs-before.json",
+      "path": "modes-corrected-r02/inputs-before.json",
+      "bytes": 42933,
+      "sha256": "477b3382c3a32310ec81707271e9b65c5bea05e0ce10986807fa4015365be269"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r02/professional_scene_modes_disposal-runtime.json",
+      "path": "modes-corrected-r02/professional_scene_modes_disposal-runtime.json",
+      "bytes": 511,
+      "sha256": "5aa42464ead118b6d111c40cd40719283929943600eafc32876e2b765d789c67"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r02/professional_scene_modes_disposal-runtime.log",
+      "path": "modes-corrected-r02/professional_scene_modes_disposal-runtime.log",
+      "bytes": 2995,
+      "sha256": "1a9ac8d1311cbdfcebe542decb1d07dbd70712a292d6448dd0b59b5f0c2a0396"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r02/professional_scene_modes_disposal-syntax.json",
+      "path": "modes-corrected-r02/professional_scene_modes_disposal-syntax.json",
+      "bytes": 530,
+      "sha256": "e6d188a977a2ae74aef2380eed8c3424da8640417e563bceff4ab2a5168e5d44"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r02/professional_scene_modes_disposal-syntax.log",
+      "path": "modes-corrected-r02/professional_scene_modes_disposal-syntax.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/scene-modes-r02/receipt.json",
+      "path": "modes-corrected-r02/receipt.json",
+      "bytes": 1666,
+      "sha256": "450e56ba7466fe8c73e7c84035dc22850cbb51e9081e3175b24ac645e1012933"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/run-scene-fix.cjs",
+      "path": "first-fix-execution/witness.cjs",
+      "bytes": 3685,
+      "sha256": "d8ce71fad0c09202d2f24e54b9145e5cacdb6e94caab01d61fd10ec183ef4945"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/run-scene-modes.cjs",
+      "path": "modes-failed-r01/witness.cjs",
+      "bytes": 3480,
+      "sha256": "8b58998e48e5ec717c61d0f34678c929320f82e32051c0d436f8222c9dfb74a9"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/run-scene-modes-r02.cjs",
+      "path": "modes-corrected-r02/witness.cjs",
+      "bytes": 3512,
+      "sha256": "62b7cf15af137cfd36c6bda2db7995a1dd2b312e0e9ec9a908c6a4ff8d0758f1"
+    },
+    {
+      "source": "build/professional-english/domain-scene-disposal-modes-r01/inputs.json",
+      "path": "modes-author-r01/inputs.json",
+      "bytes": 2425,
+      "sha256": "be3a8242157e173c2acdd3c744f03f7dfdc5892b92c1f41fd18a3ab0e6b44602"
+    },
+    {
+      "source": "build/professional-english/domain-scene-disposal-modes-r01/inventory.json",
+      "path": "modes-author-r01/inventory.json",
+      "bytes": 525,
+      "sha256": "9bdedb73be54de4eaa0a6ba8f0f5bf5ee4a542f8e0263ab7c54b7e52b885e06a"
+    },
+    {
+      "source": "build/professional-english/domain-scene-disposal-modes-r01/README.md",
+      "path": "modes-author-r01/README.md",
+      "bytes": 2665,
+      "sha256": "de8c15c82b44d980198817188c47946c6fddf69fafa11be32668705f1ef137bc"
+    },
+    {
+      "source": "build/professional-english/domain-scene-disposal-modes-r01/test-source.gd.txt",
+      "path": "modes-author-r01/test-source.gd.txt",
+      "bytes": 11004,
+      "sha256": "cf86ac8d35282b834986e962ef8f44360e06cd3eef56c2d1972731b90a7e9a13"
+    },
+    {
+      "source": "build/professional-english/domain-scene-disposal-modes-r02/preimage.gd",
+      "path": "modes-correction-r02/preimage.gd",
+      "bytes": 11004,
+      "sha256": "cf86ac8d35282b834986e962ef8f44360e06cd3eef56c2d1972731b90a7e9a13"
+    },
+    {
+      "source": "scripts/professional_play.gd",
+      "path": "final-sources/scripts/professional_play.gd",
+      "bytes": 9745,
+      "sha256": "e1af572288b804bb0fc51d98bb35926096cfd732da595170ab9c8247b0d6ee40"
+    },
+    {
+      "source": "scripts/game_ui.gd",
+      "path": "final-sources/scripts/game_ui.gd",
+      "bytes": 230621,
+      "sha256": "776b1c63cb6998e6968e76865093963a3900333f5f59786fe5bc34e46a9f7f49"
+    },
+    {
+      "source": "scripts/jelly_match.gd",
+      "path": "final-sources/scripts/jelly_match.gd",
+      "bytes": 64700,
+      "sha256": "93f14e2977850958ad94d9d1bacc232974ce0c63fc648d6585b3e158e31a6627"
+    },
+    {
+      "source": "tests/godot/professional_scene_modes_disposal_tests.gd",
+      "path": "final-sources/tests/professional_scene_modes_disposal_tests.gd",
+      "bytes": 9027,
+      "sha256": "37468edf3eeffca941f9e987ecfc6cafcace3a494a3ac27d9e486263b4921d44"
+    },
+    {
+      "source": "tools/run-tests.cjs",
+      "path": "runner-registration-r02/run-tests.cjs",
+      "bytes": 8857,
+      "sha256": "336ff3d146c6dd81706f2b6ba82ae678b5f10d549812a00f99ade8fbf3f1f4fe"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/runner-registration-r02/execution.log",
+      "path": "runner-registration-r02/execution/execution.log",
+      "bytes": 496,
+      "sha256": "396a85292016195047e7f880f489473cbe6cc77222d481b102fa07a8e91a6e06"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-integration-r01/runner-registration-r02/receipt.json",
+      "path": "runner-registration-r02/execution/receipt.json",
+      "bytes": 1174,
+      "sha256": "e07ae3ccdca4568cdb2dcdce242d7830f34c6dd6a35bbf26ebb5b808097a8196"
+    }
+  ]
+}

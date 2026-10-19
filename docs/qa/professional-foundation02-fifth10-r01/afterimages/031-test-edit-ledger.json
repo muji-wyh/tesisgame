@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "status": "scratch_afterimages_not_executed",
+  "files": [
+    {
+      "path": "tests/professional-content.test.cjs",
+      "edits": [
+        {
+          "name": "whole fifth-ten boundary before fourth-ten",
+          "occurrences": 1,
+          "before": "function beforeFoundation02FourthLanguage(entry) {",
+          "after": "const foundation02FifthLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-language-fifth10-2026-10-17.json'), 'utf8'));\nfunction beforeFoundation02FifthLanguage(entry) {\n  const patches = foundation02FifthLanguageRecord.patches.filter(patch => patch.id === entry.id);\n  if (!patches.length) return entry;\n  assert.equal(patches.length, 1);\n  const patch = patches[0];\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact fifth-ten language and metadata');\n  return structuredClone(patch.before);\n}\nfunction beforeFoundation02FifthSources(sources) {\n  const additions = foundation02FifthLanguageRecord.sources;\n  assert.equal(additions.length, 16);\n  assert.equal(new Set(additions.map(row => row.id)).size, 16);\n  assert.deepEqual(sources.slice(-16), additions, 'Exact fifth-ten sixteen-source suffix required');\n  const prefix = sources.slice(0, -16);\n  for (const addition of additions) assert.equal(prefix.some(row => row.id === addition.id), false);\n  return prefix;\n}\nfunction fifthLanguageHash(value) {\n  return require('node:crypto').createHash('sha256').update(JSON.stringify(value)).digest('hex');\n}\nfunction verifyFifthLanguageDonors(registry, readHistory) {\n  const rows = foundation02FifthLanguageRecord.history.rows;\n  assert.equal(rows.length, 50);\n  assert.equal(new Set(rows.map(row => row.history_path + '/' + row.id)).size, 50);\n  for (const expected of rows) {\n    const historical = readHistory(expected.history_path).protected_context.lexemes;\n    assert.equal(expected.exact_count, 1);\n    assert.equal(historical.filter(row => row.entry.id === expected.id).length, 1);\n    const actual = historical[expected.index];\n    assert.deepEqual(actual, expected.whole_row);\n    assert.equal(fifthLanguageHash(actual), expected.whole_row_json_sha256);\n    assert.equal(fifthLanguageHash(actual.entry), actual.json_sha256);\n    assert.equal(registry.lexemeOrigins[expected.id], actual.resource);\n    assert.deepEqual(beforeFoundation02FifthLanguage(registry.lexemes.find(entry => entry.id === expected.id)), actual.entry);\n  }\n}\nfunction beforeFoundation02FourthLanguage(entry) {\n  entry = beforeFoundation02FifthLanguage(entry);"
+        },
+        {
+          "name": "exact fifth-ten suffix before fourth-ten suffix",
+          "occurrences": 1,
+          "before": "function beforeFoundation02FourthSources(sources) {",
+          "after": "function beforeFoundation02FourthSources(sources) {\n  sources = beforeFoundation02FifthSources(sources);"
+        },
+        {
+          "name": "accepted Foundation ID set",
+          "occurrences": 1,
+          "before": "...foundation02FourthLanguageRecord.patches].map(item => item.id)",
+          "after": "...foundation02FourthLanguageRecord.patches, ...foundation02FifthLanguageRecord.patches].map(item => item.id)"
+        },
+        {
+          "name": "live measured reviewed count",
+          "occurrences": 1,
+          "before": "assert.equal(result.summary.reviewed_lexemes, 148);",
+          "after": "assert.equal(result.summary.reviewed_lexemes, foundation02FifthLanguageRecord.counts.after.reviewed_status);"
+        },
+        {
+          "name": "fourth-ten source suffix remains exact",
+          "occurrences": 1,
+          "before": "assert.deepEqual(source.sources.slice(-20),r.sources);",
+          "after": "assert.deepEqual(beforeFoundation02FifthSources(source.sources).slice(-20),r.sources);"
+        },
+        {
+          "name": "fourth-ten all-other bag collection keeps lexical history",
+          "occurrences": 1,
+          "before": "hash(shoppingBagHistoryLexemes().filter(entry=>!ids.has(entry.id)))",
+          "after": "hash(shoppingBagHistoryLexemes().map(beforeFoundation02FifthLanguage).filter(entry=>!ids.has(entry.id)))"
+        },
+        {
+          "name": "fourth-ten historical counts",
+          "occurrences": 1,
+          "before": "assert.equal(source.lexemes.filter(entry=>entry.review.status==='reviewed').length,148);assert.equal(source.lexemes.filter(entry=>entry.review.language==='reviewed').length,335);",
+          "after": "assert.equal(source.lexemes.map(beforeFoundation02FifthLanguage).filter(entry=>entry.review.status==='reviewed').length,148);assert.equal(source.lexemes.map(beforeFoundation02FifthLanguage).filter(entry=>entry.review.language==='reviewed').length,335);"
+        },
+        {
+          "name": "fourth-ten historical module count",
+          "occurrences": 1,
+          "before": "source.lexemes.filter(entry=>source.lexemeOrigins[entry.id]==='res://data/professional/lexemes/foundation-module02.json'&&entry.review.language==='reviewed').length,36",
+          "after": "source.lexemes.map(beforeFoundation02FifthLanguage).filter(entry=>source.lexemeOrigins[entry.id]==='res://data/professional/lexemes/foundation-module02.json'&&entry.review.language==='reviewed').length,36"
+        },
+        {
+          "name": "fourth-ten historical audit restores bag once",
+          "occurrences": 1,
+          "before": "const audit=auditProfessionalContent({data:source});assert.equal(audit.summary.reviewed_lexemes,148);",
+          "after": "const historical={...source,lexemes:shoppingBagHistoryLexemes().map(beforeFoundation02FifthLanguage),sources:beforeFoundation02FifthSources(source.sources)};const audit=auditProfessionalContent({data:historical});assert.equal(audit.summary.reviewed_lexemes,148);"
+        },
+        {
+          "name": "third-ten negative still mutates third-ten suffix",
+          "occurrences": 1,
+          "before": "const badSources=structuredClone(source.sources);badSources.at(-21).scope+=' Drift.';assert.throws(()=>beforeFoundation02ThirdSources(badSources));",
+          "after": "const badSources=structuredClone(source.sources);badSources.at(-(foundation02FifthLanguageRecord.sources.length+21)).scope+=' Drift.';assert.throws(()=>beforeFoundation02ThirdSources(badSources));"
+        },
+        {
+          "name": "fourth-ten negative still mutates fourth-ten suffix",
+          "occurrences": 1,
+          "before": "const badSources=structuredClone(source.sources);badSources.at(-1).scope+=' Drift.';assert.throws(()=>beforeFoundation02FourthSources(badSources));assert.throws(()=>beforeFoundation02ThirdSources(badSources));",
+          "after": "const badSources=structuredClone(source.sources);badSources.at(-(foundation02FifthLanguageRecord.sources.length+1)).scope+=' Drift.';assert.throws(()=>beforeFoundation02FourthSources(badSources));assert.throws(()=>beforeFoundation02ThirdSources(badSources));"
+        }
+      ],
+      "appended_tests": 5,
+      "native": false
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "edits": [
+        {
+          "name": "whole fifth-ten boundary before fourth-ten",
+          "occurrences": 1,
+          "before": "function beforeFoundation02FourthLanguage(entry) {",
+          "after": "const foundation02FifthLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module02-language-fifth10-2026-10-17.json'), 'utf8'));\nfunction beforeFoundation02FifthLanguage(entry) {\n  const patches = foundation02FifthLanguageRecord.patches.filter(patch => patch.id === entry.id);\n  if (!patches.length) return entry;\n  assert.equal(patches.length, 1);\n  const patch = patches[0];\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact fifth-ten language and metadata');\n  return structuredClone(patch.before);\n}\nfunction beforeFoundation02FifthSources(sources) {\n  const additions = foundation02FifthLanguageRecord.sources;\n  assert.equal(additions.length, 16);\n  assert.equal(new Set(additions.map(row => row.id)).size, 16);\n  assert.deepEqual(sources.slice(-16), additions, 'Exact fifth-ten sixteen-source suffix required');\n  const prefix = sources.slice(0, -16);\n  for (const addition of additions) assert.equal(prefix.some(row => row.id === addition.id), false);\n  return prefix;\n}\nfunction fifthLanguageHash(value) {\n  return require('node:crypto').createHash('sha256').update(JSON.stringify(value)).digest('hex');\n}\nfunction verifyFifthLanguageDonors(registry, readHistory) {\n  const rows = foundation02FifthLanguageRecord.history.rows;\n  assert.equal(rows.length, 50);\n  assert.equal(new Set(rows.map(row => row.history_path + '/' + row.id)).size, 50);\n  for (const expected of rows) {\n    const historical = readHistory(expected.history_path).protected_context.lexemes;\n    assert.equal(expected.exact_count, 1);\n    assert.equal(historical.filter(row => row.entry.id === expected.id).length, 1);\n    const actual = historical[expected.index];\n    assert.deepEqual(actual, expected.whole_row);\n    assert.equal(fifthLanguageHash(actual), expected.whole_row_json_sha256);\n    assert.equal(fifthLanguageHash(actual.entry), actual.json_sha256);\n    assert.equal(registry.lexemeOrigins[expected.id], actual.resource);\n    assert.deepEqual(beforeFoundation02FifthLanguage(registry.lexemes.find(entry => entry.id === expected.id)), actual.entry);\n  }\n}\nfunction beforeFoundation02FourthLanguage(entry) {\n  entry = beforeFoundation02FifthLanguage(entry);"
+        },
+        {
+          "name": "exact fifth-ten suffix before fourth-ten suffix",
+          "occurrences": 1,
+          "before": "function beforeFoundation02FourthSources(sources) {",
+          "after": "function beforeFoundation02FourthSources(sources) {\n  sources = beforeFoundation02FifthSources(sources);"
+        }
+      ],
+      "appended_tests": 2,
+      "native": false
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "edits": [
+        {
+          "name": "media fifth-ten helpers before separate bag helper",
+          "occurrences": 1,
+          "before": "function beforeShoppingBagImage(entry) {",
+          "after": "const foundation02FifthLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module02-language-fifth10-2026-10-17.json'), 'utf8'));\nfunction beforeFoundation02FifthLanguage(entry) {\n  const patches = foundation02FifthLanguageRecord.patches.filter(patch => patch.id === entry.id);\n  if (!patches.length) return entry;\n  assert.equal(patches.length, 1);\n  const patch = patches[0];\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact fifth-ten language and metadata');\n  return structuredClone(patch.before);\n}\nfunction beforeFoundation02FifthSources(sources) {\n  const additions = foundation02FifthLanguageRecord.sources;\n  assert.equal(additions.length, 16);\n  assert.equal(new Set(additions.map(row => row.id)).size, 16);\n  assert.deepEqual(sources.slice(-16), additions, 'Exact fifth-ten sixteen-source suffix required');\n  const prefix = sources.slice(0, -16);\n  for (const addition of additions) assert.equal(prefix.some(row => row.id === addition.id), false);\n  return prefix;\n}\nfunction fifthLanguageHash(value) {\n  return require('node:crypto').createHash('sha256').update(JSON.stringify(value)).digest('hex');\n}\nfunction verifyFifthLanguageDonors(registry, readHistory) {\n  const rows = foundation02FifthLanguageRecord.history.rows;\n  assert.equal(rows.length, 50);\n  assert.equal(new Set(rows.map(row => row.history_path + '/' + row.id)).size, 50);\n  for (const expected of rows) {\n    const historical = readHistory(expected.history_path).protected_context.lexemes;\n    assert.equal(expected.exact_count, 1);\n    assert.equal(historical.filter(row => row.entry.id === expected.id).length, 1);\n    const actual = historical[expected.index];\n    assert.deepEqual(actual, expected.whole_row);\n    assert.equal(fifthLanguageHash(actual), expected.whole_row_json_sha256);\n    assert.equal(fifthLanguageHash(actual.entry), actual.json_sha256);\n    assert.equal(registry.lexemeOrigins[expected.id], actual.resource);\n    assert.deepEqual(beforeFoundation02FifthLanguage(registry.lexemes.find(entry => entry.id === expected.id)), actual.entry);\n  }\n}\nfunction beforeShoppingBagImage(entry) {"
+        },
+        {
+          "name": "bag-time other-lexeme history",
+          "occurrences": 1,
+          "before": "hash(data.lexemes.filter(entry=>entry.id!=='shopping-bag.goods-carrier.n'))",
+          "after": "hash(data.lexemes.map(beforeFoundation02FifthLanguage).filter(entry=>entry.id!=='shopping-bag.goods-carrier.n'))"
+        },
+        {
+          "name": "bag-time source history only",
+          "occurrences": 1,
+          "before": "for(const key of ['catalog','courses','expressions','sources','themes','lexemeOrigins','expressionOrigins'])assert.equal(hash(data[key]),c[key+'_json_sha256'],key);",
+          "after": "for(const key of ['catalog','courses','expressions','sources','themes','lexemeOrigins','expressionOrigins'])assert.equal(hash(key==='sources'?beforeFoundation02FifthSources(data.sources):data[key]),c[key+'_json_sha256'],key);"
+        }
+      ],
+      "appended_tests": 1,
+      "native": false
+    },
+    {
+      "path": "tests/godot/professional_retail_morphology_tests.gd",
+      "edits": [
+        {
+          "name": "native runner fifth-ten call",
+          "occurrences": 1,
+          "before": "\t_check_foundation02_fourth_language()",
+          "after": "\t_check_foundation02_fourth_language()\n\t_check_foundation02_fifth_language()"
+        },
+        {
+          "name": "native fourth-ten reaches fifth-ten once",
+          "occurrences": 1,
+          "before": "func _f02f_reverse(entry: Dictionary) -> Dictionary:\n",
+          "after": "func _f02f_reverse(entry: Dictionary) -> Dictionary:\n\tvar fifth_language: Dictionary = _f02_fifth_reverse(entry)\n\tif not fifth_language.ok:\n\t\treturn {\"ok\": false}\n\tentry = fifth_language.entry\n"
+        }
+      ],
+      "appended_tests": 1,
+      "native": true
+    }
+  ]
+}

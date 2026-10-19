@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "status": "frozen_undispatched_sources_final_binding_unbound",
+  "files": [
+    {
+      "path": "BINDING-CONTRACT.md",
+      "bytes": 7942,
+      "raw_sha256": "6801bc017e13c37d963aefd14065b6d096de1031d1bc2b498c6a9d1be8fa1886"
+    },
+    {
+      "path": "CALL-GRAPH.md",
+      "bytes": 3633,
+      "raw_sha256": "1bc79f6ba80f61799e73f1683f97e95e7a4f00dac31652f85f56b0485e40be0f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3817,
+      "raw_sha256": "912eab6904f2db36bdd3e27165da9dd13a9390f6dbb88afd8d93f603293b9ace"
+    },
+    {
+      "path": "accepted-contract.json",
+      "bytes": 414984,
+      "raw_sha256": "e930b6e65c44daa4ab27b44523241edc41e10942d92b25f2254f47073acd2235"
+    },
+    {
+      "path": "actual-baseline-binding.template.json",
+      "bytes": 671,
+      "raw_sha256": "4e918929f6222881440afa5c4cd3412d9bc1c43ed9a0887793fa43960ef7e2b9"
+    },
+    {
+      "path": "author-observations.json",
+      "bytes": 43657,
+      "raw_sha256": "c6afb0acba234b42762447169f94547cd21aebba44467b9a5dbc0cb133586012"
+    },
+    {
+      "path": "binding.cjs",
+      "bytes": 8080,
+      "raw_sha256": "90f45769c16ba4e6e40bb7fd177e7906dc4c141d70b7c616bca3dbe76caba703"
+    },
+    {
+      "path": "context-contract.json",
+      "bytes": 1751439,
+      "raw_sha256": "5cf815fb77ebdc45325063e40eb2b1940718e721ed18f46f347277689dd2993a"
+    },
+    {
+      "path": "donor-row-contract.json",
+      "bytes": 224067,
+      "raw_sha256": "119814498724b14dd5d272a005ecdcc19f646651d321dd78dcafef0fe1c3d638"
+    },
+    {
+      "path": "prepare.cjs",
+      "bytes": 7472,
+      "raw_sha256": "0d736bb531a7ab9dbe767e78015881a5d994f057958bd1b53ad17a28bc97fcf1"
+    },
+    {
+      "path": "projection.cjs",
+      "bytes": 15663,
+      "raw_sha256": "27794f6f3cde0a2e1e5185813e496502c1385a00ddc760f135a2c339810d6302"
+    },
+    {
+      "path": "root-input.template.json",
+      "bytes": 432,
+      "raw_sha256": "8d0ec8e557e750a1874774be3aad2ab5792a80a7ef743aae3a1023da17b25b42"
+    },
+    {
+      "path": "test-transforms.cjs",
+      "bytes": 27566,
+      "raw_sha256": "e2812802f2146bfe63fcb346db6ee49c2dc1523176d1d28ce03255d34deafd37"
+    }
+  ],
+  "baseline_bound": false,
+  "actual_bag_success_selected": false,
+  "source_modules_imported": false,
+  "syntax_checks_run": false,
+  "preparation_dispatched": false,
+  "project_tests_run": false,
+  "native_browser_build_probe_run": false,
+  "production_or_shared_tests_written": false,
+  "inventory_self_excluded": true
+}

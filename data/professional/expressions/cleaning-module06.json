@@ -1,0 +1,1835 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.cleaning_facilities.module06.01",
+      "text": "The cleaning schedule states the cleaning frequency, while the cleaning checklist records the required checks.",
+      "meaning": "Distinguish planned timing from a checking aid.",
+      "context": "Reviewing work records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "cleaning",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "schedule",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "states",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "cleaning",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "frequency",
+          "start": 42,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "while",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "cleaning",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "checklist",
+          "start": 72,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "records",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "required",
+          "start": 94,
+          "end": 102
+        },
+        {
+          "index": 15,
+          "text": "checks",
+          "start": 103,
+          "end": 109
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "cleaning-schedule.planned-cleaning-task-record.n",
+        "cleaning-frequency.how-often-cleaning-is-planned-or-carried-out.n",
+        "cleaning-checklist.list-used-to-check-cleaning-tasks-or-results.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module06.02",
+      "text": "The specification and service-level agreement define the scope; the service standard still needs clarification before inspection.",
+      "meaning": "Clarify requirements before reviewing results.",
+      "context": "Discussing a service arrangement.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "specification",
+          "start": 4,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "service-level",
+          "start": 22,
+          "end": 35
+        },
+        {
+          "index": 4,
+          "text": "agreement",
+          "start": 36,
+          "end": 45
+        },
+        {
+          "index": 5,
+          "text": "define",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 7,
+          "text": "scope",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "service",
+          "start": 68,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": "standard",
+          "start": 76,
+          "end": 84
+        },
+        {
+          "index": 12,
+          "text": "still",
+          "start": 85,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": "needs",
+          "start": 91,
+          "end": 96
+        },
+        {
+          "index": 14,
+          "text": "clarification",
+          "start": 97,
+          "end": 110
+        },
+        {
+          "index": 15,
+          "text": "before",
+          "start": 111,
+          "end": 117
+        },
+        {
+          "index": 16,
+          "text": "inspection",
+          "start": 118,
+          "end": 128
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 128,
+          "end": 129
+        }
+      ],
+      "focus_lexeme_ids": [
+        "specification.detailed-system-description.n",
+        "service-level-agreement.service-commitment-agreement.n",
+        "service-standard.expected-service-quality.n",
+        "inspection.careful-condition-check.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module06.03",
+      "text": "This service request concerns room status and room turnaround within the agreed service window.",
+      "meaning": "Describe a room-service request and its timing.",
+      "context": "Coordinating an accommodation cleaning visit.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "service",
+          "start": 5,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "request",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "concerns",
+          "start": 21,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "room",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "status",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "room",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "turnaround",
+          "start": 51,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "within",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "agreed",
+          "start": 73,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "service",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "window",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "service-request.request-for-defined-service-or-standard-assistance.n",
+        "room-status.recorded-state-of-guest-room.n",
+        "room-turnaround.process-or-time-of-preparing-room-for-next-use.n",
+        "service-window.agreed-period-when-service-may-take-place.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module06.04",
+      "text": "Could you clarify the scope of routine cleaning, periodic cleaning, deep cleaning, and spot cleaning for this site?",
+      "meaning": "Ask how local cleaning categories are defined.",
+      "context": "Reviewing site terminology.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "clarify",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "scope",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 28,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "routine",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "cleaning",
+          "start": 39,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "periodic",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "cleaning",
+          "start": 58,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "deep",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "cleaning",
+          "start": 73,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "spot",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": "cleaning",
+          "start": 92,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": "for",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 19,
+          "text": "this",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 20,
+          "text": "site",
+          "start": 110,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": "?",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "routine-cleaning.regular-cleaning-within-usual-task-scope.n",
+        "periodic-cleaning.cleaning-planned-at-specified-intervals.n",
+        "deep-cleaning.more-extensive-cleaning-than-routine-scope.n",
+        "spot-cleaning.cleaning-limited-to-specific-mark-or-small-area.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module06.05",
+      "text": "The contact time, dilution, and surface compatibility must come from the applicable product information and qualified guidance.",
+      "meaning": "Request the relevant information without supplying a method.",
+      "context": "Discussing an unresolved product query.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "contact",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "time",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "dilution",
+          "start": 18,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "surface",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "compatibility",
+          "start": 40,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "must",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "come",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "from",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "applicable",
+          "start": 73,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "product",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "information",
+          "start": 92,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "qualified",
+          "start": 108,
+          "end": 117
+        },
+        {
+          "index": 18,
+          "text": "guidance",
+          "start": 118,
+          "end": 126
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 126,
+          "end": 127
+        }
+      ],
+      "focus_lexeme_ids": [
+        "contact-time.time-product-remains-in-contact-under-stated-conditions.n",
+        "dilution.reduction-of-concentration-by-adding-diluent.n",
+        "surface-compatibility.suitability-of-product-or-method-for-surface-material.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module06.06",
+      "text": "The cleaning solution has a stated product concentration; color coding alone does not establish protection against cross-contamination.",
+      "meaning": "Distinguish technical information from a local visual label.",
+      "context": "Clarifying product information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "cleaning",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "solution",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "has",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "stated",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "product",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "concentration",
+          "start": 43,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "color",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "coding",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "alone",
+          "start": 71,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "does",
+          "start": 77,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "not",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "establish",
+          "start": 86,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "protection",
+          "start": 96,
+          "end": 106
+        },
+        {
+          "index": 16,
+          "text": "against",
+          "start": 107,
+          "end": 114
+        },
+        {
+          "index": 17,
+          "text": "cross-contamination",
+          "start": 115,
+          "end": 134
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 134,
+          "end": 135
+        }
+      ],
+      "focus_lexeme_ids": [
+        "cleaning-solution.surface-cleaning-liquid.n",
+        "product-concentration.proportion-of-specified-substance-in-product.n",
+        "color-coding.use-of-colors-to-distinguish-categories.n",
+        "cross-contamination.unwanted-material-transfer.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module06.07",
+      "text": "The waste stream and waste segregation depend on local arrangements; general waste and recyclable material need clear labels.",
+      "meaning": "Clarify waste categories without classifying an actual item.",
+      "context": "Reviewing a local collection scheme.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "waste",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "stream",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "waste",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "segregation",
+          "start": 27,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "depend",
+          "start": 39,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "on",
+          "start": 46,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "local",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "arrangements",
+          "start": 55,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "general",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "waste",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "recyclable",
+          "start": 87,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": "material",
+          "start": 98,
+          "end": 106
+        },
+        {
+          "index": 16,
+          "text": "need",
+          "start": 107,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": "clear",
+          "start": 112,
+          "end": 117
+        },
+        {
+          "index": 18,
+          "text": "labels",
+          "start": 118,
+          "end": 124
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "waste-stream.category-or-flow-of-waste-managed-together.n",
+        "waste-segregation.separation-of-waste-into-defined-categories.n",
+        "general-waste.waste-collected-in-residual-local-category.n",
+        "recyclable-material.material-capable-of-being-processed-into-new-products.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module06.08",
+      "text": "The waste transfer note concerns non-hazardous business waste; a hazardous waste question requires the appropriate specialist.",
+      "meaning": "Distinguish a document's scope from another waste category.",
+      "context": "Discussing a UK-context record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "waste",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "transfer",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "note",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "concerns",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "non-hazardous",
+          "start": 33,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": "business",
+          "start": 47,
+          "end": 55
+        },
+        {
+          "index": 7,
+          "text": "waste",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "hazardous",
+          "start": 65,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "waste",
+          "start": 75,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "question",
+          "start": 81,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": "requires",
+          "start": 90,
+          "end": 98
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 15,
+          "text": "appropriate",
+          "start": 103,
+          "end": 114
+        },
+        {
+          "index": 16,
+          "text": "specialist",
+          "start": 115,
+          "end": 125
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 125,
+          "end": 126
+        }
+      ],
+      "focus_lexeme_ids": [
+        "waste-transfer-note.document-recording-transfer-of-non-hazardous-business-waste.n",
+        "hazardous-waste.waste-classified-as-hazardous-under-applicable-rules.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module06.09",
+      "text": "The linen request lists bedding, a pillowcase, a duvet cover, a bath towel, and a hand towel.",
+      "meaning": "Identify textile categories and particular requested items.",
+      "context": "Reviewing a fictional linen request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "linen",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "request",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "lists",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "bedding",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "pillowcase",
+          "start": 35,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "duvet",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "cover",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "a",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 14,
+          "text": "bath",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 15,
+          "text": "towel",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 74,
+          "end": 75
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 18,
+          "text": "a",
+          "start": 80,
+          "end": 81
+        },
+        {
+          "index": 19,
+          "text": "hand",
+          "start": 82,
+          "end": 86
+        },
+        {
+          "index": 20,
+          "text": "towel",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 92,
+          "end": 93
+        }
+      ],
+      "focus_lexeme_ids": [
+        "linen.household-textile-items-such-as-sheets-and-towels.n",
+        "bedding.textile-items-used-on-bed.n",
+        "pillowcase.removable-cover-for-pillow.n",
+        "duvet-cover.removable-fabric-cover-for-duvet.n",
+        "bath-towel.large-towel-for-drying-body-after-bathing.n",
+        "hand-towel.small-towel-for-drying-hands.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module06.10",
+      "text": "The care label and laundry cycle need review for this wash load, and the lost property record remains separate.",
+      "meaning": "Clarify fabric information and unrelated found-item records.",
+      "context": "Coordinating laundry communication.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "care",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "label",
+          "start": 9,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "laundry",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "cycle",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "need",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "review",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "for",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "wash",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "load",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "lost",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 16,
+          "text": "property",
+          "start": 78,
+          "end": 86
+        },
+        {
+          "index": 17,
+          "text": "record",
+          "start": 87,
+          "end": 93
+        },
+        {
+          "index": 18,
+          "text": "remains",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "index": 19,
+          "text": "separate",
+          "start": 102,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 110,
+          "end": 111
+        }
+      ],
+      "focus_lexeme_ids": [
+        "care-label.fabric-care-tag.n",
+        "laundry-cycle.defined-sequence-performed-by-laundry-machine.n",
+        "wash-load.items-washed-together-in-one-machine-cycle.n",
+        "lost-property.belongings-left-behind-or-reported-missing.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

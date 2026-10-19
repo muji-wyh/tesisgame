@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "stage": "sources",
+  "ok": true,
+  "scope": "Scratch source/composition probe only. No production, test, curriculum or review-gate writes.",
+  "native_runner": "tools/run-godot.cjs::runGodot",
+  "native_timeout_ms": 60000,
+  "native_args": [
+    "--path",
+    ".",
+    "--rendering-method",
+    "gl_compatibility",
+    "--audio-driver",
+    "Dummy",
+    "--script",
+    "res://build/professional-english/retail-term-art-review/checkout-r01/inspect-sources.gd"
+  ],
+  "duration_ms": 5658,
+  "script_sha256": "1a94177d1c8e3064977fb461724a634e739861c25ffb7de13c63a4de55cd2f08",
+  "source_record_sha256": "ea4f1e66fb38f55ea908a6d52c69bbddea86ae62dceaf232d6b22bc62f59fe91",
+  "report_sha256": "c7ce7596f86dd9195beeeba97628f337ca3942f720053695ac078e339f35ebda",
+  "log_sha256": "e895a50201c572e6002561d37bd85900b287b5cba8a716402bb25262e8cf1773",
+  "guarded_production_files": 658,
+  "source_original_and_retained_files": 48,
+  "native_error": null,
+  "guard_error": null
+}

@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "status": "frozen_unbound_nine_language_delivery_inventory",
+  "files": [
+    {
+      "path": "delivery-lib.cjs",
+      "raw_sha256": "7e10d25e5982253a05bd2994c64245f85a456e2384d03ea8a792112a24d6d987"
+    },
+    {
+      "path": "prepare-delivery.cjs",
+      "raw_sha256": "11ce14b96cc322f28249b0b4e63b77c69f7d35214b08d93b23d3513d2719ae5c"
+    },
+    {
+      "path": "dry-run.cjs",
+      "raw_sha256": "2d5bd6db9789742257e96a7f03abc4f548380d6f0abe38a513e499aac84af0e8"
+    },
+    {
+      "path": "persisted-test-transforms.cjs",
+      "raw_sha256": "57e44585bc412f9af6c9ea1fd69662fbfa16394502505e2e634d0fe91c25a45e"
+    },
+    {
+      "path": "bind-current-baseline.cjs",
+      "raw_sha256": "eb9c146e6a6b9ae56e3e1faa20f4302402a3bac122fb50ed89b6a1b63cfaac8a"
+    },
+    {
+      "path": "integrate-reviewed.cjs",
+      "raw_sha256": "4a8f8f14027b00a7d9fedc93d3befa21eb5eade3977c6d4ece596bdd7633cf99"
+    },
+    {
+      "path": "update-persisted-tests.cjs",
+      "raw_sha256": "0bf82a057438d016886e9818a6d3cd52b23b2e00c285be5af8f6d635ac9309d0"
+    },
+    {
+      "path": "guarded-transaction.cjs",
+      "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6"
+    },
+    {
+      "path": "transaction-plan.cjs",
+      "raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2"
+    },
+    {
+      "path": "helper-origin.json",
+      "raw_sha256": "27d5dd2d62ed8cfdae225489fc059a2cb774122a42c7343e7257886ccfc73a3a"
+    },
+    {
+      "path": "delivery-origin.json",
+      "raw_sha256": "291a5d61b6f9bb12b6d7ca455b0480c578fd26caf6f9586298626ad7c9146f2d"
+    },
+    {
+      "path": "HANDOFF.md",
+      "raw_sha256": "48ec9d9e61535519bbd8de0b20a43dc7d932a41b2ca67bd7b36c337af8b2df0d"
+    },
+    {
+      "path": "INTEGRATION.md",
+      "raw_sha256": "d16ecec49680ce557b325dcbc0b3325567d0f1f843a17d2defd8143496292553"
+    },
+    {
+      "path": "delivery-proposal.json",
+      "raw_sha256": "6fb18cedd0ee36801a102fdaf5aae384d6511c5bb5b500904bbebaf5f34babea"
+    },
+    {
+      "path": "durable-provenance-draft.json",
+      "raw_sha256": "6a6f920effae5a00dd5fc325629fd351482ec58cfe659d6d74ee6b0b8f7b6a8c"
+    },
+    {
+      "path": "test-impact-review.json",
+      "raw_sha256": "65f238c9b702a7573e00f34b005e4e04cce604688a913081017a95b2294061c0"
+    },
+    {
+      "path": "scratch-preview-receipt.json",
+      "raw_sha256": "e8133f9c2cc17ab286ab5349c542f05874a42a372dbdd9cf90d92cf295f35663"
+    },
+    {
+      "path": "preparation-receipt.json",
+      "raw_sha256": "36dc714329a93257f8180c9756b9c9cb210c780b85a532661cf5a567628ff702"
+    },
+    {
+      "path": "preview/tests/professional-content.test.cjs",
+      "raw_sha256": "259766e1f958cb77932b9e393baf67f6ca8cfcd71c0fd3c400634a6d6df974a0"
+    },
+    {
+      "path": "preview/tests/professional-retail-morphology.test.cjs",
+      "raw_sha256": "c1a9d9525926675f595ddf1dad5f2d35f653f59f5377ded5277d3146e469fcef"
+    }
+  ],
+  "inventory_excludes_itself": true
+}

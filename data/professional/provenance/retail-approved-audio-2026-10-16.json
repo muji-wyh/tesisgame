@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "status": "integrated_and_technically_validated",
+  "integrated_on": "2026-10-16",
+  "approval": "docs/assets/sources/professional-retail-ava/listening-approval-2026-10-16.json",
+  "approval_sha256": "765516673022eb2ff31da567d488284c3c92f511b3ad23688ff556cb34e484f2",
+  "historical_acquisition_sha256": "60792dfaa7c580c6981901c6bce04626cf0ae2d57a0bd0edd66bf81a304a232c",
+  "lexeme_file": "data/professional/lexemes/retail-pilot.json",
+  "before_sha256": "934085490a99ed68fe38668ce870d6f16534fb929c0f2c7946c38ee2e2c64876",
+  "after_sha256": "b7fd5f2d96339ee1bcb0eaf48bcf8b0d6b2dbaf1f011c339cf5d9399a9e80cb2",
+  "scope": "Only the two exact user-approved audio descriptors and immutable WAV copies. No language, morphology, domain, image, curriculum, or theme gate is promoted.",
+  "patches": [
+    {
+      "sense_id": "aisle.passage.n",
+      "before_audio": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "after_audio": {
+        "status": "integrated",
+        "path": "res://professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+        "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+        "source": "res://docs/assets/sources/professional-retail-ava/acquisition.json",
+        "creator": "Microsoft Ava Neural; original project texts",
+        "license": "Microsoft Services Agreement applies to synthesized output; the client LGPL license does not confer separate rights to speech. No additional license claim.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact sample listening approval in tesis-iter-2; provenance: listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "protected_fields_sha256": "a51f2c02d63dfcfbde521b90c114db6c8115594704b1ac5ed66864eb5764462b",
+      "resource": {
+        "id": "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+        "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+        "path": "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+        "kind": "audio",
+        "format": "wav",
+        "compressed_bytes": 82598,
+        "decoded_bytes": 82554,
+        "frames": 41277,
+        "channels": 1,
+        "sample_rate": 22050
+      }
+    },
+    {
+      "sense_id": "cash-register.sales-device.n",
+      "before_audio": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "after_audio": {
+        "status": "integrated",
+        "path": "res://professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+        "sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763",
+        "source": "res://docs/assets/sources/professional-retail-ava/acquisition.json",
+        "creator": "Microsoft Ava Neural; original project texts",
+        "license": "Microsoft Services Agreement applies to synthesized output; the client LGPL license does not confer separate rights to speech. No additional license claim.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact sample listening approval in tesis-iter-2; provenance: listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "protected_fields_sha256": "1211d963c370f14bfdeb8c9dc1a2280dfdac8089005253c8579cd36368634375",
+      "resource": {
+        "id": "sha256:0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763",
+        "sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763",
+        "path": "professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+        "kind": "audio",
+        "format": "wav",
+        "compressed_bytes": 82598,
+        "decoded_bytes": 82554,
+        "frames": 41277,
+        "channels": 1,
+        "sample_rate": 22050
+      }
+    }
+  ],
+  "validation": {
+    "date": "2026-10-16",
+    "native": {
+      "command": "node tools/run-godot.cjs --headless --path . --script res://tests/godot/professional_approved_audio_tests.gd",
+      "checks": 29,
+      "failures": 0,
+      "decoded_bytes": 165108,
+      "final_resident_bytes": 0,
+      "final_leases": 0
+    },
+    "node": {
+      "approved_audio": 2,
+      "professional_generator": 4,
+      "existing_voice_generator": 17,
+      "focused_retail_content": 15,
+      "runner_inventory": 4
+    },
+    "existing_voice_recordings_verified": 1888,
+    "existing_collection_wavs_verified": 7,
+    "approved_sample_preparation": {
+      "retained": 2,
+      "requests": 0
+    },
+    "full_module_ready": false,
+    "deployed": false,
+    "inputs": [
+      {
+        "path": "tests/godot/professional_approved_audio_tests.gd",
+        "sha256": "8b5c17d180ad5609ef4101ebe5b17cac0019ca085b25d06cf5f65c16afa96582"
+      },
+      {
+        "path": "scripts/professional_media_manifest.gd",
+        "sha256": "a6b41f99f97c2b537837ebf457d04e7f9189bf82325ff258747d4e1db7943a1c"
+      },
+      {
+        "path": "scripts/professional_media_loader.gd",
+        "sha256": "d9d348d665b443300009f7490dbcb613a73eff58f9e91d6e70e364c9c76e7390"
+      },
+      {
+        "path": "scripts/professional_media_cache.gd",
+        "sha256": "98d128ec9a80d178f95cd9484f6e4107a2075e49114228be7b0c16c2a24485f1"
+      },
+      {
+        "path": "docs/assets/sources/professional-retail-ava/listening-approval-2026-10-16.json",
+        "sha256": "765516673022eb2ff31da567d488284c3c92f511b3ad23688ff556cb34e484f2"
+      },
+      {
+        "path": "data/professional/lexemes/retail-pilot.json",
+        "sha256": "b7fd5f2d96339ee1bcb0eaf48bcf8b0d6b2dbaf1f011c339cf5d9399a9e80cb2"
+      }
+    ]
+  }
+}

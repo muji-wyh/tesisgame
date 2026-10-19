@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "status": "actual_committed_journal_and_afterimages_inspected",
+  "reviewer": "root",
+  "committed_receipt": {
+    "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/commit-receipt.json",
+    "sha256": "e247462f7d41a03b2b00b1dee17314987954d26df82f4b6949ddc2982fbbea35"
+  },
+  "plan_sha256": "57a12b2572dca7f2c38aff43682144309e2b0a51ac483fc5f644c5b2c6c4e0d1",
+  "registry_after_sha256": "fb45e1d9c7cbf479bf06ac0c00b39ec28de473c96c86cc1b071c72a572f8d437",
+  "production_replacements": [
+    {
+      "path": "data/professional/lexemes/foundation-module02.json",
+      "sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad"
+    },
+    {
+      "path": "data/professional/sources.json",
+      "sha256": "268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58"
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "sha256": "7ed495e35df7d66d646ba8a0090aee32e81b51759e278defc07da71f61e9473b"
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "sha256": "04a5d72b3a7c5e3add28ef23e5e1db23fb30bcfd74d79a2e69efd28874c08282"
+    },
+    {
+      "path": "tests/godot/professional_retail_morphology_tests.gd",
+      "sha256": "226160e3d454d1d19f2bb1c4e81a0c9749dcd354e4a8a71f21799f9ede0eb945"
+    }
+  ],
+  "postcommit_files_verified": 3,
+  "foundation02_language_reviewed": 26,
+  "persisted_validation_pending": true
+}

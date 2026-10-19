@@ -1,0 +1,4827 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "software.computer-instructions.n",
+      "text": "software",
+      "display_text": "software",
+      "pos": "noun",
+      "definition": "Programs and related instructions that a computer can use.",
+      "example": "The software needs an update.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "software"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A developer reviewing a fictional application on a computer.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "software.computer-instructions.n.analysis.v1",
+        "lexeme_id": "software.computer-instructions.n",
+        "text": "software",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.soft",
+            "type": "stem",
+            "canonical": "soft",
+            "surface": "soft"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.ware",
+            "type": "stem",
+            "canonical": "ware",
+            "surface": "ware"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "software",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "program.executable-instructions.n",
+      "text": "program",
+      "display_text": "program",
+      "pos": "noun",
+      "definition": "A set of instructions written for a computer to perform tasks.",
+      "example": "The program reads the input file.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "program"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional program shown beside its input and output.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "program.executable-instructions.n.analysis.v1",
+        "lexeme_id": "program.executable-instructions.n",
+        "text": "program",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.program",
+            "type": "atomic",
+            "canonical": "program",
+            "surface": "program"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "application.task-oriented-software.n",
+      "text": "application",
+      "display_text": "application",
+      "pos": "noun",
+      "definition": "Software designed to help a user perform a particular activity.",
+      "example": "The application displays the report.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "application"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional reporting application on a laptop screen.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "source-code.human-readable-program-text.n",
+      "text": "source code",
+      "display_text": "source code",
+      "pos": "noun",
+      "definition": "The program text that developers write and maintain.",
+      "example": "The source code is stored in the repository.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "source code"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A code editor showing short invented program text.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "source-code.human-readable-program-text.n.analysis.v1",
+        "lexeme_id": "source-code.human-readable-program-text.n",
+        "text": "source code",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.source",
+            "type": "stem",
+            "canonical": "source",
+            "surface": "source"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.code",
+            "type": "stem",
+            "canonical": "code",
+            "surface": "code"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "source code",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "syntax.language-structure-rules.n",
+      "text": "syntax",
+      "display_text": "syntax",
+      "pos": "noun",
+      "definition": "Rules that determine how expressions and statements are formed in a language.",
+      "example": "The editor highlights a syntax problem.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "syntax"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional code line with a structural issue highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "syntax.language-structure-rules.n.analysis.v1",
+        "lexeme_id": "syntax.language-structure-rules.n",
+        "text": "syntax",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.syntax",
+            "type": "atomic",
+            "canonical": "syntax",
+            "surface": "syntax"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "algorithm.problem-solving-steps.n",
+      "text": "algorithm",
+      "display_text": "algorithm",
+      "pos": "noun",
+      "definition": "A defined sequence of steps for solving a problem or performing a task.",
+      "example": "The algorithm compares each incoming value.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "algorithm"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A simple conceptual sequence from input to result.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "variable.named-changeable-value.n",
+      "text": "variable",
+      "display_text": "variable",
+      "pos": "noun",
+      "definition": "A named reference or storage location whose associated value can change.",
+      "example": "This variable stores the current count.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "variable"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional named value shown before and after a change.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "variable.named-changeable-value.n.analysis.v1",
+        "lexeme_id": "variable.named-changeable-value.n",
+        "text": "variable",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.vary",
+            "type": "stem",
+            "canonical": "vary",
+            "surface": "vari"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.able.suffix",
+            "type": "suffix",
+            "canonical": "able",
+            "surface": "able"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "variable",
+            "rule": "y_to_i_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "constant.fixed-program-value.n",
+      "text": "constant",
+      "display_text": "constant",
+      "pos": "noun",
+      "definition": "A named value intended to remain unchanged within its defined use.",
+      "example": "The constant holds the maximum retry count.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "constant"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional program setting marked as fixed.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "data-type.value-category.n",
+      "text": "data type",
+      "display_text": "data type",
+      "pos": "noun",
+      "definition": "A category specifying the kind of value and the operations it supports.",
+      "example": "The data type must match the input.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "data type"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Several fictional values grouped by their kinds.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "data-type.value-category.n.analysis.v1",
+        "lexeme_id": "data-type.value-category.n",
+        "text": "data type",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.data",
+            "type": "atomic",
+            "canonical": "data",
+            "surface": "data"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.type",
+            "type": "stem",
+            "canonical": "type",
+            "surface": "type"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "data type",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "string.character-sequence.n",
+      "text": "string",
+      "display_text": "string",
+      "pos": "noun",
+      "definition": "A sequence of characters treated as a text value.",
+      "example": "The function returns a string.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "string"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A short fictional text value highlighted in a code editor.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "string.character-sequence.n.analysis.v1",
+        "lexeme_id": "string.character-sequence.n",
+        "text": "string",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.string",
+            "type": "atomic",
+            "canonical": "string",
+            "surface": "string"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "integer.whole-number-value.n",
+      "text": "integer",
+      "display_text": "integer",
+      "pos": "noun",
+      "definition": "A whole number without a fractional part.",
+      "example": "The count must be an integer.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "integer"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small set of positive and negative whole-number examples.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "integer.whole-number-value.n.analysis.v1",
+        "lexeme_id": "integer.whole-number-value.n",
+        "text": "integer",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.integer",
+            "type": "atomic",
+            "canonical": "integer",
+            "surface": "integer"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "boolean.two-valued-logic-type.n",
+      "text": "Boolean",
+      "display_text": "Boolean",
+      "pos": "noun",
+      "definition": "A data type with the values true and false.",
+      "example": "This Boolean records whether the task succeeded.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "Boolean"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two clearly labeled true and false states in a fictional program.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "array.indexed-value-collection.n",
+      "text": "array",
+      "display_text": "array",
+      "pos": "noun",
+      "definition": "An ordered collection whose elements can be accessed by index.",
+      "example": "The array contains the selected identifiers.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "array"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A conceptual row of indexed fictional values.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "array.indexed-value-collection.n.analysis.v1",
+        "lexeme_id": "array.indexed-value-collection.n",
+        "text": "array",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.array",
+            "type": "atomic",
+            "canonical": "array",
+            "surface": "array"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "list.ordered-collection.n",
+      "text": "list",
+      "display_text": "list",
+      "pos": "noun",
+      "definition": "An ordered collection of items whose supported operations depend on its implementation.",
+      "example": "The list contains the pending jobs.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "list"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional ordered sequence of job identifiers.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "list.ordered-collection.n.analysis.v1",
+        "lexeme_id": "list.ordered-collection.n",
+        "text": "list",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.list",
+            "type": "atomic",
+            "canonical": "list",
+            "surface": "list"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "object.program-entity-with-properties.n",
+      "text": "object",
+      "display_text": "object",
+      "pos": "noun",
+      "definition": "A program entity that groups related properties and, in some systems, behavior.",
+      "example": "The object contains the customer's display settings.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "object"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional settings object with grouped properties.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "object.program-entity-with-properties.n.analysis.v1",
+        "lexeme_id": "object.program-entity-with-properties.n",
+        "text": "object",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.object",
+            "type": "atomic",
+            "canonical": "object",
+            "surface": "object"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "class.object-type-definition.n",
+      "text": "class",
+      "display_text": "class",
+      "pos": "noun",
+      "definition": "A definition used in many programming languages to describe a type of object.",
+      "example": "The class defines how this object behaves.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "class"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional class definition linked to two example objects.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "class.object-type-definition.n.analysis.v1",
+        "lexeme_id": "class.object-type-definition.n",
+        "text": "class",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.class",
+            "type": "atomic",
+            "canonical": "class",
+            "surface": "class"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "function.callable-program-operation.n",
+      "text": "function",
+      "display_text": "function",
+      "pos": "noun",
+      "definition": "A named or unnamed callable unit of code that performs an operation.",
+      "example": "The function checks the supplied value.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "function"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional input entering a callable unit and producing a result.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "method.object-associated-function.n",
+      "text": "method",
+      "display_text": "method",
+      "pos": "noun",
+      "definition": "A callable operation associated with an object or class.",
+      "example": "This method updates the object's state.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "method"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An object with one associated operation highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "method.object-associated-function.n.analysis.v1",
+        "lexeme_id": "method.object-associated-function.n",
+        "text": "method",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.method",
+            "type": "atomic",
+            "canonical": "method",
+            "surface": "method"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "parameter.function-input-name.n",
+      "text": "parameter",
+      "display_text": "parameter",
+      "pos": "noun",
+      "definition": "A named input declared by a function or other callable unit.",
+      "example": "The parameter specifies the maximum size.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "parameter"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional function declaration with one named input highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "argument.supplied-call-value.n",
+      "text": "argument",
+      "display_text": "argument",
+      "pos": "noun",
+      "definition": "A value supplied when calling a function or similar operation.",
+      "example": "Pass the filename as the first argument.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "argument"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional function call with one supplied value highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "return-value.function-result.n",
+      "text": "return value",
+      "display_text": "return value",
+      "pos": "noun",
+      "definition": "A value produced by a function and passed back to its caller.",
+      "example": "The return value contains the result count.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "return value"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A result moving from a fictional function back to its caller.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "return-value.function-result.n.analysis.v1",
+        "lexeme_id": "return-value.function-result.n",
+        "text": "return value",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.return",
+            "type": "atomic",
+            "canonical": "return",
+            "surface": "return"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.value",
+            "type": "atomic",
+            "canonical": "value",
+            "surface": "value"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "return value",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "loop.repeated-code-structure.n",
+      "text": "loop",
+      "display_text": "loop",
+      "pos": "noun",
+      "definition": "A control structure that repeats a block of code under defined conditions.",
+      "example": "The loop handles one record at a time.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "loop"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A conceptual repetition diagram processing fictional records.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "loop.repeated-code-structure.n.analysis.v1",
+        "lexeme_id": "loop.repeated-code-structure.n",
+        "text": "loop",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.loop",
+            "type": "atomic",
+            "canonical": "loop",
+            "surface": "loop"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "condition.evaluated-decision-test.n",
+      "text": "condition",
+      "display_text": "condition",
+      "pos": "noun",
+      "definition": "An expression evaluated to decide whether an action should occur.",
+      "example": "The condition checks whether the list is empty.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "condition"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional decision point with two possible paths.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "operator.value-operation-symbol.n",
+      "text": "operator",
+      "display_text": "operator",
+      "pos": "noun",
+      "definition": "A symbol or keyword that specifies an operation on one or more values.",
+      "example": "This operator compares the two numbers.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "operator"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional values beside a comparison operation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "operator.value-operation-symbol.n.analysis.v1",
+        "lexeme_id": "operator.value-operation-symbol.n",
+        "text": "operator",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.operate",
+            "type": "stem",
+            "canonical": "operate",
+            "surface": "operat"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.or.suffix",
+            "type": "suffix",
+            "canonical": "or",
+            "surface": "or"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "operator",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "expression.evaluated-code-combination.n",
+      "text": "expression",
+      "display_text": "expression",
+      "pos": "noun",
+      "definition": "A combination of values and operations that can be evaluated to produce a result.",
+      "example": "The expression evaluates to true.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "expression"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional calculation with its result highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "statement.program-instruction-unit.n",
+      "text": "statement",
+      "display_text": "statement",
+      "pos": "noun",
+      "definition": "A unit of code that expresses an action or declaration.",
+      "example": "The statement assigns the new value.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "statement"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A single fictional assignment highlighted in a code block.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "statement.program-instruction-unit.n.analysis.v1",
+        "lexeme_id": "statement.program-instruction-unit.n",
+        "text": "statement",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.state",
+            "type": "stem",
+            "canonical": "state",
+            "surface": "state"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "statement",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "scope.name-visibility-region.n",
+      "text": "scope",
+      "display_text": "scope",
+      "pos": "noun",
+      "definition": "The region of a program where a name can be used according to its rules.",
+      "example": "The variable is outside this scope.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "scope"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Nested fictional code regions with name visibility indicated.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "scope.name-visibility-region.n.analysis.v1",
+        "lexeme_id": "scope.name-visibility-region.n",
+        "text": "scope",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.scope",
+            "type": "atomic",
+            "canonical": "scope",
+            "surface": "scope"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "namespace.name-grouping-context.n",
+      "text": "namespace",
+      "display_text": "namespace",
+      "pos": "noun",
+      "definition": "A context that groups names to organize them and avoid conflicts.",
+      "example": "The helper functions share a namespace.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "namespace"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional groups containing distinct qualified names.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "namespace.name-grouping-context.n.analysis.v1",
+        "lexeme_id": "namespace.name-grouping-context.n",
+        "text": "namespace",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.name",
+            "type": "stem",
+            "canonical": "name",
+            "surface": "name"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.space",
+            "type": "stem",
+            "canonical": "space",
+            "surface": "space"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "namespace",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "module.organized-code-unit.n",
+      "text": "module",
+      "display_text": "module",
+      "pos": "noun",
+      "definition": "A unit of code organized for separate use or reuse.",
+      "example": "The module exports the formatting function.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "module"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A code project with one reusable unit highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "module.organized-code-unit.n.analysis.v1",
+        "lexeme_id": "module.organized-code-unit.n",
+        "text": "module",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.module",
+            "type": "atomic",
+            "canonical": "module",
+            "surface": "module"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "package.distributed-software-unit.n",
+      "text": "package",
+      "display_text": "package",
+      "pos": "noun",
+      "definition": "A unit of software and related files organized for distribution or installation.",
+      "example": "The package includes the required library.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "package"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional software package listing its included files.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "package.distributed-software-unit.n.analysis.v1",
+        "lexeme_id": "package.distributed-software-unit.n",
+        "text": "package",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.package",
+            "type": "atomic",
+            "canonical": "package",
+            "surface": "package"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "library.reusable-code-collection.n",
+      "text": "library",
+      "display_text": "library",
+      "pos": "noun",
+      "definition": "A collection of reusable code that other programs can call.",
+      "example": "The library provides a date parser.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "library"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional program using a reusable collection of functions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "library.reusable-code-collection.n.analysis.v1",
+        "lexeme_id": "library.reusable-code-collection.n",
+        "text": "library",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.library",
+            "type": "atomic",
+            "canonical": "library",
+            "surface": "library"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "framework.application-development-structure.n",
+      "text": "framework",
+      "display_text": "framework",
+      "pos": "noun",
+      "definition": "A reusable software structure that guides how an application is organized and extended.",
+      "example": "The framework handles the request routing.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "framework"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A conceptual application built around a shared software structure.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "framework.application-development-structure.n.analysis.v1",
+        "lexeme_id": "framework.application-development-structure.n",
+        "text": "framework",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.frame",
+            "type": "stem",
+            "canonical": "frame",
+            "surface": "frame"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.work",
+            "type": "stem",
+            "canonical": "work",
+            "surface": "work"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "framework",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "dependency.required-software-component.n",
+      "text": "dependency",
+      "display_text": "dependency",
+      "pos": "noun",
+      "definition": "A component that another piece of software requires to work or be built.",
+      "example": "This dependency needs a compatible version.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "dependency"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional software components connected by a requirement.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "interface.interaction-contract.n",
+      "text": "interface",
+      "display_text": "interface",
+      "pos": "noun",
+      "definition": "A defined way for software components or users to interact with a system.",
+      "example": "The interface specifies the accepted inputs.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "interface"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional components connected through a defined boundary.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "api.software-interaction-contract.n",
+      "text": "API",
+      "display_text": "API",
+      "pos": "noun",
+      "definition": "An application programming interface through which software components interact.",
+      "example": "The API returns the requested record.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "API"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional application exchanging a request and response with a service.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "api.software-interaction-contract.n.analysis.v1",
+        "lexeme_id": "api.software-interaction-contract.n",
+        "text": "API",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "abbr.api",
+            "type": "abbreviation",
+            "canonical": "API",
+            "surface": "API"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "endpoint.service-access-location.n",
+      "text": "endpoint",
+      "display_text": "endpoint",
+      "pos": "noun",
+      "definition": "A particular address or operation through which a service can be accessed.",
+      "example": "The endpoint accepts a search request.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "endpoint"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional service interface with one access location highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "endpoint.service-access-location.n.analysis.v1",
+        "lexeme_id": "endpoint.service-access-location.n",
+        "text": "endpoint",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.end",
+            "type": "stem",
+            "canonical": "end",
+            "surface": "end"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.point",
+            "type": "stem",
+            "canonical": "point",
+            "surface": "point"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "endpoint",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "protocol.communication-rules.n",
+      "text": "protocol",
+      "display_text": "protocol",
+      "pos": "noun",
+      "definition": "Agreed rules for exchanging information between systems.",
+      "example": "Both services use the same protocol.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "protocol"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two systems exchanging messages under a shared format.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "protocol.communication-rules.n.analysis.v1",
+        "lexeme_id": "protocol.communication-rules.n",
+        "text": "protocol",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.protocol",
+            "type": "atomic",
+            "canonical": "protocol",
+            "surface": "protocol"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "request.service-operation-message.n",
+      "text": "request",
+      "display_text": "request",
+      "pos": "noun",
+      "definition": "A message asking a service to perform an operation or provide information.",
+      "example": "The request includes the search term.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "request"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional client sending a message to a service.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "request.service-operation-message.n.analysis.v1",
+        "lexeme_id": "request.service-operation-message.n",
+        "text": "request",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.request",
+            "type": "atomic",
+            "canonical": "request",
+            "surface": "request"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "response.service-reply-message.n",
+      "text": "response",
+      "display_text": "response",
+      "pos": "noun",
+      "definition": "A message returned by a service after receiving a request.",
+      "example": "The response contains three matching records.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "response"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional service sending results back to a client.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "response.service-reply-message.n.analysis.v1",
+        "lexeme_id": "response.service-reply-message.n",
+        "text": "response",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.response",
+            "type": "atomic",
+            "canonical": "response",
+            "surface": "response"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "event.observable-software-occurrence.n",
+      "text": "event",
+      "display_text": "event",
+      "pos": "noun",
+      "definition": "An occurrence that a program can detect and respond to.",
+      "example": "The button generates an event when selected.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "event"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional interface action connected to a program handler.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "event.observable-software-occurrence.n.analysis.v1",
+        "lexeme_id": "event.observable-software-occurrence.n",
+        "text": "event",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.event",
+            "type": "atomic",
+            "canonical": "event",
+            "surface": "event"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "callback.supplied-handler-function.n",
+      "text": "callback",
+      "display_text": "callback",
+      "pos": "noun",
+      "definition": "A function supplied for another operation to call at a specified point.",
+      "example": "The callback runs when the operation completes.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "callback"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional operation invoking a supplied handler on completion.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "callback.supplied-handler-function.n.analysis.v1",
+        "lexeme_id": "callback.supplied-handler-function.n",
+        "text": "callback",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.call",
+            "type": "stem",
+            "canonical": "call",
+            "surface": "call"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.back",
+            "type": "stem",
+            "canonical": "back",
+            "surface": "back"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "callback",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "promise.future-result-object.n",
+      "text": "promise",
+      "display_text": "promise",
+      "pos": "noun",
+      "definition": "An object representing the eventual success or failure of an asynchronous operation.",
+      "example": "The promise resolves with the fetched data.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "promise"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional pending operation changing to a completed result.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "promise.future-result-object.n.analysis.v1",
+        "lexeme_id": "promise.future-result-object.n",
+        "text": "promise",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.promise",
+            "type": "atomic",
+            "canonical": "promise",
+            "surface": "promise"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "thread.execution-sequence.n",
+      "text": "thread",
+      "display_text": "thread",
+      "pos": "noun",
+      "definition": "A sequence of execution within a process.",
+      "example": "The worker thread handles the background task.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "thread"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two conceptual execution sequences within one process.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "thread.execution-sequence.n.analysis.v1",
+        "lexeme_id": "thread.execution-sequence.n",
+        "text": "thread",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.thread",
+            "type": "atomic",
+            "canonical": "thread",
+            "surface": "thread"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "process.running-program-instance.n",
+      "text": "process",
+      "display_text": "process",
+      "pos": "noun",
+      "definition": "A running instance of a program with its execution resources.",
+      "example": "The process is using more memory than expected.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "process"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional operating-system process view.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "process.running-program-instance.n.analysis.v1",
+        "lexeme_id": "process.running-program-instance.n",
+        "text": "process",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.process",
+            "type": "atomic",
+            "canonical": "process",
+            "surface": "process"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "memory.working-data-storage.n",
+      "text": "memory",
+      "display_text": "memory",
+      "pos": "noun",
+      "definition": "Storage used to hold data and instructions for active computing work.",
+      "example": "The application needs less memory after the change.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "memory"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional application with a working-memory usage display.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "memory.working-data-storage.n.analysis.v1",
+        "lexeme_id": "memory.working-data-storage.n",
+        "text": "memory",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.memory",
+            "type": "atomic",
+            "canonical": "memory",
+            "surface": "memory"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "buffer.temporary-data-area.n",
+      "text": "buffer",
+      "display_text": "buffer",
+      "pos": "noun",
+      "definition": "A temporary storage area used while data is being moved or processed.",
+      "example": "The buffer holds the incoming bytes.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "buffer"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A conceptual temporary store between two processing steps.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "buffer.temporary-data-area.n.analysis.v1",
+        "lexeme_id": "buffer.temporary-data-area.n",
+        "text": "buffer",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.buffer",
+            "type": "atomic",
+            "canonical": "buffer",
+            "surface": "buffer"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "cache.reusable-result-store.n",
+      "text": "cache",
+      "display_text": "cache",
+      "pos": "noun",
+      "definition": "A store of previously obtained data or results kept for faster reuse.",
+      "example": "The cache avoids repeating the same lookup.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "cache"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional lookup reusing an existing stored result.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cache.reusable-result-store.n.analysis.v1",
+        "lexeme_id": "cache.reusable-result-store.n",
+        "text": "cache",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cache",
+            "type": "atomic",
+            "canonical": "cache",
+            "surface": "cache"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "queue.ordered-waiting-structure.n",
+      "text": "queue",
+      "display_text": "queue",
+      "pos": "noun",
+      "definition": "A collection in which items wait for processing in an ordering policy.",
+      "example": "The queue contains five pending jobs.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "queue"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A conceptual line of fictional jobs awaiting processing.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "queue.ordered-waiting-structure.n.analysis.v1",
+        "lexeme_id": "queue.ordered-waiting-structure.n",
+        "text": "queue",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.queue",
+            "type": "atomic",
+            "canonical": "queue",
+            "surface": "queue"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "stack.last-in-first-out-structure.n",
+      "text": "stack",
+      "display_text": "stack",
+      "pos": "noun",
+      "definition": "A collection in which the most recently added item is normally removed first.",
+      "example": "The stack holds the nested calls.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "stack"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A conceptual last-added item at the top of a stack.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "stack.last-in-first-out-structure.n.analysis.v1",
+        "lexeme_id": "stack.last-in-first-out-structure.n",
+        "text": "stack",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.stack",
+            "type": "atomic",
+            "canonical": "stack",
+            "surface": "stack"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "heap.dynamic-allocation-memory.n",
+      "text": "heap",
+      "display_text": "heap",
+      "pos": "noun",
+      "definition": "A memory area used for dynamically allocated data in many runtime systems.",
+      "example": "The profiler shows increased heap usage.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "heap"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional memory profiler with its dynamic-allocation area highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "heap.dynamic-allocation-memory.n.analysis.v1",
+        "lexeme_id": "heap.dynamic-allocation-memory.n",
+        "text": "heap",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.heap",
+            "type": "atomic",
+            "canonical": "heap",
+            "surface": "heap"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    }
+  ]
+}

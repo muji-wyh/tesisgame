@@ -1,0 +1,132 @@
+{
+  "checks": [
+    {
+      "check": "Recovery regression uses isolated storage",
+      "passed": true
+    },
+    {
+      "check": "Professional preparation configures before its storage path becomes available",
+      "passed": true
+    },
+    {
+      "check": "An initial load failure exposes a retryable state",
+      "passed": true
+    },
+    {
+      "check": "An unavailable initial profile has no invented progress or playable round",
+      "passed": true
+    },
+    {
+      "check": "Restore the initial storage path",
+      "passed": true
+    },
+    {
+      "check": "The initial load retry stays busy while recovery is pending",
+      "passed": true
+    },
+    {
+      "check": "Successful recovery without an active round returns Home to idle",
+      "passed": true
+    },
+    {
+      "check": "Recovery loads the profile without pretending a course is already prepared",
+      "passed": true
+    },
+    {
+      "check": "An idle recovered profile still requires a real round source",
+      "passed": true
+    },
+    {
+      "check": "Remove the isolated recovery fixture",
+      "passed": true
+    },
+    {
+      "check": "Request respects request from the earliest session notification",
+      "passed": true
+    },
+    {
+      "check": "Request respects cancel from the earliest session notification",
+      "passed": true
+    },
+    {
+      "check": "Request respects leave from the earliest session notification",
+      "passed": true
+    },
+    {
+      "check": "Request freezes only supported context fields before the first callback",
+      "passed": true
+    },
+    {
+      "check": "Loader callback request cannot be overwritten by the outer request return",
+      "passed": true
+    },
+    {
+      "check": "Loader callback cancel cannot be overwritten by the outer request return",
+      "passed": true
+    },
+    {
+      "check": "Loader callback leave cannot be overwritten by the outer request return",
+      "passed": true
+    },
+    {
+      "check": "Nested request keeps its state after cancel session notification",
+      "passed": true
+    },
+    {
+      "check": "Nested request keeps its state after leave session notification",
+      "passed": true
+    },
+    {
+      "check": "Restoring an active round cannot overwrite a nested newer request",
+      "passed": true
+    },
+    {
+      "check": "Pending cancellation preserves the active claimed Access lease",
+      "passed": true
+    },
+    {
+      "check": "Controller teardown releases that active Access lease exactly once",
+      "passed": true
+    },
+    {
+      "check": "Ready notification request suppresses the obsolete round_prepared event",
+      "passed": true
+    },
+    {
+      "check": "Ready notification cancel suppresses the obsolete round_prepared event",
+      "passed": true
+    },
+    {
+      "check": "Ready notification leave suppresses the obsolete round_prepared event",
+      "passed": true
+    },
+    {
+      "check": "Opening callback request discards the obsolete storage result",
+      "passed": true
+    },
+    {
+      "check": "Opening callback cancel discards the obsolete storage result",
+      "passed": true
+    },
+    {
+      "check": "Opening callback leave discards the obsolete storage result",
+      "passed": true
+    },
+    {
+      "check": "Retry preserves a nested selection from the retry notification",
+      "passed": true
+    },
+    {
+      "check": "Retry preserves a nested selection from the leave notification",
+      "passed": true
+    },
+    {
+      "check": "An unchanged current opening still publishes its original selection and source",
+      "passed": true
+    }
+  ],
+  "count": 31,
+  "failures": 0,
+  "schema": 1,
+  "scope": "Actual ProfessionalPlay controller with controlled lifecycle callbacks, actual Access registry, and retained real initial-storage recovery test; no domain integration or acceptance."
+}

@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "status": "continuation_language_crosscheck_no_additional_gate_acceptance",
+  "reviewer": "Codex foundation continuation agent (AI language review; not human or specialist approval)",
+  "date": "2026-10-16",
+  "method": "Read all ten before/candidate English definitions, examples and levels, then directly inspect the selected dictionary passages below. The frozen original root decision and candidate hashes remain authoritative and unchanged.",
+  "findings": [
+    {"term":"feedback","url":"https://www.oxfordlearnersdictionaries.com/definition/english/feedback","observation":"Uncountable evaluation includes information about work quality, supporting the candidate expansion beyond comments. The selected topic label is B2; the electrical-noise sense is separate."},
+    {"term":"permission","url":"https://www.oxfordlearnersdictionaries.com/definition/english/permission","observation":"Ordinary authorization by a person in authority matches the unchanged schedule example. Selected topic A2 supports the course placement without erasing the retained Collins B1 disagreement."},
+    {"term":"responsibility","url":"https://www.collinsdictionary.com/dictionary/english/responsibility","observation":"The plural assigned-duties sense is B2, supporting one of my responsibilities. Blame and delegated authority appear separately and are not promoted."},
+    {"term":"task","url":"https://www.oxfordlearnersdictionaries.com/definition/english/task_1","observation":"The ordinary work-item sense and Working life A2 label support the concrete welcome-pack example. Difficulty is typical rather than a necessary condition."},
+    {"term":"role","url":"https://www.collinsdictionary.com/dictionary/english/role","observation":"Position and function has a B2 label and accommodates the organizational sense. The actor sense carries B1+ and is excluded from this placement."},
+    {"term":"priority","url":"https://www.oxfordlearnersdictionaries.com/definition/english/priority","observation":"Uncountable precedence and ordering tasks support relative importance. No selected CEFR label is visible; B2 remains an editorial decision."},
+    {"term":"location","url":"https://www.oxfordlearnersdictionaries.com/definition/english/location","observation":"The selected place sense covers both existence and events, supporting meeting location. Its B1 topic label is separate from the preserved Collins B1+ observation."},
+    {"term":"address","url":"https://www.collinsdictionary.com/dictionary/english/address","observation":"The postal-location details sense has A1 and does not require writing. A2 remains the course floor; electronic and spreadsheet senses are distinct."},
+    {"term":"signature","url":"https://www.collinsdictionary.com/dictionary/english/signature","observation":"The characteristic written-name sense is B1 and fits the form example. The distinctive-style adjective is separate; no legal validity is asserted."},
+    {"term":"time zone","url":"https://www.oxfordlearnersdictionaries.com/definition/english/time-zone","observation":"The Time topic label is B2. The retained short candidate does not copy the source's simplified universal 24-area and one-hour-adjacency claims."},
+    {"term":"time zone","url":"https://www.collinsdictionary.com/dictionary/english/time-zone","observation":"The British entry explicitly identifies a region using shared standard time, supporting the candidate core meaning. No conversion or daylight-saving procedure is accepted."}
+  ],
+  "outcome": "All ten frozen accepted language candidates remain suitable within their recorded scope. No candidate, original source record, expression binding or original root decision changed.",
+  "preserved": ["Supervisor and attendance entire pending entries", "Three current and nine prior expression ambiguity holds", "All morphology, media, domain, module and release gates", "All prior review evidence and dictionary level observations"],
+  "assets_acquired": false,
+  "production_mutated_by_this_review": false,
+  "specialist_acceptance": false
+}

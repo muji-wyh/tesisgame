@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 13,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "265ef2ac7dc09efe360c47163d37cdc855fe7579c5e25d49c64284da740b8e88",
+  "recorded_at": "2026-10-16T22:48:02.181Z",
+  "index": 5,
+  "path": "data/professional/provenance/retail-shopping-bag-image-2026-10-17.json"
+}

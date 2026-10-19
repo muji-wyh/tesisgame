@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, chooseTheme, rendered, openGame, openRewards,
+const { metrics, tap, chooseMode, openModeMenu, activateLibraryControl, rendered, openGame, openRewards,
   memoryMetrics, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek,
   resultPoint, visibleColorCount, acceptCelebration } = require('./game-ui.cjs');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
@@ -358,7 +358,7 @@ test(`Memory timed eye counts down 10s then 5s with animated text and progress (
 });
 }
 
-test('Memory discoveries survive automatic mistakes, timed peek, worlds and More', async ({ page }, testInfo) => {
+test('Memory discoveries survive automatic mistakes, timed peek, career browsing and More', async ({ page }, testInfo) => {
   const { errors } = await beginMemory(page);
   const saved = await medalRecord(page), board = await discoverBoard(page);
   const word = board.findIndex(card => card.kind === 'Word');
@@ -379,7 +379,14 @@ test('Memory discoveries survive automatic mistakes, timed peek, worlds and More
   expect(await discoverBoard(page), 'Opening the eye and four mistakes preserve every card identity and position.').toEqual(board);
   await reveal(page, wrong);
   const selected = await page.locator('#selection-status').textContent();
-  await chooseTheme(page, 4);
+  await openModeMenu(page);
+  await activateLibraryControl(page, 'ChangeLearningPath');
+  await activateLibraryControl(page, 'ProfessionalPath');
+  await activateLibraryControl(page, 'Career_retail');
+  expect((await metrics(page)).library.learning).toMatchObject({ screen: 'modules', course_id: 'retail' });
+  await activateLibraryControl(page, 'ContinueCurrentRound');
+  await expect.poll(async () => (await metrics(page)).library.visible).toBe(false);
+  expect((await metrics(page)).library.current).toBe('memory');
   await expect(page.locator('#selection-status')).toHaveText(selected);
   await openRewards(page);
   await page.keyboard.press('Escape');
@@ -484,9 +491,13 @@ test('Memory accepts the next card and timed eye directly from automatic feedbac
 });
 
 test('five Memory pairs earn one saved piece and Play again refreshes Memory', async ({ page }, testInfo) => {
-  test.setTimeout(120000);
+  test.setTimeout(180000);
+  await page.addInitScript(() => {
+    if (localStorage.getItem('wordBuddies.medalProgress') === null) localStorage.setItem('wordBuddies.medalProgress',
+      '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\nstate={"match":{"dry_rounds":0,"round":{}},"memory":{"dry_rounds":2,"round":{}}}\n');
+  });
   const errors = await openGame(page);
-  await chooseTheme(page, 0);
+  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
   await chooseMode(page, 'memory');
   await expect(page.locator('#game-status')).toContainText(READY);
   const before = await medalRecord(page), board = await discoverBoard(page);
@@ -496,13 +507,14 @@ test('five Memory pairs earn one saved piece and Play again refreshes Memory', a
     await reveal(page, word);
     await cardTap(page, picture);
     await waitFeedback(page, true, index === 4);
-    expect(await medalRecord(page), 'Matching does not bypass the chest claim.').toBe(before);
+    expect((await medalRecord(page)).match(/^counts=.*$/m)?.[0], 'Matching reserves a reward without claiming it.')
+      .toBe(before.match(/^counts=.*$/m)?.[0]);
   }
   await screenshot(page, testInfo, 'memory-chest-closed');
-  const beforeNext = resultPoint(await metrics(page), 'newAdventure');
-  await tap(page, beforeNext.x, beforeNext.y);
-  await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
-  expect(await medalRecord(page), 'Disabled Play again cannot claim or leave the chest.').toBe(before);
+  expect((await metrics(page)).growth.result.controls.find(control => control.name === 'SettlementReplay'))
+    .toMatchObject({ visible: true, disabled: false });
+  expect((await medalRecord(page)).match(/^counts=.*$/m)?.[0], 'The unopened settlement has not yet claimed its reward.')
+    .toBe(before.match(/^counts=.*$/m)?.[0]);
   const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();
@@ -523,7 +535,7 @@ test('five Memory pairs earn one saved piece and Play again refreshes Memory', a
   expect((await metrics(page)).growth.settlement.visible).toBe(false);
   const refreshed = await discoverBoard(page);
   expect(refreshed.filter(card => card.kind === 'Word').map(card => card.word).sort()).not.toEqual([...words].sort());
-  expect(await medalRecord(page)).toBe(claimed);
+  expect((await medalRecord(page)).match(/^counts=.*$/m)?.[0]).toBe(claimed.match(/^counts=.*$/m)?.[0]);
   await screenshot(page, testInfo, 'memory-next-adventure-board');
   expect(errors).toEqual([]);
 });

@@ -1,0 +1,429 @@
+{
+	"accepted_image_sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+	"captures": [
+		{
+			"accepted_rgba_pixel_sha256": "afc659ec2a36fddf8e606340f7ec39e870f2b5c57b70ef8f027a48457d4c81db",
+			"badge_visible": false,
+			"picture_alpha": 1.0,
+			"pixels_equal_accepted": true,
+			"rgba_pixel_sha256": "afc659ec2a36fddf8e606340f7ec39e870f2b5c57b70ef8f027a48457d4c81db",
+			"size": [
+				126.0,
+				72.0
+			],
+			"state": "match-unmatched"
+		},
+		{
+			"accepted_rgba_pixel_sha256": "4df22479113adb02dda600889c3638203bd5a9dc03c8b9d41234184e62c79d32",
+			"badge_visible": true,
+			"picture_alpha": 0.680000007152557,
+			"pixels_equal_accepted": true,
+			"rgba_pixel_sha256": "4df22479113adb02dda600889c3638203bd5a9dc03c8b9d41234184e62c79d32",
+			"size": [
+				126.0,
+				72.0
+			],
+			"state": "match-matched"
+		},
+		{
+			"accepted_rgba_pixel_sha256": "375afee4028a8a96bd7498ce8670be3a20a3b493b6257a2f92523bc864f923ff",
+			"badge_visible": false,
+			"picture_alpha": 1.0,
+			"pixels_equal_accepted": true,
+			"rgba_pixel_sha256": "375afee4028a8a96bd7498ce8670be3a20a3b493b6257a2f92523bc864f923ff",
+			"size": [
+				144.0,
+				74.0
+			],
+			"state": "memory-unmatched"
+		},
+		{
+			"accepted_rgba_pixel_sha256": "cd0a9999610025779f93797f7ebff315cfe11b1b1e31fa398b9e8f669a9ac50d",
+			"badge_visible": true,
+			"picture_alpha": 0.680000007152557,
+			"pixels_equal_accepted": true,
+			"rgba_pixel_sha256": "cd0a9999610025779f93797f7ebff315cfe11b1b1e31fa398b9e8f669a9ac50d",
+			"size": [
+				144.0,
+				74.0
+			],
+			"state": "memory-matched"
+		}
+	],
+	"checks": [
+		{
+			"check": "Production lexeme bytes match exact integrated image checkpoint",
+			"passed": true
+		},
+		{
+			"check": "Actual persisted cash-register entry exists",
+			"passed": true
+		},
+		{
+			"check": "Exact one-sense cash-register image provenance exists",
+			"passed": true
+		},
+		{
+			"check": "Actual full cash-register entry equals exact integrated image patch",
+			"passed": true
+		},
+		{
+			"check": "Actual image descriptor equals independently accepted descriptor",
+			"passed": true
+		},
+		{
+			"check": "Image retains exact scoped review and suitability",
+			"passed": true
+		},
+		{
+			"check": "Exact user-approved Ava audio remains unchanged",
+			"passed": true
+		},
+		{
+			"check": "Existing exact morphology review is preserved",
+			"passed": true
+		},
+		{
+			"check": "Separate domain and language gates are preserved",
+			"passed": true
+		},
+		{
+			"check": "Permanent immutable resource descriptor obeys delivery schema",
+			"passed": true
+		},
+		{
+			"check": "Persisted image and immutable resource identities agree",
+			"passed": true
+		},
+		{
+			"check": "Exact accepted PNG exists at production raw sidecar path",
+			"passed": true
+		},
+		{
+			"check": "Real production catalog loads",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module01",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module02",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module03",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module04",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module05",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module06",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module07",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module08",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module09",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module10",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for match",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for memory",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for pop",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for jelly",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for word_jelly",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for phrase",
+			"passed": true
+		},
+		{
+			"check": "Image-only inspection inventory meets immutable budget and schema",
+			"passed": true
+		},
+		{
+			"check": "Production raw loader has no injected fetch override",
+			"passed": true
+		},
+		{
+			"check": "Real native loader reads and decodes production raw sidecar",
+			"passed": true
+		},
+		{
+			"check": "Actual decoded image acquires a scoped cache lease",
+			"passed": true
+		},
+		{
+			"check": "Actual scoped image has exact accepted dimensions",
+			"passed": true
+		},
+		{
+			"check": "Actual decoded production image has exact accepted RGBA pixels",
+			"passed": true
+		},
+		{
+			"check": "Production WordArt resolves actual scoped cache resource",
+			"passed": true
+		},
+		{
+			"check": "Real cache accounts for one image, exact decoded budget and one lease",
+			"passed": true
+		},
+		{
+			"check": "Real WordCard setup receives cache resource through WordArt: 0",
+			"passed": true
+		},
+		{
+			"check": "Real WordCard setup receives cache resource through WordArt: 1",
+			"passed": true
+		},
+		{
+			"check": "Real WordCard setup receives cache resource through WordArt: 2",
+			"passed": true
+		},
+		{
+			"check": "Real WordCard setup receives cache resource through WordArt: 3",
+			"passed": true
+		},
+		{
+			"check": "Production card contact saved",
+			"passed": true
+		},
+		{
+			"check": "Exact minimum card size: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture inset size: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Real badge visibility: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Real matched picture alpha: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Visible picture face: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Production crop saved: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Production crop bytes equal accepted native crop: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Production and accepted crop match exact frozen RGBA hash: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact minimum card size: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture inset size: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Real badge visibility: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Real matched picture alpha: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Visible picture face: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Production crop saved: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Production crop bytes equal accepted native crop: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Production and accepted crop match exact frozen RGBA hash: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Exact minimum card size: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture inset size: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Real badge visibility: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Real matched picture alpha: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Visible picture face: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Production crop saved: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Production crop bytes equal accepted native crop: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Production and accepted crop match exact frozen RGBA hash: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact minimum card size: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture inset size: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Real badge visibility: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Real matched picture alpha: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Visible picture face: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Production crop saved: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Production crop bytes equal accepted native crop: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Production and accepted crop match exact frozen RGBA hash: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Cache teardown releases all resources, bytes, reservations, leases and active identities",
+			"passed": true
+		},
+		{
+			"check": "Released media scope cannot revive accepted image",
+			"passed": true
+		},
+		{
+			"check": "No strong reference retains decoded image after card and cache teardown",
+			"passed": true
+		},
+		{
+			"check": "Production metadata remains unchanged: res://data/professional/lexemes/retail-pilot.json",
+			"passed": true
+		},
+		{
+			"check": "Production metadata remains unchanged: res://data/professional/provenance/retail-cash-register-image-2026-10-16.json",
+			"passed": true
+		},
+		{
+			"check": "Production metadata remains unchanged: res://data/professional/courses/retail.json",
+			"passed": true
+		},
+		{
+			"check": "Production metadata remains unchanged: res://data/professional/themes.json",
+			"passed": true
+		}
+	],
+	"failed": 0,
+	"image_acceptance_sha256": "5e63276edb93d1f61bd605d44bbaa47736e9bfa97835a2729f175d42d23ba065",
+	"lexemes_sha256": "2182105fee2bc23207a773063f4c6434b74c00064e6ba89146783c3bed03e8cc",
+	"loaded_cache": {
+		"active_ids": [
+			"sha256:f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+		],
+		"leases": 1,
+		"limit_bytes": 134217728,
+		"pinned_bytes": 2519040,
+		"reserved_bytes": 0,
+		"resident_bytes": 2519040,
+		"resources": 1
+	},
+	"loaded_image_rgba_pixel_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+	"production_data_hashes": {
+		"res://data/professional/courses/retail.json": "7124ef1d09da0c47f1d5fb2945bfebbe49e5f180f5fbdcd66fe73991ea7d4c61",
+		"res://data/professional/lexemes/retail-pilot.json": "2182105fee2bc23207a773063f4c6434b74c00064e6ba89146783c3bed03e8cc",
+		"res://data/professional/provenance/retail-cash-register-image-2026-10-16.json": "5e63276edb93d1f61bd605d44bbaa47736e9bfa97835a2729f175d42d23ba065",
+		"res://data/professional/themes.json": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+	},
+	"production_scripts": {
+		"access": "ad4350579562aec2d49c72c0ccfd72c54df162992fe8e30604504b52aef30025",
+		"loader": "d9d348d665b443300009f7490dbcb613a73eff58f9e91d6e70e364c9c76e7390",
+		"word_art": "edcb6c1cd41375df4d91d195bddd8bebf31d9a7e10116c10bdd7c8797ad11845",
+		"word_card": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+	},
+	"released_cache": {
+		"active_ids": [],
+		"leases": 0,
+		"limit_bytes": 134217728,
+		"pinned_bytes": 0,
+		"reserved_bytes": 0,
+		"resident_bytes": 0,
+		"resources": 0
+	},
+	"released_scoped_url": true,
+	"released_texture_reference": true,
+	"resource": {
+		"compressed_bytes": 172442.0,
+		"decoded_bytes": 2519040.0,
+		"format": "png",
+		"height": 615.0,
+		"id": "sha256:f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+		"kind": "image",
+		"path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+		"sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+		"width": 512.0
+	},
+	"scope": "Exact installed cash-register image through native raw Loader, scoped Access, WordArt and actual minimum WordCard. Four exact RGBA crop hashes and complete lease/resource teardown are required. No fetch override, texture substitution, audio playback or readiness override is used. This image-only inventory is not a complete round or production module manifest."
+}

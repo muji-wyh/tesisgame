@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "status": "third10_unbound_delivery_using_reviewed_prior_architecture_as_reference_only",
+  "source_package": "build/professional-english/foundation-module01-language-review/second10/delivery-r01/",
+  "reference_files_raw_sha256": {
+    "build/professional-english/foundation-module01-language-review/second10/delivery-r01/delivery-lib.cjs": "1abb97207baa01c18e222e21cf2b1af0b64797f21fa890e83d00d241983223c1",
+    "build/professional-english/foundation-module01-language-review/second10/delivery-r01/prepare-delivery.cjs": "87df8dc9cb200ac70839052ff84ed81653e98cf0851912bc596170e6374c8324",
+    "build/professional-english/foundation-module01-language-review/second10/delivery-r01/bind-current-baseline.cjs": "d131c202649b30e5403df4ddf19d1a33eca909a1479a27355b94f2b44cd206f0",
+    "build/professional-english/foundation-module01-language-review/second10/delivery-r01/integrate-reviewed.cjs": "217745d50b129e176c207769b3c92a34aad04866b5eca188061f7c5b46287aa4",
+    "build/professional-english/foundation-module01-language-review/second10/delivery-r01/persisted-test-transforms.cjs": "c62ac047edeedd4ef5143cff1714b89ef3645a178fe603b3bcfeaece19d05680",
+    "build/professional-english/foundation-module01-language-review/second10/delivery-r01/update-persisted-tests.cjs": "637b90f4a2cb3e12465fb5b6639316fba565126eaf6a4d8e9ce5fd431ac5afd5",
+    "build/professional-english/foundation-module01-language-review/second10/delivery-r01/guarded-transaction.cjs": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "build/professional-english/foundation-module01-language-review/second10/delivery-r01/transaction-plan.cjs": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "build/professional-english/foundation-module01-language-review/second10/delivery-r01/helper-origin.json": "27d5dd2d62ed8cfdae225489fc059a2cb774122a42c7343e7257886ccfc73a3a",
+    "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+    "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/adapter-tests-r02/result.json": "61764fb1c4587e19d88a27d9494988539a17336cf0687baa792fc5e214c0a38d"
+  },
+  "prior_builders_executed": false,
+  "prior_bound_state_reused": false,
+  "helper": {
+    "path": "build/professional-english/foundation-module01-language-review/second10/delivery-r01/guarded-transaction.cjs",
+    "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "prior_fault_validation": {
+      "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+      "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+      "tests": 20,
+      "pass": 20,
+      "fail": 0
+    }
+  },
+  "adapter": {
+    "path": "build/professional-english/foundation-module01-language-review/second10/delivery-r01/transaction-plan.cjs",
+    "raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "prior_validation": {
+      "path": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/adapter-tests-r02/result.json",
+      "raw_sha256": "61764fb1c4587e19d88a27d9494988539a17336cf0687baa792fc5e214c0a38d",
+      "assertions": 32,
+      "failures": 0
+    }
+  },
+  "adaptations": [
+    "Nine exact root-accepted candidates and one entire-entry attendance hold; sixteen production source additions from eighteen historical consultations.",
+    "Source, form, region, media, morphology, expression and release scopes remain exact. Root independently accepted these author candidates; there is no separate fabricated reviewer record.",
+    "The supplied fresh binder explicitly requires the successful R22 validation and exact current measured inputs. Preparation checks R22 read-only and creates no bound state. Unrelated barcode acquisition and all other live content are preserved.",
+    "The supplied binder, guarded content integrator and separate guarded test updater are for root execution. Integrator and updater default to dry runs, and use byte-identical previously validated helper and adapter files.",
+    "Only read-only structural dry runs, syntax parsing and scratch test previews are produced by the author. Root owns fresh binding, guarded content/test transactions and execution validation."
+  ],
+  "native_runtime_executed": false,
+  "shared_tests_mutated": false
+}

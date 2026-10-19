@@ -1,0 +1,3918 @@
+{
+  "schema": 1,
+  "status": "frozen_foundation01_third10_language_candidates_awaiting_independent_review",
+  "date": "2026-10-16",
+  "author": "Codex foundation_review (AI source consultation and original authoring for third10; not its independent reviewer)",
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "native_runtime_executed": false,
+  "scope": "Foundation module01 positions21-30 across twenty courses. Only definition, example, difficulty, additive pending references and editorial notes are proposed. Every review gate, morphology graph, media field, accepted form, region, identity, membership and release status remains exact.",
+  "selection": {
+    "ids": [
+      "deadline.final-time.n",
+      "break.work-pause.n",
+      "overtime.additional-work-time.n",
+      "attendance.presence-record.n",
+      "availability.free-time.n",
+      "calendar.date-organizer.n",
+      "agenda.meeting-plan.n",
+      "invitation.attendance-request.n",
+      "update.current-information.n",
+      "reminder.memory-prompt.n"
+    ],
+    "positions": "21-30",
+    "course_count": 20,
+    "all_course_third10_identical": true
+  },
+  "selected_memberships": 200,
+  "preimages_json_sha256": "ce53eb62283f4d4df70686d4bf6a176b5c2aaedbbe737323f9ebd725d9145b9d",
+  "source_ledger_json_sha256": "e1aeb75a92369e40b0dd6d9510a590f6524aa86e4d868c3d4303a8d0512ae5f7",
+  "expression_review_json_sha256": "f34ed83ddb41b16dd8082190cc2609d740781773007d14b1765a88ea294c7dd6",
+  "input_raw_sha256": {
+    "build/professional-english/foundation-module01-language-review/third10/capture-preimages.cjs": "2a0824a5b75bd21e5a0c0ab3ef7fe8c12bb12fe33ba787bf941363a4884eb93e",
+    "build/professional-english/foundation-module01-language-review/third10/preimages.json": "d3dcff8acb7e864fb079c8e3bb4ede6eb0a8982d23a432e22d752d7ba972f5bb",
+    "build/professional-english/foundation-module01-language-review/third10/source-notes.cjs": "882c2c418f84a134c3cee2d6ace6521c83f604d011632f5353d1cf9f8c5da651",
+    "build/professional-english/foundation-module01-language-review/third10/decision-notes.cjs": "90e4a1cae413d4319b03d88371882858ede464604f95d7ef9fe553a75788a3be",
+    "build/professional-english/foundation-module01-language-review/third10/context-notes.cjs": "1e3672d8063de7511f39c034f5b43d5d9365d3c1589e4df07d4dc5f24092f9f9",
+    "build/professional-english/foundation-module01-language-review/third10/prepare-ledger.cjs": "e9d126e2475e95a0e6a1311f2ede3bd48115fb22c4a852b3b22365dd0f6dba24"
+  },
+  "proposals": [
+    {
+      "ordinal": 21,
+      "id": "deadline.final-time.n",
+      "text": "deadline",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "e0e94df155a735682ecf8a7ff2f3d27969863d2b23c1fb90a5875ad76dc125c3",
+      "before_entry": {
+        "id": "deadline.final-time.n",
+        "text": "deadline",
+        "display_text": "deadline",
+        "pos": "noun",
+        "definition": "The latest time or date by which something must be done.",
+        "example": "The deadline for the form is Friday.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "deadline"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A task beside a clearly emphasized final date on a calendar.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "deadline.final-time.n.analysis.v1",
+          "lexeme_id": "deadline.final-time.n",
+          "text": "deadline",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "deadline",
+              "surface": "deadline",
+              "canonical_id": "morph.deadline"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "deadline.final-time.n",
+        "text": "deadline",
+        "display_text": "deadline",
+        "pos": "noun",
+        "definition": "The latest time or date by which something must be done.",
+        "example": "The deadline for the form is Friday.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "deadline"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A task beside a clearly emphasized final date on a calendar.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "deadline.final-time.n.analysis.v1",
+          "lexeme_id": "deadline.final-time.n",
+          "text": "deadline",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "deadline",
+              "surface": "deadline",
+              "canonical_id": "morph.deadline"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-third10-oxford-deadline",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary deadline noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-third10-collins-deadline",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary deadline noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal based on selected dictionary passages; independent acceptance remains pending. Propose B2 rather than current A2 based on the actual Collins selected noun label. Oxford has no visible selected level; its unrelated B2 footer is excluded. This remains an author curriculum proposal, not a certified difficulty."
+      },
+      "candidate_entry_json_sha256": "e690755ad3c7817559a1bc5c9b099180924b1098570d318e63850af134dfa593",
+      "changed_fields": [
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "difficulty": "B2"
+      },
+      "protected_nonlanguage_fields_json_sha256": "f8a21aef9963d3a19eac56f65e598dfbf4729939cd040dbfe426800851eddbc4",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain the clear latest-completion-time definition. The named day in the example supplies the ordinary task deadline, not a physical boundary.",
+      "example_decision": "Retain the original form-due-on-Friday example. It illustrates a fictional time limit without establishing a legal filing rule.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "deadline"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing standard headword and general region. No alternative spelling was observed for this selected sense in the consulted passages. Synonyms, inflections and regional labels attached to other senses do not become exercise answers.",
+        "new_forms_proposed": [],
+        "limits": "Cancellation and application deadlines remain independent complete terms. Contract terms, jurisdiction, time zone, extensions and authority to change a deadline are not decided by this language review."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B2",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": "B2"
+        },
+        "status": "propose_B2_from_selected_label_pending_independent_review",
+        "notes": "Propose B2 rather than current A2 based on the actual Collins selected noun label. Oxford has no visible selected level; its unrelated B2 footer is excluded. This remains an author curriculum proposal, not a certified difficulty.",
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-third10-oxford-deadline",
+        "foundation01-language-third10-collins-deadline"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-third10-oxford-deadline",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary deadline noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-third10-collins-deadline",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary deadline noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 22,
+      "id": "break.work-pause.n",
+      "text": "break",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "cd8129700ba8595c8ce69b43be46fa1f1d446e0b2984ae6235d76f139d4295eb",
+      "before_entry": {
+        "id": "break.work-pause.n",
+        "text": "break",
+        "display_text": "break",
+        "pos": "noun",
+        "definition": "A short period when work or another activity stops for rest.",
+        "example": "We have a short break after the briefing.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "break"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A worker resting in a break area beside a paused work schedule.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "break.work-pause.n.analysis.v1",
+          "lexeme_id": "break.work-pause.n",
+          "text": "break",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "break",
+              "surface": "break",
+              "canonical_id": "morph.break"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "break.work-pause.n",
+        "text": "break",
+        "display_text": "break",
+        "pos": "noun",
+        "definition": "A short pause in work or another activity, often for rest or food.",
+        "example": "We have a short break after the briefing.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "break"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A worker resting in a break area beside a paused work schedule.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "break.work-pause.n.analysis.v1",
+          "lexeme_id": "break.work-pause.n",
+          "text": "break",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "break",
+              "surface": "break",
+              "canonical_id": "morph.break"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-third10-oxford-break",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary break noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal based on selected dictionary passages; independent acceptance remains pending. Oxford selected short-pause Working life label is A1. Retain A2 as the curriculum floor because the schema begins at A2, while preserving A1 literally; the source does not label this item A2."
+      },
+      "candidate_entry_json_sha256": "3275311b273743efe23a503a74c8087f3b7e9542831d89ec02e6c0cf438a101f",
+      "changed_fields": [
+        "definition",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "definition": "A short pause in work or another activity, often for rest or food."
+      },
+      "protected_nonlanguage_fields_json_sha256": "a0f42280029edf214afb0fb5fc0124060795f9518cbc6b517b4dc27cd75a086f",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Include eating and other short pauses rather than implying that a break must be solely for rest. Preserve the selected countable activity-pause noun.",
+      "example_decision": "Retain the original short break after a briefing. It describes a pause without prescribing an entitlement or fixed duration.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "break"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing standard headword and general region. No alternative spelling was observed for this selected sense in the consulted passages. Synonyms, inflections and regional labels attached to other senses do not become exercise answers.",
+        "new_forms_proposed": [],
+        "limits": "Broken objects, page breaks, break-even calculations, physical openings, opportunities and sports uses are excluded. British school break and North American recess are another sense, not accepted spelling variants."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": "A1"
+        },
+        "status": "retain_A2_course_floor_with_literal_A1_source",
+        "notes": "Oxford selected short-pause Working life label is A1. Retain A2 as the curriculum floor because the schema begins at A2, while preserving A1 literally; the source does not label this item A2.",
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-third10-oxford-break"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-third10-oxford-break",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary break noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 23,
+      "id": "overtime.additional-work-time.n",
+      "text": "overtime",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "3e4194d118971d3dc7baf398e82c588b3866e25408124a45d34bc3e16a4a1e67",
+      "before_entry": {
+        "id": "overtime.additional-work-time.n",
+        "text": "overtime",
+        "display_text": "overtime",
+        "pos": "noun",
+        "definition": "Time spent working beyond someone's normal scheduled hours.",
+        "example": "The team recorded its overtime for the week.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "overtime"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A workday timeline with extra hours shown after the usual finish.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "overtime.additional-work-time.n.analysis.v1",
+          "lexeme_id": "overtime.additional-work-time.n",
+          "text": "overtime",
+          "kind": "compound",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "compound",
+              "canonical": "over",
+              "surface": "over",
+              "canonical_id": "morph.over"
+            },
+            {
+              "id": "p2",
+              "type": "compound",
+              "canonical": "time",
+              "surface": "time",
+              "canonical_id": "morph.time"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "overtime",
+              "rule": "closed_compound"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "overtime.additional-work-time.n",
+        "text": "overtime",
+        "display_text": "overtime",
+        "pos": "noun",
+        "definition": "Time spent working beyond someone's normal scheduled hours.",
+        "example": "The team worked two hours of overtime on Friday.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "overtime"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A workday timeline with extra hours shown after the usual finish.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "overtime.additional-work-time.n.analysis.v1",
+          "lexeme_id": "overtime.additional-work-time.n",
+          "text": "overtime",
+          "kind": "compound",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "compound",
+              "canonical": "over",
+              "surface": "over",
+              "canonical_id": "morph.over"
+            },
+            {
+              "id": "p2",
+              "type": "compound",
+              "canonical": "time",
+              "surface": "time",
+              "canonical_id": "morph.time"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "overtime",
+              "rule": "closed_compound"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-third10-oxford-overtime",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary overtime noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-third10-collins-overtime",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary overtime noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal based on selected dictionary passages; independent acceptance remains pending. Oxford C1 and Collins B2 are both selected work-time observations. Propose B2 using the explicit Collins evidence and the bounded ordinary-hours lesson, without averaging labels or claiming that Oxford supports B2. Independent review must assess this deliberate disagreement; existing A2 is not defended."
+      },
+      "candidate_entry_json_sha256": "d397f43c44376df9103951488ca22e259ac2deb64be4b11ba5fcf5c635c28700",
+      "changed_fields": [
+        "example",
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "example": "The team worked two hours of overtime on Friday.",
+        "difficulty": "B2"
+      },
+      "protected_nonlanguage_fields_json_sha256": "e8eb8620b3289e5b22ce4096c9a0fe57b0ad408520d1f722463baa861dc5c748",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain additional work time beyond normal scheduled hours. The wording permits hours before or after the usual period and does not promise payment.",
+      "example_decision": "Replace the ambiguous recorded-overtime example with an original sentence explicitly measuring additional work in hours. This chooses the time noun rather than overtime pay.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "overtime"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing standard headword and general region. No alternative spelling was observed for this selected sense in the consulted passages. Synonyms, inflections and regional labels attached to other senses do not become exercise answers.",
+        "new_forms_proposed": [],
+        "limits": "Additional pay, sports extra time, figurative overactivity and legal entitlement remain outside the selected sense. General region is retained; the US label and British extra time contrast belong to sport."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B2",
+        "observed_selected_source_labels": {
+          "oxford": "C1",
+          "collins": "B2"
+        },
+        "status": "propose_B2_with_explicit_C1_B2_disagreement",
+        "notes": "Oxford C1 and Collins B2 are both selected work-time observations. Propose B2 using the explicit Collins evidence and the bounded ordinary-hours lesson, without averaging labels or claiming that Oxford supports B2. Independent review must assess this deliberate disagreement; existing A2 is not defended.",
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-third10-oxford-overtime",
+        "foundation01-language-third10-collins-overtime"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-third10-oxford-overtime",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary overtime noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-third10-collins-overtime",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary overtime noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 24,
+      "id": "attendance.presence-record.n",
+      "text": "attendance",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "a7699c3e58649791eaee79817f87879c2ce6b2418e729768c6f1a43c19b3594e",
+      "before_entry": {
+        "id": "attendance.presence-record.n",
+        "text": "attendance",
+        "display_text": "attendance",
+        "pos": "noun",
+        "definition": "Being present at work, a meeting, or another scheduled activity.",
+        "example": "The trainer recorded attendance at the session.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "attendance"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A small group present at a fictional workplace meeting beside its corresponding attendance record. The concept is being present, not the sheet by itself; use invented names and no biometric or private data.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "attendance.presence-record.n.analysis.v1",
+          "lexeme_id": "attendance.presence-record.n",
+          "text": "attendance",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "attend",
+              "surface": "attend",
+              "canonical_id": "morph.attend"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ance",
+              "surface": "ance",
+              "canonical_id": "affix.ance.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "attendance",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The legacy canonical ID is retained for progress continuity. The definition concerns presence, while the image connects presence with its record; the ID wording does not create a second record-object sense."
+      },
+      "candidate_entry": {
+        "id": "attendance.presence-record.n",
+        "text": "attendance",
+        "display_text": "attendance",
+        "pos": "noun",
+        "definition": "Being present at work, a meeting, or another scheduled activity.",
+        "example": "The trainer recorded attendance at the session.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "attendance"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A small group present at a fictional workplace meeting beside its corresponding attendance record. The concept is being present, not the sheet by itself; use invented names and no biometric or private data.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "attendance.presence-record.n.analysis.v1",
+          "lexeme_id": "attendance.presence-record.n",
+          "text": "attendance",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "attend",
+              "surface": "attend",
+              "canonical_id": "morph.attend"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ance",
+              "surface": "ance",
+              "canonical_id": "affix.ance.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "attendance",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-third10-oxford-attendance",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary attendance noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-third10-collins-attendance",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary attendance noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The legacy canonical ID is retained for progress continuity. The definition concerns presence, while the image connects presence with its record; the ID wording does not create a second record-object sense. Language-only author proposal based on selected dictionary passages; independent acceptance remains pending. The observed Oxford presence-sense level is C1, outside the A2/B1/B2 enum. Collins confirms meaning but supplies no visible selected level. Retain stored A2 unchanged and explicitly unaccepted until independent review resolves teaching scope or defers the item; do not clamp C1 to B2."
+      },
+      "candidate_entry_json_sha256": "60c07266fa1e4f344872e2afe8b0ac55475922be389b7c0b8c278790f37e2189",
+      "changed_fields": [
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {},
+      "protected_nonlanguage_fields_json_sha256": "70f08e2f6dc5f5436a04a004d9ec2ff5ea213f03827908b4f1d5bd744312b3cc",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain presence at work or a scheduled activity. The protected ID ending presence-record does not turn the word into a paper register, and the separate number-present sense is not silently merged.",
+      "example_decision": "Retain the trainer recording attendance: recording who was present fits the selected presence meaning. It does not certify attendance-list accuracy, a quorum or a headcount.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "attendance"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing standard headword and general region. No alternative spelling was observed for this selected sense in the consulted passages. Synonyms, inflections and regional labels attached to other senses do not become exercise answers.",
+        "new_forms_proposed": [],
+        "limits": "A list can be expected or actual; presence does not itself establish attendance numbers, a valid quorum, supervision, assistance or eligibility. Those meanings and procedures stay separate."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": "C1",
+          "collins": null
+        },
+        "status": "hold_C1_outside_schema_keep_A2_unaccepted",
+        "notes": "The observed Oxford presence-sense level is C1, outside the A2/B1/B2 enum. Collins confirms meaning but supplies no visible selected level. Retain stored A2 unchanged and explicitly unaccepted until independent review resolves teaching scope or defers the item; do not clamp C1 to B2.",
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-third10-oxford-attendance",
+        "foundation01-language-third10-collins-attendance"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-third10-oxford-attendance",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary attendance noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-third10-collins-attendance",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary attendance noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 25,
+      "id": "availability.free-time.n",
+      "text": "availability",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "9dea224787f333dd31e0f2ede31a4666c6103aaf29157317d290983ebe3b4843",
+      "before_entry": {
+        "id": "availability.free-time.n",
+        "text": "availability",
+        "display_text": "availability",
+        "pos": "noun",
+        "definition": "The times when someone is free or able to take part in something.",
+        "example": "Please send your availability for next week.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "availability"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A calendar comparing free and occupied time slots.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "availability.free-time.n.analysis.v1",
+          "lexeme_id": "availability.free-time.n",
+          "text": "availability",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "available",
+              "surface": "available",
+              "canonical_id": "morph.available"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ity",
+              "surface": "ity",
+              "canonical_id": "affix.ity.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "availability",
+              "rule": "adjective_able_to_ability"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "availability.free-time.n",
+        "text": "availability",
+        "display_text": "availability",
+        "pos": "noun",
+        "definition": "Whether and when someone is free to meet, work, or take part in an activity.",
+        "example": "Please send your availability for next week.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "availability"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A calendar comparing free and occupied time slots.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "availability.free-time.n.analysis.v1",
+          "lexeme_id": "availability.free-time.n",
+          "text": "availability",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "available",
+              "surface": "available",
+              "canonical_id": "morph.available"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ity",
+              "surface": "ity",
+              "canonical_id": "affix.ity.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "availability",
+              "rule": "adjective_able_to_ability"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-third10-oxford-availability",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary availability noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-third10-collins-availability",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary availability noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal based on selected dictionary passages; independent acceptance remains pending. No selected free-time CEFR label was observed in either consulted entry. Retain B1 as a provisional author curriculum judgment for an abstract scheduling noun in a familiar request, not as a dictionary-certified or morphological level."
+      },
+      "candidate_entry_json_sha256": "b3dcb2fa44d64112a5f4f164f20a3445563c7420ebbd6c2bf80e2ca518f7ae71",
+      "changed_fields": [
+        "definition",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "definition": "Whether and when someone is free to meet, work, or take part in an activity."
+      },
+      "protected_nonlanguage_fields_json_sha256": "561761f70e19541d12435085effc15adab478e7f7bb97dff1659c8f38b170f52",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Clarify scheduling freedom rather than a general capability to perform an activity. Preserve the selected person sense and the request for next-week availability.",
+      "example_decision": "Retain the original request to send availability for next week; this naturally asks for free times without promising attendance or employment.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "availability"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing standard headword and general region. No alternative spelling was observed for this selected sense in the consulted passages. Synonyms, inflections and regional labels attached to other senses do not become exercise answers.",
+        "new_forms_proposed": [],
+        "limits": "System uptime, stock, beds, rooms, vehicles, materials and equipment are different availability senses. Plural available people/things are not this uncountable scheduling noun or additional accepted forms."
+      },
+      "difficulty_evidence": {
+        "before": "B1",
+        "candidate": "B1",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": null
+        },
+        "status": "retain_B1_as_explicit_author_judgment_without_source_level",
+        "notes": "No selected free-time CEFR label was observed in either consulted entry. Retain B1 as a provisional author curriculum judgment for an abstract scheduling noun in a familiar request, not as a dictionary-certified or morphological level.",
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-third10-oxford-availability",
+        "foundation01-language-third10-collins-availability"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-third10-oxford-availability",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary availability noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-third10-collins-availability",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary availability noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 26,
+      "id": "calendar.date-organizer.n",
+      "text": "calendar",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "3ece0eb13fe06b226c4bbee563d831f0ca0d0325ad4d308f1b103dacdc79cb1a",
+      "before_entry": {
+        "id": "calendar.date-organizer.n",
+        "text": "calendar",
+        "display_text": "calendar",
+        "pos": "noun",
+        "definition": "A chart or application showing dates and planned events.",
+        "example": "The appointment is in the shared calendar.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "calendar"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A clear monthly calendar with a few scheduled events.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "calendar.date-organizer.n.analysis.v1",
+          "lexeme_id": "calendar.date-organizer.n",
+          "text": "calendar",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "calendar",
+              "surface": "calendar",
+              "canonical_id": "morph.calendar"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "calendar.date-organizer.n",
+        "text": "calendar",
+        "display_text": "calendar",
+        "pos": "noun",
+        "definition": "A chart, book, or application used to organize dates and planned events.",
+        "example": "The appointment is in the shared calendar.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "calendar"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A clear monthly calendar with a few scheduled events.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "calendar.date-organizer.n.analysis.v1",
+          "lexeme_id": "calendar.date-organizer.n",
+          "text": "calendar",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "calendar",
+              "surface": "calendar",
+              "canonical_id": "morph.calendar"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-third10-oxford-calendar",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary calendar noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-third10-collins-calendar",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary calendar noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal based on selected dictionary passages; independent acceptance remains pending. Collins date-display/software-calendar sense carries B1. Propose B1 for the broader organizer item. Oxford supplies no visible selected organizer level; B2 belongs to its distinct time-system sense and is excluded. Retain calendar and general region. Oxford marks its personal organizer sense especially North American English; Collins also attests appointment registers in British English and software calendars. Especially is not an exclusive region restriction. Do not add calender, diary, planner or a synonym as an answer."
+      },
+      "candidate_entry_json_sha256": "40b42e25182cb2ed1a36e66a9147390891692d7059dbb5931e91cb6985bc969f",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "definition": "A chart, book, or application used to organize dates and planned events.",
+        "difficulty": "B1"
+      },
+      "protected_nonlanguage_fields_json_sha256": "1ba3ca5aefc2b787661587d2d961df48ac0b9ff1b652454049348f9cbcd0c7bf",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Include a book organizer as well as a chart or application. The selected noun helps organize dates and events; chronological systems and the scheduling verb remain separate.",
+      "example_decision": "Retain the appointment in a shared calendar; it clearly identifies an organizer used by a group.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "calendar"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain calendar and general region. Oxford marks its personal organizer sense especially North American English; Collins also attests appointment registers in British English and software calendars. Especially is not an exclusive region restriction. Do not add calender, diary, planner or a synonym as an answer.",
+        "new_forms_proposed": [],
+        "limits": "The calendar system, legal case list, resource-status calendar and a specialized promotion/content calendar require their own complete-term scope. A resource availability grid does not by itself establish a planned-event sense."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B1",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": "B1"
+        },
+        "status": "propose_B1_selected_software_calendar_evidence",
+        "notes": "Collins date-display/software-calendar sense carries B1. Propose B1 for the broader organizer item. Oxford supplies no visible selected organizer level; B2 belongs to its distinct time-system sense and is excluded.",
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-third10-oxford-calendar",
+        "foundation01-language-third10-collins-calendar"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-third10-oxford-calendar",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary calendar noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-third10-collins-calendar",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary calendar noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 27,
+      "id": "agenda.meeting-plan.n",
+      "text": "agenda",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "777f640a566aaaa4db929c0e5f1c68d20ab58a850b52ca48c4a0dc5e932dc522",
+      "before_entry": {
+        "id": "agenda.meeting-plan.n",
+        "text": "agenda",
+        "display_text": "agenda",
+        "pos": "noun",
+        "definition": "A planned list of matters to discuss during a meeting.",
+        "example": "The first item on the agenda is staffing.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "agenda"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A meeting document with numbered discussion topics.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "agenda.meeting-plan.n.analysis.v1",
+          "lexeme_id": "agenda.meeting-plan.n",
+          "text": "agenda",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "agenda",
+              "surface": "agenda",
+              "canonical_id": "morph.agenda"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "agenda.meeting-plan.n",
+        "text": "agenda",
+        "display_text": "agenda",
+        "pos": "noun",
+        "definition": "A planned list of matters to discuss during a meeting.",
+        "example": "The first item on the agenda is staffing.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "agenda"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A meeting document with numbered discussion topics.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "agenda.meeting-plan.n.analysis.v1",
+          "lexeme_id": "agenda.meeting-plan.n",
+          "text": "agenda",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "agenda",
+              "surface": "agenda",
+              "canonical_id": "morph.agenda"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-third10-oxford-agenda",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary agenda noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal based on selected dictionary passages; independent acceptance remains pending. Oxford selected meeting-list Working life label is B2. Propose B2 rather than current A2 while leaving independent acceptance pending; the level is not borrowed from a different intention sense."
+      },
+      "candidate_entry_json_sha256": "d7982c0c7e9b53cf780bc8118784decd79765b7ebc1253c973dbff9706ae7e56",
+      "changed_fields": [
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "difficulty": "B2"
+      },
+      "protected_nonlanguage_fields_json_sha256": "5c66b894040cf2c54244b48c673798341864bdc89fef8204b237f4886963f67b",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain the planned discussion-topic list for a meeting. Its meaning does not require a paper document or include every broader policy priority or hidden intention.",
+      "example_decision": "Retain the first staffing item on the agenda as a clear meeting-list use.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "agenda"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing standard headword and general region. No alternative spelling was observed for this selected sense in the consulted passages. Synonyms, inflections and regional labels attached to other senses do not become exercise answers.",
+        "new_forms_proposed": [],
+        "limits": "Political priorities, a personal or hidden motive, meeting authority and approval of staffing decisions are separate. A list of topics is not the discussion or its minutes."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B2",
+        "observed_selected_source_labels": {
+          "oxford": "B2"
+        },
+        "status": "propose_B2_from_selected_meeting_list_label",
+        "notes": "Oxford selected meeting-list Working life label is B2. Propose B2 rather than current A2 while leaving independent acceptance pending; the level is not borrowed from a different intention sense.",
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-third10-oxford-agenda"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-third10-oxford-agenda",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary agenda noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 28,
+      "id": "invitation.attendance-request.n",
+      "text": "invitation",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "d1ff331e72f1cfe944d11ce8ad4993ed3f466d057e634a384a1ce0f07addb415",
+      "before_entry": {
+        "id": "invitation.attendance-request.n",
+        "text": "invitation",
+        "display_text": "invitation",
+        "pos": "noun",
+        "definition": "A message asking someone to attend an event or take part in an activity.",
+        "example": "I received an invitation to the training session.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "invitation"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An event invitation with time, place, and response choices.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "invitation.attendance-request.n.analysis.v1",
+          "lexeme_id": "invitation.attendance-request.n",
+          "text": "invitation",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "invite",
+              "surface": "invite",
+              "canonical_id": "morph.invite"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ation",
+              "surface": "ation",
+              "canonical_id": "affix.ation.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "invitation",
+              "rule": "drop_final_e_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "invitation.attendance-request.n",
+        "text": "invitation",
+        "display_text": "invitation",
+        "pos": "noun",
+        "definition": "A spoken or written request to attend an event or take part in an activity.",
+        "example": "I received an invitation to the training session.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "invitation"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An event invitation with time, place, and response choices.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "invitation.attendance-request.n.analysis.v1",
+          "lexeme_id": "invitation.attendance-request.n",
+          "text": "invitation",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "invite",
+              "surface": "invite",
+              "canonical_id": "morph.invite"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ation",
+              "surface": "ation",
+              "canonical_id": "affix.ation.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "invitation",
+              "rule": "drop_final_e_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-third10-oxford-invitation",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary invitation noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-third10-collins-invitation",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary invitation noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal based on selected dictionary passages; independent acceptance remains pending. Collins marks the selected spoken/written event-request sense A2. Retain A2 provisionally. Oxford supplies meaning evidence without a visible selected level; no footer level is transferred."
+      },
+      "candidate_entry_json_sha256": "05a5a72208cb510cee5b12d629d9bef21d4c2dde1857436afd5ec55e276f6a42",
+      "changed_fields": [
+        "definition",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "definition": "A spoken or written request to attend an event or take part in an activity."
+      },
+      "protected_nonlanguage_fields_json_sha256": "647b62dab31ae8d4edd6dfe013ce1b86850c7990605281e9e80fcdde55d7771a",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Make spoken requests explicit as well as written messages. The ordinary request to participate remains distinct from the physical invitation card or the act of inviting.",
+      "example_decision": "Retain the received invitation to a training session. Receiving a request does not imply accepting it or possessing permission to share its access details.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "invitation"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing standard headword and general region. No alternative spelling was observed for this selected sense in the consulted passages. Synonyms, inflections and regional labels attached to other senses do not become exercise answers.",
+        "new_forms_proposed": [],
+        "limits": "A physical card, an inducement to a bad outcome, a legal invitation to treat and meeting access credentials are not automatically this selected event-request sense. Inflected invitations remains grammatical usage, not an added accepted answer."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": "A2"
+        },
+        "status": "retain_A2_supported_by_selected_Collins_request_sense",
+        "notes": "Collins marks the selected spoken/written event-request sense A2. Retain A2 provisionally. Oxford supplies meaning evidence without a visible selected level; no footer level is transferred.",
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-third10-oxford-invitation",
+        "foundation01-language-third10-collins-invitation"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-third10-oxford-invitation",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary invitation noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-third10-collins-invitation",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary invitation noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 29,
+      "id": "update.current-information.n",
+      "text": "update",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "bde18c844cd9ddf76a747a479a5d7fcf494e447ff59b3f4153a6098dc963f8e5",
+      "before_entry": {
+        "id": "update.current-information.n",
+        "text": "update",
+        "display_text": "update",
+        "pos": "noun",
+        "definition": "New information about the progress or current state of something.",
+        "example": "Could you give us an update on the order?",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "update"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A colleague sharing new progress on an existing task.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "update.current-information.n.analysis.v1",
+          "lexeme_id": "update.current-information.n",
+          "text": "update",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The noun denotes new information or an instance of updating; the documented up- + date formation supports the same written constituents. The prefix is not a spatial-direction question. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/update",
+              "https://www.dictionary.com/browse/update"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "affix.up.prefix",
+              "type": "prefix",
+              "canonical": "up",
+              "surface": "up"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.date",
+              "type": "stem",
+              "canonical": "date",
+              "surface": "date"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "update",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-update",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-update",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "update.current-information.n",
+        "text": "update",
+        "display_text": "update",
+        "pos": "noun",
+        "definition": "A report giving the latest information about the progress or current state of something.",
+        "example": "Could you give us an update on the order?",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "update"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A colleague sharing new progress on an existing task.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "update.current-information.n.analysis.v1",
+          "lexeme_id": "update.current-information.n",
+          "text": "update",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The noun denotes new information or an instance of updating; the documented up- + date formation supports the same written constituents. The prefix is not a spatial-direction question. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/update",
+              "https://www.dictionary.com/browse/update"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "affix.up.prefix",
+              "type": "prefix",
+              "canonical": "up",
+              "surface": "up"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.date",
+              "type": "stem",
+              "canonical": "date",
+              "surface": "date"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "update",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-update",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-update",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation01-language-third10-oxford-update",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary update noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-third10-collins-update",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary update noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal based on selected dictionary passages; independent acceptance remains pending. No selected information-noun CEFR label was visible in either consulted entry. Propose B1 as an author curriculum judgment for requesting and giving a progress report while distinguishing noun, verb and software senses; this is not a source-derived level. Retain update and general region. Collins distinguishes initial-stress noun from final-stress verb; this is source context only. Keep approved voice settings, pending recording and the authored morphology exact. Verb forms and software changes do not become noun answers."
+      },
+      "candidate_entry_json_sha256": "a2f533cc73c3e7592dca103c1e9c761049aa7eed6ca62363adf76801801ef265",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "definition": "A report giving the latest information about the progress or current state of something.",
+        "difficulty": "B1"
+      },
+      "protected_nonlanguage_fields_json_sha256": "0e32cb091fa0641f4a79519c29edb205b4794b8e3464fde220f8c2e309136eab",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Express the countable report noun directly rather than treating all new information or all revisions as the same sense. The report can be spoken or written.",
+      "example_decision": "Retain the original request for an update on an order, which fixes the current-information report reading.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "update"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain update and general region. Collins distinguishes initial-stress noun from final-stress verb; this is source context only. Keep approved voice settings, pending recording and the authored morphology exact. Verb forms and software changes do not become noun answers.",
+        "new_forms_proposed": [],
+        "limits": "Updating records, code changes, software patches, configuration changes, and the act of revision remain separate. Some status-page and synchronization contexts cannot choose report versus change and stay unbound."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B1",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": null
+        },
+        "status": "propose_B1_as_explicit_author_judgment_without_source_level",
+        "notes": "No selected information-noun CEFR label was visible in either consulted entry. Propose B1 as an author curriculum judgment for requesting and giving a progress report while distinguishing noun, verb and software senses; this is not a source-derived level.",
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-third10-oxford-update",
+        "foundation01-language-third10-collins-update"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-third10-oxford-update",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary update noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-third10-collins-update",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary update noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 30,
+      "id": "reminder.memory-prompt.n",
+      "text": "reminder",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "2c46cea3d9b5ca2701f96576cdb052ccc9951692a08591aac619a5adfeb2ad4f",
+      "before_entry": {
+        "id": "reminder.memory-prompt.n",
+        "text": "reminder",
+        "display_text": "reminder",
+        "pos": "noun",
+        "definition": "A message or signal that helps someone remember something.",
+        "example": "The calendar sent a reminder before the meeting.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "reminder"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A reminder notification linked to an upcoming appointment.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "reminder.memory-prompt.n.analysis.v1",
+          "lexeme_id": "reminder.memory-prompt.n",
+          "text": "reminder",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "remind",
+              "surface": "remind",
+              "canonical_id": "morph.remind"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-er",
+              "surface": "er",
+              "canonical_id": "affix.er.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "reminder",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "reminder.memory-prompt.n",
+        "text": "reminder",
+        "display_text": "reminder",
+        "pos": "noun",
+        "definition": "A message or signal that helps someone remember something.",
+        "example": "The calendar sent a reminder before the meeting.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "reminder"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A reminder notification linked to an upcoming appointment.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "reminder.memory-prompt.n.analysis.v1",
+          "lexeme_id": "reminder.memory-prompt.n",
+          "text": "reminder",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "remind",
+              "surface": "remind",
+              "canonical_id": "morph.remind"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-er",
+              "surface": "er",
+              "canonical_id": "affix.er.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "reminder",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-third10-oxford-reminder",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary reminder noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-third10-collins-reminder",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary reminder noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal based on selected dictionary passages; independent acceptance remains pending. No selected CEFR label was visible. Propose B1 as a provisional author curriculum judgment for the abstract function of a prompt and its distinction from a notification or instruction. No source or morphology certification is implied. Retain reminder and general region. Collins mainly British applies to its narrower overdue-note sense; general memory prompts are also attested in American entries. Do not restrict the selected calendar notification to Britain."
+      },
+      "candidate_entry_json_sha256": "29c107d5c41d5a24a2e50250955afe706f984ec1a9df11e11dcb7a4bc733256e",
+      "changed_fields": [
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "difficulty": "B1"
+      },
+      "protected_nonlanguage_fields_json_sha256": "981c84d8aea444cf09604dca9402392b2c415c363cff1489b51948984fc8d146",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain a message or signal prompting memory, including a scheduled notification before an event. It need not refer to a forgotten past event or an overdue payment.",
+      "example_decision": "Retain the calendar sending a reminder before the meeting. This is an ordinary electronic prompt and no medical or billing instruction is implied.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "reminder"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain reminder and general region. Collins mainly British applies to its narrower overdue-note sense; general memory prompts are also attested in American entries. Do not restrict the selected calendar notification to Britain.",
+        "new_forms_proposed": [],
+        "limits": "A medication reminder remains a separately scoped care prompt and does not authorize administration or treatment decisions. A renewal reminder conveys information without deciding renewal, payment or cancellation rights."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B1",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": null
+        },
+        "status": "propose_B1_as_explicit_author_judgment_without_source_level",
+        "notes": "No selected CEFR label was visible. Propose B1 as a provisional author curriculum judgment for the abstract function of a prompt and its distinction from a notification or instruction. No source or morphology certification is implied.",
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-third10-oxford-reminder",
+        "foundation01-language-third10-collins-reminder"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-third10-oxford-reminder",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary reminder noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-third10-collins-reminder",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary reminder noun and bounded source observations consulted for this original author proposal. Independent language acceptance, morphology and all domain/media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    }
+  ],
+  "proposed_additive_source_records": [
+    {
+      "id": "foundation01-language-third10-oxford-deadline",
+      "title": "Oxford Advanced Learner's Dictionary: deadline",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/deadline",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-oxford-break",
+      "title": "Oxford Advanced Learner's Dictionary: break",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/break_2",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-oxford-overtime",
+      "title": "Oxford Advanced Learner's Dictionary: overtime",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/overtime",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-oxford-attendance",
+      "title": "Oxford Advanced Learner's Dictionary: attendance",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/attendance",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-oxford-availability",
+      "title": "Oxford Advanced Learner's Dictionary: availability",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/availability",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-oxford-calendar",
+      "title": "Oxford Advanced Learner's Dictionary: calendar",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/calendar",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-oxford-agenda",
+      "title": "Oxford Advanced Learner's Dictionary: agenda",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/agenda",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-oxford-invitation",
+      "title": "Oxford Advanced Learner's Dictionary: invitation",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/invitation",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-oxford-update",
+      "title": "Oxford Advanced Learner's Dictionary: update",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/update_2",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-oxford-reminder",
+      "title": "Oxford Advanced Learner's Dictionary: reminder",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/reminder",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-collins-overtime",
+      "title": "Collins English Dictionary / COBUILD: overtime",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/overtime",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-collins-attendance",
+      "title": "Collins English Dictionary / COBUILD: attendance",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/attendance",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-collins-deadline",
+      "title": "Collins English Dictionary / COBUILD: deadline",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/deadline",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-collins-availability",
+      "title": "Collins English Dictionary / COBUILD: availability",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/availability",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-collins-calendar",
+      "title": "Collins English Dictionary / COBUILD: calendar",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/calendar",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-collins-invitation",
+      "title": "Collins English Dictionary / COBUILD: invitation",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/invitation",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-collins-update",
+      "title": "Collins English Dictionary / COBUILD: update",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/update",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-third10-collins-reminder",
+      "title": "Collins English Dictionary / COBUILD: reminder",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/reminder",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary noun meaning, explicitly observed difficulty labels and spelling/region evidence. AI author consultation only; independent language acceptance and all specialist, morphology and media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    }
+  ],
+  "review_boundary": {
+    "language": "All ten retain pending language and exact reviewer/date/overall/domain fields. No independent acceptance is supplied.",
+    "difficulty": "Deadline B2, calendar B1 and agenda B2 have selected source labels. Overtime B2 is proposed with the Oxford C1/Collins B2 conflict explicit. Attendance C1 is outside the enum and stored A2 remains unaccepted. Availability B1 retention and update/reminder B1 proposals are author judgments without observed selected CEFR. Break A1 is recorded literally while A2 is a course-floor choice. Invitation A2 has selected source evidence.",
+    "spelling": "Accepted forms and general regions remain exact. No synonym, inflection or different-sense regional label becomes an answer. Calendar organizer usage and reminder overdue-note regional semantics are explicitly bounded.",
+    "morphology": "All authored graphs, review statuses, source references and provenance remain exact; no morphological acceptance is granted.",
+    "media": "All images, briefs, audio, suitability flags and approved Ava Sweet settings remain exact. Update noun/verb stress observation certifies no recording.",
+    "domain": "Existing gates remain exact. Lexical scope supplies no employment, legal, medical, financial, access or other specialist approval.",
+    "release": "All modules and courses remain exact and unpromoted.",
+    "runtime": "No native engine, runtime probe, shared tests or full suite were invoked. Only scratch preservation and candidate schema guards ran."
+  },
+  "structural_checks": {
+    "candidate_entries": 10,
+    "schema_errors": 0,
+    "expression_mutations": 0
+  },
+  "registry_json_sha256_informational": {
+    "capture": "f8f2fefe0ce63dc21b017f54fad2f4b28ffad840eec942bace8070c812d51a9f",
+    "start": "f8f2fefe0ce63dc21b017f54fad2f4b28ffad840eec942bace8070c812d51a9f",
+    "end": "f8f2fefe0ce63dc21b017f54fad2f4b28ffad840eec942bace8070c812d51a9f"
+  },
+  "remaining": [
+    "Independently assess the exact candidate entries, actual source observations and frozen context before any promotion.",
+    "Resolve or explicitly defer attendance difficulty and teaching scope; do not clamp observed C1 into B2 or silently accept stored A2.",
+    "Assess the overtime B2 proposal against the explicit C1/B2 source disagreement.",
+    "Assess author-only availability/update/reminder difficulty and the break course-floor choice separately from sourced labels.",
+    "Keep every expression and related term exact, including five expression ambiguity holds and the policy-update report/change alternative; no new scored bindings.",
+    "Any later integration must bind current exact preimages and preserve unrelated work. This package supplies no production serializer or baseline."
+  ]
+}

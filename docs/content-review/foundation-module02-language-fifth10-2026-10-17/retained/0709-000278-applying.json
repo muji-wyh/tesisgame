@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 278,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "479df55d00c28b1a3b662d151d13cd83bb4e3810a3cb47ae2b2435597c7c1415",
+  "recorded_at": "2026-10-16T22:49:04.279Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/output/additional-retained-files.json",
+  "work": "work/efb52bf0-3af1-4a49-b9ef-b90298fe63d6.bin"
+}

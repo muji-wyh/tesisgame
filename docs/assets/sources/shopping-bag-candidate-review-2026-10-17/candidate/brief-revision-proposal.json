@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "status": "proposed_for_independent_review_not_applied",
+  "sense_id": "shopping-bag.goods-carrier.n",
+  "definition_unchanged": "A bag used to carry purchased items.",
+  "original_brief": "Show a reusable fabric shopping bag upright with two handles and a few purchased items peeking above the opening. Make the flexible sides and carrying handles clearly distinct from a rigid shopping basket. Reject a backpack, paper-only carrier definition, wheeled trolley, or decorative gift bag that obscures the intended shopping use.",
+  "proposed_brief": "Show a plain open retail shopping bag upright in a three-quarter view, with a tall solid-sided body, two separate loop handles and a visible opening. Preserve the inspected 3dicons dynamic color source. Keep the tall solid body and paired loops visually distinct from the accepted squat slotted shopping basket. Exclude wheels, backpack straps, a closed top, a bow, a gift tag, tissue paper and gift-specific decoration. The illustration does not narrow the definition to a particular material or require visible contents.",
+  "rationale": "Reusable fabric, flexible sides and visible purchases were depiction choices in the original brief. They are not necessary conditions of the approved broad purchased-goods-carrier definition. The acquired source has an open cavity and paired loops, while the accepted basket is squat, slotted and broad-handled. The source does not establish reusable fabric or a particular material; do not claim either.",
+  "limits": [
+    "An empty generic bag cannot establish shopping use absolutely; gift and shopping bags can share a form.",
+    "The inspected source has no gift-specific decoration, brand, text, ribbon or tag.",
+    "Source and simulated size review authorize candidate QA only; native cue visibility and the brief revision remain pending independent root review.",
+    "No participant recognition study or human subject-matter approval is claimed."
+  ],
+  "allowed_candidate_adaptations": [
+    "Use the exact frozen study derivative: crop alpha bounds plus 16 source pixels, then Lanczos reduction to 414 by 512.",
+    "Do not redraw, recolor, add contents or handles, change the material, or acquire an unreviewed source variant."
+  ],
+  "unchanged_fields": ["definition", "example", "accepted_forms", "difficulty", "audio", "morphology", "language_review", "domain_review", "overall_review", "module_status"],
+  "brief_revision_accepted": false,
+  "image_accepted": false,
+  "production_mutations": []
+}

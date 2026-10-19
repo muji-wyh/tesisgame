@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "status": "source_accepted_pending_actual_afterimage_and_concrete_input_review",
+  "reviewer": "/root/recover_delivery",
+  "reviewed_source_author": "/root",
+  "scope": "Independent raw-source review of the separate projected validator. This review does not select or accept actual preparation afterimages or the concrete dispatch input.",
+  "independence_disclosure": {
+    "reviewer_authored_preparation_and_binding_helper": true,
+    "reviewer_authored_reviewed_validator": false,
+    "independent_scope": "The separately root-authored projected validator source only.",
+    "actual_binding_and_preparation_acceptance_owners": [
+      "/root",
+      "/root/morph_review"
+    ],
+    "corroborating_source_reviewer": "/root/recover_delivery/guard_assertion_review"
+  },
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/source-inventory.json",
+    "bytes": 807,
+    "raw_sha256": "a7a14add7f19e7240c2561cec604212cd00718c5b986b24614502fc20401c374"
+  },
+  "runner": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/run.cjs",
+    "bytes": 11683,
+    "raw_sha256": "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80"
+  },
+  "prior_review": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r01/review.json",
+    "bytes": 7200,
+    "raw_sha256": "06f07e21d517918330785ab226f1d94a68c5ba7594bab64f58a9ce06bfc44da1"
+  },
+  "evidence": {
+    "inputs": {
+      "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r02/inputs.json",
+      "bytes": 7379,
+      "raw_sha256": "540a929179dc8ec2084dde912e684e962b7fcaf85a68184869d6d1b2a6a251ad"
+    },
+    "inspection": {
+      "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r02/inspection.json",
+      "bytes": 3549,
+      "raw_sha256": "13d901d0d16c23dcc6c0d3d02459c3717d01b5604b8785fc768e5d1c5781392d"
+    }
+  },
+  "resolved_findings": [
+    {
+      "id": "r01/F01",
+      "resolution": "The cpSync property now routes to copySchemas. Its exact source/options match the retained preview callback, every file leaf uses observedRead, each destination uses writable, and visited source links reject. The current source tree has eight regular JSON files. This removes the previously identified unsupported-operation blocker at source-review level.",
+      "source_lines": [
+        84,
+        85,
+        86,
+        87,
+        89,
+        90,
+        92,
+        93,
+        94,
+        103
+      ],
+      "trigger": {
+        "path": "tests/professional-content.test.cjs",
+        "line": 1421
+      },
+      "qualification": "The r01 remediation suggested rejecting source and destination links. R02 explicitly rejects visited source links and preserves inherited lexical destination containment. The current retained fixture writes into a fresh generated root and creates no links, so no additional current-source blocker was identified. This is not acceptance of an injected-link or hostile-code boundary."
+    }
+  ],
+  "findings": [],
+  "source_delta": {
+    "helper_lines": 15,
+    "additional_override": "cpSync: copySchemas",
+    "other_source_bytes_unchanged": true,
+    "line_endings": "Both revisions use LF; removing the helper and override restores the prior source exactly.",
+    "prior_source_and_rejection_retained": true
+  },
+  "source_observations": {
+    "shared_overlay": "The copy reads and every recursively loaded local module use the same observedRead overlay. The original runner-owned module cache and projectedRequire remain unchanged; no native local module loading is introduced.",
+    "schema_copy": "The source must be the exact repository data/professional/schemas directory and options must deep-equal {recursive:true}. Regular files are copied through observedRead, non-file/non-directory nodes reject, and directories recurse only after a non-link lstat. The current schema listing is pinned separately in this review.",
+    "artifact_target_schema_checks": "The existing receipt/artifact identities, exact target and absence sets, six replacements, overlay afterimage hashes, current preimages, registry hash, actual schema-aware validator errors, and exact audit summary checks remain unchanged. The future concrete input must still include the complete actual preparation artifacts and separate afterimage acceptance.",
+    "callback_counts": {
+      "content": 197,
+      "morphology": 40,
+      "media": 26,
+      "total": 263,
+      "source_accounting_retained": true,
+      "execution_observed": false
+    },
+    "temporary_writes": "The newly registered copy handler uses the existing writable guard for its root destination and every recursive target. Existing test-created temporary roots and their descendants remain the only supported write destinations. The reviewed fixture creates no links and removes the temporary root in finally.",
+    "failure_and_postchecks": "The existing first-failure capture, final source/input/protected-file/absence/observed-read rechecks, temporary-root reporting and exclusive attempt-001 behavior remain unchanged.",
+    "trusted_code_boundary": "Host context exposure and lexical destination containment remain unchanged. The reviewed code is trusted instrumentation, not a hostile-code sandbox or complete filesystem-link hardening."
+  },
+  "method": {
+    "raw_text_json_hash_and_directory_inspection_only": true,
+    "unique_input_pins": 31,
+    "schema_directory_entries": 8,
+    "all_original_pins_and_listing_rechecked_unchanged": true,
+    "source_modules_imported": false,
+    "syntax_checks_run": false,
+    "source_vm_tests_or_native_execution": false,
+    "actual_preparation_inputs_inspected": false,
+    "production_mutated": false
+  },
+  "decision": {
+    "validator_source_accepted": true,
+    "validator_source_accepted_for_dispatch": true,
+    "actual_concrete_input_accepted": false,
+    "validator_execution_accepted": false,
+    "actual_binding_accepted": false,
+    "preparation_execution_accepted": false,
+    "afterimages_accepted": false,
+    "scope": "Source-level acceptance for one root-owned dispatch of these exact bytes only after separately accepted actual preparation afterimages and a complete conflict-checked, explicitly hashed concrete input. This review does not authorize or perform that dispatch.",
+    "qualification": "No validator success, callback result, native/browser/audio/ready-module outcome, installation or persisted validation is claimed."
+  }
+}

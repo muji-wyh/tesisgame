@@ -1,0 +1,991 @@
+{
+  "schema": 1,
+  "status": "actual_prepared_output_inspection_complete",
+  "recorded_at": "2026-10-16T21:26:05.815Z",
+  "preparation_receipt": {
+    "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+    "bytes": 226840,
+    "raw_sha256": "b6f797200a9c856b189dfcc3bf1dc20e65a8b9aac361b62bd3959ae460311f4d"
+  },
+  "root_witness": {
+    "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/receipt.json",
+    "bytes": 8613,
+    "raw_sha256": "b3597a51b6d3a501ddcd507471582b6370eff9c1a1904bbc557d84cfff69a82c"
+  },
+  "source_count": 13,
+  "execution_artifact_count": 17,
+  "prepared_sources": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/input-pins.json",
+      "bytes": 242074,
+      "raw_sha256": "54982d9d4421d9cb0629167fa8b9644e7b825094882372aeaa34c2381e8ff750"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/input-freeze-receipt.json",
+      "bytes": 28854,
+      "raw_sha256": "8b619da5373a9125cfb5338c801294210ea73b3af1f2d3fbb05f1d8133d74828"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/projection.cjs",
+      "bytes": 23650,
+      "raw_sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/test-transforms.cjs",
+      "bytes": 23426,
+      "raw_sha256": "7886b3c0d03766f2f0a3f460e6e2cbf391384338fe747f8defa2ce308d1d4dc9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/prepare.cjs",
+      "bytes": 9161,
+      "raw_sha256": "612d9b98fd62b62492f7140a034ccb29a8c75fb07fc2937fa6b7787e35c98621"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/HANDOFF.md",
+      "bytes": 5776,
+      "raw_sha256": "620c9ddd91788662d7227ca7ab79fdf5083735daece06d042f75c95789646e39"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/TRANSACTION.md",
+      "bytes": 5763,
+      "raw_sha256": "ceddf90d4066c4a2c6ed806c46e9a6ecc10de5025d37a21c054fc35b7746b052"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/author-r02.cjs",
+      "bytes": 6551,
+      "raw_sha256": "5bf19ff7a5ab8628f24a4222c07aa7202d9898e795bfe3ffc396fd66105deb8b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/revision-derivation.json",
+      "bytes": 5199,
+      "raw_sha256": "317d94037e9ccd27a6c38feb34bb199fec697d61f0f22ddbb1a4b6b2b181164c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/author-coverage-r02.cjs",
+      "bytes": 3959,
+      "raw_sha256": "ca74606235ce905a2d566d62dc84de3c5525dfd9d70f9acd76413eaec9430c6e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/coverage-supplement.json",
+      "bytes": 2482,
+      "raw_sha256": "e54a9bcc19f2b34c0d8d875213e3e692d8a7ca643973141b27f9459a0a8625f0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/freeze-inputs.cjs",
+      "bytes": 14047,
+      "raw_sha256": "a762a1256495cec9a270e289ffa2d487267359e4a92d7b57fefeb819e498cf42"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/author-inventory.json",
+      "bytes": 3550,
+      "raw_sha256": "aece2564d2a9f0d6261ba57f8613fc862b5541f5fba01e80bb3f8c8651384ff6"
+    }
+  ],
+  "prepared_artifacts": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/accepted-language.json",
+      "bytes": 2337675,
+      "raw_sha256": "51d6569514875bc8bceeaa149cef44f7863d28d0e523e4557472909607efeece"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/execution-end.json",
+      "bytes": 2912,
+      "raw_sha256": "9605da550f97858787f89e651ad5af33180ebadbd11024375efbfcf3ffa0eeb3"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/execution-start.json",
+      "bytes": 3065,
+      "raw_sha256": "698f41ff56d51675c2f1d2ef4e75d899886bd43c2836a675b0ac1c4bffb2c72b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/foundation-module02.json.after",
+      "bytes": 372196,
+      "raw_sha256": "9f698ae9b2572d279709b521e6b7d490ffe3d05b1a8ed362add36e07fd4accbc"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/foundation-module02.json.before",
+      "bytes": 267505,
+      "raw_sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/measured-inputs-before.json",
+      "bytes": 121462,
+      "raw_sha256": "f7b8f677326df79d731eca301f57a7da48cea083a07b85cdf417f30eadc3f506"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+      "bytes": 226840,
+      "raw_sha256": "b6f797200a9c856b189dfcc3bf1dc20e65a8b9aac361b62bd3959ae460311f4d"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "bytes": 346365,
+      "raw_sha256": "7620d4196914eb136f7ee4375eb1c13bafb0f509cfacb9859794210b14ebfa86"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional-content.test.cjs.before",
+      "bytes": 332257,
+      "raw_sha256": "7ed495e35df7d66d646ba8a0090aee32e81b51759e278defc07da71f61e9473b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.after",
+      "bytes": 88429,
+      "raw_sha256": "b5bfe27b11fccbdf4f399588e77eb730018228c65446404f9f9c8c545e0119c6"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.before",
+      "bytes": 85308,
+      "raw_sha256": "04a5d72b3a7c5e3add28ef23e5e1db23fb30bcfd74d79a2e69efd28874c08282"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional_retail_morphology_tests.gd.after",
+      "bytes": 114792,
+      "raw_sha256": "db277170d8bc7285204b86784ba2f118cae8f01fa8311eb7ac55f5953cd039a0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional_retail_morphology_tests.gd.before",
+      "bytes": 111030,
+      "raw_sha256": "226160e3d454d1d19f2bb1c4e81a0c9749dcd354e4a8a71f21799f9ede0eb945"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/projection-checks.json",
+      "bytes": 47220,
+      "raw_sha256": "fd84c2bdc496345c88c446aa85cdd90d950660a663314da151280cc182eebcfc"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/sources.json.after",
+      "bytes": 869470,
+      "raw_sha256": "310be48d81d29917146db162b26d9927007b68ed12380df4a113458d2de7b330"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/sources.json.before",
+      "bytes": 781399,
+      "raw_sha256": "268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/test-patches.json",
+      "bytes": 7985,
+      "raw_sha256": "f39ee37d2f9a03bdf48a5f18db512fd66acea88346ba71d0fa1bfa5b4591acec"
+    }
+  ],
+  "root_witness_files": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/dispatch-source.json",
+      "bytes": 485,
+      "raw_sha256": "dee5bc7f2fbc43d649af9f48bb08744ee39eeea5f4e8368ec19b7248e06192d7"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-1.log",
+      "bytes": 0,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-2.log",
+      "bytes": 0,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-3.log",
+      "bytes": 0,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-4.log",
+      "bytes": 295,
+      "raw_sha256": "571ad3541c378279750bc6f3c20484f77f800a1225500848be32dc2033687f1e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/receipt.json",
+      "bytes": 8613,
+      "raw_sha256": "b3597a51b6d3a501ddcd507471582b6370eff9c1a1904bbc557d84cfff69a82c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/start.json",
+      "bytes": 4143,
+      "raw_sha256": "e6c5b26575b05b74c51ba658fae8dce481c3613357c178921a0102cc9216a688"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/invoke.cjs",
+      "bytes": 3519,
+      "raw_sha256": "6f565c2e6dd23d3f67582d66608a9b7d7e5ec1a4b767d8a1063db711997c6c06"
+    }
+  ],
+  "registry_before_sha256": "fb45e1d9c7cbf479bf06ac0c00b39ec28de473c96c86cc1b071c72a572f8d437",
+  "registry_after_sha256": "9a9b3c8665ce920fcddd584456e4ca47b8c365d8d2c43daacb9ea908c540ee1c",
+  "historical_registry_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "language_field_changes": [
+    {
+      "id": "submit.send-for-consideration.v",
+      "field": "definition",
+      "before": "To send or present something for review, decision, or processing.",
+      "after": "To send a document, request, or proposal for someone to review or decide on."
+    },
+    {
+      "id": "submit.send-for-consideration.v",
+      "field": "difficulty",
+      "before": "A2",
+      "after": "B2"
+    },
+    {
+      "id": "approve.authorize.v",
+      "field": "difficulty",
+      "before": "A2",
+      "after": "B2"
+    },
+    {
+      "id": "reject.decline-acceptance.v",
+      "field": "example",
+      "before": "The team may reject a proposal that misses the requirements.",
+      "after": "The team may reject a proposal that does not meet the requirements."
+    },
+    {
+      "id": "reject.decline-acceptance.v",
+      "field": "difficulty",
+      "before": "A2",
+      "after": "B1"
+    },
+    {
+      "id": "fault.equipment-defect.n",
+      "field": "difficulty",
+      "before": "A2",
+      "after": "B2"
+    },
+    {
+      "id": "damage.physical-harm.n",
+      "field": "difficulty",
+      "before": "A2",
+      "after": "B1"
+    },
+    {
+      "id": "shortage.insufficient-supply.n",
+      "field": "difficulty",
+      "before": "A2",
+      "after": "B2"
+    }
+  ],
+  "metadata_checks": [
+    {
+      "id": "submit.send-for-consideration.v",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "reference_prefix_preserved": true,
+      "added_scoped_references": 2,
+      "review_metadata_matches_named_AI_language_review": true,
+      "protected_fields_equal": true,
+      "media_morphology_domain_unchanged": true
+    },
+    {
+      "id": "approve.authorize.v",
+      "changed_fields": [
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "reference_prefix_preserved": true,
+      "added_scoped_references": 2,
+      "review_metadata_matches_named_AI_language_review": true,
+      "protected_fields_equal": true,
+      "media_morphology_domain_unchanged": true
+    },
+    {
+      "id": "reject.decline-acceptance.v",
+      "changed_fields": [
+        "example",
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "reference_prefix_preserved": true,
+      "added_scoped_references": 2,
+      "review_metadata_matches_named_AI_language_review": true,
+      "protected_fields_equal": true,
+      "media_morphology_domain_unchanged": true
+    },
+    {
+      "id": "sign.write-name.v",
+      "changed_fields": [
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "reference_prefix_preserved": true,
+      "added_scoped_references": 2,
+      "review_metadata_matches_named_AI_language_review": true,
+      "protected_fields_equal": true,
+      "media_morphology_domain_unchanged": true
+    },
+    {
+      "id": "delay.late-occurrence.n",
+      "changed_fields": [
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "reference_prefix_preserved": true,
+      "added_scoped_references": 2,
+      "review_metadata_matches_named_AI_language_review": true,
+      "protected_fields_equal": true,
+      "media_morphology_domain_unchanged": true
+    },
+    {
+      "id": "error.mistake.n",
+      "changed_fields": [
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "reference_prefix_preserved": true,
+      "added_scoped_references": 2,
+      "review_metadata_matches_named_AI_language_review": true,
+      "protected_fields_equal": true,
+      "media_morphology_domain_unchanged": true
+    },
+    {
+      "id": "fault.equipment-defect.n",
+      "changed_fields": [
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "reference_prefix_preserved": true,
+      "added_scoped_references": 2,
+      "review_metadata_matches_named_AI_language_review": true,
+      "protected_fields_equal": true,
+      "media_morphology_domain_unchanged": true
+    },
+    {
+      "id": "damage.physical-harm.n",
+      "changed_fields": [
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "reference_prefix_preserved": true,
+      "added_scoped_references": 2,
+      "review_metadata_matches_named_AI_language_review": true,
+      "protected_fields_equal": true,
+      "media_morphology_domain_unchanged": true
+    },
+    {
+      "id": "shortage.insufficient-supply.n",
+      "changed_fields": [
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "reference_prefix_preserved": true,
+      "added_scoped_references": 2,
+      "review_metadata_matches_named_AI_language_review": true,
+      "protected_fields_equal": true,
+      "media_morphology_domain_unchanged": true
+    },
+    {
+      "id": "missing.not-present.adj",
+      "changed_fields": [
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "reference_prefix_preserved": true,
+      "added_scoped_references": 2,
+      "review_metadata_matches_named_AI_language_review": true,
+      "protected_fields_equal": true,
+      "media_morphology_domain_unchanged": true
+    }
+  ],
+  "source_additions": 20,
+  "original_source_prefix_preserved": true,
+  "all_40_unselected_foundation02_entries_equal": true,
+  "historical_reversal": {
+    "fourth_exact_before": true,
+    "third_exact_research_registry": true,
+    "source_suffix_counts": [
+      20,
+      16
+    ],
+    "original_target_and_sources_raw_serialization_recovered": true
+  },
+  "context_counts": {
+    "memberships": 200,
+    "modules": 20,
+    "expressions": 130,
+    "derivatives": 42,
+    "focus": 4,
+    "related": 63,
+    "inherited_holds": 17,
+    "module_expressions": 10,
+    "additional_foundation": 4
+  },
+  "protected_context_matches_frozen_research_and_exact_current_rebase": true,
+  "prior_lexical_holds_preserved": 4,
+  "complete_pending_form_image_mismatch_preserved": true,
+  "donor_groups": [
+    {
+      "history": "first10",
+      "id": "submit.send-for-consideration.v",
+      "exact_count": 1,
+      "indices": [
+        70
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "first10",
+      "id": "approve.authorize.v",
+      "exact_count": 1,
+      "indices": [
+        71
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "first10",
+      "id": "reject.decline-acceptance.v",
+      "exact_count": 1,
+      "indices": [
+        72
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "first10",
+      "id": "sign.write-name.v",
+      "exact_count": 1,
+      "indices": [
+        73
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "first10",
+      "id": "delay.late-occurrence.n",
+      "exact_count": 1,
+      "indices": [
+        74
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "first10",
+      "id": "error.mistake.n",
+      "exact_count": 1,
+      "indices": [
+        75
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "first10",
+      "id": "fault.equipment-defect.n",
+      "exact_count": 1,
+      "indices": [
+        76
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "first10",
+      "id": "damage.physical-harm.n",
+      "exact_count": 1,
+      "indices": [
+        77
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "first10",
+      "id": "shortage.insufficient-supply.n",
+      "exact_count": 1,
+      "indices": [
+        78
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "first10",
+      "id": "missing.not-present.adj",
+      "exact_count": 1,
+      "indices": [
+        79
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "second10",
+      "id": "submit.send-for-consideration.v",
+      "exact_count": 1,
+      "indices": [
+        70
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "second10",
+      "id": "approve.authorize.v",
+      "exact_count": 1,
+      "indices": [
+        71
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "second10",
+      "id": "reject.decline-acceptance.v",
+      "exact_count": 1,
+      "indices": [
+        72
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "second10",
+      "id": "sign.write-name.v",
+      "exact_count": 1,
+      "indices": [
+        73
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "second10",
+      "id": "delay.late-occurrence.n",
+      "exact_count": 1,
+      "indices": [
+        74
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "second10",
+      "id": "error.mistake.n",
+      "exact_count": 1,
+      "indices": [
+        75
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "second10",
+      "id": "fault.equipment-defect.n",
+      "exact_count": 1,
+      "indices": [
+        76
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "second10",
+      "id": "damage.physical-harm.n",
+      "exact_count": 1,
+      "indices": [
+        77
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "second10",
+      "id": "shortage.insufficient-supply.n",
+      "exact_count": 1,
+      "indices": [
+        78
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "second10",
+      "id": "missing.not-present.adj",
+      "exact_count": 1,
+      "indices": [
+        79
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "third10",
+      "id": "submit.send-for-consideration.v",
+      "exact_count": 1,
+      "indices": [
+        70
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "third10",
+      "id": "approve.authorize.v",
+      "exact_count": 1,
+      "indices": [
+        71
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "third10",
+      "id": "reject.decline-acceptance.v",
+      "exact_count": 1,
+      "indices": [
+        72
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "third10",
+      "id": "sign.write-name.v",
+      "exact_count": 1,
+      "indices": [
+        73
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "third10",
+      "id": "delay.late-occurrence.n",
+      "exact_count": 1,
+      "indices": [
+        74
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "third10",
+      "id": "error.mistake.n",
+      "exact_count": 1,
+      "indices": [
+        75
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "third10",
+      "id": "fault.equipment-defect.n",
+      "exact_count": 1,
+      "indices": [
+        76
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "third10",
+      "id": "damage.physical-harm.n",
+      "exact_count": 1,
+      "indices": [
+        77
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "third10",
+      "id": "shortage.insufficient-supply.n",
+      "exact_count": 1,
+      "indices": [
+        78
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "third10",
+      "id": "missing.not-present.adj",
+      "exact_count": 1,
+      "indices": [
+        79
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fourth10",
+      "id": "submit.send-for-consideration.v",
+      "exact_count": 1,
+      "indices": [
+        70
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fourth10",
+      "id": "approve.authorize.v",
+      "exact_count": 1,
+      "indices": [
+        71
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fourth10",
+      "id": "reject.decline-acceptance.v",
+      "exact_count": 1,
+      "indices": [
+        72
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fourth10",
+      "id": "sign.write-name.v",
+      "exact_count": 1,
+      "indices": [
+        73
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fourth10",
+      "id": "delay.late-occurrence.n",
+      "exact_count": 1,
+      "indices": [
+        74
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fourth10",
+      "id": "error.mistake.n",
+      "exact_count": 1,
+      "indices": [
+        75
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fourth10",
+      "id": "fault.equipment-defect.n",
+      "exact_count": 1,
+      "indices": [
+        76
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fourth10",
+      "id": "damage.physical-harm.n",
+      "exact_count": 1,
+      "indices": [
+        77
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fourth10",
+      "id": "shortage.insufficient-supply.n",
+      "exact_count": 1,
+      "indices": [
+        78
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fourth10",
+      "id": "missing.not-present.adj",
+      "exact_count": 1,
+      "indices": [
+        79
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fifth10",
+      "id": "submit.send-for-consideration.v",
+      "exact_count": 1,
+      "indices": [
+        70
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fifth10",
+      "id": "approve.authorize.v",
+      "exact_count": 1,
+      "indices": [
+        71
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fifth10",
+      "id": "reject.decline-acceptance.v",
+      "exact_count": 1,
+      "indices": [
+        72
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fifth10",
+      "id": "sign.write-name.v",
+      "exact_count": 2,
+      "indices": [
+        73,
+        90
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fifth10",
+      "id": "delay.late-occurrence.n",
+      "exact_count": 1,
+      "indices": [
+        74
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fifth10",
+      "id": "error.mistake.n",
+      "exact_count": 1,
+      "indices": [
+        75
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fifth10",
+      "id": "fault.equipment-defect.n",
+      "exact_count": 1,
+      "indices": [
+        76
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fifth10",
+      "id": "damage.physical-harm.n",
+      "exact_count": 1,
+      "indices": [
+        77
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fifth10",
+      "id": "shortage.insufficient-supply.n",
+      "exact_count": 1,
+      "indices": [
+        78
+      ],
+      "every_whole_row_matches_before": true
+    },
+    {
+      "history": "fifth10",
+      "id": "missing.not-present.adj",
+      "exact_count": 1,
+      "indices": [
+        79
+      ],
+      "every_whole_row_matches_before": true
+    }
+  ],
+  "exact_donor_rows": 51,
+  "shared_test_checks": [
+    {
+      "path": "tests/professional-content.test.cjs",
+      "before_sha256": "7ed495e35df7d66d646ba8a0090aee32e81b51759e278defc07da71f61e9473b",
+      "after_sha256": "7620d4196914eb136f7ee4375eb1c13bafb0f509cfacb9859794210b14ebfa86",
+      "exact_anchor_edits": 10,
+      "appended_tests": 5,
+      "appended_text_matches_frozen_reviewed_source": true,
+      "removing_only_recorded_additions_restores_every_preimage_byte": true,
+      "native_execution_pending": false
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "before_sha256": "04a5d72b3a7c5e3add28ef23e5e1db23fb30bcfd74d79a2e69efd28874c08282",
+      "after_sha256": "b5bfe27b11fccbdf4f399588e77eb730018228c65446404f9f9c8c545e0119c6",
+      "exact_anchor_edits": 2,
+      "appended_tests": 1,
+      "appended_text_matches_frozen_reviewed_source": true,
+      "removing_only_recorded_additions_restores_every_preimage_byte": true,
+      "native_execution_pending": false
+    },
+    {
+      "path": "tests/godot/professional_retail_morphology_tests.gd",
+      "before_sha256": "226160e3d454d1d19f2bb1c4e81a0c9749dcd354e4a8a71f21799f9ede0eb945",
+      "after_sha256": "db277170d8bc7285204b86784ba2f118cae8f01fa8311eb7ac55f5953cd039a0",
+      "exact_anchor_edits": 2,
+      "appended_tests": 1,
+      "appended_text_matches_frozen_reviewed_source": true,
+      "removing_only_recorded_additions_restores_every_preimage_byte": true,
+      "native_execution_pending": true
+    }
+  ],
+  "projected_callbacks": {
+    "total": 230,
+    "content": 192,
+    "morphology": 38,
+    "root_executed": true,
+    "reviewer_replayed": false
+  },
+  "counts": {
+    "before": {
+      "reviewed": 138,
+      "language_reviewed": 325,
+      "foundation02_language": 26
+    },
+    "after": {
+      "reviewed": 148,
+      "language_reviewed": 335,
+      "foundation02_language": 36
+    }
+  },
+  "audit_observed_from_root_preparation": {
+    "before": {
+      "summary": {
+        "courses": 20,
+        "modules": 200,
+        "themes": 21,
+        "unique_lexemes": 4939,
+        "vocabulary_memberships": 10000,
+        "vocabulary_memberships_target": 10000,
+        "vocabulary_memberships_remaining": 0,
+        "expressions": 1620,
+        "expression_memberships": 2000,
+        "expression_memberships_target": 2000,
+        "expression_memberships_remaining": 0,
+        "ready_modules": 0,
+        "reviewed_lexemes": 138,
+        "morphology_authored": 4045,
+        "morphology_reviewed": 89,
+        "integrated_word_images": 8,
+        "integrated_word_audio": 12,
+        "release_ready": false
+      },
+      "errors": 0,
+      "warnings": 29416
+    },
+    "after": {
+      "summary": {
+        "courses": 20,
+        "modules": 200,
+        "themes": 21,
+        "unique_lexemes": 4939,
+        "vocabulary_memberships": 10000,
+        "vocabulary_memberships_target": 10000,
+        "vocabulary_memberships_remaining": 0,
+        "expressions": 1620,
+        "expression_memberships": 2000,
+        "expression_memberships_target": 2000,
+        "expression_memberships_remaining": 0,
+        "ready_modules": 0,
+        "reviewed_lexemes": 148,
+        "morphology_authored": 4045,
+        "morphology_reviewed": 89,
+        "integrated_word_images": 8,
+        "integrated_word_audio": 12,
+        "release_ready": false
+      },
+      "errors": 0,
+      "warnings": 29396
+    }
+  },
+  "all_864_inputs_unchanged": true,
+  "production_modified": false,
+  "project_code_imported": false,
+  "preparation_test_or_native_replayed": false
+}

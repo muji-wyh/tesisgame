@@ -1,0 +1,882 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const {loadProfessionalContent, morphologyErrors} = require('../tools/validate-professional-content.cjs');
+const root = path.resolve(__dirname, '..');
+const foundationLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module01-language-first10-2026-10-16.json')));
+const foundationSecondLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module01-language-second10-2026-10-16.json')));
+const foundationThirdLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module01-language-third10-2026-10-16.json'), 'utf8'));
+const foundationFourthLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json'), 'utf8'));
+const foundationFifthLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json'), 'utf8'));
+const supervisorLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module01-supervisor-language-2026-10-16.json'), 'utf8'));
+function beforeSupervisorLanguage(entry) {
+  const patch = supervisorLanguageRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  // Historical snapshots can already contain the exact held entry. Both states remain fully checked.
+  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later independently reviewed supervisor language delta');
+  return structuredClone(patch.before);
+}
+function beforeFoundationFifthLanguage(entry) {
+  entry = beforeSupervisorLanguage(entry);
+  const patch = foundationFifthLanguageRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later fifth-ten language, reference and note delta');
+  return structuredClone(patch.before);
+}
+function beforeFoundationFourthLanguage(entry) {
+  entry = beforeFoundationFifthLanguage(entry);
+  const patch = foundationFourthLanguageRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later fourth-ten language, reference and note delta');
+  return structuredClone(patch.before);
+}
+function beforeFoundationThirdLanguage(entry) {
+  entry = beforeFoundationFourthLanguage(entry);
+  const patch = foundationThirdLanguageRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later third-ten language, reference and note delta');
+  return structuredClone(patch.before);
+}
+function beforeFoundationSecondLanguage(entry) {
+  entry = beforeFoundationThirdLanguage(entry);
+  const patch = foundationSecondLanguageRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later second-ten language, spelling, reference and note delta');
+  return structuredClone(patch.before);
+}
+function beforeFoundationLanguage(entry) {
+  entry = beforeFoundationSecondLanguage(entry);
+  const patch = foundationLanguageRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later Foundation language, reference and note delta');
+  return structuredClone(patch.before);
+}
+const record = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json')));
+const nextRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module03-morphology-next10-2026-10-16.json')));
+const caseRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-case-family-review-2026-10-16.json')));
+const thirdRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module03-morphology-third10-2026-10-16.json')));
+const fourthRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module03-morphology-fourth10-2026-10-16.json')));
+const cartBasketAudioRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-cart-basket-approved-audio-2026-10-16.json')));
+const palletImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-pallet-image-2026-10-16.json')));
+const shelfImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-shelf-image-2026-10-16.json')));
+const palletShelfAudioRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-pallet-shelf-approved-audio-2026-10-16.json')));
+const bagWrapAudioRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-bag-wrap-approved-audio-2026-10-16.json')));
+const fifthRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json')));
+const retail04FirstRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module04-morphology-first10-2026-10-16.json')));
+const retail04SecondRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module04-morphology-second10-2026-10-16.json'), 'utf8'));
+const retail04ThirdRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module04-morphology-third10-2026-10-16.json'), 'utf8'));
+function beforeRetail04Third10(entry) {
+  const patch = retail04ThirdRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later Retail04 third-ten morphology-only acceptance');
+  return structuredClone(patch.before);
+}
+function beforeRetail04Second10(entry) {
+  entry = beforeRetail04Third10(entry);
+  const patch = retail04SecondRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later Retail04 second-ten morphology-only acceptance');
+  return structuredClone(patch.before);
+}
+function beforeRetail04First10(entry) {
+  entry = beforeRetail04Second10(entry);
+  const patch = retail04FirstRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later Retail04 morphology-only acceptance');
+  return structuredClone(patch.before);
+}
+function beforeFifth10(entry) {
+  const patch = fifthRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later fifth-ten graph and note delta');
+  return structuredClone(patch.before);
+}
+const counterImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-counter-image-2026-10-16.json')));
+const counterCheckoutAudioRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-counter-checkout-approved-audio-2026-10-16.json')));
+const checkoutImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-checkout-image-2026-10-16.json')));
+const barcodeImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-barcode-image-2026-10-16.json'), 'utf8'));
+const cashRegisterImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-cash-register-image-2026-10-16.json'), 'utf8'));
+const cardReaderBarcodeAudioRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-card-reader-barcode-approved-audio-2026-10-16.json'), 'utf8'));
+const mediaRecords = [cartBasketAudioRecord, palletImageRecord, shelfImageRecord, palletShelfAudioRecord, bagWrapAudioRecord, counterImageRecord, counterCheckoutAudioRecord, checkoutImageRecord, barcodeImageRecord, cashRegisterImageRecord, cardReaderBarcodeAudioRecord];
+function beforeCardReaderBarcodeAudio(entry) {
+  const patch = cardReaderBarcodeAudioRecord.patches.find(item => item.sense_id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later user-approved card reader or barcode audio and note delta');
+  return structuredClone(patch.before);
+}
+function beforeCashRegisterImage(entry) {
+  const patch = cashRegisterImageRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later cash-register image and obsolete pending-media note delta');
+  return structuredClone(patch.before);
+}
+function beforeBarcodeImage(entry) {
+  const patch = barcodeImageRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later barcode image and pending-image clause delta');
+  return structuredClone(patch.before);
+}
+function beforeCheckoutImage(entry) {
+  const patch = checkoutImageRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later checkout image and pending-image note delta');
+  return structuredClone(patch.before);
+}
+function beforeCounterCheckoutAudio(entry) {
+  entry = beforeCheckoutImage(entry);
+  const patch = counterCheckoutAudioRecord.patches.find(item => item.sense_id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later approved counter or checkout audio and note delta');
+  return structuredClone(patch.before);
+}
+function beforeCounterImage(entry) {
+  entry = beforeCardReaderBarcodeAudio(entry);
+  entry = beforeCashRegisterImage(entry);
+  entry = beforeBarcodeImage(entry);
+  entry = beforeFoundationSecondLanguage(entry);
+  entry = beforeRetail04First10(entry);
+  entry = beforeCounterCheckoutAudio(entry);
+  const patch = counterImageRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later counter image and note delta');
+  return structuredClone(patch.before);
+}
+function beforeRetailMedia(entry) {
+  entry = beforeFoundationLanguage(entry);
+  let historical = beforeFifth10(beforeRetail04First10(entry));
+  for (const record of [...mediaRecords].reverse()) {
+    const patch = record.patches.find(item => (item.sense_id || item.id) === entry.id);
+    if (!patch) continue;
+    assert.deepEqual(historical, patch.after, entry.id + ': exact later accepted media and note delta');
+    historical = structuredClone(patch.before);
+  }
+  return historical;
+}
+const data = loadProfessionalContent(root);
+const hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+const protect = entry => {const copy = structuredClone(entry); delete copy.morphology; delete copy.editorial_notes; return copy;};
+
+test('Retail first ten morphology decisions have exact independent provenance and preserve other gates', () => {
+  assert.equal(record.independent_approval.accepted, true);
+  assert.equal(record.independent_approval.ledger_json_sha256, '90843f4dfcd11b7336f35134d83d0af5a65cf272007db31900825e43fdedeeee');
+  assert.equal(record.patches.length, 10);
+  assert.equal(record.sources.length, 29);
+  for (const patch of record.patches) {
+    const entry = beforeRetailMedia(data.lexemes.find(e => e.id === patch.id));
+    assert.equal(hash(patch.before), patch.before_sha256);
+    assert.equal(hash(protect(patch.before)), patch.protected_fields_sha256);
+    assert.deepEqual(entry, patch.after);
+    assert.deepEqual(protect(entry), protect(patch.before));
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    assert.equal(entry.morphology.review.status, 'reviewed');
+    assert.match(entry.morphology.review.reviewer, /independent AI morphology review; not human or subject-matter approval/);
+    assert.doesNotMatch(entry.editorial_notes, /Morphology remains unauthored|morphology graph remains pending/);
+    for (const id of entry.morphology.review.source_record_ids) assert.ok(record.sources.some(s => s.id === id));
+  }
+  for (const source of record.sources) assert.deepEqual(data.sources.find(s => s.id === source.id), source);
+  assert.ok(data.courses.every(c => c.modules.every(m => m.status === 'draft')));
+});
+
+test('Equipment morphology uses meaningful modern constituents and explicit authored spellings', () => {
+  const graph = text => data.lexemes.find(e => record.patches.some(p => p.id === e.id) && e.text === text).morphology;
+  const parts = text => graph(text).parts.map(p => p.canonical);
+  assert.deepEqual(parts('aisle'), ['aisle']);
+  assert.deepEqual(parts('counter'), ['counter']);
+  assert.deepEqual(parts('checkout'), ['check', 'out']);
+  assert.deepEqual(parts('cash register'), ['cash', 'register']);
+  assert.deepEqual(parts('card reader'), ['card', 'read', '-er']);
+  assert.deepEqual(parts('barcode'), ['bar', 'code']);
+  assert.deepEqual(parts('barcode scanner'), ['bar', 'code', 'scan', '-er']);
+  assert.deepEqual(parts('receipt printer'), ['receipt', 'print', '-er']);
+  assert.deepEqual(parts('cash drawer'), ['cash', 'draw', '-er']);
+  assert.deepEqual(parts('conveyor belt'), ['convey', '-or', 'belt']);
+  assert.equal(graph('barcode scanner').nodes.find(n => n.id === 'scanner').surface, 'scanner');
+  assert.match(graph('barcode scanner').nodes.find(n => n.id === 'scanner').rule, /double-final-n/);
+  for (const text of ['cash register','card reader','barcode scanner','receipt printer','cash drawer','conveyor belt']) {
+    const whole = graph(text).nodes.at(-1);
+    assert.equal(whole.surface, text);
+    assert.deepEqual(whole.break_offsets, [text.indexOf(' ') + 1]);
+  }
+  assert.match(graph('receipt printer').review.notes, /current receipt stem/);
+  assert.match(graph('cash register').review.notes, /does not invent regist plus agent-er/);
+  assert.match(graph('conveyor belt').review.notes, /modern derivational depth/);
+});
+
+test('Canonical reuse and evidence limits stay explicit without changing existing families', () => {
+  const decisions = record.independent_approval.canonical_decisions;
+  assert.deepEqual(decisions.filter(p => !p.existing_professional_occurrences).map(p => p.name), ['convey']);
+  const scanner = data.lexemes.find(e => e.id === 'barcode-scanner.product-reader.n').morphology;
+  const reader = data.lexemes.find(e => e.id === 'card-reader.payment-device.n').morphology;
+  assert.deepEqual(scanner.parts.at(-1), {...reader.parts.at(-1), id:'p4'});
+  const limited = record.source_consultation_ledger.find(s => s.id === 'retail03-morph-cambridge-doubling-access-limited');
+  assert.equal(limited.access, 'search_excerpt_only_direct_page_403');
+  assert.match(record.sources.find(s => s.id === limited.id).scope, /supplementary only/);
+  assert.ok(!scanner.review.source_record_ids.includes(limited.id));
+  assert.equal(record.independent_approval.fresh_crosschecks.length, 8);
+});
+
+test('Nine next decisions preserve exact independent provenance, other content gates and held display case', () => {
+  const approval = nextRecord.independent_approval;
+  assert.equal(approval.accepted, true);
+  assert.equal(approval.ledger_json_sha256, '80d88a86bb695177151c2497341a8519e223db546f707c255e8268041f10999d');
+  assert.equal(approval.canonical_correction_json_sha256, 'c61c1a4bd98c3cdb4fa0d05dab49e912629dc791abd43652aa68de19d596e947');
+  assert.equal(hash(approval.canonical_correction), approval.canonical_correction_json_sha256);
+  assert.equal(nextRecord.patches.length, 9);
+  assert.equal(nextRecord.sources.length, 24);
+  assert.equal(nextRecord.appended_source_ids.length, 23);
+  assert.equal(approval.fresh_crosschecks.length, 10);
+  for (const patch of nextRecord.patches) {
+    const entry = beforeRetailMedia(data.lexemes.find(e => e.id === patch.id));
+    assert.equal(hash(patch.before), patch.before_sha256);
+    assert.equal(hash(protect(patch.before)), patch.protected_fields_sha256);
+    assert.deepEqual(entry, patch.after);
+    assert.deepEqual(protect(entry), protect(patch.before));
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    assert.equal(entry.morphology.review.status, 'reviewed');
+    assert.match(entry.morphology.review.reviewer, /independent AI morphology review; not human or subject-matter approval/);
+    assert.doesNotMatch(entry.editorial_notes, /Morphology remains unauthored|morphology graph remains pending/);
+    for (const id of entry.morphology.review.source_record_ids) assert.ok(nextRecord.sources.some(s => s.id === id));
+  }
+  assert.equal(nextRecord.holds.length, 1);
+  const hold = nextRecord.holds[0];
+  assert.equal(hold.id, 'display-case.glass-cabinet.n');
+  assert.equal(hash(hold.before), hold.before_sha256);
+  const later = caseRecord.patches.find(p => p.id === hold.id);
+  assert.deepEqual(data.lexemes.find(e => e.id === hold.id), later.after);
+  assert.deepEqual(later.before, hold.before);
+  assert.equal(hold.before.morphology, null);
+  for (const source of nextRecord.sources) assert.deepEqual(data.sources.find(s => s.id === source.id), source);
+  assert.ok(data.courses.every(c => c.modules.every(m => m.status === 'draft')));
+});
+
+test('Next compound graphs author doubling and final-e omission while keeping current-stem atomic choices', () => {
+  const graph = text => nextRecord.patches.find(p => p.after.text === text).after.morphology;
+  for (const [text,stem,surface] of [
+    ['shopping basket','shop','shopping'], ['shopping cart','shop','shopping'],
+    ['fitting room','fit','fitting'], ['clothing rack','clothe','clothing'], ['loading bay','load','loading']
+  ]) {
+    const g = graph(text);
+    assert.equal(g.parts[0].canonical, stem);
+    assert.equal(g.parts[1].canonical, '-ing');
+    assert.equal(g.nodes[0].surface, surface);
+    assert.equal(g.nodes.at(-1).surface, text);
+    assert.deepEqual(g.nodes.at(-1).break_offsets, [text.indexOf(' ') + 1]);
+  }
+  for (const text of ['shopping basket', 'shopping cart']) assert.match(graph(text).nodes[0].rule, /double-p/);
+  assert.match(graph('fitting room').nodes[0].rule, /double-t/);
+  assert.match(graph('clothing rack').nodes[0].rule, /(?:drop|omit)-final-e/);
+  assert.deepEqual(graph('hanger').parts.map(p => p.canonical), ['hang', '-er']);
+  assert.deepEqual(graph('stockroom').parts.map(p => p.canonical), ['stock', 'room']);
+  for (const text of ['shelf', 'mannequin']) {
+    assert.deepEqual(graph(text).parts.map(p => p.canonical), [text]);
+    assert.equal(graph(text).nodes.length, 0);
+  }
+});
+
+test('Accepted nominal ing families reuse exact Growth identities and preserve unrelated legacy candidates', () => {
+  const correction = nextRecord.independent_approval.canonical_correction;
+  assert.equal(correction.patches.length, 5);
+  for (const family of correction.reused_families) {
+    const bytes = fs.readFileSync(path.join(root, family.source_resource));
+    assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'), family.source_resource_raw_sha256);
+    const entry = JSON.parse(bytes).entries.find(e => e.text === family.target);
+    assert.deepEqual(entry, family.source_entry);
+    assert.equal(entry.review.status, 'reviewed');
+  }
+  for (const patch of correction.patches) {
+    assert.equal(hash(patch.before), patch.original_candidate_json_sha256);
+    assert.equal(hash(patch.after), patch.corrected_candidate_json_sha256);
+    const expected = structuredClone(patch.before);
+    expected.parts[1].canonical_id = patch.after_canonical_id;
+    assert.deepEqual(patch.after, expected);
+    const graph = data.lexemes.find(e => e.id === patch.id).morphology;
+    assert.deepEqual({...graph, review:patch.after.review}, patch.after);
+    assert.equal(graph.parts[1].canonical_id, patch.role === 'activity' ? 'english.affix.ing.activity' : 'english.affix.ing.result-noun');
+  }
+  for (const occurrence of correction.finding.inventory.filter(o => !nextRecord.patches.some(p => p.id === o.lexeme_id))) {
+    const entry = beforeRetailMedia(data.lexemes.find(e => e.id === occurrence.lexeme_id));
+    const later = thirdRecord.patches.find(p => p.id === entry.id);
+    if (later) {
+      assert.equal(hash(later.before), occurrence.entry_json_sha256);
+      assert.deepEqual(entry, later.after);
+    } else {
+      assert.equal(hash(entry), occurrence.entry_json_sha256);
+      assert.equal(entry.morphology.review.status, 'pending');
+    }
+  }
+  const source = nextRecord.sources.find(s => s.id === 'retail03-morph-next10-dcom-ing');
+  assert.match(source.scope, /activity and result-noun candidates reuse/);
+  assert.equal(nextRecord.independent_approval.source_registration_clarifications.length, 1);
+  assert.match(nextRecord.source_consultation_ledger.find(s => s.id === source.id).finding, /retain the existing exact Professional suffix pair/);
+});
+
+test('Case-family correction changes five pending canonical identities without promoting their graphs', () => {
+  assert.equal(caseRecord.independent_approval.accepted, true);
+  assert.equal(hash(caseRecord.proposal), 'a99e2875f8fc8b41aa1c802500393555123801349e4e085a366aef53a9c6a0d2');
+  assert.equal(caseRecord.patches.length, 6);
+  for (const migration of caseRecord.proposal.migrations) {
+    const patch = caseRecord.patches.find(p => p.id === migration.id);
+    const expected = structuredClone(patch.before);
+    expected.morphology.parts[migration.operation.path[2]].canonical_id = 'growth.part.case.container';
+    assert.equal(hash(patch.before), patch.before_sha256);
+    assert.deepEqual(patch.after, expected);
+    assert.deepEqual(data.lexemes.find(e => e.id === patch.id), expected);
+    assert.equal(expected.morphology.review.status, 'pending');
+    assert.deepEqual(expected.morphology.review, patch.before.morphology.review);
+  }
+  for (const classification of caseRecord.proposal.classifications.filter(c => c.family === 'event_matter')) {
+    const entry = data.lexemes.find(e => e.id === classification.id);
+    assert.deepEqual(entry, classification.before_entry);
+    assert.equal(entry.morphology.parts[classification.part_index].canonical_id, 'morph.case');
+  }
+  for (const [file, expected] of Object.entries(caseRecord.proposal.preservation.growth_raw_sha256)) {
+    assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex'), expected);
+  }
+});
+
+test('Display case has its own exact graph review with a preserved lexical and media boundary', () => {
+  const patch = caseRecord.patches.find(p => p.kind === 'exact_display_case_graph_review');
+  assert.equal(patch.id, 'display-case.glass-cabinet.n');
+  assert.equal(patch.before.morphology, null);
+  const entry = data.lexemes.find(e => e.id === patch.id);
+  assert.deepEqual(entry, patch.after);
+  assert.deepEqual(protect(entry), protect(patch.before));
+  assert.equal(entry.morphology.review.status, 'reviewed');
+  assert.deepEqual(entry.morphology.parts.map(p => [p.canonical_id, p.canonical]), [['morph.display','display'], ['growth.part.case.container','case']]);
+  assert.equal(entry.morphology.nodes[0].surface, 'display case');
+  assert.deepEqual(entry.morphology.nodes[0].break_offsets, [8]);
+  assert.match(entry.morphology.review.notes, /No arbitrary dis plus play split/);
+  assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+  assert.equal(caseRecord.sources.length, 23);
+  assert.equal(caseRecord.independent_approval.fresh_crosschecks.length, 8);
+  for (const source of caseRecord.sources) assert.deepEqual(data.sources.find(s => s.id === source.id), source);
+  assert.ok(data.courses.every(c => c.modules.every(m => m.status === 'draft')));
+});
+
+test('Third ten reviews preserve lexical and media gates with exact source and graph provenance', () => {
+  const approval = thirdRecord.independent_approval;
+  assert.equal(approval.accepted, true);
+  assert.equal(approval.ledger_json_sha256, 'd2106b1b6dd7dee62729cab440291112a26c97faaae9dff7bf4068c495199dbb');
+  assert.equal(approval.canonical_audit_json_sha256, '250e472dc83721030048edb86f823c46292dbb9a097e2c1c51e5de344372c163');
+  assert.equal(approval.held_candidates_json_sha256, hash(thirdRecord.original_held_candidate));
+  assert.equal(thirdRecord.patches.length, 10);
+  assert.equal(thirdRecord.sources.length, 35);
+  assert.equal(thirdRecord.appended_source_ids.length, 34);
+  assert.equal(approval.independent_crosschecks.findings.length, 11);
+  for (const patch of thirdRecord.patches) {
+    const entry = beforeRetailMedia(data.lexemes.find(e => e.id === patch.id));
+    assert.equal(hash(patch.before), patch.before_sha256);
+    assert.equal(hash(protect(patch.before)), patch.protected_fields_sha256);
+    assert.deepEqual(entry, patch.after);
+    assert.deepEqual(protect(entry), protect(patch.before));
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    assert.equal(entry.morphology.review.status, 'reviewed');
+    assert.match(entry.morphology.review.reviewer, /independent AI morphology review; not human or subject-matter approval/);
+    assert.doesNotMatch(entry.editorial_notes, /Morphology remains unauthored|morphology graph remains pending/);
+    for (const id of entry.morphology.review.source_record_ids) assert.ok(thirdRecord.sources.some(s => s.id === id));
+  }
+  for (const source of thirdRecord.sources) assert.deepEqual(data.sources.find(s => s.id === source.id), source);
+  assert.ok(!thirdRecord.appended_source_ids.includes('retail03-morph-dcom-er'));
+  for (const snapshot of thirdRecord.protected_modules) {
+    const module = data.courses.find(c => c.id === snapshot.course_id).modules.find(m => m.id === snapshot.module_id);
+    assert.equal(hash(module), snapshot.json_sha256);
+  }
+  for (const snapshot of thirdRecord.protected_expressions) assert.equal(hash(data.expressions.find(e => e.id === snapshot.entry.id)), snapshot.json_sha256);
+  assert.ok(data.courses.every(c => c.modules.every(m => m.status === 'draft')));
+});
+
+test('Third ten use explicit current bases, suffix roles and authored final-e omission', () => {
+  const graph = text => data.lexemes.find(e => e.text === text && thirdRecord.patches.some(p => p.id === e.id)).morphology;
+  const expected = {
+    pallet:['pallet'], 'pallet jack':['pallet','jack'], 'hand truck':['hand','truck'],
+    'price tag':['price','tag'], 'label printer':['label','print','-er'],
+    'weighing scale':['weigh','-ing','scale'], freezer:['freeze','-er'],
+    refrigerator:['refrigerate','-or'], 'security camera':['secure','-ity','camera'], 'security tag':['secure','-ity','tag']
+  };
+  for (const [text, parts] of Object.entries(expected)) {
+    const g = graph(text);
+    assert.deepEqual(g.parts.map(p => p.canonical), parts);
+    if (text.includes(' ')) assert.deepEqual(g.nodes.at(-1).break_offsets, [text.indexOf(' ') + 1]);
+  }
+  assert.equal(graph('pallet jack').parts[1].canonical_id, 'english.base.jack.lifting-device');
+  for (const text of ['freezer','refrigerator','security camera','security tag']) assert.match(graph(text).nodes[0].rule, /drop-final-e/);
+  assert.equal(graph('refrigerator').parts[0].canonical_id, 'growth.refrigerate');
+  assert.equal(graph('security camera').parts[1].canonical_id, 'english.affix.ity.quality');
+  assert.deepEqual(graph('security camera').parts.slice(0, 2), graph('security tag').parts.slice(0, 2));
+  assert.match(graph('security camera').review.notes, /borrowed from Latin/);
+});
+
+test('Weighing-scale acceptance resolves only the held target and preserves four pending legacy meanings', () => {
+  const held = thirdRecord.original_held_candidate;
+  assert.equal(held.status, 'held_corrected_candidate_awaiting_independent_identity_and_graph_review');
+  assert.equal(hash(held.candidate), held.candidate_json_sha256);
+  const accepted = data.lexemes.find(e => e.id === held.lexeme_id).morphology;
+  assert.deepEqual({...accepted, review:held.candidate.review}, held.candidate);
+  assert.deepEqual(accepted.parts.map(p => [p.canonical_id,p.canonical]), [
+    ['morph.weigh','weigh'], ['english.affix.ing.activity','-ing'], ['growth.part.scale.weighing-device','scale']
+  ]);
+  assert.match(accepted.review.notes, /other four pending graphs/);
+  for (const snapshot of thirdRecord.scale_family_preimages.filter(s => s.lexeme_id !== held.lexeme_id)) {
+    const entry = data.lexemes.find(e => e.id === snapshot.lexeme_id);
+    assert.equal(hash(entry), snapshot.entry_json_sha256);
+    assert.equal(entry.morphology.review.status, 'pending');
+    assert.ok(entry.morphology.parts.some(p => p.canonical_id === 'morph.scale' && p.canonical === 'scale'));
+  }
+  for (const snapshot of held.reviewed_growth_evidence) {
+    const entry = JSON.parse(fs.readFileSync(path.join(root,snapshot.resource))).entries.find(e => e.id === snapshot.entry.id);
+    assert.equal(hash(entry), snapshot.entry_json_sha256);
+    assert.equal(entry.review.status, 'reviewed');
+  }
+});
+
+test('Fourth ten retain exact independent graph approval, source provenance and other release gates', () => {
+  const approval = fourthRecord.independent_approval;
+  assert.equal(approval.accepted, true);
+  assert.equal(approval.ledger_json_sha256, '7a1e6eaecc3dff6f9879b1930fb401110d5183b2f5d24912921ae08a69401e0f');
+  assert.equal(approval.canonical_audit_json_sha256, '6f2e26cafc1e73fc876c752028ec979be99b2c78bbd2b92e3c7bf476daafdaed');
+  assert.equal(approval.source_ledger_json_sha256, 'bed2bb29783325da5b24d4b017752adeff8fd3f273e8597ccf9b4816a4dd07cf');
+  assert.equal(approval.native_review.accepted_for_exact_candidates, true);
+  assert.equal(approval.native_review.checks, 924);
+  assert.equal(approval.independent_crosschecks.fresh.findings.length, 11);
+  assert.equal(approval.independent_crosschecks.supplemental.findings.length, 4);
+  assert.equal(fourthRecord.patches.length, 10);
+  assert.equal(fourthRecord.sources.length, 26);
+  assert.deepEqual(fourthRecord.appended_source_ids, fourthRecord.sources.map(source => source.id));
+  assert.deepEqual(approval.reviewed_graph_ids, fourthRecord.patches.map(patch => patch.id));
+  for (const patch of fourthRecord.patches) {
+    const entry = beforeRetailMedia(data.lexemes.find(item => item.id === patch.id));
+    assert.equal(hash(patch.before), patch.before_sha256);
+    assert.equal(hash(protect(patch.before)), patch.protected_fields_sha256);
+    assert.deepEqual(entry, patch.after);
+    assert.deepEqual(protect(entry), protect(patch.before));
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    assert.equal(entry.morphology.review.status, 'reviewed');
+    assert.match(entry.morphology.review.reviewer, /independent AI morphology review; not human or subject-matter approval/);
+    assert.doesNotMatch(entry.editorial_notes, /Morphology remains unauthored|morphology graph remains pending/);
+    for (const id of entry.morphology.review.source_record_ids) assert.ok(fourthRecord.sources.some(source => source.id === id));
+  }
+  for (const expected of fourthRecord.sources) assert.deepEqual(data.sources.find(source => source.id === expected.id), expected);
+  for (const snapshot of fourthRecord.protected_modules) {
+    const module = data.courses.find(course => course.id === snapshot.course_id).modules.find(item => item.id === snapshot.module_id);
+    assert.equal(hash(module), snapshot.json_sha256);
+    assert.equal(module.status, 'draft');
+  }
+  for (const snapshot of fourthRecord.protected_expressions) assert.equal(hash(data.expressions.find(entry => entry.id === snapshot.entry.id)), snapshot.json_sha256);
+  assert.equal(data.lexemes.filter(entry => entry.morphology?.review.status === 'reviewed').length, 89);
+  assert.equal(data.courses.find(course => course.id === 'retail').modules.find(module => module.id === 'module03').lexeme_ids.filter(id => data.lexemes.find(entry => entry.id === id).morphology?.review.status === 'reviewed').length, 50);
+  assert.ok(data.courses.every(course => course.modules.every(module => module.status === 'draft')));
+});
+
+test('Fourth ten author current constituents, spelling changes and exact grammatical suffix roles', () => {
+  const graph = text => fourthRecord.patches.find(patch => patch.after.text === text).after.morphology;
+  const expected = {
+    'alarm gate': ['alarm', 'gate'], escalator: ['escalator'], elevator: ['elevate', '-or'],
+    entrance: ['enter', '-ance'], exit: ['exit'], 'automatic door': ['automatic', 'door'],
+    'customer service desk': ['customer', 'service', 'desk'], 'pickup counter': ['pick', 'up', 'counter'],
+    'returns counter': ['return', '-s', 'counter'], 'queue barrier': ['queue', 'barrier']
+  };
+  for (const [text, parts] of Object.entries(expected)) {
+    const value = graph(text);
+    assert.deepEqual(value.parts.map(part => part.canonical), parts, text);
+    if (parts.length === 1) assert.deepEqual(value.nodes, []);
+    else assert.equal(value.nodes.at(-1).surface, text);
+  }
+  assert.equal(graph('alarm gate').parts[1].canonical_id, 'english.base.gate.passage');
+  assert.equal(graph('elevator').parts[0].canonical_id, 'english.base.elevate.raise');
+  assert.match(graph('elevator').nodes[0].rule, /instrument-or-drop-final-e/);
+  assert.equal(graph('elevator').parts[1].canonical_id, 'affix.or.suffix');
+  assert.equal(graph('entrance').parts[0].canonical_id, 'growth.enter');
+  assert.equal(graph('entrance').parts[1].canonical_id, 'affix.ance.suffix');
+  assert.match(graph('entrance').nodes[0].rule, /enter-to-entr/);
+  assert.equal(graph('pickup counter').nodes[0].surface, 'pickup');
+  assert.deepEqual(graph('pickup counter').nodes[0].break_offsets, []);
+  assert.deepEqual(graph('pickup counter').nodes[1].break_offsets, [7]);
+  assert.equal(graph('returns counter').parts[1].canonical_id, 'english.affix.s.plural');
+  assert.equal(graph('returns counter').nodes[0].surface, 'returns');
+  assert.deepEqual(graph('customer service desk').nodes.map(node => [node.left, node.right, node.surface, node.break_offsets]), [
+    ['p1', 'p2', 'customer service', [9]], ['customer-service', 'p3', 'customer service desk', [9, 17]]
+  ]);
+  assert.deepEqual(fourthRecord.independent_approval.canonical_decisions.filter(item => item.new_pair).map(item => item.name), ['gate', 'elevate']);
+});
+
+test('Fourth-ten related families and first thirty entries retain exact historical values through media updates', () => {
+  assert.equal(fourthRecord.protected_related_entries.length, 395);
+  for (const snapshot of fourthRecord.protected_related_entries) {
+    const entry = beforeRetailMedia(data.lexemes.find(item => item.id === snapshot.entry.id));
+    assert.equal(hash(snapshot.entry), snapshot.json_sha256);
+    assert.deepEqual(entry, snapshot.entry, entry.id);
+  }
+  assert.equal(Object.keys(fourthRecord.protected_first30_entry_json_sha256).length, 30);
+  for (const [id, expected] of Object.entries(fourthRecord.protected_first30_entry_json_sha256)) assert.equal(hash(beforeRetailMedia(data.lexemes.find(entry => entry.id === id))), expected, id);
+  for (const [file, expected] of Object.entries(fourthRecord.independent_approval.native_review.root_dependency_raw_sha256).filter(([file]) => /^data\/vocabulary\/morphology\/(age-\d\d|index)\.json$/.test(file))) {
+    assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex'), expected, file);
+  }
+  for (const [file, expected] of [
+    ['retail-shelf-image-2026-10-16.json', '29fa0f55c39569496ef79b15efbb976c78c74667403a75515a9a8b8e6e4fa654'],
+    ['retail-pallet-shelf-approved-audio-2026-10-16.json', 'aa3f0ff1e3d92c7a2cd0761e4a7284e48a05a49457c35b2091eb1240ee1c9f27']
+  ]) assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'data/professional/provenance', file))).digest('hex'), expected);
+});
+
+test('Fourth-ten review keeps historical customer derivation and Growth escalator approval separate', () => {
+  const customer = data.lexemes.find(entry => entry.id === 'customer.buyer.n');
+  const wholeCustomer = data.lexemes.find(entry => entry.id === 'customer-service-desk.help-counter.n');
+  assert.equal(customer.morphology.review.status, 'pending');
+  assert.deepEqual(customer.morphology.parts.map(part => part.canonical), ['custom', '-er']);
+  assert.equal(wholeCustomer.morphology.parts[0].canonical_id, 'morph.customer');
+  assert.equal(wholeCustomer.morphology.parts[0].canonical, 'customer');
+  const escalator = fourthRecord.patches.find(patch => patch.id === 'escalator.moving-stairway.n');
+  assert.equal(escalator.before.morphology.review.status, 'pending');
+  assert.equal(escalator.before.morphology.review.provenance.corpus, 'Growth');
+  assert.equal(escalator.after.morphology.review.status, 'reviewed');
+  assert.equal(escalator.after.morphology.review.acceptance_record, 'data/professional/provenance/retail-module03-morphology-fourth10-2026-10-16.json');
+  assert.deepEqual(escalator.before.morphology.roots, ['whole']);
+  assert.deepEqual(escalator.after.morphology.roots, ['p1']);
+  assert.deepEqual(escalator.after.morphology.parts, escalator.before.morphology.parts.map(part => ({...part, id: 'p1'})));
+  const growth = JSON.parse(fs.readFileSync(path.join(root, 'data/vocabulary/morphology/age-08.json'))).entries.find(entry => entry.id === 'escalator');
+  assert.equal(growth.review.status, 'reviewed');
+  assert.notEqual(growth.analysis.lexeme_id, escalator.after.morphology.lexeme_id);
+  assert.deepEqual(growth.analysis.parts, escalator.before.morphology.parts);
+  const elevator = data.lexemes.find(entry => entry.id === 'elevator.vertical-transport.n');
+  assert.equal(elevator.review.domain, 'pending');
+  assert.equal(elevator.media.image.status, 'pending');
+  assert.equal(elevator.media.image.review.status, 'pending');
+  assert.equal(elevator.media.audio.status, 'pending');
+});
+
+test('Fourth-ten integration binds successful R06 separately from the preserved failed R04 evidence', () => {
+  const validation = fourthRecord.independent_approval.production_validation;
+  const bytes = fs.readFileSync(path.join(root, validation.path));
+  assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'), validation.raw_sha256);
+  assert.equal(validation.path, 'build/professional-english/continuation-validation-r06.json');
+  assert.equal(validation.registry_sha256, fourthRecord.integration.before_registry_sha256);
+  assert.deepEqual(validation.runs.map(run => [run.name, run.status]), [['node', 0], ['native', 0], ['native-audio', 0]]);
+  assert.equal(validation.runs.find(run => run.name === 'node').pass, 177);
+  assert.equal(validation.runs.find(run => run.name === 'native').checks, 629);
+  const supplemental = fourthRecord.independent_approval.supplemental_growth_index;
+  assert.equal(supplemental.prior_overall_ok, false);
+  assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root, supplemental.prior_receipt))).digest('hex'), supplemental.prior_receipt_raw_sha256);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root, supplemental.prior_receipt))).ok, false);
+});
+
+
+test('Fifth ten preserve exact reviewed candidates, approved audio and all unrelated release gates', () => {
+  assert.equal(fifthRecord.independent_approval.accepted_for_exact_candidates, true);
+  assert.equal(fifthRecord.independent_approval.ledger_json_sha256, '9499b39f70fa8162af64674f2786804dc2326e6813f7627e25eabb4a3754e274');
+  assert.equal(fifthRecord.patches.length, 10);
+  assert.equal(fifthRecord.sources.length, 30);
+  assert.deepEqual(fifthRecord.appended_source_ids, fifthRecord.sources.map(item => item.id));
+  for (const patch of fifthRecord.patches) {
+    const entry = data.lexemes.find(item => item.id === patch.id);
+    assert.deepEqual(entry, patch.after);
+    assert.equal(hash(patch.before), patch.before_sha256);
+    assert.equal(hash(protect(patch.before)), patch.protected_fields_sha256);
+    assert.deepEqual(protect(entry), protect(patch.before));
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    assert.equal(entry.morphology.review.status, 'reviewed');
+    assert.match(entry.morphology.review.reviewer, /independent AI morphology review; not human or subject-matter approval/);
+    assert.doesNotMatch(entry.editorial_notes, /Morphology remains unauthored|morphology graph remains pending/);
+    for (const id of entry.morphology.review.source_record_ids) assert.ok(fifthRecord.sources.some(source => source.id === id));
+    if (['shopping bag', 'gift wrap'].includes(entry.text)) {
+      assert.equal(entry.media.audio.status, 'integrated');
+      assert.match(entry.editorial_notes, /exact Ava word recording has user listening approval/);
+    }
+  }
+  for (const expected of fifthRecord.sources) assert.deepEqual(data.sources.find(source => source.id === expected.id), expected);
+  for (const snapshot of fifthRecord.protected_related_entries) assert.deepEqual(beforeCounterImage(data.lexemes.find(entry => entry.id === snapshot.entry.id)), snapshot.entry);
+  for (const snapshot of fifthRecord.protected_modules) assert.equal(hash(data.courses.find(course => course.id === snapshot.course_id).modules.find(module => module.id === snapshot.module_id)), snapshot.json_sha256);
+  for (const snapshot of fifthRecord.protected_expressions) assert.equal(hash(data.expressions.find(entry => entry.id === snapshot.entry.id)), snapshot.json_sha256);
+  assert.equal(Object.keys(fifthRecord.protected_first40_entry_json_sha256).length, 40);
+  for (const [id, expected] of Object.entries(fifthRecord.protected_first40_entry_json_sha256)) assert.equal(hash(beforeCounterImage(data.lexemes.find(entry => entry.id === id))), expected);
+  assert.ok(data.courses.every(course => course.modules.every(module => module.status === 'draft')));
+});
+
+test('Fifth ten retain literal donors, whole modern bases, contextual senses and exact spellings', () => {
+  const graph = text => fifthRecord.patches.find(patch => patch.after.text === text).after.morphology;
+  const pairs = text => graph(text).parts.map(part => [part.canonical_id, part.canonical]);
+  assert.deepEqual(pairs('window display'), [['growth.window', 'window'], ['morph.display', 'display']]);
+  assert.deepEqual(pairs('shopping bag'), [['morph.shop', 'shop'], ['english.affix.ing.activity', '-ing'], ['growth.bag', 'bag']]);
+  assert.deepEqual(pairs('touchscreen'), [['growth.touch', 'touch'], ['morph.screen', 'screen']]);
+  assert.deepEqual(pairs('keypad'), [['growth.part.key.input', 'key'], ['morph.pad', 'pad']]);
+  assert.deepEqual(pairs('cash safe'), [['morph.cash', 'cash'], ['morph.safe', 'safe']]);
+  assert.deepEqual(pairs('mop'), [['growth.mop', 'mop']]);
+  assert.deepEqual(graph('mop').nodes, []);
+  assert.deepEqual(graph('store directory').parts.map(part => part.canonical), ['store', 'directory']);
+  assert.deepEqual(graph('gift wrap').parts.map(part => part.canonical), ['gift', 'wrap']);
+  assert.deepEqual(graph('receipt roll').parts.map(part => part.canonical), ['receipt', 'roll']);
+  assert.deepEqual(graph('waste bin').parts.map(part => part.canonical), ['waste', 'bin']);
+  assert.equal(graph('shopping bag').nodes[0].surface, 'shopping');
+  assert.match(graph('shopping bag').nodes[0].rule, /double-final-p/);
+  assert.deepEqual(graph('shopping bag').nodes[1].break_offsets, [9]);
+  for (const text of ['keypad', 'touchscreen']) assert.deepEqual(graph(text).nodes[0].break_offsets, []);
+  for (const [file, expected] of Object.entries(fifthRecord.independent_approval.dependency_raw_sha256).filter(([file]) => /^data\/vocabulary\/morphology\/(age-\d\d|index)\.json$/.test(file))) assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex'), expected);
+  for (const text of ['touchscreen', 'keypad', 'mop', 'waste bin']) assert.equal(fifthRecord.patches.find(patch => patch.after.text === text).after.review.domain, 'pending');
+  assert.deepEqual(fifthRecord.patches.find(patch => patch.after.text === 'gift wrap').after.accepted_forms, ['gift wrap', 'wrapping paper']);
+  assert.ok(fifthRecord.sources.every(source => source.assets_acquired === false && source.asset_license === null));
+});
+
+test('Retail04 first ten bind exact author, independent, native and root decisions', () => {
+  const r = retail04FirstRecord, approval = r.independent_approval;
+  assert.equal(approval.status, 'root_accepts_exact_morphology_candidates_pending_guarded_integration');
+  assert.equal(approval.author_ledger_json_sha256, '7b37697afbdb128515070a75f176ae799a96f906f2c849bb4fb9027a3f9634e6');
+  assert.equal(approval.independent_decisions.json_sha256, '4f3c25c5bc8dcb1d3c186e5115543974933ece4b46d31274c066316f258ed085');
+  assert.equal(hash(r.independent_decisions), approval.independent_decisions.json_sha256);
+  assert.equal(hash(r.source_consultation_ledger), r.author_evidence.source_ledger_json_sha256);
+  assert.equal(r.patches.length, 10); assert.equal(r.sources.length, 24);
+  const raw = file => crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
+  assert.equal(raw(r.acceptance_evidence.path), 'cf7af9b291a37db9b4f58cb83b4da15c41663d4aab9b4af59c34f69028358caf');
+  assert.equal(raw(r.acceptance_evidence.path), r.acceptance_evidence.raw_sha256);
+  assert.equal(raw(r.native_probe.path), '8052564a73e54f578aac12264fc7b2710aef34034e4c4fae98583af972ec3afa');
+  const native = JSON.parse(fs.readFileSync(path.join(root, r.native_probe.path)));
+  assert.equal(native.status, 'scratch_native_checks_passed_not_production_acceptance');
+  assert.equal(native.native.checks, 317); assert.deepEqual(native.native.failures, []);
+  assert.equal(native.proposal_json_sha256, approval.author_ledger_json_sha256);
+  assert.equal(native.independent_decisions_json_sha256, approval.independent_decisions.json_sha256);
+  assert.equal(raw(r.production_validation.path), r.production_validation.raw_sha256);
+  const validation = JSON.parse(fs.readFileSync(path.join(root, r.production_validation.path)));
+  assert.equal(validation.ok, true); assert.equal(validation.registry_after_sha256, r.integration.before_registry_sha256);
+  for (const [index, patch] of r.patches.entries()) {
+    assert.equal(approval.decisions[index].id, patch.id);
+    assert.equal(approval.decisions[index].candidate_json_sha256, patch.original_candidate_json_sha256);
+    assert.equal(approval.decisions[index].decision, 'accept_at_declared_teaching_depth');
+    assert.equal(r.independent_decisions.decisions[index].decision, 'accept_at_declared_teaching_depth');
+    const candidate = structuredClone(patch.after.morphology);
+    candidate.review.status = 'pending'; candidate.review.independent_review = 'not_completed';
+    for (const key of ['reviewer','reviewed_at','acceptance_record']) delete candidate.review[key];
+    assert.equal(hash(candidate), patch.original_candidate_json_sha256);
+  }
+});
+
+test('Retail04 changes morphology only and preserves complete family, course and source scope', () => {
+  const r = retail04FirstRecord, nonMorphology = entry => Object.fromEntries(Object.entries(entry).filter(([key]) => key !== 'morphology'));
+  for (const patch of r.patches) {
+    const actual = data.lexemes.find(entry => entry.id === patch.id);
+    assert.deepEqual(actual, patch.after); assert.equal(hash(patch.before), patch.before_sha256);
+    assert.equal(hash(nonMorphology(patch.before)), patch.protected_fields_sha256);
+    assert.deepEqual(nonMorphology(actual), nonMorphology(patch.before));
+    assert.equal(actual.editorial_notes, patch.before.editorial_notes);
+    assert.deepEqual(morphologyErrors(actual.morphology, actual), []);
+    assert.equal(actual.morphology.review.status, 'reviewed');
+    for (const id of actual.morphology.review.source_record_ids) assert.ok(r.sources.some(s => s.id === id));
+  }
+  for (const expected of r.sources) {
+    assert.deepEqual(data.sources.find(s => s.id === expected.id), expected);
+    assert.equal(expected.status, 'consulted'); assert.equal(expected.assets_acquired, false); assert.equal(expected.asset_license, null);
+  }
+  assert.equal(r.protected_related_entries.length, 215);
+  for (const row of r.protected_related_entries) assert.deepEqual(beforeFoundationSecondLanguage(data.lexemes.find(e => e.id === row.entry.id)), row.entry);
+  for (const row of r.protected_modules) assert.equal(hash(data.courses.find(c => c.id === row.course_id).modules.find(m => m.id === row.module_id)), row.json_sha256);
+  for (const row of r.protected_expressions) assert.equal(hash(data.expressions.find(e => e.id === row.entry.id)), row.json_sha256);
+  for (const row of r.protected_existing_sources) assert.deepEqual(data.sources.find(s => s.id === row.source.id), row.source);
+  for (const row of r.protected_growth_entries) assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root, row.resource))).entries.find(e => e.id === row.entry.id), row.entry);
+  for (const [file, expected] of Object.entries(r.protected_growth_raw_sha256)) assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex'), expected);
+  assert.equal(r.selected_memberships.reduce((n, row) => n + row.memberships.length, 0), 24);
+  for (const row of r.selected_memberships) assert.deepEqual(data.courses.flatMap(c => c.modules.filter(m => m.lexeme_ids.includes(row.id)).map(m => c.id + '/' + m.id)).sort(), row.memberships.map(m => m.course_id + '/' + m.module_id).sort());
+  assert.equal(r.patches.filter(p => p.after.review.domain === 'pending').length, 8);
+  assert.ok(data.courses.every(c => c.modules.every(m => m.status === 'draft')));
+});
+
+test('Retail04 records nine exposure-only roots, exact result-ment, new pairs and unchanged family boundaries', () => {
+  const r = retail04FirstRecord, graph = text => r.patches.find(p => p.after.text === text).after.morphology;
+  assert.equal(r.patches.filter(p => p.after.morphology.kind === 'atomic').length, 9);
+  assert.deepEqual(r.new_canonical_pairs, [['morph.merchandise','merchandise'],['morph.assort','assort'],['morph.variant','variant']]);
+  assert.deepEqual(r.canonical_migrations, []);
+  assert.deepEqual(graph('assortment').parts.map(p => [p.canonical_id,p.canonical,p.surface]), [['morph.assort','assort','assort'],['english.affix.ment.result','-ment','ment']]);
+  assert.deepEqual(graph('assortment').nodes, [{id:'whole',left:'p1',right:'p2',surface:'assortment',rule:'assort-plus-result-ment',break_offsets:[]}]);
+  assert.deepEqual(graph('fabric').parts.map(p => [p.canonical_id,p.canonical]), [['growth.fabric','fabric']]);
+  assert.deepEqual(graph('material').parts.map(p => [p.canonical_id,p.canonical]), [['growth.material','material']]);
+  const oldFabric = r.patches.find(p => p.after.text === 'fabric').before.morphology;
+  assert.deepEqual(oldFabric.parts.map(p => [p.canonical_id,p.canonical]), [['morph.fabric','fabric']]);
+  assert.notEqual(oldFabric.id, graph('fabric').id); assert.equal(oldFabric.lexeme_id, graph('fabric').lexeme_id);
+  const colour = r.patches.find(p => p.after.text === 'color').after;
+  assert.ok(colour.accepted_forms.includes('colour')); assert.equal(colour.morphology.text, 'color'); assert.equal(colour.morphology.parts[0].surface, 'color');
+  for (const text of ['product','variant','material']) assert.ok(r.independent_decisions.decisions.find(d => d.id === r.patches.find(p => p.after.text === text).id).teaching_depth_uncertainty.length > 50);
+});
+
+test('Retail04 second ten require exact independent evidence, root decision and committed integration', () => {
+  const r=retail04SecondRecord, approval=r.independent_approval;
+  const raw=file=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex');
+  assert.equal(approval.status,'root_accepts_exact_morphology_candidates_pending_guarded_integration');
+  assert.equal(approval.root_review_recorded,true);assert.match(approval.reviewer,/^Codex root/);
+  assert.equal(approval.author_ledger_json_sha256,'e12ada75767c7b43a0b1132f4ed8ae02d36c6acd9c7a71a8cf48ee0de42c4855');
+  assert.equal(hash(r.independent_decisions),'6f6ac9a57e6d48511e1643187cae382f6ecc900fcd37a416325a55774626ac44');
+  assert.equal(hash(r.independent_decisions),approval.independent_decisions.json_sha256);
+  assert.equal(raw(r.acceptance_evidence.path),r.acceptance_evidence.raw_sha256);
+  assert.equal(hash(r.source_consultation_ledger),r.author_evidence.source_ledger_json_sha256);
+  assert.equal(r.patches.length,10);assert.equal(r.author_candidates.length,10);assert.equal(r.sources.length,24);
+  const delivery='build/professional-english/retail-module04-morphology-review/second10/delivery-r01/';
+  assert.equal(raw(delivery+'acceptance-proposal.json'),approval.approval_proposal_raw_sha256);
+  const proposal=JSON.parse(fs.readFileSync(path.join(root,delivery+'acceptance-proposal.json')));
+  assert.equal(proposal.root_review_recorded,false);assert.equal(proposal.status,'unsigned_proposal_for_root_review');
+  assert.deepEqual({...approval,status:proposal.status,root_review_recorded:false,reviewer:null,recorded_at:null,approval_proposal_raw_sha256:null},proposal);
+  const native=JSON.parse(fs.readFileSync(path.join(root,r.native_probe.path)));
+  assert.equal(raw(r.native_probe.path),'0ddf066f15735f19596e1a8c4a40a154900d40fe4fbeb7ac8df7bcc841e5d6e4');
+  assert.equal(native.status,'scratch_native_checks_passed_not_production_acceptance');assert.equal(native.native.checks,870);assert.deepEqual(native.native.failures,[]);
+  assert.equal(native.native.cases.length,95);assert.ok(native.native.cases.every(c=>c.passed&&c.checks>0));
+  assert.deepEqual(native.native.cases.map(c=>c.id),r.runtime_case_proposal.cases.map(c=>c.id));assert.deepEqual(native.native.case_counts,r.runtime_case_proposal.case_counts);
+  const nativeDir=path.dirname(r.native_probe.path);for(const [file,sha]of Object.entries(native.local_raw_sha256))assert.equal(raw(nativeDir+'/'+file),sha);
+  assert.equal(raw(nativeDir+'/'+native.script_snapshot),native.script_raw_sha256);assert.equal(raw(nativeDir+'/'+native.log_file),native.log_raw_sha256);
+  const lineage=JSON.parse(fs.readFileSync(path.join(root,nativeDir,'revision-lineage.json')));for(const [file,sha]of Object.entries(lineage.predecessor_raw_sha256))assert.equal(raw(file),sha);
+  const failed=JSON.parse(fs.readFileSync(path.join(root,'build/professional-english/retail-module04-morphology-review/second10/native-probe-r02/runtime-attempt-01-diagnostic.json')));
+  assert.equal(failed.status,'failed_native_attempt_preserved_no_acceptance');assert.equal(failed.native.checks,855);assert.equal(failed.native.failures.length,2);
+  const validation=JSON.parse(fs.readFileSync(path.join(root,r.production_validation.path)));
+  assert.equal(raw(r.production_validation.path),r.production_validation.raw_sha256);assert.equal(validation.ok,true);assert.equal(validation.registry_after_sha256,r.integration.before_registry_sha256);
+  const transaction=r.integration.transaction_path,states=fs.readdirSync(path.join(root,transaction,'states')).filter(f=>/^\d{6}-[a-z-]+\.json$/.test(f)).sort();
+  const committed=JSON.parse(fs.readFileSync(path.join(root,transaction,'states',states.at(-1))));assert.equal(committed.status,'committed');assert.equal(committed.prepared_sha256,raw(transaction+'/prepared.json'));
+  for(const [i,patch]of r.patches.entries()){
+    assert.equal(hash(r.author_candidates[i]),patch.original_candidate_json_sha256);assert.equal(approval.decisions[i].candidate_json_sha256,patch.original_candidate_json_sha256);assert.equal(approval.decisions[i].decision,'accept_at_declared_teaching_depth');
+    const restored=structuredClone(patch.after.morphology);restored.review.status='pending';restored.review.independent_review='not_completed';for(const key of ['reviewer','reviewed_at','acceptance_record'])delete restored.review[key];
+    assert.deepEqual(restored,r.author_candidates[i]);assert.equal(restored.review.status,'pending');
+  }
+});
+
+test('Retail04 second ten alter morphology only and preserve context, source, Growth and domain gates', () => {
+  const r=retail04SecondRecord,withoutMorphology=e=>Object.fromEntries(Object.entries(e).filter(([k])=>k!=='morphology'));
+  for(const patch of r.patches){const actual=data.lexemes.find(e=>e.id===patch.id);assert.deepEqual(actual,patch.after);assert.equal(hash(patch.before),patch.before_sha256);assert.deepEqual(withoutMorphology(actual),withoutMorphology(patch.before));assert.equal(hash(withoutMorphology(actual)),patch.protected_fields_sha256);assert.equal(actual.editorial_notes,patch.before.editorial_notes);assert.deepEqual(morphologyErrors(actual.morphology,actual),[]);assert.equal(actual.morphology.review.status,'reviewed');assert.ok(actual.morphology.review.source_record_ids.every(id=>r.sources.some(s=>s.id===id)));}
+  assert.equal(r.protected_related_entries.length,48);for(const row of r.protected_related_entries)assert.deepEqual(beforeCardReaderBarcodeAudio(data.lexemes.find(e=>e.id===row.entry.id)),row.entry);
+  assert.equal(r.protected_modules.length,45);for(const row of r.protected_modules)assert.equal(hash(data.courses.find(c=>c.id===row.course_id).modules.find(m=>m.id===row.module_id)),row.json_sha256);
+  assert.equal(r.protected_expressions.length,450);for(const row of r.protected_expressions)assert.equal(hash(data.expressions.find(e=>e.id===row.entry.id)),row.json_sha256);
+  assert.equal(r.protected_existing_sources.length,168);for(const row of r.protected_existing_sources)assert.deepEqual(data.sources.find(s=>s.id===row.source.id),row.source);
+  for(const expected of r.sources){assert.deepEqual(data.sources.find(s=>s.id===expected.id),expected);assert.equal(expected.status,'consulted');assert.equal(expected.assets_acquired,false);assert.equal(expected.asset_license,null);}
+  for(const row of r.protected_growth_entries)assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root,row.resource))).entries.find(e=>e.id===row.entry.id),row.entry);
+  const raw=file=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex');for(const [file,sha]of Object.entries(r.protected_growth_raw_sha256))assert.equal(raw(file),sha);
+  const supplement=r.protected_growth_dependency_supplement;assert.equal(raw(supplement.growth_index.resource),supplement.growth_index.raw_sha256);const words=JSON.parse(fs.readFileSync(path.join(root,'words.json')));for(const row of supplement.actual_growth_words)assert.deepEqual(words.find(w=>w.id===row.entry_id),row.word);
+  assert.equal(r.selected_memberships.reduce((n,row)=>n+row.memberships.length,0),21);for(const row of r.selected_memberships)assert.deepEqual(data.courses.flatMap(c=>c.modules.filter(m=>m.lexeme_ids.includes(row.id)).map(m=>({course_id:c.id,module_id:m.id}))),row.memberships);
+  assert.equal(r.patches.filter(p=>p.after.review.domain==='pending').length,7);assert.deepEqual(r.patches.filter(p=>p.after.review.domain==='not_required').map(p=>p.after.text),['cotton','wool','leather']);assert.ok(data.courses.every(c=>c.modules.every(m=>m.status==='draft')));
+});
+
+test('Retail04 second ten retain declared noun depth, exact new pairs and sense boundaries', () => {
+  const r=retail04SecondRecord,graph=text=>r.patches.find(p=>p.after.text===text).after.morphology,pairs=text=>graph(text).parts.map(p=>[p.canonical_id,p.canonical]);
+  assert.equal(r.patches.filter(p=>p.after.morphology.kind==='atomic').length,8);assert.deepEqual(r.new_canonical_pairs,[['morph.ceramic','ceramic'],['morph.part.tissue.wrapping-paper','tissue']]);assert.deepEqual(r.canonical_migrations,[]);
+  for(const [text,id]of Object.entries({cotton:'morph.cotton',wool:'growth.wool',leather:'morph.leather',plastic:'growth.plastic',glass:'growth.part.glass.material',ceramic:'morph.ceramic',metal:'morph.metal',wood:'growth.wood'})){assert.deepEqual(pairs(text),[[id,text]]);assert.deepEqual(graph(text).nodes,[]);assert.deepEqual(graph(text).roots,['whole']);}
+  assert.deepEqual(pairs('cardboard'),[['growth.card','card'],['growth.part.board.sheet','board']]);assert.deepEqual(graph('cardboard').nodes,[{id:'whole',left:'p1',right:'p2',surface:'cardboard',rule:'card-plus-sheet-board',break_offsets:[]}]);
+  assert.deepEqual(pairs('tissue paper'),[['morph.part.tissue.wrapping-paper','tissue'],['growth.paper','paper']]);assert.deepEqual(graph('tissue paper').nodes,[{id:'whole',left:'p1',right:'p2',surface:'tissue paper',rule:'tissue-plus-paper-word-boundary',break_offsets:[7]}]);assert.deepEqual(r.patches.find(p=>p.after.text==='tissue paper').after.accepted_forms,['tissue paper']);
+  assert.deepEqual(r.patches.filter(p=>p.before.morphology===null).map(p=>p.after.text),['ceramic']);assert.equal(r.patches.filter(p=>p.before.morphology?.review.status==='pending').length,9);
+  for(const [text,history]of Object.entries({plastic:/Historical molding\/adjectival structure is real/,ceramic:/Greek clay-base\/adjectival structure remains acknowledged/})){const d=r.independent_decisions.decisions.find(d=>d.text===text);assert.match(d.independent_reason,history);assert.equal(d.depth,'whole-current-material-noun exposure only');assert.equal(d.composition_mastery_allowed_by_editorial_review,false);assert.equal(d.production_acceptance,false);}
+  assert.equal(data.courses.find(c=>c.id==='retail').modules.find(m=>m.id==='module04').lexeme_ids.filter(id=>data.lexemes.find(e=>e.id===id).morphology?.review.status==='reviewed').length,30);
+});
+
+
+test('Third-ten Foundation language reversal preserves pending Retail legacy morphology donors', () => {
+  for(const id of ['update.current-information.n','reminder.memory-prompt.n']){
+    const patch=foundationThirdLanguageRecord.patches.find(item=>item.id===id),entry=data.lexemes.find(item=>item.id===id);
+    assert.deepEqual(entry,patch.after);assert.deepEqual(beforeFoundationThirdLanguage(entry),patch.before);assert.deepEqual(beforeFoundationLanguage(entry),patch.before);assert.deepEqual(entry.morphology,patch.before.morphology);assert.equal(entry.morphology.review.status,'pending');
+    const wrong=structuredClone(entry);wrong.morphology.review.status='reviewed';assert.throws(()=>beforeFoundationThirdLanguage(wrong));
+  }
+  const attendance=foundationThirdLanguageRecord.held[0];assert.equal(attendance.id,'attendance.presence-record.n');assert.deepEqual(data.lexemes.find(item=>item.id===attendance.id),attendance.value);
+});
+
+test('Retail04 third ten require exact independent evidence, root decision and committed integration', () => {
+  const r=retail04ThirdRecord, approval=r.independent_approval;
+  const raw=file=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex');
+  assert.equal(approval.status,'root_accepts_exact_morphology_candidates_pending_guarded_integration');
+  assert.equal(approval.root_review_recorded,true);assert.match(approval.reviewer,/^Codex root/);
+  assert.equal(approval.author_ledger_json_sha256,'8b5f270f0c47935a2e74fca13a3586d17b73ba7fb694a075d1877fbe4112740e');
+  assert.equal(hash(r.independent_decisions),'20f586fe2fa38600e680c42238e8fd5cb6e33e0a15f1d0216a5786a56a0e2d45');
+  assert.equal(hash(r.independent_decisions),approval.independent_decisions.json_sha256);
+  assert.equal(raw(r.acceptance_evidence.path),r.acceptance_evidence.raw_sha256);
+  assert.equal(hash(r.source_consultation_ledger),r.author_evidence.source_ledger_json_sha256);
+  assert.equal(r.patches.length,10);assert.equal(r.author_candidates.length,10);assert.equal(r.sources.length,22);
+  const delivery='build/professional-english/retail-module04-morphology-review/third10/delivery-r01/';
+  assert.equal(raw(delivery+'acceptance-proposal.json'),approval.approval_proposal_raw_sha256);
+  const proposal=JSON.parse(fs.readFileSync(path.join(root,delivery+'acceptance-proposal.json')));
+  assert.equal(proposal.root_review_recorded,false);assert.equal(proposal.status,'unsigned_proposal_for_root_review');
+  assert.deepEqual({...approval,status:proposal.status,root_review_recorded:false,reviewer:null,recorded_at:null,approval_proposal_raw_sha256:null},proposal);
+  const native=JSON.parse(fs.readFileSync(path.join(root,r.native_probe.path)));
+  assert.equal(raw(r.native_probe.path),'d6e014cae2c1e4ce15555f5c4b817e832765d809d1ef0737fa0600ed55231971');
+  assert.equal(native.status,'scratch_native_checks_passed_not_production_acceptance');assert.equal(native.native.checks,1139);assert.deepEqual(native.native.failures,[]);
+  assert.equal(native.native.cases.length,54);assert.ok(native.native.cases.every(c=>c.passed&&c.checks>0));
+  assert.deepEqual(native.native.cases.map(c=>c.id),r.runtime_case_proposal.cases.map(c=>c.id));assert.deepEqual(native.native.case_counts,r.runtime_case_proposal.case_counts);
+  assert.equal(hash(r.runtime_case_proposal),'b5a2bf5f69377845c40ba5064c16e4b7c49f6f6776eda728234b9e76cef4b24b');
+  assert.equal(native.native.actual_growth_decorator_evidence.length,12);for(const observed of native.native.actual_growth_decorator_evidence){const expected=r.protected_growth_entries.find(row=>row.entry.id===observed.id);assert.deepEqual(observed.decorated_graph,{...expected.entry.analysis,review:expected.entry.review});}
+  const nativeDir=path.dirname(r.native_probe.path);for(const [file,sha]of Object.entries(native.local_raw_sha256))assert.equal(raw(nativeDir+'/'+file),sha);
+  assert.equal(raw(nativeDir+'/'+native.script_snapshot),native.script_raw_sha256);assert.equal(raw(nativeDir+'/'+native.log_file),native.log_raw_sha256);
+  const validation=JSON.parse(fs.readFileSync(path.join(root,r.production_validation.path)));
+  assert.equal(raw(r.production_validation.path),r.production_validation.raw_sha256);assert.equal(validation.ok,true);assert.equal(validation.registry_after_sha256,r.integration.before_registry_sha256);
+  const transaction=r.integration.transaction_path,states=fs.readdirSync(path.join(root,transaction,'states')).filter(f=>/^\d{6}-[a-z-]+\.json$/.test(f)).sort();
+  const committed=JSON.parse(fs.readFileSync(path.join(root,transaction,'states',states.at(-1))));assert.equal(committed.status,'committed');assert.equal(committed.prepared_sha256,raw(transaction+'/prepared.json'));
+  for(const [i,patch]of r.patches.entries()){
+    assert.equal(hash(r.author_candidates[i]),patch.original_candidate_json_sha256);assert.equal(approval.decisions[i].candidate_json_sha256,patch.original_candidate_json_sha256);assert.equal(approval.decisions[i].decision,'accept_at_declared_teaching_depth');
+    const restored=structuredClone(patch.after.morphology);restored.review.status='pending';restored.review.independent_review='not_completed';for(const key of ['reviewer','reviewed_at','acceptance_record'])delete restored.review[key];
+    assert.deepEqual(restored,r.author_candidates[i]);assert.equal(restored.review.status,'pending');
+  }
+});
+
+test('Retail04 third ten preserve exact packaging and fastening identities and teaching limits', () => {
+  const r=retail04ThirdRecord,graph=text=>r.patches.find(p=>p.after.text===text).after.morphology,pairs=text=>graph(text).parts.map(p=>[p.canonical_id,p.canonical]);
+  assert.equal(r.patches.filter(p=>p.after.morphology.kind==='atomic').length,7);
+  assert.deepEqual(r.new_canonical_pairs,[['morph.part.contain.hold-within','contain'],['morph.part.seal.package-closure','seal'],['morph.part.handle.grip','handle']]);assert.deepEqual(r.canonical_migrations,[]);
+  for(const [text,id]of Object.entries({carton:'morph.carton',lid:'growth.lid',cap:'morph.cap',seal:'morph.part.seal.package-closure',handle:'morph.part.handle.grip',strap:'morph.strap',button:'growth.button'})){assert.deepEqual(pairs(text),[[id,text]]);assert.deepEqual(graph(text).nodes,[]);assert.deepEqual(graph(text).roots,['whole']);}
+  assert.deepEqual(pairs('bubble wrap'),[['morph.bubble','bubble'],['morph.wrap','wrap']]);assert.deepEqual(graph('bubble wrap').nodes,[{id:'whole',left:'p1',right:'p2',surface:'bubble wrap',rule:'bubble-plus-wrap-word-boundary',break_offsets:[7]}]);
+  assert.deepEqual(pairs('container'),[['morph.part.contain.hold-within','contain'],['english.affix.er.agent-instrument','-er']]);assert.deepEqual(graph('container').nodes,[{id:'whole',left:'p1',right:'p2',surface:'container',rule:'contain-plus-instrument-er',break_offsets:[]}]);
+  assert.deepEqual(pairs('zipper'),[['growth.part.zip.fasten','zip'],['english.affix.er.agent-instrument','-er']]);assert.deepEqual(graph('zipper').nodes,[{id:'whole',left:'p1',right:'p2',surface:'zipper',rule:'zip-fasten-plus-instrument-er-double-p',break_offsets:[]}]);
+  assert.deepEqual(r.patches.find(p=>p.after.text==='zipper').after.accepted_forms,['zipper','zip','zip fastener']);assert.deepEqual(r.patches.filter(p=>p.before.morphology===null).map(p=>p.after.text),['container']);
+  const handle=r.independent_decisions.decisions.find(d=>d.text==='handle'),zipper=r.independent_decisions.decisions.find(d=>d.text==='zipper');
+  assert.match(handle.retained_uncertainty,/historical hand plus instrumental el/);assert.equal(handle.composition_mastery_allowed_by_editorial_review,false);assert.match(zipper.retained_uncertainty,/back-formation/);assert.match(zipper.retained_uncertainty,/not historical derivational order/);
+  assert.ok(r.independent_decisions.decisions.every(d=>d.production_acceptance===false&&d.retained_uncertainty));
+  const relations=r.runtime_case_proposal.cases.filter(c=>c.category==='actual_source_relation').map(c=>c.source);assert.equal(relations.length,37);
+  for(const relation of relations){const source=relation.source.source==='actual_growth'?r.protected_growth_entries.find(row=>row.entry.id===relation.source.lexeme_id).entry.analysis:r.protected_related_entries.find(row=>row.entry.id===relation.source.lexeme_id).entry.morphology;assert.equal(source.id,relation.source.analysis_id);assert.deepEqual(source.roots,[relation.source.root]);const part=source.parts.find(p=>p.id===relation.source.part_id);assert.deepEqual([part.canonical_id,part.canonical],relation.source.canonical_pair);assert.equal(hash(relation.target_pair)===hash(relation.source.canonical_pair),relation.pair_compatible);}
+  const strapping=relations.find(row=>row.source.lexeme_id==='strapping-machine.machine-for-applying-package-bands.n');assert.equal(strapping.pair_compatible,true);const strappingSource=r.protected_related_entries.find(row=>row.entry.id===strapping.source.lexeme_id).entry.morphology.parts.find(p=>p.id===strapping.source.part_id);assert.equal(strappingSource.surface,'strapp');assert.equal(graph('strap').parts[0].surface,'strap');
+  const unbutton=relations.find(row=>row.source.lexeme_id==='unbutton');assert.equal(unbutton.pair_compatible,false);assert.deepEqual(unbutton.source.canonical_pair,['growth.part.button.action','button']);
+  assert.equal(data.courses.find(c=>c.id==='retail').modules.find(m=>m.id==='module04').lexeme_ids.filter(id=>data.lexemes.find(e=>e.id===id).morphology?.review.status==='reviewed').length,30);
+});
+
+test('Retail04 third ten historical reversal rejects any unrelated entry drift', () => {
+  for(const patch of retail04ThirdRecord.patches){assert.deepEqual(beforeRetail04Third10(patch.after),patch.before);const wrongDefinition=structuredClone(patch.after);wrongDefinition.definition+=' Unexpected change.';assert.throws(()=>beforeRetail04Third10(wrongDefinition));const wrongGraph=structuredClone(patch.after);wrongGraph.morphology.review.status='pending';assert.throws(()=>beforeRetail04Third10(wrongGraph));const wrongMedia=structuredClone(patch.after);wrongMedia.media.image.status='rejected';assert.throws(()=>beforeRetail04Third10(wrongMedia));}
+});
+
+test('Retail04 third ten alter morphology only and preserve context, source, Growth and domain gates', () => {
+  const r=retail04ThirdRecord,withoutMorphology=e=>Object.fromEntries(Object.entries(e).filter(([k])=>k!=='morphology'));
+  for(const patch of r.patches){const actual=data.lexemes.find(e=>e.id===patch.id);assert.deepEqual(actual,patch.after);assert.equal(hash(patch.before),patch.before_sha256);assert.deepEqual(withoutMorphology(actual),withoutMorphology(patch.before));assert.equal(hash(withoutMorphology(actual)),patch.protected_fields_sha256);assert.equal(actual.editorial_notes,patch.before.editorial_notes);assert.deepEqual(morphologyErrors(actual.morphology,actual),[]);assert.equal(actual.morphology.review.status,'reviewed');assert.ok(actual.morphology.review.source_record_ids.every(id=>r.sources.some(s=>s.id===id)));}
+  assert.equal(r.protected_related_entries.length,39);for(const row of r.protected_related_entries)assert.deepEqual(data.lexemes.find(e=>e.id===row.entry.id),row.entry);
+  assert.equal(r.protected_modules.length,62);for(const row of r.protected_modules)assert.equal(hash(data.courses.find(c=>c.id===row.course_id).modules.find(m=>m.id===row.module_id)),row.json_sha256);
+  assert.equal(r.protected_expressions.length,620);for(const row of r.protected_expressions)assert.equal(hash(data.expressions.find(e=>e.id===row.entry.id)),row.json_sha256);
+  assert.equal(r.protected_existing_sources.length,197);for(const row of r.protected_existing_sources)assert.deepEqual(data.sources.find(s=>s.id===row.source.id),row.source);
+  for(const expected of r.sources){assert.deepEqual(data.sources.find(s=>s.id===expected.id),expected);assert.equal(expected.status,'consulted');assert.equal(expected.assets_acquired,false);assert.equal(expected.asset_license,null);}
+  for(const row of r.protected_growth_entries)assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root,row.resource))).entries.find(e=>e.id===row.entry.id),row.entry);
+  const raw=file=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex');for(const [file,sha]of Object.entries(r.protected_growth_raw_sha256))assert.equal(raw(file),sha);
+  const supplement=r.protected_growth_dependency_supplement;assert.equal(raw(supplement.growth_index.resource),supplement.growth_index.raw_sha256);const words=JSON.parse(fs.readFileSync(path.join(root,'words.json')));for(const row of supplement.actual_growth_words)assert.deepEqual(words.find(w=>w.id===row.entry_id),row.word);
+  assert.equal(r.selected_memberships.reduce((n,row)=>n+row.memberships.length,0),24);for(const row of r.selected_memberships)assert.deepEqual(data.courses.flatMap(c=>c.modules.filter(m=>m.lexeme_ids.includes(row.id)).map(m=>({course_id:c.id,module_id:m.id}))),row.memberships);
+  assert.equal(r.patches.filter(p=>p.after.review.domain==='pending').length,7);assert.deepEqual(r.patches.filter(p=>p.after.review.domain==='not_required').map(p=>p.after.text),['cap','handle','zipper']);assert.ok(data.courses.every(c=>c.modules.every(m=>m.status==='draft')));
+});
+
+
+
+test('Fourth-ten Foundation reversal preserves exact historical Retail donor snapshots', () => {
+  for(const [id,record]of [['greeting.welcome-message.n',fifthRecord],['announcement.public-message.n',retail04FirstRecord]]){
+    const patch=foundationFourthLanguageRecord.patches.find(p=>p.id===id),entry=data.lexemes.find(e=>e.id===id),historical=record.protected_related_entries.find(row=>row.entry.id===id);
+    assert.deepEqual(entry,patch.after);assert.deepEqual(beforeFoundationFourthLanguage(entry),patch.before);assert.deepEqual(beforeFoundationLanguage(entry),historical.entry);assert.deepEqual(entry.morphology,historical.entry.morphology);assert.equal(entry.morphology.review.status,'pending');
+    const wrong=structuredClone(entry);wrong.morphology.review.status='reviewed';assert.throws(()=>beforeFoundationFourthLanguage(wrong));
+  }
+  for(const patch of foundationFourthLanguageRecord.patches){assert.deepEqual(data.lexemes.find(e=>e.id===patch.id).morphology,patch.before.morphology);assert.equal(patch.after.morphology.review.status,'pending');}
+});
+
+test('cash-register historical image reversal rejects all unrelated full-entry drift',()=>{
+  const patch=cashRegisterImageRecord.patches[0];assert.deepEqual(beforeCashRegisterImage(patch.after),patch.before);assert.throws(()=>beforeCashRegisterImage(patch.before));
+  for(const mutate of [e=>e.definition+=' Unexpected change.',e=>e.media.audio.sha256='0'.repeat(64),e=>e.morphology.review.status='pending',e=>e.review.domain='reviewed',e=>e.editorial_notes+=' Unexpected note.',e=>e.media.image.brief+=' Unexpected brief.']){const wrong=structuredClone(patch.after);mutate(wrong);assert.throws(()=>beforeCashRegisterImage(wrong));}
+});
+
+
+test('Fifth-ten Foundation language acceptance preserves all ten pending morphology graphs', () => {
+  for (const patch of foundationFifthLanguageRecord.patches) {
+    const entry = data.lexemes.find(e => e.id === patch.id);
+    assert.deepEqual(entry, patch.after); assert.deepEqual(entry.morphology, patch.before.morphology); assert.equal(entry.morphology.review.status, 'pending');
+    assert.deepEqual(entry.references.slice(0, patch.before.references.length), patch.before.references);
+    assert.deepEqual(beforeFoundationFifthLanguage(entry), patch.before); assert.deepEqual(beforeFoundationLanguage(entry), patch.before);
+    for (const mutate of [e => {e.morphology.review.status = 'reviewed';}, e => {e.references[0].scope += ' Unexpected.';}, e => {e.accepted_forms.push('unexpected');}]) {
+      const changed = structuredClone(entry); mutate(changed); assert.throws(() => beforeFoundationFifthLanguage(changed));
+    }
+  }
+});
+
+test('Supervisor language reversal retains exact pending morphology and rejects graph or identity drift', () => {
+  const p=supervisorLanguageRecord.patches[0], entry=data.lexemes.find(e=>e.id===p.id);
+  assert.deepEqual(entry,p.after); assert.deepEqual(entry.morphology,p.before.morphology); assert.equal(entry.morphology.review.status,'pending');
+  assert.deepEqual(beforeFoundationLanguage(entry),p.before); assert.deepEqual(beforeFoundationLanguage(p.before),p.before);
+  for (const state of [p.before,p.after]) for (const change of [e=>{e.morphology.review.status='reviewed';},e=>{e.morphology.parts[0].canonical_id+='unexpected';},e=>{e.media.audio.voice='unexpected';},e=>{e.accepted_forms.push('unexpected');}]) {
+    const altered=structuredClone(state); change(altered); assert.throws(()=>beforeSupervisorLanguage(altered));
+  }
+});

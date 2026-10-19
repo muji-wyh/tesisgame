@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "status": "new_unbound_revision_after_root_single_test_count_correction",
+  "prior_package": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01",
+  "prior_preparation_raw_sha256": "555a99cc29595e4c869274908f23e8dc0a4534bd7d636cf7f237b9274d7bc1a5",
+  "prior_inventory_raw_sha256": "4bc85c58e1444ae8a76b20b8ee73626b64bfbdff735bde5a7187c929aee8eb06",
+  "root_correction": {
+    "path": "build/professional-english/foundation-language-test-correction-r01.json",
+    "raw_sha256": "4731a374aec09fb062349c505ba722f5438ec7dbb541c1a94b620c124846df6a",
+    "record": {
+      "schema": 1,
+      "status": "stale_aggregate_test_count_corrected_pending_r18",
+      "failed_validation": "build/professional-english/continuation-validation-r17.json",
+      "failed_validation_raw_sha256": "70b5bed03fdad2a4638f15c08e0c0503064cece81dc489b9dab19af34cf9e915",
+      "registry_sha256": "9162bb11ab9ceceddc509407855a42d12c13069ed5035fcd1f02ac33e6571e89",
+      "production_changed": false,
+      "correction": {
+        "file": "tests/professional-content.test.cjs",
+        "before": "build/professional-english/professional-content-before-r18.test.cjs",
+        "before_raw_sha256": "87f5abad51135382d4545fe45126c11e19414aa4be08a2065fae5ebb45ccf2de",
+        "after_raw_sha256": "b1219a8a5b01f7d1662fbf735b92a125d073357607e95a92d8500d353626fca7",
+        "reason": "Nine scoped language acceptances with unchanged not_required domain gates raise overall-reviewed lexemes from 62 to71. All exact per-entry, separate-gate and unchanged-context tests already pass; update the stale aggregate expectation only."
+      }
+    }
+  },
+  "production_changes_by_this_revision": false
+}

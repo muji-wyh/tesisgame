@@ -1,0 +1,1208 @@
+{
+  "schema": 1,
+  "ok": true,
+  "production_mutated": false,
+  "scope": "Current draft audit and every synchronous affected Node callback against an in-memory projection. No native, browser, full runtime, human, specialist, expression or release acceptance.",
+  "callbacks": [
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "it_support preserves complete distinct draft quotas, on-demand origins, and module-local scored routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "it_support specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "education_childcare preserves complete distinct draft quotas, on-demand origins, and module-local scored routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "education_childcare specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "hr_recruitment preserves complete distinct draft quotas, on-demand origins, and module-local scored routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "hr_recruitment specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "construction_trades preserves complete distinct draft quotas, on-demand origins, and module-local scored routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "construction_trades specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "cleaning_facilities preserves complete distinct draft quotas, on-demand origins, and module-local scored routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "cleaning_facilities specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "manufacturing_maintenance preserves complete distinct draft quotas, on-demand origins, and module-local scored routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "manufacturing_maintenance specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "sales_marketing preserves complete distinct draft quotas, on-demand origins, and module-local scored routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "sales_marketing specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "clinical_medicine preserves complete distinct draft quotas, on-demand origins, and module-local scored routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "clinical_medicine specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "accounting_finance preserves complete distinct draft quotas, on-demand origins, and module-local scored routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "accounting_finance specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "legal_paralegal preserves complete distinct draft quotas, on-demand origins, and module-local scored routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "legal_paralegal specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Recent courses keep authored morphology, uncertain analyses, assets, and voice gates honest",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Inherited Growth morphology preserves exact source graphs without transferring source approval",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Source-backed morphology keeps explicit families, all source provenance, and unresolved holds separate",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Nine reopened analyses retain exact source-backed families and scoped AI review without other approvals",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail equipment review distinguishes exact senses, sourced forms, and contextual counter routes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Completed Retail language review is scoped separately from subject, morphology, media, and readiness",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail04 editorial acceptance preserves exact senses, shared uses, and module-local focus coverage",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail04 language metadata retains exact domain holds and separate morphology and media gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail04 verified references stop at consulted lexical passages and preserve contextual source bounds",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail05 accepted action senses preserve protected fields, exact source scope, and separate review gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail05 total uses a verb in both modules and retains all local and shared focuses",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail05 language acceptance binds precise lexical references and preserves compare morphology and subject holds",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail06 accepted payment senses preserve exact editorial scope and all review gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail06 separates authorization, split payments, cash-back senses and regional tax wording",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail06 language metadata binds lexical evidence while financial and consumer-rights holds remain pending",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail07 editorial provenance preserves all fifty target preimages and 198 course memberships",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail07 sentences distinguish production groups, return charges and available supply while preserving every focus",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail07 consultation records preserve indexed retrieval limits without granting specialty or asset approval",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail07 language acceptance binds forty-nine nouns and ten expressions to exact metadata changes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail07 verifies only bounded lexical references and preserves both complete sell-by holds",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail07 language leaves shared dependencies, every membership and nonlanguage release gates intact",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Accepted picture exclusions bind seven exact metadata-only changes and retain conditional safeguards",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Accepted shopping-cart picture preserves exact source bytes and all unrelated content gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Accepted shopping-basket picture preserves exact bytes, the separately reviewed empty brief, and pending gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Approved cart and basket audio binds exact listening approval, bytes, and scoped note changes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Accepted pallet picture binds exact source bytes while preserving morphology and pending gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Construction shares exact existing senses and preserves the reviewed specification clarification",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Construction preserves action meaning, contextual contract wording, and source-access limits",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "HR preserves canonical Education evidence and assessment senses with shared definitions",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "HR retains employment meanings, honest pay and burnout wording, and the negative in allomorph",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "HR sources preserve introduction-only, landing-page-only, and targeted dictionary consultation limits",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Education reuses thirteen IT canonical identities without noun, verb, or equipment conflation",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Education preserves contextual homographs, regional scope, and source-access limitations",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "IT review clarifies technical meanings without changing canonical software identities",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Shared sense repairs have local Phrase routes while legitimate clothing and care meanings stay intact",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Transport preserves complete draft quotas and on-demand origin links",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Transport every specialist sense has a scored route in its own module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Transport preserves pending morphology, assets, and approved voice settings",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Transport specialist domain review cannot be bypassed outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Physical dimension and task dependency replace four mistaken software memberships",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Transport vehicle semantics and delivery evidence keep editorial limits explicit",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "draft audit preserves the complete scope and reports actual authored coverage",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail has its full draft inventory without padding or bypassing release review",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Retail digital modules reuse existing canonical software senses and their on-demand file",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Software and Data has 500 distinct senses and 100 expressions with pending safety review",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Software reuses canonical Retail meanings but distinguishes different senses of shared spellings",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Software long terms and repeated constituents have explicit ordered pending morphology",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "local Home previews enforce provenance, dimensions, size, and scope without releasing the full theme",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Nursing has 500 distinct senses and 100 expressions with explicit clinical review requirements",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Nursing reuses genuine shared meanings and keeps synonyms from padding its inventory",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Nursing candidate morphology preserves long phrases while uncertain classical analyses stay unauthored",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Caregiving has 500 distinct senses and 100 expressions without bypassing required care-domain review",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Caregiving reuses existing meanings and distinguishes human care vocabulary from software and wound-care senses",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Customer Support has 500 distinct senses and 100 expressions with mandatory domain review outside its safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Customer Support preserves genuine senses without counting alternate spellings and status inflections",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Customer Support candidate graphs preserve spelling changes, constituent identity, and long terms",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "every new Customer Support sense has an authored scored route while media and review remain pending",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Customer Support preserves source limitations, security wording, and workflow distinctions",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Food Service has 500 distinct senses and 100 expressions with mandatory subject review outside its safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Food Service reuses canonical senses and preserves real role, ingredient, and part-of-speech distinctions",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Food Service candidate graphs preserve spelling, possessives, long terms, and explicit initialisms",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Food Service sources and pending media cannot imply a completed safety review or delivered assets",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Caregiving transparent morphology remains pending and uncertain clinical or historical analyses stay unauthored",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "both workplace foundation modules retain identical canonical content across all careers",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "shared foundation membership cannot diverge for terms or expressions, including empty drafts",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "generic foundation review is reusable across careers while explicit safety review stays required",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "strict release rejects drafts, unreviewed morphology, and missing production assets",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "strict release still rejects a removed sense or expression after all course drafts are populated",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "a ready label cannot make unreviewed pilot entries playable",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "module files support selected-module loading and shared senses retain one identity",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "a missing shared file prevents silent incomplete on-demand loads",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "an unknown module file and unknown sense cannot escape catalog validation",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "duplicate IDs and repeated course memberships cannot inflate completion counts",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "a duplicated sense cannot acquire a second identity merely to pad inventories",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "a term cannot lose its canonical spelling or refer to an unknown research source",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "authored morphology graphs preserve exact text, order, and full part coverage",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "cyclic, reversed, and incomplete morphology graphs are rejected",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "morphology cannot hide spelling changes behind a mismatched root or identity",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "every authored expression preserves repeated tokens and punctuation positions",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "dropping a repeated phrase token or punctuation is detected",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "expression focus senses must be in the same module and expose the phrase skill",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "abstract illustrations never silently qualify for picture-identification exercises",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "atomic collection alone cannot satisfy the scored-exercise requirement",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "every course membership has a scored route within its own module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "a scored phrase in another course cannot hide a missing module-local route",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "claimed integrated artwork requires provenance, visual review, and real matching bytes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "resource references cannot escape the repository or use remote paths",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "delivery references require a real immutable manifest and its hash",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "module delivery includes theme artwork and exact immutable content paths",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "theme mapping and historical sound mappings remain explicit",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "schema contracts enforce counts, context shape, voice settings, and unknown fields",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Office Admin has exact distinct inventory and source links",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Office Admin separates noun and verb homographs while preserving regional alternatives",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Office Admin explicit morphology preserves spelling and ordered long terms",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Office Admin has authored scored routes without media readiness or domain-review bypass",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Office Admin source limitations and authority distinctions remain explicit",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Warehouse has exact distinct inventory and source links",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Warehouse distinguishes physical goods and logistics senses without synonym padding",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Warehouse morphology preserves genuine ordered constituents and spelling changes",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Warehouse draft exercises have scored routes without claiming reviewed content or media",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Warehouse safety, source scope, and document limitations remain explicit",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Hospitality has exact distinct inventory and canonical source links",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Hospitality morphology preserves spelling, hyphens, and ordered constituents",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Hospitality expressions assess real same-module terms and every new sense has a scored route",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Hospitality specialist reviews and media remain mandatory outside the safety module",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Hospitality keeps guest-service meanings and research limits explicit",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation assesses every sense and keeps contextual focus identities and token offsets",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation missing analyses have sourced pending decisions without claiming expert review",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation allomorphs and classical roots remain explicit instead of syllable cuts",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation editorial distinctions and reviewed-media gates survive the route repair",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Cleaning preserves physical actions, fixture senses, soiling, and canonical record sharing",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Cleaning keeps authored spelling, regional waste scope, and consulted-source limits explicit",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Manufacturing preserves shared identities and explicit equipment breakdown clarification",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Manufacturing retains measurement, investigation, energy-control, and source-scope distinctions",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Sales preserves canonical sharing and its explicit product-feature and measuring amendments",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Sales retains scoped research, variant identities, morphology and literal expression focus",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Clinical reuses care meanings, distinguishes homographs and keeps corrected morphology explicit",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Clinical preserves consent and test interpretation limits, variants and source boundaries",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Accounting preserves corrected canonical sharing, financial homographs and shared action meanings",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Accounting keeps financial concepts, uncertain analysis and contextual evidence distinct",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Accounting retains regional variants and actual source scope without media or framework approval",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Legal preserves independent canonical corrections, one consent amendment and distinct homographs",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Legal preserves document meaning, uncertainty and jurisdiction without authorizing legal action",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Legal preserves supported prefix analysis, explicit uncertainty and bounded source consultation",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation nine accepted language records retain exact candidates, sources and separate gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation historical supervisor hold and editorial difficulty distinctions remain explicit",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation language acceptance preserves all context and creates no expression or scoring approval",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation second ten language decisions retain exact root accepted candidates and thirteen sources",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation second ten preserve literal source levels and the separately reviewed British spelling",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation second ten preserve every context and all unresolved sense bindings",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation historical reversal refuses unexpected later field drift",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation third ten install nine exact language candidates and sixteen scoped sources",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation third ten retain the historical attendance hold and literal source difficulty evidence",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation third ten preserve context, five ambiguity holds and every nonlanguage gate",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Third-ten historical reversal rejects every unexpected later field change",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fourth ten install ten exact language candidates and twenty scoped sources",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fourth ten preserve literal levels and contrast-only voicemail evidence",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fourth ten preserve prior entry holds and all current and prior expression holds",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Fourth-ten historical reversal refuses arbitrary field changes and requires committed R25 lineage",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fifth ten install ten exact language candidates and twenty scoped sources",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fifth ten keep source levels separate from editorial difficulty and other senses",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fifth ten preserve prior entry holds and twelve expression ambiguities",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Fifth-ten reversal rejects unrelated drift and requires the committed validated baseline",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Supervisor reconsideration accepts exact ordinary language while retaining C1 and graded-context limits",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Supervisor language reversal accepts only exact current or historical full entries",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Supervisor language preserves attendance, context expressions, twenty memberships and readiness",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation module02 first ten install exact accepted candidates with bounded integration metadata",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation module02 keeps corrected confirm levels, editorial placements and sense limits exact",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation module02 preserves every context hold, membership and separate release gate",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Module02 chronological reversal rejects every unrecognized field drift before older Foundation history",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Module02 language delivery requires the actual composite baseline and committed guarded journal",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Attendance delivery installs exact independently accepted presence content and bounded metadata",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Attendance editorial B2 retains Oxford C1 and distinct headword and whole-lesson evidence",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Attendance chronology rejects unrecognized field drift and preserves historical hold snapshots",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Attendance delivery preserves every other entry, expression, source prefix, membership and readiness gate",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Attendance delivery requires the exact successful baseline and committed guarded journal",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten delivery installs eight exact accepted proposals and scoped metadata",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten preserves literal levels, corrected deliver and complete image mismatch",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten retains whole-entry holds, all expressions and inherited exclusions",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten chronological reversal rejects partial fields and protects independent clone states",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten preserves registry isolation and separate readiness gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten delivery binds explicit composite evidence and committed guarded journal",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 third-ten installs only eight accepted language projections and proposed delivery metadata",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 third-ten retains four lexical holds and exact expression context without new bindings",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 third-ten preserves literal source disagreements and selected senses",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 third-ten chronology rejects partial fields and keeps every historical snapshot exact",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 third-ten preserves registry isolation and separate readiness gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 fourth-ten installs ten exact accepted language projections with separately scoped delivery metadata",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 fourth-ten preserves exact historical rebase, four lexical holds and all expression boundaries",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 fourth-ten keeps literal dictionary levels and fresh-rendered versus frozen-HTML provenance",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 fourth-ten chronology rejects partial drift across all earlier histories",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 fourth-ten preserves registry isolation and separate readiness gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail first ten morphology decisions have exact independent provenance and preserve other gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Equipment morphology uses meaningful modern constituents and explicit authored spellings",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Canonical reuse and evidence limits stay explicit without changing existing families",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Nine next decisions preserve exact independent provenance, other content gates and held display case",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Next compound graphs author doubling and final-e omission while keeping current-stem atomic choices",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Accepted nominal ing families reuse exact Growth identities and preserve unrelated legacy candidates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Case-family correction changes five pending canonical identities without promoting their graphs",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Display case has its own exact graph review with a preserved lexical and media boundary",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Third ten reviews preserve lexical and media gates with exact source and graph provenance",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Third ten use explicit current bases, suffix roles and authored final-e omission",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Weighing-scale acceptance resolves only the held target and preserves four pending legacy meanings",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fourth ten retain exact independent graph approval, source provenance and other release gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fourth ten author current constituents, spelling changes and exact grammatical suffix roles",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fourth-ten related families and first thirty entries retain exact historical values through media updates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fourth-ten review keeps historical customer derivation and Growth escalator approval separate",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fourth-ten integration binds successful R06 separately from the preserved failed R04 evidence",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fifth ten preserve exact reviewed candidates, approved audio and all unrelated release gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fifth ten retain literal donors, whole modern bases, contextual senses and exact spellings",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 first ten bind exact author, independent, native and root decisions",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 changes morphology only and preserves complete family, course and source scope",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 records nine exposure-only roots, exact result-ment, new pairs and unchanged family boundaries",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 second ten require exact independent evidence, root decision and committed integration",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 second ten alter morphology only and preserve context, source, Growth and domain gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 second ten retain declared noun depth, exact new pairs and sense boundaries",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Third-ten Foundation language reversal preserves pending Retail legacy morphology donors",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 third ten require exact independent evidence, root decision and committed integration",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 third ten preserve exact packaging and fastening identities and teaching limits",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 third ten historical reversal rejects any unrelated entry drift",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 third ten alter morphology only and preserve context, source, Growth and domain gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fourth-ten Foundation reversal preserves exact historical Retail donor snapshots",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "cash-register historical image reversal rejects all unrelated full-entry drift",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fifth-ten Foundation language acceptance preserves all ten pending morphology graphs",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Supervisor language reversal retains exact pending morphology and rejects graph or identity drift",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Module02 language reversal preserves exact pending morphology and rejects identity or graph drift",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Attendance language reversal preserves pending morphology and rejects graph or identity drift",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Foundation02 second-ten language leaves every morphology graph pending and preserves historical donors",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Foundation02 third-ten language leaves exact morphology, media and historical Foundation donors unchanged",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Foundation02 fourth-ten language leaves exact morphology, media and historical Foundation donors unchanged",
+      "passed": true
+    }
+  ],
+  "before_audit": {
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 138,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 8,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "errors": 0,
+    "warnings": 29416
+  },
+  "after_audit": {
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 148,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 8,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "errors": 0,
+    "warnings": 29396
+  },
+  "current_persisted_node_execution": false,
+  "native_dispatched": false
+}

@@ -15,11 +15,15 @@ signal finished(result: Dictionary)
 signal powerup_feedback(kind: String, success: bool)
 signal powerup_drag_started(payload: Dictionary)
 signal powerup_fragment_arrived(payload: Dictionary)
+signal drag_blocked(reason: String)
 
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
 const WordSampler = preload("res://scripts/word_sampler.gd")
 const CoinEconomy = preload("res://scripts/coin_economy.gd")
+const MorphologyResolver = preload("res://scripts/morphology_resolver.gd")
+const JellyFootprint = preload("res://scripts/jelly_footprint.gd")
+const LABEL_FONT = preload("res://assets/fonts/heading.tres")
 const COLUMNS: int = 6
 const ROWS: int = 8
 const CAPACITY: int = COLUMNS * ROWS
@@ -71,10 +75,16 @@ var spawn_elapsed: float = 0.0
 var full_elapsed: float = -1.0
 var error: String = ""
 var credit_collection: Callable
+var commit_collection: Callable
 var purchase_powerup: Callable
 
 var _words: Array[Dictionary] = []
 var _word_lookup: Dictionary = {}
+var _words_by_id: Dictionary = {}
+var _authored_words: Dictionary = {}
+var _morphology := MorphologyResolver.new()
+var _footprints: Dictionary = {}
+var authored_morphology: bool = false
 var _supply: Array[Dictionary] = []
 var _supply_pending: Array[Dictionary] = []
 var _completed_words: Dictionary = {}
@@ -114,6 +124,7 @@ var _finishing_powerup: bool = false
 var _finish_after_purchase: bool = false
 var _finish_reason: String = ""
 var _settle_after_purchase: bool = false
+var _finish_after_collection_commit: bool = false
 
 
 func configure(words: Array, level: int, seed_value: int = -1) -> bool:
@@ -129,6 +140,10 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	fusions.clear()
 	_words.clear()
 	_word_lookup.clear()
+	_words_by_id.clear()
+	_authored_words.clear()
+	_footprints.clear()
+	authored_morphology = false
 	_supply.clear()
 	_supply_pending.clear()
 	_completed_words.clear()
@@ -162,6 +177,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_finish_after_purchase = false
 	_finish_reason = ""
 	_settle_after_purchase = false
+	_finish_after_collection_commit = false
 	error = ""
 	if seed_value < 0:
 		_rng.randomize()
@@ -171,6 +187,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 		# Coin rolls must not alter word supply, fragments, or automatic matching.
 		_coin_rng.seed = seed_value ^ 0x434F494E
 	var ids: Dictionary = {}
+	var analyses: Array = []
 	for candidate in words:
 		if not candidate is Dictionary or not _eligible(candidate, level):
 			continue
@@ -181,15 +198,37 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 		ids[str(word.id)] = true
 		_words.append(word)
 		_word_lookup[normalized] = word
+		_words_by_id[str(word.id)] = word
+		if _reviewed_morphology(word):
+			if str(word.morphology.get("lexeme_id", "")) != str(word.id) or str(word.morphology.get("text", "")) != str(word.text):
+				error = "Reviewed morphology must match the word's sense ID and exact spelling."
+				changed.emit()
+				return false
+			analyses.append(word.morphology)
+			_authored_words[str(word.id)] = str(word.morphology.get("id", ""))
 	if _words.is_empty():
-		error = "Word Jelly needs at least one pictured word for this age."
+		error = "Word Jelly needs at least one eligible pictured word."
 		changed.emit()
 		return false
+	if not _morphology.configure(analyses):
+		error = _morphology.error
+		changed.emit()
+		return false
+	authored_morphology = not analyses.is_empty()
 	_powerup_uses = {"auto_merge": 0, "fragments": 0}
 	phase = "playing"
 	_fill_upcoming()
+	var initial_area: int = 0
 	for index in range(INITIAL_SETTLED_TILES):
-		_spawn_tile(false)
+		if authored_morphology:
+			var next: Dictionary = _first_preview_tile()
+			if next.is_empty() or initial_area + int(next.width) * int(next.height) > INITIAL_SETTLED_TILES:
+				break
+			initial_area += int(next.width) * int(next.height)
+		if not _spawn_tile(false):
+			break
+	if authored_morphology:
+		_schedule_spawn_interval()
 	changed.emit()
 	return true
 
@@ -326,6 +365,23 @@ func _same_powerup(generation: int, receipt_id: String) -> bool:
 
 
 func _powerup_pair(captured_only: bool = true, random_source: bool = false) -> Array[int]:
+	if authored_morphology:
+		# Keep an authored completion path sequential. Its checked geometry stays
+		# fixed until the paid sequence finishes; gravity resumes afterward.
+		if not fusions.is_empty() or (powerup_active() and not _powerup.drags.is_empty()) or _settling_remaining() > EPSILON:
+			return []
+		if powerup_active() and _powerup.has("completion_plan"):
+			var current: Dictionary = _powerup.completion_plan
+			var next: int = current.result_ids.size()
+			if next < current.steps.size():
+				var pending: Dictionary = current.steps[next]
+				return [_plan_tile_id(current, str(pending.left_ref)), _plan_tile_id(current, str(pending.right_ref))]
+		var plan: Dictionary = authored_completion_plan(captured_only)
+		if plan.get("status") == "complete":
+			if powerup_active():
+				plan.result_ids = []
+				_powerup.completion_plan = plan
+			return [int(plan.first_source_id), int(plan.first_target_id)]
 	var candidates: Array = []
 	for source: Dictionary in cells:
 		if (captured_only and not _powerup_ids.has(int(source.id))) or not is_settled(source) \
@@ -335,7 +391,7 @@ func _powerup_pair(captured_only: bool = true, random_source: bool = false) -> A
 			if int(source.id) == int(target.id) or (captured_only and not _powerup_ids.has(int(target.id))) or not is_settled(target) \
 				or is_fusing(int(target.id)) or _reserved_for_powerup(int(target.id)):
 				continue
-			if _word_lookup.has(normalize_word(str(source.text) + str(target.text))):
+			if not source.has("composition") and not target.has("composition") and not _legacy_merge_word(source, target).is_empty():
 				if not random_source:
 					return [int(source.id), int(target.id)]
 				# Each eligible source appears once, regardless of how many targets
@@ -346,6 +402,12 @@ func _powerup_pair(captured_only: bool = true, random_source: bool = false) -> A
 	if not candidates.is_empty():
 		pair.assign(candidates[_rng.randi_range(0, candidates.size() - 1)])
 	return pair
+
+
+func _plan_tile_id(plan: Dictionary, reference: String) -> int:
+	if reference.begins_with("input:"):
+		return int(plan.input_ids[int(reference.trim_prefix("input:"))])
+	return int(plan.result_ids[int(reference.trim_prefix("step:"))])
 
 
 func _reserved_for_powerup(tile_id: int) -> bool:
@@ -543,6 +605,9 @@ func _complete_powerup() -> void:
 	_powerup.contact_pending = false
 	_held_tile_id = -1
 	_powerup_ids.clear()
+	if authored_morphology:
+		_growth_pending = true
+		_gravity_pending = true
 
 
 func _grant_powerup_fragment(tile: Dictionary) -> void:
@@ -560,26 +625,25 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 	var b: Dictionary = cell(b_id)
 	if a.is_empty() or b.is_empty() or (not held_source and not is_settled(a)) or not is_settled(b) or is_lifted(b_id):
 		return "ignored"
-	# Only the dragged prefix followed by this target may form the current word.
-	# Reject before allocating IDs or reserving either body.
-	if not _word_lookup.has(normalize_word(str(a.text) + str(b.text))):
+	# Validate spelling and the full result rectangle before consuming IDs.
+	var candidate: Dictionary = merge_candidate(a, b)
+	if candidate.status == "needs_room":
+		return "needs_room"
+	if not candidate.status in ["partial", "complete"]:
 		cue_requested.emit("wrong")
 		return "wrong"
-	var mass: int = int(a.mass) + int(b.mass)
-	var result: Dictionary = _new_tile(str(a.text) + str(b.text), mass, int(a.fragments) + int(b.fragments))
+	var result: Dictionary = candidate.result
+	result.id = _next_tile_id
+	_next_tile_id += 1
+	if result.has("composition") and automatic:
+		result.composition.assisted = true
+		result.composition.mastery_eligible = false
 	result.skin = int(b.get("skin", b.id))
-	var position: Vector2i = _position_near(_occupied([a_id, b_id]), int(result.width), int(result.height), b)
-	if position.x < 0:
-		# Keep a crowded merge at its destination until room for growth opens up.
-		result.width = int(b.width)
-		result.height = int(b.height)
-		position = Vector2i(int(b.column), int(b.row))
-	result.column = position.x
-	result.row = position.y
 	var active: Dictionary = {
 		"operation": "merge", "automatic": automatic, "a_id": a_id, "b_id": b_id,
 		"a": a.duplicate(true), "b": b.duplicate(true), "result": result,
 		"word": result.word.duplicate(true), "attempt_id": _event_id("merge"),
+		"composition_status": candidate.status,
 		"elapsed": 0.0, "duration": FUSION_SECONDS, "pop_at": FUSION_SECONDS,
 		"popped": false
 	}
@@ -806,24 +870,28 @@ func step(delta: float) -> void:
 		if _gravity_pending and _next_settlement() > EPSILON:
 			consumed = minf(consumed, _next_settlement())
 		for active in fusions:
+			if bool(active.get("commit_pending", false)):
+				continue
 			var boundary: float = float(active.duration)
 			if str(active.operation) == "collect" and not bool(active.popped):
 				boundary = float(active.pop_at)
 			consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)))
 		var full: bool = not _has_free_cell()
-		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running
+		var ending_wait: bool = _finish_after_collection_commit
+		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running and not ending_wait
 		var next_second: float = minf(FULL_SECONDS, floorf(full_elapsed + EPSILON) + 1.0)
 		if danger_running:
 			consumed = minf(consumed, maxf(0.0, next_second - full_elapsed))
-		elif full and not powerup_running:
+		elif full and not powerup_running and not ending_wait:
 			consumed = minf(consumed, maxf(0.0, _settling_remaining()))
-		elif not powerup_running:
+		elif not powerup_running and not ending_wait:
 			consumed = minf(consumed, maxf(0.0, spawn_interval - spawn_elapsed))
 		for tile in cells:
 			tile.age = float(tile.age) + consumed
 			tile.settling = float(tile.age) + EPSILON < settle_duration(tile)
 		for active in fusions:
-			active.elapsed = float(active.elapsed) + consumed
+			if not bool(active.get("commit_pending", false)):
+				active.elapsed = float(active.elapsed) + consumed
 		if powerup_running:
 			_powerup.elapsed = float(_powerup.elapsed) + consumed
 			_powerup.clock = float(_powerup.clock) + consumed
@@ -836,13 +904,15 @@ func step(delta: float) -> void:
 			_collection_batch_next_in = maxf(0.0, _collection_batch_next_in - consumed)
 		if danger_running:
 			full_elapsed += consumed
-		elif not full and not powerup_running:
+		elif not full and not powerup_running and not ending_wait:
 			spawn_elapsed += consumed
 		remaining -= consumed
 		for active in fusions.duplicate():
 			if not _can_continue(generation):
 				break
 			if _fusion_index(str(active.attempt_id)) < 0:
+				continue
+			if bool(active.get("commit_pending", false)):
 				continue
 			if str(active.operation) == "collect" and not bool(active.popped) and float(active.elapsed) + EPSILON >= float(active.pop_at):
 				active.popped = true
@@ -858,7 +928,7 @@ func step(delta: float) -> void:
 		_advance_powerup()
 		if not _can_continue(generation):
 			break
-		if powerup_running:
+		if powerup_running or _finish_after_collection_commit:
 			if _finishing_powerup and not powerup_active():
 				break
 			continue
@@ -917,6 +987,9 @@ func begin_drag(tile_id: int) -> bool:
 	if index < 0 or _dragged_tile_id >= 0 or not is_settled(cells[index]):
 		return false
 	var source: Dictionary = cells[index]
+	if source.has("composition") and _drag_return_after_motion(source).x < 0:
+		drag_blocked.emit("needs_room")
+		return false
 	var removed_support: bool = false
 	for tile: Dictionary in cells:
 		if int(tile.id) == tile_id or bool(tile.get("lifted", false)):
@@ -950,7 +1023,7 @@ func _restore_dragged_tile() -> void:
 	var extent := Vector2i(int(tile.width), int(tile.height))
 	var original_extent: Vector2i = extent
 	var position: Vector2i = _drag_return_position(occupied, extent.x, extent.y, tile)
-	if position.x < 0:
+	if position.x < 0 and not tile.has("composition"):
 		# Retain as much of the original body as possible if falling stacks have
 		# fragmented its old space. Mass, word data and fragments remain intact.
 		var best_area: int = 0
@@ -967,6 +1040,8 @@ func _restore_dragged_tile() -> void:
 			return
 		if extent.x != int(tile.width) or extent.y != int(tile.height):
 			tile.placement_locked = false
+	if position.x < 0:
+		return
 	tile.column = position.x
 	tile.row = position.y
 	tile.width = extent.x
@@ -995,6 +1070,58 @@ func _drag_return_position(occupied: Dictionary, width: int, height: int, anchor
 				nearest = Vector2i(column, row)
 				distance = candidate_distance
 	return nearest
+
+
+func _drag_return_after_motion(anchor: Dictionary, additional: Dictionary = {}) -> Vector2i:
+	# Keep a return rectangle outside every remaining body's vertical fall path.
+	# This projection owns only geometry: it never moves live bodies, advances
+	# operations, pays rewards, or uses the return reservation as support.
+	var occupied: Dictionary = {}
+	var current: Array[Dictionary] = []
+	var projected: Array[Dictionary] = []
+	var consumed: Array[int] = []
+	var reserved: Dictionary = {}
+	for active: Dictionary in fusions:
+		consumed.append(int(active.a_id))
+		consumed.append(int(active.b_id))
+		if str(active.operation) == "merge":
+			projected.append(active.result.duplicate())
+			_occupy(reserved, int(active.result.column), int(active.result.row), int(active.result.width), int(active.result.height))
+	for tile: Dictionary in cells:
+		if int(tile.id) == int(anchor.id) or bool(tile.get("lifted", false)):
+			continue
+		current.append(tile.duplicate())
+	if not additional.is_empty():
+		current.append(additional.duplicate())
+	# Settled neighbors commit their new grid positions in begin_drag itself.
+	# Their vacated cells are immediately available, even during visual falling.
+	current.sort_custom(_gravity_order)
+	for tile: Dictionary in current:
+		if int(tile.id) in consumed or not is_settled(tile):
+			continue
+		var obstacles: Dictionary = reserved.duplicate()
+		for other: Dictionary in current:
+			if int(other.id) != int(tile.id):
+				_occupy(obstacles, int(other.column), int(other.row), int(other.width), int(other.height))
+		while int(tile.row) + int(tile.height) < ROWS and _fits(obstacles, int(tile.column), int(tile.row) + 1, int(tile.width), int(tile.height)):
+			tile.row = int(tile.row) + 1
+	for tile: Dictionary in current:
+		_occupy(occupied, int(tile.column), int(tile.row), int(tile.width), int(tile.height))
+		if not int(tile.id) in consumed:
+			projected.append(tile)
+	projected.sort_custom(_gravity_order)
+	for tile: Dictionary in projected:
+		var obstacles: Dictionary = {}
+		for other: Dictionary in projected:
+			if int(other.id) != int(tile.id):
+				_occupy(obstacles, int(other.column), int(other.row), int(other.width), int(other.height))
+		var start_row: int = int(tile.row)
+		var row: int = start_row
+		while row + int(tile.height) < ROWS and _fits(obstacles, int(tile.column), row + 1, int(tile.width), int(tile.height)):
+			row += 1
+		_occupy(occupied, int(tile.column), start_row, int(tile.width), int(tile.height) + row - start_row)
+		tile.row = row
+	return _drag_return_position(occupied, int(anchor.width), int(anchor.height), anchor)
 
 
 func can_reposition(tile_id: int, column: int, row: int) -> bool:
@@ -1054,7 +1181,8 @@ func can_drop_now() -> bool:
 
 
 func drop_now(expected_first_id: int = -1) -> bool:
-	if not can_drop_now() or (expected_first_id != -1 and expected_first_id != int(upcoming[0].id)):
+	var first: Dictionary = _first_preview_tile()
+	if not can_drop_now() or (expected_first_id != -1 and expected_first_id != int(first.get("id", -1))):
 		return false
 	spawn_elapsed = 0.0
 	_spawn_drop()
@@ -1101,13 +1229,14 @@ static func settle_duration(tile: Dictionary) -> float:
 
 
 func is_valid_word(tile: Dictionary) -> bool:
+	if tile.has("composition"):
+		return bool(tile.composition.get("complete", false)) and not tile.get("word", {}).is_empty()
 	return int(tile.get("mass", 0)) > 1 and not tile.get("word", {}).is_empty()
 
 
-static func coins_for_tile(tile: Dictionary) -> int:
+static func coins_for_tile(_tile: Dictionary) -> int:
 	# Potential bonus value; collection separately reserves the rare drop roll.
-	var mass: int = maxi(1, int(tile.get("mass", tile.get("parts_count", 1))))
-	return CoinEconomy.jelly_bonus(mass)
+	return CoinEconomy.jelly_bonus(2)
 
 
 func score() -> int:
@@ -1134,6 +1263,7 @@ func snapshot() -> Dictionary:
 		"powerup_prices": {"auto_merge": powerup_price("auto_merge"), "fragments": powerup_price("fragments")},
 		"error": error, "result": _result.duplicate(true)
 	}
+	state.authored_morphology = authored_morphology
 	state.merge(reward_progress(fragment_count), true)
 	return state
 
@@ -1147,6 +1277,9 @@ func finish_round(reason: String = "finished") -> Dictionary:
 		_finish_reason = reason
 	if _powerup_purchasing:
 		_finish_after_purchase = true
+		return _result.duplicate(true)
+	if _has_pending_collection_commit():
+		_finish_after_collection_commit = true
 		return _result.duplicate(true)
 	var generation: int = _generation
 	finish_powerup()
@@ -1191,7 +1324,177 @@ func _eligible(word: Dictionary, level: int) -> bool:
 	for key in ["id", "text", "image", "audio"]:
 		if not word.get(key) is String or str(word[key]).strip_edges().is_empty():
 			return false
-	return int(word.get("min_age", 3)) == clampi(level, 3, 12) and normalize_word(str(word.text)).length() >= 2
+	if str(word.get("track", "")) == "professional":
+		return _reviewed_morphology(word) and word.get("practice_modes") is Array \
+			and "word_jelly" in word.practice_modes
+	# Growth resolution supplies an explicit review state. A pending or invalid
+	# analysis must never turn back into the former midpoint spelling exercise.
+	if word.has("morphology_status") or word.has("morphology"):
+		if str(word.get("morphology_status", "reviewed")) != "reviewed" or not _reviewed_morphology(word):
+			return false
+	return int(word.get("min_age", 3)) == clampi(level, 3, 12) and normalize_word(str(word.text)).length() >= (1 if _reviewed_morphology(word) else 2)
+
+
+static func _reviewed_morphology(word: Dictionary) -> bool:
+	return word.get("morphology") is Dictionary and word.morphology.get("review") is Dictionary \
+		and word.morphology.review.get("status") == "reviewed"
+
+
+func _legacy_merge_word(left: Dictionary, right: Dictionary) -> Dictionary:
+	var word: Dictionary = _word_lookup.get(normalize_word(str(left.text) + str(right.text)), {})
+	return {} if _authored_words.has(str(word.get("id", ""))) else word
+
+
+func _composition_state(tile: Dictionary) -> Dictionary:
+	var state: Dictionary = tile.composition.duplicate(true)
+	for key: String in ["id", "column", "row", "width", "height", "fragments"]:
+		if tile.has(key):
+			state[key] = tile[key]
+	return state
+
+
+func _composition_footprint(state: Dictionary) -> Dictionary:
+	var signature: String = str(state.signature)
+	if not _footprints.has(signature):
+		# The fixed badge and optional picture allocation also applies to pieces
+		# currently carrying no fragment, so later awards cannot resize a body.
+		var reserved_width: float = 12.0 + (24.0 if bool(state.get("complete", false)) else 0.0)
+		var layout: Dictionary = JellyFootprint.plan(str(state.text), LABEL_FONT,
+			state.get("break_offsets", []), Vector4(4, 3, 4, 3), Vector2(reserved_width, 0))
+		layout.label_reserved_width = reserved_width
+		_footprints[signature] = layout
+	return _footprints[signature].duplicate(true)
+
+
+func _new_composition_tile(state: Dictionary, allocate_id: bool = true) -> Dictionary:
+	var tile: Dictionary = _new_tile(str(state.text), int(state.part_count), int(state.get("fragments", 0)), allocate_id)
+	var layout: Dictionary = _composition_footprint(state)
+	tile.composition = state.duplicate(true)
+	tile.word = _words_by_id.get(str(state.get("lexeme_id", "")), {}).duplicate(true) if bool(state.get("complete", false)) else {}
+	tile.kind = "word" if not tile.word.is_empty() else "part"
+	tile.width = int(layout.width)
+	tile.height = int(layout.height)
+	tile.preferred_width = tile.width
+	tile.preferred_height = tile.height
+	tile.row = ROWS - int(tile.height)
+	tile.requires_read = bool(layout.requires_read)
+	tile.label_lines = layout.lines.duplicate()
+	tile.approved_break_offsets = state.get("break_offsets", []).duplicate()
+	tile.label_reserved_width = layout.label_reserved_width
+	return tile
+
+
+func _place_composition(left: Dictionary, right: Dictionary, state: Dictionary,
+	board: Array = [], fixed_occupied: Dictionary = {}) -> Dictionary:
+	var layout: Dictionary = _composition_footprint(state)
+	var occupied: Dictionary
+	if board.is_empty():
+		occupied = _occupied([int(left.get("id", -1)), int(right.get("id", -1))])
+	else:
+		occupied = fixed_occupied.duplicate()
+		for tile: Dictionary in board:
+			var same_left: bool = tile.get("plan_ref", "") == left.get("plan_ref", "") if left.has("plan_ref") else tile.get("id") == left.get("id")
+			var same_right: bool = tile.get("plan_ref", "") == right.get("plan_ref", "") if right.has("plan_ref") else tile.get("id") == right.get("id")
+			if not same_left and not same_right:
+				_occupy(occupied, int(tile.column), int(tile.row), int(tile.width), int(tile.height))
+	# Search the whole board, including space below the target. Every accepted
+	# result reserves its complete readable rectangle before the fusion starts.
+	var position: Vector2i = _drag_return_position(occupied, int(layout.width), int(layout.height), right)
+	return {"ok": position.x >= 0, "placement": {"column": position.x, "row": position.y,
+		"width": int(layout.width), "height": int(layout.height)}}
+
+
+func merge_candidate(left: Dictionary, right: Dictionary, check_space: bool = true) -> Dictionary:
+	if left.is_empty() or right.is_empty() or int(left.get("id", -1)) == int(right.get("id", -2)):
+		return {"status": "invalid", "result": {}}
+	if left.has("composition") or right.has("composition"):
+		if not left.has("composition") or not right.has("composition"):
+			return {"status": "invalid", "result": {}}
+		var fit: Callable = func(a: Dictionary, b: Dictionary, result: Dictionary, _board: Array) -> Dictionary:
+			return _place_composition(a, b, result)
+		var resolved: Dictionary = _morphology.resolve(_composition_state(left), _composition_state(right), fit if check_space else Callable())
+		if not resolved.status in ["partial", "complete"]:
+			return {"status": resolved.status, "result": {}}
+		var tile: Dictionary = _new_composition_tile(resolved.tile, false)
+		if resolved.has("placement"):
+			tile.column = resolved.placement.column
+			tile.row = resolved.placement.row
+		return {"status": resolved.status, "result": tile}
+	if _legacy_merge_word(left, right).is_empty():
+		return {"status": "invalid", "result": {}}
+	var tile: Dictionary = _new_tile(str(left.text) + str(right.text), int(left.mass) + int(right.mass), int(left.fragments) + int(right.fragments), false)
+	var position: Vector2i = _position_near(_occupied([int(left.id), int(right.id)]), int(tile.width), int(tile.height), right)
+	if position.x < 0:
+		# Legacy spelling chunks retain their established crowded-board behavior.
+		tile.width = right.width
+		tile.height = right.height
+		position = Vector2i(int(right.column), int(right.row))
+	tile.column = position.x
+	tile.row = position.y
+	return {"status": "complete", "result": tile}
+
+
+func uses_authored_morphology() -> bool:
+	return authored_morphology
+
+
+func parts_compatible(left: Dictionary, right: Dictionary) -> bool:
+	if left.is_empty() or right.is_empty() or int(left.get("id", -1)) == int(right.get("id", -2)):
+		return false
+	if left.has("composition") or right.has("composition"):
+		if not left.has("composition") or not right.has("composition"):
+			return false
+		return _morphology.resolve(left.composition, right.composition).status in ["partial", "complete"]
+	# Palette classification runs for every visible ordered pair. A semantic
+	# query must not scan the physical board or create speculative bodies.
+	return not _legacy_merge_word(left, right).is_empty()
+
+
+func can_merge(left: Dictionary, right: Dictionary) -> bool:
+	if not left.has("composition") and not right.has("composition"):
+		# Legacy pairs can always retain the target rectangle when crowded.
+		return parts_compatible(left, right)
+	return merge_candidate(left, right).status in ["partial", "complete"]
+
+
+func compatible_pairs(check_space: bool = true) -> Array[Dictionary]:
+	var pairs: Array[Dictionary] = []
+	for left: Dictionary in cells:
+		if not is_settled(left) or is_fusing(int(left.id)) or is_lifted(int(left.id)):
+			continue
+		for right: Dictionary in cells:
+			if int(left.id) == int(right.id) or not is_settled(right) or is_fusing(int(right.id)) or is_lifted(int(right.id)):
+				continue
+			var candidate: Dictionary = merge_candidate(left, right, check_space)
+			if candidate.status in ["partial", "complete"]:
+				pairs.append({"source_id": int(left.id), "target_id": int(right.id), "status": candidate.status})
+	return pairs
+
+
+func authored_completion_plan(captured_only: bool = false) -> Dictionary:
+	var states: Array = []
+	var ids: Array[int] = []
+	for tile: Dictionary in cells:
+		if not tile.has("composition") or not is_settled(tile) or is_fusing(int(tile.id)) or is_lifted(int(tile.id)) \
+			or (captured_only and not _powerup_ids.has(int(tile.id))) or _reserved_for_powerup(int(tile.id)):
+			continue
+		states.append(_composition_state(tile))
+		ids.append(int(tile.id))
+	if states.size() < 2:
+		return {"status": "unavailable", "steps": []}
+	var fixed: Dictionary = _occupied(ids)
+	var fit: Callable = func(a: Dictionary, b: Dictionary, result: Dictionary, board: Array) -> Dictionary:
+		return _place_composition(a, b, result, board, fixed)
+	var plan: Dictionary = _morphology.completion_plan(states, fit)
+	if plan.status == "complete":
+		plan.input_ids = ids.duplicate()
+		plan.first_source_id = ids[int(str(plan.steps[0].left_ref).trim_prefix("input:"))]
+		plan.first_target_id = ids[int(str(plan.steps[0].right_ref).trim_prefix("input:"))]
+	return plan
+
+
+func _authored_auto_active() -> bool:
+	return authored_morphology and powerup_active() and str(_powerup.get("kind", "")) == "auto_merge"
 
 
 func _parts_for_word(word: Dictionary) -> Array[String]:
@@ -1220,18 +1523,21 @@ func _parts_for_word(word: Dictionary) -> Array[String]:
 	return [text.left(midpoint), text.substr(midpoint)]
 
 
-func _new_tile(text: String, mass: int, fragments: int) -> Dictionary:
+func _new_tile(text: String, mass: int, fragments: int, allocate_id: bool = true) -> Dictionary:
 	var word: Dictionary = _word_lookup.get(normalize_word(text), {}) if mass > 1 else {}
+	if _authored_words.has(str(word.get("id", ""))):
+		word = {}
 	var size: Vector2i = _preferred_size(mass)
 	var tile: Dictionary = {
-		"id": _next_tile_id, "text": text, "mass": mass, "parts_count": mass,
+		"id": _next_tile_id if allocate_id else -1, "text": text, "mass": mass, "parts_count": mass,
 		"fragments": fragments, "chest": fragments > 0,
-		"word": word.duplicate(true), "kind": "word" if not word.is_empty() else "root",
+		"word": word.duplicate(true), "kind": "word" if not word.is_empty() else "chunk",
 		"column": 0, "row": ROWS - size.y, "width": size.x, "height": size.y,
 		"age": SETTLE_SECONDS, "settling": false, "arrival": false, "arrival_index": 0, "arrival_delay": 0.0,
 		"falling": false, "falling_rows": 0, "placement_locked": false
 	}
-	_next_tile_id += 1
+	if allocate_id:
+		_next_tile_id += 1
 	return tile
 
 
@@ -1242,8 +1548,67 @@ func _preferred_size(mass: int) -> Vector2i:
 
 
 func _fill_upcoming() -> void:
+	if authored_morphology:
+		while upcoming.size() < UPCOMING_COUNT:
+			upcoming.append({})
+		while true:
+			var has_gap: bool = false
+			for slot: Dictionary in upcoming:
+				has_gap = has_gap or slot.is_empty()
+			if not has_gap:
+				return
+			if _supply.is_empty():
+				_build_supply()
+			var next: Dictionary = _supply[0]
+			var width: int = int(next.width)
+			var anchor: int = -1
+			for column in range(COLUMNS - width + 1):
+				var fits: bool = true
+				for lane in range(column, column + width):
+					fits = fits and upcoming[lane].is_empty()
+				if fits:
+					anchor = column
+					break
+			if anchor < 0:
+				return
+			var tile: Dictionary = _supply.pop_front()
+			tile.preview_column = anchor
+			tile.preview_span = width
+			upcoming[anchor] = tile
+			for lane in range(anchor + 1, anchor + width):
+				upcoming[lane] = {"reservation": int(tile.id), "anchor": anchor}
+		return
 	while upcoming.size() < UPCOMING_COUNT:
 		upcoming.append(_next_supply_tile())
+
+
+func _first_preview_tile() -> Dictionary:
+	for slot: Dictionary in upcoming:
+		if slot.has("id"):
+			return slot
+	return {}
+
+
+func _release_preview_slot(anchor: int) -> Dictionary:
+	var tile: Dictionary = upcoming[anchor]
+	for index in range(upcoming.size()):
+		if index == anchor or int(upcoming[index].get("reservation", -1)) == int(tile.id):
+			upcoming[index] = {}
+	return tile
+
+
+func preview_area() -> int:
+	var area: int = 0
+	for tile: Dictionary in upcoming:
+		if tile.has("id"):
+			area += int(tile.width) * int(tile.height)
+	return area
+
+
+func _schedule_spawn_interval() -> void:
+	var stage: int = floori(float(cleared_pairs) / CLEARS_PER_DIFFICULTY_STAGE)
+	var baseline: float = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - stage * SPEEDUP_PER_STAGE)
+	spawn_interval = baseline * maxf(1.0, float(preview_area()) / float(COLUMNS)) if authored_morphology else baseline
 
 
 func _next_supply_tile() -> Dictionary:
@@ -1253,15 +1618,29 @@ func _next_supply_tile() -> Dictionary:
 
 
 func _build_supply() -> void:
-	# Mix only a new six-root packet. Advertised preview identities never move,
+	# Mix only a new six-part packet. Advertised preview identities never move,
 	# and any word crossing a packet boundary keeps its remaining chunks first.
 	while _supply_pending.size() < UPCOMING_COUNT:
 		var word: Dictionary = WordSampler.next_word(_words, _rng, _word_counts, _word_service, practice_weight_for)
 		_supply_words += 1
 		var parts: Array[String] = _parts_for_word(word)
+		var authored_parts: Array = _morphology.source_tiles(str(_authored_words[word.id])) if _authored_words.has(word.id) else []
+		if not authored_parts.is_empty():
+			parts.clear()
+			for state: Dictionary in authored_parts:
+				parts.append(str(state.text))
 		var marked: int = _rng.randi_range(0, parts.size() - 1) if _supply_words % 2 == 0 else -1
 		for index in range(parts.size()):
-			var tile: Dictionary = _new_tile(parts[index], 1, 1 if index == marked else 0)
+			var fragments: int = 1 if index == marked else 0
+			var tile: Dictionary
+			if authored_parts.is_empty():
+				tile = _new_tile(parts[index], 1, fragments)
+			else:
+				var state: Dictionary = authored_parts[index]
+				state.fragments = fragments
+				state.origins[0].supply_group = _supply_words
+				state.origins[0].supply_part = index
+				tile = _new_composition_tile(state)
 			tile.supply_group = _supply_words
 			tile.supply_part = index
 			tile.supply_parts = parts.size()
@@ -1303,47 +1682,64 @@ func _search_supply_order(packet: Array[Dictionary], order: Array[int], score: i
 
 func _spawn_drop() -> void:
 	var previous_generated: int = generated_tiles
+	var advertised: Dictionary = {}
+	for index in range(upcoming.size()):
+		if upcoming[index].has("id"):
+			advertised[index] = int(upcoming[index].id)
 	var column_delays: Dictionary = {}
 	var slot_delays: Dictionary = {}
 	# Concurrent batches reserve their destinations immediately. Preserve the
 	# entry spacing of earlier arrivals without delaying the next input.
 	for tile: Dictionary in cells:
 		if bool(tile.get("arrival", false)) and not is_settled(tile):
-			var column: int = int(tile.column)
 			var slot: int = int(tile.get("arrival_index", 0))
 			var departure: float = arrival_delay(tile) - float(tile.age)
-			column_delays[column] = maxf(float(column_delays.get(column, -INF)), departure)
+			var clearance: float = departure + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY)
+			for column in range(int(tile.column), int(tile.column) + int(tile.width)):
+				column_delays[column] = maxf(float(column_delays.get(column, -INF)), clearance)
 			slot_delays[slot] = maxf(float(slot_delays.get(slot, -INF)), departure + ARRIVAL_SLOT_CLEARANCE)
 	for index in range(DROP_COUNT):
+		if not advertised.has(index) or int(upcoming[index].get("id", -1)) != int(advertised[index]):
+			continue
 		if not _spawn_tile(true, index):
 			continue
 		var tile: Dictionary = cells.back()
-		var column: int = int(tile.column)
 		tile.arrival_delay = maxf(float(tile.arrival_delay), float(slot_delays.get(index, 0.0)))
-		if column_delays.has(column):
-			# Give the preceding root at least one row of clearance before the
-			# next root starts down the same entry lane. A shared lane keeps its
-			# floor-up order even when other lanes use an alternating release.
-			tile.arrival_delay = maxf(float(tile.arrival_delay), float(column_delays[column]) + sqrt(2.0 / Motion.ARRIVAL_GRAVITY))
-		column_delays[column] = float(tile.arrival_delay)
+		for column in range(int(tile.column), int(tile.column) + int(tile.width)):
+			if column_delays.has(column):
+				tile.arrival_delay = maxf(float(tile.arrival_delay), float(column_delays[column]))
+		for column in range(int(tile.column), int(tile.column) + int(tile.width)):
+			column_delays[column] = float(tile.arrival_delay) + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY)
 	if generated_tiles > previous_generated:
 		# Completed collections set the next packet's pace. Keep the current
 		# Next timer intact so a late Collect cannot unexpectedly release it.
-		var stage: int = floori(float(cleared_pairs) / CLEARS_PER_DIFFICULTY_STAGE)
-		spawn_interval = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - stage * SPEEDUP_PER_STAGE)
+		_schedule_spawn_interval()
 
 
 func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
 	if upcoming.is_empty() or (arrival and (arrival_index < 0 or arrival_index >= upcoming.size())):
 		return false
+	if authored_morphology and not arrival:
+		arrival_index = -1
+		for index in range(upcoming.size()):
+			if upcoming[index].has("id"):
+				arrival_index = index
+				break
+		if arrival_index < 0:
+			return false
+	if authored_morphology and not upcoming[arrival_index].has("id"):
+		return false
+	var preview: Dictionary = upcoming[arrival_index] if arrival or authored_morphology else upcoming[0]
 	var occupied: Dictionary = _occupied()
-	var position: Vector2i = _arrival_position(occupied, arrival_index) if arrival else _free_position(occupied, 1, 1)
-	if position.x < 0:
+	var width: int = int(preview.width) if authored_morphology else 1
+	var height: int = int(preview.height) if authored_morphology else 1
+	var position: Vector2i = _arrival_position(occupied, arrival_index, width, height) if arrival else _free_position(occupied, width, height)
+	if position.x < 0 or not _arrival_preserves_drag_return(preview, position, arrival):
 		return false
 	# A visible preview owns its column until it can enter. Refill only that
-	# slot so blocked roots never slide sideways or get replaced by a neighbor.
-	var tile: Dictionary = upcoming[arrival_index] if arrival else upcoming.pop_front()
-	if arrival:
+	# slot so blocked parts never slide sideways or get replaced by a neighbor.
+	var tile: Dictionary = _release_preview_slot(arrival_index) if authored_morphology else (upcoming[arrival_index] if arrival else upcoming.pop_front())
+	if arrival and not authored_morphology:
 		upcoming[arrival_index] = _next_supply_tile()
 	tile.column = position.x
 	tile.row = position.y
@@ -1352,7 +1748,7 @@ func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
 	tile.arrival = arrival
 	tile.arrival_index = arrival_index if arrival else 0
 	tile.arrival_delay = _scheduled_arrival_delay(arrival_index) if arrival else 0.0
-	tile.falling_rows = position.y + 1 if arrival else 0
+	tile.falling_rows = position.y + height if arrival else 0
 	cells.append(tile)
 	generated_tiles += 1
 	_fill_upcoming()
@@ -1369,6 +1765,22 @@ func _complete_operation(event_id: String) -> void:
 		_complete_merge(completed)
 	elif str(completed.operation) == "collect":
 		var generation: int = _generation
+		if bool(completed.get("commit_pending", false)):
+			return
+		if commit_collection.is_valid() and not bool(completed.get("commit_confirmed", false)):
+			# Install the pending obligation before an adapter can synchronously
+			# acknowledge, pause, leave, or replace the round from its callback.
+			fusions[operation_index].commit_pending = true
+			var payload: Dictionary = completed.duplicate(true)
+			payload.event_id = event_id
+			payload.generation = generation
+			var response: Variant = commit_collection.call(payload)
+			if generation != _generation or _fusion_index(event_id) < 0:
+				return
+			if response is Dictionary and bool(response.get("pending", false)):
+				return
+			resolve_collection_commit(event_id, generation, response if response is Dictionary else {})
+			return
 		if int(completed.coins) > 0 and not bool(completed.get("credited", false)) and credit_collection.is_valid():
 			var response: Variant = credit_collection.call(event_id, int(completed.coins))
 			if generation != _generation or phase != "playing" or _fusion_index(event_id) < 0:
@@ -1386,6 +1798,44 @@ func _complete_operation(event_id: String) -> void:
 		fusions.remove_at(_fusion_index(event_id))
 		error = ""
 		_complete_collection(completed)
+
+
+func resolve_collection_commit(event_id: String, generation: int, response: Dictionary) -> bool:
+	if generation != _generation or phase != "playing":
+		return false
+	var index: int = _fusion_index(event_id)
+	if index < 0 or str(fusions[index].operation) != "collect" or not bool(fusions[index].get("commit_pending", false)):
+		return false
+	if bool(response.get("pending", false)):
+		return true
+	if not bool(response.get("ok", false)):
+		fusions.remove_at(index)
+		error = str(response.get("error", "The collection could not be saved. Tap the word to try again."))
+		if error.is_empty():
+			error = "The collection could not be saved. Tap the word to try again."
+		_collection_batch_event_id = ""
+		cancel_collection_batch()
+	else:
+		fusions[index].commit_pending = false
+		fusions[index].commit_confirmed = true
+		fusions[index].credited = true
+		if not paused:
+			_complete_operation(event_id)
+	if generation != _generation:
+		return true
+	if _finish_after_collection_commit and not _has_pending_collection_commit():
+		_finish_after_collection_commit = false
+		finish_round(_finish_reason)
+	else:
+		changed.emit()
+	return true
+
+
+func _has_pending_collection_commit() -> bool:
+	for active: Dictionary in fusions:
+		if bool(active.get("commit_pending", false)):
+			return true
+	return false
 
 
 func _complete_merge(completed: Dictionary) -> void:
@@ -1416,6 +1866,11 @@ func _complete_merge(completed: Dictionary) -> void:
 	_gravity_pending = true
 	merged_count += 1
 	if bool(_powerup.get("active", false)) and str(_powerup.kind) == "auto_merge":
+		if result.has("composition") and _powerup.has("completion_plan"):
+			var plan: Dictionary = _powerup.completion_plan
+			plan.result_ids.append(int(result.id))
+			if plan.result_ids.size() >= plan.steps.size():
+				_powerup.erase("completion_plan")
 		_powerup_ids.erase(int(a.id))
 		_powerup_ids.erase(int(b.id))
 		_powerup_ids.append(int(result.id))
@@ -1474,7 +1929,8 @@ func _complete_collection(completed: Dictionary) -> void:
 	if not _can_continue(generation):
 		return
 	var word_ids: Array[String] = [str(completed.word.id)]
-	word_attempted.emit(str(completed.attempt_id), word_ids, true)
+	if not completed.a.has("composition") or bool(completed.a.composition.get("mastery_eligible", false)):
+		word_attempted.emit(str(completed.attempt_id), word_ids, true)
 	if not _can_continue(generation):
 		return
 	if awarded > 0:
@@ -1494,7 +1950,12 @@ func _restore_growth(excluded_id: int = -1) -> void:
 	# Growth can reuse nearby space. Its settled result and any neighbors that
 	# lose support then fall. Manual footprints keep their chosen size and column.
 	_growth_pending = false
+	if _authored_auto_active():
+		_growth_pending = true
+		return
 	for tile in cells:
+		if tile.has("composition"):
+			continue
 		var extent: Vector2i = _preferred_size(int(tile.mass))
 		if int(tile.width) == extent.x and int(tile.height) == extent.y:
 			continue
@@ -1532,16 +1993,11 @@ func _resume_pending_motion() -> void:
 
 
 func _settle_collected_stack() -> void:
+	if _authored_auto_active():
+		return
 	_gravity_pending = false
 	var ordered: Array[Dictionary] = cells.duplicate()
-	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var bottom_a: int = int(a.row) + int(a.height)
-		var bottom_b: int = int(b.row) + int(b.height)
-		if bottom_a != bottom_b:
-			return bottom_a > bottom_b
-		if a.column != b.column:
-			return int(a.column) < int(b.column)
-		return int(a.id) < int(b.id))
+	ordered.sort_custom(_gravity_order)
 	for tile: Dictionary in ordered:
 		if is_fusing(int(tile.id)) or int(tile.id) == _held_tile_id or _reserved_for_collection(int(tile.id)) \
 			or _reserved_for_powerup(int(tile.id)) or not is_settled(tile):
@@ -1565,6 +2021,16 @@ func _settle_collected_stack() -> void:
 		_growth_pending = true
 
 
+func _gravity_order(a: Dictionary, b: Dictionary) -> bool:
+	var bottom_a: int = int(a.row) + int(a.height)
+	var bottom_b: int = int(b.row) + int(b.height)
+	if bottom_a != bottom_b:
+		return bottom_a > bottom_b
+	if a.column != b.column:
+		return int(a.column) < int(b.column)
+	return int(a.id) < int(b.id)
+
+
 func _occupied(excluded_ids: Array[int] = [], reserve_drag_return: bool = true) -> Dictionary:
 	var occupied: Dictionary = {}
 	for tile in cells:
@@ -1577,13 +2043,16 @@ func _occupied(excluded_ids: Array[int] = [], reserve_drag_return: bool = true) 
 			var result: Dictionary = active.result
 			_occupy(occupied, int(result.column), int(result.row), int(result.width), int(result.height))
 	if reserve_drag_return and _dragged_tile_id >= 0 and not _dragged_tile_id in excluded_ids:
-		# A moving spare cell protects cancellation from new arrivals and growth.
+		# A moving return footprint protects cancellation from arrivals and growth.
 		# Gravity never sees this reservation, so it cannot act as hidden support.
 		var anchor: Dictionary = cell(_dragged_tile_id)
 		if not anchor.is_empty():
-			var position: Vector2i = _drag_return_position(_occupied([], false), 1, 1, anchor)
+			var width: int = int(anchor.width) if anchor.has("composition") else 1
+			var height: int = int(anchor.height) if anchor.has("composition") else 1
+			var position: Vector2i = _drag_return_after_motion(anchor) if anchor.has("composition") else \
+				_drag_return_position(_occupied([], false), width, height, anchor)
 			if position.x >= 0:
-				_occupy(occupied, position.x, position.y, 1, 1)
+				_occupy(occupied, position.x, position.y, width, height)
 	return occupied
 
 
@@ -1626,19 +2095,44 @@ func _free_position(occupied: Dictionary, width: int, height: int) -> Vector2i:
 
 
 func _has_free_cell() -> bool:
+	if authored_morphology:
+		var occupied: Dictionary = _occupied()
+		for index in range(upcoming.size()):
+			var tile: Dictionary = upcoming[index]
+			if not tile.has("id"):
+				continue
+			var position: Vector2i = _arrival_position(occupied, index, int(tile.width), int(tile.height))
+			if position.x >= 0 and _arrival_preserves_drag_return(tile, position):
+				return true
+		return false
 	return _arrival_position(_occupied()).x >= 0
 
 
-func _arrival_position(occupied: Dictionary, preferred_column: int = -1) -> Vector2i:
+func _arrival_preserves_drag_return(preview: Dictionary, position: Vector2i, arrival: bool = true) -> bool:
+	if _dragged_tile_id < 0:
+		return true
+	var held: Dictionary = cell(_dragged_tile_id)
+	if not held.has("composition"):
+		return true
+	var incoming: Dictionary = preview.duplicate()
+	incoming.column = position.x
+	incoming.row = position.y
+	incoming.age = 0.0 if arrival else SETTLE_SECONDS
+	incoming.arrival = arrival
+	return _drag_return_after_motion(held, incoming).x >= 0
+
+
+func _arrival_position(occupied: Dictionary, preferred_column: int = -1, width: int = 1, height: int = 1) -> Vector2i:
 	var position := Vector2i(-1, -1)
-	for column in range(COLUMNS):
+	for column in range(COLUMNS - width + 1):
 		if preferred_column >= 0 and column != preferred_column:
 			continue
-		var row: int = 0
-		while row < ROWS and not occupied.has(row * COLUMNS + column):
-			row += 1
-		var landing_row: int = row - 1
-		# A supplied root can enter only through its advertised column. Without
+		if not _fits(occupied, column, 0, width, height):
+			continue
+		var landing_row: int = 0
+		while landing_row + height < ROWS and _fits(occupied, column, landing_row + 1, width, height):
+			landing_row += 1
+		# A supplied part can enter only through its advertised column. Without
 		# a specified column, this also checks whether any entrance is available.
 		if landing_row > position.y:
 			position = Vector2i(column, landing_row)

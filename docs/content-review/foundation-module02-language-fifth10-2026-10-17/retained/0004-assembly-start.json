@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T20:05:06.399Z",
+  "script_raw_sha256": "9c512a2a8dbceb32d5436f33b9e2181a5de81dec1d8b11a7f2ff0efa108c1730",
+  "scope": "Evidence-only serializer and invariant checks; no production integration, validator, tests or native dispatch."
+}

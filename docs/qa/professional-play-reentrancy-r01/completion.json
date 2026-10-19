@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "completed_at": "2026-10-16T14:17:39.451Z",
+  "status": "validated_and_frozen",
+  "native_runs": 1,
+  "files": [
+    {
+      "path": "scripts/professional_play.gd",
+      "bytes": 5977,
+      "sha256": "80d0f36bcf6f1c245faa981d194d824ccd64b9ab02ece75db716539348727d91",
+      "preimage": "build/professional-english/professional-play-reentrancy-r01/preimages/scripts/professional_play.gd",
+      "after_bytes": 7234,
+      "after_sha256": "348431e211ca691aa873e201d8a5688e3e8f1cc63bc2fda6b8851b3c41a22db0",
+      "preimage_unchanged": true
+    },
+    {
+      "path": "tests/godot/professional_play_tests.gd",
+      "bytes": 2479,
+      "sha256": "62fdbbb8bc8325d182cc834c10dbe7390c1928e28a198e2f5a51d15c96ea06e8",
+      "preimage": "build/professional-english/professional-play-reentrancy-r01/preimages/tests/godot/professional_play_tests.gd",
+      "after_bytes": 13576,
+      "after_sha256": "c6fea401bb2eea0e0399aec939ec5e84f0c31e308a5bdc4554dc25acecb9c7f6",
+      "preimage_unchanged": true
+    }
+  ],
+  "validation_receipt_sha256": "8b8f1f8cb4b317a250167968b7a58e6a0809895875f35989aba7b03bba0bac78",
+  "scope": "Only the named existing dirty controller and its dedicated test were modified; scratch evidence is separate. No policy installation or content acceptance."
+}

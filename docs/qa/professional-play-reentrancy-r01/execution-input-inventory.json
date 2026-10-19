@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "files": [
+    {
+      "path": "build/professional-english/professional-play-reentrancy-r01/native_entry.gd",
+      "bytes": 1691,
+      "sha256": "2f01df0aba92e9557dcded19badc87881acb1187133d752141fe2124079bb8b1"
+    },
+    {
+      "path": "build/professional-english/professional-play-reentrancy-r01/preimages/scripts/professional_play.gd",
+      "bytes": 5977,
+      "sha256": "80d0f36bcf6f1c245faa981d194d824ccd64b9ab02ece75db716539348727d91"
+    },
+    {
+      "path": "build/professional-english/professional-play-reentrancy-r01/preimages/tests/godot/professional_play_tests.gd",
+      "bytes": 2479,
+      "sha256": "62fdbbb8bc8325d182cc834c10dbe7390c1928e28a198e2f5a51d15c96ea06e8"
+    },
+    {
+      "path": "build/professional-english/professional-play-reentrancy-r01/run-native.cjs",
+      "bytes": 4623,
+      "sha256": "187c13ed8b62ebbcffc435bc231d408323cc42f8b6fec5a8e1f5986c91bedd52"
+    },
+    {
+      "path": "data/professional/catalog.json",
+      "bytes": 33329,
+      "sha256": "ff39f26ad1a6868dcb6ce96e6f2c007f0c9dcbe2eafee906c8ee9360af99e544"
+    },
+    {
+      "path": "data/professional/themes.json",
+      "bytes": 91201,
+      "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "bytes": 20942,
+      "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+    },
+    {
+      "path": "scripts/growth_morphology.gd",
+      "bytes": 4976,
+      "sha256": "cf5140ffff2ca4ac2f9bfa7368d07617fa4d2200659f7dbf47a95eeb3f6f4b8f"
+    },
+    {
+      "path": "scripts/learning_content_resolver.gd",
+      "bytes": 17119,
+      "sha256": "d491e2641ee37c201cdb7f132cb472e6f4f18fa31a367bd5d9aa75d0aacedad3"
+    },
+    {
+      "path": "scripts/learning_context.gd",
+      "bytes": 2446,
+      "sha256": "f7099fa50517a593b2adc95a52566905b3b27b0dde010ed4c834ab96ff3497e5"
+    },
+    {
+      "path": "scripts/learning_theme_motion.gd",
+      "bytes": 2700,
+      "sha256": "8509e2445381d990cbda4281f9e0b13049d6b58b1f4b07380b704e726f6eb80d"
+    },
+    {
+      "path": "scripts/morphology_analysis.gd",
+      "bytes": 7877,
+      "sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b"
+    },
+    {
+      "path": "scripts/professional_catalog.gd",
+      "bytes": 7177,
+      "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+    },
+    {
+      "path": "scripts/professional_media_access.gd",
+      "bytes": 3639,
+      "sha256": "ad4350579562aec2d49c72c0ccfd72c54df162992fe8e30604504b52aef30025"
+    },
+    {
+      "path": "scripts/professional_media_cache.gd",
+      "bytes": 6801,
+      "sha256": "98d128ec9a80d178f95cd9484f6e4107a2075e49114228be7b0c16c2a24485f1"
+    },
+    {
+      "path": "scripts/professional_media_loader.gd",
+      "bytes": 7369,
+      "sha256": "d9d348d665b443300009f7490dbcb613a73eff58f9e91d6e70e364c9c76e7390"
+    },
+    {
+      "path": "scripts/professional_media_manifest.gd",
+      "bytes": 14605,
+      "sha256": "a6b41f99f97c2b537837ebf457d04e7f9189bf82325ff258747d4e1db7943a1c"
+    },
+    {
+      "path": "scripts/professional_play.gd",
+      "bytes": 7234,
+      "sha256": "348431e211ca691aa873e201d8a5688e3e8f1cc63bc2fda6b8851b3c41a22db0"
+    },
+    {
+      "path": "scripts/professional_progress.gd",
+      "bytes": 12616,
+      "sha256": "56437fdfb907bc9cfcbeb0b9ba1442f98f6c07aaf21bc81024af9a70838f5c4f"
+    },
+    {
+      "path": "scripts/professional_round_loader.gd",
+      "bytes": 2882,
+      "sha256": "527a87862bf27dd731f68800c756502543f8899528e8cee1cf96a0b3fa4d27ed"
+    },
+    {
+      "path": "scripts/professional_session.gd",
+      "bytes": 13663,
+      "sha256": "a6d5115d6e65a74c97cd129be4a3613358295566ac2065d046ac440560be8616"
+    },
+    {
+      "path": "scripts/professional_store.gd",
+      "bytes": 11941,
+      "sha256": "aa91a6caeb97c9145d7b991f556139705a4cb97760a6f99c598f5183e6a045bf"
+    },
+    {
+      "path": "tests/godot/professional_play_tests.gd",
+      "bytes": 13576,
+      "sha256": "c6fea401bb2eea0e0399aec939ec5e84f0c31e308a5bdc4554dc25acecb9c7f6"
+    },
+    {
+      "path": "tools/run-godot.cjs",
+      "bytes": 1228,
+      "sha256": "a411f937acd304761e0ac9f6513f45e0f2a6aa886856e3b32a537a04ff5189be"
+    }
+  ]
+}

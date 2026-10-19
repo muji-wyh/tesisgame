@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "ok": true,
+  "duration_ms": 1440,
+  "current_checks": 31,
+  "current_failures": 0,
+  "original_observations": 17,
+  "original_invariant_failures": 14,
+  "expected_original_reproduction": true,
+  "guarded_input_count": 24,
+  "inputs_unchanged": true,
+  "changed_paths": [],
+  "error": null,
+  "log_sha256": "266692858acf72ed1826211949d49055293174a60caab5c7369eeebf0619f984",
+  "current_report_sha256": "79e3dacc26279031e616288047f4451bfe481fe6d64f15ef245bafc636599647",
+  "original_report_sha256": "b1ed0602eedf5af480006b0a7bb81166f837b49cf5e286e74d08d1059e6d3ade",
+  "production_scope": [
+    "scripts/professional_play.gd",
+    "tests/godot/professional_play_tests.gd"
+  ],
+  "domain_policy_installed": false,
+  "content_acceptance_changed": false
+}

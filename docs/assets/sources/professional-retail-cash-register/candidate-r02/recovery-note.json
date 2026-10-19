@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T11:44:26.295Z",
+  "status": "fresh_static_repair_waiting_for_successful_r26",
+  "predecessor": "candidate-r01",
+  "previous_native_log_sha256": "e0428fa91c9f7d5b3e4a78de94696ee75e916066a13f3eeef50e289de4e91825",
+  "previous_receipt_raw_sha256": "f7cc9e98592d8fda688ec9bc6bf0f67215fb1540c7bdf6b3a56d72f28a429af0",
+  "previous_artifacts": [],
+  "failure": "GDScript parser could not infer sidecar from OUTPUT + resource.path at line 129. No rendering occurred.",
+  "production_unchanged_in_failed_attempt": true,
+  "repair": [
+    "Explicit String sidecar with str(resource.path)",
+    "Explicit Dictionary for JSON, resource, frozen, coroutine, manifest, lease and report locals",
+    "Explicit Node3D for generated model"
+  ],
+  "unchanged_scope": [
+    "Original full source model, atlas and child transforms",
+    "Root-reviewed low-right camera, lighting and source-only review",
+    "Transparent 512-wide candidate, exact raw loader and minimum WordCard pipeline",
+    "No image approval, production writes, readiness override or audio playback"
+  ],
+  "other_inference_review": "All remaining inferred values originate from typed engine constructors/functions, locally typed functions, literals, or preloaded script constructors; no other dictionary-attribute expression remains on an inferred variable declaration.",
+  "native_execution": "not_run",
+  "production_freeze": "not_run; requires root-provided successful R26 receipt hash"
+}

@@ -1,0 +1,1477 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.sales_marketing.module08.01",
+      "text": "The complaint concerns a testimonial and an endorsement whose commercial relationship was unclear.",
+      "meaning": "Summarize a concern without treating it as an established finding.",
+      "context": "Preparing an advertising review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "complaint",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "concerns",
+          "start": 14,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "testimonial",
+          "start": 25,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "an",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "endorsement",
+          "start": 44,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "whose",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "commercial",
+          "start": 62,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "relationship",
+          "start": 73,
+          "end": 85
+        },
+        {
+          "index": 11,
+          "text": "was",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 12,
+          "text": "unclear",
+          "start": 90,
+          "end": 97
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "complaint.expression-of-dissatisfaction.n",
+        "testimonial.statement-about-persons-experience-used-in-promotion.n",
+        "endorsement.public-expression-of-support-or-approval.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module08.02",
+      "text": "Please check the substantiation and qualification before deciding whether the statement is an exaggeration.",
+      "meaning": "Request evidence and scope review of a claim.",
+      "context": "Reviewing draft advertising copy.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "substantiation",
+          "start": 17,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "qualification",
+          "start": 36,
+          "end": 49
+        },
+        {
+          "index": 6,
+          "text": "before",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 7,
+          "text": "deciding",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 8,
+          "text": "whether",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 10,
+          "text": "statement",
+          "start": 78,
+          "end": 87
+        },
+        {
+          "index": 11,
+          "text": "is",
+          "start": 88,
+          "end": 90
+        },
+        {
+          "index": 12,
+          "text": "an",
+          "start": 91,
+          "end": 93
+        },
+        {
+          "index": 13,
+          "text": "exaggeration",
+          "start": 94,
+          "end": 106
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 106,
+          "end": 107
+        }
+      ],
+      "focus_lexeme_ids": [
+        "substantiation.evidence-supporting-stated-claim.n",
+        "qualification.limitation-or-condition-that-narrows-statement.n",
+        "exaggeration.presentation-making-something-seem-greater-than-it-is.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module08.03",
+      "text": "The permission record covers this image use; consent requirements for personal data need separate review.",
+      "meaning": "Distinguish image-use permissions from the applicable requirements for personal information.",
+      "context": "Preparing material for appropriate rights and privacy review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "permission",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "covers",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "this",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "image",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "use",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ";",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "consent",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "requirements",
+          "start": 53,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "for",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "personal",
+          "start": 70,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "data",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "need",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "separate",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": "review",
+          "start": 98,
+          "end": 104
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 104,
+          "end": 105
+        }
+      ],
+      "focus_lexeme_ids": [
+        "permission-record.record-of-what-use-or-action-was-permitted.n",
+        "consent.informed-agreement.n",
+        "personal-data.identifiable-person-information.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module08.04",
+      "text": "The copyright and trademark questions need qualified review before we approve the usage rights.",
+      "meaning": "Refer rights questions for appropriate review.",
+      "context": "Checking third-party campaign material.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "copyright",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "trademark",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "questions",
+          "start": 28,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "need",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "qualified",
+          "start": 43,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "review",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 8,
+          "text": "before",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 9,
+          "text": "we",
+          "start": 67,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "approve",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "usage",
+          "start": 82,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "rights",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "copyright.legal-rights-relating-to-original-creative-work.n",
+        "trademark.sign-distinguishing-source-of-goods-or-services.n",
+        "usage-rights.permissions-defining-how-material-may-be-used.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module08.05",
+      "text": "Please check readability, contrast and accessibility at the actual display size.",
+      "meaning": "Request a practical review of visible content.",
+      "context": "Reviewing phone-sized campaign material.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "readability",
+          "start": 13,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "contrast",
+          "start": 26,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "accessibility",
+          "start": 39,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "at",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "actual",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "display",
+          "start": 67,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "size",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "readability.ease-of-reading-and-understanding-written-content.n",
+        "contrast.visible-difference-helping-elements-be-distinguished.n",
+        "accessibility.inclusive-usability.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module08.06",
+      "text": "The opt-in and opt-out should match the contact choices recorded for this message category.",
+      "meaning": "Request consistency between choices and records.",
+      "context": "Reviewing message preferences.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "opt-in",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "opt-out",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "should",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "match",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "contact",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "choices",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "recorded",
+          "start": 56,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "for",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "this",
+          "start": 69,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "message",
+          "start": 74,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "category",
+          "start": 82,
+          "end": 90
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "opt-in.active-choice-to-participate-or-receive-something.n",
+        "opt-out.choice-to-stop-or-decline-participation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module08.07",
+      "text": "Please report the broken link and incorrect price before publishing the corrected page.",
+      "meaning": "Ask a colleague to flag specific content problems.",
+      "context": "Checking a product page.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "broken",
+          "start": 18,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "link",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "incorrect",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "price",
+          "start": 44,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "before",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "publishing",
+          "start": 57,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "corrected",
+          "start": 72,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "page",
+          "start": 82,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "broken-link.link-that-does-not-reach-intended-working-destination.n",
+        "incorrect-price.displayed-or-recorded-price-that-is-wrong.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module08.08",
+      "text": "The negative review mentions a delivery delay and a stock shortage; please check the relevant records.",
+      "meaning": "Request verification of a customer's reported experience.",
+      "context": "Preparing a factual response.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "negative",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "review",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "mentions",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "delivery",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "delay",
+          "start": 40,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "stock",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "shortage",
+          "start": 58,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "please",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "check",
+          "start": 75,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "relevant",
+          "start": 85,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "records",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "negative-review.published-assessment-expressing-unfavorable-opinion.n",
+        "delivery-delay.arrival-later-than-expected-or-agreed-time.n",
+        "stock-shortage.available-stock-below-needed-amount.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module08.09",
+      "text": "The budget overrun and missed target need separate explanations in the campaign review.",
+      "meaning": "Ask for distinct reporting of cost and result issues.",
+      "context": "Reviewing a completed campaign.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "budget",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "overrun",
+          "start": 11,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "missed",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "target",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "need",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "separate",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "explanations",
+          "start": 51,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "in",
+          "start": 64,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "campaign",
+          "start": 71,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "review",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "budget-overrun.spending-above-planned-budget.n",
+        "missed-target.intended-result-not-achieved.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module08.10",
+      "text": "Please verify the duplicate lead before merging records, and record the current approval status.",
+      "meaning": "Request an identity check before a data change.",
+      "context": "Maintaining an authorized contact list.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "verify",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "duplicate",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "lead",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "merging",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "records",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "record",
+          "start": 61,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "current",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "approval",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "status",
+          "start": 89,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "duplicate-lead.repeated-record-of-same-potential-sales-contact.n",
+        "approval-status.current-state-of-required-approval.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

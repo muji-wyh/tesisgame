@@ -1,0 +1,1563 @@
+{
+  "date": "2026-10-16",
+  "sense_id": "checkout.payment-area.n",
+  "status": "previously_acquired_originals_retained_for_scratch_inspection_only",
+  "definition": "The place in a store where purchases are paid for.",
+  "example": "A second checkout is open near the entrance.",
+  "approved_brief": "Show a complete staffed checkout lane: customer side, short goods belt or counter, and a register, with a shopper presenting purchases. Frame the lane as one place while the equipment stays subordinate. Reject a close-up of a register alone, a help desk, or a hotel reception. No readable payment credentials or brand marks.",
+  "brief_source": "data/professional/lexemes/retail-pilot.json",
+  "brief_source_raw_sha256": "b5c78a76cd2e8dfba08b64ffc9e0db7c8edfb6ffdcb558429db8d5664cd09fdd",
+  "packs": [
+    {
+      "id": "mini-market",
+      "version": "1.0",
+      "source": "https://kenney.nl/assets/mini-market",
+      "creator": "Kenney",
+      "additional_credits": [
+        "Fleur Keijsers",
+        "Guus Vermeulen"
+      ],
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "acquisition_status": "Already acquired in local Kenney All-in-1 3.7.0 library; exact originals copied into this scratch revision only."
+    },
+    {
+      "id": "mini-characters",
+      "version": "1.0",
+      "source": "https://kenney.nl/assets/mini-characters",
+      "creator": "Kenney",
+      "additional_credits": [],
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "acquisition_status": "Already acquired in local Kenney All-in-1 3.7.0 library; exact originals copied into this scratch revision only."
+    },
+    {
+      "id": "food-kit",
+      "version": "2.0",
+      "source": "https://kenney.nl/assets/food-kit",
+      "creator": "Kenney",
+      "additional_credits": [],
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "acquisition_status": "Already acquired in local Kenney All-in-1 3.7.0 library; exact originals copied into this scratch revision only."
+    }
+  ],
+  "files": [
+    {
+      "pack": "mini-market",
+      "role": "complete original GLB",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/cash-register.glb",
+      "retained_path": "source/mini-market/original/cash-register.glb",
+      "bytes": 20332,
+      "sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598"
+    },
+    {
+      "pack": "mini-market",
+      "role": "supplied source preview; not new render or accepted artwork",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Previews/cash-register.png",
+      "retained_path": "source/mini-market/previews/cash-register.png",
+      "bytes": 1569,
+      "sha256": "db169c7da59d220e24e55081ff75bc44b768bf9fb8caa9b1ff8e9a20aee20258"
+    },
+    {
+      "pack": "mini-market",
+      "role": "complete original GLB",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/character-employee.glb",
+      "retained_path": "source/mini-market/original/character-employee.glb",
+      "bytes": 215836,
+      "sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc"
+    },
+    {
+      "pack": "mini-market",
+      "role": "supplied source preview; not new render or accepted artwork",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Previews/character-employee.png",
+      "retained_path": "source/mini-market/previews/character-employee.png",
+      "bytes": 1802,
+      "sha256": "10bdce51445eadd07de6c0584d09dc50cdb6c98a2336567eb7074c296a42a902"
+    },
+    {
+      "pack": "mini-market",
+      "role": "complete original GLB",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/floor.glb",
+      "retained_path": "source/mini-market/original/floor.glb",
+      "bytes": 3928,
+      "sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8"
+    },
+    {
+      "pack": "mini-market",
+      "role": "supplied source preview; not new render or accepted artwork",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Previews/floor.png",
+      "retained_path": "source/mini-market/previews/floor.png",
+      "bytes": 870,
+      "sha256": "16e529175af85f5a372b80779a1e15fd081d8a0b0f4d9fa0e513b16bb297e4e0"
+    },
+    {
+      "pack": "mini-market",
+      "role": "original external material texture",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+      "retained_path": "source/mini-market/original/Textures/colormap.png",
+      "bytes": 8706,
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+    },
+    {
+      "pack": "mini-market",
+      "role": "original license evidence",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/License.txt",
+      "retained_path": "source/mini-market/License.txt",
+      "bytes": 767,
+      "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070"
+    },
+    {
+      "pack": "mini-market",
+      "role": "original pack inventory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Overview.html",
+      "retained_path": "source/mini-market/Overview.html",
+      "bytes": 6652,
+      "sha256": "58dee631a02b854f1b511d6184302f06647ac908ad560039ad3c4d0aad1011c8"
+    },
+    {
+      "pack": "mini-market",
+      "role": "supplied source overview; not new render or accepted artwork",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Preview.png",
+      "retained_path": "source/mini-market/previews/Preview.png",
+      "bytes": 99231,
+      "sha256": "db0bc243ed956e21ab55915c794130ca4cfda8ed181d27f856444fdcb7f7e5f7"
+    },
+    {
+      "pack": "mini-market",
+      "role": "supplied source overview; not new render or accepted artwork",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Sample.png",
+      "retained_path": "source/mini-market/previews/Sample.png",
+      "bytes": 113281,
+      "sha256": "77e54d04afde778892f0e2a7ab548b6daaa6b7922a8fcd4bee97b9b9c1dd094b"
+    },
+    {
+      "pack": "mini-characters",
+      "role": "complete original GLB",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Models/GLB format/character-female-b.glb",
+      "retained_path": "source/mini-characters/original/character-female-b.glb",
+      "bytes": 252140,
+      "sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a"
+    },
+    {
+      "pack": "mini-characters",
+      "role": "supplied source preview; not new render or accepted artwork",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Previews/character-female-b.png",
+      "retained_path": "source/mini-characters/previews/character-female-b.png",
+      "bytes": 1820,
+      "sha256": "db299b4ab11a3f038cbd961b62f93cb67677d3e1a9b4cd12577978120f5f9ea6"
+    },
+    {
+      "pack": "mini-characters",
+      "role": "original external material texture",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Models/GLB format/Textures/colormap.png",
+      "retained_path": "source/mini-characters/original/Textures/colormap.png",
+      "bytes": 8706,
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+    },
+    {
+      "pack": "mini-characters",
+      "role": "original license evidence",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/License.txt",
+      "retained_path": "source/mini-characters/License.txt",
+      "bytes": 718,
+      "sha256": "28358ae5accc85b572eb42507956afc8beae05acb4648bb9026a5714d421b785"
+    },
+    {
+      "pack": "mini-characters",
+      "role": "original pack inventory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Overview.html",
+      "retained_path": "source/mini-characters/Overview.html",
+      "bytes": 7690,
+      "sha256": "d27bd2bca14e3c581938375f210ff3f7b671c08bb047083b2401cb91542b6d36"
+    },
+    {
+      "pack": "mini-characters",
+      "role": "supplied source overview; not new render or accepted artwork",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Preview.png",
+      "retained_path": "source/mini-characters/previews/Preview.png",
+      "bytes": 106511,
+      "sha256": "ed425bf02d6a2de2bc44adc0ba52996b0cdb7b99d98859ea60b038958790f256"
+    },
+    {
+      "pack": "food-kit",
+      "role": "complete original GLB",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit/Models/GLB format/carton.glb",
+      "retained_path": "source/food-kit/original/carton.glb",
+      "bytes": 9352,
+      "sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04"
+    },
+    {
+      "pack": "food-kit",
+      "role": "supplied source preview; not new render or accepted artwork",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit/Previews/carton.png",
+      "retained_path": "source/food-kit/previews/carton.png",
+      "bytes": 1518,
+      "sha256": "6d3cd2d4a8a00858628cdc045d293ea3a058959d7230c50358eee12dbba2918d"
+    },
+    {
+      "pack": "food-kit",
+      "role": "complete original GLB",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit/Models/GLB format/apple.glb",
+      "retained_path": "source/food-kit/original/apple.glb",
+      "bytes": 14376,
+      "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+    },
+    {
+      "pack": "food-kit",
+      "role": "supplied source preview; not new render or accepted artwork",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit/Previews/apple.png",
+      "retained_path": "source/food-kit/previews/apple.png",
+      "bytes": 1808,
+      "sha256": "1fa189f9f6e88750743c93e97e548d70a3765c7fb2446edd5ed6355ffabb3259"
+    },
+    {
+      "pack": "food-kit",
+      "role": "original external material texture",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit/Models/GLB format/Textures/colormap.png",
+      "retained_path": "source/food-kit/original/Textures/colormap.png",
+      "bytes": 10715,
+      "sha256": "75baf74d9483a0fc56ac21ceba346fbe16fc24a2a1bf0524c53e6bbe802e1153"
+    },
+    {
+      "pack": "food-kit",
+      "role": "original license evidence",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit/License.txt",
+      "retained_path": "source/food-kit/License.txt",
+      "bytes": 711,
+      "sha256": "32a081c2035dd4db47d850c83244da048165f0e53d71c076b76c1afc0590bc7f"
+    },
+    {
+      "pack": "food-kit",
+      "role": "original pack inventory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit/Overview.html",
+      "retained_path": "source/food-kit/Overview.html",
+      "bytes": 29848,
+      "sha256": "361722dd387f8986c08ea216567713f405b1be9b029a63f4e7781fefa8790183"
+    }
+  ],
+  "models": [
+    {
+      "id": "mini-market/cash-register",
+      "retained_path": "source/mini-market/original/cash-register.glb",
+      "sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+      "asset": {
+        "generator": "UnityGLTF",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "cash-register"
+        }
+      ],
+      "meshes": [
+        {
+          "name": "cash-register",
+          "primitives": [
+            {
+              "material": 0,
+              "position_accessor": {
+                "bufferView": 0,
+                "componentType": 5126,
+                "count": 361,
+                "type": "VEC3",
+                "max": [
+                  0.44999998807907104,
+                  0.5949000120162964,
+                  0.45000001788139343
+                ],
+                "min": [
+                  -0.4000000059604645,
+                  0,
+                  -0.4000000059604645
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "uri": "Textures/colormap.png",
+          "name": "colormap"
+        }
+      ],
+      "skins": [],
+      "animations": []
+    },
+    {
+      "id": "mini-market/character-employee",
+      "retained_path": "source/mini-market/original/character-employee.glb",
+      "sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc",
+      "asset": {
+        "generator": "UnityGLTF",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "children": [
+            1,
+            8,
+            9
+          ],
+          "name": "character-employee"
+        },
+        {
+          "children": [
+            2,
+            3,
+            4
+          ],
+          "name": "root"
+        },
+        {
+          "translation": [
+            0.0835709646,
+            0.17625,
+            -0.02875
+          ],
+          "name": "leg-left"
+        },
+        {
+          "translation": [
+            -0.0835709646,
+            0.17625,
+            -0.02875
+          ],
+          "name": "leg-right"
+        },
+        {
+          "children": [
+            5,
+            6,
+            7
+          ],
+          "translation": [
+            -1.44382282e-15,
+            0.17625,
+            -0.02875
+          ],
+          "name": "torso"
+        },
+        {
+          "translation": [
+            0.09989677,
+            0.1115,
+            0.0115
+          ],
+          "name": "arm-left"
+        },
+        {
+          "translation": [
+            -0.09989677,
+            0.1115,
+            0.0115
+          ],
+          "name": "arm-right"
+        },
+        {
+          "translation": [
+            1.81968929e-9,
+            0.167,
+            0.0263887774
+          ],
+          "name": "head"
+        },
+        {
+          "skin": 0,
+          "mesh": 0,
+          "name": "body-mesh"
+        },
+        {
+          "skin": 1,
+          "mesh": 1,
+          "name": "head-mesh"
+        }
+      ],
+      "meshes": [
+        {
+          "name": "body-mesh",
+          "primitives": [
+            {
+              "material": 0,
+              "position_accessor": {
+                "bufferView": 0,
+                "componentType": 5126,
+                "count": 470,
+                "type": "VEC3",
+                "max": [
+                  0.3902819752693176,
+                  0.3682500123977661,
+                  0.1133003830909729
+                ],
+                "min": [
+                  -0.3902819752693176,
+                  0,
+                  -0.1628611534833908
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "head-mesh",
+          "primitives": [
+            {
+              "material": 0,
+              "position_accessor": {
+                "bufferView": 6,
+                "componentType": 5126,
+                "count": 420,
+                "type": "VEC3",
+                "max": [
+                  0.2374928593635559,
+                  0.7233532667160034,
+                  0.19048893451690674
+                ],
+                "min": [
+                  -0.2374928593635559,
+                  0.34324997663497925,
+                  -0.21088328957557678
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "uri": "Textures/colormap.png",
+          "name": "colormap"
+        }
+      ],
+      "skins": [
+        {
+          "inverseBindMatrices": 420,
+          "joints": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "inverseBindMatrices": 423,
+          "joints": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      ],
+      "animations": [
+        {
+          "name": "static",
+          "channel_count": 21,
+          "duration_seconds": 0.10000000149011612
+        },
+        {
+          "name": "idle",
+          "channel_count": 4,
+          "duration_seconds": 1.3333333730697632
+        },
+        {
+          "name": "walk",
+          "channel_count": 7,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "sprint",
+          "channel_count": 7,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "jump",
+          "channel_count": 7,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "fall",
+          "channel_count": 5,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "crouch",
+          "channel_count": 8,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "sit",
+          "channel_count": 5,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "drive",
+          "channel_count": 5,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "die",
+          "channel_count": 8,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "pick-up",
+          "channel_count": 4,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "emote-yes",
+          "channel_count": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "emote-no",
+          "channel_count": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "holding-right",
+          "channel_count": 2,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "holding-left",
+          "channel_count": 2,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "holding-both",
+          "channel_count": 2,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "holding-right-shoot",
+          "channel_count": 4,
+          "duration_seconds": 0.20000000298023224
+        },
+        {
+          "name": "holding-left-shoot",
+          "channel_count": 4,
+          "duration_seconds": 0.20000000298023224
+        },
+        {
+          "name": "holding-both-shoot",
+          "channel_count": 4,
+          "duration_seconds": 0.20000000298023224
+        },
+        {
+          "name": "attack-melee-right",
+          "channel_count": 7,
+          "duration_seconds": 0.4166666567325592
+        },
+        {
+          "name": "attack-melee-left",
+          "channel_count": 7,
+          "duration_seconds": 0.4166666567325592
+        },
+        {
+          "name": "attack-kick-right",
+          "channel_count": 7,
+          "duration_seconds": 0.5333333611488342
+        },
+        {
+          "name": "attack-kick-left",
+          "channel_count": 7,
+          "duration_seconds": 0.5333333611488342
+        },
+        {
+          "name": "interact-right",
+          "channel_count": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "interact-left",
+          "channel_count": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "wheelchair-sit",
+          "channel_count": 7,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "wheelchair-look-left",
+          "channel_count": 9,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "wheelchair-look-right",
+          "channel_count": 9,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "wheelchair-move-forward",
+          "channel_count": 9,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "wheelchair-move-back",
+          "channel_count": 9,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "wheelchair-move-left",
+          "channel_count": 9,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "wheelchair-move-right",
+          "channel_count": 9,
+          "duration_seconds": 0.5
+        }
+      ]
+    },
+    {
+      "id": "mini-market/floor",
+      "retained_path": "source/mini-market/original/floor.glb",
+      "sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+      "asset": {
+        "generator": "UnityGLTF",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "floor"
+        }
+      ],
+      "meshes": [
+        {
+          "name": "floor",
+          "primitives": [
+            {
+              "material": 0,
+              "position_accessor": {
+                "bufferView": 0,
+                "componentType": 5126,
+                "count": 46,
+                "type": "VEC3",
+                "max": [
+                  0.5,
+                  0.02500000037252903,
+                  0.5
+                ],
+                "min": [
+                  -0.5,
+                  0,
+                  -0.5
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "uri": "Textures/colormap.png",
+          "name": "colormap"
+        }
+      ],
+      "skins": [],
+      "animations": []
+    },
+    {
+      "id": "mini-characters/character-female-b",
+      "retained_path": "source/mini-characters/original/character-female-b.glb",
+      "sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a",
+      "asset": {
+        "generator": "UnityGLTF",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "children": [
+            1,
+            8,
+            9
+          ],
+          "name": "character-female-b"
+        },
+        {
+          "children": [
+            2,
+            3,
+            4
+          ],
+          "name": "root"
+        },
+        {
+          "translation": [
+            0.0835709646,
+            0.17625,
+            -0.02875
+          ],
+          "name": "leg-left"
+        },
+        {
+          "translation": [
+            -0.0835709646,
+            0.17625,
+            -0.02875
+          ],
+          "name": "leg-right"
+        },
+        {
+          "children": [
+            5,
+            6,
+            7
+          ],
+          "translation": [
+            -1.44382282e-15,
+            0.17625,
+            -0.02875
+          ],
+          "name": "torso"
+        },
+        {
+          "translation": [
+            0.09989677,
+            0.1115,
+            0.0115
+          ],
+          "name": "arm-left"
+        },
+        {
+          "translation": [
+            -0.09989677,
+            0.1115,
+            0.0115
+          ],
+          "name": "arm-right"
+        },
+        {
+          "translation": [
+            1.81968929e-9,
+            0.167,
+            0.0263887774
+          ],
+          "name": "head"
+        },
+        {
+          "skin": 0,
+          "mesh": 0,
+          "name": "body-mesh"
+        },
+        {
+          "skin": 1,
+          "mesh": 1,
+          "name": "head-mesh"
+        }
+      ],
+      "meshes": [
+        {
+          "name": "body-mesh",
+          "primitives": [
+            {
+              "material": 0,
+              "position_accessor": {
+                "bufferView": 0,
+                "componentType": 5126,
+                "count": 726,
+                "type": "VEC3",
+                "max": [
+                  0.3835841417312622,
+                  0.3682500123977661,
+                  0.10699200630187988
+                ],
+                "min": [
+                  -0.3835841417312622,
+                  1.043081283569336e-7,
+                  -0.15347351133823395
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "head-mesh",
+          "primitives": [
+            {
+              "material": 0,
+              "position_accessor": {
+                "bufferView": 6,
+                "componentType": 5126,
+                "count": 596,
+                "type": "VEC3",
+                "max": [
+                  0.23749297857284546,
+                  0.7233532667160034,
+                  0.20763881504535675
+                ],
+                "min": [
+                  -0.2374928891658783,
+                  0.3432497978210449,
+                  -0.21088343858718872
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "uri": "Textures/colormap.png",
+          "name": "colormap"
+        }
+      ],
+      "skins": [
+        {
+          "inverseBindMatrices": 420,
+          "joints": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "inverseBindMatrices": 423,
+          "joints": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      ],
+      "animations": [
+        {
+          "name": "static",
+          "channel_count": 21,
+          "duration_seconds": 0.10000000149011612
+        },
+        {
+          "name": "idle",
+          "channel_count": 4,
+          "duration_seconds": 1.3333333730697632
+        },
+        {
+          "name": "walk",
+          "channel_count": 7,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "sprint",
+          "channel_count": 7,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "jump",
+          "channel_count": 7,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "fall",
+          "channel_count": 5,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "crouch",
+          "channel_count": 8,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "sit",
+          "channel_count": 5,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "drive",
+          "channel_count": 5,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "die",
+          "channel_count": 8,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "pick-up",
+          "channel_count": 4,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "emote-yes",
+          "channel_count": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "emote-no",
+          "channel_count": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "holding-right",
+          "channel_count": 2,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "holding-left",
+          "channel_count": 2,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "holding-both",
+          "channel_count": 2,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "holding-right-shoot",
+          "channel_count": 4,
+          "duration_seconds": 0.20000000298023224
+        },
+        {
+          "name": "holding-left-shoot",
+          "channel_count": 4,
+          "duration_seconds": 0.20000000298023224
+        },
+        {
+          "name": "holding-both-shoot",
+          "channel_count": 4,
+          "duration_seconds": 0.20000000298023224
+        },
+        {
+          "name": "attack-melee-right",
+          "channel_count": 7,
+          "duration_seconds": 0.4166666567325592
+        },
+        {
+          "name": "attack-melee-left",
+          "channel_count": 7,
+          "duration_seconds": 0.4166666567325592
+        },
+        {
+          "name": "attack-kick-right",
+          "channel_count": 7,
+          "duration_seconds": 0.5333333611488342
+        },
+        {
+          "name": "attack-kick-left",
+          "channel_count": 7,
+          "duration_seconds": 0.5333333611488342
+        },
+        {
+          "name": "interact-right",
+          "channel_count": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "interact-left",
+          "channel_count": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "wheelchair-sit",
+          "channel_count": 7,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "wheelchair-look-left",
+          "channel_count": 9,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "wheelchair-look-right",
+          "channel_count": 9,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "wheelchair-move-forward",
+          "channel_count": 9,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "wheelchair-move-back",
+          "channel_count": 9,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "wheelchair-move-left",
+          "channel_count": 9,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "wheelchair-move-right",
+          "channel_count": 9,
+          "duration_seconds": 0.5
+        }
+      ]
+    },
+    {
+      "id": "food-kit/carton",
+      "retained_path": "source/food-kit/original/carton.glb",
+      "sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04",
+      "asset": {
+        "generator": "UnityGLTF",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "carton"
+        }
+      ],
+      "meshes": [
+        {
+          "name": "carton",
+          "primitives": [
+            {
+              "material": 0,
+              "position_accessor": {
+                "bufferView": 0,
+                "componentType": 5126,
+                "count": 152,
+                "type": "VEC3",
+                "max": [
+                  0.11500000208616257,
+                  0.5905462503433228,
+                  0.11500000208616257
+                ],
+                "min": [
+                  -0.11500000208616257,
+                  0,
+                  -0.11500000208616257
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "uri": "Textures/colormap.png",
+          "name": "colormap"
+        }
+      ],
+      "skins": [],
+      "animations": []
+    },
+    {
+      "id": "food-kit/apple",
+      "retained_path": "source/food-kit/original/apple.glb",
+      "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526",
+      "asset": {
+        "generator": "UnityGLTF",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "apple"
+        }
+      ],
+      "meshes": [
+        {
+          "name": "apple",
+          "primitives": [
+            {
+              "material": 0,
+              "position_accessor": {
+                "bufferView": 0,
+                "componentType": 5126,
+                "count": 252,
+                "type": "VEC3",
+                "max": [
+                  0.09814728051424026,
+                  0.19075341522693634,
+                  0.09814728051424026
+                ],
+                "min": [
+                  -0.09814728051424026,
+                  0,
+                  -0.09814728051424026
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "uri": "Textures/colormap.png",
+          "name": "colormap"
+        }
+      ],
+      "skins": [],
+      "animations": []
+    }
+  ],
+  "available_animations": {
+    "station_floor_carton_apple": [],
+    "employee_and_shopper": [
+      {
+        "model": "mini-market/character-employee",
+        "animations": [
+          {
+            "name": "static",
+            "channel_count": 21,
+            "duration_seconds": 0.10000000149011612
+          },
+          {
+            "name": "idle",
+            "channel_count": 4,
+            "duration_seconds": 1.3333333730697632
+          },
+          {
+            "name": "walk",
+            "channel_count": 7,
+            "duration_seconds": 0.6666666865348816
+          },
+          {
+            "name": "sprint",
+            "channel_count": 7,
+            "duration_seconds": 0.5
+          },
+          {
+            "name": "jump",
+            "channel_count": 7,
+            "duration_seconds": 0.5
+          },
+          {
+            "name": "fall",
+            "channel_count": 5,
+            "duration_seconds": 0.3333333432674408
+          },
+          {
+            "name": "crouch",
+            "channel_count": 8,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "sit",
+            "channel_count": 5,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "drive",
+            "channel_count": 5,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "die",
+            "channel_count": 8,
+            "duration_seconds": 0.3333333432674408
+          },
+          {
+            "name": "pick-up",
+            "channel_count": 4,
+            "duration_seconds": 0.3333333432674408
+          },
+          {
+            "name": "emote-yes",
+            "channel_count": 4,
+            "duration_seconds": 0.6666666865348816
+          },
+          {
+            "name": "emote-no",
+            "channel_count": 4,
+            "duration_seconds": 0.6666666865348816
+          },
+          {
+            "name": "holding-right",
+            "channel_count": 2,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "holding-left",
+            "channel_count": 2,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "holding-both",
+            "channel_count": 2,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "holding-right-shoot",
+            "channel_count": 4,
+            "duration_seconds": 0.20000000298023224
+          },
+          {
+            "name": "holding-left-shoot",
+            "channel_count": 4,
+            "duration_seconds": 0.20000000298023224
+          },
+          {
+            "name": "holding-both-shoot",
+            "channel_count": 4,
+            "duration_seconds": 0.20000000298023224
+          },
+          {
+            "name": "attack-melee-right",
+            "channel_count": 7,
+            "duration_seconds": 0.4166666567325592
+          },
+          {
+            "name": "attack-melee-left",
+            "channel_count": 7,
+            "duration_seconds": 0.4166666567325592
+          },
+          {
+            "name": "attack-kick-right",
+            "channel_count": 7,
+            "duration_seconds": 0.5333333611488342
+          },
+          {
+            "name": "attack-kick-left",
+            "channel_count": 7,
+            "duration_seconds": 0.5333333611488342
+          },
+          {
+            "name": "interact-right",
+            "channel_count": 4,
+            "duration_seconds": 0.6666666865348816
+          },
+          {
+            "name": "interact-left",
+            "channel_count": 4,
+            "duration_seconds": 0.6666666865348816
+          },
+          {
+            "name": "wheelchair-sit",
+            "channel_count": 7,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "wheelchair-look-left",
+            "channel_count": 9,
+            "duration_seconds": 0.3333333432674408
+          },
+          {
+            "name": "wheelchair-look-right",
+            "channel_count": 9,
+            "duration_seconds": 0.3333333432674408
+          },
+          {
+            "name": "wheelchair-move-forward",
+            "channel_count": 9,
+            "duration_seconds": 0.5
+          },
+          {
+            "name": "wheelchair-move-back",
+            "channel_count": 9,
+            "duration_seconds": 0.5
+          },
+          {
+            "name": "wheelchair-move-left",
+            "channel_count": 9,
+            "duration_seconds": 0.5
+          },
+          {
+            "name": "wheelchair-move-right",
+            "channel_count": 9,
+            "duration_seconds": 0.5
+          }
+        ],
+        "inspection_status": "Clip names and durations verified from GLB metadata. Supplied static previews inspected; native pose inspection has not run."
+      },
+      {
+        "model": "mini-characters/character-female-b",
+        "animations": [
+          {
+            "name": "static",
+            "channel_count": 21,
+            "duration_seconds": 0.10000000149011612
+          },
+          {
+            "name": "idle",
+            "channel_count": 4,
+            "duration_seconds": 1.3333333730697632
+          },
+          {
+            "name": "walk",
+            "channel_count": 7,
+            "duration_seconds": 0.6666666865348816
+          },
+          {
+            "name": "sprint",
+            "channel_count": 7,
+            "duration_seconds": 0.5
+          },
+          {
+            "name": "jump",
+            "channel_count": 7,
+            "duration_seconds": 0.5
+          },
+          {
+            "name": "fall",
+            "channel_count": 5,
+            "duration_seconds": 0.3333333432674408
+          },
+          {
+            "name": "crouch",
+            "channel_count": 8,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "sit",
+            "channel_count": 5,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "drive",
+            "channel_count": 5,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "die",
+            "channel_count": 8,
+            "duration_seconds": 0.3333333432674408
+          },
+          {
+            "name": "pick-up",
+            "channel_count": 4,
+            "duration_seconds": 0.3333333432674408
+          },
+          {
+            "name": "emote-yes",
+            "channel_count": 4,
+            "duration_seconds": 0.6666666865348816
+          },
+          {
+            "name": "emote-no",
+            "channel_count": 4,
+            "duration_seconds": 0.6666666865348816
+          },
+          {
+            "name": "holding-right",
+            "channel_count": 2,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "holding-left",
+            "channel_count": 2,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "holding-both",
+            "channel_count": 2,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "holding-right-shoot",
+            "channel_count": 4,
+            "duration_seconds": 0.20000000298023224
+          },
+          {
+            "name": "holding-left-shoot",
+            "channel_count": 4,
+            "duration_seconds": 0.20000000298023224
+          },
+          {
+            "name": "holding-both-shoot",
+            "channel_count": 4,
+            "duration_seconds": 0.20000000298023224
+          },
+          {
+            "name": "attack-melee-right",
+            "channel_count": 7,
+            "duration_seconds": 0.4166666567325592
+          },
+          {
+            "name": "attack-melee-left",
+            "channel_count": 7,
+            "duration_seconds": 0.4166666567325592
+          },
+          {
+            "name": "attack-kick-right",
+            "channel_count": 7,
+            "duration_seconds": 0.5333333611488342
+          },
+          {
+            "name": "attack-kick-left",
+            "channel_count": 7,
+            "duration_seconds": 0.5333333611488342
+          },
+          {
+            "name": "interact-right",
+            "channel_count": 4,
+            "duration_seconds": 0.6666666865348816
+          },
+          {
+            "name": "interact-left",
+            "channel_count": 4,
+            "duration_seconds": 0.6666666865348816
+          },
+          {
+            "name": "wheelchair-sit",
+            "channel_count": 7,
+            "duration_seconds": 0.1666666716337204
+          },
+          {
+            "name": "wheelchair-look-left",
+            "channel_count": 9,
+            "duration_seconds": 0.3333333432674408
+          },
+          {
+            "name": "wheelchair-look-right",
+            "channel_count": 9,
+            "duration_seconds": 0.3333333432674408
+          },
+          {
+            "name": "wheelchair-move-forward",
+            "channel_count": 9,
+            "duration_seconds": 0.5
+          },
+          {
+            "name": "wheelchair-move-back",
+            "channel_count": 9,
+            "duration_seconds": 0.5
+          },
+          {
+            "name": "wheelchair-move-left",
+            "channel_count": 9,
+            "duration_seconds": 0.5
+          },
+          {
+            "name": "wheelchair-move-right",
+            "channel_count": 9,
+            "duration_seconds": 0.5
+          }
+        ],
+        "inspection_status": "Clip names and durations verified from GLB metadata. Supplied static previews inspected; native pose inspection has not run."
+      }
+    ]
+  },
+  "preview_findings": [
+    "Existing native cash-register source views show a complete pale checkout station with a dark goods belt and a terminal/display. This previously failed the isolated physical-key cash-register brief, but supplies the correct complete station for the payment-area sense.",
+    "Mini Market employee source preview shows a green-and-white retail uniform and a friendly neutral face. Mini Characters character-female-b preview shows a casual yellow top, purple lower clothing and orange hair, visually distinct from the staff uniform.",
+    "Food Kit carton and apple supplied previews show recognizable generic groceries, with no readable brand or payment information. Their original colormap materials will be retained.",
+    "Mini Market supplied floor preview is a pale tiled surface. A complete 2-by-2 floor assembly may establish shared customer/staff space, but it must not reduce checkout recognition at real card sizes."
+  ],
+  "earlier_station_inspection": {
+    "path": "build/professional-english/retail-term-art-review/cash-register/source-inspection",
+    "reviewed_views": [
+      "front-three-quarter.png",
+      "rear-three-quarter.png"
+    ],
+    "source_sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+    "reuse_scope": "Read-only source evidence. Preserve the prior rejected-source outcome for the separate cash-register sense."
+  },
+  "acquisition_required": false,
+  "source_previews_are_term_artwork": false,
+  "production_integration": false,
+  "preservation": "Complete original GLBs, all source child nodes, original skins, materials and external colormap textures are retained. Only complete-model root translation, yaw and uniform scale are planned. A named included character animation may be sampled for a still; no manual skeleton or mesh changes."
+}

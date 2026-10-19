@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_root_guard_wrapper_source_review",
+  "reviewer": "Codex runtime_recovery",
+  "source_accepted": true,
+  "exact_commit_contract_accepted": false,
+  "files": [
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-source-review.json",
+      "bytes": 4518,
+      "sha256": "24fda5acf522c3503ed5011135be5d320632afa8b2b289afde2fe9c79796e29d"
+    }
+  ],
+  "prior_inventory": {
+    "path": "build/professional-english/shopping-bag-commit-independent-review-r01/inventory.json",
+    "bytes": 919,
+    "sha256": "f99e091e7ece2a899df31fd6e50ef5b79054d678cc9849d01a516f4ed554c2d5"
+  }
+}

@@ -1,0 +1,1207 @@
+{
+  "schema": 1,
+  "status": "static_inspection_complete_source_findings_separate",
+  "checks": [
+    {
+      "label": "Frozen r02 inventory SHA256",
+      "passed": true
+    },
+    {
+      "label": "Thirteen frozen source members",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/BINDING-CONTRACT.md",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/CALL-GRAPH.md",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/README.md",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/accepted-contract.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/actual-baseline-binding.template.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/author-observations.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/binding.cjs",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/context-contract.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/donor-row-contract.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/prepare.cjs",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/projection.cjs",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/root-input.template.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fifth10-delivery-preparation-r02/test-transforms.cjs",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/proposal.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/context-preservation.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/history-preservation.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/evidence-pins.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/static-observations.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/HANDOFF.md",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/README.md",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/capture-start.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/capture.cjs",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/input-audit.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/inspection.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/review.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/source-review.json",
+      "passed": true
+    },
+    {
+      "label": "Eight accepted projections",
+      "passed": true
+    },
+    {
+      "label": "Sixteen complete sources match durable proposal",
+      "passed": true
+    },
+    {
+      "label": "Accepted metadata decisions match durable independent review",
+      "passed": true
+    },
+    {
+      "label": "Literal source observations match durable independent review",
+      "passed": true
+    },
+    {
+      "label": "Context copy byte-identical to durable accepted proposal",
+      "passed": true
+    },
+    {
+      "label": "Six exact whole-entry holds",
+      "passed": true
+    },
+    {
+      "label": "Exact accepted before and after: broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Independent accepted after hash: broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact forms, regions, modes, morphology and media: broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Two references and original prefix: broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact accepted before and after: urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Independent accepted after hash: urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact forms, regions, modes, morphology and media: urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Two references and original prefix: urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact accepted before and after: unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Independent accepted after hash: unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact forms, regions, modes, morphology and media: unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Two references and original prefix: unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact accepted before and after: safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Independent accepted after hash: safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact forms, regions, modes, morphology and media: safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Two references and original prefix: safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact accepted before and after: incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Independent accepted after hash: incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Exact forms, regions, modes, morphology and media: incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Two references and original prefix: incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Exact accepted before and after: concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Independent accepted after hash: concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Exact forms, regions, modes, morphology and media: concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Two references and original prefix: concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Exact accepted before and after: solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Independent accepted after hash: solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Exact forms, regions, modes, morphology and media: solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Two references and original prefix: solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Exact accepted before and after: procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Independent accepted after hash: procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Exact forms, regions, modes, morphology and media: procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Two references and original prefix: procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Exact four-definition, one-example, five-difficulty delta",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-oxford-broken",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-collins-broken",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-oxford-urgent",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-collins-urgent",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-oxford-unclear",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-collins-unclear",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-oxford-safe",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-collins-safe",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-oxford-incident",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-collins-incident",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-oxford-concern",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-collins-concern",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-oxford-solution",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-collins-solution",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-oxford-procedure",
+      "passed": true
+    },
+    {
+      "label": "Consulted-only source: foundation02-language-fifth10-collins-procedure",
+      "passed": true
+    },
+    {
+      "label": "Complete context count: selected_memberships",
+      "passed": true
+    },
+    {
+      "label": "Complete context count: containing_modules",
+      "passed": true
+    },
+    {
+      "label": "Complete context count: containing_module_expressions",
+      "passed": true
+    },
+    {
+      "label": "Complete context count: expression_uses",
+      "passed": true
+    },
+    {
+      "label": "Complete context count: derivative_expression_uses",
+      "passed": true
+    },
+    {
+      "label": "Complete context count: focus_expressions",
+      "passed": true
+    },
+    {
+      "label": "Complete context count: related_entry_boundaries",
+      "passed": true
+    },
+    {
+      "label": "Complete context count: inherited_expression_holds",
+      "passed": true
+    },
+    {
+      "label": "Complete context count: additional_foundation02_preservation",
+      "passed": true
+    },
+    {
+      "label": "Bag excluded from fixed related context",
+      "passed": true
+    },
+    {
+      "label": "Fifty complete donor rows and groups",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/unsafe.presenting-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/unsafe.presenting-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/hazard.possible-harm.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/hazard.possible-harm.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json/procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/unsafe.presenting-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/unsafe.presenting-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/hazard.possible-harm.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/hazard.possible-harm.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json/procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/unsafe.presenting-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/unsafe.presenting-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/hazard.possible-harm.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/hazard.possible-harm.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json/procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/unsafe.presenting-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/unsafe.presenting-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/hazard.possible-harm.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/hazard.possible-harm.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json/procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/broken.not-working.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/urgent.needing-prompt-attention.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/unclear.not-understandable.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/safe.free-from-unacceptable-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/unsafe.presenting-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/unsafe.presenting-danger.adj",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/hazard.possible-harm.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/hazard.possible-harm.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/incident.workplace-event.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/concern.worrying-matter.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/solution.problem-answer.n",
+      "passed": true
+    },
+    {
+      "label": "Whole donor row and original index: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Exact donor multiplicity one: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json/procedure.agreed-method.n",
+      "passed": true
+    },
+    {
+      "label": "Thirty-nine evidence and history pins",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/HANDOFF.md",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assemble-evidence.cjs",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assembly-result.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assembly-start.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/baseline.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/candidate-ledger.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-completion.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-observations.cjs",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-start.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/collect-html-metadata.cjs",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/collection-start.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/context-screen.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/original-foundation-module02.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/oxford-html-metadata.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/research-notes.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/source-index.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/inventory.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/root-copy-receipt.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/README.md",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assemble-independent-review.cjs",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assembly-result.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assembly-start.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/context-review.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/input-audit.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/review-ledger.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/source-observations.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/inventory.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/root-copy-receipt.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/foundation-module02.json.after",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/sources.json.after",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/accepted-language.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fourth10-prepared-output-review-r02/binding.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: build/professional-english/foundation02-fourth10-prepared-output-review-r02/review.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "passed": true
+    },
+    {
+      "label": "Raw pin: data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: lexical boundary",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: source boundary",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: lexical boundary",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: source boundary",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: accepted IDs",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: live count",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: fourth suffix",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: fourth other lexemes",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: fourth counts",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: fourth module count",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: fourth audit",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: third negative",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: fourth negative",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: fifth helper insertion",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: bag other-lexeme history",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: bag source history",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: new runner call",
+      "passed": true
+    },
+    {
+      "label": "Literal design anchor: native chronological boundary",
+      "passed": true
+    },
+    {
+      "label": "Strict bag helper present: professional-content.test.cjs.after",
+      "passed": true
+    },
+    {
+      "label": "Strict bag helper present: professional-retail-morphology.test.cjs.after",
+      "passed": true
+    },
+    {
+      "label": "Strict bag helper present: professional-retail-media.test.cjs.after",
+      "passed": true
+    },
+    {
+      "label": "Transform preserves exact bag helper bytes",
+      "passed": true
+    }
+  ],
+  "checks_passed": 261,
+  "checks_failed": 0,
+  "anchors": [
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "lexical boundary",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "source boundary",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.after",
+      "name": "lexical boundary",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.after",
+      "name": "source boundary",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "accepted IDs",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "live count",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "fourth suffix",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "fourth other lexemes",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "fourth counts",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "fourth module count",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "fourth audit",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "third negative",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "name": "fourth negative",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-media.test.cjs.after",
+      "name": "fifth helper insertion",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-media.test.cjs.after",
+      "name": "bag other-lexeme history",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-media.test.cjs.after",
+      "name": "bag source history",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "tests/godot/professional_retail_morphology_tests.gd",
+      "name": "new runner call",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    },
+    {
+      "source": "tests/godot/professional_retail_morphology_tests.gd",
+      "name": "native chronological boundary",
+      "occurrences": 1,
+      "method": "Raw literal search; no transformation executed",
+      "actual_post_bag_binding": false
+    }
+  ],
+  "bag_helpers": [
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "helper_sha256": "ee8bd68b413651e52856b0e4e850d6d927fc98fd7a606e9c793d1d72da73bffe",
+      "source_only": true
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.after",
+      "helper_sha256": "ee8bd68b413651e52856b0e4e850d6d927fc98fd7a606e9c793d1d72da73bffe",
+      "source_only": true
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-media.test.cjs.after",
+      "helper_sha256": "ee8bd68b413651e52856b0e4e850d6d927fc98fd7a606e9c793d1d72da73bffe",
+      "source_only": true
+    }
+  ],
+  "content_delta": {
+    "definition": 4,
+    "example": 1,
+    "difficulty": 5
+  },
+  "source_modules_imported": false,
+  "project_or_proposal_code_executed": false,
+  "syntax_tests_native_or_transform_executed": false,
+  "final_binding_prepared": false,
+  "production_mutated": false
+}

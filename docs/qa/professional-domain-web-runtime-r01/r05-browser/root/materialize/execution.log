@@ -1,0 +1,8 @@
+{
+  "ok": true,
+  "receipt": {
+    "path": "attempt-001/shell-supplement.json",
+    "bytes": 4302,
+    "sha256": "be4fd060e55388d2590d7c077ac6800c221e8d6eb308ab550972fd9eae55b06a"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "status": "syntax_passed",
+  "dispatcher": "/root",
+  "commands": [
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/run.cjs",
+        "bytes": 11683,
+        "raw_sha256": "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80"
+      },
+      "args": [
+        "--check",
+        "build/professional-english/foundation02-fifth10-projected-validation-r02/run.cjs"
+      ],
+      "exit_code": 0,
+      "error": null,
+      "signal": null
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/run.cjs",
+        "bytes": 23431,
+        "raw_sha256": "0359ced35e82254e9e09f95bd5ca8b10748e8d4a6c482ed9d992c5e3fb6ed33d"
+      },
+      "args": [
+        "--check",
+        "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/run.cjs"
+      ],
+      "exit_code": 0,
+      "error": null,
+      "signal": null
+    }
+  ],
+  "project_tests_executed": false,
+  "native_executed": false
+}

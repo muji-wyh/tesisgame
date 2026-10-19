@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "status": "scratch_fault_injection_passed",
+  "recorded_at": "2026-10-16T08:37:48.546Z",
+  "exit_status": 0,
+  "signal": null,
+  "error": null,
+  "duration_ms": 12292,
+  "tests": 20,
+  "pass": 20,
+  "fail": 0,
+  "cancelled": 0,
+  "skipped": 0,
+  "production_registry_before_sha256": "d1caec76221920c17e1ba8fb14cb612fb9102e89ba2302610255b8b6e9e163bb",
+  "production_registry_after_sha256": "d1caec76221920c17e1ba8fb14cb612fb9102e89ba2302610255b8b6e9e163bb",
+  "production_mutated": false,
+  "native_executed": false,
+  "source_raw_sha256_before": {
+    "guarded-transaction.cjs": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "guarded-transaction.test.cjs": "24d41c1b0d41013beb48990deff0abf7bbb829fe0149c6148f751e0b69133d64",
+    "transaction-child.cjs": "c8ef577457eb0535380b4454774ebdfe34da95a545412aa0c9e3dbc62a9f477f",
+    "run-fault-tests.cjs": "b9b981bfd1d972b1e86c5da88dab3de0dc90c3d4b010d86b774eae4740d26ee9"
+  },
+  "source_raw_sha256_after": {
+    "guarded-transaction.cjs": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "guarded-transaction.test.cjs": "24d41c1b0d41013beb48990deff0abf7bbb829fe0149c6148f751e0b69133d64",
+    "transaction-child.cjs": "c8ef577457eb0535380b4454774ebdfe34da95a545412aa0c9e3dbc62a9f477f",
+    "run-fault-tests.cjs": "b9b981bfd1d972b1e86c5da88dab3de0dc90c3d4b010d86b774eae4740d26ee9"
+  },
+  "log_raw_sha256": "df7bc9412cad6618832c815a3759439a0b0b5f666cb4a5d5baa994fe5d2e3229",
+  "fixture_directory": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/test-runs/validation-attempt-XE9O6l"
+}

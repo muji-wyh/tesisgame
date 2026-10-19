@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_helper_source_acceptance",
+  "reviewer": "/root/morph_review",
+  "source_inventory_raw_sha256": "b52fea9c2181064d024d35a05f599ad3b24897e2402927031f13e449e5a10993",
+  "files": [
+    {
+      "path": "inspect-source.cjs",
+      "bytes": 14792,
+      "raw_sha256": "c20aad550e93b01fd4ca3a80497826866c5f78532f8042fd44258bca72d3f0d9"
+    },
+    {
+      "path": "inspection-r01/inputs.json",
+      "bytes": 45090,
+      "raw_sha256": "8de01532b7be5da42db7874298968e6c4b656d823f4c5c2d89f6a904dbe62721"
+    },
+    {
+      "path": "inspection-r01/inspection.json",
+      "bytes": 288928,
+      "raw_sha256": "f63deda7bb90c8f9f109bd416c2d256f5ad7bf42f05b0c6fc748e84329b245bc"
+    },
+    {
+      "path": "inspection-r01/start.json",
+      "bytes": 177,
+      "raw_sha256": "533d768eb43f30207e874008631fe68630cba03c1ce75c69e10a733223882bdf"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1604,
+      "raw_sha256": "198e3a03651c7c4cff4ea5c80ba75dc671b23da97cbdb451830e200ee20bdb21"
+    },
+    {
+      "path": "review.json",
+      "bytes": 8919,
+      "raw_sha256": "43173b9061e326e27a60e87d54f5d0c72527b14e70c6df6c490a456f0eb53c78"
+    }
+  ],
+  "helper_execution_accepted": true,
+  "actual_binding_accepted": false,
+  "preparation_execution_accepted": false,
+  "inventory_self_excluded": true
+}

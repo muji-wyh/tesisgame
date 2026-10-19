@@ -1,0 +1,200 @@
+{
+  "schema": 1,
+  "status": "raw_source_and_schema_inspection_pins",
+  "files": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/prepare.cjs",
+      "bytes": 7472,
+      "raw_sha256": "0d736bb531a7ab9dbe767e78015881a5d994f057958bd1b53ad17a28bc97fcf1"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/test-transforms.cjs",
+      "bytes": 27566,
+      "raw_sha256": "e2812802f2146bfe63fcb346db6ee49c2dc1523176d1d28ce03255d34deafd37"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r01/input.template.json",
+      "bytes": 595,
+      "raw_sha256": "d7ab762c3cad3fe2f0e734610f3a56a88f694ec3f022cef16a0b208f2e2af2ec"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r01/README.md",
+      "bytes": 1946,
+      "raw_sha256": "3943496f22cfaf558c849ecd3e9a81b8479c71403e390c633475209e23e0507b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r01/run.cjs",
+      "bytes": 10884,
+      "raw_sha256": "1e0002f9c9afa0bb95607e4e4d37ea725c0b46092fba445c72a79b007cdb0a9c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r01/source-inventory.json",
+      "bytes": 647,
+      "raw_sha256": "7c8cac3503731eb7b51902d2b3f6460c5a191808446b43018e088433439eab5a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/input.template.json",
+      "bytes": 595,
+      "raw_sha256": "d7ab762c3cad3fe2f0e734610f3a56a88f694ec3f022cef16a0b208f2e2af2ec"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/README.md",
+      "bytes": 2487,
+      "raw_sha256": "62a47b4c5b689ce413d565b39522d178f8246a5ef86cd9086f36c4836821e53a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/revision-lineage.json",
+      "bytes": 2795,
+      "raw_sha256": "cab73e0d6473a36fbd06918ec6cd542948625348d28b5db3cdd0c3d6b9f4b52a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/run.cjs",
+      "bytes": 11683,
+      "raw_sha256": "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/source-inventory.json",
+      "bytes": 807,
+      "raw_sha256": "a7a14add7f19e7240c2561cec604212cd00718c5b986b24614502fc20401c374"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r01/inputs.json",
+      "bytes": 2674,
+      "raw_sha256": "7bf780ede00ebb06665498f1c9869fb7ee7210a083d82df4e790c61646f423d6"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r01/inspection.json",
+      "bytes": 3776,
+      "raw_sha256": "2426be07bcb2b3322f7bd240a01c28a234e6d40b0f8e2cb1a7eea6241268db62"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r01/inventory.json",
+      "bytes": 1096,
+      "raw_sha256": "95994b1e8fef7e90ae42bb634c00cf8ddabfb2d7e2da6688d671097376d9be8a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r01/README.md",
+      "bytes": 1661,
+      "raw_sha256": "047c367fb38dfca7c7c53deabf0e3bb57bf9e01863287220feb8bd789956253a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r01/review.json",
+      "bytes": 7200,
+      "raw_sha256": "06f07e21d517918330785ab226f1d94a68c5ba7594bab64f58a9ce06bfc44da1"
+    },
+    {
+      "path": "data/professional/schemas/catalog.schema.json",
+      "bytes": 3206,
+      "raw_sha256": "390ab594b41ef8955d13448882c9732ea0d7ab3841f4d51ec8720a8df5794ac5"
+    },
+    {
+      "path": "data/professional/schemas/common.schema.json",
+      "bytes": 12377,
+      "raw_sha256": "4d27b5255e854f57be7a1778bc3aec6c467d0777c44f79ec8219ae617f6c8113"
+    },
+    {
+      "path": "data/professional/schemas/course.schema.json",
+      "bytes": 3688,
+      "raw_sha256": "4ffebf8bd5fb635eb6db15a70f85a203588dbff3b796cc1e6953aae5459aa24a"
+    },
+    {
+      "path": "data/professional/schemas/expression.schema.json",
+      "bytes": 1950,
+      "raw_sha256": "0b4ecce1acb728ff044732244a4410424473a42c84d53e9a794d8dbadbeef03a"
+    },
+    {
+      "path": "data/professional/schemas/learning-context.schema.json",
+      "bytes": 703,
+      "raw_sha256": "466af7a175c3b349d41c982a2c61bf4e0028601c67b8ca926f4aa2677be8b1d4"
+    },
+    {
+      "path": "data/professional/schemas/lexeme.schema.json",
+      "bytes": 2276,
+      "raw_sha256": "8837fa8779894d7b0d67e9e46d97aefdd7e952b476715df436db03ead4b4ff60"
+    },
+    {
+      "path": "data/professional/schemas/morphology.schema.json",
+      "bytes": 3928,
+      "raw_sha256": "5248a5e3fbbbcc70b63dbb13072f6ae0148a6ba2871eb9e44739bb94f4bbda6c"
+    },
+    {
+      "path": "data/professional/schemas/theme.schema.json",
+      "bytes": 4798,
+      "raw_sha256": "03202db37b6e6b8b1dea3a2058b646807c9da5630fe0e4cba8b40896966aa77f"
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "bytes": 347272,
+      "raw_sha256": "0519ea34d948fa75bddc1e29cbfc70f97e7667a4495a947719fbd9ac36cabe28"
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "bytes": 52548,
+      "raw_sha256": "6a278d2dd88941a51e2b4b401af8e21893156c72fcb40a8e05ea7dd63e6e8ef7"
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "bytes": 89132,
+      "raw_sha256": "8280c7159fc3852cc9c5c80c6a17f0b3963ad8e66f5803adbcabe3d798702a29"
+    },
+    {
+      "path": "tools/professional-picture-pools.cjs",
+      "bytes": 3496,
+      "raw_sha256": "ca37e39c0987fb4d2738fec4b951bc2646464c36aa8acd9827173542e08e3629"
+    },
+    {
+      "path": "tools/validate-professional-content.cjs",
+      "bytes": 31243,
+      "raw_sha256": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd"
+    },
+    {
+      "path": "tools/validate-theme-motion.cjs",
+      "bytes": 2288,
+      "raw_sha256": "bb2a9c07829a3b60616c663662875ba0cdbdf6af9fe9b607517ebf89ff721b04"
+    },
+    {
+      "path": "web/professional-media.js",
+      "bytes": 11851,
+      "raw_sha256": "db9ac8f3aeaaafb8f1ac411a56d56f0bfd6d8ad2862348868d42666d3021630a"
+    }
+  ],
+  "directories": [
+    {
+      "path": "data/professional/schemas",
+      "entries": [
+        {
+          "name": "catalog.schema.json",
+          "type": "regular_file"
+        },
+        {
+          "name": "common.schema.json",
+          "type": "regular_file"
+        },
+        {
+          "name": "course.schema.json",
+          "type": "regular_file"
+        },
+        {
+          "name": "expression.schema.json",
+          "type": "regular_file"
+        },
+        {
+          "name": "learning-context.schema.json",
+          "type": "regular_file"
+        },
+        {
+          "name": "lexeme.schema.json",
+          "type": "regular_file"
+        },
+        {
+          "name": "morphology.schema.json",
+          "type": "regular_file"
+        },
+        {
+          "name": "theme.schema.json",
+          "type": "regular_file"
+        }
+      ]
+    }
+  ]
+}

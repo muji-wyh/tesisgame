@@ -1,0 +1,45 @@
+{
+  "id": "display-pedestal",
+  "folder": "innerscene-display-pedestal",
+  "theme": "sales-marketing",
+  "source_url": "https://www.innerscene.com/tools/library/3d-parts/canted-display-pedestal-display-plinth-22ced290",
+  "download_url": "https://www.innerscene.com/api/library/canted-display-pedestal-display-plinth-22ced290/download",
+  "creator": "Innerscene",
+  "acquired_on": "2026-10-16",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "terms_url": "https://www.innerscene.com/tools/library/terms",
+  "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+  "filename": "display-pedestal.glb",
+  "bytes": 99296,
+  "sha256": "7af772939927ea1a4015187ccadd4c6e378ae237c9b6650ecf83c4ef1e3cccc7",
+  "acquisition_status": "downloaded_from_original_source_for_review",
+  "integration_status": "retained_for_reviewed_static_home_composition",
+  "review_status": "actual_source_front_and_rear_views_inspected",
+  "mesh_count": 3,
+  "triangle_count": 788,
+  "material_count": 2,
+  "image_count": 3,
+  "available_animations": [],
+  "skin_count": 0,
+  "external_dependencies": [],
+  "node_names": [
+    "Canted solid gallery pedestal",
+    "Display cap",
+    "Recessed bottom plinth",
+    "Canted display pedestal"
+  ],
+  "asset_metadata": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0"
+  },
+  "visual_review": {
+    "reviewer": "finish_difficulty",
+    "reviewed_on": "2026-10-16",
+    "basis": "Saved Godot front/rear source renders at 296 x 185, displayed without scaling in source-review-sheet-1.png through source-review-sheet-3.png.",
+    "notes": "The saved views show the original canted dark plinth and its flat product-support surface.",
+    "scope": "Source geometry and material inspection only. No composition, Home integration, animation, or full-theme approval."
+  },
+  "source_review": "build/professional-english/remaining-theme-review/source-visual-review.json",
+  "composition_review": "build/professional-english/remaining-theme-review/composition-visual-review.json"
+}

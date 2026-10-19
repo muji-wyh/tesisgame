@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-16",
+  "status": "one_basket_candidate_pending_independent_root_review",
+  "candidate_sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+  "source_files": [
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shopping-basket.glb",
+      "sha256": "a7704926cb56c5a9ab74488230fc7c4d7b914387c59e9c1b6f62376965c0ea7d",
+      "bytes": 25864
+    },
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/Textures/colormap.png",
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+      "bytes": 8706
+    },
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/License.txt",
+      "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+      "bytes": 767
+    }
+  ],
+  "original_brief_preserved": true,
+  "production_changes": false,
+  "checks": 32,
+  "failures": 0,
+  "evidence": [
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/actual-word-card-contact-3x.png",
+      "sha256": "9fcd4d513c3f4b3a9cf7fb187ae0e26ac527d07a3d6b972116bbb24e89ebcc37",
+      "bytes": 71216
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/actual-word-card-contact.png",
+      "sha256": "fa56ff23bcd34bc2c8596da0c660808ec17945d9d26f26195c6ada9f78a6969b",
+      "bytes": 51030
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/cart-basket-confusability-contact-3x.png",
+      "sha256": "7cf566e6e35faa4741571cfeeb44157fecb5ecca6afc0c3be12fdc5bbba20321",
+      "bytes": 98858
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/cart-basket-confusability-contact.png",
+      "sha256": "4c2c31cd6f29eaea32334b3bf5a9cb4db12b076e86b41711796f0ce82cfddc5a",
+      "bytes": 70585
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/match-matched.png",
+      "sha256": "564c443bcd54dd9b1c212b827f38f82b56d09d24285d9d44fc16bb73ce16e9c0",
+      "bytes": 5408
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/match-unmatched.png",
+      "sha256": "fc39c372a23a33e1c2663e503ed20fb055e093f1c834d255706df6bfb9deb83b",
+      "bytes": 4825
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/memory-matched.png",
+      "sha256": "07f2bfdbd992edb09b25f2881b4b76046520e922caea3202e48ddefc0ea8128b",
+      "bytes": 5035
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/memory-unmatched.png",
+      "sha256": "9aad34703dd9102b8bb27e937ebaba3c630c5b4f7e44914b0cc53f32994505cd",
+      "bytes": 4699
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/render-raw.png",
+      "sha256": "b3ebc28219fd2e37e963865e4090d22cc67c5242948e4840d90fd32bcbdf79fc",
+      "bytes": 29070
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/render.log",
+      "sha256": "76fb740d6a183cc195f35b386e54bc94f8ed79eea8f5b7f754242b5529a152df",
+      "bytes": 372
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/report.json",
+      "sha256": "e936d5be3c9a811b3a15778b8b85f2a79b773cb10d241502682402ee3483d5ea",
+      "bytes": 5316
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/shopping-basket.png",
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "bytes": 105604
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/review-proposal.json",
+      "sha256": "2fc70d1d71710dbba65552de51712c83c31f754f0889173e2cc15435bdaa43a4",
+      "bytes": 8963
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/front-low.png",
+      "sha256": "4b21918525b429f469510cdfa6c37c325ba64c62ca3c95a6dc4824dfe5a0dd5e",
+      "bytes": 22332
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/front-three-quarter.png",
+      "sha256": "d4acb44ab82d683aa1a1818a96867ac23a80e7deb720fd5c0f4cc7ba5bbf216a",
+      "bytes": 27503
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/other-side.png",
+      "sha256": "52ee26618daee5574a4c87012409b3bf0daf7a8964547aa8e4b39781f3c12058",
+      "bytes": 32474
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/rear-three-quarter.png",
+      "sha256": "ab2911240d0b724d6a48ec39959b458f75f6e0f451a6ee27c1be579ffabf4654",
+      "bytes": 19836
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/render.log",
+      "sha256": "4dc518debd15a59aae85868e99eb24f07e4b6a5cb1d419b6869e0a79c80c725e",
+      "bytes": 376
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/report.json",
+      "sha256": "56b8c6fc93de6b9f5a21b89781b0a8b169a615370d14f170e84d41e6c7518920",
+      "bytes": 800
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/source-record.json",
+      "sha256": "5db0e3a11adf303bc116c6db0141e54fb734339541a7e5a4b3d8eefd7990e4c4",
+      "bytes": 3193
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/prepare-shopping-basket-inspection.cjs",
+      "sha256": "efb01086b29090eda59d59778dfda101fc941ab29fe3777baaa4dec60d245d21",
+      "bytes": 2654
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/inspect-shopping-basket.gd",
+      "sha256": "c439358e1b225c563210053c340d78aa5427b9bb1403d6241bc2a2a59c3e0dc6",
+      "bytes": 3426
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/render-shopping-basket-candidate.gd",
+      "sha256": "4ef572fc89670bcc4b78a0129e25a8d5f9bf34477e0cac054bed3720f622eccc",
+      "bytes": 11273
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/prepare-shopping-basket-review.cjs",
+      "sha256": "c7b6c97ab29f599c279c0820e5be7fd60498bad31877224feeb8a603e857f33f",
+      "bytes": 7912
+    }
+  ]
+}

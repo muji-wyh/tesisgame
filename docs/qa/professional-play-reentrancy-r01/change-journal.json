@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "created_at": "2026-10-16T14:11:02.262Z",
+  "root": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+  "scope": [
+    "scripts/professional_play.gd",
+    "tests/godot/professional_play_tests.gd"
+  ],
+  "status": "preimages_saved",
+  "native_runs": 0,
+  "files": [
+    {
+      "path": "scripts/professional_play.gd",
+      "bytes": 5977,
+      "sha256": "80d0f36bcf6f1c245faa981d194d824ccd64b9ab02ece75db716539348727d91",
+      "preimage": "build/professional-english/professional-play-reentrancy-r01/preimages/scripts/professional_play.gd"
+    },
+    {
+      "path": "tests/godot/professional_play_tests.gd",
+      "bytes": 2479,
+      "sha256": "62fdbbb8bc8325d182cc834c10dbe7390c1928e28a198e2f5a51d15c96ea06e8",
+      "preimage": "build/professional-english/professional-play-reentrancy-r01/preimages/tests/godot/professional_play_tests.gd"
+    }
+  ]
+}

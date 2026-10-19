@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "status": "fresh_reference_consultation_only_unaccepted",
+  "results": [
+    {
+      "id": "oxford-collect",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "started_at": "2026-10-16T21:13:52.234Z",
+      "completed_at": "2026-10-16T21:13:53.508Z",
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "http_status": 200,
+      "ok": true,
+      "response_bytes": 99227,
+      "response_sha256": "881db6904d891358f01fddf866492669df0083effe3d372f3eece9b09519d277",
+      "content_type": "text/html;charset=UTF-8",
+      "full_response_retained": false,
+      "selected_sense_tags": [
+        "<li class=\"sense\" sensenum=\"1\" id=\"collect_sng_2\" cefr=\"a2\" hclass=\"sense\" ox3000=\"y\" htag=\"li\">",
+        "<li class=\"sense\" sensenum=\"4\" cefr=\"b1\" id=\"collect_sng_6\" hclass=\"sense\" ox3000=\"y\" htag=\"li\">"
+      ],
+      "selected_metadata": [
+        {
+          "id": "collect_sng_2",
+          "cefr": "a2",
+          "fkcefr": null
+        },
+        {
+          "id": "collect_sng_6",
+          "cefr": "b1",
+          "fkcefr": null
+        }
+      ]
+    },
+    {
+      "id": "collins-collect",
+      "url": "https://www.collinsdictionary.com/dictionary/english/collect",
+      "started_at": "2026-10-16T21:13:52.398Z",
+      "completed_at": "2026-10-16T21:13:53.018Z",
+      "final_url": "https://www.collinsdictionary.com/dictionary/english/collect",
+      "http_status": 403,
+      "ok": false,
+      "response_bytes": 5533,
+      "response_sha256": "baa680e0f1fb8de2869d791563ea8504a6c3bed09a8a14a4649936a2a28d8ecc",
+      "content_type": "text/html; charset=UTF-8",
+      "full_response_retained": false
+    }
+  ],
+  "rendered_consultations": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "inspected": true,
+      "selected_sections": [
+        "bring together / sense 1",
+        "take away / sense 4"
+      ],
+      "unrelated_word_of_day_level_excluded": true
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/collect",
+      "inspected": true,
+      "selected_sections": [
+        "COBUILD sense 1 gathering: B1",
+        "COBUILD sense 3 pickup: A2, British / American preference for pick up",
+        "American English dictionary fetching sense"
+      ],
+      "body_not_retained": true
+    },
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/collect",
+      "inspected": false,
+      "outcome": "Web open returned Internal Error; no Cambridge sense or level claim."
+    }
+  ]
+}

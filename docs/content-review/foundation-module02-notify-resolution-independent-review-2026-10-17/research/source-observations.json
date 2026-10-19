@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "status": "fresh_author_consultation_only_unaccepted",
+  "date_local": "2026-10-17",
+  "rendered_pages": [
+    {
+      "id": "O-notify",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/notify",
+      "section": "Selected formal/official informing verb",
+      "observation": "Meaning and recipient constructions fit the existing draft. Fresh notify_sng_1 has fkcefr=c1. Formal register. The unrelated reasonably B2 footer is excluded.",
+      "selected_level": "C1"
+    },
+    {
+      "id": "C-notify",
+      "url": "https://www.collinsdictionary.com/dictionary/english/notify",
+      "section": "COBUILD verb, rendered selected entry",
+      "observation": "Official informing, formal register, recipient-of/about and recipient-that patterns. No selected CEFR level observed. The separate British announcement sense and automatically collected examples are excluded.",
+      "selected_level": null
+    },
+    {
+      "id": "O-inform",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/inform",
+      "section": "Giving-information verb sense 1, inform_sng_1",
+      "observation": "Giving information to someone, especially officially. Fresh selected tag cefr=b2 and selected topic B2. Recipient-of/about/that/if patterns support the proposed original example and phrase. Informing oneself, influencing something and inform on are separate; historical origins do not approve a teaching split.",
+      "selected_level": "B2"
+    },
+    {
+      "id": "C-inform",
+      "url": "https://www.collinsdictionary.com/dictionary/english/inform",
+      "section": "COBUILD verb sense 1, rendered lines 224-235",
+      "observation": "Selected giving-information verb explicitly B1+, with direct recipient, of-information and that-clause patterns. Separate reporting-on and influence/characterizing senses are not the candidate.",
+      "selected_level": "B1+"
+    },
+    {
+      "id": "O-LIST",
+      "url": "https://www.oxfordlearnersdictionaries.com/wordlists/oxford3000-5000?dataset=english&level=b2&list=ox3000",
+      "section": "Actual inform and notify headword/POS rows",
+      "observation": "Rendered inform verb row is B2 and notify verb row C1. The whole rendered list includes other levels despite the URL filters; no claim is derived from URL query parameters."
+    },
+    {
+      "id": "P-CSV",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "section": "Exact headword/POS row and full-file exact notify-verb search",
+      "observation": "Inform verb B1 at physical line 3499; no exact notify verb row. Profile evidence is headword/POS, not selected-sense certification. Absence is not proof of a higher level."
+    },
+    {
+      "id": "P-TERMS",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "section": "Terms of use and references",
+      "observation": "Research and commercial use without charge with proper citation for CEFR-J vocabulary/grammar; copyright Tono Laboratory at TUFS. The separate Octanove CC BY-SA terms do not apply to the selected v1.5 row."
+    }
+  ],
+  "raw_metadata": "fresh-http-metadata.json",
+  "failed_retrievals": [
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/inform",
+      "result": "Web open returned 403 Forbidden; no inspected Cambridge evidence."
+    },
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/notify",
+      "result": "Web open returned Internal Error; no inspected Cambridge evidence."
+    },
+    {
+      "url": "https://www.englishprofile.org/wordlists/evp",
+      "result": "Web open returned Internal Error; no inspected EVP evidence."
+    }
+  ],
+  "acquisition": {
+    "full_publisher_pages_saved": false,
+    "selected_tags_and_one_profile_row_only": true,
+    "source_examples_imported": false,
+    "artwork_acquired": false,
+    "recordings_acquired": false,
+    "pronunciation_played": false,
+    "publisher_content_redistribution_license_acquired": false
+  },
+  "conclusion": "Retain the current notify hold. Propose a separate inform giving-information identity at editorial B2 for independent review. No existing ensure or other term acceptance transfers."
+}

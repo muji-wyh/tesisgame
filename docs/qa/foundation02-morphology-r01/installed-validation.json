@@ -1,0 +1,207 @@
+{
+  "schema": 1,
+  "status": "foundation02_installed_and_persisted_verified",
+  "recorded_at": "2026-10-19T05:01:41.218Z",
+  "reviewer": "Root continuation assistant; post-install receipt and current-byte reconciliation",
+  "scope": "47 reviewed Foundation02 morphology additions installed. This is not curriculum media, human listening, physical-device or release acceptance.",
+  "changed_targets": [
+    {
+      "path": "data/professional/lexemes/foundation-module02.json",
+      "bytes": 554149,
+      "sha256": "7d6c2e941d9b5b6c3490c0155f01ecf8fa42ff4ccf998b552aadb56c4cabfa64"
+    },
+    {
+      "path": "data/professional/sources.json",
+      "bytes": 1105982,
+      "sha256": "60a07ed186a938cfc021428afc0ec1c07e608f18d8ed1a866926f04cf9381ac2"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module02-morphology-2026-10-17.json",
+      "bytes": 879701,
+      "sha256": "8f2944a6129662d856003b08b8638fda6399db782e7401e2eac277cc4de2c803"
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "bytes": 277852,
+      "sha256": "72780361778beb835cf9df53a8d94ab0a67828c107a417475d94978169513031"
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "bytes": 91800,
+      "sha256": "9a9823bdd33a35d076a0601a0fe9d9e9b7355423474d5646b2b74a5d3af303a4"
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "bytes": 64236,
+      "sha256": "f9d357e95dcaf45238533c56f3a8a0f3e61c46c58dc30b244ab35b0c2fe5a5cc"
+    },
+    {
+      "path": "tests/godot/professional_retail_morphology_tests.gd",
+      "bytes": 133037,
+      "sha256": "1f02f208a2a0aca037a187c9b3a263b80326cdee81c579f4ade88d23a0e61b16"
+    },
+    {
+      "path": "tests/godot/word_jelly_morphology_tests.gd",
+      "bytes": 46936,
+      "sha256": "d408a0001e969e061b7254af2325b1741672c3c5e2755d5e4eb524bfca392c77"
+    },
+    {
+      "path": "tests/professional-foundation02-morphology.test.cjs",
+      "bytes": 10412,
+      "sha256": "281d5dfe2167dd418de4c969b508f4c4560cb68c5d7984b262c46f65565f4a53"
+    },
+    {
+      "path": "tests/godot/professional_foundation02_morphology_tests.gd",
+      "bytes": 8116,
+      "sha256": "7e9816e9ffdd0d5a0978474341657edf782ceb1577584b7762cd999998ee076e"
+    },
+    {
+      "path": "data/professional/domain-policy/generated/index.json",
+      "bytes": 20705,
+      "sha256": "583d319e73637cdac6a6ce923e67ecd5c218c84e4d04f3ca716abb3193de895d"
+    },
+    {
+      "path": "data/professional/domain-policy/generated/release.json",
+      "bytes": 954,
+      "sha256": "7523097f2d8f9031343b4ac381ea15b3dbe105a3a1ada94e96857150f5182508"
+    },
+    {
+      "path": "scripts/professional_domain_release.gd",
+      "bytes": 543,
+      "sha256": "c04a51edfd90787b7161c38cd0968056658bdcd1457c9d78b981888e258f4e4f"
+    },
+    {
+      "path": "tests/godot/professional_foundation02_morphology_tests.gd.uid",
+      "bytes": 20,
+      "sha256": "8544fe7698f7e4673e90a27f8034a25ace06b883cd9a2bb6dd8f4f1753cae02f"
+    }
+  ],
+  "installation_receipt": {
+    "path": "build/professional-english/foundation02-morphology-work-r01/installation-r01/installation-receipt.json",
+    "bytes": 674,
+    "sha256": "a81d48d3db3d189acec45a330b3b04c24e82b68b05618e657333a2fcb5197321"
+  },
+  "installation_outer": {
+    "path": "build/professional-english/foundation02-morphology-work-r01/installation-r01/outer-completion.json",
+    "bytes": 870,
+    "sha256": "dc0c6f90166d9051759dc9fa3ba4547fd003d530e85d69899bf001bbf01c33f7"
+  },
+  "validation_receipt": {
+    "path": "build/professional-english/foundation02-morphology-work-r01/persisted-validation-r01/receipt.json",
+    "bytes": 33224,
+    "sha256": "010c2809869695ce580d6ec0241b02110ffca1ad7182014921e7369120930f14"
+  },
+  "validation_outer": {
+    "path": "build/professional-english/foundation02-morphology-work-r01/persisted-validation-r01/outer-completion.json",
+    "bytes": 950,
+    "sha256": "9c9c8c0d17245e98202905274356270456a9c62835633fb8c14daa3deb832082"
+  },
+  "visual_review": {
+    "path": "build/professional-english/foundation02-morphology-work-r01/root-visual-review.json",
+    "bytes": 52605,
+    "sha256": "ee2a5b75ac696e94c65d9aeccfb57f4467a3b7d3a3a24c55c34ba608c765597e"
+  },
+  "candidate_review": {
+    "path": "build/professional-english/foundation02-morphology-candidate-independent-review-r01/decision.json",
+    "bytes": 14816,
+    "sha256": "c2010f14a4c25c094fea51b863407f73532280f2c9680af3b7e4b52645c6a118"
+  },
+  "actual_binding_review": {
+    "path": "build/professional-english/foundation02-installation-binding-actual-independent-review-r01/actual-binding-observations.json",
+    "bytes": 1802413,
+    "sha256": "f5da1700ff5a1c68f5f4c8e0d54fe9bd73d6c6bee33cdd1221cac346e2f2b167"
+  },
+  "commands": [
+    {
+      "name": "user-directory-probe",
+      "exit_code": 0
+    },
+    {
+      "name": "import",
+      "exit_code": 0
+    },
+    {
+      "name": "content-audit",
+      "exit_code": 0
+    },
+    {
+      "name": "node-current",
+      "exit_code": 0
+    },
+    {
+      "name": "check-professional_retail_morphology_tests",
+      "exit_code": 0
+    },
+    {
+      "name": "professional_retail_morphology_tests",
+      "exit_code": 0
+    },
+    {
+      "name": "check-professional_foundation02_morphology_tests",
+      "exit_code": 0
+    },
+    {
+      "name": "professional_foundation02_morphology_tests",
+      "exit_code": 0
+    },
+    {
+      "name": "check-word_jelly_morphology_tests",
+      "exit_code": 0
+    },
+    {
+      "name": "word_jelly_morphology_tests",
+      "exit_code": 0
+    }
+  ],
+  "node": {
+    "tests": 238,
+    "pass": 238,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "native": [
+    {
+      "suite": "professional_retail_morphology_tests",
+      "checks": 4363,
+      "failures": 0
+    },
+    {
+      "suite": "professional_foundation02_morphology_tests",
+      "checks": 448,
+      "failures": 0
+    },
+    {
+      "suite": "word_jelly_morphology_tests",
+      "checks": 1162,
+      "failures": 0
+    }
+  ],
+  "summary": {
+    "courses": 20,
+    "modules": 200,
+    "themes": 21,
+    "unique_lexemes": 4939,
+    "vocabulary_memberships": 10000,
+    "vocabulary_memberships_target": 10000,
+    "vocabulary_memberships_remaining": 0,
+    "expressions": 1620,
+    "expression_memberships": 2000,
+    "expression_memberships_target": 2000,
+    "expression_memberships_remaining": 0,
+    "ready_modules": 0,
+    "reviewed_lexemes": 156,
+    "morphology_authored": 4045,
+    "morphology_reviewed": 189,
+    "integrated_word_images": 10,
+    "integrated_word_audio": 12,
+    "release_ready": false
+  },
+  "protected_paths": 27,
+  "private_user_directory": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-morphology-work-r01\\persisted-validation-r01\\private-appdata\\Godot\\app_userdata\\Word Buddies",
+  "limitations": [
+    "The continuation subagents disconnected before completing their tasks. Existing independently authored candidate and binding review scripts completed successfully; this final reconciliation is root-authored.",
+    "All 201 existing PNGs were visually reviewed via original or derived contact sheets; fixture cat media are excluded from vocabulary-media acceptance.",
+    "No deployment or publication occurred. Full 20-course delivery remains unfinished."
+  ]
+}

@@ -1,0 +1,326 @@
+{
+  "schema": 1,
+  "ok": false,
+  "started_at": "2026-10-16T20:47:11.812Z",
+  "finished_at": "2026-10-16T20:47:49.204Z",
+  "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#cold')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"cold\">cold</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <canvas id=\"canvas\" width=\"1000\" height=\"900\" tabindex=\"0\"></canvas> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <canvas id=\"canvas\" width=\"1000\" height=\"900\" tabindex=\"0\"></canvas> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    40 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <canvas id=\"canvas\" width=\"1000\" height=\"900\" tabindex=\"0\"></canvas> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r04\\browser.cjs:66:16",
+  "harness_inventory": {
+    "path": "inventory.json",
+    "bytes": 4200,
+    "sha256": "3014a945f6da95c09cf9e885f170184d467a51fae3dfb855047b124743732e36"
+  },
+  "export_receipt": {
+    "path": "attempt-001/export-receipt.json",
+    "bytes": 175806,
+    "sha256": "6af2c3e988b0cec313f8ff73d51d2416618d4cca3ca5302b7a0e8d3198c452bb"
+  },
+  "synthetic_only": true,
+  "last": {
+    "snapshot": {
+      "audio_bound": false,
+      "cache": {
+        "active_ids": [],
+        "leases": 0,
+        "limit_bytes": 134217728,
+        "pinned_bytes": 0,
+        "reserved_bytes": 0,
+        "resident_bytes": 0,
+        "resources": 0
+      },
+      "case": "boot",
+      "case_status": "idle",
+      "claim_count": 0,
+      "failures": [],
+      "invalidated_count": 0,
+      "last_scope_accessible": false,
+      "mode": "phrase",
+      "owner": {
+        "active_catalog_capabilities": 0,
+        "active_jobs": 0,
+        "active_tokens": 0,
+        "cache_hits": 0,
+        "cache_insertions": 0,
+        "cached_modules": 0,
+        "closed": false,
+        "configured": true,
+        "decode_calls": 0,
+        "encoded_bytes_read": 0,
+        "epoch": 1,
+        "installed": false,
+        "largest_read_chunk": 0,
+        "largest_steps_per_turn": 0,
+        "last_request": {},
+        "manifest_file_reads": 0,
+        "open_files": 0,
+        "phase": "idle",
+        "policy_file_reads": 0,
+        "process_turns": 0,
+        "publications": 0,
+        "resolve_calls": 0,
+        "selection": 0,
+        "steps": 0
+      },
+      "pack_proof": {
+        "generated_inventory": [
+          {
+            "bytes": 21177,
+            "path": "res://data/professional/domain-policy/generated/index.json",
+            "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+          },
+          {
+            "bytes": 2815,
+            "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+            "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+          },
+          {
+            "bytes": 283578,
+            "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+            "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+          },
+          {
+            "bytes": 1320,
+            "path": "res://data/professional/domain-policy/generated/release.json",
+            "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+          },
+          {
+            "bytes": 91201,
+            "path": "res://data/professional/domain-policy/generated/themes.json",
+            "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+          }
+        ],
+        "kind": "professional_domain_pack_proof_v1",
+        "ok": true,
+        "pin_constants": {
+          "CONTEXT_BOUNDARY": "containing-modules-v1",
+          "DESCRIPTOR_BYTES": 1320,
+          "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+          "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+          "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+          "POLICY_VERSION": "ordinary-lexical-v3",
+          "SCHEMA_VERSION": 1
+        },
+        "schema_version": 1
+      },
+      "pending_selection": -1,
+      "phase": "idle",
+      "picture_bound": false,
+      "ready_count": 0,
+      "schema": 1,
+      "session": {
+        "blocked": false,
+        "configured": true,
+        "context": {},
+        "error": {},
+        "generation": 0,
+        "outbox_pending": 0,
+        "pending": [],
+        "pending_count": 0,
+        "progress": {
+          "completions": {},
+          "expressions": {},
+          "requirements": {},
+          "schema": 1,
+          "sequence": 0,
+          "skills": {}
+        },
+        "progress_loaded": true,
+        "ready": false,
+        "saved_context": null,
+        "source_id": ""
+      },
+      "store_pending": 0,
+      "summary": {},
+      "synthetic_only": true
+    },
+    "host": {
+      "media_requests": 0,
+      "media_completions": 0,
+      "media_cancels": 0,
+      "progress_requests": 1,
+      "progress_completions": 1,
+      "held_released": 0,
+      "operations": [
+        {
+          "operation": "load",
+          "request_id": 1
+        }
+      ],
+      "held": 0,
+      "hold_next_open": false
+    },
+    "engine_error": null
+  },
+  "observations": [
+    {
+      "label": "boot:idle",
+      "snapshot": {
+        "audio_bound": false,
+        "cache": {
+          "active_ids": [],
+          "leases": 0,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 0,
+          "reserved_bytes": 0,
+          "resident_bytes": 0,
+          "resources": 0
+        },
+        "case": "boot",
+        "case_status": "idle",
+        "claim_count": 0,
+        "failures": [],
+        "invalidated_count": 0,
+        "last_scope_accessible": false,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 0,
+          "cache_hits": 0,
+          "cache_insertions": 0,
+          "cached_modules": 0,
+          "closed": false,
+          "configured": true,
+          "decode_calls": 0,
+          "encoded_bytes_read": 0,
+          "epoch": 1,
+          "installed": false,
+          "largest_read_chunk": 0,
+          "largest_steps_per_turn": 0,
+          "last_request": {},
+          "manifest_file_reads": 0,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 0,
+          "process_turns": 0,
+          "publications": 0,
+          "resolve_calls": 0,
+          "selection": 0,
+          "steps": 0
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": -1,
+        "phase": "idle",
+        "picture_bound": false,
+        "ready_count": 0,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {},
+          "error": {},
+          "generation": 0,
+          "outbox_pending": 0,
+          "pending": [],
+          "pending_count": 0,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": false,
+          "saved_context": null,
+          "source_id": ""
+        },
+        "store_pending": 0,
+        "summary": {},
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 0,
+        "media_completions": 0,
+        "media_cancels": 0,
+        "progress_requests": 1,
+        "progress_completions": 1,
+        "held_released": 0,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    }
+  ],
+  "requests": [
+    {
+      "path": "/",
+      "bytes": 4869
+    },
+    {
+      "path": "/professional-media.js",
+      "bytes": 11851
+    },
+    {
+      "path": "/professional-progress.js",
+      "bytes": 19082
+    },
+    {
+      "path": "/index.js",
+      "bytes": 281121
+    },
+    {
+      "path": "/index.wasm",
+      "bytes": 39509339
+    },
+    {
+      "path": "/index.pck",
+      "bytes": 1526148
+    },
+    {
+      "path": "/index.audio.position.worklet.js",
+      "bytes": 2973
+    },
+    {
+      "path": "/index.audio.worklet.js",
+      "bytes": 7298
+    }
+  ],
+  "page_errors": []
+}

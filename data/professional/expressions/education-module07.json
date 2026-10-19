@@ -1,0 +1,1832 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.education_childcare.module07.01",
+      "text": "The parent, guardian, and foster carer roles may differ; confirm the relevant arrangements instead of inferring authority from the title.",
+      "meaning": "Respect family roles while checking actual authority.",
+      "context": "Preparing a family contact record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "parent",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 10,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "guardian",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 6,
+          "text": "foster",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "carer",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "roles",
+          "start": 39,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "may",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "differ",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "confirm",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "relevant",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "arrangements",
+          "start": 78,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "instead",
+          "start": 91,
+          "end": 98
+        },
+        {
+          "index": 17,
+          "text": "of",
+          "start": 99,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": "inferring",
+          "start": 102,
+          "end": 111
+        },
+        {
+          "index": 19,
+          "text": "authority",
+          "start": 112,
+          "end": 121
+        },
+        {
+          "index": 20,
+          "text": "from",
+          "start": 122,
+          "end": 126
+        },
+        {
+          "index": 21,
+          "text": "the",
+          "start": 127,
+          "end": 130
+        },
+        {
+          "index": 22,
+          "text": "title",
+          "start": 131,
+          "end": 136
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 136,
+          "end": 137
+        }
+      ],
+      "focus_lexeme_ids": [
+        "parent.person-in-parental-family-role.n",
+        "guardian.person-with-recognized-guardianship-role.n",
+        "foster-carer.person-providing-care-under-fostering-arrangement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module07.02",
+      "text": "The birth parent and family member information is recorded separately from the caregiver and authorized collector details.",
+      "meaning": "Distinguish a family relationship from current care and collection arrangements.",
+      "context": "Checking a fictional contact record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "birth",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "parent",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "family",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "member",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "information",
+          "start": 35,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "is",
+          "start": 47,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "recorded",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "separately",
+          "start": 59,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "from",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "caregiver",
+          "start": 79,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 14,
+          "text": "authorized",
+          "start": 93,
+          "end": 103
+        },
+        {
+          "index": 15,
+          "text": "collector",
+          "start": 104,
+          "end": 113
+        },
+        {
+          "index": 16,
+          "text": "details",
+          "start": 114,
+          "end": 121
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 121,
+          "end": 122
+        }
+      ],
+      "focus_lexeme_ids": [
+        "birth-parent.parent-in-biological-parentage-relationship.n",
+        "family-member.person-in-family.n",
+        "caregiver.person-providing-care.n",
+        "authorized-collector.person-authorized-to-collect-child.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module07.03",
+      "text": "The key person discussed the kinship care context and asked how the family partnership could support the school transition.",
+      "meaning": "Use family knowledge when planning continuity.",
+      "context": "Preparing a transition conversation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "key",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "person",
+          "start": 8,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "discussed",
+          "start": 15,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "kinship",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "care",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "context",
+          "start": 42,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "asked",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "how",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "family",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "partnership",
+          "start": 75,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "could",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "support",
+          "start": 93,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "school",
+          "start": 105,
+          "end": 111
+        },
+        {
+          "index": 18,
+          "text": "transition",
+          "start": 112,
+          "end": 122
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 122,
+          "end": 123
+        }
+      ],
+      "focus_lexeme_ids": [
+        "key-person.designated-early-years-contact-for-child-and-family.n",
+        "kinship-care.care-by-relative-or-person-with-existing-family-connection.n",
+        "family-partnership.reciprocal-working-relationship-with-family.n",
+        "school-transition.change-between-school-stages-or-settings.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module07.04",
+      "text": "The nursery and childminder agreed how to share relevant information about enrollment and the settling-in period.",
+      "meaning": "Clarify communication across settings under the applicable arrangements.",
+      "context": "Coordinating early years provision.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "nursery",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "childminder",
+          "start": 16,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "agreed",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "how",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 39,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "share",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "relevant",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "information",
+          "start": 57,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "about",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "enrollment",
+          "start": 75,
+          "end": 85
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "settling-in",
+          "start": 94,
+          "end": 105
+        },
+        {
+          "index": 15,
+          "text": "period",
+          "start": 106,
+          "end": 112
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "nursery.early-years-education-or-childcare-setting.n",
+        "childminder.person-providing-childcare-usually-in-home-setting.n",
+        "enrollment.process-of-registering-for-educational-service.n",
+        "settling-in-period.time-of-adjusting-to-new-setting.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module07.05",
+      "text": "The family confirmed the preferred name, pronouns, and preferred language, and asked about an interpreter and a written translation.",
+      "meaning": "Respect communication preferences and distinguish interpreting from written translation.",
+      "context": "Arranging an accessible family meeting.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "family",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "confirmed",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "preferred",
+          "start": 25,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "name",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "pronouns",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "preferred",
+          "start": 55,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "language",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "asked",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "about",
+          "start": 85,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "an",
+          "start": 91,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "interpreter",
+          "start": 94,
+          "end": 105
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 106,
+          "end": 109
+        },
+        {
+          "index": 19,
+          "text": "a",
+          "start": 110,
+          "end": 111
+        },
+        {
+          "index": 20,
+          "text": "written",
+          "start": 112,
+          "end": 119
+        },
+        {
+          "index": 21,
+          "text": "translation",
+          "start": 120,
+          "end": 131
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 131,
+          "end": 132
+        }
+      ],
+      "focus_lexeme_ids": [
+        "preferred-name.person-chosen-address-name.n",
+        "pronouns.words-used-in-place-of-nouns-or-names.n",
+        "preferred-language.chosen-language-for-communication.n",
+        "interpreter.spoken-language-communication-professional.n",
+        "translation.written-meaning-conveyed-between-languages.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module07.06",
+      "text": "The office explained the waiting list, contact details, and emergency contact information requested for the application.",
+      "meaning": "Clarify the purpose of the requested information.",
+      "context": "Discussing enrollment records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "office",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "explained",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "waiting",
+          "start": 25,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "list",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "contact",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "details",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "emergency",
+          "start": 60,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "contact",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "information",
+          "start": 78,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "requested",
+          "start": 90,
+          "end": 99
+        },
+        {
+          "index": 15,
+          "text": "for",
+          "start": 100,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "application",
+          "start": 108,
+          "end": 119
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 119,
+          "end": 120
+        }
+      ],
+      "focus_lexeme_ids": [
+        "waiting-list.people-awaiting-service-list.n",
+        "contact-details.communication-contact-information.n",
+        "emergency-contact.person-to-contact-in-emergency.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module07.07",
+      "text": "The drop-off and pickup arrangements are in the home-school diary, together with the agreed daily report channel.",
+      "meaning": "Connect arrival, departure, and everyday communication arrangements.",
+      "context": "Confirming routine communication.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "drop-off",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "pickup",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "arrangements",
+          "start": 24,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "are",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "in",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "home-school",
+          "start": 48,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "diary",
+          "start": 60,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 65,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "together",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "with",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "agreed",
+          "start": 85,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "daily",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "report",
+          "start": 98,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "channel",
+          "start": 105,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "drop-off.handover-of-child-on-arrival.n",
+        "pickup.collection-of-child-from-setting.n",
+        "home-school-diary.record-supporting-communication-between-home-and-school.n",
+        "daily-report.summary-of-events-during-day.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module07.08",
+      "text": "Review the photo consent and consent form for their actual scope; a permission slip alone does not establish valid consent.",
+      "meaning": "Distinguish documents from the validity and scope of agreement.",
+      "context": "Checking an activity's recorded permissions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Review",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "photo",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "consent",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "consent",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "form",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "for",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "their",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "actual",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "scope",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "permission",
+          "start": 68,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "slip",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "alone",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": "does",
+          "start": 90,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "not",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": "establish",
+          "start": 99,
+          "end": 108
+        },
+        {
+          "index": 19,
+          "text": "valid",
+          "start": 109,
+          "end": 114
+        },
+        {
+          "index": 20,
+          "text": "consent",
+          "start": 115,
+          "end": 122
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 122,
+          "end": 123
+        }
+      ],
+      "focus_lexeme_ids": [
+        "photo-consent.consent-arrangements-for-taking-or-using-images.n",
+        "consent-form.agreement-documentation-form.n",
+        "permission-slip.form-for-requesting-specific-activity-permission.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module07.09",
+      "text": "The family discussed the food allergy, food intolerance, dietary requirement, and meal plan with the responsible team.",
+      "meaning": "Keep different food-related requirements distinct and refer management to the actual plan.",
+      "context": "Sharing individual care information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "family",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "discussed",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "food",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "allergy",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "food",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "intolerance",
+          "start": 44,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "dietary",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "requirement",
+          "start": 65,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "meal",
+          "start": 82,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "plan",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "with",
+          "start": 92,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 97,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": "responsible",
+          "start": 101,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": "team",
+          "start": 113,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "food-allergy.immune-reaction-to-food-substance.n",
+        "food-intolerance.nonallergic-adverse-food-response.n",
+        "dietary-requirement.specific-food-related-need.n",
+        "meal-plan.planned-meal-arrangement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module07.10",
+      "text": "The family supplied a diaper, sunscreen, spare clothes, and a comfort item, and asked where to keep the wet bag.",
+      "meaning": "Identify personal items while leaving use to the agreed care arrangements.",
+      "context": "Preparing the child's stored belongings.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "family",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "supplied",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "diaper",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "sunscreen",
+          "start": 30,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "spare",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "clothes",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "comfort",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "item",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 74,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 17,
+          "text": "asked",
+          "start": 80,
+          "end": 85
+        },
+        {
+          "index": 18,
+          "text": "where",
+          "start": 86,
+          "end": 91
+        },
+        {
+          "index": 19,
+          "text": "to",
+          "start": 92,
+          "end": 94
+        },
+        {
+          "index": 20,
+          "text": "keep",
+          "start": 95,
+          "end": 99
+        },
+        {
+          "index": 21,
+          "text": "the",
+          "start": 100,
+          "end": 103
+        },
+        {
+          "index": 22,
+          "text": "wet",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 23,
+          "text": "bag",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "diaper.absorbent-garment-for-bodily-waste.n",
+        "sunscreen.product-intended-to-reduce-ultraviolet-exposure.n",
+        "spare-clothes.additional-clothing-kept-for-change.n",
+        "comfort-item.familiar-object-providing-reassurance.n",
+        "wet-bag.bag-for-containing-wet-or-soiled-items.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

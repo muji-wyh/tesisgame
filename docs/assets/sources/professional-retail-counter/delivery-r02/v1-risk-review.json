@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "status": "confirmed_partial_write_risk_requires_transactional_revision",
+  "recorded_at": "2026-10-16T08:28:15.755Z",
+  "reviewer": "Codex retail_register_art (AI serializer self-review after independent root finding)",
+  "prior_revision": "delivery-r01",
+  "prior_preparation_receipt_sha256": "4d47646097a23f4d2a8fe49e6755e7e2847d0fb086931f5cb75a29721400723f",
+  "prior_delivery_files": {
+    "delivery-lib.cjs": "3804509f911cab166b684b4d49d718645e11f6ad8ba56790285f4a696c7659ff",
+    "bind-current-baseline.cjs": "56feef12ae796b5b65c47c912763604f9bf2b50875336ca4358909acffb2f92c",
+    "integrate-reviewed.cjs": "9ae9d52973ef739529d0edbf7626591af9dcfd1b8f17fffbf625d318dce2c0f2",
+    "HANDOFF.md": "77af31dcf4b283c8d5e0c1ebe11abdd20fbb4a524fda003cc01cf106e5b6b95f",
+    "source-doc-draft.md": "a775937b650c9c30965a64190bb63531949e5f31b3f85e0976fbcfb1ae473fc0"
+  },
+  "findings": [
+    {
+      "severity": "high",
+      "file": "delivery-r01/integrate-reviewed.cjs",
+      "scope": "Evidence and media copies before registry write",
+      "finding": "A failed copy or final baseline check can leave partial retained evidence and/or the PNG. The next invocation rejects existing outputs, with no journal identifying ownership and no recovery route."
+    },
+    {
+      "severity": "high",
+      "file": "delivery-r01/integrate-reviewed.cjs",
+      "scope": "Direct registry overwrite",
+      "finding": "fs.writeFileSync truncates the live retail-pilot JSON before completing the new bytes. A write failure or interruption can leave a corrupt target; no staged replacement or raw preimage backup is retained by the serializer."
+    },
+    {
+      "severity": "high",
+      "file": "delivery-r01/integrate-reviewed.cjs",
+      "scope": "Provenance and receipt after registry write",
+      "finding": "A failure after the registry update but before provenance/receipt creation leaves a partially integrated state. Subsequent exact-baseline guards reject that state without an explicit rollback or recovery mechanism."
+    }
+  ],
+  "required_revision": [
+    "Stage every output and raw preimage before production mutation",
+    "Persist a prepared journal with exact file hashes and ownership",
+    "Guarded multi-file install with rollback on thrown errors",
+    "Explicit recovery after interruption; never infer completion or automatically reapply",
+    "Preserve allowed pre-existing byte-identical immutable source/media files; reject differing bytes",
+    "Include exact PNG, retained evidence, one registry replacement, provenance, and integration receipt in the guarded commit",
+    "Verify exact resulting registry, audits, source/image/provenance hashes before marking committed"
+  ],
+  "production_content_written": false,
+  "baseline_bound": false,
+  "integration_executed": false,
+  "godot_invoked": false
+}

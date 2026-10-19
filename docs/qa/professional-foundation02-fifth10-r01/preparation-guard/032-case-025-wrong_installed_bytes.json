@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "id": "wrong_installed_bytes",
+  "specification": "wrong_installed_bytes_or_hash",
+  "classification": "semantic_guard_with_rebound_fixture_envelopes",
+  "expected": "reject",
+  "mutation": "Change installed bytes while preserving genuine manifest and actual file bytes.",
+  "synthetic_in_memory_only": true,
+  "source_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "actual_preparation_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "opened": false,
+  "recheck_passed": false,
+  "passed": true,
+  "virtual_io": {
+    "imports": [
+      "node:fs",
+      "node:path",
+      "node:crypto",
+      "node:assert/strict"
+    ],
+    "file_reads": 12505,
+    "directory_reads": 2,
+    "existence_reads": 0,
+    "denied": []
+  },
+  "virtual_changes": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "33e9bd11c08d560e88cc17b0b040b6b30693866079e8587f227cffa4f57aaa5b"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "89ead5ea1101fbf0a1d1052b8f6919c4bac296a7bf67617bde50c4aa259b18e1"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "9ac0f67583e71876a1eec65c395ced92953c01368acf6875df8a8a8d077426fc"
+      },
+      "scope": "memory_only"
+    }
+  ],
+  "rejection": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "Installed target pins must equal the complete authoritative bag manifest\n+ actual - expected\n\n  [\n    {\n+     bytes: 360375,\n-     bytes: 360374,\n      path: 'data/professional/lexemes/retail-pilot.json',\n      raw_sha256: 'e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2'\n    },\n    {\n      bytes: 126206,\n",
+    "stack": "node:assert:152\n  throw new AssertionError(obj);\n  ^\n\nAssertionError [ERR_ASSERTION]: Installed target pins must equal the complete authoritative bag manifest\n+ actual - expected\n\n  [\n    {\n+     bytes: 360375,\n-     bytes: 360374,\n      path: 'data/professional/lexemes/retail-pilot.json',\n      raw_sha256: 'e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2'\n    },\n    {\n      bytes: 126206,\n\n    at successfulPredecessor (fifth10-frozen-binding.cjs:144:12)\n    at Object.openSession (fifth10-frozen-binding.cjs:194:15)\n    at fifth10-memory-guard-call.cjs:1:44\n    at Script.runInContext (node:vm:149:12)\n    at run (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:428:82)\n    at Object.open (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:430:12)\n    at main (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:229:19)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:584:1)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)"
+  },
+  "expected_assertion": {
+    "line": 144,
+    "column_start": 5,
+    "column_end": 149,
+    "source_fragment": "assert.deepEqual(sorted(stage.installed_targets), sorted(complete), 'Installed target pins must equal the complete authoritative bag manifest');"
+  },
+  "actual_first_binding_frame": {
+    "line": 144,
+    "column": 12
+  }
+}

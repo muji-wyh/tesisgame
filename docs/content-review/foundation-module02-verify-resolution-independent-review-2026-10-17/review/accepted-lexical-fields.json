@@ -1,0 +1,16 @@
+{
+  "id": "ensure.make-certain.v",
+  "text": "ensure",
+  "display_text": "ensure",
+  "pos": "verb",
+  "definition": "To make certain that a required result happens or a required condition is met.",
+  "example": "Please ensure that the form includes the reference number.",
+  "difficulty": "B2",
+  "regions": [
+    "general"
+  ],
+  "accepted_forms": [
+    "ensure",
+    "insure"
+  ]
+}

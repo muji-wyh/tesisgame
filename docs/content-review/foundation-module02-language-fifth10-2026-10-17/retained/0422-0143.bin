@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "status": "accepted_shopping_bag_root_memory_guard_wrapper_source_only",
+  "reviewer": "Codex runtime_recovery",
+  "author": "Codex root",
+  "recorded_at": "2026-10-16T22:36:25.9762791Z",
+  "source_accepted": true,
+  "exact_commit_contract_accepted": false,
+  "final_bundle_approved": false,
+  "wrapper_source": {
+    "path": "build/professional-english/shopping-bag-root-guard-r01/invoke.cjs",
+    "bytes": 4739,
+    "sha256": "af25df7aac66b176586ae39725ad5d89420c1af8c83774b8b050ff9fd4f2e573"
+  },
+  "reviewed_dependencies": [
+    {
+      "path": "build/professional-english/shopping-bag-commit-proposal-r01/commit.cjs",
+      "bytes": 27037,
+      "sha256": "b522c987354d2e526cc9194b0dd5239b2592b07aa30f4ddd7bd16261e2c3c087"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-proposal-r01/guard-probe.cjs",
+      "bytes": 13318,
+      "sha256": "606b14e55469c212d39e24e16a0bcbdf51e3c46330bc8ecf5bb23b732a11bdf7"
+    }
+  ],
+  "prior_frozen_review_inventory": {
+    "path": "build/professional-english/shopping-bag-commit-independent-review-r01/inventory.json",
+    "bytes": 919,
+    "sha256": "f99e091e7ece2a899df31fd6e50ef5b79054d678cc9849d01a516f4ed554c2d5"
+  },
+  "blocking_findings": [],
+  "findings": [
+    {
+      "area": "Invocation and dependency pins",
+      "lines": "4-18",
+      "assessment": "The wrapper requires the exact Q worktree and cwd, caller-pinned own source and input, fixed accepted commit/probe hashes, and the actual exclusive token hash before consuming its attempt. The fixed source files are checked again through the protected pin map before the probe is imported."
+    },
+    {
+      "area": "One-shot artifact writes",
+      "lines": "19-21,44-45",
+      "assessment": "Only the fresh wrapper-local attempt directory and exclusive start/receipt files are written. A consumed attempt is rejected. This source does not call the commit runner or transaction helper."
+    },
+    {
+      "area": "Exact-byte cache",
+      "lines": "22-36",
+      "assessment": "The candidate expected-input map and explicit evidence/source/review/receipt/supplement/finalized descriptors form the protected pin map. Each initial cached read verifies its hash; every returned Buffer is copied. The probe receives only read, exists and list adapter methods and its own negative mutations remain in memory."
+    },
+    {
+      "area": "Success and failure evidence",
+      "lines": "37-45",
+      "assessment": "Successful probe status and every case are required. Main failure is caught with partial probe cases/observations; both success and failure continue into own-source, protected-file and observed-existence rechecks against real disk. Any main or postcheck error yields ok false and process exit 1. A successful receipt therefore requires all enumerated postchecks to complete."
+    }
+  ],
+  "limitations": [
+    "This acceptance applies only to the frozen wrapper source. The actual complete commit input, candidate evidence, finalized metadata and exact contract still require independent review before dispatch.",
+    "The wrapper is intentionally executable at top level. This reviewer has only read raw source and hashes; root must pin it in the actual command before invocation and never import it for inspection.",
+    "The supplied adapter is a read-only raw filesystem adapter, not the commit realAdapter. This wrapper acceptance depends on the exact root-owned reviewed input and exclusive writer window; it does not test Windows symlink/junction confinement or filesystem transaction behavior.",
+    "If a postcheck discovers drift, its loop stops on that first assertion and the receipt is failed. Such a receipt is not a complete unchanged-input witness and must not authorize commit.",
+    "Errors before the main try block or failure to write the receipt remain process/attempt evidence for the outer root dispatcher. A failed or incomplete attempt must not be replayed.",
+    "Production mutations, project/native/browser execution, actual guard outcomes, commit and persisted validation are not established by source inspection."
+  ],
+  "execution": {
+    "source_imported": false,
+    "syntax_checked": false,
+    "wrapper_executed": false,
+    "probe_executed": false,
+    "project_executed": false,
+    "tests_executed": false,
+    "native_executed": false,
+    "browser_executed": false,
+    "transaction_executed": false,
+    "production_mutated": false
+  }
+}

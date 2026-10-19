@@ -1,0 +1,292 @@
+{
+  "schema": 1,
+  "status": "independent_ai_language_accepted_pending_delivery",
+  "reviewer": "Codex root independent AI language review; not human or subject-matter approval",
+  "reviewed_on": "2026-10-16",
+  "direct_primary_source_review": {
+    "sources": 20,
+    "publishers": [
+      "Oxford University Press",
+      "HarperCollins"
+    ],
+    "scope": "Selected passages were directly opened; source-level observations are separate from editorial difficulty. No source media or exercises acquired."
+  },
+  "accepted_candidates": [
+    {
+      "id": "request.asking-action.n",
+      "candidate_path": "build/professional-english/foundation-module02-language-review/first10/language-ledger.json",
+      "candidate_entry_json_sha256": "99b186506c666d7c403a81ef6efc652ab237862152b4e8705dea02b917564719",
+      "before_entry_json_sha256": "2a6688c064ed57018bf87a4421bf12f52436ed2793bd02309f3c2c8905d3be28",
+      "accepted": true,
+      "editorial_difficulty": "B1",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "B1+"
+      },
+      "independent_reason": "Accept the ordinary asking noun and optional polite/formal tendency. Editorial B1 is appropriate for the bounded support-message example; preserve literal Collins B1+ without asserting equivalence. Software requests and musical requests remain distinct."
+    },
+    {
+      "id": "instruction.direction.n",
+      "candidate_path": "build/professional-english/foundation-module02-language-review/first10/language-ledger.json",
+      "candidate_entry_json_sha256": "6a64567a0ab104590796ec5cd1943655d7d574bb03d3e04a52cc5eb194ed1c8d",
+      "before_entry_json_sha256": "cbcf09935a6d11e030f9465e49eb6b6a75368cfbf151b5265277653e75d3ae5e",
+      "accepted": true,
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": null
+      },
+      "independent_reason": "Accept countable direction and the more natural each instruction example. Editorial A2 is a pedagogical decision for routine directions. Do not transfer plural how-to A2, computer B2, or uncountable teaching to the selected countable noun."
+    },
+    {
+      "id": "clarification.clearer-explanation.n",
+      "candidate_path": "build/professional-english/foundation-module02-language-review/first10/language-ledger.json",
+      "candidate_entry_json_sha256": "108172090346e3e63975e51d668a341b480f14c4c1814255c732bf292184944c",
+      "before_entry_json_sha256": "1ccedbb0d57860ad97a29b3876937eaa1e39c0343b00930686cbe09f576b2378",
+      "accepted": true,
+      "editorial_difficulty": "B1",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": null
+      },
+      "independent_reason": "Accept the unchanged explanatory meaning and ask for clarification pattern. Retain B1 as an explicit course judgment for a useful reusable workplace phrase. Neither selected noun source assigns a level; record Oxford formal usage and exclude its unrelated B2 footer and chemical/culinary senses."
+    },
+    {
+      "id": "question.information-request.n",
+      "candidate_path": "build/professional-english/foundation-module02-language-review/first10/language-ledger.json",
+      "candidate_entry_json_sha256": "8433d31192a3bdcc9e2139c36899d5798e138e8572d933bd5665d4f6b090b9ec",
+      "before_entry_json_sha256": "3d530d673b41e00d7351e5e657321a2e4ea40e04390597c52ba94ce00c2be1a1",
+      "accepted": true,
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "A1"
+      },
+      "independent_reason": "Accept the ordinary information-seeking noun and unchanged schedule example. Retain the A2 course floor while recording Collins A1; do not transfer question-as-doubt or questioning verb levels."
+    },
+    {
+      "id": "answer.response.n",
+      "candidate_path": "build/professional-english/foundation-module02-language-review/first10/language-ledger.json",
+      "candidate_entry_json_sha256": "669be3e90db19ce0efd6e648700a9bb891af0be43b34aab29c9798cdaa254d0e",
+      "before_entry_json_sha256": "ca697f2ad838d128d051f13dc8d47203079af2a335dfd4e930d80c246ea4b26c",
+      "accepted": true,
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "A1"
+      },
+      "independent_reason": "Accept a spoken or written response without requiring correctness or complete information. Keep the paragraph example and A2 course placement; Collins selected response noun is A1, not a reason to label all answer meanings A1."
+    },
+    {
+      "id": "repeat.say-again.v",
+      "candidate_path": "build/professional-english/foundation-module02-language-review/first10/language-ledger.json",
+      "candidate_entry_json_sha256": "0690331ad6b75e17e70ee92127bd439216978fb386ba0114f5219b293857aa62",
+      "before_entry_json_sha256": "0b1e5d29ae79ed88f3596c38902584a741b26fd97f4c56ff5754b7d917b9f637",
+      "accepted": true,
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "A2"
+      },
+      "independent_reason": "Accept the narrow spoken say-again sense and room-number example, supported within Collins A2 say/write-again. Doing a procedure again, repeated patterns and broadcasts remain outside this spoken identity."
+    },
+    {
+      "id": "explain.make-clear.v",
+      "candidate_path": "build/professional-english/foundation-module02-language-review/first10/language-ledger.json",
+      "candidate_entry_json_sha256": "3d34e62c5e3db41bd053c61ba0d427730a6b99e102fe8044027acb36ab26e2c4",
+      "before_entry_json_sha256": "5f6991a90b044b21222a0b55306f0a74907b884cd8b1ae86900f3c640b1658cb",
+      "accepted": true,
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "A2"
+      },
+      "independent_reason": "Accept making an idea, reason or process understandable and the form-choice example. The Collins selected sense supports A2; no professional procedure or subject advice is validated by approving this ordinary verb."
+    },
+    {
+      "id": "confirm.verify-arrangement.v",
+      "candidate_path": "build/professional-english/foundation-module02-language-review/first10-confirm-correction-r01/language-ledger.json",
+      "candidate_entry_json_sha256": "72bbbbec8f9abc92e5f931f4b0491a05866ad8937f807fb8c89ef06f806a92b3",
+      "before_entry_json_sha256": "7007e8a0ff3e430ce8a91ef62e35e8814d513e9740b1591eaa315a499838e9a5",
+      "accepted": true,
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": "B2",
+        "collins": "B1+"
+      },
+      "independent_reason": "Reject the original null-Oxford/B1 candidate and accept only the corrected hash. Direct source review finds Oxford Discussion and agreement B2 on sense 2, including reservation certainty; Collins arrangement B1+ remains literal. Editorial B2 and the appointment-for-Tuesday example isolate the arrangement sense. Keep the delivery-time expression ambiguous and pending."
+    },
+    {
+      "id": "check.examine.v",
+      "candidate_path": "build/professional-english/foundation-module02-language-review/first10/language-ledger.json",
+      "candidate_entry_json_sha256": "f9fa3cd013b4792fa006af3e4392314807166d6de9d3117b31a9d9fdb0227073",
+      "before_entry_json_sha256": "3f9d1664d53101d6a46a8ff2e8349e64ab34ea63b995a5ba41c708bce13b37cd",
+      "accepted": true,
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "A2"
+      },
+      "independent_reason": "Accept examination for correctness or condition and delivery-details example, with Collins selected A2. Do not transfer the noun, payment instrument, tick-mark action, check-in/out or specialist inspection authority."
+    },
+    {
+      "id": "follow.act-on.v",
+      "candidate_path": "build/professional-english/foundation-module02-language-review/first10/language-ledger.json",
+      "candidate_entry_json_sha256": "57e73dc7694052b6f7c1f35d88116bcaf47eb69b584fadc6a593cb0006ca5cce",
+      "before_entry_json_sha256": "f07d9d69ec76ecc558a752cb266c7a940197c8669d756e380d667cad7fdab343",
+      "accepted": true,
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": "A2",
+        "collins": "B1"
+      },
+      "independent_reason": "Accept acting according to directions and the form example. Retain editorial A2 on the strength of Oxford selected Suggestions and advice A2 while explicitly recording Collins selected B1 disagreement. Physical following, comprehension, temporal sequence, social links and follow-up remain separate."
+    }
+  ],
+  "sources_to_use": [
+    {
+      "id": "foundation02-language-first10-oxford-request",
+      "json_sha256": "6902ac6be4ed15b88855464f53e47d0a586a9967b075146bec78735e6bfc3279"
+    },
+    {
+      "id": "foundation02-language-first10-collins-request",
+      "json_sha256": "61171b8f3390a2c9d6557e3b90d008253253e549967a3a70ab700216511a7fa0"
+    },
+    {
+      "id": "foundation02-language-first10-oxford-instruction",
+      "json_sha256": "3efe023edf045126980622bb5863bbe1ede6fcd61fac21d94553f17f7bbd5b8f"
+    },
+    {
+      "id": "foundation02-language-first10-collins-instruction",
+      "json_sha256": "02a8e66d5876f91097c3c72852f807f9d7ae39564c69e081bbc3bf5bbc099462"
+    },
+    {
+      "id": "foundation02-language-first10-oxford-clarification",
+      "json_sha256": "5a8f8943e265e5fe0bd69a1fca5bbeab8a1bed51a24a8d5360cb5f715872d920"
+    },
+    {
+      "id": "foundation02-language-first10-collins-clarification",
+      "json_sha256": "41616af3c3ff5ce2223ddefb5550d0dd015409b1e317af37c9758f7fdcfa6dad"
+    },
+    {
+      "id": "foundation02-language-first10-oxford-question",
+      "json_sha256": "2fb8c39cd97c74e09563ebec4c2c53b24f2fd433f6439c00cddddd9225616b4d"
+    },
+    {
+      "id": "foundation02-language-first10-collins-question",
+      "json_sha256": "da5d3fb407175610afe6055ffbbbb2f0b9cd292cc54e21863fd2b91091df7d3c"
+    },
+    {
+      "id": "foundation02-language-first10-oxford-answer",
+      "json_sha256": "6bbb609981a44c4ca475f54c65dd83956961b6a2e95d7284f23ebf0fa4d32b85"
+    },
+    {
+      "id": "foundation02-language-first10-collins-answer",
+      "json_sha256": "7f0bbade9664c142c41054af33239dd164ba37c3ec97f5c2716e2c0c2200edcb"
+    },
+    {
+      "id": "foundation02-language-first10-oxford-repeat",
+      "json_sha256": "c0e70345a4445bf14e67603c9f5afb640d5f505c6009e8d47ed7de95b4a40074"
+    },
+    {
+      "id": "foundation02-language-first10-collins-repeat",
+      "json_sha256": "880cc97838892546e5f796f0d18b66b9bb6dc5b3dc21f8c524a8e98a7d395368"
+    },
+    {
+      "id": "foundation02-language-first10-oxford-explain",
+      "json_sha256": "dcbd40729720c2ac5a60906d7f7e1c47ca0fea1ce7816a0c1bc25f08197e6c1f"
+    },
+    {
+      "id": "foundation02-language-first10-collins-explain",
+      "json_sha256": "51dc46f18329c152b1f8f268ef885e882254aa2dd969ba9d8b74fe90aed4b0ad"
+    },
+    {
+      "id": "foundation02-language-first10-oxford-confirm",
+      "json_sha256": "6ac9de354a9da1cad3f89458654964433a8c111073ecfe75b1cf3181d8a51327"
+    },
+    {
+      "id": "foundation02-language-first10-collins-confirm",
+      "json_sha256": "2a2b64087037748d5f48dcc005559d3517a26cbad73809aebae8bb1ceaba16c4"
+    },
+    {
+      "id": "foundation02-language-first10-oxford-check",
+      "json_sha256": "82f6a039bb8a715a4d24a9b8cb3166003166ca2c83176d5364c6cec6f6198206"
+    },
+    {
+      "id": "foundation02-language-first10-collins-check",
+      "json_sha256": "0d1e0366a8a7ebd25059e5fbcb6e60fdb422d044170e4682289a49fed7729184"
+    },
+    {
+      "id": "foundation02-language-first10-oxford-follow",
+      "json_sha256": "fda42f05ddea4d8fc6b34305a434aa8760c6a2d82224ac3c754bc910787e7ca6"
+    },
+    {
+      "id": "foundation02-language-first10-collins-follow",
+      "json_sha256": "8049340cb7236701d32ef115b6bb5478d9587bb322ccb01c4dfd7b5cbd510854"
+    }
+  ],
+  "rejected_candidate": {
+    "id": "confirm.verify-arrangement.v",
+    "candidate_entry_json_sha256": "e367633854ed63585c94e7cc11c1d4c9fcff7ef864f27d7bc3dda185ca107bb3",
+    "reason": "Missed Oxford selected sense2 Discussion and agreement B2 label; resolved only by the fresh corrected variant."
+  },
+  "protected_context": {
+    "screened_expression_hashes_verified": 523,
+    "related_entry_hashes_verified": 64,
+    "expression_hold_ids": [
+      "expr.foundation.module02.02",
+      "expr.clinical_medicine.module07.05",
+      "expr.legal_paralegal.module09.02",
+      "expr.legal_paralegal.module09.08",
+      "expr.sales_marketing.module04.07"
+    ],
+    "prior_expression_hold_ids": [
+      "expr.customer_support.module03.08",
+      "expr.customer_support.module07.08",
+      "expr.foundation.module01.03",
+      "expr.foundation.module01.06",
+      "expr.foundation.module01.08",
+      "expr.hospitality_tourism.module05.04",
+      "expr.hospitality_tourism.module09.02",
+      "expr.hospitality_tourism.module09.08",
+      "expr.office_admin.module05.07",
+      "expr.office_admin.module06.03",
+      "expr.office_admin.module09.01",
+      "expr.transport_delivery.module09.06"
+    ],
+    "expression_review_json_sha256": "c7ec6f2c07f4ecec02b0157eb2828083580fae1b141cd476480213281f73feb3",
+    "new_expression_acceptances": 0,
+    "new_scored_bindings": 0,
+    "course_memberships": 200
+  },
+  "candidate_audit": {
+    "errors": 0,
+    "warnings": 29460,
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 121,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 8,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    }
+  },
+  "independent_limits": [
+    "Language-only acceptance of these ten exact candidates.",
+    "No morphology, image, audio, specialist, domain, whole-expression, module or release approval.",
+    "No production or test files changed by this review.",
+    "Delivery must bind actual post-supervisor and post-controller-writer baseline under an exclusive mutation window; this review is not a registry baseline."
+  ]
+}

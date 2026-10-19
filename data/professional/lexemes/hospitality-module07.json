@@ -1,0 +1,3439 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "visitor-capacity.number-of-visitors-supported-under-stated-arrangements.n",
+      "text": "visitor capacity",
+      "display_text": "visitor capacity",
+      "pos": "noun",
+      "definition": "The number of visitors a place or activity can accommodate under its stated operational and applicable safety arrangements.",
+      "example": "Ask the responsible venue contact to confirm the visitor capacity.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "visitor capacity"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional venue-capacity record with a qualified review reference and no invented limit or evacuation claim.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "visitor-capacity.number-of-visitors-supported-under-stated-arrangements.n.analysis.v1",
+        "lexeme_id": "visitor-capacity.number-of-visitors-supported-under-stated-arrangements.n",
+        "text": "visitor capacity",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.visitor",
+            "type": "stem",
+            "canonical": "visitor",
+            "surface": "visitor"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.capacity",
+            "type": "stem",
+            "canonical": "capacity",
+            "surface": "capacity"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "visitor capacity",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "destination.place-to-which-person-is-traveling.n",
+      "text": "destination",
+      "display_text": "destination",
+      "pos": "noun",
+      "definition": "The place to which a person is traveling.",
+      "example": "Please confirm the destination before reviewing the travel options.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "destination"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional itinerary with one destination clearly marked and no real guest details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "tourist-attraction.place-or-experience-that-draws-visitors.n",
+      "text": "tourist attraction",
+      "display_text": "tourist attraction",
+      "pos": "noun",
+      "definition": "A place or experience that people visit for interest or enjoyment.",
+      "example": "Check the tourist attraction's current opening information.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "tourist attraction"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming fictional visitor attraction with a clear information point and no copied landmark artwork.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "tourist-attraction.place-or-experience-that-draws-visitors.n.analysis.v1",
+        "lexeme_id": "tourist-attraction.place-or-experience-that-draws-visitors.n",
+        "text": "tourist attraction",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.tour",
+            "type": "stem",
+            "canonical": "tour",
+            "surface": "tour"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ist.suffix",
+            "type": "suffix",
+            "canonical": "ist",
+            "surface": "ist"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.attraction",
+            "type": "stem",
+            "canonical": "attraction",
+            "surface": "attraction"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "tourist",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "tourist attraction",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "landmark.recognizable-feature-used-for-interest-or-orientation.n",
+      "text": "landmark",
+      "display_text": "landmark",
+      "pos": "noun",
+      "definition": "A recognizable place or feature that is notable or useful for orientation.",
+      "example": "The map identifies a landmark near the hotel.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "landmark"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional local map showing an original recognizable building or natural feature.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "landmark.recognizable-feature-used-for-interest-or-orientation.n.analysis.v1",
+        "lexeme_id": "landmark.recognizable-feature-used-for-interest-or-orientation.n",
+        "text": "landmark",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.land",
+            "type": "stem",
+            "canonical": "land",
+            "surface": "land"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.mark",
+            "type": "stem",
+            "canonical": "mark",
+            "surface": "mark"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "landmark",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "museum.place-preserving-and-displaying-collections.n",
+      "text": "museum",
+      "display_text": "museum",
+      "pos": "noun",
+      "definition": "A place that preserves and displays collections for public interest, learning, or research.",
+      "example": "The museum has published its current access information.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "museum"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming fictional museum entrance with readable service and accessibility information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "gallery.place-displaying-works-of-art.n",
+      "text": "gallery",
+      "display_text": "gallery",
+      "pos": "noun",
+      "definition": "A place where works of art are displayed.",
+      "example": "The gallery requires a separate booking for this exhibition.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "gallery"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming fictional gallery with original invented artwork and a clear visitor-information point.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "guided-tour.organized-visit-led-by-guide.n",
+      "text": "guided tour",
+      "display_text": "guided tour",
+      "pos": "noun",
+      "definition": "An organized visit led by a guide who provides information or direction.",
+      "example": "Ask the provider about the guided tour's language and access arrangements.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "guided tour"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly guide speaking to a small diverse group at a fictional attraction.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "guided-tour.organized-visit-led-by-guide.n.analysis.v1",
+        "lexeme_id": "guided-tour.organized-visit-led-by-guide.n",
+        "text": "guided tour",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.guide",
+            "type": "stem",
+            "canonical": "guide",
+            "surface": "guid"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.tour",
+            "type": "stem",
+            "canonical": "tour",
+            "surface": "tour"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "guided",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "guided tour",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "walking-tour.tour-traveled-mainly-on-foot.n",
+      "text": "walking tour",
+      "display_text": "walking tour",
+      "pos": "noun",
+      "definition": "A tour in which participants travel mainly on foot, either with a guide or using provided information.",
+      "example": "Check the actual route and access requirements before recommending the walking tour.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "walking tour"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional route-information card with terrain and access fields awaiting current provider details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "walking-tour.tour-traveled-mainly-on-foot.n.analysis.v1",
+        "lexeme_id": "walking-tour.tour-traveled-mainly-on-foot.n",
+        "text": "walking tour",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.walk",
+            "type": "stem",
+            "canonical": "walk",
+            "surface": "walk"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.tour",
+            "type": "stem",
+            "canonical": "tour",
+            "surface": "tour"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "walking",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "walking tour",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "day-trip.journey-with-return-on-same-day.n",
+      "text": "day trip",
+      "display_text": "day trip",
+      "pos": "noun",
+      "definition": "A journey to visit a place and return on the same day.",
+      "example": "The day trip is scheduled to return this evening.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "day trip"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional itinerary clearly showing an outward journey and a return on one date.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "day-trip.journey-with-return-on-same-day.n.analysis.v1",
+        "lexeme_id": "day-trip.journey-with-return-on-same-day.n",
+        "text": "day trip",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.day",
+            "type": "stem",
+            "canonical": "day",
+            "surface": "day"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.trip",
+            "type": "stem",
+            "canonical": "trip",
+            "surface": "trip"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "day trip",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "excursion.short-planned-outing-often-within-longer-visit.n",
+      "text": "excursion",
+      "display_text": "excursion",
+      "pos": "noun",
+      "definition": "A short planned outing, often organized as part of a longer visit or trip.",
+      "example": "The guest has asked which excursion is available during the stay.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "excursion"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional optional outing listed within a broader holiday itinerary.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "tour-operator.business-organizing-tours-or-travel-packages.n",
+      "text": "tour operator",
+      "display_text": "tour operator",
+      "pos": "noun",
+      "definition": "A business that organizes tours or travel packages under its stated arrangements.",
+      "example": "Ask the tour operator for the current activity details.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "tour operator"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional tour-provider information card with invented contact details and package descriptions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "tour-operator.business-organizing-tours-or-travel-packages.n.analysis.v1",
+        "lexeme_id": "tour-operator.business-organizing-tours-or-travel-packages.n",
+        "text": "tour operator",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.tour",
+            "type": "stem",
+            "canonical": "tour",
+            "surface": "tour"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.operate",
+            "type": "stem",
+            "canonical": "operate",
+            "surface": "operat"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.or.suffix",
+            "type": "suffix",
+            "canonical": "or",
+            "surface": "or"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "operator",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "tour operator",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "travel-agent.person-or-business-arranging-travel-bookings.n",
+      "text": "travel agent",
+      "display_text": "travel agent",
+      "pos": "noun",
+      "definition": "A person or business that helps customers arrange or purchase travel services.",
+      "example": "The travel agent has sent a revised itinerary.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "travel agent"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly travel-service professional reviewing a fictional itinerary with a customer.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "travel-agent.person-or-business-arranging-travel-bookings.n.analysis.v1",
+        "lexeme_id": "travel-agent.person-or-business-arranging-travel-bookings.n",
+        "text": "travel agent",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.travel",
+            "type": "stem",
+            "canonical": "travel",
+            "surface": "travel"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.agent",
+            "type": "stem",
+            "canonical": "agent",
+            "surface": "agent"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "travel agent",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "tour-guide.person-leading-and-explaining-visitor-tour.n",
+      "text": "tour guide",
+      "display_text": "tour guide",
+      "pos": "noun",
+      "definition": "A person who leads a tour and provides information about the places or activities visited.",
+      "example": "The tour guide will confirm the meeting point.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "tour guide"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly guide holding an original fictional tour-information card near a welcoming attraction.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "tour-guide.person-leading-and-explaining-visitor-tour.n.analysis.v1",
+        "lexeme_id": "tour-guide.person-leading-and-explaining-visitor-tour.n",
+        "text": "tour guide",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.tour",
+            "type": "stem",
+            "canonical": "tour",
+            "surface": "tour"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.guide",
+            "type": "stem",
+            "canonical": "guide",
+            "surface": "guide"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "tour guide",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "admission-ticket.document-or-code-for-entry-to-event-or-place.n",
+      "text": "admission ticket",
+      "display_text": "admission ticket",
+      "pos": "noun",
+      "definition": "A document or code used for admission to a specified place or event under its stated conditions.",
+      "example": "Check the date and entry conditions on the admission ticket.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "admission ticket"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly fictional admission ticket with a nonfunctional code and invented venue details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "admission-ticket.document-or-code-for-entry-to-event-or-place.n.analysis.v1",
+        "lexeme_id": "admission-ticket.document-or-code-for-entry-to-event-or-place.n",
+        "text": "admission ticket",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.admission",
+            "type": "stem",
+            "canonical": "admission",
+            "surface": "admission"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.ticket",
+            "type": "stem",
+            "canonical": "ticket",
+            "surface": "ticket"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "admission ticket",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "entrance-fee.charge-for-entering-place-or-event.n",
+      "text": "entrance fee",
+      "display_text": "entrance fee",
+      "pos": "noun",
+      "definition": "A charge for entering a place or event.",
+      "example": "Confirm whether the entrance fee is included in the package.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "entrance fee"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional attraction-price card distinguishing admission from optional additional services.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "entrance-fee.charge-for-entering-place-or-event.n.analysis.v1",
+        "lexeme_id": "entrance-fee.charge-for-entering-place-or-event.n",
+        "text": "entrance fee",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.entrance",
+            "type": "stem",
+            "canonical": "entrance",
+            "surface": "entrance"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.fee",
+            "type": "stem",
+            "canonical": "fee",
+            "surface": "fee"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "entrance fee",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "visitor-information-center.service-place-providing-local-visitor-information.n",
+      "text": "visitor information center",
+      "display_text": "visitor information center",
+      "pos": "noun",
+      "definition": "A place that provides local information and assistance to visitors.",
+      "example": "The visitor information center has the current local transport details.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "visitor information center",
+        "visitor information centre"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming fictional visitor-information counter with original maps and brochures.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "visitor-information-center.service-place-providing-local-visitor-information.n.analysis.v1",
+        "lexeme_id": "visitor-information-center.service-place-providing-local-visitor-information.n",
+        "text": "visitor information center",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.visitor",
+            "type": "stem",
+            "canonical": "visitor",
+            "surface": "visitor"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.information",
+            "type": "stem",
+            "canonical": "information",
+            "surface": "information"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.center",
+            "type": "stem",
+            "canonical": "center",
+            "surface": "center"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "visitor information",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "visitor information center",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "local-map.map-showing-nearby-area.n",
+      "text": "local map",
+      "display_text": "local map",
+      "pos": "noun",
+      "definition": "A map showing an area near a particular place.",
+      "example": "The local map shows the station and the hotel.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "local map"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional neighborhood map with clear labels and no claimed real-world navigation accuracy.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "local-map.map-showing-nearby-area.n.analysis.v1",
+        "lexeme_id": "local-map.map-showing-nearby-area.n",
+        "text": "local map",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.local",
+            "type": "stem",
+            "canonical": "local",
+            "surface": "local"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.map",
+            "type": "stem",
+            "canonical": "map",
+            "surface": "map"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "local map",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "public-transport.transport-services-available-to-general-public.n",
+      "text": "public transport",
+      "display_text": "public transport",
+      "pos": "noun",
+      "definition": "Transport services available to the public under the provider's routes, schedules, and terms.",
+      "example": "Check the current public transport options with the operator.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "public transport"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional transport-information board showing bus and rail services without real-time claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "public-transport.transport-services-available-to-general-public.n.analysis.v1",
+        "lexeme_id": "public-transport.transport-services-available-to-general-public.n",
+        "text": "public transport",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.public",
+            "type": "stem",
+            "canonical": "public",
+            "surface": "public"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.transport",
+            "type": "stem",
+            "canonical": "transport",
+            "surface": "transport"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "public transport",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "bus-stop.designated-place-for-bus-passenger-pickup.n",
+      "text": "bus stop",
+      "display_text": "bus stop",
+      "pos": "noun",
+      "definition": "A designated place where a bus picks up or drops off passengers.",
+      "example": "Confirm which bus stop serves the requested destination.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "bus stop"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional marked bus stop with clear route information and no moving vehicle.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bus-stop.designated-place-for-bus-passenger-pickup.n.analysis.v1",
+        "lexeme_id": "bus-stop.designated-place-for-bus-passenger-pickup.n",
+        "text": "bus stop",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bus",
+            "type": "stem",
+            "canonical": "bus",
+            "surface": "bus"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.stop",
+            "type": "stem",
+            "canonical": "stop",
+            "surface": "stop"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "bus stop",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "train-station.place-where-trains-stop-for-passengers.n",
+      "text": "train station",
+      "display_text": "train station",
+      "pos": "noun",
+      "definition": "A place where trains stop for passengers to board or leave.",
+      "example": "Ask the rail operator about access at the train station.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "train station"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming fictional station entrance with current-information and access signs.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "train-station.place-where-trains-stop-for-passengers.n.analysis.v1",
+        "lexeme_id": "train-station.place-where-trains-stop-for-passengers.n",
+        "text": "train station",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.train",
+            "type": "stem",
+            "canonical": "train",
+            "surface": "train"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.station",
+            "type": "stem",
+            "canonical": "station",
+            "surface": "station"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "train station",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "airport.facility-for-aircraft-arrivals-and-departures.n",
+      "text": "airport",
+      "display_text": "airport",
+      "pos": "noun",
+      "definition": "A facility where aircraft arrive and depart and where passengers or cargo are handled.",
+      "example": "Confirm which airport appears in the booking.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "airport"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional airport terminal exterior with readable invented terminal signs.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "airport.facility-for-aircraft-arrivals-and-departures.n.analysis.v1",
+        "lexeme_id": "airport.facility-for-aircraft-arrivals-and-departures.n",
+        "text": "airport",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.air",
+            "type": "stem",
+            "canonical": "air",
+            "surface": "air"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.port",
+            "type": "stem",
+            "canonical": "port",
+            "surface": "port"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "airport",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "airport-transfer.transport-arrangement-between-airport-and-another-place.n",
+      "text": "airport transfer",
+      "display_text": "airport transfer",
+      "pos": "noun",
+      "definition": "A transport arrangement between an airport and another place such as a hotel.",
+      "example": "The airport transfer needs the correct arrival details.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "airport transfer"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional transfer booking linking an invented airport terminal and hotel.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "airport-transfer.transport-arrangement-between-airport-and-another-place.n.analysis.v1",
+        "lexeme_id": "airport-transfer.transport-arrangement-between-airport-and-another-place.n",
+        "text": "airport transfer",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.air",
+            "type": "stem",
+            "canonical": "air",
+            "surface": "air"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.port",
+            "type": "stem",
+            "canonical": "port",
+            "surface": "port"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.transfer",
+            "type": "stem",
+            "canonical": "transfer",
+            "surface": "transfer"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "airport",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "airport transfer",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "shuttle-service.transport-service-between-defined-places.n",
+      "text": "shuttle service",
+      "display_text": "shuttle service",
+      "pos": "noun",
+      "definition": "A transport service operating between defined places under its stated schedule or booking arrangements.",
+      "example": "Check the shuttle service's current timetable and access features.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "shuttle service"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional shuttle-service card showing defined stops and a clearly labeled timetable.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "shuttle-service.transport-service-between-defined-places.n.analysis.v1",
+        "lexeme_id": "shuttle-service.transport-service-between-defined-places.n",
+        "text": "shuttle service",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.shuttle",
+            "type": "stem",
+            "canonical": "shuttle",
+            "surface": "shuttle"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.service",
+            "type": "stem",
+            "canonical": "service",
+            "surface": "service"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "shuttle service",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "taxi-booking.arrangement-requesting-taxi-service.n",
+      "text": "taxi booking",
+      "display_text": "taxi booking",
+      "pos": "noun",
+      "definition": "An arrangement or request for a taxi service at a specified place and time.",
+      "example": "The taxi booking is awaiting confirmation from the provider.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "taxi booking"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional taxi-service request showing invented pickup details and a pending status.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "taxi-booking.arrangement-requesting-taxi-service.n.analysis.v1",
+        "lexeme_id": "taxi-booking.arrangement-requesting-taxi-service.n",
+        "text": "taxi booking",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.taxi",
+            "type": "stem",
+            "canonical": "taxi",
+            "surface": "taxi"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.book",
+            "type": "stem",
+            "canonical": "book",
+            "surface": "book"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "booking",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "taxi booking",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "rental-car.car-hired-for-defined-period.n",
+      "text": "rental car",
+      "display_text": "rental car",
+      "pos": "noun",
+      "definition": "A car hired for use over a defined period under the rental provider's conditions.",
+      "example": "Ask the rental provider about the rental car's collection requirements.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "rental car"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A stationary fictional rental car beside a booking-information card with no driving instruction.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "rental-car.car-hired-for-defined-period.n.analysis.v1",
+        "lexeme_id": "rental-car.car-hired-for-defined-period.n",
+        "text": "rental car",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.rent",
+            "type": "stem",
+            "canonical": "rent",
+            "surface": "rent"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.al.suffix",
+            "type": "suffix",
+            "canonical": "al",
+            "surface": "al"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.car",
+            "type": "stem",
+            "canonical": "car",
+            "surface": "car"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "rental",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "rental car",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "travel-voucher.document-or-code-used-toward-specified-travel-service.n",
+      "text": "travel voucher",
+      "display_text": "travel voucher",
+      "pos": "noun",
+      "definition": "A document or code issued for use toward a specified travel service under stated terms.",
+      "example": "Check the travel voucher's issuer, validity, and conditions.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "travel voucher"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly fictional travel voucher with a nonfunctional code and visible terms reference.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "travel-voucher.document-or-code-used-toward-specified-travel-service.n.analysis.v1",
+        "lexeme_id": "travel-voucher.document-or-code-used-toward-specified-travel-service.n",
+        "text": "travel voucher",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.travel",
+            "type": "stem",
+            "canonical": "travel",
+            "surface": "travel"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.voucher",
+            "type": "stem",
+            "canonical": "voucher",
+            "surface": "voucher"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "travel voucher",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "travel-insurance.insurance-covering-specified-travel-related-risks.n",
+      "text": "travel insurance",
+      "display_text": "travel insurance",
+      "pos": "noun",
+      "definition": "Insurance covering specified travel-related risks under the policy's terms, limits, and exclusions.",
+      "example": "Refer the travel insurance question to the insurer or qualified adviser.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "travel insurance"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional policy-information card with coverage questions referred to the insurer and no purchase recommendation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "travel-insurance.insurance-covering-specified-travel-related-risks.n.analysis.v1",
+        "lexeme_id": "travel-insurance.insurance-covering-specified-travel-related-risks.n",
+        "text": "travel insurance",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.travel",
+            "type": "stem",
+            "canonical": "travel",
+            "surface": "travel"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.insurance",
+            "type": "stem",
+            "canonical": "insurance",
+            "surface": "insurance"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "travel insurance",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "passport.official-document-identifying-traveler-and-nationality.n",
+      "text": "passport",
+      "display_text": "passport",
+      "pos": "noun",
+      "definition": "An official document identifying a traveler and their nationality for relevant international-travel purposes.",
+      "example": "Direct questions about passport requirements to the appropriate official source.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "passport"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly fictional closed travel-document booklet without real seals, personal data, or entry-permission claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.passport.official-document-identifying-traveler-and-nationality.n.morphology.v1",
+        "lexeme_id": "passport.official-document-identifying-traveler-and-nationality.n",
+        "text": "passport",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.pass.travel",
+            "canonical": "pass",
+            "surface": "pass",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.port.entry",
+            "canonical": "port",
+            "surface": "port",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "passport",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Pending Professional English review. Explicit sense comparison: Both nouns select the official international-travel document. The source pass travel-action and port entry-place identities are appropriate; neither permission pass nor computer port is substituted. Inherited Growth rationale: The established travel document compound concerns passing through a port; pass is the travel action rather than the permission noun, and the current document meaning is retained. The Growth AI editorial status is not transferred. External sources listed here are inherited repository records, not newly consulted in this pass.",
+          "references": [
+            "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html",
+            "https://www.merriam-webster.com/dictionary/passport"
+          ],
+          "provenance": {
+            "corpus": "Growth",
+            "file": "data/vocabulary/morphology/age-07.json",
+            "entry_id": "passport",
+            "analysis_id": "growth.passport.analysis.v1",
+            "analysis_sha256": "d769b8215cf33afe635462a524a39472e71aa63bb048653dbc5ea14a5b64ddea",
+            "source_review_status": "reviewed"
+          },
+          "source_consultation": "inherited_repository_record_not_newly_consulted_in_this_pass"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "visa.official-permission-related-to-entry-or-stay.n",
+      "text": "visa",
+      "display_text": "visa",
+      "pos": "noun",
+      "definition": "An official permission related to entering or staying in a country under specified conditions, subject to the destination's rules.",
+      "example": "Ask the relevant official authority about visa requirements.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "visa"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly fictional travel-requirements reference card without a real visa design or eligibility decision.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "travel-advisory.official-information-about-travel-conditions-or-risks.n",
+      "text": "travel advisory",
+      "display_text": "travel advisory",
+      "pos": "noun",
+      "definition": "Official information about travel conditions or risks for a place, issued by the relevant authority.",
+      "example": "Check the current travel advisory from the appropriate official source.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "travel advisory"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional advisory-information page with an issuer and date field and no invented real-world risk claim.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "travel-advisory.official-information-about-travel-conditions-or-risks.n.analysis.v1",
+        "lexeme_id": "travel-advisory.official-information-about-travel-conditions-or-risks.n",
+        "text": "travel advisory",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.travel",
+            "type": "stem",
+            "canonical": "travel",
+            "surface": "travel"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.advisory",
+            "type": "stem",
+            "canonical": "advisory",
+            "surface": "advisory"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "travel advisory",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "weather-forecast.prediction-of-weather-for-place-and-time.n",
+      "text": "weather forecast",
+      "display_text": "weather forecast",
+      "pos": "noun",
+      "definition": "A prediction of the weather for a stated place and period.",
+      "example": "Check the latest weather forecast before confirming the provider's activity update.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "weather forecast"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional weather-information card clearly labeled as a forecast for an invented location.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "weather-forecast.prediction-of-weather-for-place-and-time.n.analysis.v1",
+        "lexeme_id": "weather-forecast.prediction-of-weather-for-place-and-time.n",
+        "text": "weather forecast",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.weather",
+            "type": "stem",
+            "canonical": "weather",
+            "surface": "weather"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.forecast",
+            "type": "stem",
+            "canonical": "forecast",
+            "surface": "forecast"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "weather forecast",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

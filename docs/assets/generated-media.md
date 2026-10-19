@@ -98,7 +98,7 @@ See [growth persistence](../growth-system.md) for independent save ownership.
 
 ### Regenerate natural speech
 
-Voice regeneration requires **Python**, **edge-tts 7.2.8**, and **FFmpeg** on PATH.
+Voice regeneration requires **Python**, **edge-tts 7.3.1**, and **FFmpeg** on PATH.
 `tools\generate-voices.cjs` uses the same Ava profile as the user-approved preview.
 FFmpeg decodes the service MP3 into the existing **22.05 kHz, PCM16 mono** asset
 format. It does not alter pitch, add effects, or trim the spoken delivery.

@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "status": "unexecuted_preparation_r02_static_sources_derived",
+  "recorded_at": "2026-10-16T21:10:17.099Z",
+  "author": "Codex runtime_recovery delivery proposal author",
+  "repository_root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "author_source_before_sha256": "5bf19ff7a5ab8628f24a4222c07aa7202d9898e795bfe3ffc396fd66105deb8b",
+  "author_source_after_sha256": "5bf19ff7a5ab8628f24a4222c07aa7202d9898e795bfe3ffc396fd66105deb8b",
+  "predecessor": "build/professional-english/foundation02-fourth10-delivery-preparation-r01",
+  "source_preimages": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/projection.cjs",
+      "raw_sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/test-transforms.cjs",
+      "raw_sha256": "f28949a1cdb0dfceb1875ec7abfd6478aa2502dfecb3b6e8e37d1bd113c58d5e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/prepare.cjs",
+      "raw_sha256": "6fa9ddd5547673b797c302a4b1c78d8b3be64a9b90f07cfe2771a3f2236b9c11"
+    }
+  ],
+  "output_sources": [
+    {
+      "path": "projection.cjs",
+      "bytes": 23650,
+      "raw_sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9"
+    },
+    {
+      "path": "test-transforms.cjs",
+      "bytes": 23088,
+      "raw_sha256": "8c7d14a179b193bc8d107956e17cdc93d5bf24b02a227c5428b2b0b8c900f786"
+    },
+    {
+      "path": "prepare.cjs",
+      "bytes": 9106,
+      "raw_sha256": "5f72577a8651ed37c1bc7b6df0a66ad745645f65a6a060e022e967b031656790"
+    }
+  ],
+  "changes": [
+    {
+      "file": "projection.cjs",
+      "action": "Exact byte copy; language, provenance, protected context and proposed output semantics unchanged"
+    },
+    {
+      "file": "test-transforms.cjs",
+      "action": "One exact callback anchor replacement",
+      "before": "    for(const history of [foundationLanguageRecord,foundationSecondLanguageRecord,foundationThirdLanguageRecord,foundationFourthLanguageRecord,foundationFifthLanguageRecord]){const snapshots=history.protected_context.lexemes.filter(row=>row.entry.id===p.id);assert.equal(snapshots.length,1);assert.deepEqual(beforeFoundationLanguage(entry),snapshots[0].entry);}",
+      "after": "    const histories=[foundationLanguageRecord,foundationSecondLanguageRecord,foundationThirdLanguageRecord,foundationFourthLanguageRecord,foundationFifthLanguageRecord];\n    const expectedCounts=p.id==='sign.write-name.v'?[1,1,1,1,2]:[1,1,1,1,1];\n    const expectedRow={resource:'res://data/professional/lexemes/foundation-module02.json',json_sha256:p.before_sha256,entry:p.before};\n    assert.equal(data.lexemeOrigins[p.id],expectedRow.resource);\n    for(const [historyIndex,history] of histories.entries()){\n      const snapshots=history.protected_context.lexemes.filter(row=>row.entry.id===p.id);\n      assert.equal(snapshots.length,expectedCounts[historyIndex],p.id+': exact historical snapshot multiplicity '+historyIndex);\n      for(const snapshot of snapshots){\n        assert.deepEqual(snapshot,expectedRow,p.id+': exact whole historical donor row '+historyIndex);\n        assert.deepEqual(snapshot.entry,beforeFoundationLanguage(entry),p.id+': exact historical reversal '+historyIndex);\n      }\n    }",
+      "count": 1
+    },
+    {
+      "file": "prepare.cjs",
+      "action": "Extend source witnesses to bind r02 derivation and input-freeze source",
+      "before": "const sourceNames = ['input-pins.json', 'input-freeze-receipt.json', 'projection.cjs', 'test-transforms.cjs', 'prepare.cjs', 'HANDOFF.md', 'TRANSACTION.md', 'author-inventory.json'];",
+      "after": "const sourceNames = ['input-pins.json', 'input-freeze-receipt.json', 'projection.cjs', 'test-transforms.cjs', 'prepare.cjs', 'HANDOFF.md', 'TRANSACTION.md', 'author-r02.cjs', 'revision-derivation.json', 'freeze-inputs.cjs', 'author-inventory.json'];",
+      "count": 1
+    }
+  ],
+  "exact_multiplicity": {
+    "history_order": [
+      "Foundation01 first10",
+      "Foundation01 second10",
+      "Foundation01 third10",
+      "Foundation01 fourth10",
+      "Foundation01 fifth10"
+    ],
+    "sign": [
+      1,
+      1,
+      1,
+      1,
+      2
+    ],
+    "other_nine_fourth10_ids": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "expected_total_rows": 51,
+    "expected_groups": 50
+  },
+  "duplicate_origin": "Fifth10 protected_context.lexemes[73] and [90] originate from identical preimages.unselected_foundation_entries[73] and preimages.related_entries[0], concatenated by delivery-lib.cjs. Both complete rows must match resource, json_sha256 and entry.",
+  "original_failure_preserved": true,
+  "history_rewritten_or_deduplicated": false,
+  "broad_guard_exception": false,
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "candidate_modules_imported": false,
+  "preparation_or_projection_dispatched": false,
+  "syntax_checked": false,
+  "tests_dispatched": false,
+  "native_dispatched": false,
+  "input_freeze_pending": true,
+  "independent_source_review_pending": true,
+  "root_dispatch_required": true
+}

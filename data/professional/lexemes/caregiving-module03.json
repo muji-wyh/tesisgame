@@ -1,0 +1,3971 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "living-room.home-shared-sitting-space.n",
+      "text": "living room",
+      "display_text": "living room",
+      "pos": "noun",
+      "definition": "A room in a home used for relaxing and spending time together.",
+      "example": "She prefers to meet visitors in the living room.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "living room"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming sitting room with comfortable seating and a clear route.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "living-room.home-shared-sitting-space.n.analysis.v1",
+        "lexeme_id": "living-room.home-shared-sitting-space.n",
+        "text": "living room",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.live",
+            "type": "stem",
+            "canonical": "live",
+            "surface": "liv"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.room",
+            "type": "stem",
+            "canonical": "room",
+            "surface": "room"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "living",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "living room",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "kitchen.food-preparation-room.n",
+      "text": "kitchen",
+      "display_text": "kitchen",
+      "pos": "noun",
+      "definition": "A room or area where food is prepared and cooked.",
+      "example": "He asked for help finding a cup in the kitchen.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "kitchen"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm domestic kitchen with recognizable appliances.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "kitchen.food-preparation-room.n.analysis.v1",
+        "lexeme_id": "kitchen.food-preparation-room.n",
+        "text": "kitchen",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.kitchen",
+            "type": "atomic",
+            "canonical": "kitchen",
+            "surface": "kitchen"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "bathroom.personal-washing-room.n",
+      "text": "bathroom",
+      "display_text": "bathroom",
+      "pos": "noun",
+      "definition": "A room with facilities for washing, usually including a bath or shower.",
+      "example": "The visitor asked where the bathroom was.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "bathroom"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unoccupied accessible bathroom with respectful domestic details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bathroom.personal-washing-room.n.analysis.v1",
+        "lexeme_id": "bathroom.personal-washing-room.n",
+        "text": "bathroom",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bath",
+            "type": "stem",
+            "canonical": "bath",
+            "surface": "bath"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.room",
+            "type": "stem",
+            "canonical": "room",
+            "surface": "room"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "bathroom",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "bedroom.sleeping-room.n",
+      "text": "bedroom",
+      "display_text": "bedroom",
+      "pos": "noun",
+      "definition": "A room used mainly for sleeping.",
+      "example": "She chose the curtains for her bedroom.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "bedroom"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A personal bedroom with a bed and familiar possessions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bedroom.sleeping-room.n.analysis.v1",
+        "lexeme_id": "bedroom.sleeping-room.n",
+        "text": "bedroom",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bed",
+            "type": "stem",
+            "canonical": "bed",
+            "surface": "bed"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.room",
+            "type": "stem",
+            "canonical": "room",
+            "surface": "room"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "bedroom",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "dining-room.room-for-eating-meals.n",
+      "text": "dining room",
+      "display_text": "dining room",
+      "pos": "noun",
+      "definition": "A room where people sit to eat meals.",
+      "example": "They agreed to have lunch in the dining room.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "dining room"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An inviting room with a dining table and chairs.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "dining-room.room-for-eating-meals.n.analysis.v1",
+        "lexeme_id": "dining-room.room-for-eating-meals.n",
+        "text": "dining room",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.dine",
+            "type": "stem",
+            "canonical": "dine",
+            "surface": "din"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.room",
+            "type": "stem",
+            "canonical": "room",
+            "surface": "room"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "dining",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "dining room",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "doorway.door-opening-space.n",
+      "text": "doorway",
+      "display_text": "doorway",
+      "pos": "noun",
+      "definition": "The opening through which a person enters or leaves a room or building.",
+      "example": "He reported an obstruction in the doorway.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "doorway"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly visible home doorway with a fictional concern discussed nearby.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "doorway.door-opening-space.n.analysis.v1",
+        "lexeme_id": "doorway.door-opening-space.n",
+        "text": "doorway",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.door",
+            "type": "stem",
+            "canonical": "door",
+            "surface": "door"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.way",
+            "type": "stem",
+            "canonical": "way",
+            "surface": "way"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "doorway",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "hallway.interior-connecting-passage.n",
+      "text": "hallway",
+      "display_text": "hallway",
+      "pos": "noun",
+      "definition": "A passage inside a building connecting rooms or entrances.",
+      "example": "The hallway leads to the kitchen.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "hallway"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A short domestic hallway linking two rooms.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "hallway.interior-connecting-passage.n.analysis.v1",
+        "lexeme_id": "hallway.interior-connecting-passage.n",
+        "text": "hallway",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.hall",
+            "type": "stem",
+            "canonical": "hall",
+            "surface": "hall"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.way",
+            "type": "stem",
+            "canonical": "way",
+            "surface": "way"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "hallway",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "doorstep.step-at-building-entrance.n",
+      "text": "doorstep",
+      "display_text": "doorstep",
+      "pos": "noun",
+      "definition": "A step directly outside an entrance door.",
+      "example": "She asked about the height of the doorstep.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "doorstep"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A home entrance with one clearly visible step.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "doorstep.step-at-building-entrance.n.analysis.v1",
+        "lexeme_id": "doorstep.step-at-building-entrance.n",
+        "text": "doorstep",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.door",
+            "type": "stem",
+            "canonical": "door",
+            "surface": "door"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.step",
+            "type": "stem",
+            "canonical": "step",
+            "surface": "step"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "doorstep",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "stair.one-step-of-staircase.n",
+      "text": "stair",
+      "display_text": "stair",
+      "pos": "noun",
+      "definition": "One step in a series leading between levels.",
+      "example": "The report identifies a damaged stair.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "stair"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An empty staircase with one step discreetly highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "stair.one-step-of-staircase.n.analysis.v1",
+        "lexeme_id": "stair.one-step-of-staircase.n",
+        "text": "stair",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.stair",
+            "type": "atomic",
+            "canonical": "stair",
+            "surface": "stair"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "handrail.support-rail-along-route.n",
+      "text": "handrail",
+      "display_text": "handrail",
+      "pos": "noun",
+      "definition": "A rail beside steps or a route that people can hold for support.",
+      "example": "He asked the assessor about the handrail.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "handrail"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly visible stair handrail without demonstrating a technique.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "handrail.support-rail-along-route.n.analysis.v1",
+        "lexeme_id": "handrail.support-rail-along-route.n",
+        "text": "handrail",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.hand",
+            "type": "stem",
+            "canonical": "hand",
+            "surface": "hand"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.rail",
+            "type": "stem",
+            "canonical": "rail",
+            "surface": "rail"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "handrail",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "ramp.sloping-route-between-levels.n",
+      "text": "ramp",
+      "display_text": "ramp",
+      "pos": "noun",
+      "definition": "A sloping surface connecting places at different heights.",
+      "example": "The visitor asked which entrance has a ramp.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "ramp"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An accessible entrance with a gentle sloping route.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "ramp.sloping-route-between-levels.n.analysis.v1",
+        "lexeme_id": "ramp.sloping-route-between-levels.n",
+        "text": "ramp",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.ramp",
+            "type": "atomic",
+            "canonical": "ramp",
+            "surface": "ramp"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "grab-rail.fixed-support-handhold.n",
+      "text": "grab rail",
+      "display_text": "grab rail",
+      "pos": "noun",
+      "definition": "A fixed bar intended to provide a handhold for support.",
+      "example": "The occupational therapist discussed the grab rail.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "grab rail"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unoccupied bathroom rail shown as a product reference.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "grab-rail.fixed-support-handhold.n.analysis.v1",
+        "lexeme_id": "grab-rail.fixed-support-handhold.n",
+        "text": "grab rail",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.grab",
+            "type": "stem",
+            "canonical": "grab",
+            "surface": "grab"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.rail",
+            "type": "stem",
+            "canonical": "rail",
+            "surface": "rail"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "grab rail",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "shower-chair.seat-designed-for-showering.n",
+      "text": "shower chair",
+      "display_text": "shower chair",
+      "pos": "noun",
+      "definition": "A seat designed for use in a shower, subject to individual suitability.",
+      "example": "The care plan names the shower chair.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "shower chair"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An empty purpose-designed shower seat without a person using it.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "shower-chair.seat-designed-for-showering.n.analysis.v1",
+        "lexeme_id": "shower-chair.seat-designed-for-showering.n",
+        "text": "shower chair",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.shower",
+            "type": "stem",
+            "canonical": "shower",
+            "surface": "shower"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.chair",
+            "type": "stem",
+            "canonical": "chair",
+            "surface": "chair"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "shower chair",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "raised-toilet-seat.toilet-seat-height-aid.n",
+      "text": "raised toilet seat",
+      "display_text": "raised toilet seat",
+      "pos": "noun",
+      "definition": "An aid designed to increase the height of a toilet seat.",
+      "example": "She asked whether the raised toilet seat was the assessed model.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "raised toilet seat"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unoccupied toilet-height aid shown respectfully.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "raised-toilet-seat.toilet-seat-height-aid.n.analysis.v1",
+        "lexeme_id": "raised-toilet-seat.toilet-seat-height-aid.n",
+        "text": "raised toilet seat",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.raise",
+            "type": "stem",
+            "canonical": "raise",
+            "surface": "rais"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.toilet",
+            "type": "stem",
+            "canonical": "toilet",
+            "surface": "toilet"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.seat",
+            "type": "stem",
+            "canonical": "seat",
+            "surface": "seat"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "raised",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "raised toilet",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "raised toilet seat",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "non-slip-mat.traction-improving-mat.n",
+      "text": "non-slip mat",
+      "display_text": "non-slip mat",
+      "pos": "noun",
+      "definition": "A mat designed to reduce slipping in its intended setting.",
+      "example": "The worker reported damage to the non-slip mat.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "non-slip mat"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clean bathroom mat with visible textured material.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "non-slip-mat.traction-improving-mat.n.analysis.v1",
+        "lexeme_id": "non-slip-mat.traction-improving-mat.n",
+        "text": "non-slip mat",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.non.prefix",
+            "type": "prefix",
+            "canonical": "non",
+            "surface": "non"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.slip",
+            "type": "stem",
+            "canonical": "slip",
+            "surface": "slip"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.mat",
+            "type": "stem",
+            "canonical": "mat",
+            "surface": "mat"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "non-slip",
+            "rule": "hyphenated_prefix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "non-slip mat",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "soap.washing-cleaning-substance.n",
+      "text": "soap",
+      "display_text": "soap",
+      "pos": "noun",
+      "definition": "A substance used with water for washing.",
+      "example": "He asked for his usual soap.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "soap"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A recognizable bar and dispenser of unbranded soap.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "soap.washing-cleaning-substance.n.analysis.v1",
+        "lexeme_id": "soap.washing-cleaning-substance.n",
+        "text": "soap",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.soap",
+            "type": "atomic",
+            "canonical": "soap",
+            "surface": "soap"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "towel.absorbent-drying-cloth.n",
+      "text": "towel",
+      "display_text": "towel",
+      "pos": "noun",
+      "definition": "An absorbent cloth used for drying.",
+      "example": "She chose a clean towel from the shelf.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "towel"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A soft folded towel with visible fabric detail.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "towel.absorbent-drying-cloth.n.analysis.v1",
+        "lexeme_id": "towel.absorbent-drying-cloth.n",
+        "text": "towel",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.towel",
+            "type": "atomic",
+            "canonical": "towel",
+            "surface": "towel"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "washcloth.small-body-washing-cloth.n",
+      "text": "washcloth",
+      "display_text": "washcloth",
+      "pos": "noun",
+      "definition": "A small cloth used for washing the body.",
+      "example": "He asked where his washcloth was kept.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "washcloth",
+        "flannel"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small personal washing cloth beside a basin.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "washcloth.small-body-washing-cloth.n.analysis.v1",
+        "lexeme_id": "washcloth.small-body-washing-cloth.n",
+        "text": "washcloth",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.wash",
+            "type": "stem",
+            "canonical": "wash",
+            "surface": "wash"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.cloth",
+            "type": "stem",
+            "canonical": "cloth",
+            "surface": "cloth"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "washcloth",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "toothbrush.tooth-cleaning-brush.n",
+      "text": "toothbrush",
+      "display_text": "toothbrush",
+      "pos": "noun",
+      "definition": "A small brush used to clean teeth.",
+      "example": "She identified her toothbrush by its color.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "toothbrush"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly recognizable toothbrush in a holder.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "toothbrush.tooth-cleaning-brush.n.analysis.v1",
+        "lexeme_id": "toothbrush.tooth-cleaning-brush.n",
+        "text": "toothbrush",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.tooth",
+            "type": "stem",
+            "canonical": "tooth",
+            "surface": "tooth"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.brush",
+            "type": "atomic",
+            "canonical": "brush",
+            "surface": "brush"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "toothbrush",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "toothpaste.tooth-cleaning-paste.n",
+      "text": "toothpaste",
+      "display_text": "toothpaste",
+      "pos": "noun",
+      "definition": "A paste or gel used when cleaning teeth.",
+      "example": "He requested his usual toothpaste.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "toothpaste"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unbranded toothpaste tube beside a brush.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "toothpaste.tooth-cleaning-paste.n.analysis.v1",
+        "lexeme_id": "toothpaste.tooth-cleaning-paste.n",
+        "text": "toothpaste",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.tooth",
+            "type": "stem",
+            "canonical": "tooth",
+            "surface": "tooth"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.paste",
+            "type": "stem",
+            "canonical": "paste",
+            "surface": "paste"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "toothpaste",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "denture.removable-tooth-replacement.n",
+      "text": "denture",
+      "display_text": "denture",
+      "pos": "noun",
+      "definition": "A removable appliance replacing some or all teeth.",
+      "example": "She asked for the case for her denture.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "denture"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A closed denture case with a gentle educational inset.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "hearing-aid.hearing-support-device.n",
+      "text": "hearing aid",
+      "display_text": "hearing aid",
+      "pos": "noun",
+      "definition": "A device designed to help a person hear sound.",
+      "example": "He asked for support locating his hearing aid.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "hearing aid"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A recognizable hearing aid on a clean display tray.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "hearing-aid.hearing-support-device.n.analysis.v1",
+        "lexeme_id": "hearing-aid.hearing-support-device.n",
+        "text": "hearing aid",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.hear",
+            "type": "stem",
+            "canonical": "hear",
+            "surface": "hear"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.aid",
+            "type": "stem",
+            "canonical": "aid",
+            "surface": "aid"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "hearing",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "hearing aid",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "spectacles.vision-correcting-glasses.n",
+      "text": "spectacles",
+      "display_text": "spectacles",
+      "pos": "noun",
+      "definition": "Glasses with lenses worn to help a person see.",
+      "example": "She put her spectacles beside the book.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "spectacles",
+        "eyeglasses",
+        "glasses"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A pair of everyday eyeglasses near a reading book.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "remote-control.wireless-device-controller.n",
+      "text": "remote control",
+      "display_text": "remote control",
+      "pos": "noun",
+      "definition": "A handheld device used to operate another device from a distance.",
+      "example": "He asked for the television remote control.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "remote control"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unbranded remote with clear large controls.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "remote-control.wireless-device-controller.n.analysis.v1",
+        "lexeme_id": "remote-control.wireless-device-controller.n",
+        "text": "remote control",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.remote",
+            "type": "stem",
+            "canonical": "remote",
+            "surface": "remote"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.control",
+            "type": "stem",
+            "canonical": "control",
+            "surface": "control"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "remote control",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "kettle.water-heating-vessel.n",
+      "text": "kettle",
+      "display_text": "kettle",
+      "pos": "noun",
+      "definition": "A vessel or appliance used to heat water.",
+      "example": "She asked which kettle belonged to her.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "kettle"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A familiar electric kettle shown unplugged for identification.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "kettle.water-heating-vessel.n.analysis.v1",
+        "lexeme_id": "kettle.water-heating-vessel.n",
+        "text": "kettle",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.kettle",
+            "type": "atomic",
+            "canonical": "kettle",
+            "surface": "kettle"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "microwave.microwave-cooking-appliance.n",
+      "text": "microwave",
+      "display_text": "microwave",
+      "pos": "noun",
+      "definition": "An appliance that heats food using microwave energy.",
+      "example": "The worker asked for the microwave instructions.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "microwave"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A recognizable closed microwave with no cooking directions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "microwave.microwave-cooking-appliance.n.analysis.v1",
+        "lexeme_id": "microwave.microwave-cooking-appliance.n",
+        "text": "microwave",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.micro.prefix",
+            "type": "prefix",
+            "canonical": "micro",
+            "surface": "micro"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.wave",
+            "type": "stem",
+            "canonical": "wave",
+            "surface": "wave"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "microwave",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "laundry-basket.clothes-collection-container.n",
+      "text": "laundry basket",
+      "display_text": "laundry basket",
+      "pos": "noun",
+      "definition": "A basket used to hold clothes or household fabrics for washing.",
+      "example": "She placed the clothes beside the laundry basket.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "laundry basket"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A woven laundry basket with folded fabric nearby.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "laundry-basket.clothes-collection-container.n.analysis.v1",
+        "lexeme_id": "laundry-basket.clothes-collection-container.n",
+        "text": "laundry basket",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.laundry",
+            "type": "atomic",
+            "canonical": "laundry",
+            "surface": "laundry"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.basket",
+            "type": "stem",
+            "canonical": "basket",
+            "surface": "basket"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "laundry basket",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "washing-machine.automatic-laundry-appliance.n",
+      "text": "washing machine",
+      "display_text": "washing machine",
+      "pos": "noun",
+      "definition": "An appliance that washes clothes and other suitable fabrics.",
+      "example": "The washing machine needs a maintenance check.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "washing machine"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A domestic washing machine with its door closed.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "washing-machine.automatic-laundry-appliance.n.analysis.v1",
+        "lexeme_id": "washing-machine.automatic-laundry-appliance.n",
+        "text": "washing machine",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.wash",
+            "type": "stem",
+            "canonical": "wash",
+            "surface": "wash"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.machine",
+            "type": "stem",
+            "canonical": "machine",
+            "surface": "machine"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "washing",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "washing machine",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "vacuum-cleaner.suction-cleaning-appliance.n",
+      "text": "vacuum cleaner",
+      "display_text": "vacuum cleaner",
+      "pos": "noun",
+      "definition": "An appliance that removes dust and dirt by suction.",
+      "example": "He asked where the vacuum cleaner was stored.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "vacuum cleaner"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A recognizable household vacuum cleaner in storage.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "vacuum-cleaner.suction-cleaning-appliance.n.analysis.v1",
+        "lexeme_id": "vacuum-cleaner.suction-cleaning-appliance.n",
+        "text": "vacuum cleaner",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.vacuum",
+            "type": "atomic",
+            "canonical": "vacuum",
+            "surface": "vacuum"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.clean",
+            "type": "stem",
+            "canonical": "clean",
+            "surface": "clean"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "cleaner",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "vacuum cleaner",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "plate.flat-food-serving-dish.n",
+      "text": "plate",
+      "display_text": "plate",
+      "pos": "noun",
+      "definition": "A usually flat dish on which food is served.",
+      "example": "She selected the blue plate.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "plate"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly recognizable plate with a simple decorative rim.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "plate.flat-food-serving-dish.n.analysis.v1",
+        "lexeme_id": "plate.flat-food-serving-dish.n",
+        "text": "plate",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.plate",
+            "type": "atomic",
+            "canonical": "plate",
+            "surface": "plate"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cup.small-drinking-vessel.n",
+      "text": "cup",
+      "display_text": "cup",
+      "pos": "noun",
+      "definition": "A small vessel used for drinking.",
+      "example": "He chose his favorite cup.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cup"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A familiar handled drinking cup at tabletop height.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cup.small-drinking-vessel.n.analysis.v1",
+        "lexeme_id": "cup.small-drinking-vessel.n",
+        "text": "cup",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cup",
+            "type": "atomic",
+            "canonical": "cup",
+            "surface": "cup"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cutlery.eating-utensil-collection.n",
+      "text": "cutlery",
+      "display_text": "cutlery",
+      "pos": "noun",
+      "definition": "Knives, forks, and spoons used for eating or serving food.",
+      "example": "She asked for the cutlery she usually uses.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cutlery"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A neatly arranged fork, spoon, and table knife.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "pillow.head-supporting-cushion.n",
+      "text": "pillow",
+      "display_text": "pillow",
+      "pos": "noun",
+      "definition": "A soft support used for the head, often in bed.",
+      "example": "He requested his own pillow.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pillow"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A soft pillow in a personal bedroom.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "pillow.head-supporting-cushion.n.analysis.v1",
+        "lexeme_id": "pillow.head-supporting-cushion.n",
+        "text": "pillow",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pillow",
+            "type": "atomic",
+            "canonical": "pillow",
+            "surface": "pillow"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "bedsheet.bed-covering-fabric.n",
+      "text": "bedsheet",
+      "display_text": "bedsheet",
+      "pos": "noun",
+      "definition": "A large piece of fabric used as part of the covering of a bed.",
+      "example": "She chose a clean bedsheet.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "bedsheet",
+        "bed sheet"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A folded bedsheet with part spread across a bed.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bedsheet.bed-covering-fabric.n.analysis.v1",
+        "lexeme_id": "bedsheet.bed-covering-fabric.n",
+        "text": "bedsheet",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bed",
+            "type": "stem",
+            "canonical": "bed",
+            "surface": "bed"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.sheet",
+            "type": "stem",
+            "canonical": "sheet",
+            "surface": "sheet"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "bedsheet",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "personal-alarm.help-request-alert-device.n",
+      "text": "personal alarm",
+      "display_text": "personal alarm",
+      "pos": "noun",
+      "definition": "A device a person can use to send an alert requesting help.",
+      "example": "He asked who receives a signal from the personal alarm.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "personal alarm"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A personal alarm pendant displayed without promising a response time.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "personal-alarm.help-request-alert-device.n.analysis.v1",
+        "lexeme_id": "personal-alarm.help-request-alert-device.n",
+        "text": "personal alarm",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.person",
+            "type": "stem",
+            "canonical": "person",
+            "surface": "person"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.al.suffix",
+            "type": "suffix",
+            "canonical": "al",
+            "surface": "al"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.alarm",
+            "type": "stem",
+            "canonical": "alarm",
+            "surface": "alarm"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "personal",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "personal alarm",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

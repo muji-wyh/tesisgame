@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "status": "frozen_projected_validator_source_review_changes_requested",
+  "reviewer": "/root/recover_delivery",
+  "reviewed_source_author": "/root",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1661,
+      "raw_sha256": "047c367fb38dfca7c7c53deabf0e3bb57bf9e01863287220feb8bd789956253a"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 2674,
+      "raw_sha256": "7bf780ede00ebb06665498f1c9869fb7ee7210a083d82df4e790c61646f423d6"
+    },
+    {
+      "path": "inspection.json",
+      "bytes": 3776,
+      "raw_sha256": "2426be07bcb2b3322f7bd240a01c28a234e6d40b0f8e2cb1a7eea6241268db62"
+    },
+    {
+      "path": "review.json",
+      "bytes": 7200,
+      "raw_sha256": "06f07e21d517918330785ab226f1d94a68c5ba7594bab64f58a9ce06bfc44da1"
+    }
+  ],
+  "original_inputs_rechecked_unchanged": 13,
+  "validator_source_accepted_for_dispatch": false,
+  "actual_binding_accepted": false,
+  "preparation_execution_accepted": false,
+  "afterimages_accepted": false,
+  "source_or_vm_executed": false,
+  "production_mutated": false,
+  "inventory_self_excluded": true
+}

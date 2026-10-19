@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 6,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "daa5378224329f81d8a58b2f290d61404146213b22159bf138c75152250596fb",
+  "recorded_at": "2026-10-16T22:48:01.986Z",
+  "path": "tests/professional-retail-morphology.test.cjs",
+  "work": "work/3e075568-4216-4fd3-9420-921fca331319.bin"
+}

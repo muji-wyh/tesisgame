@@ -6,6 +6,7 @@ const Model = preload("res://scripts/word_jelly_model.gd")
 static var _hues: Array[float] = HUES.duplicate()
 var colors: Dictionary = {}
 var _signature: String = ""
+var compatibility: Callable
 
 static func hue(index: int) -> float:
 	# A crowded board still needs distinct colors, rather than modulo-four skins.
@@ -24,6 +25,9 @@ static func hue(index: int) -> float:
 
 static func completes(a: Dictionary, b: Dictionary, words: Dictionary) -> bool:
 	return int(a.get("id", -1)) != int(b.get("id", -1)) and words.has(Model.normalize_word(str(a.get("text", "")) + str(b.get("text", ""))))
+
+func _compatible(a: Dictionary, b: Dictionary, words: Dictionary) -> bool:
+	return bool(compatibility.call(a, b)) if compatibility.is_valid() else completes(a, b, words)
 
 func clear() -> void:
 	colors.clear()
@@ -50,7 +54,7 @@ func update(items: Array[Dictionary], words: Dictionary, reserved: Array[int] = 
 					continue
 				if preserve and (not colors.has(int(a.id)) or colors.get(int(a.id)) != colors.get(int(b.id), -1)):
 					continue
-				if completes(a, b, words) or completes(b, a, words):
+				if _compatible(a, b, words) or _compatible(b, a, words):
 					groups.append([int(a.id), int(b.id)])
 					paired[int(a.id)] = true
 					paired[int(b.id)] = true
@@ -97,7 +101,7 @@ func selected(items: Array[Dictionary], words: Dictionary, source_id: int) -> Di
 		var id: int = int(item.id)
 		if id == source_id:
 			continue
-		if completes(source, item, words):
+		if _compatible(source, item, words):
 			result[id] = source_color
 		# Incompatible targets retain their idle paint, even if the reverse word
 		# shares a resting pair color. Only a forward completion earns a cue.

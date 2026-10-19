@@ -1,0 +1,1512 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.transport_delivery.module09.01",
+      "text": "The dashboard shows a notification, but the delivery status has not yet updated.",
+      "meaning": "Distinguish an alert from the recorded delivery stage.",
+      "context": "Reviewing application information while stationary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "dashboard",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "shows",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "notification",
+          "start": 22,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "but",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "delivery",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "status",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "has",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "not",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "yet",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "updated",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "dashboard.information-display.n",
+        "notification.system-alert-message.n",
+        "delivery-status.recorded-current-stage-or-outcome-of-delivery.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module09.02",
+      "text": "The form has a mandatory field for the reference number.",
+      "meaning": "Identify a required information field in a record.",
+      "context": "Completing a fictional delivery form.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "form",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 13,
+          "end": 14
+        },
+        {
+          "index": 4,
+          "text": "mandatory",
+          "start": 15,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "field",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "reference",
+          "start": 39,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "number",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 55,
+          "end": 56
+        }
+      ],
+      "focus_lexeme_ids": [
+        "form.structured-information-document.n",
+        "mandatory-field.required-input-item.n",
+        "field.data-entry-space.n",
+        "reference-number.record-reference-code.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module09.03",
+      "text": "Use the menu to open the relevant tab, then choose the filter for this shipment.",
+      "meaning": "Locate a software view and narrow its results.",
+      "context": "Reviewing a delivery application while stationary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Use",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "menu",
+          "start": 8,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 13,
+          "end": 15
+        },
+        {
+          "index": 4,
+          "text": "open",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 6,
+          "text": "relevant",
+          "start": 25,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "tab",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 9,
+          "text": "then",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 10,
+          "text": "choose",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 12,
+          "text": "filter",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "for",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 14,
+          "text": "this",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 15,
+          "text": "shipment",
+          "start": 71,
+          "end": 79
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "menu.interface-command-list.n",
+        "tab.interface-page-selector.n",
+        "filter.result-limiting-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module09.04",
+      "text": "Please confirm your permission level before changing this record or attaching the document.",
+      "meaning": "Check authorized access before altering information.",
+      "context": "Clarifying access to a delivery record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "your",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "permission",
+          "start": 20,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "level",
+          "start": 31,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "changing",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "this",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "record",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": "or",
+          "start": 65,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "attaching",
+          "start": 68,
+          "end": 77
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "document",
+          "start": 82,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "permission-level.access-scope.n",
+        "record.stored-information-entry.n",
+        "document.recorded-information-item.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module09.05",
+      "text": "The GPS signal and the app's geolocation need checking against the actual destination.",
+      "meaning": "Distinguish positioning information from confirmation of a delivery place.",
+      "context": "Reviewing a location discrepancy while stationary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "GPS",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "signal",
+          "start": 8,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "app's",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "geolocation",
+          "start": 29,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "need",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "checking",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "against",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "actual",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "destination",
+          "start": 74,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "gps.satellite-system-for-position-navigation-and-time.n",
+        "geolocation.identification-of-geographical-position-of-device-or-item.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module09.06",
+      "text": "The delivery app is in offline mode, so confirm which actions are available and which updates are waiting.",
+      "meaning": "Check actual application behavior without assuming automatic synchronization.",
+      "context": "Handling a connectivity problem while stationary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "delivery",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "app",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 17,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "in",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "offline",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "mode",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 8,
+          "text": "so",
+          "start": 37,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": "confirm",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "which",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "actions",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "are",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "available",
+          "start": 66,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "which",
+          "start": 80,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "updates",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "are",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "waiting",
+          "start": 98,
+          "end": 105
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 105,
+          "end": 106
+        }
+      ],
+      "focus_lexeme_ids": [
+        "delivery-app.application-supporting-delivery-work.n",
+        "offline-mode.application-operation-without-live-network-connection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module09.07",
+      "text": "The route optimization result still needs review against the current vehicle and road restrictions.",
+      "meaning": "Treat a computed route as information requiring suitability checks.",
+      "context": "Reviewing a proposed route before travel.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "route",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "optimization",
+          "start": 10,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "result",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "still",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "needs",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "review",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "against",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "current",
+          "start": 61,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "vehicle",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "road",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": "restrictions",
+          "start": 86,
+          "end": 98
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "route-optimization.selecting-route-arrangement-against-defined-criteria.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module09.08",
+      "text": "The vehicle tracking position has an old timestamp, so it may not show the current location.",
+      "meaning": "Recognize that recorded position information can be out of date.",
+      "context": "Checking a fleet information display.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "vehicle",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "tracking",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "position",
+          "start": 21,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "has",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "an",
+          "start": 34,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "old",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "timestamp",
+          "start": 41,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "so",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "it",
+          "start": 55,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "may",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "not",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "show",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": "current",
+          "start": 75,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": "location",
+          "start": 83,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "vehicle-tracking.monitoring-recorded-vehicle-location-or-movement.n",
+        "timestamp.recorded-event-time.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module09.09",
+      "text": "The dispatch log and mileage log refer to the same vehicle and journey.",
+      "meaning": "Connect dispatch events with the relevant distance record.",
+      "context": "Reviewing journey records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "dispatch",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "log",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "mileage",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "log",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "refer",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 39,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "same",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "vehicle",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "journey",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "dispatch-log.record-of-vehicle-or-shipment-dispatch-events.n",
+        "mileage-log.record-of-distance-traveled-by-vehicle.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module09.10",
+      "text": "Add the fuel receipt as an attachment using the approved process, and check for a duplicate scan.",
+      "meaning": "Link the supporting document and avoid duplicate records.",
+      "context": "Reviewing a fictional expense attachment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Add",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "fuel",
+          "start": 8,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "receipt",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "as",
+          "start": 21,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "an",
+          "start": 24,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "attachment",
+          "start": 27,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "using",
+          "start": 38,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "approved",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "process",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "check",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "for",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "a",
+          "start": 80,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "duplicate",
+          "start": 82,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": "scan",
+          "start": 92,
+          "end": 96
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fuel-receipt.document-acknowledging-fuel-purchase.n",
+        "duplicate-scan.scan-record-repeating-same-intended-event.n",
+        "attachment.linked-file.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

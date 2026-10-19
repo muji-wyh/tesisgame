@@ -1,0 +1,361 @@
+{
+  "status": "bounded_immutable_candidate_inventory_not_language_or_morphology_approval",
+  "corpus": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project",
+  "catalog_lexeme_file_count": 163,
+  "matched_canonical_ids": [
+    "morph.collect",
+    "morph.inform",
+    "morph.collection",
+    "morph.information",
+    "affix.en.prefix",
+    "english.affix.en.in"
+  ],
+  "matched_lexeme_count": 21,
+  "rows": [
+    {
+      "id": "collect.gather.v",
+      "definition": "To gather items together or pick them up from a place.",
+      "language": "pending",
+      "domain": "not_required",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.collect",
+          "canonical": "collect",
+          "surface": "collect",
+          "type": "atomic"
+        }
+      ]
+    },
+    {
+      "id": "encode.represent-by-code.v",
+      "definition": "To represent information using a specified format or coding scheme.",
+      "language": "pending",
+      "domain": "not_required",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p1",
+          "canonical_id": "affix.en.prefix",
+          "canonical": "en",
+          "surface": "en",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
+      "id": "informed-consent.informed-voluntary-care-agreement.n",
+      "definition": "A person's voluntary agreement to a proposed intervention after relevant information and an opportunity for understanding, subject to applicable requirements.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.inform",
+          "canonical": "inform",
+          "surface": "inform",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "empathy.understanding-another-experience.n",
+      "definition": "An effort to understand another person's feelings and perspective.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "part1",
+          "canonical_id": "english.affix.en.in",
+          "canonical": "en-",
+          "surface": "em",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
+      "id": "collection-window.agreed-period-for-goods-pickup.n",
+      "definition": "A period during which goods are expected or agreed to be collected.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.collection",
+          "canonical": "collection",
+          "surface": "collection",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "visitor-information-center.service-place-providing-local-visitor-information.n",
+      "definition": "A place that provides local information and assistance to visitors.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.information",
+          "canonical": "information",
+          "surface": "information",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "collection-point.agreed-place-for-goods-to-be-picked-up.n",
+      "definition": "An agreed place where goods are picked up for transport.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.collection",
+          "canonical": "collection",
+          "surface": "collection",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "collection-receipt.record-acknowledging-goods-pickup.n",
+      "definition": "A record acknowledging that goods were picked up for transport.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.collection",
+          "canonical": "collection",
+          "surface": "collection",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "missed-collection.scheduled-pickup-that-did-not-take-place.n",
+      "definition": "A scheduled pickup that did not take place.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.collection",
+          "canonical": "collection",
+          "surface": "collection",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "enable.make-feature-available-for-use.v",
+      "definition": "To make a feature or function available for use through its settings or configuration.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p1",
+          "canonical_id": "affix.en.prefix",
+          "canonical": "en",
+          "surface": "en",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
+      "id": "system-information.details-describing-computing-system.n",
+      "definition": "Details describing a computing system's hardware, software, and configuration.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.information",
+          "canonical": "information",
+          "surface": "information",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "student-information-system.system-managing-student-administrative-records.n",
+      "definition": "A system used to manage student administrative records such as enrollment and attendance.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.information",
+          "canonical": "information",
+          "surface": "information",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "sensitive-information.information-needing-particular-care-in-handling.n",
+      "definition": "Information needing particular care because its misuse or disclosure could cause harm.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.information",
+          "canonical": "information",
+          "surface": "information",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "human-resources-information-system.digital-system-for-managing-workforce-records-and-processes.n",
+      "definition": "A digital system used to manage workforce records and related processes.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p3",
+          "canonical_id": "morph.information",
+          "canonical": "information",
+          "surface": "information",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "request-for-information.formal-request-clarifying-project-information.n",
+      "definition": "A formal request for clarification of project information or requirements.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p3",
+          "canonical_id": "morph.information",
+          "canonical": "information",
+          "surface": "information",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "building-information-model.digital-representation-of-built-asset-and-associated-information.n",
+      "definition": "A digital representation of a built asset and associated information.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.information",
+          "canonical": "information",
+          "surface": "information",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "waste-collection.organized-pickup-of-waste-for-transport.n",
+      "definition": "The organized pickup of waste for transport to further handling.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.collect",
+          "canonical": "collect",
+          "surface": "collect",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "waste-collection-point.designated-place-where-waste-is-picked-up.n",
+      "definition": "A designated place where waste is picked up for transport.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.collect",
+          "canonical": "collect",
+          "surface": "collect",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "outdated-information.information-no-longer-current.n",
+      "definition": "Information that is no longer current.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.information",
+          "canonical": "information",
+          "surface": "information",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "collection-activity.work-to-follow-up-on-amounts-due.n",
+      "definition": "Work to follow up on amounts due under the applicable arrangements.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.collection",
+          "canonical": "collection",
+          "surface": "collection",
+          "type": "stem"
+        }
+      ]
+    },
+    {
+      "id": "information-barrier.arrangements-limiting-information-flow-between-people-or-teams.n",
+      "definition": "Arrangements intended to limit information flow between people or teams.",
+      "language": "pending",
+      "domain": "pending",
+      "morphology_review": "pending",
+      "matched_parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.information",
+          "canonical": "information",
+          "surface": "information",
+          "type": "stem"
+        }
+      ]
+    }
+  ],
+  "proposed_canonical_ids": [
+    "english.affix.en.causative",
+    "english.stem.sure.certain",
+    "english.atomic.inform.give-information",
+    "english.atomic.collect.gather",
+    "english.atomic.ensure.make-certain"
+  ],
+  "proposed_id_collisions_in_immutable_corpus": [],
+  "limits": "Includes exact selected canonical families and all their corpus occurrences. Surface resemblance alone does not establish family identity; other derivatives and all future registry entries need separate final inspection."
+}

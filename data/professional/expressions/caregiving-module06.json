@@ -1,0 +1,1650 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.caregiving.module06.01",
+      "text": "I will report your concerns about hydration, appetite, and thirst, including your food preference.",
+      "meaning": "Communicate the person's concerns and preferences.",
+      "context": "A person discusses eating, drinking, and their wellbeing.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "report",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "your",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "concerns",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "about",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "hydration",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "appetite",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "thirst",
+          "start": 59,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 65,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "including",
+          "start": 67,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "your",
+          "start": 77,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "food",
+          "start": 82,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "preference",
+          "start": 87,
+          "end": 97
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "appetite.desire-to-eat.n",
+        "thirst.desire-for-fluid.n",
+        "food-preference.preferred-food-choice.n",
+        "hydration.body-fluid-status.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-eating",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module06.02",
+      "text": "The meal plan records a dietary requirement and an allergy; please clarify which ingredient is involved.",
+      "meaning": "Clarify recorded food requirements and allergy information.",
+      "context": "A worker seeks clarification of an existing meal plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "meal",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "plan",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "records",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "dietary",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "requirement",
+          "start": 32,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "an",
+          "start": 48,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "allergy",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "please",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "clarify",
+          "start": 67,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "which",
+          "start": 75,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "ingredient",
+          "start": 81,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "is",
+          "start": 92,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": "involved",
+          "start": 95,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "meal-plan.planned-meal-arrangement.n",
+        "dietary-requirement.specific-food-related-need.n",
+        "allergy.immune-mediated-hypersensitivity.n",
+        "ingredient.component-substance.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-eating",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module06.03",
+      "text": "This menu lists breakfast, lunch, dinner, and a snack; please choose your meal and the portion you would like.",
+      "meaning": "Invite choices about meals and serving amounts.",
+      "context": "A person selects from the available food options.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "menu",
+          "start": 5,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "lists",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "breakfast",
+          "start": 16,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "lunch",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "dinner",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 11,
+          "text": "snack",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 12,
+          "text": ";",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 13,
+          "text": "please",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 14,
+          "text": "choose",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 15,
+          "text": "your",
+          "start": 69,
+          "end": 73
+        },
+        {
+          "index": 16,
+          "text": "meal",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 19,
+          "text": "portion",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 20,
+          "text": "you",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 21,
+          "text": "would",
+          "start": 99,
+          "end": 104
+        },
+        {
+          "index": 22,
+          "text": "like",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "breakfast.first-meal-of-day.n",
+        "meal.food-eating-occasion.n",
+        "menu.list-of-food-options.n",
+        "lunch.middle-of-day-meal.n",
+        "dinner.main-meal-usually-evening.n",
+        "snack.small-amount-of-food.n",
+        "portion.serving-amount.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-eating",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module06.04",
+      "text": "Let us check the shopping list for groceries and read the food label on your chosen beverage together.",
+      "meaning": "Check household purchases and a drink label together.",
+      "context": "A person participates in planning their shopping.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Let",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "us",
+          "start": 4,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "shopping",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "list",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "groceries",
+          "start": 35,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "read",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "food",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "label",
+          "start": 63,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "on",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "your",
+          "start": 72,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "chosen",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "beverage",
+          "start": 84,
+          "end": 92
+        },
+        {
+          "index": 17,
+          "text": "together",
+          "start": 93,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "shopping-list.written-purchase-reminder.n",
+        "food-label.packaged-food-information-label.n",
+        "groceries.everyday-food-and-household-purchases.n",
+        "beverage.drink-for-consumption.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-eating",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module06.05",
+      "text": "Your personal care and continence care preferences, including concerns about constipation, diarrhea, or incontinence, can be discussed privately.",
+      "meaning": "Offer privacy for discussing personal care concerns.",
+      "context": "A person decides what to disclose about bowel or continence concerns.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Your",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "personal",
+          "start": 5,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "care",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "continence",
+          "start": 23,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "care",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "preferences",
+          "start": 39,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "including",
+          "start": 52,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "concerns",
+          "start": 62,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": "about",
+          "start": 71,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "constipation",
+          "start": 77,
+          "end": 89
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 89,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": "diarrhea",
+          "start": 91,
+          "end": 99
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 99,
+          "end": 100
+        },
+        {
+          "index": 15,
+          "text": "or",
+          "start": 101,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "incontinence",
+          "start": 104,
+          "end": 116
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 116,
+          "end": 117
+        },
+        {
+          "index": 18,
+          "text": "can",
+          "start": 118,
+          "end": 121
+        },
+        {
+          "index": 19,
+          "text": "be",
+          "start": 122,
+          "end": 124
+        },
+        {
+          "index": 20,
+          "text": "discussed",
+          "start": 125,
+          "end": 134
+        },
+        {
+          "index": 21,
+          "text": "privately",
+          "start": 135,
+          "end": 144
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 144,
+          "end": 145
+        }
+      ],
+      "focus_lexeme_ids": [
+        "personal-care.support-with-private-daily-needs.n",
+        "continence-care.support-for-bladder-or-bowel-control-needs.n",
+        "constipation.difficult-or-infrequent-stool-passage.n",
+        "diarrhea.loose-or-watery-stool-passage.n",
+        "incontinence.involuntary-urine-or-stool-loss.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-eating",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module06.06",
+      "text": "We can leave the laundry until later if you prefer a nap, quiet time, or a leisure activity.",
+      "meaning": "Respect a preference to postpone a household task.",
+      "context": "A person chooses rest or leisure during a visit.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "leave",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "laundry",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "until",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "later",
+          "start": 31,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "if",
+          "start": 37,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "you",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "prefer",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "nap",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 13,
+          "text": "quiet",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 14,
+          "text": "time",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 16,
+          "text": "or",
+          "start": 70,
+          "end": 72
+        },
+        {
+          "index": 17,
+          "text": "a",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 18,
+          "text": "leisure",
+          "start": 75,
+          "end": 82
+        },
+        {
+          "index": 19,
+          "text": "activity",
+          "start": 83,
+          "end": 91
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "nap.short-period-of-sleep.n",
+        "quiet-time.chosen-low-stimulation-period.n",
+        "leisure.time-for-chosen-enjoyment.n",
+        "laundry.clothes-and-fabrics-for-washing.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-eating",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module06.07",
+      "text": "Which hobby, craft, or community activity would you like to keep doing?",
+      "meaning": "Ask about meaningful activities the person wants to continue.",
+      "context": "A person discusses interests and participation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Which",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "hobby",
+          "start": 6,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 11,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "craft",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 5,
+          "text": "or",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 6,
+          "text": "community",
+          "start": 23,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "activity",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "would",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "you",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "like",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "to",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "keep",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "doing",
+          "start": 65,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "?",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hobby.regular-enjoyable-activity.n",
+        "community-activity.locally-shared-participation.n",
+        "craft.creative-making-activity.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-eating",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module06.08",
+      "text": "We can share music or reminiscence if you enjoy it, and you can stop at any time.",
+      "meaning": "Offer an optional social activity.",
+      "context": "A person chooses whether to share memories or listen.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "share",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "music",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "or",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "reminiscence",
+          "start": 22,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "if",
+          "start": 35,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "you",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "enjoy",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "it",
+          "start": 48,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 12,
+          "text": "you",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 13,
+          "text": "can",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 14,
+          "text": "stop",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 15,
+          "text": "at",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 16,
+          "text": "any",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 17,
+          "text": "time",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "music.organized-sound-for-listening-or-making.n",
+        "reminiscence.sharing-or-recalling-past-experiences.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-eating",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module06.09",
+      "text": "Please tell me about any change in mobility, balance, or sleep pattern.",
+      "meaning": "Invite an account of everyday changes.",
+      "context": "A worker prepares a report for the responsible professional.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "tell",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "me",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "about",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "any",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "change",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "in",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "mobility",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "balance",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "or",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "sleep",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "pattern",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mobility.ability-to-move.n",
+        "balance.ability-to-maintain-stability.n",
+        "sleep-pattern.usual-sleep-timing-and-quality.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-eating",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module06.10",
+      "text": "The outing should reflect your sensory preference and the social connection you want.",
+      "meaning": "Plan around individual interests.",
+      "context": "An adult helps choose a community visit.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "outing",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "should",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "reflect",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "your",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "sensory",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "preference",
+          "start": 39,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "social",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "connection",
+          "start": 65,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": "you",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "want",
+          "start": 80,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "outing.short-trip-for-activity.n",
+        "sensory-preference.preferred-sensory-experience.n",
+        "social-connection.relationship-and-contact-with-others.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-eating",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

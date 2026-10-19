@@ -1,0 +1,369 @@
+{
+  "schema": 1,
+  "status": "candidate_evidence_bound_for_guarded_installation",
+  "created_at": "2026-10-17T05:34:26.338Z",
+  "scope": "Two selected break identities, four Growth authoring/test files, and independently reviewed Retail and content compatibility tests. Installed validation is a separate future operation.",
+  "retail_extension": {
+    "path": "build/professional-english/growth-break-family-work-r01/retail-extension-r02/receipt.json",
+    "bytes": 11695,
+    "sha256": "0cd5cad7e5025b4f85164a2c4126d4c4a9e184c912697d56b8dc47f9e2a2f04f"
+  },
+  "retail_extension_outer": {
+    "path": "build/professional-english/growth-break-family-work-r01/retail-extension-r02/outer-completion.json",
+    "bytes": 723,
+    "sha256": "b2319dcfcad2fca99dd0f0efbcf9637e2b63256867c946fd1de080767b18ed1d"
+  },
+  "candidate_source_overrides": {
+    "path": "build/professional-english/growth-break-family-work-r01/retail-extension-r02/source-overrides.json",
+    "bytes": 4486,
+    "sha256": "d501e25e59c8b56731933dc5e101344921738ae1d78537cf2182b08072c30afb"
+  },
+  "excluded_failed_growth_validation": {
+    "receipt": {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\growth-break-family-work-r01\\validation-r01\\receipt.json",
+      "bytes": 2280,
+      "sha256": "6005d1a5732115d9720d6a42159be55711b9501084517d758ac1fc3e42f1ec65"
+    },
+    "overall_reused_as_passing_evidence": false
+  },
+  "excluded_failed_retail_extension": {
+    "receipt": {
+      "path": "build/professional-english/growth-break-family-work-r01/retail-extension-r01/receipt.json",
+      "bytes": 17714,
+      "sha256": "b38971e3c124d7f68483c583d2a56bced4337d2455044d87e228bc4446d6fae5"
+    },
+    "outer": {
+      "path": "build/professional-english/growth-break-family-work-r01/retail-extension-r01/outer-completion.json",
+      "bytes": 489,
+      "sha256": "b6648e64669cd12a1862a1c053a44f8d9262d2053d226f7c28a7f49875ed870a"
+    },
+    "source_overrides": {
+      "path": "build/professional-english/growth-break-family-work-r01/retail-extension-r01/source-overrides.json",
+      "bytes": 12417,
+      "sha256": "9fd352db60420cca31caccba4e0158a88bfea18a2c5ddee3954f2095e32f9568"
+    },
+    "node": {
+      "tests": 36,
+      "pass": 32,
+      "fail": 4,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "overall_reused_as_passing_evidence": false
+  },
+  "excluded_failed_retail_preflight": {
+    "observation": {
+      "path": "build/professional-english/growth-break-family-work-r01/retail-extension-r02-launch-failure-r01.json",
+      "bytes": 1891,
+      "sha256": "8391fe07faef47057881b3f0fa9baa1bac51733bdb67c5f93f0aa823ee5b7aba"
+    },
+    "binding": {
+      "path": "build/professional-english/growth-break-family-work-r01/retail-extension-binding-r02.json",
+      "bytes": 106229,
+      "sha256": "d171a95cddac7f436fb9b428beb0b304bf36889a9f871b641004fdc1e6abe4a4"
+    },
+    "stage": "before_shared_module_evaluation",
+    "overall_reused_as_passing_evidence": false
+  },
+  "proposal_inventory": {
+    "path": "build/professional-english/growth-break-family-install-proposal-r04/inventory.json",
+    "bytes": 3331,
+    "sha256": "940d2aeae1a7729a8a6c2eb1f364caab11de62b4ddc18a5f13532cabc351daf4"
+  },
+  "evidence_binding": {
+    "path": "build/professional-english/growth-break-family-work-r01/installation-evidence-binding.json",
+    "bytes": 116989,
+    "sha256": "27f3b00b4b0493f0054e8cefe4f1e8919a31caa26b3a0f691f5c304632e8e318"
+  },
+  "preparation": {
+    "path": "build/professional-english/growth-break-family-work-r01/preparation-receipt.json",
+    "bytes": 771537,
+    "sha256": "68696d040dbda0078e031cad13a1dcb41e904ee35d7d269a4ed65e1435a4861b"
+  },
+  "candidate_validation": {
+    "path": "build/professional-english/growth-break-family-work-r01/validation-r02/receipt.json",
+    "bytes": 19298,
+    "sha256": "264ace32bd5ed2c4d457280b194f39ca6e402e41c397fae9072a084601915a9a"
+  },
+  "preparation_outer": {
+    "path": "build/professional-english/growth-break-family-work-r01/preparation-outer-completion.json",
+    "bytes": 267,
+    "sha256": "df9ab022089952aef111211d37bca998013b49bb2e34f336410f734254e348b8"
+  },
+  "validation_outer": {
+    "path": "build/professional-english/growth-break-family-work-r01/validation-r02/outer-completion.json",
+    "bytes": 550,
+    "sha256": "9f39ce8f5c65c8b2dd8fd785fb6823b6f2eeedbc9c53b8c550556b8882448874"
+  },
+  "root_baseline": {
+    "path": "build/professional-english/growth-break-family-work-r01/root-baseline-receipt.json",
+    "bytes": 13755,
+    "sha256": "2dd465383134a3a88d2e7bd6aff65076f201ba2309f525a1efdf51c599e5c531"
+  },
+  "gift_persisted_validation": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/persisted-validation-r02/receipt.json",
+    "bytes": 12525,
+    "sha256": "7a990c28797ac8ef3cffdd3d9c47aa7591e4964533ef9bca1db28d7ad794a34b"
+  },
+  "targets": [
+    {
+      "path": "data/vocabulary/morphology/age-05.json",
+      "before": {
+        "bytes": 214078,
+        "sha256": "cf29cf0c1d4a4fa1a528c2954d615d45c123073a335d949a29f5538fd905719a"
+      },
+      "after": {
+        "bytes": 214093,
+        "sha256": "3de1405d806e343fd1942057a463b891423a46d7034fc3b1569703454301a5d7"
+      },
+      "allowed_mutation": "Only breakfast analysis.parts[0].canonical_id"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-07.json",
+      "before": {
+        "bytes": 356742,
+        "sha256": "0a5b68fb84a9b0fa7f9a8d5523699e1a02eb7ec9dfd34d9539289ec092601afc"
+      },
+      "after": {
+        "bytes": 356755,
+        "sha256": "129f46c5def05f84096a2973eae664db73470c1bd105a828091c6081ad94c22c"
+      },
+      "allowed_mutation": "Only broken analysis.parts[0].canonical_id"
+    },
+    {
+      "path": "tools/author-growth-morphology.cjs",
+      "before": {
+        "bytes": 31341,
+        "sha256": "af597489164c496b0eec761fcd7a2ed0b1b6156bb00c0d610ca843aa04435136"
+      },
+      "after": {
+        "bytes": 31408,
+        "sha256": "daf056bcea375614d6befef1dc8fef3e25a4f0af4f569afd23066994f8626187"
+      },
+      "allowed_mutation": "Only exact breakfast stem expression to equivalent explicit part object"
+    },
+    {
+      "path": "tools/growth-morphology/age-07.cjs",
+      "before": {
+        "bytes": 45504,
+        "sha256": "59f2663f7355e92135c5f11d79926f223905a907963d8f58d5ef21d422a4022d"
+      },
+      "after": {
+        "bytes": 45577,
+        "sha256": "cf186c1cae97111b66576ceecb5a9af220b64786cada29c9221583483f783e71"
+      },
+      "allowed_mutation": "Only exact broken stem expression to equivalent explicit part object"
+    },
+    {
+      "path": "tests/growth-morphology.test.cjs",
+      "before": {
+        "bytes": 13253,
+        "sha256": "5fe1b5a5a01e591f7d4da6b601fd91f894ebda288fded91e4b5a9351d0c92767"
+      },
+      "after": {
+        "bytes": 15070,
+        "sha256": "7331dffeb192c5e99d091edf56b83cdff5ccf23dfc82df487e31ad1cea3d3438"
+      },
+      "allowed_mutation": "Append exact node-test-addition.txt only; entire prior file prefix retained"
+    },
+    {
+      "path": "tests/godot/growth_morphology_tests.gd",
+      "before": {
+        "bytes": 14813,
+        "sha256": "aa6bab2e11099a8a10244a99b61beff7c9478802c8848cd6b9b5d846cdb9d2f7"
+      },
+      "after": {
+        "bytes": 21610,
+        "sha256": "9387099e273b4dfb83469dc98b47dae5eecde7d8df5ac572a6fac3d60745d738"
+      },
+      "allowed_mutation": "Add exact GrowthState preload, in-memory fixture, two calls and native-test-additions.txt only; all prior function bodies retained"
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "before": {
+        "bytes": 89327,
+        "sha256": "10477196a60c1b67ea100d6bf836de6d492a9529d3040e86e615ef1f0ebb79d5"
+      },
+      "after": {
+        "bytes": 90494,
+        "sha256": "76ae406a5a1c4443b5c45cc3ea87c0b2c11af48540e14cebb70ad0cb973ad821"
+      }
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "before": {
+        "bytes": 274951,
+        "sha256": "383410508b167a410193ccbfa89f40e2cd4bdf883b9a389aa5337e46d9f4734d"
+      },
+      "after": {
+        "bytes": 276293,
+        "sha256": "5e1ec5b2c2f5ab542c537ec7215ad25cc6e6666aaa0369d0890bf7a01e00d2b2"
+      }
+    }
+  ],
+  "protected_paths": [
+    {
+      "path": "words.json",
+      "bytes": 645989,
+      "sha256": "81809bf9d2c810aaee4f5a5aabf9f0f1b48a4f822dc2325a1c6b714ec4e92be0"
+    },
+    {
+      "path": "scripts/growth_state.gd",
+      "bytes": 19217,
+      "sha256": "bd0d298e193c6cf27c02da7513f5c0409f15496efcde030050af057f9330d728"
+    },
+    {
+      "path": "scripts/growth_morphology.gd",
+      "bytes": 4976,
+      "sha256": "cf5140ffff2ca4ac2f9bfa7368d07617fa4d2200659f7dbf47a95eeb3f6f4b8f"
+    },
+    {
+      "path": "scripts/morphology_analysis.gd",
+      "bytes": 7877,
+      "sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b"
+    },
+    {
+      "path": "scripts/morphology_resolver.gd",
+      "bytes": 10233,
+      "sha256": "bbd22c8fb11f96d7dcc4a8d534ba80bc63f0c2ed1b2cc1578e7656c06d7d67e8"
+    },
+    {
+      "path": "scripts/professional_play.gd",
+      "bytes": 9745,
+      "sha256": "e1af572288b804bb0fc51d98bb35926096cfd732da595170ab9c8247b0d6ee40"
+    },
+    {
+      "path": "scripts/game_ui.gd",
+      "bytes": 230621,
+      "sha256": "776b1c63cb6998e6968e76865093963a3900333f5f59786fe5bc34e46a9f7f49"
+    },
+    {
+      "path": "scripts/jelly_match.gd",
+      "bytes": 64700,
+      "sha256": "93f14e2977850958ad94d9d1bacc232974ce0c63fc648d6585b3e158e31a6627"
+    },
+    {
+      "path": "assets/audio/jelly-match/collect-do.wav",
+      "bytes": 21212,
+      "sha256": "f13c453fe9ca987aff83de9abd1c9b2cfe42aaf09e9a2ef424640a1d90881194"
+    },
+    {
+      "path": "assets/audio/jelly-match/collect-re.wav",
+      "bytes": 21212,
+      "sha256": "0ad365213e7b57cc2cc7825d9afb9d3457bbebb37abc96aa55062dbfdf8f80bc"
+    },
+    {
+      "path": "assets/audio/jelly-match/collect-mi.wav",
+      "bytes": 21212,
+      "sha256": "f9582be0032812f3320ac4fbbd83c623996e090c5841e50d79e87c2e734882cc"
+    },
+    {
+      "path": "assets/audio/jelly-match/collect-fa.wav",
+      "bytes": 21212,
+      "sha256": "fcfb015a72ff57c4b9abc5d592fc5b6d0d126a20d5e2ce86864d8fb0b4be457e"
+    },
+    {
+      "path": "assets/audio/jelly-match/collect-sol.wav",
+      "bytes": 21212,
+      "sha256": "c738b8a8369f225cc18be115438d1ca2b0c3824cc4e64ba8cb199289cd132afe"
+    },
+    {
+      "path": "assets/audio/jelly-match/collect-la.wav",
+      "bytes": 21212,
+      "sha256": "2715d23d88e99f58917a68f633dce99f600e62e56cc320b06eb0820a25d3d9d1"
+    },
+    {
+      "path": "assets/audio/jelly-match/collect-ti.wav",
+      "bytes": 21212,
+      "sha256": "0881856b6a79bebc537a83fd7b0b22a992cb24dd8454a23e034c2207e3827563"
+    },
+    {
+      "path": "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+      "bytes": 82598,
+      "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3"
+    },
+    {
+      "path": "professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+      "bytes": 82598,
+      "sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224"
+    },
+    {
+      "path": "professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav",
+      "bytes": 82598,
+      "sha256": "685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3"
+    },
+    {
+      "path": "professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+      "bytes": 82598,
+      "sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763"
+    },
+    {
+      "path": "professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+      "bytes": 82598,
+      "sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45"
+    },
+    {
+      "path": "professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav",
+      "bytes": 82598,
+      "sha256": "01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5"
+    },
+    {
+      "path": "professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav",
+      "bytes": 82598,
+      "sha256": "aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12"
+    },
+    {
+      "path": "professional-media/150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56.wav",
+      "bytes": 82598,
+      "sha256": "150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56"
+    },
+    {
+      "path": "professional-media/778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3.wav",
+      "bytes": 82598,
+      "sha256": "778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3"
+    },
+    {
+      "path": "professional-media/8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f.wav",
+      "bytes": 82598,
+      "sha256": "8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f"
+    },
+    {
+      "path": "professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+      "bytes": 82598,
+      "sha256": "cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2"
+    },
+    {
+      "path": "professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+      "bytes": 82598,
+      "sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72"
+    }
+  ],
+  "source_snapshot": {
+    "exact_targets": 8,
+    "protected_files": 27,
+    "current_source_files": 1258,
+    "candidate_files": 7675,
+    "original_non_target_pins": 29,
+    "historical_dependency_files": 50,
+    "build_exclusion_files": 1,
+    "runtime_dependency_files": 1,
+    "content_dependency_files": 12
+  },
+  "identity_preservation": {
+    "entries": 1550,
+    "nonmorphology_projections": 1550,
+    "word_and_analysis_ids_unchanged": true,
+    "identity_sha256": "5a255c8afb15e7592c656236d537a6c33dc048699a6f6b8451bc81b8d876b24b"
+  },
+  "save_projection_evidence": {
+    "candidate_native_suite": "growth_morphology_tests",
+    "source_sha256": "9387099e273b4dfb83469dc98b47dae5eecde7d8df5ac572a6fac3d60745d738",
+    "scope": "Reviewed in-memory fixture preserves original IDs/ages, streaks, mastery, level, age and saved text with zero writes. No real user save is accessed."
+  },
+  "human_acceptance": false,
+  "listening_acceptance": false,
+  "device_acceptance": false,
+  "full_release_acceptance": false,
+  "professional_recompile": false,
+  "media_changes": false
+}

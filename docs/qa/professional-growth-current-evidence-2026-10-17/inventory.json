@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "files": [
+    {
+      "path": "inspect-evidence.cjs",
+      "bytes": 15676,
+      "sha256": "fb710accf14dd77c0887028f175e79fd79126f8027aa833db5a334e50df98996"
+    },
+    {
+      "path": "input-pins.json",
+      "bytes": 22576,
+      "sha256": "a931e61aee1c09e90337f7a09a5acd2b1dc234661100017fcf3a801bda92d711"
+    },
+    {
+      "path": "review.json",
+      "bytes": 36035,
+      "sha256": "0abfdadd20653c35693ac744b3dbf20a6424087068a52011298058241e31b07b"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2502,
+      "sha256": "fd43bf750b54ec43f27b878f397878e1151377c526dcab332e4e9de5849a1f5f"
+    }
+  ]
+}

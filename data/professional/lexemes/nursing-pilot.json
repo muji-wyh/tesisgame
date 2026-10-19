@@ -1,0 +1,5195 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "ward.hospital-section.n",
+      "text": "ward",
+      "display_text": "ward",
+      "pos": "noun",
+      "definition": "A hospital area where a group of patients receives care.",
+      "example": "The ward has rooms on both sides of the corridor.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "ward"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm hospital ward corridor with patient-room entrances.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "ward.hospital-section.n.analysis.v1",
+        "lexeme_id": "ward.hospital-section.n",
+        "text": "ward",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.ward",
+            "type": "atomic",
+            "canonical": "ward",
+            "surface": "ward"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "patient-room.hospital-room.n",
+      "text": "patient room",
+      "display_text": "patient room",
+      "pos": "noun",
+      "definition": "A room where a patient stays while receiving care.",
+      "example": "The patient room has a chair beside the bed.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "patient room"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming room with a hospital bed and bedside chair.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "patient-room.hospital-room.n.analysis.v1",
+        "lexeme_id": "patient-room.hospital-room.n",
+        "text": "patient room",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.patient",
+            "type": "word",
+            "canonical": "patient",
+            "surface": "patient"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.room",
+            "type": "word",
+            "canonical": "room",
+            "surface": "room"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "patient room",
+            "rule": "preserve_word_boundary",
+            "break_offsets": [
+              8
+            ]
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "nurses-station.work-area.n",
+      "text": "nurses' station",
+      "display_text": "nurses' station",
+      "pos": "noun",
+      "definition": "A central work area where nursing staff coordinate care.",
+      "example": "The visitor asked for directions at the nurses' station.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "nurses' station"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Nursing staff discussing a chart at a central work counter.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "treatment-room.care-room.n",
+      "text": "treatment room",
+      "display_text": "treatment room",
+      "pos": "noun",
+      "definition": "A room equipped for providing examinations or care.",
+      "example": "The treatment room is ready for the next appointment.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "treatment room"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clinical room with examination surface and supply storage.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "medication-room.medicine-storage.n",
+      "text": "medication room",
+      "display_text": "medication room",
+      "pos": "noun",
+      "definition": "A designated room where medicines are stored or prepared by authorized staff.",
+      "example": "The medication room is accessible to authorized staff.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "medication room"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An organized clinical medicine room; no preparation instructions.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "supply-room.equipment-storage.n",
+      "text": "supply room",
+      "display_text": "supply room",
+      "pos": "noun",
+      "definition": "A room where equipment and other supplies are kept.",
+      "example": "There are extra blankets in the supply room.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "supply room"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clinical supply room with packaged supplies.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "waiting-room.visitor-area.n",
+      "text": "waiting room",
+      "display_text": "waiting room",
+      "pos": "noun",
+      "definition": "A room where people wait before an appointment or visit.",
+      "example": "The family is sitting in the waiting room.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "waiting room"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming waiting room with varied seating.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "waiting-room.visitor-area.n.analysis.v1",
+        "lexeme_id": "waiting-room.visitor-area.n",
+        "text": "waiting room",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.wait",
+            "type": "stem",
+            "canonical": "wait",
+            "surface": "wait"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "-ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.room",
+            "type": "word",
+            "canonical": "room",
+            "surface": "room"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "waiting",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "waiting room",
+            "rule": "preserve_word_boundary",
+            "break_offsets": [
+              8
+            ]
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "examination-table.clinical-surface.n",
+      "text": "examination table",
+      "display_text": "examination table",
+      "pos": "noun",
+      "definition": "A raised padded surface used during a medical examination.",
+      "example": "The examination table has fresh paper on it.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "examination table"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A padded examination table with a paper roll.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "hospital-bed.patient-bed.n",
+      "text": "hospital bed",
+      "display_text": "hospital bed",
+      "pos": "noun",
+      "definition": "A bed designed to support patient care in a healthcare setting.",
+      "example": "The hospital bed has an adjustable head section.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "hospital bed"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An empty hospital bed with adjustment controls.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "bed-rail.side-barrier.n",
+      "text": "bed rail",
+      "display_text": "bed rail",
+      "pos": "noun",
+      "definition": "A bar or barrier fitted along the side of a bed.",
+      "example": "The nurse checked the bed rail before the handover.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "bed rail"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A hospital bed side rail; no universal raised-rail advice.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bed-rail.side-barrier.n.analysis.v1",
+        "lexeme_id": "bed-rail.side-barrier.n",
+        "text": "bed rail",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bed",
+            "type": "word",
+            "canonical": "bed",
+            "surface": "bed"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.rail",
+            "type": "word",
+            "canonical": "rail",
+            "surface": "rail"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "bed rail",
+            "rule": "preserve_word_boundary",
+            "break_offsets": [
+              4
+            ]
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "fda-bed-rail-safety",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content. Bed rails can create entrapment and fall risks; the label does not establish suitability for an individual. A qualified equipment review is required, and no installation or use instructions are provided."
+    },
+    {
+      "id": "bedside-table.patient-furniture.n",
+      "text": "bedside table",
+      "display_text": "bedside table",
+      "pos": "noun",
+      "definition": "A small table placed next to a bed.",
+      "example": "The water jug is on the bedside table.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "bedside table"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small bedside table with a water jug.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bedside-table.patient-furniture.n.analysis.v1",
+        "lexeme_id": "bedside-table.patient-furniture.n",
+        "text": "bedside table",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bed",
+            "type": "compound",
+            "canonical": "bed",
+            "surface": "bed"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.side",
+            "type": "compound",
+            "canonical": "side",
+            "surface": "side"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.table",
+            "type": "word",
+            "canonical": "table",
+            "surface": "table"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "bedside",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "bedside table",
+            "rule": "preserve_word_boundary",
+            "break_offsets": [
+              8
+            ]
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "call-button.assistance-control.n",
+      "text": "call button",
+      "display_text": "call button",
+      "pos": "noun",
+      "definition": "A control used to request assistance from staff.",
+      "example": "The patient asked where the call button was.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "call button"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A hospital call control beside a bed.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "call-button.assistance-control.n.analysis.v1",
+        "lexeme_id": "call-button.assistance-control.n",
+        "text": "call button",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.call",
+            "type": "word",
+            "canonical": "call",
+            "surface": "call"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.button",
+            "type": "word",
+            "canonical": "button",
+            "surface": "button"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "call button",
+            "rule": "preserve_word_boundary",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "privacy-curtain.room-divider.n",
+      "text": "privacy curtain",
+      "display_text": "privacy curtain",
+      "pos": "noun",
+      "definition": "A curtain used to screen a person or area from view.",
+      "example": "The privacy curtain separates the two bed spaces.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "privacy curtain"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A hospital curtain partly dividing two patient spaces.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "privacy-curtain.room-divider.n.analysis.v1",
+        "lexeme_id": "privacy-curtain.room-divider.n",
+        "text": "privacy curtain",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.privacy",
+            "type": "word",
+            "canonical": "privacy",
+            "surface": "privacy"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.curtain",
+            "type": "word",
+            "canonical": "curtain",
+            "surface": "curtain"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "privacy curtain",
+            "rule": "preserve_word_boundary",
+            "break_offsets": [
+              8
+            ]
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "wheelchair.mobility-chair.n",
+      "text": "wheelchair",
+      "display_text": "wheelchair",
+      "pos": "noun",
+      "definition": "A chair with wheels used by a person who needs seated mobility.",
+      "example": "A wheelchair is available near the entrance.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "wheelchair"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A wheelchair with footrests and large rear wheels.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "wheelchair.mobility-chair.n.analysis.v1",
+        "lexeme_id": "wheelchair.mobility-chair.n",
+        "text": "wheelchair",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.wheel",
+            "type": "compound",
+            "canonical": "wheel",
+            "surface": "wheel"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.chair",
+            "type": "compound",
+            "canonical": "chair",
+            "surface": "chair"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "wheelchair",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "stretcher.patient-transport.n",
+      "text": "stretcher",
+      "display_text": "stretcher",
+      "pos": "noun",
+      "definition": "A flat support used to carry or move a person who is lying down.",
+      "example": "The stretcher is waiting near the treatment room.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "stretcher"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An empty wheeled hospital stretcher.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "stretcher.patient-transport.n.analysis.v1",
+        "lexeme_id": "stretcher.patient-transport.n",
+        "text": "stretcher",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.stretch",
+            "type": "stem",
+            "canonical": "stretch",
+            "surface": "stretch"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "-er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "stretcher",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "walker.mobility-frame.n",
+      "text": "walker",
+      "display_text": "walker",
+      "pos": "noun",
+      "definition": "A frame that gives support to a person while walking.",
+      "example": "The walker is beside the chair.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "walker"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A mobility walker with handles and supporting frame.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "walker.mobility-frame.n.analysis.v1",
+        "lexeme_id": "walker.mobility-frame.n",
+        "text": "walker",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.walk",
+            "type": "stem",
+            "canonical": "walk",
+            "surface": "walk"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "-er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "walker",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "crutch.mobility-support.n",
+      "text": "crutch",
+      "display_text": "crutch",
+      "pos": "noun",
+      "definition": "A support used to help a person move while reducing weight on a leg.",
+      "example": "One crutch is leaning beside the seat.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "crutch"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A forearm crutch beside a chair; no technique demonstration.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "crutch.mobility-support.n.analysis.v1",
+        "lexeme_id": "crutch.mobility-support.n",
+        "text": "crutch",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.crutch",
+            "type": "atomic",
+            "canonical": "crutch",
+            "surface": "crutch"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "transfer-board.mobility-aid.n",
+      "text": "transfer board",
+      "display_text": "transfer board",
+      "pos": "noun",
+      "definition": "A rigid board used as an aid when moving a person between surfaces.",
+      "example": "The team asked for the transfer board.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "transfer board"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A transfer board beside an empty wheelchair and bed; no technique.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "gait-belt.transfer-aid.n",
+      "text": "gait belt",
+      "display_text": "gait belt",
+      "pos": "noun",
+      "definition": "A belt used by trained staff as an aid when supporting some patients during movement.",
+      "example": "The gait belt is stored with the mobility aids.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "gait belt"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A gait belt with buckle visible; no lifting demonstration.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "gait-belt.transfer-aid.n.analysis.v1",
+        "lexeme_id": "gait-belt.transfer-aid.n",
+        "text": "gait belt",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.gait",
+            "type": "word",
+            "canonical": "gait",
+            "surface": "gait"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.belt",
+            "type": "word",
+            "canonical": "belt",
+            "surface": "belt"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "gait belt",
+            "rule": "preserve_word_boundary",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "stethoscope.listening-device.n",
+      "text": "stethoscope",
+      "display_text": "stethoscope",
+      "pos": "noun",
+      "definition": "An instrument that helps a clinician listen to sounds inside the body.",
+      "example": "The nurse placed the stethoscope on the desk.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "stethoscope"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A stethoscope with earpieces, tubing, and chest piece visible.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.stethoscope.listening-device.n.morphology.v1",
+        "lexeme_id": "stethoscope.listening-device.n",
+        "text": "stethoscope",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.stetho.chest",
+            "canonical": "stetho-",
+            "surface": "stetho",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.scope.examine",
+            "canonical": "-scope",
+            "surface": "scope",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "stethoscope",
+            "rule": "stetho-plus-scope",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Pending Professional English review. Explicit sense comparison: Both entries name the instrument for listening inside the body. Reuse stetho- as chest and -scope as an examining instrument; neither part replaces the listening function in the complete definition. Inherited Growth rationale: The sourced instrument contains the chest element stetho- and examining-instrument -scope; the selected listening function is preserved rather than replaced by sight alone. The Growth AI editorial status is not transferred. External sources listed here are inherited repository records, not newly consulted in this pass.",
+          "references": [
+            "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html",
+            "https://www.merriam-webster.com/dictionary/stethoscope"
+          ],
+          "provenance": {
+            "corpus": "Growth",
+            "file": "data/vocabulary/morphology/age-11.json",
+            "entry_id": "stethoscope",
+            "analysis_id": "growth.stethoscope.analysis.v1",
+            "analysis_sha256": "1b14b39c09e960dc914a162c7757dab6286cb3a5adca98e6618abe484931ebc2",
+            "source_review_status": "reviewed"
+          },
+          "source_consultation": "inherited_repository_record_not_newly_consulted_in_this_pass"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "thermometer.temperature-device.n",
+      "text": "thermometer",
+      "display_text": "thermometer",
+      "pos": "noun",
+      "definition": "An instrument used to measure temperature.",
+      "example": "The thermometer shows a reading on its display.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "thermometer"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A digital thermometer with no diagnostic threshold.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.thermometer.temperature-device.n.morphology.v1",
+        "lexeme_id": "thermometer.temperature-device.n",
+        "text": "thermometer",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.thermo.heat",
+            "canonical": "thermo-",
+            "surface": "thermo",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.meter.measure",
+            "canonical": "-meter",
+            "surface": "meter",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "thermometer",
+            "rule": "thermo-plus-meter",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Pending Professional English review. Explicit sense comparison: Both entries name the temperature-measuring instrument. Heat thermo- and measuring -meter retain the same meanings and the source keeps its linking o with thermo-. Inherited Growth rationale: The instrument name joins the heat combining form thermo- and measuring form -meter; the linking o belongs with thermo-. The Growth AI editorial status is not transferred. External sources listed here are inherited repository records, not newly consulted in this pass.",
+          "references": [
+            "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html",
+            "https://www.merriam-webster.com/dictionary/thermometer"
+          ],
+          "provenance": {
+            "corpus": "Growth",
+            "file": "data/vocabulary/morphology/age-08.json",
+            "entry_id": "thermometer",
+            "analysis_id": "growth.thermometer.analysis.v1",
+            "analysis_sha256": "2e6e5b9dddd69a5f7acf9ae76bab9d48bb46a56243e0d6a044cea8d6d5157eae",
+            "source_review_status": "reviewed"
+          },
+          "source_consultation": "inherited_repository_record_not_newly_consulted_in_this_pass"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "blood-pressure-cuff.measurement-device.n",
+      "text": "blood pressure cuff",
+      "display_text": "blood pressure cuff",
+      "pos": "noun",
+      "definition": "An inflatable band used as part of blood pressure measurement.",
+      "example": "The blood pressure cuff is beside the monitor.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "blood pressure cuff"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unfastened cuff connected to a measuring unit.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "pulse-oximeter.measurement-device.n",
+      "text": "pulse oximeter",
+      "display_text": "pulse oximeter",
+      "pos": "noun",
+      "definition": "A device that estimates blood oxygen saturation using light.",
+      "example": "The pulse oximeter is in the equipment tray.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "pulse oximeter"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A finger-clip oximeter; no diagnostic threshold.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "patient-monitor.observation-device.n",
+      "text": "patient monitor",
+      "display_text": "patient monitor",
+      "pos": "noun",
+      "definition": "An electronic device that displays measurements related to a patient's condition.",
+      "example": "The patient monitor is mounted beside the bed.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "patient monitor"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A bedside monitor with generic waveforms, without interpretation.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "patient-monitor.observation-device.n.analysis.v1",
+        "lexeme_id": "patient-monitor.observation-device.n",
+        "text": "patient monitor",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.patient",
+            "type": "word",
+            "canonical": "patient",
+            "surface": "patient"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.monitor",
+            "type": "word",
+            "canonical": "monitor",
+            "surface": "monitor"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "patient monitor",
+            "rule": "preserve_word_boundary",
+            "break_offsets": [
+              8
+            ]
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "infusion-pump.delivery-device.n",
+      "text": "infusion pump",
+      "display_text": "infusion pump",
+      "pos": "noun",
+      "definition": "A device that controls the delivery of fluid through tubing.",
+      "example": "The infusion pump has an identification label.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "infusion pump"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An infusion pump on a stand; no dose or settings.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "iv-pole.equipment-stand.n",
+      "text": "IV pole",
+      "display_text": "IV pole",
+      "pos": "noun",
+      "definition": "A stand used to support containers or equipment for intravenous therapy.",
+      "example": "The IV pole stands beside the bed.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "IV pole"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A wheeled IV pole with hooks; no treatment in progress.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "oxygen-cylinder.gas-container.n",
+      "text": "oxygen cylinder",
+      "display_text": "oxygen cylinder",
+      "pos": "noun",
+      "definition": "A strong container used to store oxygen under pressure.",
+      "example": "The oxygen cylinder has a clear identification label.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "oxygen cylinder"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A secured oxygen cylinder; no operating instructions.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "oxygen-mask.delivery-mask.n",
+      "text": "oxygen mask",
+      "display_text": "oxygen mask",
+      "pos": "noun",
+      "definition": "A face mask connected to equipment that supplies oxygen.",
+      "example": "The oxygen mask is in its package.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "oxygen mask"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A packaged oxygen mask with tubing.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "nasal-cannula.delivery-tube.n",
+      "text": "nasal cannula",
+      "display_text": "nasal cannula",
+      "pos": "noun",
+      "definition": "A small tube with two short tips that can deliver oxygen through the nose.",
+      "example": "The nurse checked the package containing the nasal cannula.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "nasal cannula"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A nasal cannula with its two short tips visible.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "nebulizer.mist-device.n",
+      "text": "nebulizer",
+      "display_text": "nebulizer",
+      "pos": "noun",
+      "definition": "A device that turns liquid medicine into a mist for inhalation.",
+      "example": "The nebulizer is on the equipment shelf.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "nebulizer",
+        "nebuliser"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A nebulizer unit and tubing without medicine or settings.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "suction-machine.fluid-removal-device.n",
+      "text": "suction machine",
+      "display_text": "suction machine",
+      "pos": "noun",
+      "definition": "A device that creates suction to remove fluid or material through tubing.",
+      "example": "The suction machine is stored in the treatment room.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "suction machine"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unused suction unit with collection container.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "syringe.injection-device.n",
+      "text": "syringe",
+      "display_text": "syringe",
+      "pos": "noun",
+      "definition": "A device with a barrel and plunger used to draw in or push out fluid.",
+      "example": "The sealed syringe is on the tray.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "syringe"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A sealed syringe without needle or medication dose.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "syringe.injection-device.n.analysis.v1",
+        "lexeme_id": "syringe.injection-device.n",
+        "text": "syringe",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.syringe",
+            "type": "atomic",
+            "canonical": "syringe",
+            "surface": "syringe"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "needle.medical-needle.n",
+      "text": "needle",
+      "display_text": "needle",
+      "pos": "noun",
+      "definition": "A thin hollow pointed instrument used in some medical procedures.",
+      "example": "The needle remains in its sealed package.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "needle"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A sealed packaged needle; no skin penetration.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "needle.medical-needle.n.analysis.v1",
+        "lexeme_id": "needle.medical-needle.n",
+        "text": "needle",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.needle",
+            "type": "atomic",
+            "canonical": "needle",
+            "surface": "needle"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "sharps-container.disposal-container.n",
+      "text": "sharps container",
+      "display_text": "sharps container",
+      "pos": "noun",
+      "definition": "A puncture-resistant container intended for used needles and other medical sharps.",
+      "example": "The sharps container is fixed beside the work area.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sharps container"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A closed sharps container with recognizable disposal opening.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "dressing-tray.care-equipment.n",
+      "text": "dressing tray",
+      "display_text": "dressing tray",
+      "pos": "noun",
+      "definition": "A tray used to organize supplies for dressing care.",
+      "example": "The dressing tray is on the trolley.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "dressing tray"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A tray holding sealed dressing supplies.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "gauze.dressing-material.n",
+      "text": "gauze",
+      "display_text": "gauze",
+      "pos": "noun",
+      "definition": "A loosely woven material used in medical dressings.",
+      "example": "The unopened gauze is beside the dressing pack.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "gauze"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A sealed gauze pack and one clean sample.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "gauze.dressing-material.n.analysis.v1",
+        "lexeme_id": "gauze.dressing-material.n",
+        "text": "gauze",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.gauze",
+            "type": "atomic",
+            "canonical": "gauze",
+            "surface": "gauze"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "bandage.support-material.n",
+      "text": "bandage",
+      "display_text": "bandage",
+      "pos": "noun",
+      "definition": "A strip or piece of material used to cover or support part of the body.",
+      "example": "There is a spare bandage in the supply drawer.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "bandage"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A rolled bandage without an injury.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bandage.support-material.n.analysis.v1",
+        "lexeme_id": "bandage.support-material.n",
+        "text": "bandage",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bandage",
+            "type": "atomic",
+            "canonical": "bandage",
+            "surface": "bandage"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "adhesive-tape.fixing-material.n",
+      "text": "adhesive tape",
+      "display_text": "adhesive tape",
+      "pos": "noun",
+      "definition": "A strip of material with a sticky surface used to hold things in place.",
+      "example": "The adhesive tape is stored with the dressings.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "adhesive tape"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A roll of medical adhesive tape with an end lifted.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-material-movers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "disposable-glove.protective-covering.n",
+      "text": "disposable glove",
+      "display_text": "disposable glove",
+      "pos": "noun",
+      "definition": "A glove intended to be discarded after its designated use.",
+      "example": "The box contains disposable gloves in several sizes.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "disposable glove"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A disposable examination glove beside its box.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "surgical-mask.face-covering.n",
+      "text": "surgical mask",
+      "display_text": "surgical mask",
+      "pos": "noun",
+      "definition": "A medical face covering designed to provide a barrier over the mouth and nose.",
+      "example": "The surgical masks are in the supply cabinet.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "surgical mask"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A pleated surgical mask with ear loops.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "face-shield.protective-screen.n",
+      "text": "face shield",
+      "display_text": "face shield",
+      "pos": "noun",
+      "definition": "A clear protective screen worn in front of the face.",
+      "example": "The face shield is hanging on the equipment stand.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "face shield"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A transparent face shield with headband.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "face-shield.protective-screen.n.analysis.v1",
+        "lexeme_id": "face-shield.protective-screen.n",
+        "text": "face shield",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.face",
+            "type": "word",
+            "canonical": "face",
+            "surface": "face"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.shield",
+            "type": "word",
+            "canonical": "shield",
+            "surface": "shield"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "face shield",
+            "rule": "preserve_word_boundary",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "protective-gown.clinical-clothing.n",
+      "text": "protective gown",
+      "display_text": "protective gown",
+      "pos": "noun",
+      "definition": "A garment worn over clothing as part of protective equipment.",
+      "example": "The protective gown is in a sealed package.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "protective gown"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clinical protective gown on a neutral display form.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "hand-sanitizer.cleaning-product.n",
+      "text": "hand sanitizer",
+      "display_text": "hand sanitizer",
+      "pos": "noun",
+      "definition": "A product used on hands to reduce microorganisms.",
+      "example": "The hand sanitizer dispenser is near the doorway.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "hand sanitizer",
+        "hand sanitiser"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A hand sanitizer dispenser; no replacement-for-washing claims.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "specimen-container.sample-vessel.n",
+      "text": "specimen container",
+      "display_text": "specimen container",
+      "pos": "noun",
+      "definition": "A container used to hold a sample collected for examination or testing.",
+      "example": "The specimen container has space for a label.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "specimen container"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An empty sealed specimen container with blank label.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "bedpan.toileting-vessel.n",
+      "text": "bedpan",
+      "display_text": "bedpan",
+      "pos": "noun",
+      "definition": "A container used for toileting by a person who remains in bed.",
+      "example": "The clean bedpan is stored in the utility area.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "bedpan"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clean empty bedpan on a shelf.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bedpan.toileting-vessel.n.analysis.v1",
+        "lexeme_id": "bedpan.toileting-vessel.n",
+        "text": "bedpan",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bed",
+            "type": "compound",
+            "canonical": "bed",
+            "surface": "bed"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.pan",
+            "type": "compound",
+            "canonical": "pan",
+            "surface": "pan"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "bedpan",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "urinal.toileting-vessel.n",
+      "text": "urinal",
+      "display_text": "urinal",
+      "pos": "noun",
+      "definition": "A portable container used to collect urine.",
+      "example": "The clean urinal is within the patient's reach.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "urinal"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clean empty portable medical urinal.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "commode.toileting-chair.n",
+      "text": "commode",
+      "display_text": "commode",
+      "pos": "noun",
+      "definition": "A chair with a removable toileting container beneath its seat.",
+      "example": "The commode is beside the bed.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "commode"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clean bedside commode with its frame visible.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "commode.toileting-chair.n.analysis.v1",
+        "lexeme_id": "commode.toileting-chair.n",
+        "text": "commode",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.commode",
+            "type": "atomic",
+            "canonical": "commode",
+            "surface": "commode"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "medication-cart.medicine-trolley.n",
+      "text": "medication cart",
+      "display_text": "medication cart",
+      "pos": "noun",
+      "definition": "A mobile storage unit used by staff to organize medicines and related supplies.",
+      "example": "The medication cart is parked near the nurses' station.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "medication cart"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A closed medication cart without patient information.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    },
+    {
+      "id": "blanket.bed-covering.n",
+      "text": "blanket",
+      "display_text": "blanket",
+      "pos": "noun",
+      "definition": "A warm covering used on a bed or around a person.",
+      "example": "The visitor asked for another blanket.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "blanket"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A folded blanket on a bedside chair.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "blanket.bed-covering.n.analysis.v1",
+        "lexeme_id": "blanket.bed-covering.n",
+        "text": "blanket",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm modern morphological boundaries and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.blanket",
+            "type": "atomic",
+            "canonical": "blanket",
+            "surface": "blanket"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and image brief. Not approved learning content."
+    }
+  ]
+}

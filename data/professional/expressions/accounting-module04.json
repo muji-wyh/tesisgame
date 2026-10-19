@@ -1,0 +1,1627 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.accounting_finance.module04.01",
+      "text": "The treasurer will discuss liquidity and solvency separately because near-term cash needs differ from longer-term obligations.",
+      "meaning": "Distinguish two financial conditions and the responsible role.",
+      "context": "Preparing a scoped financial discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "treasurer",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "discuss",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "liquidity",
+          "start": 27,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "solvency",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "separately",
+          "start": 50,
+          "end": 60
+        },
+        {
+          "index": 8,
+          "text": "because",
+          "start": 61,
+          "end": 68
+        },
+        {
+          "index": 9,
+          "text": "near-term",
+          "start": 69,
+          "end": 78
+        },
+        {
+          "index": 10,
+          "text": "cash",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 11,
+          "text": "needs",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "index": 12,
+          "text": "differ",
+          "start": 90,
+          "end": 96
+        },
+        {
+          "index": 13,
+          "text": "from",
+          "start": 97,
+          "end": 101
+        },
+        {
+          "index": 14,
+          "text": "longer-term",
+          "start": 102,
+          "end": 113
+        },
+        {
+          "index": 15,
+          "text": "obligations",
+          "start": 114,
+          "end": 125
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 125,
+          "end": 126
+        }
+      ],
+      "focus_lexeme_ids": [
+        "treasurer.person-responsible-for-organizations-funds.n",
+        "liquidity.ability-to-meet-near-term-payment-obligations.n",
+        "solvency.ability-to-meet-financial-obligations-over-time.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module04.02",
+      "text": "Please identify the account and transaction before comparing the debit and credit entries.",
+      "meaning": "Request the context needed to interpret accounting entries.",
+      "context": "Reviewing a fictional ledger example.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "identify",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "account",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "transaction",
+          "start": 32,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "before",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "comparing",
+          "start": 51,
+          "end": 60
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": "debit",
+          "start": 65,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "credit",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "entries",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "account.record-grouping-financial-entries-for-specific-item.n",
+        "transaction.business-exchange.n",
+        "debit.entry-on-debit-side-of-account.n",
+        "credit.entry-on-credit-side-of-account.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module04.03",
+      "text": "An asset and a liability have different meanings; equity is the residual interest after liabilities are deducted.",
+      "meaning": "Distinguish financial resources, obligations and owners' residual interest.",
+      "context": "Explaining a simplified reporting example.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "An",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "asset",
+          "start": 3,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 13,
+          "end": 14
+        },
+        {
+          "index": 4,
+          "text": "liability",
+          "start": 15,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "have",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "different",
+          "start": 30,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "meanings",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "equity",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "is",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "residual",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "interest",
+          "start": 73,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "after",
+          "start": 82,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "liabilities",
+          "start": 88,
+          "end": 99
+        },
+        {
+          "index": 16,
+          "text": "are",
+          "start": 100,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": "deducted",
+          "start": 104,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "asset.resource-or-right-with-economic-value.n",
+        "liability.present-obligation-with-economic-consequence.n",
+        "equity.residual-interest-after-deducting-liabilities-from-assets.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module04.04",
+      "text": "The expense belongs to the stated period; please explain how it affects profit or loss under this basis.",
+      "meaning": "Request an explanation of period results without prescribing treatment.",
+      "context": "Discussing a fictional report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "expense",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "belongs",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "stated",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "period",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": ";",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "please",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "explain",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "how",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "it",
+          "start": 61,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "affects",
+          "start": 64,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "profit",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "or",
+          "start": 79,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "loss",
+          "start": 82,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "under",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 17,
+          "text": "this",
+          "start": 93,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "basis",
+          "start": 98,
+          "end": 103
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "expense.cost-or-resource-use-recognized-against-income.n",
+        "profit.excess-of-income-over-expenses-for-stated-period.n",
+        "loss.excess-of-expenses-over-income-for-stated-period.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module04.05",
+      "text": "The note distinguishes revenue and other income from capital contributed by an owner.",
+      "meaning": "Separate business income from an owner contribution.",
+      "context": "Reading a fictional financial-statement note.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "note",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "distinguishes",
+          "start": 9,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "revenue",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "other",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "income",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "from",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "capital",
+          "start": 53,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "contributed",
+          "start": 61,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "by",
+          "start": 73,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": "an",
+          "start": 76,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "owner",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "revenue.income-from-business-activities-before-expenses.n",
+        "income.increase-in-economic-benefits-other-than-owner-contribution.n",
+        "capital.funds-or-resources-invested-in-business.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module04.06",
+      "text": "The loan statement separates interest from principal, while the dividend relates to shareholders.",
+      "meaning": "Distinguish borrowing amounts from a shareholder distribution.",
+      "context": "Clarifying different fictional financial records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "loan",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "statement",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "separates",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "interest",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "from",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "principal",
+          "start": 43,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "while",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "dividend",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "relates",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 81,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "shareholders",
+          "start": 84,
+          "end": 96
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "interest.charge-for-use-of-borrowed-money.n",
+        "principal.loan-amount-excluding-interest-and-other-charges.n",
+        "dividend.distribution-by-company-to-shareholders.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module04.07",
+      "text": "Please state the currency and exchange rate used for this comparison.",
+      "meaning": "Request the monetary unit and conversion basis.",
+      "context": "Reviewing a report prepared from two currencies.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "state",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "currency",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "exchange",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "rate",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "used",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "for",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "comparison",
+          "start": 58,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 68,
+          "end": 69
+        }
+      ],
+      "focus_lexeme_ids": [
+        "currency.money-system.n",
+        "exchange-rate.currency-conversion-rate.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module04.08",
+      "text": "The accountant and auditor have different roles, and the bookkeeper maintains the transaction records.",
+      "meaning": "Clarify the roles involved in financial information.",
+      "context": "Introducing a finance workflow.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "accountant",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "auditor",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "have",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "different",
+          "start": 32,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "roles",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "bookkeeper",
+          "start": 57,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "maintains",
+          "start": 68,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "transaction",
+          "start": 82,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "records",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "accountant.person-preparing-or-analyzing-financial-records.n",
+        "auditor.person-examining-records-or-processes-against-criteria.n",
+        "bookkeeper.person-maintaining-records-of-financial-transactions.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module04.09",
+      "text": "The creditor is owed money; the debtor owes it, while the lender and borrower are parties to a loan.",
+      "meaning": "Distinguish parties to debts and loans.",
+      "context": "Explaining roles in fictional arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "creditor",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 13,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "owed",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "money",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": ";",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "debtor",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "owes",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "it",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 11,
+          "text": "while",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 13,
+          "text": "lender",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 15,
+          "text": "borrower",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 16,
+          "text": "are",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 17,
+          "text": "parties",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 18,
+          "text": "to",
+          "start": 90,
+          "end": 92
+        },
+        {
+          "index": 19,
+          "text": "a",
+          "start": 93,
+          "end": 94
+        },
+        {
+          "index": 20,
+          "text": "loan",
+          "start": 95,
+          "end": 99
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 99,
+          "end": 100
+        }
+      ],
+      "focus_lexeme_ids": [
+        "creditor.person-or-organization-to-whom-money-is-owed.n",
+        "debtor.person-or-organization-that-owes-money.n",
+        "lender.party-providing-money-under-loan-arrangement.n",
+        "borrower.party-receiving-money-under-loan-arrangement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module04.10",
+      "text": "Please explain the accounting estimate and materiality in their reporting context rather than assuming one universal threshold.",
+      "meaning": "Request a scoped explanation of judgment and uncertainty.",
+      "context": "Preparing questions for a qualified reviewer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "accounting",
+          "start": 19,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "estimate",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "materiality",
+          "start": 43,
+          "end": 54
+        },
+        {
+          "index": 7,
+          "text": "in",
+          "start": 55,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "their",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "reporting",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 10,
+          "text": "context",
+          "start": 74,
+          "end": 81
+        },
+        {
+          "index": 11,
+          "text": "rather",
+          "start": 82,
+          "end": 88
+        },
+        {
+          "index": 12,
+          "text": "than",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 13,
+          "text": "assuming",
+          "start": 94,
+          "end": 102
+        },
+        {
+          "index": 14,
+          "text": "one",
+          "start": 103,
+          "end": 106
+        },
+        {
+          "index": 15,
+          "text": "universal",
+          "start": 107,
+          "end": 116
+        },
+        {
+          "index": 16,
+          "text": "threshold",
+          "start": 117,
+          "end": 126
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 126,
+          "end": 127
+        }
+      ],
+      "focus_lexeme_ids": [
+        "accounting-estimate.monetary-amount-subject-to-measurement-uncertainty.n",
+        "materiality.importance-of-information-to-users-decisions.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

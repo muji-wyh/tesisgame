@@ -1,0 +1,27 @@
+Q:\.codex\worktrees\current-age-vocabulary\tesisgame\build\professional-english\foundation02-fourth10-delivery-preparation-r01\prepare.cjs:122
+  throw error;
+  ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+2 !== 1
+
+    at Object.fn (tests/professional-retail-morphology.test.cjs:990:266)
+    at Object.<anonymous> (Q:\.codex\worktrees\current-age-vocabulary\tesisgame\build\professional-english\foundation02-fourth10-delivery-preparation-r01\prepare.cjs:80:33)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 2,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.13.1

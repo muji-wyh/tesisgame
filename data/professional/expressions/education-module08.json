@@ -1,0 +1,1899 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.education_childcare.module08.01",
+      "text": "The team reviewed the risk assessment for manual handling and the reported allergen concern under the setting's actual arrangements.",
+      "meaning": "Identify risk topics and refer them to the actual local assessment and arrangements.",
+      "context": "Reviewing a setting's risk information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "team",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "reviewed",
+          "start": 9,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "risk",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "assessment",
+          "start": 27,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "manual",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "handling",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "reported",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "allergen",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "concern",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 14,
+          "text": "under",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 98,
+          "end": 101
+        },
+        {
+          "index": 16,
+          "text": "setting's",
+          "start": 102,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": "actual",
+          "start": 112,
+          "end": 118
+        },
+        {
+          "index": 18,
+          "text": "arrangements",
+          "start": 119,
+          "end": 131
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 131,
+          "end": 132
+        }
+      ],
+      "focus_lexeme_ids": [
+        "risk-assessment.hazard-evaluation.n",
+        "manual-handling.human-load-movement.n",
+        "allergen.allergy-trigger.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module08.02",
+      "text": "The professional boundary discussion covered confidentiality, privacy, and data privacy in their different contexts.",
+      "meaning": "Distinguish conduct and information responsibilities.",
+      "context": "Participating in staff training.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "professional",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "boundary",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 3,
+          "text": "discussion",
+          "start": 26,
+          "end": 36
+        },
+        {
+          "index": 4,
+          "text": "covered",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 5,
+          "text": "confidentiality",
+          "start": 45,
+          "end": 60
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 7,
+          "text": "privacy",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 10,
+          "text": "data",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 11,
+          "text": "privacy",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 88,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": "their",
+          "start": 91,
+          "end": 96
+        },
+        {
+          "index": 14,
+          "text": "different",
+          "start": 97,
+          "end": 106
+        },
+        {
+          "index": 15,
+          "text": "contexts",
+          "start": 107,
+          "end": 115
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 115,
+          "end": 116
+        }
+      ],
+      "focus_lexeme_ids": [
+        "professional-boundary.limit-defining-appropriate-professional-relationship.n",
+        "confidentiality.authorized-information-disclosure.n",
+        "privacy.personal-space-and-information-control.n",
+        "data-privacy.personal-information-protection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module08.03",
+      "text": "The record separates a disclosure and an allegation from confirmed findings; the designated safeguarding lead can clarify the setting's process.",
+      "meaning": "Avoid turning an unverified report into an established fact.",
+      "context": "Clarifying a safeguarding record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "record",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "separates",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "disclosure",
+          "start": 23,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "an",
+          "start": 38,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "allegation",
+          "start": 41,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "from",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "confirmed",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "findings",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 75,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "designated",
+          "start": 81,
+          "end": 91
+        },
+        {
+          "index": 14,
+          "text": "safeguarding",
+          "start": 92,
+          "end": 104
+        },
+        {
+          "index": 15,
+          "text": "lead",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 16,
+          "text": "can",
+          "start": 110,
+          "end": 113
+        },
+        {
+          "index": 17,
+          "text": "clarify",
+          "start": 114,
+          "end": 121
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 122,
+          "end": 125
+        },
+        {
+          "index": 19,
+          "text": "setting's",
+          "start": 126,
+          "end": 135
+        },
+        {
+          "index": 20,
+          "text": "process",
+          "start": 136,
+          "end": 143
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 143,
+          "end": 144
+        }
+      ],
+      "focus_lexeme_ids": [
+        "disclosure.sharing-previously-unknown-sensitive-information.n",
+        "allegation.claim-of-wrongdoing-not-established-as-fact.n",
+        "designated-safeguarding-lead.person-assigned-lead-safeguarding-role.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module08.04",
+      "text": "The training distinguishes neglect, abuse, bullying, discrimination, and harassment without treating a single observation as a confirmed finding.",
+      "meaning": "Recognize different terms while referring interpretation to the applicable process.",
+      "context": "Reviewing safeguarding terminology.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "training",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "distinguishes",
+          "start": 13,
+          "end": 26
+        },
+        {
+          "index": 3,
+          "text": "neglect",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "abuse",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "bullying",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "discrimination",
+          "start": 53,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "harassment",
+          "start": 73,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "without",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 14,
+          "text": "treating",
+          "start": 92,
+          "end": 100
+        },
+        {
+          "index": 15,
+          "text": "a",
+          "start": 101,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": "single",
+          "start": 103,
+          "end": 109
+        },
+        {
+          "index": 17,
+          "text": "observation",
+          "start": 110,
+          "end": 121
+        },
+        {
+          "index": 18,
+          "text": "as",
+          "start": 122,
+          "end": 124
+        },
+        {
+          "index": 19,
+          "text": "a",
+          "start": 125,
+          "end": 126
+        },
+        {
+          "index": 20,
+          "text": "confirmed",
+          "start": 127,
+          "end": 136
+        },
+        {
+          "index": 21,
+          "text": "finding",
+          "start": 137,
+          "end": 144
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 144,
+          "end": 145
+        }
+      ],
+      "focus_lexeme_ids": [
+        "neglect.failure-to-meet-required-care.n",
+        "abuse.harmful-mistreatment.n",
+        "bullying.harmful-behavior-involving-power-imbalance-and-repetition.n",
+        "discrimination.unfair-treatment-linked-to-characteristic.n",
+        "harassment.unwanted-conduct-that-intimidates-or-offends.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module08.05",
+      "text": "The concern log includes a contemporaneous record, and staff must know which mandatory reporting duties apply to their role.",
+      "meaning": "Connect accurate recording with role-specific reporting requirements.",
+      "context": "Reviewing local reporting information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "concern",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "log",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "includes",
+          "start": 16,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "contemporaneous",
+          "start": 27,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "record",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "staff",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "must",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "know",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "which",
+          "start": 71,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "mandatory",
+          "start": 77,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "reporting",
+          "start": 87,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "duties",
+          "start": 97,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "apply",
+          "start": 104,
+          "end": 109
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 110,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": "their",
+          "start": 113,
+          "end": 118
+        },
+        {
+          "index": 19,
+          "text": "role",
+          "start": 119,
+          "end": 123
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 123,
+          "end": 124
+        }
+      ],
+      "focus_lexeme_ids": [
+        "concern-log.record-of-concerns-and-related-actions.n",
+        "contemporaneous-record.record-made-at-or-close-to-event-time.n",
+        "mandatory-reporting.reporting-required-under-applicable-law.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module08.06",
+      "text": "To improve accessibility, ask the learner which visual support, communication aid, or assistive technology helps, and discuss any reasonable adjustment.",
+      "meaning": "Start access planning from individual requirements.",
+      "context": "Planning an inclusive activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "To",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "improve",
+          "start": 3,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "accessibility",
+          "start": 11,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "ask",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "learner",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "which",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "visual",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "support",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "communication",
+          "start": 64,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "aid",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "or",
+          "start": 83,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "assistive",
+          "start": 86,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "technology",
+          "start": 96,
+          "end": 106
+        },
+        {
+          "index": 17,
+          "text": "helps",
+          "start": 107,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": ",",
+          "start": 112,
+          "end": 113
+        },
+        {
+          "index": 19,
+          "text": "and",
+          "start": 114,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "discuss",
+          "start": 118,
+          "end": 125
+        },
+        {
+          "index": 21,
+          "text": "any",
+          "start": 126,
+          "end": 129
+        },
+        {
+          "index": 22,
+          "text": "reasonable",
+          "start": 130,
+          "end": 140
+        },
+        {
+          "index": 23,
+          "text": "adjustment",
+          "start": 141,
+          "end": 151
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 151,
+          "end": 152
+        }
+      ],
+      "focus_lexeme_ids": [
+        "accessibility.inclusive-usability.n",
+        "visual-support.visible-information-supporting-understanding-or-action.n",
+        "communication-aid.tool-supporting-expression-or-understanding.n",
+        "assistive-technology.technology-supporting-activities-and-access.n",
+        "reasonable-adjustment.access-support-change.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module08.07",
+      "text": "The team discussed the sensory need and learning difference in context, then checked the applicable meaning of special educational need.",
+      "meaning": "Use terms carefully without assigning a diagnosis.",
+      "context": "Reviewing support terminology.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "team",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "discussed",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "sensory",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "need",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "learning",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "difference",
+          "start": 49,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "in",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "context",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "then",
+          "start": 72,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "checked",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "applicable",
+          "start": 89,
+          "end": 99
+        },
+        {
+          "index": 16,
+          "text": "meaning",
+          "start": 100,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "of",
+          "start": 108,
+          "end": 110
+        },
+        {
+          "index": 18,
+          "text": "special",
+          "start": 111,
+          "end": 118
+        },
+        {
+          "index": 19,
+          "text": "educational",
+          "start": 119,
+          "end": 130
+        },
+        {
+          "index": 20,
+          "text": "need",
+          "start": 131,
+          "end": 135
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 135,
+          "end": 136
+        }
+      ],
+      "focus_lexeme_ids": [
+        "sensory-need.individual-requirement-related-to-sensory-experience.n",
+        "learning-difference.difference-in-how-person-learns-or-processes-information.n",
+        "special-educational-need.learning-need-requiring-additional-or-different-provision.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module08.08",
+      "text": "The behavior support plan considers distress, positive guidance, and de-escalation within the setting's arrangements.",
+      "meaning": "Connect behavior support with context and respectful responses.",
+      "context": "Reviewing an agreed support plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "behavior",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "support",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "plan",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "considers",
+          "start": 26,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "distress",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "positive",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "guidance",
+          "start": 55,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "de-escalation",
+          "start": 69,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "within",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "setting's",
+          "start": 94,
+          "end": 103
+        },
+        {
+          "index": 15,
+          "text": "arrangements",
+          "start": 104,
+          "end": 116
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 116,
+          "end": 117
+        }
+      ],
+      "focus_lexeme_ids": [
+        "behavior-support-plan.documented-support-for-understanding-and-responding-to-behavior.n",
+        "distress.marked-physical-or-emotional-discomfort.n",
+        "positive-guidance.respectful-support-for-learning-behavior-and-relationships.n",
+        "de-escalation.effort-to-reduce-tension-or-conflict.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module08.09",
+      "text": "The accident form records the injury and the reported choking hazard; the qualified first aider has been informed through the applicable process.",
+      "meaning": "Separate an observed injury from a reported hazard and identify the relevant role.",
+      "context": "Reviewing an incident record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "accident",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "form",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "records",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "injury",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "reported",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "choking",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "hazard",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "qualified",
+          "start": 74,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "first",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "aider",
+          "start": 90,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "has",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 17,
+          "text": "been",
+          "start": 100,
+          "end": 104
+        },
+        {
+          "index": 18,
+          "text": "informed",
+          "start": 105,
+          "end": 113
+        },
+        {
+          "index": 19,
+          "text": "through",
+          "start": 114,
+          "end": 121
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 122,
+          "end": 125
+        },
+        {
+          "index": 21,
+          "text": "applicable",
+          "start": 126,
+          "end": 136
+        },
+        {
+          "index": 22,
+          "text": "process",
+          "start": 137,
+          "end": 144
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 144,
+          "end": 145
+        }
+      ],
+      "focus_lexeme_ids": [
+        "accident-form.form-recording-accident-information.n",
+        "injury.physical-harm.n",
+        "choking-hazard.item-or-situation-that-can-obstruct-breathing.n",
+        "qualified-first-aider.person-with-relevant-first-aid-qualification.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module08.10",
+      "text": "The supervision plan identifies the head count arrangements, applicable staff-to-child ratio, and authorized access for the activity.",
+      "meaning": "Discuss several supervision conditions without treating a ratio alone as sufficient.",
+      "context": "Checking a planned activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "supervision",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "plan",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "identifies",
+          "start": 21,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "head",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "count",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "arrangements",
+          "start": 47,
+          "end": 59
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "applicable",
+          "start": 61,
+          "end": 71
+        },
+        {
+          "index": 10,
+          "text": "staff-to-child",
+          "start": 72,
+          "end": 86
+        },
+        {
+          "index": 11,
+          "text": "ratio",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 92,
+          "end": 93
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": "authorized",
+          "start": 98,
+          "end": 108
+        },
+        {
+          "index": 15,
+          "text": "access",
+          "start": 109,
+          "end": 115
+        },
+        {
+          "index": 16,
+          "text": "for",
+          "start": 116,
+          "end": 119
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 120,
+          "end": 123
+        },
+        {
+          "index": 18,
+          "text": "activity",
+          "start": 124,
+          "end": 132
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 132,
+          "end": 133
+        }
+      ],
+      "focus_lexeme_ids": [
+        "supervision-plan.arrangement-for-overseeing-people-or-activity.n",
+        "head-count.count-of-people-present.n",
+        "staff-to-child-ratio.relationship-between-number-of-staff-and-children.n",
+        "authorized-access.access-permitted-under-applicable-arrangements.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

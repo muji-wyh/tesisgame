@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "ok": true,
+  "started_at": "2026-10-16T23:05:44.299Z",
+  "finished_at": "2026-10-16T23:09:43.058Z",
+  "source_sha256": "6e138489e51f4789c1f2fd6a4039aa7e2f1af44ec435ff4309c33e568053bac5",
+  "input_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f",
+  "commands": [
+    {
+      "args": [
+        "tools/validate-professional-content.cjs",
+        "--json"
+      ],
+      "started_at": "2026-10-16T23:06:07.861Z",
+      "finished_at": "2026-10-16T23:06:10.702Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-1.log",
+      "log_sha256": "0020b63f47249956e1122188f101d26390511a6b02ec16e52377033dd6504ae6"
+    },
+    {
+      "args": [
+        "--test",
+        "tests/professional-content.test.cjs",
+        "tests/professional-retail-morphology.test.cjs",
+        "tests/professional-retail-media.test.cjs"
+      ],
+      "started_at": "2026-10-16T23:06:36.362Z",
+      "finished_at": "2026-10-16T23:09:15.093Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-2.log",
+      "log_sha256": "892a1dc27c167d34b96c2c14c9abc9decc44d4311e44551379d46c019620ecc3"
+    }
+  ],
+  "audit": {
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 148,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 9,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "errors": 0,
+    "warnings": 29395
+  },
+  "tests": {
+    "tests": 255,
+    "pass": 255,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "error": null,
+  "postcheck_error": null,
+  "scope": "Fresh actual persisted audit and affected Node suites, committed journal targets and protected input hashes. No native/browser/listening/release claim."
+}

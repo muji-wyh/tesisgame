@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "status": "frozen_unbound_delivery_preparation",
+  "recorded_at": "2026-10-16T14:22:25.984Z",
+  "baseline_bound": false,
+  "production_mutated": false,
+  "projected_callback_count": 36,
+  "excluded_persisted_lineage_callbacks": 1,
+  "files": [
+    {
+      "path": "delivery-lib.cjs",
+      "raw_sha256": "5b6f8a2ca2259b6adaa8999d5e2ea8ac1a06ad1043b4f746b36b302d3af1b917",
+      "bytes": 12266
+    },
+    {
+      "path": "composite-baseline.cjs",
+      "raw_sha256": "4e140124b358f785eaac15758a54118dfe0e11455616c4598da3f010448b2717",
+      "bytes": 7644
+    },
+    {
+      "path": "persisted-test-transforms.cjs",
+      "raw_sha256": "96fa10af0db3c74a9671f503f96b7bc080be76c4506fa8a3c8a2057c1837b686",
+      "bytes": 14370
+    },
+    {
+      "path": "prepare-delivery.cjs",
+      "raw_sha256": "f40d9f41db31a08191b00a26299564d45f8a35688911f10055c64d71b40d50c3",
+      "bytes": 7063
+    },
+    {
+      "path": "bind-current-baseline.cjs",
+      "raw_sha256": "f5c9a5a90fc412ec03cbb44b1cc2e07265e541c64e92ad065e374787e9602522",
+      "bytes": 3390
+    },
+    {
+      "path": "integrate-reviewed.cjs",
+      "raw_sha256": "597a28feaae1216075bfe5e54b291055c4a68cf7d529170ac8a67f7df6259e5a",
+      "bytes": 5943
+    },
+    {
+      "path": "HANDOFF.md",
+      "raw_sha256": "5712846c6fbd6b0475f7b2edb1267ed3ad1e709ba53ddf089411251b7084c112",
+      "bytes": 3652
+    },
+    {
+      "path": "delivery-proposal.json",
+      "raw_sha256": "3e6dc78641cea0e914818bd71aaa40d0f9c3c8a6b3997505ee17e6f3d4792457",
+      "bytes": 289837
+    },
+    {
+      "path": "observed-current-inputs.json",
+      "raw_sha256": "135efe43fda80a4ec4cacd652126dff1d93758b422431096dcf1117268f01884",
+      "bytes": 89424
+    },
+    {
+      "path": "professional-content.test.cjs.before",
+      "raw_sha256": "83ccbe17e57bcd9ee8216f1416de68abcaae8ca79c54e493eaf0007d6e74440e",
+      "bytes": 286706
+    },
+    {
+      "path": "professional-content.test.cjs.after",
+      "raw_sha256": "6cc20ad953645ecf4961dfff2fd22f9cdd2ed5c4d6e3c9d100e938902fd3e9f0",
+      "bytes": 299007
+    },
+    {
+      "path": "professional-retail-morphology.test.cjs.before",
+      "raw_sha256": "445ace67e25d2be472f58e41eb507cc2e96ca15a61f815d8a4583fe80c28650f",
+      "bytes": 78227
+    },
+    {
+      "path": "professional-retail-morphology.test.cjs.after",
+      "raw_sha256": "5344e7ab7c62e62640f3c9047f602f0434be6d584430c08e65ae50dbeb9c210c",
+      "bytes": 79957
+    },
+    {
+      "path": "test-patches.json",
+      "raw_sha256": "4da8af68acc7278a79ec2ba37a16a3933143706faf9747d66f74c67d2a79244a",
+      "bytes": 3514
+    },
+    {
+      "path": "scratch-validation.json",
+      "raw_sha256": "15c3bb593af39c6791588b8f494b3f149e9a7e78281ac8cdf87aac4396897231",
+      "bytes": 9913
+    }
+  ],
+  "immutable_after_preparation": true
+}

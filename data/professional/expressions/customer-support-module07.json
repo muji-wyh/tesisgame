@@ -1,0 +1,1737 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.customer_support.module07.01",
+      "text": "First reply time, resolution time, and waiting time measure different events; please check the report's counting rules.",
+      "meaning": "Distinguish service-time measurements.",
+      "context": "A team reviews how a report measures customer waiting.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "First",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "reply",
+          "start": 6,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "time",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "resolution",
+          "start": 18,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "time",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "waiting",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "time",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "measure",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "different",
+          "start": 60,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "events",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "please",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "check",
+          "start": 85,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "report's",
+          "start": 95,
+          "end": 103
+        },
+        {
+          "index": 18,
+          "text": "counting",
+          "start": 104,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": "rules",
+          "start": 113,
+          "end": 118
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 118,
+          "end": 119
+        }
+      ],
+      "focus_lexeme_ids": [
+        "first-reply-time.time-to-first-qualifying-support-reply.n",
+        "resolution-time.time-to-defined-request-resolution.n",
+        "waiting-time.delay-before-service.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "zendesk-support-duration-metrics",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module07.02",
+      "text": "The response target and resolution target use the business hours defined for this service.",
+      "meaning": "Clarify the applicable timing arrangements.",
+      "context": "An agent checks a service commitment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "response",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "target",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "resolution",
+          "start": 24,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "target",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "use",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "business",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "hours",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "defined",
+          "start": 65,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "for",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "this",
+          "start": 77,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "service",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "response-target.intended-time-for-service-reply.n",
+        "resolution-target.intended-time-for-resolving-request.n",
+        "business-hours.hours-counted-for-business-service.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module07.03",
+      "text": "Each ticket records an issue; its request category, ticket priority, and ticket status describe different aspects of the case.",
+      "meaning": "Distinguish a case record from its classification fields.",
+      "context": "An agent explains ticket information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Each",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "ticket",
+          "start": 5,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "records",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "an",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "issue",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": ";",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "its",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "request",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "category",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "ticket",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "priority",
+          "start": 59,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "ticket",
+          "start": 73,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "status",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "describe",
+          "start": 87,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "different",
+          "start": 96,
+          "end": 105
+        },
+        {
+          "index": 18,
+          "text": "aspects",
+          "start": 106,
+          "end": 113
+        },
+        {
+          "index": 19,
+          "text": "of",
+          "start": 114,
+          "end": 116
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 117,
+          "end": 120
+        },
+        {
+          "index": 21,
+          "text": "case",
+          "start": 121,
+          "end": 125
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 125,
+          "end": 126
+        }
+      ],
+      "focus_lexeme_ids": [
+        "request-category.group-for-kind-of-support-request.n",
+        "ticket-priority.relative-urgency-of-support-case.n",
+        "ticket-status.recorded-stage-of-support-case.n",
+        "ticket.tracked-request-record.n",
+        "issue.tracked-work-item.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module07.04",
+      "text": "The assignee, support group, and owner should be clear while the case is in progress, including responsibility for outstanding work and pending decisions.",
+      "meaning": "Clarify responsibility for unfinished work.",
+      "context": "A support team reviews an active case.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "assignee",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 12,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "support",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "group",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "owner",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "should",
+          "start": 39,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "be",
+          "start": 46,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "clear",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "while",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "case",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "is",
+          "start": 70,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "in",
+          "start": 73,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "progress",
+          "start": 76,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 18,
+          "text": "including",
+          "start": 86,
+          "end": 95
+        },
+        {
+          "index": 19,
+          "text": "responsibility",
+          "start": 96,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": "for",
+          "start": 111,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": "outstanding",
+          "start": 115,
+          "end": 126
+        },
+        {
+          "index": 22,
+          "text": "work",
+          "start": 127,
+          "end": 131
+        },
+        {
+          "index": 23,
+          "text": "and",
+          "start": 132,
+          "end": 135
+        },
+        {
+          "index": 24,
+          "text": "pending",
+          "start": 136,
+          "end": 143
+        },
+        {
+          "index": 25,
+          "text": "decisions",
+          "start": 144,
+          "end": 153
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 153,
+          "end": 154
+        }
+      ],
+      "focus_lexeme_ids": [
+        "assignee.person-assigned-work.n",
+        "support-group.team-handling-related-support-work.n",
+        "in-progress.currently-being-worked-on.a",
+        "owner.task-responsible-person.n",
+        "outstanding.not-yet-completed.a",
+        "pending.awaiting-decision-or-action.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module07.05",
+      "text": "The resolution summary and closure reason remain linked when this workflow creates a follow-up ticket.",
+      "meaning": "Preserve the relationship to earlier work.",
+      "context": "An agent reviews a case continuation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "resolution",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "summary",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "closure",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "reason",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "remain",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "linked",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "when",
+          "start": 56,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "workflow",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "creates",
+          "start": 75,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 83,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "follow-up",
+          "start": 85,
+          "end": 94
+        },
+        {
+          "index": 14,
+          "text": "ticket",
+          "start": 95,
+          "end": 101
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "resolution-summary.record-of-how-request-was-addressed.n",
+        "closure-reason.recorded-reason-for-finishing-case.n",
+        "follow-up-ticket.new-ticket-linked-to-earlier-case.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module07.06",
+      "text": "Please review the case history before deciding whether this is a duplicate ticket or a related linked ticket.",
+      "meaning": "Check the relationship between records.",
+      "context": "An agent investigates two similar requests.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "review",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "case",
+          "start": 18,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "history",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "deciding",
+          "start": 38,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "whether",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "this",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "is",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "duplicate",
+          "start": 65,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "ticket",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "or",
+          "start": 82,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "a",
+          "start": 85,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "related",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": "linked",
+          "start": 95,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": "ticket",
+          "start": 102,
+          "end": 108
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "case-history.record-of-earlier-work-on-case.n",
+        "duplicate-ticket.additional-ticket-for-same-support-issue.n",
+        "linked-ticket.ticket-connected-to-another-record.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module07.07",
+      "text": "This known issue affects a feature in the current version; the workaround is approved, but the bug's root cause remains under investigation.",
+      "meaning": "Distinguish a known effect and workaround from the unresolved cause.",
+      "context": "An agent explains the confirmed state of a software issue.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "known",
+          "start": 5,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "issue",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "affects",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "feature",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "in",
+          "start": 35,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "current",
+          "start": 42,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "version",
+          "start": 50,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "workaround",
+          "start": 63,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "is",
+          "start": 74,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "approved",
+          "start": 77,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 85,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "but",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "bug's",
+          "start": 95,
+          "end": 100
+        },
+        {
+          "index": 19,
+          "text": "root",
+          "start": 101,
+          "end": 105
+        },
+        {
+          "index": 20,
+          "text": "cause",
+          "start": 106,
+          "end": 111
+        },
+        {
+          "index": 21,
+          "text": "remains",
+          "start": 112,
+          "end": 119
+        },
+        {
+          "index": 22,
+          "text": "under",
+          "start": 120,
+          "end": 125
+        },
+        {
+          "index": 23,
+          "text": "investigation",
+          "start": 126,
+          "end": 139
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 139,
+          "end": 140
+        }
+      ],
+      "focus_lexeme_ids": [
+        "known-issue.recognized-problem-with-recorded-information.n",
+        "workaround.temporary-way-around-problem.n",
+        "root-cause.underlying-cause-identified-by-analysis.n",
+        "feature.software-capability.n",
+        "version.identified-software-state.n",
+        "bug.unintended-program-problem.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module07.08",
+      "text": "The verified status page describes the service outage and the time of its latest update.",
+      "meaning": "Refer to current published service information.",
+      "context": "An agent checks a reported interruption.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "verified",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "status",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "page",
+          "start": 20,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "describes",
+          "start": 25,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "service",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "outage",
+          "start": 47,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "time",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "of",
+          "start": 67,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "its",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "latest",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "update",
+          "start": 81,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "status-page.page-reporting-service-condition.n",
+        "service-outage.period-of-service-unavailability.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module07.09",
+      "text": "Please send only the relevant error message or error code through the approved route; redact any screenshot first.",
+      "meaning": "Limit information to what the support task needs.",
+      "context": "An agent requests suitable diagnostic context.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "send",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "only",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "relevant",
+          "start": 21,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "error",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "message",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "or",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "error",
+          "start": 47,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "code",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "through",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "approved",
+          "start": 70,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "route",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": ";",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "redact",
+          "start": 86,
+          "end": 92
+        },
+        {
+          "index": 16,
+          "text": "any",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": "screenshot",
+          "start": 97,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": "first",
+          "start": 108,
+          "end": 113
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 113,
+          "end": 114
+        }
+      ],
+      "focus_lexeme_ids": [
+        "error-message.message-reporting-operation-problem.n",
+        "error-code.code-identifying-error-category.n",
+        "screenshot.image-captured-from-screen.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module07.10",
+      "text": "The escalation path depends on the confirmed impact on each affected user and the intermittent fault evidence.",
+      "meaning": "Refer an issue using relevant evidence.",
+      "context": "A supervisor reviews the reported impact.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "escalation",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "path",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "depends",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "on",
+          "start": 28,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "confirmed",
+          "start": 35,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "impact",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "on",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "each",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "affected",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "user",
+          "start": 69,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "intermittent",
+          "start": 82,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "fault",
+          "start": 95,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "evidence",
+          "start": 101,
+          "end": 109
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "escalation-path.route-to-appropriate-further-review.n",
+        "affected-user.person-experiencing-reported-impact.n",
+        "intermittent-fault.fault-occurring-irregularly.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

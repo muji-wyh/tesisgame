@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "status": "frozen_loader_integration_handoff",
+  "production_bindings": [
+    {
+      "path": "scripts/professional_round_loader.gd",
+      "bytes": 10408,
+      "sha256": "83186aeb5c993e6dcd544f71e6939de8a3b08ab60b3fc610987b22bf94d3182d"
+    },
+    {
+      "path": "tests/godot/professional_round_loader_tests.gd",
+      "bytes": 24170,
+      "sha256": "99904fff2e23cd83976647c89990a76c7786f91ba51feb2108983833a01ae96d"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "build/professional-english/domain-loader-integration-r01/preimages.json",
+      "bytes": 771,
+      "sha256": "fb6e5c7a32b25500262c918719763379baca7871f0e4b89a6d29eec822ae68db"
+    },
+    {
+      "path": "build/professional-english/domain-loader-integration-r01/preimages/scripts/professional_round_loader.gd",
+      "bytes": 2882,
+      "sha256": "527a87862bf27dd731f68800c756502543f8899528e8cee1cf96a0b3fa4d27ed"
+    },
+    {
+      "path": "build/professional-english/domain-loader-integration-r01/preimages/tests/godot/professional_round_loader_tests.gd",
+      "bytes": 7386,
+      "sha256": "c44a68982bd35ecb36c8a4a8fbdd6a11db2ea298222b95310d47b5b8ef3799d3"
+    },
+    {
+      "path": "build/professional-english/domain-loader-integration-r01/README.md",
+      "bytes": 4886,
+      "sha256": "2ad0ec2beedcd693ac49a3245eb7a3ec84a86888d84aca8977186532801bb160"
+    },
+    {
+      "path": "build/professional-english/domain-loader-integration-r01/handoff.json",
+      "bytes": 1072,
+      "sha256": "ba3830087d3503d776aa96371d6e73f697c90072e6389dc0453110d5c5d13ad8"
+    }
+  ]
+}

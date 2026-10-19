@@ -1,0 +1,2227 @@
+{
+  "schema_version": 1,
+  "profiles": [
+    {
+      "id": "growth_garden",
+      "title": "Pip's Garden",
+      "track": "growth",
+      "course_id": null,
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#237A57",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Reuse the established Kenney daylight garden direction, with existing sourced hills and foliage; audit its new Home composition before integration. Existing source assets are integrated in Jelly; this new theme profile and its Home artwork remain pending.",
+          "available_animations": [],
+          "adaptations": [],
+          "existing_asset_reference": "res://docs/assets/jelly-garden.json"
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: Reuse the established Kenney daylight garden direction, with existing sourced hills and foliage; audit its new Home composition before integration.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200
+    },
+    {
+      "id": "professional_caregiving",
+      "title": "Welcoming Home",
+      "track": "professional",
+      "course_id": "caregiving",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#457653",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A sunlit accessible home with a garden-facing sitting area, gentle furniture, and a clear walking route.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A sunlit accessible home with a garden-facing sitting area, gentle furniture, and a clear walking route.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/caregiving.png",
+        "sha256": "5158de0b177ab2e5159ca226f18c6c5a8536b39dbaab69c18791c80cdeef421a",
+        "source": "https://kenney.nl/assets/furniture-kit; https://kenney.nl/assets/mini-characters",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Model scale and contact heights corrected after source-bound and rendered inspection.",
+          "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+        ]
+      }
+    },
+    {
+      "id": "professional_retail",
+      "title": "Neighborhood Store",
+      "track": "professional",
+      "course_id": "retail",
+      "status": "ready",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#32695F",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "integrated",
+          "path": "res://professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png",
+          "sha256": "8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+          "source": "https://kenney.nl/assets/mini-market",
+          "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+          "license": "CC0 1.0",
+          "acquisition_status": "integrated",
+          "review": {
+            "status": "reviewed",
+            "reviewer": "Codex source/frame/pose visual review; recorded native timing; no continuous playback/listening claim",
+            "reviewed_at": "2026-10-16"
+          },
+          "brief": "Source-rendered Retail environment candidate.",
+          "available_animations": [],
+          "adaptations": [
+            "Original source geometry and materials; fixed orthographic source render.",
+            "Layered from identical renderer captures to retain correct occlusion and shadows.",
+            "Accepted source/frame/pose visual review and recorded native timing; no continuous playback or listening claim. Exact source and integration evidence: docs/assets/professional-retail-theme.md."
+          ]
+        },
+        "home": {
+          "status": "integrated",
+          "path": "res://professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png",
+          "sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+          "source": "https://kenney.nl/assets/mini-market",
+          "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+          "license": "CC0 1.0",
+          "acquisition_status": "integrated",
+          "review": {
+            "status": "reviewed",
+            "reviewer": "Codex source/frame/pose visual review; recorded native timing; no continuous playback/listening claim",
+            "reviewed_at": "2026-10-16"
+          },
+          "brief": "Byte-for-byte reuse of the accepted static Retail Home preview.",
+          "available_animations": [],
+          "adaptations": [
+            "Exact accepted 512 by 320 local Home image copied to a content-addressed sidecar.",
+            "Accepted source/frame/pose visual review and recorded native timing; no continuous playback or listening claim. Exact source and integration evidence: docs/assets/professional-retail-theme.md."
+          ]
+        },
+        "props": {
+          "status": "integrated",
+          "path": "res://professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png",
+          "sha256": "afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+          "source": "https://kenney.nl/assets/mini-market",
+          "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+          "license": "CC0 1.0",
+          "acquisition_status": "integrated",
+          "review": {
+            "status": "reviewed",
+            "reviewer": "Codex source/frame/pose visual review; recorded native timing; no continuous playback/listening claim",
+            "reviewed_at": "2026-10-16"
+          },
+          "brief": "Source-rendered Retail props candidate.",
+          "available_animations": [],
+          "adaptations": [
+            "Original source geometry and materials; fixed orthographic source render.",
+            "Layered from identical renderer captures to retain correct occlusion and shadows.",
+            "Accepted source/frame/pose visual review and recorded native timing; no continuous playback or listening claim. Exact source and integration evidence: docs/assets/professional-retail-theme.md."
+          ]
+        }
+      },
+      "ambient_motion": {
+        "status": "ready",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex source/frame/pose visual review; recorded native timing; no continuous playback/listening claim",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "A friendly employee behind checkout uses the acquired source idle at one third of its original speed. Frame zero is the authored reduced-motion resting pose. Accepted source/frame/pose visual review and recorded native timing; no continuous playback or listening claim. Exact source and integration evidence: docs/assets/professional-retail-theme.md.",
+        "clips": [
+          {
+            "id": "retail-employee-idle",
+            "columns": 4,
+            "rows": 4,
+            "frame_count": 16,
+            "rest_frame": 0,
+            "frames_per_second": 4,
+            "rect": [
+              0.5325520833333334,
+              0.42578125,
+              0.2994791666666667,
+              0.23697916666666666
+            ],
+            "image": {
+              "status": "integrated",
+              "path": "res://professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png",
+              "sha256": "202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76",
+              "source": "https://kenney.nl/assets/mini-market",
+              "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+              "license": "CC0 1.0",
+              "acquisition_status": "integrated",
+              "review": {
+                "status": "reviewed",
+                "reviewer": "Codex source/frame/pose visual review; recorded native timing; no continuous playback/listening claim",
+                "reviewed_at": "2026-10-16"
+              },
+              "brief": "Source-rendered Retail motion candidate.",
+              "available_animations": [
+                "idle"
+              ],
+              "adaptations": [
+                "Original source geometry and materials; fixed orthographic source render.",
+                "Original idle sampled into sixteen frames over a four-second cycle.",
+                "Accepted source/frame/pose visual review and recorded native timing; no continuous playback or listening claim. Exact source and integration evidence: docs/assets/professional-retail-theme.md."
+              ]
+            }
+          }
+        ]
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/retail.png",
+        "sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+        "source": "https://kenney.nl/assets/mini-market",
+        "creator": "Kenney; additional credits: Fleur Keijsers and Guus Vermeulen",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed only from acquired source GLB meshes, preserving their geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+        ]
+      }
+    },
+    {
+      "id": "professional_food_service",
+      "title": "Restaurant & Kitchen",
+      "track": "professional",
+      "course_id": "food_service",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#A05036",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly restaurant with a clearly separated open kitchen, service counter, and inviting tables.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A friendly restaurant with a clearly separated open kitchen, service counter, and inviting tables.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/food-service.png",
+        "sha256": "cb6952f9d40d6c9b7b074557e861e5bbe975c3826f83ed5eba83567313ec2ab3",
+        "source": "https://kenney.nl/assets/furniture-kit; https://kenney.nl/assets/food-kit",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Model scale and contact heights corrected after source-bound and rendered inspection.",
+          "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+        ]
+      }
+    },
+    {
+      "id": "professional_nursing",
+      "title": "Care Ward",
+      "track": "professional",
+      "course_id": "nursing",
+      "status": "ready",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#356B80",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "integrated",
+          "path": "res://professional-media/712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png",
+          "sha256": "712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9",
+          "source": "https://www.innerscene.com/tools/library/3d-parts/privacy-curtain-and-ceiling-track-0353bfbc",
+          "creator": "Innerscene; Kenney",
+          "license": "CC0 1.0",
+          "acquisition_status": "integrated",
+          "review": {
+            "status": "reviewed",
+            "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+            "reviewed_at": "2026-10-16"
+          },
+          "brief": "Sourced Care Ward environment candidate with recorded source geometry and textile adaptations.",
+          "available_animations": [],
+          "adaptations": [
+            "Uniformly scaled acquired source models and retained source materials.",
+            "Corrected source textile cap-smoothed normals.",
+            "Original side triangles subdivided in memory into seven height bands, with lower 45 percent depth bend and fixed upper region/hardware.",
+            "Sixteen newly authored samples over eight seconds; not an included animation or cloth simulation."
+          ]
+        },
+        "props": {
+          "status": "integrated",
+          "path": "res://professional-media/65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png",
+          "sha256": "65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973",
+          "source": "https://www.innerscene.com/tools/library/3d-parts/privacy-curtain-and-ceiling-track-0353bfbc",
+          "creator": "Innerscene; Kenney",
+          "license": "CC0 1.0",
+          "acquisition_status": "integrated",
+          "review": {
+            "status": "reviewed",
+            "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+            "reviewed_at": "2026-10-16"
+          },
+          "brief": "Sourced Care Ward props candidate with recorded source geometry and textile adaptations.",
+          "available_animations": [],
+          "adaptations": [
+            "Uniformly scaled acquired source models and retained source materials.",
+            "Corrected source textile cap-smoothed normals.",
+            "Original side triangles subdivided in memory into seven height bands, with lower 45 percent depth bend and fixed upper region/hardware.",
+            "Sixteen newly authored samples over eight seconds; not an included animation or cloth simulation."
+          ]
+        },
+        "home": {
+          "status": "integrated",
+          "path": "res://professional-media/41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png",
+          "sha256": "41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5",
+          "source": "https://www.innerscene.com/tools/library/3d-parts/privacy-curtain-and-ceiling-track-0353bfbc",
+          "creator": "Innerscene; Kenney",
+          "license": "CC0 1.0",
+          "acquisition_status": "integrated",
+          "review": {
+            "status": "reviewed",
+            "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+            "reviewed_at": "2026-10-16"
+          },
+          "brief": "Sourced Care Ward home candidate with recorded source geometry and textile adaptations.",
+          "available_animations": [],
+          "adaptations": [
+            "Uniformly scaled acquired source models and retained source materials.",
+            "Corrected source textile cap-smoothed normals.",
+            "Original side triangles subdivided in memory into seven height bands, with lower 45 percent depth bend and fixed upper region/hardware.",
+            "Sixteen newly authored samples over eight seconds; not an included animation or cloth simulation."
+          ]
+        }
+      },
+      "ambient_motion": {
+        "status": "ready",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Only the lower privacy-textile hem bends by at most two centimetres over an eight-second cycle. The upper 55 percent, rings, rail, brackets and all room objects remain fixed. Frame zero is reduced-motion rest.",
+        "clips": [
+          {
+            "id": "nursing-curtain-hem-sway",
+            "columns": 4,
+            "rows": 4,
+            "frame_count": 16,
+            "rest_frame": 0,
+            "frames_per_second": 2,
+            "rect": [
+              0.4775390625,
+              0.345703125,
+              0.255859375,
+              0.20703125
+            ],
+            "image": {
+              "status": "integrated",
+              "path": "res://professional-media/3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png",
+              "sha256": "3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714",
+              "source": "https://www.innerscene.com/tools/library/3d-parts/privacy-curtain-and-ceiling-track-0353bfbc",
+              "creator": "Innerscene; Kenney",
+              "license": "CC0 1.0",
+              "acquisition_status": "integrated",
+              "review": {
+                "status": "reviewed",
+                "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+                "reviewed_at": "2026-10-16"
+              },
+              "brief": "Sourced Care Ward motion candidate with recorded source geometry and textile adaptations.",
+              "available_animations": [],
+              "adaptations": [
+                "Uniformly scaled acquired source models and retained source materials.",
+                "Corrected source textile cap-smoothed normals.",
+                "Original side triangles subdivided in memory into seven height bands, with lower 45 percent depth bend and fixed upper region/hardware.",
+                "Sixteen newly authored samples over eight seconds; not an included animation or cloth simulation."
+              ]
+            }
+          }
+        ]
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/nursing.png",
+        "sha256": "9dea5958b2143012b69d0119ce3b6c2fe9c3eaa0ad5e5b544cdcedd632fa73ee",
+        "source": "https://kenney.nl/assets/furniture-kit; https://kenney.nl/assets/mini-characters; https://www.innerscene.com/tools/library/3d-parts/hospital-bed-raised-backrest-6bb95542",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Model scale and contact heights corrected after source-bound and rendered inspection.",
+          "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+        ]
+      }
+    },
+    {
+      "id": "professional_customer_support",
+      "title": "Service Center",
+      "track": "professional",
+      "course_id": "customer_support",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#65569A",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A bright service center with headset workspaces, a help counter, and welcoming shared seating.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A bright service center with headset workspaces, a help counter, and welcoming shared seating.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/customer-support.png",
+        "sha256": "5a3a35221e881999e047390136f1cbe8a12aa238102e3b309bd2df3fe1cd6b8d",
+        "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/desk-call-office-phone-dbbf9f01",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex composition author and independent root review of exact final canonical source/phone images; static Home scope only",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion, occupational review, and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired original GLB meshes, preserving source geometry and materials with uniform scaling.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; source listing preview images are not used as scene art.",
+          "Actual source bounds determine support heights for the phone, calculator, scanner, headphones, and other tabletop props.",
+          "Resized using Lanczos filtering; exact canonical 512 by 320 and 296 by 185 images independently inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_office_admin",
+      "title": "Office Hub",
+      "track": "professional",
+      "course_id": "office_admin",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#456C8C",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm office hub with a reception desk, shared calendar wall, document shelves, and meeting nook.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A warm office hub with a reception desk, shared calendar wall, document shelves, and meeting nook.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/office-admin.png",
+        "sha256": "6ba67a3c508d6211bea2370589837e7e445c561b9b9ae9a5811639d2746239c8",
+        "source": "https://kenney.nl/assets/furniture-kit",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Model scale and contact heights corrected after source-bound and rendered inspection.",
+          "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+        ]
+      }
+    },
+    {
+      "id": "professional_warehouse_logistics",
+      "title": "Distribution Center",
+      "track": "professional",
+      "course_id": "warehouse_logistics",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#79613B",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An orderly warehouse with distinct receiving, shelving, packing, and dispatch areas and marked walking routes.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: An orderly warehouse with distinct receiving, shelving, packing, and dispatch areas and marked walking routes.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/warehouse-logistics.png",
+        "sha256": "723cea4f1883ab238425f4f2c779e93030bbf5eda964f8fb52bd7c60b5be29f9",
+        "source": "https://kenney.nl/assets/factory-kit; https://kenney.nl/assets/mini-skate; https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/electric-counterbalance-forklift-7acc0547",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Surface heights derived from source bounds; oversized warehouse structural modules rejected before integration.",
+          "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_hospitality_tourism",
+      "title": "Hotel & Travel Desk",
+      "track": "professional",
+      "course_id": "hospitality_tourism",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#8B546E",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An inviting hotel lobby with a reception desk, travel information shelves, luggage area, and seating.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: An inviting hotel lobby with a reception desk, travel information shelves, luggage area, and seating.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/hospitality-tourism.png",
+        "sha256": "422cc920c1ab1dbbe090454a2b82b018a350f18650dff3287ff4e2af467c14ee",
+        "source": "https://kenney.nl/assets/furniture-kit",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Surface heights derived from source bounds; oversized warehouse structural modules rejected before integration.",
+          "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_transport_delivery",
+      "title": "Delivery Depot",
+      "track": "professional",
+      "course_id": "transport_delivery",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#54714B",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A delivery depot with parked vans, a dispatch map, parcel staging, and a clear pedestrian route.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A delivery depot with parked vans, a dispatch map, parcel staging, and a clear pedestrian route.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/transport-delivery.png",
+        "sha256": "ce672584af56edb6608203a5f16d93f8a846eb324073c362118037164a7ef234",
+        "source": "https://kenney.nl/assets/car-kit; https://kenney.nl/assets/mini-skate; https://kenney.nl/assets/furniture-kit",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Source bounds set proportional equipment scales and tabletop contacts; mop placed visibly against the utility-room wall.",
+          "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_construction_trades",
+      "title": "Building Site & Workshop",
+      "track": "professional",
+      "course_id": "construction_trades",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#8F612D",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A bright building workshop overlooking a tidy construction site; tools and materials are arranged with clear boundaries.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A bright building workshop overlooking a tidy construction site; tools and materials are arranged with clear boundaries.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/construction-trades.png",
+        "sha256": "ee917b37e665e6326c291c899f9a09adbf03675d96d572913a9d40a5bd82e6b6",
+        "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/carpenter-workbench-carpentry-workbench-9855fae6; https://www.innerscene.com/tools/library/3d-parts/drill-compact-cordless-drill-90e6de1c; https://www.innerscene.com/tools/library/3d-parts/step-fold-step-ladder-acbe7baf; https://kenney.nl/assets/survival-kit",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Authored bench surface bounds determine tool contact heights; the hammer is laid flat and network switch stays within the mat.",
+          "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_cleaning_facilities",
+      "title": "Building Care Center",
+      "track": "professional",
+      "course_id": "cleaning_facilities",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#3D786D",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming building service room with an organized cleaning cart, maintenance desk, and view of a cared-for lobby.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A welcoming building service room with an organized cleaning cart, maintenance desk, and view of a cared-for lobby.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/cleaning-facilities.png",
+        "sha256": "ec93a90cb516a727cac00af0b64875fc9c426a2a8c265db24bd7e7849e7a6c12",
+        "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/mop-bucket-wringer-bucket-75de0942; https://www.innerscene.com/tools/library/3d-parts/workshop-vac-wet-dry-vacuum-119e0848; https://www.innerscene.com/tools/library/3d-parts/mop-squeeze-sponge-mop-e07fedc4",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Source bounds set proportional equipment scales and tabletop contacts; mop placed visibly against the utility-room wall.",
+          "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_education_childcare",
+      "title": "Learning Center",
+      "track": "professional",
+      "course_id": "education_childcare",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#886441",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An inclusive learning center with reading, activity, and family conversation areas and varied-height furniture.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: An inclusive learning center with reading, activity, and family conversation areas and varied-height furniture.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/education-childcare.png",
+        "sha256": "a65495ef4fc41b0a802547a036f3f90db9198ce0855006b16f017ddfa61b7d29",
+        "source": "https://kenney.nl/assets/furniture-kit",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Surface heights derived from source bounds; oversized warehouse structural modules rejected before integration.",
+          "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_manufacturing_maintenance",
+      "title": "Production Workshop",
+      "track": "professional",
+      "course_id": "manufacturing_maintenance",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#586C7D",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clean production workshop with a workbench, enclosed machines, a quality station, and a maintenance area.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A clean production workshop with a workbench, enclosed machines, a quality station, and a maintenance area.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/manufacturing-maintenance.png",
+        "sha256": "b9794f4f4ed02559b0fa2c1a810d2cd78d40252950aaa424e7656de2f9b06cb3",
+        "source": "https://kenney.nl/assets/factory-kit; https://kenney.nl/assets/furniture-kit",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Source bounds set proportional equipment scales and tabletop contacts; mop placed visibly against the utility-room wall.",
+          "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_it_support",
+      "title": "Device Support Lab",
+      "track": "professional",
+      "course_id": "it_support",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#3A7084",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A device support lab with a repair bench, neatly arranged laptops, a network shelf, and a user-help desk.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A device support lab with a repair bench, neatly arranged laptops, a network shelf, and a user-help desk.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/it-support.png",
+        "sha256": "c78665355a7ec8447d4575e19167b9a8e06452e3f8066174ef0e20a92d129048",
+        "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/electronics-repair-bench-technical-workbench-96f9d5a8; https://www.innerscene.com/tools/library/3d-parts/network-eight-network-switch-36db103d; https://www.innerscene.com/tools/library/3d-parts/driver-hand-screwdriver-61ecc731",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Authored bench surface bounds determine tool contact heights; the hammer is laid flat and network switch stays within the mat.",
+          "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_software_data",
+      "title": "Digital Studio",
+      "track": "professional",
+      "course_id": "software_data",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#625789",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A collaborative digital studio with paired workstations, a review screen, a whiteboard, and a quiet analysis nook.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A collaborative digital studio with paired workstations, a review screen, a whiteboard, and a quiet analysis nook.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/software-data.png",
+        "sha256": "5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+        "source": "https://kenney.nl/assets/furniture-kit",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed only from acquired source GLB meshes, preserving their geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+        ]
+      }
+    },
+    {
+      "id": "professional_accounting_finance",
+      "title": "Finance Office",
+      "track": "professional",
+      "course_id": "accounting_finance",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#416D62",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm finance office with a document review desk, secure records storage, and a budget discussion table.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A calm finance office with a document review desk, secure records storage, and a budget discussion table.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/accounting-finance.png",
+        "sha256": "31ea949bb0ca8e5774302dd8b22e18066a189baac9ad736d7935980c2e2c171a",
+        "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/desk-sum-calculator-6fa207a5; https://www.innerscene.com/tools/library/3d-parts/scan-feed-sheet-fed-scanner-6229d7f6; https://www.innerscene.com/tools/library/3d-parts/two-drawer-lateral-filing-cabinet-157adbfa",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex composition author and independent root review of exact final canonical source/phone images; static Home scope only",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion, occupational review, and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired original GLB meshes, preserving source geometry and materials with uniform scaling.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; source listing preview images are not used as scene art.",
+          "Actual source bounds determine support heights for the phone, calculator, scanner, headphones, and other tabletop props.",
+          "Resized using Lanczos filtering; exact canonical 512 by 320 and 296 by 185 images independently inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_sales_marketing",
+      "title": "Showroom & Campaign Studio",
+      "track": "professional",
+      "course_id": "sales_marketing",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#9A4F61",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly showroom opening onto a campaign studio with product displays, a presentation board, and a planning table.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A friendly showroom opening onto a campaign studio with product displays, a presentation board, and a planning table.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/sales-marketing.png",
+        "sha256": "283866d94d5fbe50b66f602bffe428632dcebcb188d8ef2db59fd769157437c7",
+        "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/canted-display-pedestal-display-plinth-22ced290; https://www.innerscene.com/tools/library/3d-parts/monitor-cans-studio-headphones-215d0bbe",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex composition author and independent root review of exact final canonical source/phone images; static Home scope only",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion, occupational review, and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired original GLB meshes, preserving source geometry and materials with uniform scaling.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; source listing preview images are not used as scene art.",
+          "Actual source bounds determine support heights for the phone, calculator, scanner, headphones, and other tabletop props.",
+          "Resized using Lanczos filtering; exact canonical 512 by 320 and 296 by 185 images independently inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_hr_recruitment",
+      "title": "People & Interview Office",
+      "track": "professional",
+      "course_id": "hr_recruitment",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#786046",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An approachable people office with a private interview room, welcome desk, and onboarding conversation area.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: An approachable people office with a private interview room, welcome desk, and onboarding conversation area.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/hr-recruitment.png",
+        "sha256": "bb6ff2a331ad371a83fcc2eeadebe071fa275af3795d63054dc842646110f09a",
+        "source": "https://kenney.nl/assets/furniture-kit",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex visual review (source composition and final phone-scale images)",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired source GLB meshes, preserving geometry and materials.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+          "Model scale and contact heights corrected after source-bound and rendered inspection.",
+          "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+        ]
+      }
+    },
+    {
+      "id": "professional_clinical_medicine",
+      "title": "Consultation Clinic",
+      "track": "professional",
+      "course_id": "clinical_medicine",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#39796F",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming consultation clinic with a conversation desk, a separate examination area, and discreet equipment storage.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: A welcoming consultation clinic with a conversation desk, a separate examination area, and discreet equipment storage.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/clinical-medicine.png",
+        "sha256": "6b52f53f4d60046db67b948f5a2dfc8e4dc7604e8cee5b34ba1f020c93048367",
+        "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/clinical-examination-table-abcf7263; https://www.innerscene.com/tools/library/3d-parts/three-shelf-medical-supply-cart-45cc326c",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex composition author and independent root review of exact final canonical source/phone images; static Home scope only",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion, occupational review, and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired original GLB meshes, preserving source geometry and materials with uniform scaling.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; source listing preview images are not used as scene art.",
+          "Actual source bounds determine support heights for the phone, calculator, scanner, headphones, and other tabletop props.",
+          "Resized using Lanczos filtering; exact canonical 512 by 320 and 296 by 185 images independently inspected."
+        ]
+      }
+    },
+    {
+      "id": "professional_legal_paralegal",
+      "title": "Legal Office",
+      "track": "professional",
+      "course_id": "legal_paralegal",
+      "status": "pending",
+      "palette": {
+        "background": "#F4F5EF",
+        "surface": "#FFFFFF",
+        "text": "#253B35",
+        "accent": "#6D6084",
+        "light": "#D9E7DB",
+        "spark": "#E7B56D"
+      },
+      "art": {
+        "environment": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An approachable legal office with a client meeting table, organized case files, and a private document review nook.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "home": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A warm, readable course illustration derived from: An approachable legal office with a client meeting table, organized case files, and a private document review nook.",
+          "available_animations": [],
+          "adaptations": []
+        },
+        "props": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "available_animations": [],
+          "adaptations": []
+        }
+      },
+      "ambient_motion": {
+        "status": "pending",
+        "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+        "clips": []
+      },
+      "audio": {
+        "music": "res://assets/audio/bgm/spring.wav",
+        "interaction_bank": "res://scripts/game_audio.gd",
+        "chest_sound_theme": "spring",
+        "policy": "Reuse the existing audio cues without changing their recordings or timing."
+      },
+      "rewards": {
+        "legacy_theme_id": "spring",
+        "chest_id": "royal",
+        "collection_namespace": "existing"
+      },
+      "transition_ms": 200,
+      "preview": {
+        "status": "integrated",
+        "path": "res://assets/images/professional-previews/legal-paralegal.png",
+        "sha256": "0ef10dbaf2d1f7e8879beefaa10e02058a2a1a95343fc33e948e2f7a119a0eb6",
+        "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/filled-bookshelf-medium-original-interior-furnishing-71edbaa9; https://www.innerscene.com/tools/library/3d-parts/two-drawer-lateral-filing-cabinet-157adbfa; https://commons.wikimedia.org/wiki/File:Balanced_scale_of_Justice.svg",
+        "creator": "Kenney; Innerscene; Perhelion",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex composition author and independent root review of exact final canonical source/phone images; static Home scope only",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Small local Home career preview only. Full theme environment, props, motion, occupational review, and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from acquired original GLB meshes, preserving source geometry and materials with uniform scaling.",
+          "Orthographic Godot render at 1280 by 800 with static studio lighting; source listing preview images are not used as scene art.",
+          "Actual source bounds determine support heights for the phone, calculator, scanner, headphones, and other tabletop props.",
+          "Resized using Lanczos filtering; exact canonical 512 by 320 and 296 by 185 images independently inspected.",
+          "Perhelion's original CC0 scales SVG is used unchanged as wall art on a transparent carrier surface; no generated symbol or frame."
+        ]
+      }
+    }
+  ]
+}

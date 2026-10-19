@@ -1,0 +1,1998 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.education_childcare.module05.01",
+      "text": "We can teach learners to read a short message and write a reply, then discuss what they learn.",
+      "meaning": "Connect teaching with reading, writing, and learning through one communication activity.",
+      "context": "Planning a message-and-reply activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "teach",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "learners",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "read",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "short",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": "message",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "write",
+          "start": 50,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "a",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "reply",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 14,
+          "text": "then",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 15,
+          "text": "discuss",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 16,
+          "text": "what",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 17,
+          "text": "they",
+          "start": 83,
+          "end": 87
+        },
+        {
+          "index": 18,
+          "text": "learn",
+          "start": 88,
+          "end": 93
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "teach.support-acquisition-of-knowledge-or-skill.v",
+        "read.interpret-written-or-printed-language.v",
+        "write.produce-written-language.v",
+        "learn.gain-knowledge-understanding-or-skill.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.02",
+      "text": "Learners may trace an outline, draw a detail, paint the picture, and cut out the finished shape.",
+      "meaning": "Describe four distinct creative actions in a coherent art activity.",
+      "context": "Explaining a planned collage activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Learners",
+          "start": 0,
+          "end": 8
+        },
+        {
+          "index": 1,
+          "text": "may",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "trace",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "an",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "outline",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "draw",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": "detail",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "paint",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 12,
+          "text": "picture",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 15,
+          "text": "cut",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 16,
+          "text": "out",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 18,
+          "text": "finished",
+          "start": 81,
+          "end": 89
+        },
+        {
+          "index": 19,
+          "text": "shape",
+          "start": 90,
+          "end": 95
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "trace.follow-line-or-shape-with-mark.v",
+        "draw.make-picture-with-lines-or-marks.v",
+        "paint.make-picture-or-apply-color-with-paint.v",
+        "cut.divide-or-shape-material-with-cutting-tool.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.03",
+      "text": "Adapt the card activity to include everyone, guide the discussion, and ask learners to sort and match the pictures.",
+      "meaning": "Connect access, participation, and guidance with a specific matching task.",
+      "context": "Preparing an inclusive card activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Adapt",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "card",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "activity",
+          "start": 15,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 24,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "include",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "everyone",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "guide",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "discussion",
+          "start": 55,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 65,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "ask",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "learners",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "to",
+          "start": 84,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "sort",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 18,
+          "text": "match",
+          "start": 96,
+          "end": 101
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 102,
+          "end": 105
+        },
+        {
+          "index": 20,
+          "text": "pictures",
+          "start": 106,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "adapt.change-to-suit-purpose-or-person.v",
+        "include.make-someone-or-something-part-of-activity.v",
+        "guide.support-direction-with-information-or-cues.v",
+        "sort.group-by-kind.v",
+        "match.pair-items-by-selected-relationship.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.04",
+      "text": "The educator will model the task and supervise the activity, then assess the learning evidence and annotate the observation record.",
+      "meaning": "Distinguish showing a task, overseeing participation, evaluating learning, and adding notes.",
+      "context": "Clarifying teaching and recordkeeping roles.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "educator",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "model",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "task",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "supervise",
+          "start": 37,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "activity",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "then",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "assess",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "learning",
+          "start": 77,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "evidence",
+          "start": 86,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 17,
+          "text": "annotate",
+          "start": 99,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 19,
+          "text": "observation",
+          "start": 112,
+          "end": 123
+        },
+        {
+          "index": 20,
+          "text": "record",
+          "start": 124,
+          "end": 130
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 130,
+          "end": 131
+        }
+      ],
+      "focus_lexeme_ids": [
+        "model.demonstrate-process-or-behavior-for-learning.v",
+        "supervise.oversee-activity-with-assigned-responsibility.v",
+        "assess.evaluate-evidence-of-learning.v",
+        "annotate.add-explanatory-notes-to-material.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.05",
+      "text": "Invite and encourage learners to participate in the project, collaborate on the design, and share the materials.",
+      "meaning": "Offer participation in a shared project without assuming identical contributions.",
+      "context": "Introducing a group design project.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Invite",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "and",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "encourage",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "learners",
+          "start": 21,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "participate",
+          "start": 33,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "in",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "project",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "collaborate",
+          "start": 61,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "on",
+          "start": 73,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "design",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 86,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "share",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 98,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": "materials",
+          "start": 102,
+          "end": 111
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "invite.ask-someone-to-join-or-contribute.v",
+        "encourage.offer-support-for-chosen-action.v",
+        "participate.take-part-in-activity.v",
+        "collaborate.work-jointly-to-produce-or-develop-something.v",
+        "share.allow-others-to-use-or-experience-something.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.06",
+      "text": "Explore the objects and estimate how many will fit; then count them, experiment with arrangements, and compare the results to discover a solution.",
+      "meaning": "Connect exploration, approximation, investigation, and discovery in one task.",
+      "context": "Planning a container-and-objects investigation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Explore",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "objects",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "estimate",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "how",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "many",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "will",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "fit",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": ";",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "then",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "count",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "them",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "experiment",
+          "start": 69,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "with",
+          "start": 80,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "arrangements",
+          "start": 85,
+          "end": 97
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 97,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 19,
+          "text": "compare",
+          "start": 103,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 111,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": "results",
+          "start": 115,
+          "end": 122
+        },
+        {
+          "index": 22,
+          "text": "to",
+          "start": 123,
+          "end": 125
+        },
+        {
+          "index": 23,
+          "text": "discover",
+          "start": 126,
+          "end": 134
+        },
+        {
+          "index": 24,
+          "text": "a",
+          "start": 135,
+          "end": 136
+        },
+        {
+          "index": 25,
+          "text": "solution",
+          "start": 137,
+          "end": 145
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 145,
+          "end": 146
+        }
+      ],
+      "focus_lexeme_ids": [
+        "explore.examine-or-try-to-discover-more.v",
+        "estimate.make-informed-approximation.v",
+        "count.find-number.v",
+        "experiment.try-out-ideas-and-observe-results.v",
+        "compare.examine-differences.v",
+        "discover.find-or-become-aware-of-something-new.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.07",
+      "text": "Scaffold the task so learners can practice a skill, review and revise their work, and reflect on what changed.",
+      "meaning": "Connect adjustable learning support with practice and reconsideration.",
+      "context": "Discussing support during a writing activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Scaffold",
+          "start": 0,
+          "end": 8
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "task",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "so",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "learners",
+          "start": 21,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "can",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "practice",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "skill",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "review",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "revise",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "their",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "work",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 80,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 17,
+          "text": "reflect",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 18,
+          "text": "on",
+          "start": 94,
+          "end": 96
+        },
+        {
+          "index": 19,
+          "text": "what",
+          "start": 97,
+          "end": 101
+        },
+        {
+          "index": 20,
+          "text": "changed",
+          "start": 102,
+          "end": 109
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "scaffold.provide-adjustable-support-for-learning.v",
+        "practice.repeat-an-activity-to-develop-skill.v",
+        "review.reconsider-care-information.v",
+        "revise.change-work-after-reconsideration.v",
+        "reflect.think-carefully-about-experience-or-learning.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.08",
+      "text": "Observe the character's actions, then sequence the story pictures, retell the events, predict what comes next, and infer how the character feels.",
+      "meaning": "Distinguish ordering, retelling, prediction, and inference within one story discussion.",
+      "context": "Reviewing an unfinished fictional story.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Observe",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "character's",
+          "start": 12,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "actions",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "then",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "sequence",
+          "start": 38,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "story",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "pictures",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 65,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "retell",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "events",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "predict",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "what",
+          "start": 94,
+          "end": 98
+        },
+        {
+          "index": 17,
+          "text": "comes",
+          "start": 99,
+          "end": 104
+        },
+        {
+          "index": 18,
+          "text": "next",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 19,
+          "text": ",",
+          "start": 109,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": "and",
+          "start": 111,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": "infer",
+          "start": 115,
+          "end": 120
+        },
+        {
+          "index": 22,
+          "text": "how",
+          "start": 121,
+          "end": 124
+        },
+        {
+          "index": 23,
+          "text": "the",
+          "start": 125,
+          "end": 128
+        },
+        {
+          "index": 24,
+          "text": "character",
+          "start": 129,
+          "end": 138
+        },
+        {
+          "index": 25,
+          "text": "feels",
+          "start": 139,
+          "end": 144
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 144,
+          "end": 145
+        }
+      ],
+      "focus_lexeme_ids": [
+        "observe.notice-care-information.v",
+        "sequence.arrange-items-or-events-in-order.v",
+        "retell.tell-story-or-event-again.v",
+        "predict.suggest-what-may-happen-from-information.v",
+        "infer.draw-conclusion-from-evidence-and-reasoning.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.09",
+      "text": "Listen to the learner, demonstrate how to blend the sounds, and prompt them to segment the spoken word into individual sounds.",
+      "meaning": "Distinguish combining and separating speech sounds without treating them as morphemes.",
+      "context": "Planning a spoken-sound activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Listen",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "to",
+          "start": 7,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "learner",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "demonstrate",
+          "start": 23,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "how",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 39,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "blend",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "sounds",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "prompt",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "them",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "to",
+          "start": 76,
+          "end": 78
+        },
+        {
+          "index": 16,
+          "text": "segment",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 18,
+          "text": "spoken",
+          "start": 91,
+          "end": 97
+        },
+        {
+          "index": 19,
+          "text": "word",
+          "start": 98,
+          "end": 102
+        },
+        {
+          "index": 20,
+          "text": "into",
+          "start": 103,
+          "end": 107
+        },
+        {
+          "index": 21,
+          "text": "individual",
+          "start": 108,
+          "end": 118
+        },
+        {
+          "index": 22,
+          "text": "sounds",
+          "start": 119,
+          "end": 125
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 125,
+          "end": 126
+        }
+      ],
+      "focus_lexeme_ids": [
+        "listen.attend-to-spoken-information.v",
+        "demonstrate.show-how-it-works.v",
+        "blend.combine-speech-sounds-into-word.v",
+        "prompt.offer-reminder-or-cue.v",
+        "segment.separate-spoken-word-into-sounds.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.10",
+      "text": "Ask learners to identify and describe the pictured object, then pronounce and spell the word used to name it.",
+      "meaning": "Distinguish producing a spoken word from representing its spelling.",
+      "context": "Planning listening, pronunciation, and spelling practice.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "learners",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "to",
+          "start": 13,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "identify",
+          "start": 16,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "describe",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "pictured",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "object",
+          "start": 51,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "then",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "pronounce",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "spell",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "word",
+          "start": 88,
+          "end": 92
+        },
+        {
+          "index": 16,
+          "text": "used",
+          "start": 93,
+          "end": 97
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 98,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": "name",
+          "start": 101,
+          "end": 105
+        },
+        {
+          "index": 19,
+          "text": "it",
+          "start": 106,
+          "end": 108
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "identify.establish-identity-or-nature.v",
+        "describe.give-details-in-words.v",
+        "pronounce.produce-spoken-form-of-word.v",
+        "spell.represent-word-with-ordered-letters.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "status": "prepared_ten_language_delivery_unbound_no_production_writes",
+  "checks": 4613,
+  "production_content_written": false,
+  "shared_tests_mutated": false,
+  "native_executed": false,
+  "tests_executed": false,
+  "baseline_bound": false,
+  "settled_input_validation": {
+    "path": "build/professional-english/continuation-validation-r20.json",
+    "raw_sha256": "621f703956ab43605f34db9aad744f25a84f355a2e8b7f0eee4aff10009a3b39"
+  },
+  "root_acceptance_raw_sha256": "18b4e6af0afafc1f156184f309030dad3cde38370923addeb43c82d64603b922",
+  "independent_review_raw_sha256": "849fb6af65055e74802af8ad24ade1740dc4a9e75f7cfce38d205d2e06911202",
+  "coordinator_variant_raw_sha256": "4bb9d2f31a6711f5d3a1c7f8fb4eff2b50f54fbc67cb4333d7ea266f711a2be2",
+  "delivery_proposal_raw_sha256": "bd8f04b0a785998b804dc9b16f103f687acce55724d39d59913e1ff2962706b2",
+  "durable_history_draft_raw_sha256": "a312c8e8150f91610e493579afd60923259f8892638fa28b5c2bdf8effa1841b",
+  "scratch_preview_receipt_raw_sha256": "15d04b0913e31c3a89885c644d6855c2e9eed1c0afc872996fbcc369227e3bb5",
+  "helper": {
+    "helper_source": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/guarded-transaction.cjs",
+    "helper_raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "helper_validation": {
+      "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+      "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+      "tests": 20,
+      "pass": 20,
+      "fail": 0
+    },
+    "adapter_source": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/transaction-plan.cjs",
+    "adapter_raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "adapter_validation": {
+      "path": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/adapter-tests-r02/result.json",
+      "raw_sha256": "61764fb1c4587e19d88a27d9494988539a17336cf0687baa792fc5e214c0a38d",
+      "assertions": 32,
+      "failures": 0
+    },
+    "scope": "Byte-identical reused guarded helper and plan adapter. Earlier scratch fault-test receipts remain evidence; this Foundation language package performs no native run or rerun of those fixtures.",
+    "copied_origin_record": {
+      "path": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/delivery-r01/helper-origin.json",
+      "raw_sha256": "ca9fc913ac187268813e900f55e3748e4317944a29ed43f0578aa3ce18dc012d"
+    }
+  },
+  "delivery_files": {
+    "delivery-lib.cjs": "1abb97207baa01c18e222e21cf2b1af0b64797f21fa890e83d00d241983223c1",
+    "bind-current-baseline.cjs": "d131c202649b30e5403df4ddf19d1a33eca909a1479a27355b94f2b44cd206f0",
+    "integrate-reviewed.cjs": "217745d50b129e176c207769b3c92a34aad04866b5eca188061f7c5b46287aa4",
+    "transaction-plan.cjs": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "guarded-transaction.cjs": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "helper-origin.json": "27d5dd2d62ed8cfdae225489fc059a2cb774122a42c7343e7257886ccfc73a3a",
+    "persisted-test-transforms.cjs": "c62ac047edeedd4ef5143cff1714b89ef3645a178fe603b3bcfeaece19d05680",
+    "update-persisted-tests.cjs": "637b90f4a2cb3e12465fb5b6639316fba565126eaf6a4d8e9ce5fd431ac5afd5",
+    "prepare-delivery.cjs": "87df8dc9cb200ac70839052ff84ed81653e98cf0851912bc596170e6374c8324",
+    "HANDOFF.md": "2557304251485a7f7e8d822dcbe2bcdaddaa13da0f825d248c976c920feda4b8",
+    "durable-history-draft.md": "17fef4f81bfa3a928383c8ffbce6b3fa13826b585b31393a11c49d1f26fa9f1a",
+    "delivery-origin.json": "7ac075bab69b70f8e6911136b86b996df5fc2de9e249fe2d9c746566093899c4"
+  },
+  "accepted": 10,
+  "held": 0,
+  "registered_source_additions": 13,
+  "retained_consulted_pages": 13,
+  "accepted_form_additions": 1,
+  "expression_mutations": 0,
+  "limits": "Read-only structural preparation and syntax checks only. Root owns binding, all transactions and post-integration Node/native validation."
+}

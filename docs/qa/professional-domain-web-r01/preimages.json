@@ -1,0 +1,22 @@
+[
+  {
+    "path": "tools/build-web.cjs",
+    "bytes": 4179,
+    "sha256": "16d9b267d76ed319bfae8164d2b3a26d13696f042edd44ffaf8256fb76d1f766"
+  },
+  {
+    "path": "tools/web-build-receipt.cjs",
+    "bytes": 11554,
+    "sha256": "e563403dd81314a31a4b72a18a326952b99a15b752cdcbc7b82037c9b6f7c6ad"
+  },
+  {
+    "path": "tests/godot/verify_web_pack.gd",
+    "bytes": 31232,
+    "sha256": "08310c66ef2888f3914a15c9f8298243499402cd80241da49815d7775bd82e62"
+  },
+  {
+    "path": "export_presets.cfg",
+    "bytes": 2367,
+    "sha256": "503cee1412047d04e39c08851e8ade519393489ea72749967aec3b3db2c82461"
+  }
+]

@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Library = preload("res://scripts/game_library.gd")
+const Catalog = preload("res://scripts/professional_catalog.gd")
 var checks := 0
 var failures := 0
 var chosen := ""
@@ -205,6 +206,20 @@ func _run() -> void:
 	var library := Library.new()
 	root.add_child(library)
 	library.fit(Vector2(1280, 800), 1.0)
+	var catalog := Catalog.new()
+	check(catalog.load_index(), "Home uses the real learning catalog")
+	library.configure_learning(catalog, {}, {"phase": "idle"})
+	await settle()
+	check(library.learning.snapshot().screen == "paths" and not library.grid.visible
+		and not library._hero.visible, "A fresh Home offers learning paths before games or age progress")
+	check(not library._tiles.any(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
+		"Hidden game previews do not animate before a learning path is selected")
+	library.learning_context_selected.connect(func(selection: Dictionary) -> void:
+		library.configure_learning(catalog, selection, {"phase": "idle"}))
+	library.learning._growth_button.pressed.emit()
+	await settle()
+	check(library.grid.visible and library._hero.visible and library.learning.snapshot().screen == "summary",
+		"Selecting Growth reveals the age journey and the six game choices")
 	var focused_tile: Button = library.buttons[0]
 	focused_tile.grab_focus()
 	check(focused_tile.focus_mode == Control.FOCUS_ALL and focused_tile.get_theme_stylebox("focus") is StyleBoxEmpty,
@@ -231,7 +246,8 @@ func _run() -> void:
 	library.theme_requested.connect(func(id: String) -> void: theme_chosen = id)
 	library.configure_theme("ocean", false, false)
 	check(library.theme_buttons.size() == 8 and library.theme_buttons[4].button_pressed
-		and library.snapshot().theme_id == "ocean", "Home offers eight themes and identifies the selected world")
+		and library.snapshot().theme_id == "ocean" and not library._theme_choices.visible,
+		"Historical theme configuration is retained without exposing the removed manual picker")
 	library.configure("", false, true)
 	check(library.buttons.size() == 6, "Home offers all six supported games")
 	check(not library.buttons.any(func(button: Button) -> bool: return button.button_pressed),
@@ -281,15 +297,12 @@ func _run() -> void:
 			"%s: the growth headline avoids an unnecessary forced line break" % dimensions)
 		for label: Label in [library.heading, library._journey_heading, library._journey_count, library._pip_caption, library._next_label]:
 			check_label_fits(label, "%s: %s" % [dimensions, label.name])
-		for index in range(library.theme_buttons.size()):
-			var button: Button = library.theme_buttons[index]
-			button.grab_focus()
-			await settle()
-			check(button.size.x >= 44 and button.size.y >= 44
-				and library.scroll.get_global_rect().grow(1).encloses(button.get_global_rect()),
-				"%s: focused theme %s remains fully reachable" % [dimensions, button.name])
-			button.pressed.emit()
-			check(theme_chosen == library.Model.THEMES[index], "Each Home theme requests its own world")
+		check(not library._theme_choices.visible and library.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
+			"%s: automatic learning themes leave no hidden manual picker in the focus flow" % dimensions)
+		library.learning._change_path.grab_focus()
+		await settle()
+		check(library.learning._change_path.has_focus() and library.scroll.get_global_rect().grow(1).encloses(library.learning._change_path.get_global_rect()),
+			"%s: changing the learning path remains keyboard reachable" % dimensions)
 		for tile: Dictionary in library._tiles:
 			library.ensure_mode_visible(str(tile.entry.id))
 			await settle()
@@ -331,6 +344,34 @@ func _run() -> void:
 		and library._journey.get_global_rect().grow(1).encloses(library.pip.get_global_rect())
 		and not library.pip.get_global_rect().intersects(library.heading.get_global_rect()),
 		"A scaled Home portrait stays recognizable, enclosed by the growth panel and clear of the welcome text")
+	root.size = Vector2i(854, 480)
+	library.fit(Vector2(853.75, 480), 1.6)
+	library._keyboard_focus_visible = true
+	await settle()
+	library.collection_button.grab_focus()
+	await settle()
+	library.sound_button.grab_focus()
+	await settle()
+	check(library.scroll.get_global_rect().grow(0.01).encloses(library.sound_button.get_global_rect()),
+		"Fractional browser scaling fully reveals the focused Sound button without clipping a CSS pixel")
+	for dimensions: Vector2i in [Vector2i(320, 320), Vector2i(844, 260)]:
+		root.size = dimensions
+		library.fit(Vector2(dimensions), 1.0)
+		library.learning._show_courses()
+		await settle()
+		var career: Control = library.learning.find_child("Career_retail", true, false)
+		check(career != null, "The actual illustrated Retail card remains available in a short viewport")
+		library.learning._search.grab_focus()
+		await settle()
+		career.grab_focus()
+		await settle()
+		var viewport: Rect2 = library.scroll.get_global_rect()
+		var card: Rect2 = career.get_global_rect()
+		check(career.has_focus() and card.size.y > viewport.size.y,
+			"%s: the regression exercises an illustrated card taller than the available scroll viewport" % dimensions)
+		check(card.position.y >= viewport.position.y and card.position.y <= viewport.position.y + 4.0
+			and viewport.intersection(card).size.y >= 44.0,
+			"%s: an oversized focused career begins at its illustration/title and retains a visible activation target" % dimensions)
 	library.queue_free()
 	await process_frame
 	print("Game homepage: %d checks, %d failures" % [checks, failures])

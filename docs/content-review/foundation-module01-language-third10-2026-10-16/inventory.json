@@ -1,0 +1,209 @@
+{
+  "schema": 1,
+  "status": "frozen_third10_author_package_inventory_not_acceptance",
+  "date": "2026-10-16",
+  "scope": "Foundation module01 positions21-30 author proposals and actual source/context observations. Independent review remains required.",
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "native_runtime_executed": false,
+  "write_once_preparation_rerun": false,
+  "artifact_count_excluding_inventory": 11,
+  "artifacts": [
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/HANDOFF.md",
+      "bytes": 7574,
+      "raw_sha256": "4cf66562c190725e329895491d1ef057c333aa3bad60fc043595e7819296d40b"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/capture-preimages.cjs",
+      "bytes": 8316,
+      "raw_sha256": "2a0824a5b75bd21e5a0c0ab3ef7fe8c12bb12fe33ba787bf941363a4884eb93e"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/context-notes.cjs",
+      "bytes": 18520,
+      "raw_sha256": "1e3672d8063de7511f39c034f5b43d5d9365d3c1589e4df07d4dc5f24092f9f9"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/decision-notes.cjs",
+      "bytes": 11264,
+      "raw_sha256": "90e4a1cae413d4319b03d88371882858ede464604f95d7ef9fe553a75788a3be"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/expression-use-review.json",
+      "bytes": 192688,
+      "raw_sha256": "1dfffc18574c160c1d583e28a1abf1c05b9af1635c3f1215d32118b2b4f03c62",
+      "json_sha256": "f34ed83ddb41b16dd8082190cc2609d740781773007d14b1765a88ea294c7dd6"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/language-ledger.json",
+      "bytes": 149625,
+      "raw_sha256": "74de919a950fafb248d9aaa2998aa5906a0bd64071282e0160d92cae4340c2b7",
+      "json_sha256": "4517fbb347f59056b589bc5dd7b26ce3b4b0255ca2ab2fad0b0241094756eb4d"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/preimages.json",
+      "bytes": 1506965,
+      "raw_sha256": "d3dcff8acb7e864fb079c8e3bb4ede6eb0a8982d23a432e22d752d7ba972f5bb",
+      "json_sha256": "ce53eb62283f4d4df70686d4bf6a176b5c2aaedbbe737323f9ebd725d9145b9d"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/prepare-ledger.cjs",
+      "bytes": 24903,
+      "raw_sha256": "e9d126e2475e95a0e6a1311f2ede3bd48115fb22c4a852b3b22365dd0f6dba24"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/source-consultations.json",
+      "bytes": 34601,
+      "raw_sha256": "0da9e3d211bc380115db8ef4d83fcb919f4eeee0da0c34f2467b2831f88a79cc",
+      "json_sha256": "e1aeb75a92369e40b0dd6d9510a590f6524aa86e4d868c3d4303a8d0512ae5f7"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/source-notes.cjs",
+      "bytes": 8441,
+      "raw_sha256": "882c2c418f84a134c3cee2d6ace6521c83f604d011632f5353d1cf9f8c5da651"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/third10/structural-audit.json",
+      "bytes": 3549,
+      "raw_sha256": "9c786eefc1981405d922e4139887e04b27309f61aeba3cccc8e6db8f46d1aab0",
+      "json_sha256": "69aa98a69a7bd0581b3315eabf7215a6d06b2e8adf057042e6b64d971a460c47"
+    }
+  ],
+  "candidate_manifest": [
+    {
+      "ordinal": 21,
+      "id": "deadline.final-time.n",
+      "before_entry_json_sha256": "e0e94df155a735682ecf8a7ff2f3d27969863d2b23c1fb90a5875ad76dc125c3",
+      "candidate_entry_json_sha256": "e690755ad3c7817559a1bc5c9b099180924b1098570d318e63850af134dfa593",
+      "changed_fields": [
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty_status": "propose_B2_from_selected_label_pending_independent_review"
+    },
+    {
+      "ordinal": 22,
+      "id": "break.work-pause.n",
+      "before_entry_json_sha256": "cd8129700ba8595c8ce69b43be46fa1f1d446e0b2984ae6235d76f139d4295eb",
+      "candidate_entry_json_sha256": "3275311b273743efe23a503a74c8087f3b7e9542831d89ec02e6c0cf438a101f",
+      "changed_fields": [
+        "definition",
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty_status": "retain_A2_course_floor_with_literal_A1_source"
+    },
+    {
+      "ordinal": 23,
+      "id": "overtime.additional-work-time.n",
+      "before_entry_json_sha256": "3e4194d118971d3dc7baf398e82c588b3866e25408124a45d34bc3e16a4a1e67",
+      "candidate_entry_json_sha256": "d397f43c44376df9103951488ca22e259ac2deb64be4b11ba5fcf5c635c28700",
+      "changed_fields": [
+        "example",
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty_status": "propose_B2_with_explicit_C1_B2_disagreement"
+    },
+    {
+      "ordinal": 24,
+      "id": "attendance.presence-record.n",
+      "before_entry_json_sha256": "a7699c3e58649791eaee79817f87879c2ce6b2418e729768c6f1a43c19b3594e",
+      "candidate_entry_json_sha256": "60c07266fa1e4f344872e2afe8b0ac55475922be389b7c0b8c278790f37e2189",
+      "changed_fields": [
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty_status": "hold_C1_outside_schema_keep_A2_unaccepted"
+    },
+    {
+      "ordinal": 25,
+      "id": "availability.free-time.n",
+      "before_entry_json_sha256": "9dea224787f333dd31e0f2ede31a4666c6103aaf29157317d290983ebe3b4843",
+      "candidate_entry_json_sha256": "b3dcb2fa44d64112a5f4f164f20a3445563c7420ebbd6c2bf80e2ca518f7ae71",
+      "changed_fields": [
+        "definition",
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty_status": "retain_B1_as_explicit_author_judgment_without_source_level"
+    },
+    {
+      "ordinal": 26,
+      "id": "calendar.date-organizer.n",
+      "before_entry_json_sha256": "3ece0eb13fe06b226c4bbee563d831f0ca0d0325ad4d308f1b103dacdc79cb1a",
+      "candidate_entry_json_sha256": "40b42e25182cb2ed1a36e66a9147390891692d7059dbb5931e91cb6985bc969f",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty_status": "propose_B1_selected_software_calendar_evidence"
+    },
+    {
+      "ordinal": 27,
+      "id": "agenda.meeting-plan.n",
+      "before_entry_json_sha256": "777f640a566aaaa4db929c0e5f1c68d20ab58a850b52ca48c4a0dc5e932dc522",
+      "candidate_entry_json_sha256": "d7982c0c7e9b53cf780bc8118784decd79765b7ebc1253c973dbff9706ae7e56",
+      "changed_fields": [
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty_status": "propose_B2_from_selected_meeting_list_label"
+    },
+    {
+      "ordinal": 28,
+      "id": "invitation.attendance-request.n",
+      "before_entry_json_sha256": "d1ff331e72f1cfe944d11ce8ad4993ed3f466d057e634a384a1ce0f07addb415",
+      "candidate_entry_json_sha256": "05a5a72208cb510cee5b12d629d9bef21d4c2dde1857436afd5ec55e276f6a42",
+      "changed_fields": [
+        "definition",
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty_status": "retain_A2_supported_by_selected_Collins_request_sense"
+    },
+    {
+      "ordinal": 29,
+      "id": "update.current-information.n",
+      "before_entry_json_sha256": "bde18c844cd9ddf76a747a479a5d7fcf494e447ff59b3f4153a6098dc963f8e5",
+      "candidate_entry_json_sha256": "a2f533cc73c3e7592dca103c1e9c761049aa7eed6ca62363adf76801801ef265",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty_status": "propose_B1_as_explicit_author_judgment_without_source_level"
+    },
+    {
+      "ordinal": 30,
+      "id": "reminder.memory-prompt.n",
+      "before_entry_json_sha256": "2c46cea3d9b5ca2701f96576cdb052ccc9951692a08591aac619a5adfeb2ad4f",
+      "candidate_entry_json_sha256": "29c107d5c41d5a24a2e50250955afe706f984ec1a9df11e11dcb7a4bc733256e",
+      "changed_fields": [
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty_status": "propose_B1_as_explicit_author_judgment_without_source_level"
+    }
+  ],
+  "verified": {
+    "artifact_hash_links": true,
+    "all_preparation_inputs_exact": true,
+    "all_ten_before_and_candidate_hashes_exact": true,
+    "scope_guards_passed": 1885,
+    "candidate_schema_errors": 0
+  },
+  "limits": [
+    "This inventory certifies artifact identity and consistency, not independent language acceptance.",
+    "No global integration baseline, serializer, production promotion or test/native result is supplied.",
+    "Frozen evidence must not be overwritten or preparation rerun."
+  ]
+}

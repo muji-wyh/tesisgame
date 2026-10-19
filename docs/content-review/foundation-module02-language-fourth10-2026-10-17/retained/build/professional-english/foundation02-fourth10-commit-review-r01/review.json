@@ -1,0 +1,137 @@
+{
+  "schema": 1,
+  "status": "approved_for_root_guarded_commit",
+  "reviewer": "Codex recover_delivery",
+  "reviewed_at": "2026-10-16T21:52:24.871Z",
+  "authors": [
+    "Codex runtime_recovery"
+  ],
+  "dispatcher_excluded": "Codex root",
+  "independent_of_proposal_authors": true,
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json",
+    "sha256": "f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7"
+  },
+  "prepared_binding": {
+    "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/binding.json",
+    "sha256": "dbacf79ca796410664a1a6af9a577172c93234109b3c33c326ba669a5394dc21"
+  },
+  "native_receipt": {
+    "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/receipt.json",
+    "sha256": "1dbb1e3a9d34226b77381502edd6a9d745605f0e05d320297519e45106c5bc0c"
+  },
+  "baseline_dependency_transfer": {
+    "accepted": true,
+    "scope": "unchanged_prior_baseline_only",
+    "receipt": {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/receipt.json",
+      "sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8"
+    }
+  },
+  "reviewed_files": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/commit.cjs",
+      "sha256": "d9df7689e7e958036e6f328d91db9a090527fcfea0e00055ba50546b0caf7b61"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-contract.cjs",
+      "sha256": "85dbf8515a67b479fb6b904ac65b8c6ca1a6477983fa14b17beb06e34b8b2efd"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/committed-evidence.test.cjs",
+      "sha256": "85a70750e79b4c0fe1511a5289cb6b232c4a8511f7478368c7a3c41df26acc9f"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/INPUTS.md",
+      "sha256": "dd11e83f7996cac0b339121a6cd1fe57a9b56b26d46e5e321f664228770072b9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/root-commit-input.example.json",
+      "sha256": "f6ce26aa9d18382c70791eb21706a59eb2a6eaa9df18773047f84386da2736c5"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-inputs.json",
+      "sha256": "391c9292b5b9cd1cb30a0a47c968565a41750d4c49e2b30556d61d6bdff83654"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json",
+      "sha256": "f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7"
+    }
+  ],
+  "guard_probe_evidence": {
+    "path": "build/professional-english/foundation02-fourth10-commit-review-r01/execution-foundation02-fourth10-commit-proposal-r01/result.json",
+    "sha256": "480fc04cce34e18420567af7d2c8f1a3dadfdc88aca767ed9ab54414c83a1e4b"
+  },
+  "evidence_files": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/probe.cjs",
+      "sha256": "43cdd6e7c22e13419b98e6fb2c50115db1a363bb34602b537c078211a535948e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/inventory.json",
+      "sha256": "c0c72404f09f04058c01d27068bf7daa7cec14549f8ed5b6e2ad3ef0be2500c1"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/capture-static.cjs",
+      "sha256": "d976e422e2340dbbca0f29d7dc6a794719bc05c43e6f70e38fd35956c7246609"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/static-measurements.json",
+      "sha256": "6a803aa5cc72f83518f2b50b1e082cb8625d6c05838c2da33d2ed251bf9d18f0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/static-review.json",
+      "sha256": "172d9cce8cf892b92868d8c710795666ed55155d0d80ce1f6ae6396d699e94d4"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/persisted-wrapper-source-review.json",
+      "sha256": "714106792797c12fd32a0736e438ea83918ec10b9cfe6602a4c50bb1e5482809"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/root-commit-wrapper-source-review.json",
+      "sha256": "f1365087bd4cf0a7c734f3159570416f51dcc41e18c7a636a33818b486c4aa1c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/README.md",
+      "sha256": "1eac192eda08f47eca9a2ae0946921efeb64822d29ab7c3efc4a74092fcd65a6"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/assess-probe.cjs",
+      "sha256": "898cfbed8d4beaf15109b4baa7619403d8a0ea2dd5ebd821ae5c56b293b4e350"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/evidence-verification.json",
+      "sha256": "71bbadc5b0af2440e47db4106523c0fbf85ff128510f155e8e87ce6365e0a1c0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/execution-foundation02-fourth10-commit-proposal-r01/start.json",
+      "sha256": "379702836ffdff0cda5ea6959dbdff4dea3f6f75356d31a9dd4695160ee7acc7"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/execution-foundation02-fourth10-commit-proposal-r01/result.json",
+      "sha256": "480fc04cce34e18420567af7d2c8f1a3dadfdc88aca767ed9ab54414c83a1e4b"
+    }
+  ],
+  "static_blockers": [],
+  "measured_cases": 21,
+  "measured_cases_passed": 21,
+  "inherited_case_results": [],
+  "real_files_unchanged_in_probe": 1366,
+  "same_current_files_independently_rehashed": 1366,
+  "reviewer_executed_modules_or_tests": false,
+  "reviewer_mutated_production": false,
+  "approval_scope": "One root-owned guarded commit of the exact five reviewed fourth-ten prepared afterimages and bounded provenance/evidence outputs. This does not assert that a production commit has occurred.",
+  "required_root_actions": [
+    "Serialize the mutation window and use the exact frozen proposal plus this review hash.",
+    "Preserve every failed or consumed attempt and journal; do not replay or automatically recover.",
+    "After inspecting the actual successful journal, dispatch the separately reviewed persisted wrapper for fresh audit, affected Node, native morphology and committed-evidence checks."
+  ],
+  "limitations": [
+    "The positive commit and all guard cases ran through a memory filesystem; they are not native transaction or power-loss validation.",
+    "The historic helper overlap limitation remains: describePlan accepts absent overlap; its memory execution rejects with recovery-required evidence. The scoped exactPaths guard now independently rejects that overlap before helper planning.",
+    "The historical 686-input baseline establishes only unchanged dependency evidence; the fourth-ten candidate native result and future persisted results are separate.",
+    "All 48 original scratch input paths were hidden only in memory for a successful retained-evidence reconstruction. The journal and non-build inputs remain required.",
+    "Reviewer-name exclusion is a caller-field contract, not identity authentication.",
+    "No human, specialist, expression, morphology, media, browser, whole-module or release gate is cleared."
+  ]
+}

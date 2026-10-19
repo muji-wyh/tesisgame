@@ -1,0 +1,11 @@
+# Cash register guarded image-only delivery
+
+The root already accepted the exact 512 by 615 PNG f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262; root-picture-acceptance-r01.json is 70f7d183dee631642befddff9f3ebf0a9a7f8401c9ee69c826c48478f08f57c4. This package proposes one image descriptor and exact obsolete pending-media note replacement. The prior approved Ava recording remains byte-identical. Read source-doc-draft.md and integration-impact.md for source and snapshot scope.
+
+1. Inspect the unbound preparation receipt, in-memory patch and four exact shared-test previews. Preparation runs only syntax checks and in-memory audits. It does not execute shared tests or native, bind a baseline, or write production.
+2. Root runs bind-current-baseline.cjs with --preparation-sha256, --root-approval-sha256, --validation-path and --validation-sha256. R26 is the intended successful baseline; every measured input must still match. No implicit acceptance or binding is inferred.
+3. Root inspects integrate-reviewed.cjs --preimages-sha256 HASH in dry-run mode, then uses --integrate. The unchanged guarded helper installs exact image/evidence, patch and provenance. Completion requires the committed journal. Recovery is explicit and binds the exact plan; it never replays failed preparation or native work.
+4. Root inspects update-persisted-tests.cjs --preimages-sha256 HASH --integration-receipt-sha256 HASH, then uses --apply. Four exact previews are installed by a separate guarded transaction; no tests run in this step.
+5. Root follows ../production-delivery-r01/HANDOFF.md to freeze the committed state and run the accepted-bytes-only real Loader/card/teardown probe once. Run combined persisted validation separately. Source bytes are never rerendered or changed.
+
+R26 contains Foundation fourth10, which remains protected. All historical counter/checkout/barcode/morphology full-entry assertions stay exact through strict later-patch reversal. Image count becomes eight and approved recordings stay ten. The shared helper's earlier 20-test and adapter's 32-assertion validation are reused byte-identically; no simultaneous multi-file visibility or power-loss durability is claimed.

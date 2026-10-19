@@ -1,0 +1,1504 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.transport_delivery.module06.01",
+      "text": "The itinerary shows the route, the next stop, and the expected distance for the journey.",
+      "meaning": "Identify the path, halt, and length of a planned journey.",
+      "context": "Reviewing a route before departure.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "itinerary",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "shows",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "route",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "next",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "stop",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 12,
+          "text": "expected",
+          "start": 54,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "distance",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "for",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 16,
+          "text": "journey",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "itinerary.planned-sequence-of-travel-arrangements.n",
+        "route.path-for-travel.n",
+        "stop.scheduled-halt-on-delivery-journey.n",
+        "distance.amount-of-space-between-places.n",
+        "journey.travel-from-one-place-to-another.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module06.02",
+      "text": "Traffic and roadworks may affect this route; the planner is checking a detour.",
+      "meaning": "Explain why an alternative path needs review.",
+      "context": "Discussing current route conditions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Traffic",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "and",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "roadworks",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "may",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "affect",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "this",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "route",
+          "start": 38,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ";",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "planner",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "is",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "checking",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "detour",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 77,
+          "end": 78
+        }
+      ],
+      "focus_lexeme_ids": [
+        "traffic.vehicles-moving-on-road-network.n",
+        "roadworks.construction-or-repair-work-on-road.n",
+        "detour.alternative-route-around-blocked-or-unavailable-way.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module06.03",
+      "text": "The junction near the bridge leads toward the roundabout shown on the local map.",
+      "meaning": "Describe mapped road features without giving maneuver instructions.",
+      "context": "Clarifying a fictional destination map.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "junction",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "near",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "bridge",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "leads",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "toward",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "roundabout",
+          "start": 46,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "shown",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "on",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "local",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "map",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "junction.place-where-roads-meet.n",
+        "bridge.structure-carrying-route-over-obstacle.n",
+        "roundabout.road-junction-with-traffic-around-central-island.n",
+        "local-map.map-showing-nearby-area.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module06.04",
+      "text": "The fuel type and the toll are recorded separately in the journey information.",
+      "meaning": "Distinguish a vehicle requirement from a road-use charge.",
+      "context": "Checking a travel record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "fuel",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "type",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "toll",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "recorded",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "separately",
+          "start": 40,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "in",
+          "start": 51,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "journey",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "information",
+          "start": 66,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 77,
+          "end": 78
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fuel.material-used-to-supply-energy.n",
+        "toll.charge-for-using-road-bridge-or-tunnel.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module06.05",
+      "text": "The route plan has a new route sequence, so the estimated time of arrival needs updating.",
+      "meaning": "Connect a changed stop order with a revised estimate.",
+      "context": "Coordinating a schedule change.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "route",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "plan",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "has",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 19,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "new",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 6,
+          "text": "route",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "sequence",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 9,
+          "text": "so",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 11,
+          "text": "estimated",
+          "start": 48,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "time",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "of",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 14,
+          "text": "arrival",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 15,
+          "text": "needs",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 16,
+          "text": "updating",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "route-plan.documented-arrangement-for-journey-path-and-stops.n",
+        "route-sequence.order-of-stops-on-planned-journey.n",
+        "estimated-time-of-arrival.predicted-clock-time-of-reaching-destination.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module06.06",
+      "text": "Check the current height restriction, width restriction, and weight limit against the assigned vehicle details.",
+      "meaning": "Request a route-suitability check using applicable information.",
+      "context": "Reviewing a proposed route with the responsible planner.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "current",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "height",
+          "start": 18,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "restriction",
+          "start": 25,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "width",
+          "start": 38,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "restriction",
+          "start": 44,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "weight",
+          "start": 61,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "limit",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "against",
+          "start": 74,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "assigned",
+          "start": 86,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "vehicle",
+          "start": 95,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": "details",
+          "start": 103,
+          "end": 110
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 110,
+          "end": 111
+        }
+      ],
+      "focus_lexeme_ids": [
+        "height-restriction.limit-on-permitted-vehicle-height.n",
+        "width-restriction.limit-on-permitted-vehicle-width.n",
+        "weight-limit.maximum-permitted-load.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module06.07",
+      "text": "The site contact is confirming the parking restriction and loading restriction for this delivery.",
+      "meaning": "Request the actual local access conditions.",
+      "context": "Arranging a destination visit.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "site",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "contact",
+          "start": 9,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 17,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "confirming",
+          "start": 20,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "parking",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "restriction",
+          "start": 43,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "loading",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "restriction",
+          "start": 67,
+          "end": 78
+        },
+        {
+          "index": 11,
+          "text": "for",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "this",
+          "start": 83,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "delivery",
+          "start": 88,
+          "end": 96
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "parking-restriction.rule-limiting-where-or-when-vehicles-may-park.n",
+        "loading-restriction.rule-limiting-goods-transfer-at-location.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module06.08",
+      "text": "The walkaround check record includes a vehicle defect and a tire pressure concern.",
+      "meaning": "Pass recorded findings to the responsible team.",
+      "context": "Discussing a vehicle inspection record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "walkaround",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "record",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "includes",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "vehicle",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "defect",
+          "start": 47,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "tire",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "pressure",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "concern",
+          "start": 74,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "walkaround-check.visual-vehicle-check-before-use.n",
+        "vehicle-defect.fault-affecting-vehicle-condition-or-function.n",
+        "tire-pressure.pressure-of-air-inside-tire.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module06.09",
+      "text": "The fuel level and battery charge information must match the assigned vehicle's equipment.",
+      "meaning": "Ask for relevant energy information without assuming all vehicles use the same system.",
+      "context": "Reviewing the correct vehicle record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "fuel",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "level",
+          "start": 9,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "battery",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "charge",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "information",
+          "start": 34,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "must",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "match",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "assigned",
+          "start": 61,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "vehicle's",
+          "start": 70,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "equipment",
+          "start": 80,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fuel-level.amount-of-fuel-remaining-in-tank.n",
+        "battery-charge.amount-of-stored-electrical-energy-in-battery.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module06.10",
+      "text": "Please confirm vehicle availability and the relevant route restriction before assigning the journey.",
+      "meaning": "Check whether a proposed vehicle and route are suitable.",
+      "context": "Reviewing a planned vehicle assignment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "vehicle",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "availability",
+          "start": 23,
+          "end": 35
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "relevant",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "route",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 8,
+          "text": "restriction",
+          "start": 59,
+          "end": 70
+        },
+        {
+          "index": 9,
+          "text": "before",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 10,
+          "text": "assigning",
+          "start": 78,
+          "end": 87
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 12,
+          "text": "journey",
+          "start": 92,
+          "end": 99
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 99,
+          "end": 100
+        }
+      ],
+      "focus_lexeme_ids": [
+        "vehicle-availability.whether-vehicle-is-free-and-eligible-for-assignment.n",
+        "route-restriction.condition-limiting-use-of-route.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

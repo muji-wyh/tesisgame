@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 32,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "94ffb578e4e670b6f457b11163a4d4334131e58254c1cfa338d464bc088073ef",
+  "recorded_at": "2026-10-16T22:48:03.016Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/invoke.cjs",
+  "work": "work/55fe9537-6648-4628-9ea8-1b59f885e082.bin"
+}

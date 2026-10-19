@@ -1,0 +1,314 @@
+{
+  "status": "independent_expanded_id_only_contexts_not_new_approval",
+  "objects": [
+    {
+      "resource": "res://data/professional/lexemes/retail-module08.json",
+      "entry": {
+        "id": "consent.informed-agreement.n",
+        "text": "consent",
+        "display_text": "consent",
+        "pos": "noun",
+        "definition": "A person's agreement to a particular action or use of information.",
+        "example": "The colleague asked whether the customer had given consent for marketing messages.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "consent"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An optional unchecked consent control with a neutral explanation.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "consent.informed-agreement.n.analysis.v1",
+          "lexeme_id": "consent.informed-agreement.n",
+          "text": "consent",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "consent",
+              "surface": "consent",
+              "type": "atomic",
+              "canonical_id": "morph.consent"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "hse-retail",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "ico-data-minimization",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "osha-computer-workstations",
+            "status": "pending_term_check",
+            "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "visitengland-accessible-tourism",
+            "status": "pending_term_check",
+            "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "hr-onet-specialists",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "hr-ico-employment-index",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "sales-ftc-advertising-basics",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "sales-asa-misleading-advertising",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-bls-lawyers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-bls-paralegals",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-ew-cpr-glossary",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-dictionary-counterpart",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-dictionary-counter-prefix",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original draft definition, example, and sense-specific picture brief. No language, subject, morphological, or visual approval is claimed. Subject and regional review are required; examples communicate concerns or request guidance, not technical or legal instructions."
+      },
+      "why_added": "The expanded reviewer scan includes canonical IDs; informed occurs in this ID, not its visible text, definition, example or image brief.",
+      "disposition": "Preserve the complete original object and pending review gates. No recipient-information sense, morphological-family, clinical, consent, specialist or readiness acceptance transfers."
+    },
+    {
+      "resource": "res://data/professional/lexemes/nursing-module09.json",
+      "entry": {
+        "id": "clinical-guideline.evidence-informed-care-guidance.n",
+        "text": "clinical guideline",
+        "display_text": "clinical guideline",
+        "pos": "noun",
+        "definition": "Recommendations intended to support clinical decisions within a defined scope and evidence base.",
+        "example": "The clinician checked the current clinical guideline.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "clinical guideline"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A fictional guidance cover showing scope and revision date.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "clinical-guideline.evidence-informed-care-guidance.n.analysis.v1",
+          "lexeme_id": "clinical-guideline.evidence-informed-care-guidance.n",
+          "text": "clinical guideline",
+          "kind": "phrase",
+          "review": {
+            "status": "pending",
+            "notes": "Explicit draft based on modern lexical constituents. Clinical and linguistic review must verify meaning, classical roots, allomorphs, and the suitability of intact stems before release. No pronunciation syllables or character-length cuts are inferred.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.clinic",
+              "type": "stem",
+              "canonical": "clinic",
+              "surface": "clinic"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.al.suffix",
+              "type": "suffix",
+              "canonical": "al",
+              "surface": "al"
+            },
+            {
+              "id": "p3",
+              "canonical_id": "morph.guideline",
+              "type": "stem",
+              "canonical": "guideline",
+              "surface": "guideline"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "clinical",
+              "rule": "suffix_attachment"
+            },
+            {
+              "id": "n2",
+              "left": "n1",
+              "right": "p3",
+              "surface": "clinical guideline",
+              "rule": "word_boundary"
+            }
+          ],
+          "roots": [
+            "n2"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "nmc-code",
+            "status": "pending_term_check",
+            "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+          },
+          {
+            "source_id": "clinical-gmc-team-records",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-bls-physicians",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-medline-lab-results",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original communication-focused draft; not clinical guidance or approved learning content. Clinical meaning, scope, regional alternatives, morphology, and image suitability require specialist review. No diagnostic thresholds, treatment steps, or medicine doses are supplied."
+      },
+      "why_added": "The expanded reviewer scan includes canonical IDs; informed occurs in this ID, not its visible text, definition, example or image brief.",
+      "disposition": "Preserve the complete original object and pending review gates. No recipient-information sense, morphological-family, clinical, consent, specialist or readiness acceptance transfers."
+    }
+  ],
+  "production_changed": false
+}

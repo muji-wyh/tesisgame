@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "status": "frozen_static_review_accepted_final_baseline_unbound",
+  "artifacts": [
+    {
+      "path": "README.md",
+      "bytes": 3722,
+      "raw_sha256": "b4ffa30bddf1723718ffa25a1e01e1a1f652164449e6f320ddf24878682deddc"
+    },
+    {
+      "path": "capture-start.json",
+      "bytes": 276,
+      "raw_sha256": "c792384c1ad9f293b4c1a4ffd6affe0e8c7117135b188731124dbb10ceae222b"
+    },
+    {
+      "path": "capture.cjs",
+      "bytes": 36142,
+      "raw_sha256": "651ba393c6bdccb93b21f0f4f256031449c1b0ea601ead03a25266dfcf00a34f"
+    },
+    {
+      "path": "input-audit.json",
+      "bytes": 113000,
+      "raw_sha256": "c7cc948d879745960c8faa6440c0464b0fe882e8769c1eabd9ca95c47201d28b"
+    },
+    {
+      "path": "inspection.json",
+      "bytes": 791764,
+      "raw_sha256": "a563b2959dfae97a7fdc8b612b970158c1ed87e7b7cd64a0050682d1049dd9b2"
+    },
+    {
+      "path": "review.json",
+      "bytes": 9776,
+      "raw_sha256": "65a00b7d353ade569cfd5fa129c95451dbc1aaf506baeef62cf4b95f44155d0a"
+    },
+    {
+      "path": "source-review.json",
+      "bytes": 15131,
+      "raw_sha256": "ca061dbe755f41aa2a615d8c9fae19e0901c780fd181f303bb9b69ff7688fa08"
+    }
+  ],
+  "baseline_bound": false,
+  "inventory_self_excluded": true
+}

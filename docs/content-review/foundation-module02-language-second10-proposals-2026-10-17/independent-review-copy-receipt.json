@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T18:10:47.400Z",
+  "scope": "Exact independent AI language review copies only. Production review counts and all other gates remain unchanged.",
+  "source_directory": "build/professional-english/foundation-module02-language-review/second10-continuation-r01-independent-language-r01",
+  "durable_directory": "docs/content-review/foundation-module02-language-second10-proposals-2026-10-17",
+  "artifacts": [
+    {
+      "path": "independent-source-observations.json",
+      "sha256": "846ea1d0d8dc7516ec83783efb70844def057e622f495833ab7672c9db6b4edd"
+    },
+    {
+      "path": "mechanical-checks.json",
+      "sha256": "076f8a4930fa278613377b0cc4d82fccc64a052fcce3ea976aea6388baedb5e8"
+    },
+    {
+      "path": "review.json",
+      "sha256": "2d95fb5e1f08ed79a2b9de27ad2e031e36139385acf0d6d0e3e7a13b1a6f865e"
+    }
+  ]
+}

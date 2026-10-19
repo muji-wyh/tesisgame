@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 194,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "b10ae9c6304db28fcdff9f6996ea9f94229b138ff0333e2c307d515ffac42570",
+  "recorded_at": "2026-10-16T22:48:31.582Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/authoring-failure-r01.json",
+  "work": "work/ba2994b6-41a1-4e30-a6af-3b56bb367217.bin"
+}

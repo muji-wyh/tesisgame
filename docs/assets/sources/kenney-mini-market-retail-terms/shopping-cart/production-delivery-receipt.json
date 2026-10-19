@@ -1,0 +1,138 @@
+{
+  "date": "2026-10-16",
+  "status": "production_native_delivery_checks_passed_pending_independent_root_receipt_review",
+  "scope": "Actual persisted shopping-cart image descriptor and production raw sidecar through native Loader, cache, scoped Access and actual WordCard/WordArt. No fetch override, no image substitution, no audio fabrication, no status/review overrides. This isolated image verification is not a playable round or production module manifest.",
+  "process_exit_code": 0,
+  "checks": 53,
+  "failures": 0,
+  "accepted_png_sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+  "lexemes_sha256": "12c40ed580248dcdecbfa7504ef57e33c792c8ba8a4a250bebf2c722b5cb1f3b",
+  "loaded_cache": {
+    "active_ids": [
+      "sha256:b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1"
+    ],
+    "leases": 1,
+    "limit_bytes": 134217728,
+    "pinned_bytes": 1699840,
+    "reserved_bytes": 0,
+    "resident_bytes": 1699840,
+    "resources": 1
+  },
+  "released_cache": {
+    "active_ids": [],
+    "leases": 0,
+    "limit_bytes": 134217728,
+    "pinned_bytes": 0,
+    "reserved_bytes": 0,
+    "resident_bytes": 0,
+    "resources": 0
+  },
+  "exact_native_card_pixels": [
+    {
+      "badge_visible": false,
+      "picture_alpha": 1,
+      "pixels_equal_accepted": true,
+      "size": [
+        126,
+        72
+      ],
+      "state": "match-unmatched"
+    },
+    {
+      "badge_visible": true,
+      "picture_alpha": 0.680000007152557,
+      "pixels_equal_accepted": true,
+      "size": [
+        126,
+        72
+      ],
+      "state": "match-matched"
+    },
+    {
+      "badge_visible": false,
+      "picture_alpha": 1,
+      "pixels_equal_accepted": true,
+      "size": [
+        144,
+        74
+      ],
+      "state": "memory-unmatched"
+    },
+    {
+      "badge_visible": true,
+      "picture_alpha": 0.680000007152557,
+      "pixels_equal_accepted": true,
+      "size": [
+        144,
+        74
+      ],
+      "state": "memory-matched"
+    }
+  ],
+  "protected_data": {
+    "res://data/professional/courses/retail.json": "7124ef1d09da0c47f1d5fb2945bfebbe49e5f180f5fbdcd66fe73991ea7d4c61",
+    "res://data/professional/lexemes/retail-pilot.json": "12c40ed580248dcdecbfa7504ef57e33c792c8ba8a4a250bebf2c722b5cb1f3b",
+    "res://data/professional/themes.json": "718bae2956226505281d5e8f62406d0b225b12834b00977f401cb517f068f9fd"
+  },
+  "production_scripts": {
+    "access": "ad4350579562aec2d49c72c0ccfd72c54df162992fe8e30604504b52aef30025",
+    "loader": "d9d348d665b443300009f7490dbcb613a73eff58f9e91d6e70e364c9c76e7390",
+    "word_art": "edcb6c1cd41375df4d91d195bddd8bebf31d9a7e10116c10bdd7c8797ad11845",
+    "word_card": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+  },
+  "evidence": [
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/production-verification/actual-production-word-card-contact.png",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/production-verification/actual-production-word-card-contact.png",
+      "sha256": "bb74a1c55bd93423dd0df822ddf052787d47476f013de2c71fd930c24023248b",
+      "bytes": 50757
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/production-verification/match-matched.png",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/production-verification/match-matched.png",
+      "sha256": "c7d468da7bfd675d9c70819a3f9d9c2e8bcfad627e6ccb96ba6f9ddab4f63d25",
+      "bytes": 5538
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/production-verification/match-unmatched.png",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/production-verification/match-unmatched.png",
+      "sha256": "f5c678d7ca08af308022518ddfecb7cbf70bd44b017b4f7001f55ad20a7664bd",
+      "bytes": 4939
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/production-verification/memory-matched.png",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/production-verification/memory-matched.png",
+      "sha256": "a63eb551207dbc6b977058826783fab4255f65d1a634409c0bd94bb468b0a782",
+      "bytes": 5160
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/production-verification/memory-unmatched.png",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/production-verification/memory-unmatched.png",
+      "sha256": "0da3064336403592ab1fc6b548a2bc5ba86fd5aa992902694b1ed4e63df28774",
+      "bytes": 4799
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/production-verification/render.log",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/production-verification/render.log",
+      "sha256": "4cf3480cde44d4e801e0ea435da643930bf71bd233ff86211b725f74e71406fa",
+      "bytes": 366
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/production-verification/report.json",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/production-verification/report.json",
+      "sha256": "b59683401220cb128eadf58a52833172d5fec41b6961353c8d301ea45da49b0b",
+      "bytes": 7930
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/verify-shopping-cart-production.gd",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/production-verification/verify-shopping-cart-production.gd",
+      "sha256": "5b54582d33f3216008cef7a18612e258e8b713ddb7a7a8b3e566282b565fed73",
+      "bytes": 11402
+    }
+  ],
+  "limitations": [
+    "One image only. Actual incomplete module remains rejected.",
+    "No audio, speech recognition, playable-module, browser-export or broader curriculum approval.",
+    "Original candidate source and acceptance receipts are preserved unchanged."
+  ]
+}

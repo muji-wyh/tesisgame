@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "status": "independent_source_consultation_only_pending_complete_ledger_review",
+  "reviewer": "Codex root",
+  "consulted_on": "2026-10-16",
+  "method": "Direct selected passages via web open; paraphrased observations only; no dictionary assets acquired.",
+  "consultations": [
+    {
+      "term": "priority",
+      "urls": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/priority",
+        "https://www.collinsdictionary.com/dictionary/english/priority"
+      ],
+      "observation": "The selected rank/precedence sense is distinct from a countable important item. Neither selected passage showed CEFR. B2 remains an independent editorial placement, with all priority-policy domain holds unchanged."
+    },
+    {
+      "term": "address",
+      "urls": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/address_1",
+        "https://www.collinsdictionary.com/dictionary/english/address"
+      ],
+      "observation": "Postal/location details can be spoken, so removing necessarily-written is supported. Collins selected postal A1 is literal; course A2 is a floor, not a source level. Computing/electronic addresses stay distinct."
+    },
+    {
+      "term": "time zone",
+      "urls": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/time-zone",
+        "https://www.collinsdictionary.com/dictionary/english/time-zone"
+      ],
+      "observation": "Oxford selected topic B2 supports bounded scheduling placement. Collins shared-standard-time region supports the retained definition. Simplified 24-zone/one-hour-adjacency claims are not adopted."
+    },
+    {
+      "term": "permission",
+      "urls": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/permission",
+        "https://www.collinsdictionary.com/dictionary/english/permission"
+      ],
+      "observation": "Oxford selected authorization A2 and Collins selected B1 disagree. A2 is reasonable for the bounded schedule-change example. Electronic permissions and written permissions are separate senses; current ambiguity holds remain."
+    },
+    {
+      "term": "task",
+      "urls": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/task_1",
+        "https://www.collinsdictionary.com/dictionary/english/task"
+      ],
+      "observation": "Oxford ordinary work-item A2 contrasts with Collins B2. Concrete welcome-pack work supports bounded A2; no difficulty/project requirement or operating-system sense is imported."
+    },
+    {
+      "term": "role",
+      "urls": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/role",
+        "https://www.collinsdictionary.com/dictionary/english/role"
+      ],
+      "observation": "Oxford organizational position/function and Collins position/function B2 support the narrowed definition and B2 placement. Actor A2/B1+ labels are separate. A role is not proof of authority or professional competence."
+    },
+    {
+      "term": "feedback",
+      "urls": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/feedback",
+        "https://www.collinsdictionary.com/dictionary/english/feedback"
+      ],
+      "observation": "Both selected response-to-work passages show B2. Evaluation/information broadens comments appropriately while excluding electrical and control feedback. Uncountability and one-word noun remain."
+    },
+    {
+      "term": "responsibility",
+      "urls": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/responsibility",
+        "https://www.collinsdictionary.com/dictionary/english/responsibility"
+      ],
+      "observation": "Oxford permits countable assigned duties, and Collins plural duties B2 supports the proposed example one of my responsibilities. Duty is not blame, legal liability or universal authority."
+    },
+    {
+      "term": "location",
+      "urls": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/location",
+        "https://www.collinsdictionary.com/dictionary/english/location"
+      ],
+      "observation": "Selected general place supports an activity location. Oxford B1 and Collins literal B1+ remain separate from Collins exact-position B2. B1 is editorial, not a rounded Collins level."
+    },
+    {
+      "term": "signature",
+      "urls": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/signature",
+        "https://www.collinsdictionary.com/dictionary/english/signature"
+      ],
+      "observation": "The ordinary characteristic written-name noun supports the retained meaning and Collins B1 placement. A signing act, style, stamp, prescription or electronic authentication does not acquire acceptance."
+    }
+  ]
+}

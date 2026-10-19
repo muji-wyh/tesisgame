@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "status": "checkout_image_baseline_bound_no_production_writes",
+  "checks": 2861,
+  "preimages_raw_sha256": "0fedded31a70ffe43151b1e732405d39c5421ad04b63a2ab6774cea02649b593",
+  "preparation_receipt_raw_sha256": "ac24c6cfa67fcf2f4f8e975d9581ff31ff658320a0342844e5e06af554cc8245",
+  "baseline_registry_sha256": "9162bb11ab9ceceddc509407855a42d12c13069ed5035fcd1f02ac33e6571e89",
+  "proposed_registry_sha256": "bdd07516c489f2f728f8ad09912b0cbc01d97765a04e2403373de13238ee2bbf",
+  "validation_raw_sha256": "933c2f61bbfcc8375d0f9a018dc9ed3b7ce67c2894fe047e38178071b6754585",
+  "root_image_review_raw_sha256": "9f91735ea130c4b035c053084e46ac289aa60ad8184816a6c9a8f0344f1b0a47",
+  "serializer_raw_sha256": "120d2dcaba24442b13a98800f49ae252171ccb4467997451faca1bf93f08b0fa",
+  "production_content_written": false
+}

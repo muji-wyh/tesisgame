@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "status": "authored_sources_frozen_by_root_before_first_preparation",
+  "author": "Codex recover_delivery",
+  "inventory_recorded_by": "root",
+  "inventory_excludes_itself": true,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 7913,
+      "sha256": "d463183735c29216bf18832bb62607a4285aa8e3fb24810e19d278312ae06eb3"
+    },
+    {
+      "path": "brief-revision-proposal.json",
+      "bytes": 2527,
+      "sha256": "c8997bfa4b132d6f356d515aaa81f3f4cfb697f28723eee6be693e8c41644739"
+    },
+    {
+      "path": "common.cjs",
+      "bytes": 3857,
+      "sha256": "4cf077adb0b5a80b25013c39d753b4bd563cc21a93cd520f9ba374c729a457ec"
+    },
+    {
+      "path": "prepare-candidate.cjs",
+      "bytes": 8669,
+      "sha256": "6917262f644d10b0e5058e057e0f65e9d8e5c491576a2608090c0fa0f3a95fe2"
+    },
+    {
+      "path": "render-and-check.gd",
+      "bytes": 19321,
+      "sha256": "cb9dfeb2938762407e0782b0ef7b58a332fb9b9c99634fb2c927292eb515deb6"
+    },
+    {
+      "path": "review-checklist.json",
+      "bytes": 2360,
+      "sha256": "bf9c496f2fecf8d3f0dcf6dbd828b54aa9debb36737e6d1d43fd6a550d1c123b"
+    },
+    {
+      "path": "run-candidate.cjs",
+      "bytes": 9491,
+      "sha256": "0edccb0c80e38fd6a6beb6a44f435b2dbdb25ed51c743cc9391d29fc2b89c55e"
+    }
+  ],
+  "source_execution": false,
+  "native_execution": false,
+  "production_mutation": false
+}

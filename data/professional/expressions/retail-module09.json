@@ -1,0 +1,1664 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.retail.module09.01",
+      "text": "Please find the product listing in the online catalog using the search bar; access to purchase history needs authorization.",
+      "meaning": "Locate a product while recognizing a separate customer-record permission.",
+      "context": "A worker checks information access before viewing purchase records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "find",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "product",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "listing",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "in",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "online",
+          "start": 39,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "catalog",
+          "start": 46,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "using",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "search",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "bar",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 74,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "access",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "to",
+          "start": 83,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "purchase",
+          "start": 86,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "history",
+          "start": 95,
+          "end": 102
+        },
+        {
+          "index": 18,
+          "text": "needs",
+          "start": 103,
+          "end": 108
+        },
+        {
+          "index": 19,
+          "text": "authorization",
+          "start": 109,
+          "end": 122
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 122,
+          "end": 123
+        }
+      ],
+      "focus_lexeme_ids": [
+        "product-listing.published-product-entry.n",
+        "online-catalog.web-product-list.n",
+        "search-bar.query-entry-control.n",
+        "purchase-history.past-purchase-record.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module09.02",
+      "text": "Check the promotion calendar, choose the filter and sort order, then add the approved item to the online basket.",
+      "meaning": "Review offer timing and the displayed selection.",
+      "context": "A worker checks the applicable promotional schedule.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "promotion",
+          "start": 10,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "calendar",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "choose",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "filter",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "sort",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "order",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "then",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "add",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "approved",
+          "start": 77,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "item",
+          "start": 86,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 91,
+          "end": 93
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 19,
+          "text": "online",
+          "start": 98,
+          "end": 104
+        },
+        {
+          "index": 20,
+          "text": "basket",
+          "start": 105,
+          "end": 111
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "filter.result-limiting-control.n",
+        "sort-order.display-sequence.n",
+        "online-basket.selected-purchase-list.n",
+        "promotion-calendar.offer-schedule.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module09.03",
+      "text": "On the checkout page, use your user account, username, and password as directed; ask support about the permission level.",
+      "meaning": "Distinguish account credentials from access scope.",
+      "context": "A worker requests access support without sharing secret credentials.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "On",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "checkout",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "page",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "use",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 6,
+          "text": "your",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "user",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 8,
+          "text": "account",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 10,
+          "text": "username",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 13,
+          "text": "password",
+          "start": 59,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": "as",
+          "start": 68,
+          "end": 70
+        },
+        {
+          "index": 15,
+          "text": "directed",
+          "start": 71,
+          "end": 79
+        },
+        {
+          "index": 16,
+          "text": ";",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 17,
+          "text": "ask",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 18,
+          "text": "support",
+          "start": 85,
+          "end": 92
+        },
+        {
+          "index": 19,
+          "text": "about",
+          "start": 93,
+          "end": 98
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 21,
+          "text": "permission",
+          "start": 103,
+          "end": 113
+        },
+        {
+          "index": 22,
+          "text": "level",
+          "start": 114,
+          "end": 119
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 119,
+          "end": 120
+        }
+      ],
+      "focus_lexeme_ids": [
+        "checkout-page.web-purchase-completion.n",
+        "user-account.personal-system-profile.n",
+        "username.account-identifier.n",
+        "password.secret-access-string.n",
+        "permission-level.access-scope.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module09.04",
+      "text": "Open the menu in the browser and select the next tab for the point of sale.",
+      "meaning": "Locate the sales-processing interface.",
+      "context": "A worker navigates the approved retail system.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Open",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 5,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "menu",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "in",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "browser",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "select",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "next",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "tab",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "for",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 13,
+          "text": "point",
+          "start": 61,
+          "end": 66
+        },
+        {
+          "index": 14,
+          "text": "of",
+          "start": 67,
+          "end": 69
+        },
+        {
+          "index": 15,
+          "text": "sale",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 74,
+          "end": 75
+        }
+      ],
+      "focus_lexeme_ids": [
+        "menu.interface-command-list.n",
+        "browser.web-access-program.n",
+        "tab.interface-page-selector.n",
+        "point-of-sale.sales-processing-system.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module09.05",
+      "text": "Use the approved template for the incident form: complete the field, review the checkbox, and use the submit button to send the form.",
+      "meaning": "Prepare and submit an incident record using the approved structure.",
+      "context": "A worker records information in the assigned reporting system.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Use",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "approved",
+          "start": 8,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "template",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "for",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "incident",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "form",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": ":",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "complete",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "field",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "review",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "checkbox",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 88,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 18,
+          "text": "use",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 98,
+          "end": 101
+        },
+        {
+          "index": 20,
+          "text": "submit",
+          "start": 102,
+          "end": 108
+        },
+        {
+          "index": 21,
+          "text": "button",
+          "start": 109,
+          "end": 115
+        },
+        {
+          "index": 22,
+          "text": "to",
+          "start": 116,
+          "end": 118
+        },
+        {
+          "index": 23,
+          "text": "send",
+          "start": 119,
+          "end": 123
+        },
+        {
+          "index": 24,
+          "text": "the",
+          "start": 124,
+          "end": 127
+        },
+        {
+          "index": 25,
+          "text": "form",
+          "start": 128,
+          "end": 132
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 132,
+          "end": 133
+        }
+      ],
+      "focus_lexeme_ids": [
+        "field.data-entry-space.n",
+        "checkbox.binary-selection-control.n",
+        "submit-button.form-send-control.n",
+        "form.structured-information-document.n",
+        "template.reusable-document-pattern.n",
+        "incident-form.event-report-document.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module09.06",
+      "text": "The spreadsheet has one product per row, with its quantity in a cell in the last column.",
+      "meaning": "Locate a quantity within a spreadsheet.",
+      "context": "A worker describes the arrangement of stock data.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "spreadsheet",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "one",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "product",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "per",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "row",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "with",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "its",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "quantity",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "in",
+          "start": 59,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "cell",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "in",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "last",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 17,
+          "text": "column",
+          "start": 81,
+          "end": 87
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "spreadsheet.tabular-calculation-document.n",
+        "row.table-record.n",
+        "column.table-field.n",
+        "cell.single-spreadsheet-space.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module09.07",
+      "text": "Please include the order number, reference number, and tracking number in the attachment.",
+      "meaning": "Ask for identifying references in a document.",
+      "context": "A colleague prepares a fictional order-status report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "include",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "order",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "number",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "reference",
+          "start": 33,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "number",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "tracking",
+          "start": 55,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "number",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 71,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "attachment",
+          "start": 78,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "order-number.purchase-order-identifier.n",
+        "reference-number.record-reference-code.n",
+        "tracking-number.shipment-tracking-code.n",
+        "attachment.linked-file.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module09.08",
+      "text": "The notification asks us to check the payment status and order status in the dashboard.",
+      "meaning": "Respond to an alert by reviewing the recorded states.",
+      "context": "A worker checks current transaction information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "notification",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "asks",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "us",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 25,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "check",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "payment",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "status",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "order",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "status",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 70,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "dashboard",
+          "start": 77,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "payment-status.payment-progress-state.n",
+        "order-status.order-progress-state.n",
+        "dashboard.information-display.n",
+        "notification.system-alert-message.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module09.09",
+      "text": "The supervisor compared the sales report, inventory report, and end-of-day report.",
+      "meaning": "Describe a review of operational records.",
+      "context": "A colleague summarizes a closing review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "supervisor",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "compared",
+          "start": 15,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "sales",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "report",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "inventory",
+          "start": 42,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "report",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "end-of-day",
+          "start": 64,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "report",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "sales-report.sales-summary.n",
+        "inventory-report.stock-summary.n",
+        "end-of-day-report.daily-closing-summary.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module09.10",
+      "text": "The staff rota and timesheet are attached to the shift record.",
+      "meaning": "Explain where duty and work-time information can be found.",
+      "context": "A colleague hands over fictional staffing records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "staff",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "rota",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "timesheet",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "are",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "attached",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "shift",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "record",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 61,
+          "end": 62
+        }
+      ],
+      "focus_lexeme_ids": [
+        "staff-rota.staff-duty-schedule.n",
+        "timesheet.work-time-record.n",
+        "record.stored-information-entry.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    }
+  ]
+}

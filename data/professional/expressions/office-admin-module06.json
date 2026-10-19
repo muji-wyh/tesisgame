@@ -1,0 +1,1538 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.office_admin.module06.01",
+      "text": "The meeting invitation includes the meeting link; share the meeting password only through the approved route.",
+      "meaning": "Distinguish meeting information from protected access information.",
+      "context": "Preparing an authorized online invitation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "meeting",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "invitation",
+          "start": 12,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "includes",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "meeting",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "link",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": ";",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "share",
+          "start": 50,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "meeting",
+          "start": 60,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "password",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "only",
+          "start": 77,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "through",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "approved",
+          "start": 94,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": "route",
+          "start": 103,
+          "end": 108
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "meeting-invitation.request-to-attend-specified-meeting.n",
+        "meeting-link.address-for-joining-online-meeting.n",
+        "meeting-password.secret-required-for-meeting-entry.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ftc-tech-support-scams",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module06.02",
+      "text": "Check the room booking and resolve the booking conflict before confirming the venue.",
+      "meaning": "Request a resource check before final confirmation.",
+      "context": "Coordinating an event location.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "room",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "booking",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "resolve",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "booking",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "conflict",
+          "start": 47,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "before",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "confirming",
+          "start": 63,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "venue",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "room-booking.reservation-of-room-for-period.n",
+        "booking-conflict.incompatible-reservations-for-same-resource.n",
+        "venue.place-where-event-is-held.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module06.03",
+      "text": "The chairperson will check the attendance list and confirm the quorum under the meeting rules.",
+      "meaning": "Refer formal participation requirements to the applicable rules.",
+      "context": "Preparing a formal meeting.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "chairperson",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "check",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "attendance",
+          "start": 31,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "list",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "confirm",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "quorum",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "under",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "meeting",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "rules",
+          "start": 88,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "chairperson.person-leading-meeting-proceedings.n",
+        "attendance-list.list-of-people-attending-event.n",
+        "quorum.minimum-participation-for-valid-business.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module06.04",
+      "text": "The minute taker will confirm each action item with its assignee and the relevant attendee.",
+      "meaning": "Clarify how the meeting record will identify agreed responsibilities.",
+      "context": "Reviewing meeting actions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "minute",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "taker",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "will",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "confirm",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "each",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "action",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "item",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "with",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "its",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "assignee",
+          "start": 56,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "relevant",
+          "start": 73,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "attendee",
+          "start": 82,
+          "end": 90
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "minute-taker.person-recording-meeting-minutes.n",
+        "action-item.agreed-follow-up-task.n",
+        "assignee.person-assigned-work.n",
+        "attendee.person-attending-event.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module06.05",
+      "text": "Please check the travel approval against the itinerary before booking accommodation.",
+      "meaning": "Check authorization against the actual plan.",
+      "context": "Preparing work-related travel.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "travel",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "approval",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "against",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "itinerary",
+          "start": 45,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "before",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "booking",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "accommodation",
+          "start": 70,
+          "end": 83
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "travel-approval.authorization-for-specified-work-travel.n",
+        "itinerary.planned-sequence-of-travel-arrangements.n",
+        "accommodation.temporary-place-to-stay.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module06.06",
+      "text": "Confirm the boarding pass and connection time with the carrier before the return journey.",
+      "meaning": "Ask for current information from the responsible travel provider.",
+      "context": "Checking a journey plan without guaranteeing a connection.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "boarding",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "pass",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "connection",
+          "start": 30,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "time",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "with",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "carrier",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "return",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "journey",
+          "start": 81,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "boarding-pass.travel-document-for-boarding.n",
+        "connection-time.interval-between-transport-services.n",
+        "return-journey.journey-back-to-starting-place.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module06.07",
+      "text": "Review the seating plan and accessibility request, and provide the slide deck in an agreed alternative format before the presentation.",
+      "meaning": "Plan access using the participant's actual requirements.",
+      "context": "Preparing inclusive meeting materials.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Review",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "seating",
+          "start": 11,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "plan",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "accessibility",
+          "start": 28,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "request",
+          "start": 42,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "provide",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "slide",
+          "start": 67,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "deck",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "in",
+          "start": 78,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "an",
+          "start": 81,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "agreed",
+          "start": 84,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "alternative",
+          "start": 91,
+          "end": 102
+        },
+        {
+          "index": 17,
+          "text": "format",
+          "start": 103,
+          "end": 109
+        },
+        {
+          "index": 18,
+          "text": "before",
+          "start": 110,
+          "end": 116
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 117,
+          "end": 120
+        },
+        {
+          "index": 20,
+          "text": "presentation",
+          "start": 121,
+          "end": 133
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 133,
+          "end": 134
+        }
+      ],
+      "focus_lexeme_ids": [
+        "seating-plan.planned-arrangement-of-places-to-sit.n",
+        "accessibility-request.request-for-access-support-or-change.n",
+        "slide-deck.ordered-set-of-presentation-slides.n",
+        "alternative-format.different-information-presentation-format.n",
+        "presentation.organized-explanation-for-audience.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module06.08",
+      "text": "Before screen sharing in the video conference, check the visible content and each participant's access needs.",
+      "meaning": "Request privacy and participation checks.",
+      "context": "Starting an authorized remote presentation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Before",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "screen",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "sharing",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "in",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "video",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "conference",
+          "start": 35,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "check",
+          "start": 47,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "visible",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "content",
+          "start": 65,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "each",
+          "start": 77,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "participant's",
+          "start": 82,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "access",
+          "start": 96,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": "needs",
+          "start": 103,
+          "end": 108
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "screen-sharing.displaying-device-content-to-others.n",
+        "video-conference.meeting-using-live-video-connections.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module06.09",
+      "text": "The hybrid meeting needs a way for remote and in-person attendees to contribute.",
+      "meaning": "Identify participation needs across two attendance settings.",
+      "context": "Planning an inclusive event.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "hybrid",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "meeting",
+          "start": 11,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "needs",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "way",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "remote",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "in-person",
+          "start": 46,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "attendees",
+          "start": 56,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "to",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "contribute",
+          "start": 69,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hybrid-meeting.meeting-with-in-person-and-remote-attendance.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module06.10",
+      "text": "Use the scheduling poll to find an appointment slot for a recurring meeting, then confirm the time zone for each occurrence.",
+      "meaning": "Find an available time and confirm recurring arrangements.",
+      "context": "An administrator coordinates a recurring appointment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Use",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "scheduling",
+          "start": 8,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "poll",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 24,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "find",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "an",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "appointment",
+          "start": 35,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "slot",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "for",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "recurring",
+          "start": 58,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "meeting",
+          "start": 68,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 75,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "then",
+          "start": 77,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "confirm",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "time",
+          "start": 94,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": "zone",
+          "start": 99,
+          "end": 103
+        },
+        {
+          "index": 19,
+          "text": "for",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 20,
+          "text": "each",
+          "start": 108,
+          "end": 112
+        },
+        {
+          "index": 21,
+          "text": "occurrence",
+          "start": 113,
+          "end": 123
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 123,
+          "end": 124
+        }
+      ],
+      "focus_lexeme_ids": [
+        "scheduling-poll.survey-of-availability-for-proposed-times.n",
+        "recurring-meeting.meeting-repeated-on-planned-schedule.n",
+        "appointment-slot.bookable-time-period.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

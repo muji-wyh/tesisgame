@@ -1,0 +1,183 @@
+{
+  "schema": 1,
+  "status": "isolated_native_candidate_failed",
+  "ok": false,
+  "started_at": "2026-10-16T23:50:14.067Z",
+  "finished_at": "2026-10-16T23:51:39.642Z",
+  "root_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-r01/input.json",
+    "bytes": 3218,
+    "raw_sha256": "58a00ee875f524d7a1561aebe46d2e6d3d6bb0a46a9a4cbe6b9c31dc51e44117"
+  },
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/source-inventory.json",
+    "bytes": 1874,
+    "raw_sha256": "7ee9da67778fe717537c9ae35331a49f334660307a3bef5b330a1e9096387f18"
+  },
+  "independent_source_review": {
+    "path": "build/professional-english/foundation02-fifth10-native-source-root-review-r01/review.json",
+    "bytes": 2435,
+    "raw_sha256": "3e4f9e449568df0daa3aabafa051813291fa9e18083b04b2204a0b9a3ad99384"
+  },
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "preparation": {
+    "receipt": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/preparation-receipt.json",
+      "bytes": 137807,
+      "raw_sha256": "44074a72a3bed006177725c5d6a0303d80fa3c4cf792a425b08924dce8abdc8d"
+    },
+    "execution_end": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/execution-end.json",
+      "bytes": 145,
+      "raw_sha256": "e4e00da38bd380589bd77ddfb73afd780b08a34faf73d25ba72d16db0fdfa407"
+    },
+    "target_plan": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/target-plan.json",
+      "bytes": 376416,
+      "raw_sha256": "cd58e001bfdafac503a8bb9903d2a556afe592d2771244e779d3024b802ab9ac"
+    },
+    "projection_observation": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/projection-observation.json",
+      "bytes": 997,
+      "raw_sha256": "8a17f3c1ed0844c749b5b52387a5e5c56ff1e4c9bdfb01f8b170d415d9c17423"
+    },
+    "root_input": {
+      "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+      "bytes": 1191,
+      "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+    }
+  },
+  "independent_afterimage_review": {
+    "path": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/native-review.json",
+    "bytes": 9607,
+    "raw_sha256": "cbfb692c19949c7bd5d138b91343fef429b9f3bd70b11cfb7c810a92f13b1ffc"
+  },
+  "godot_binary": {
+    "path": "C:/Users/yaohuiwang/AppData/Local/Microsoft/WinGet/Packages/GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe/Godot_v4.7-stable_win64.exe",
+    "bytes": 178485256,
+    "raw_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8"
+  },
+  "source_input_count": 13294,
+  "planned_copy_count": 493,
+  "completed_copy_count": 493,
+  "registry_after_sha256": "709b2621940b4698af615ed9c4b9a679006bfc83a877cc6f7d0f29517a3b2fd3",
+  "commands": [
+    {
+      "sequence": 1,
+      "kind": "check_only",
+      "executable": {
+        "path": "C:/Users/yaohuiwang/AppData/Local/Microsoft/WinGet/Packages/GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe/Godot_v4.7-stable_win64.exe",
+        "bytes": 178485256,
+        "raw_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8"
+      },
+      "args": [
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\execution-r01\\project",
+        "--check-only",
+        "--script",
+        "res://tests/godot/professional_retail_morphology_tests.gd"
+      ],
+      "cwd": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\execution-r01\\project",
+      "started_at": "2026-10-16T23:50:32.993Z",
+      "finished_at": "2026-10-16T23:50:34.299Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-1.stdout.log",
+        "bytes": 73,
+        "raw_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+      },
+      "stderr": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-1.stderr.log",
+        "bytes": 0,
+        "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "summary": null,
+      "postcheck_ok": true
+    },
+    {
+      "sequence": 2,
+      "kind": "native_suite",
+      "executable": {
+        "path": "C:/Users/yaohuiwang/AppData/Local/Microsoft/WinGet/Packages/GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe/Godot_v4.7-stable_win64.exe",
+        "bytes": 178485256,
+        "raw_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8"
+      },
+      "args": [
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\execution-r01\\project",
+        "--script",
+        "res://tests/godot/professional_retail_morphology_tests.gd"
+      ],
+      "cwd": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\execution-r01\\project",
+      "started_at": "2026-10-16T23:50:51.506Z",
+      "finished_at": "2026-10-16T23:51:03.581Z",
+      "exit_code": 1,
+      "signal": null,
+      "error": "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org\r\n\r\nProfessional Retail morphology: 3922 checks, 1 failures\r\n\nFAIL: Related broad Professional graph remains its exact pending preimage: safe.free-from-unacceptable-danger.adj\r\n\n\n1 !== 0\n",
+      "stdout": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-2.stdout.log",
+        "bytes": 130,
+        "raw_sha256": "3efb6675fdebb1306b33370d6ee539ca3f8f5e40ef8182fbaa7b8dd8b7bea4ef"
+      },
+      "stderr": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-2.stderr.log",
+        "bytes": 115,
+        "raw_sha256": "cb474a4aa927cd7fb03edc7509c15ba381384618101b59412bcd75e954060549"
+      },
+      "summary": null,
+      "postcheck_ok": true
+    }
+  ],
+  "postchecks": [
+    {
+      "label": "before-native",
+      "ok": true,
+      "evidence": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/postchecks/01-before-native.json",
+        "bytes": 257,
+        "raw_sha256": "f480b74c198f555bca844d1dd13e3aa61c03b0c3f4233360db06762addcd872e"
+      }
+    },
+    {
+      "label": "after-command-1",
+      "ok": true,
+      "evidence": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/postchecks/02-after-command-1.json",
+        "bytes": 259,
+        "raw_sha256": "7a7ebb9fd03920987f335913b2d4e0f81e444edaf754ce85e4403b5394b9db51"
+      }
+    },
+    {
+      "label": "after-command-2",
+      "ok": true,
+      "evidence": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/postchecks/03-after-command-2.json",
+        "bytes": 259,
+        "raw_sha256": "6c71c878da40a6303aa2926d8069798dff639478027d8acdf45f4354517e0e8b"
+      }
+    },
+    {
+      "label": "final",
+      "ok": true,
+      "evidence": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/postchecks/04-final.json",
+        "bytes": 249,
+        "raw_sha256": "11ae1b60f56c37d648d02095d6e80d3fec68d33c88314f9a35c6f3637d5f6ea9"
+      }
+    }
+  ],
+  "error": "Error: AssertionError [ERR_ASSERTION]: Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org\r\n\r\nProfessional Retail morphology: 3922 checks, 1 failures\r\n\nFAIL: Related broad Professional graph remains its exact pending preimage: safe.free-from-unacceptable-danger.adj\r\n\n\n1 !== 0\n\n    at main (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\run.cjs:186:142)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\run.cjs:210:1)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)\n    at Module.load (node:internal/modules/cjs/loader:1525:32)\n    at Module._load (node:internal/modules/cjs/loader:1327:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47\n    at main (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\run.cjs:197:29)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\run.cjs:210:1)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)\n    at Module.load (node:internal/modules/cjs/loader:1525:32)\n    at Module._load (node:internal/modules/cjs/loader:1327:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47",
+  "postcheck_error": null,
+  "production_mutated": false,
+  "project_node_tests_executed": false,
+  "persisted_integration_accepted": false,
+  "scope": "Exact accepted native/lexical/source/provenance afterimages in one isolated copied project. No production integration or full-game/device/release acceptance."
+}

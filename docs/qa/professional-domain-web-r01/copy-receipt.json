@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "kind": "professional_domain_web_durable_copy",
+  "created_at": "2026-10-16T19:21:58.795Z",
+  "actual_build_ok": true,
+  "files": [
+    {
+      "path": "actual-web-build-result.json",
+      "source": "build/professional-english/domain-web-integration-r01/actual-web-build-result.json",
+      "bytes": 4995,
+      "sha256": "391f3943ab118bc6f4391adffdf7ee6a07b5bd92cf65225e84e7b2400f34a3ac"
+    },
+    {
+      "path": "actual-web-build.log",
+      "source": "build/professional-english/domain-web-integration-r01/actual-web-build.log",
+      "bytes": 6854,
+      "sha256": "8c138bf02dc6e5f70551c9901c0939c30ad2ca945727ef6845222f442e4359d6"
+    },
+    {
+      "path": "build-inputs-after.json",
+      "source": "build/professional-english/domain-web-integration-r01/build-inputs-after.json",
+      "bytes": 2192087,
+      "sha256": "49b860cf744c92b85694e7ea44c5ba32c095ecc1100621c4d32028258aa39102"
+    },
+    {
+      "path": "build-inputs-before.json",
+      "source": "build/professional-english/domain-web-integration-r01/build-inputs-before.json",
+      "bytes": 2185105,
+      "sha256": "fb0f96851f6ae0fe7d353c3e105854a17182c77a4eb03b8aef7146072f292453"
+    },
+    {
+      "path": "focused-checks.json",
+      "source": "build/professional-english/domain-web-integration-r01/focused-checks.json",
+      "bytes": 2810,
+      "sha256": "22c35f8a98b17017e218609fe8ff95c4d21f9a6592955d0b75179a254c0c9fa5"
+    },
+    {
+      "path": "generated/index.json",
+      "source": "data/professional/domain-policy/generated/index.json",
+      "bytes": 20705,
+      "sha256": "21aa9d49135b574f12dcff2fdb2295a3fae329b0a6765ac3a914e90944994ac0"
+    },
+    {
+      "path": "generated/professional_domain_release.gd",
+      "source": "scripts/professional_domain_release.gd",
+      "bytes": 543,
+      "sha256": "ffe5411752295e30abcb81bfa4634da56654ee60575d36f56426cba082f1161f"
+    },
+    {
+      "path": "generated/release.json",
+      "source": "data/professional/domain-policy/generated/release.json",
+      "bytes": 954,
+      "sha256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b"
+    },
+    {
+      "path": "generated/themes.json",
+      "source": "data/professional/domain-policy/generated/themes.json",
+      "bytes": 91201,
+      "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+    },
+    {
+      "path": "node-results-tail.log",
+      "source": "build/professional-english/domain-web-integration-r01/node-results-tail.log",
+      "bytes": 6262,
+      "sha256": "369106f0e780da372a6c756c81b6855fe1b819f28e398951f8fadca760205f1b"
+    },
+    {
+      "path": "package/audit-report.json",
+      "source": "build/professional-domain-web-ff413491-1363-4a1b-98da-b6449126884a/audit-report.json",
+      "bytes": 67833,
+      "sha256": "50dd89d3d5645ac7b7c1076b466daeeb6331a500c3bce48e1bdef8945a76680e"
+    },
+    {
+      "path": "package/compile-report.json",
+      "source": "build/professional-domain-web-ff413491-1363-4a1b-98da-b6449126884a/compile-report.json",
+      "bytes": 1407,
+      "sha256": "59c6016c1fe7d627f3301f9d5e26ba43e2338056b4920720492c36c17cd2ce0d"
+    },
+    {
+      "path": "package/installed-release.json",
+      "source": "build/professional-domain-web-ff413491-1363-4a1b-98da-b6449126884a/installed-release.json",
+      "bytes": 66782,
+      "sha256": "3ff632fea2e35a588fbcffd9b3f3a985e9a4fabdc4f7d0c19664f42f1eab8c3f"
+    },
+    {
+      "path": "package/prepared-release.json",
+      "source": "build/professional-domain-web-ff413491-1363-4a1b-98da-b6449126884a/prepared-release.json",
+      "bytes": 66782,
+      "sha256": "3ff632fea2e35a588fbcffd9b3f3a985e9a4fabdc4f7d0c19664f42f1eab8c3f"
+    },
+    {
+      "path": "package/source-capture.json",
+      "source": "build/professional-domain-web-ff413491-1363-4a1b-98da-b6449126884a/source-capture.json",
+      "bytes": 128785,
+      "sha256": "bf81dd5b08d9a9ffa6a1d615af8eef1a9aa1407ed4742038a260c2a46b5b88a4"
+    },
+    {
+      "path": "package/web-pack-manifest.json",
+      "source": "build/professional-domain-web-ff413491-1363-4a1b-98da-b6449126884a/web-pack-manifest.json",
+      "bytes": 1121,
+      "sha256": "e71ce6f51be064e6abd2b7fe05650af6fc06c5f6322bf001b1e9b6b3a07bafbb"
+    },
+    {
+      "path": "package/web-pack-proof.json",
+      "source": "build/professional-domain-web-ff413491-1363-4a1b-98da-b6449126884a/web-pack-proof.json",
+      "bytes": 956,
+      "sha256": "f399600d32e33d4deb0112aaaf4a991b59e2bf6ee926ad74949b35acb240ec98"
+    },
+    {
+      "path": "preimages.json",
+      "source": "build/professional-english/domain-web-integration-r01/preimages.json",
+      "bytes": 599,
+      "sha256": "acb50b0fb3a1077a68778800a1fdadce6ea1772643a10654a7f7bb11e3d47820"
+    },
+    {
+      "path": "preimages/export_presets.cfg",
+      "source": "build/professional-english/domain-web-integration-r01/preimages/export_presets.cfg",
+      "bytes": 2367,
+      "sha256": "503cee1412047d04e39c08851e8ade519393489ea72749967aec3b3db2c82461"
+    },
+    {
+      "path": "preimages/tests/godot/verify_web_pack.gd",
+      "source": "build/professional-english/domain-web-integration-r01/preimages/tests/godot/verify_web_pack.gd",
+      "bytes": 31232,
+      "sha256": "08310c66ef2888f3914a15c9f8298243499402cd80241da49815d7775bd82e62"
+    },
+    {
+      "path": "preimages/tests/web-build-receipt.test.cjs",
+      "source": "build/professional-english/domain-web-integration-r01/preimages/tests/web-build-receipt.test.cjs",
+      "bytes": 17100,
+      "sha256": "00a45f53b73db6c6642054b0ba2dcbc22119b057b7aeb6efbb6c6b2d5346c457"
+    },
+    {
+      "path": "preimages/tools/build-web.cjs",
+      "source": "build/professional-english/domain-web-integration-r01/preimages/tools/build-web.cjs",
+      "bytes": 4179,
+      "sha256": "16d9b267d76ed319bfae8164d2b3a26d13696f042edd44ffaf8256fb76d1f766"
+    },
+    {
+      "path": "preimages/tools/web-build-receipt.cjs",
+      "source": "build/professional-english/domain-web-integration-r01/preimages/tools/web-build-receipt.cjs",
+      "bytes": 11554,
+      "sha256": "e563403dd81314a31a4b72a18a326952b99a15b752cdcbc7b82037c9b6f7c6ad"
+    },
+    {
+      "path": "preserve-result.cjs",
+      "source": "build/professional-english/domain-web-integration-r01/preserve-result.cjs",
+      "bytes": 3641,
+      "sha256": "111e35d98a881ccf1e0111035a89a2cbf08c87c7eaa6a92dc0ddaa260dd817e2"
+    },
+    {
+      "path": "prior-web-build.json",
+      "source": "build/professional-english/domain-web-integration-r01/prior-web-build.json",
+      "bytes": 2291409,
+      "sha256": "08bb722348bb1eb960d8c5808786dfda50a5cb6a9a26a18afa2bad6a91f693df"
+    },
+    {
+      "path": "run-build.cjs",
+      "source": "build/professional-english/domain-web-integration-r01/run-build.cjs",
+      "bytes": 3412,
+      "sha256": "42a84e952c94bcfb6495995e2750082c9bbd7de3ccf0f19aeee0c4a585b82748"
+    },
+    {
+      "path": "verified-web-build.json",
+      "source": "build/professional-english/domain-web-integration-r01/verified-web-build.json",
+      "bytes": 2437866,
+      "sha256": "2c9ad5292d4a5bd87d9631138d6206121172af1615d2deed5b563de233e9c232"
+    }
+  ],
+  "copies_byte_identical": true,
+  "source_snapshot_retained_at": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-domain-web-ff413491-1363-4a1b-98da-b6449126884a",
+  "scope": "Exact local build evidence only. No deployment, runtime-owner integration, gameplay, device, listening or curriculum acceptance."
+}

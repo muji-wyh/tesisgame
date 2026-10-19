@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "status": "accepted_with_explicit_retained_harness_failure",
+  "reviewer": "Codex root independent static technical review",
+  "recorded_at": "2026-10-16T18:26:21.328Z",
+  "findings": [],
+  "retained_failure": [
+    {
+      "check": "unavailable-mode: failed replacement cannot return predecessor success",
+      "passed": false
+    }
+  ],
+  "verified": [
+    {
+      "name": "original",
+      "receipt_sha256": "311bbf2bec145a18f0819bfa6c1aeac949e0828793e42d10a90f0c3315943f02",
+      "input_count": 147,
+      "missing": 5,
+      "checks": 214,
+      "failures": 1,
+      "all_inputs_verified": true
+    },
+    {
+      "name": "supplement",
+      "receipt_sha256": "f37d37f8537b428f80f2f3a6520434590e352222d8cf3f9881eb819c84b2835b",
+      "input_count": 52,
+      "missing": 0,
+      "checks": 28,
+      "failures": 0,
+      "all_inputs_verified": true
+    }
+  ],
+  "reviewed_scope": "Negative fixture preparation, literal-only source variants, rejection/lifecycle assertions, minimal optional-message supplement, exact frozen input/report/log hashes.",
+  "conclusion": "Accept the package-negative observations and separate affected-request supplement within fixed synthetic fixture scope. The original 214-check run remains failed; no new execution or production integration is claimed.",
+  "production_changes": false,
+  "owner_logic_changes": false,
+  "app_trust_verified": false,
+  "real_media_or_browser_or_memory_or_latency_acceptance": false,
+  "copies": [
+    {
+      "file": "README.md",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/README.md",
+      "bytes": 6115,
+      "sha256": "4f7ac6a3dd5b6510410e7e404c173bd502d6f25774cfac46c1b4d65653f354ae"
+    },
+    {
+      "file": "original-validation-receipt.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/validation-receipt.json",
+      "bytes": 1023,
+      "sha256": "311bbf2bec145a18f0819bfa6c1aeac949e0828793e42d10a90f0c3315943f02"
+    },
+    {
+      "file": "original-execution-input-inventory.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/execution-input-inventory.json",
+      "bytes": 32721,
+      "sha256": "729c8c56fb39572c8d72d2ef7f3d5e32dcae8ae4c365b6fb4ff917ccb0d93262"
+    },
+    {
+      "file": "original-preparation-receipt.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/preparation-receipt.json",
+      "bytes": 28640,
+      "sha256": "f991370f290e72a336b2188d7be4b9dbf9cf1401cb0a4bc4e3043f73a95f0caa"
+    },
+    {
+      "file": "original-native-attempt.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/native-attempt.json",
+      "bytes": 230,
+      "sha256": "f360886fdfc06790dbd2587c82fac8511f9dc0510fe7dbf011043c9d00d47b54"
+    },
+    {
+      "file": "original-native.log",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/native.log",
+      "bytes": 212,
+      "sha256": "619e1ccd85c3094461dfb5cb7efe61a65fd3c60e558a60aea34d15ded86cc484"
+    },
+    {
+      "file": "original-native-report.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/native-report.json",
+      "bytes": 67511,
+      "sha256": "73ea73e87278b6a90ca991cb8cdc0b32160790c32a094b74a354805fa02ec93a"
+    },
+    {
+      "file": "original-prepare.cjs",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/prepare.cjs",
+      "bytes": 13019,
+      "sha256": "78d10e36cf00e66bdee5e3633f859df7c5296227cc34c6ae930d884180ddf6e5"
+    },
+    {
+      "file": "original-run-native.cjs",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/run-native.cjs",
+      "bytes": 4217,
+      "sha256": "82c5d8e3eef64a51a80a7b9bc4ff4aac92a2484cd956d2008d389b26710d6ed4"
+    },
+    {
+      "file": "original-negative_tests.gd",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/negative_tests.gd",
+      "bytes": 9207,
+      "sha256": "8e15eebf24c6040eb50530137535346ed284f84135349a674d7decc8c521880f"
+    },
+    {
+      "file": "supplement-validation-receipt.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/supplement-r01/attempts/attempt-001/validation-receipt.json",
+      "bytes": 967,
+      "sha256": "f37d37f8537b428f80f2f3a6520434590e352222d8cf3f9881eb819c84b2835b"
+    },
+    {
+      "file": "supplement-execution-input-inventory.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/supplement-r01/attempts/attempt-001/execution-input-inventory.json",
+      "bytes": 12060,
+      "sha256": "b016d8d2e5ff05f5f2ff4c9662604badc3e9009ec8c00ac16a2202706ccaa5c0"
+    },
+    {
+      "file": "supplement-preparation-receipt.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/supplement-r01/attempts/attempt-001/preparation-receipt.json",
+      "bytes": 11087,
+      "sha256": "06d4d05e065900551a5f78f83a0e9c3737daf6ab0085c1d6b4026ea0e5fccaa6"
+    },
+    {
+      "file": "supplement-native-attempt.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/supplement-r01/attempts/attempt-001/native-attempt.json",
+      "bytes": 229,
+      "sha256": "a040f1b6e71b4b0c3e6fcba32130eb38077000c421c4d765a884371e575c1586"
+    },
+    {
+      "file": "supplement-native.log",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/supplement-r01/attempts/attempt-001/native.log",
+      "bytes": 110,
+      "sha256": "498d6e1ec3fd27d775721f3538139e7f809cb2d285b5fa008647667b4a6df8ab"
+    },
+    {
+      "file": "supplement-native-report.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/supplement-r01/attempts/attempt-001/project/native-report.json",
+      "bytes": 6708,
+      "sha256": "6973508a54af4f04ae9c1c3ee08f59adc4442581382dff07d30be5c944f8f082"
+    },
+    {
+      "file": "supplement-prepare.cjs",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/supplement-r01/prepare.cjs",
+      "bytes": 6745,
+      "sha256": "2937d4fdc5a77bcf54fd8763bdb2962506ccb8fdbe806501825d7b094cdf476a"
+    },
+    {
+      "file": "supplement-run-native.cjs",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/supplement-r01/run-native.cjs",
+      "bytes": 4348,
+      "sha256": "bdde6a60668d88e5f77cffcb8140b4e7a8e117244c31b75126dd0990348edeb5"
+    },
+    {
+      "file": "supplement-negative_tests.gd",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/supplement-r01/negative_tests.gd",
+      "bytes": 9454,
+      "sha256": "a51020957372b3859cc81ad6fb305c43eecc74715f7cda9d5ffa5b2107277a19"
+    },
+    {
+      "file": "candidate_owner_reference.gd",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/candidate_owner_reference.gd",
+      "bytes": 16162,
+      "sha256": "5ca565b95bad3702c4592acb0b6c34a3c786abd1bba20b66bd1951e5f0a93a50"
+    },
+    {
+      "file": "case-manifest.json",
+      "source": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/case-manifest.json",
+      "bytes": 7843,
+      "sha256": "16bb44b959b1ced915cde5986c37034eec269c9167893960938cd61b67799091"
+    }
+  ]
+}

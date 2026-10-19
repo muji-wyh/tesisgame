@@ -1,0 +1,1708 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.office_admin.module09.01",
+      "text": "Confirm the URL and source in your browser before you download a document, and check permission and destination before you upload it.",
+      "meaning": "Check the source and destination of a file transfer.",
+      "context": "An administrator handles a digital document.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "URL",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "source",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "in",
+          "start": 27,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "your",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "browser",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "before",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "you",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "download",
+          "start": 54,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "a",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "document",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "check",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "permission",
+          "start": 85,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 18,
+          "text": "destination",
+          "start": 100,
+          "end": 111
+        },
+        {
+          "index": 19,
+          "text": "before",
+          "start": 112,
+          "end": 118
+        },
+        {
+          "index": 20,
+          "text": "you",
+          "start": 119,
+          "end": 122
+        },
+        {
+          "index": 21,
+          "text": "upload",
+          "start": 123,
+          "end": 129
+        },
+        {
+          "index": 22,
+          "text": "it",
+          "start": 130,
+          "end": 132
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 132,
+          "end": 133
+        }
+      ],
+      "focus_lexeme_ids": [
+        "download.receive-data-from-another-system.v",
+        "upload.send-data-to-another-system.v",
+        "url.resource-address.n",
+        "browser.web-access-program.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module09.02",
+      "text": "In the word processor, open the layout tab and menu to check the page layout, page margin, and page orientation.",
+      "meaning": "Locate and review document-layout controls.",
+      "context": "An administrator prepares an accessible document layout.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "In",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "word",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "processor",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "open",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "layout",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "tab",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "menu",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "to",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 12,
+          "text": "check",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 14,
+          "text": "page",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 15,
+          "text": "layout",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 17,
+          "text": "page",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 18,
+          "text": "margin",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 19,
+          "text": ",",
+          "start": 89,
+          "end": 90
+        },
+        {
+          "index": 20,
+          "text": "and",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 21,
+          "text": "page",
+          "start": 95,
+          "end": 99
+        },
+        {
+          "index": 22,
+          "text": "orientation",
+          "start": 100,
+          "end": 111
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "word-processor.software-for-creating-text-documents.n",
+        "page-layout.arrangement-of-content-on-page.n",
+        "page-margin.space-between-page-edge-and-content.n",
+        "page-orientation.direction-of-page-dimensions.n",
+        "tab.interface-page-selector.n",
+        "menu.interface-command-list.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module09.03",
+      "text": "Check the line spacing, font, and heading structure for each paragraph.",
+      "meaning": "Request readable and structured text.",
+      "context": "Reviewing a draft for accessibility.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "line",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "spacing",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "font",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": "heading",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "structure",
+          "start": 42,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "for",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "each",
+          "start": 56,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "paragraph",
+          "start": 61,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "line-spacing.vertical-space-between-text-lines.n",
+        "font.text-character-design-and-style.n",
+        "heading.title-introducing-document-section.n",
+        "paragraph.group-of-sentences-on-one-topic.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module09.04",
+      "text": "The footer and page break need review before the appendix is distributed.",
+      "meaning": "Request a check of lower-page content and pagination.",
+      "context": "Preparing a final document review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "footer",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "page",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "break",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "need",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "review",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "before",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "appendix",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "is",
+          "start": 58,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "distributed",
+          "start": 61,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 72,
+          "end": 73
+        }
+      ],
+      "focus_lexeme_ids": [
+        "footer.content-at-bottom-of-page.n",
+        "page-break.marker-starting-content-on-new-page.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module09.05",
+      "text": "Spellcheck can flag possible errors, but it does not replace a review of the intended meaning.",
+      "meaning": "Explain a spelling tool's limitations.",
+      "context": "Checking an automatically reviewed draft.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Spellcheck",
+          "start": 0,
+          "end": 10
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "flag",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "possible",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "errors",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "but",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "it",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "does",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "not",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "replace",
+          "start": 53,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "a",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "review",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "of",
+          "start": 70,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "intended",
+          "start": 77,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "meaning",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "spellcheck.tool-for-flagging-possible-spelling-errors.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module09.06",
+      "text": "Check the formula and cell reference for each cell in the selected row and column on the correct worksheet before relying on this workbook's total.",
+      "meaning": "Check spreadsheet locations and calculations.",
+      "context": "An administrator reviews the cells used in a total.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "formula",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "cell",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "reference",
+          "start": 27,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "each",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "cell",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "in",
+          "start": 51,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "selected",
+          "start": 58,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "row",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "column",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "on",
+          "start": 82,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": "correct",
+          "start": 89,
+          "end": 96
+        },
+        {
+          "index": 18,
+          "text": "worksheet",
+          "start": 97,
+          "end": 106
+        },
+        {
+          "index": 19,
+          "text": "before",
+          "start": 107,
+          "end": 113
+        },
+        {
+          "index": 20,
+          "text": "relying",
+          "start": 114,
+          "end": 121
+        },
+        {
+          "index": 21,
+          "text": "on",
+          "start": 122,
+          "end": 124
+        },
+        {
+          "index": 22,
+          "text": "this",
+          "start": 125,
+          "end": 129
+        },
+        {
+          "index": 23,
+          "text": "workbook's",
+          "start": 130,
+          "end": 140
+        },
+        {
+          "index": 24,
+          "text": "total",
+          "start": 141,
+          "end": 146
+        },
+        {
+          "index": 25,
+          "text": ".",
+          "start": 146,
+          "end": 147
+        }
+      ],
+      "focus_lexeme_ids": [
+        "formula.spreadsheet-expression-for-calculation.n",
+        "cell-reference.identifier-for-spreadsheet-cell-or-range.n",
+        "worksheet.individual-sheet-in-spreadsheet-file.n",
+        "workbook.spreadsheet-file-containing-worksheets.n",
+        "cell.single-spreadsheet-space.n",
+        "row.table-record.n",
+        "column.table-field.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module09.07",
+      "text": "Review each recipient field in the form, check the filter, and inspect individual outputs before sending a mail merge.",
+      "meaning": "Check recipient data and selected outputs.",
+      "context": "An administrator reviews a mail-merge run.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Review",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "each",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "recipient",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "field",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "in",
+          "start": 28,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "form",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "check",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "filter",
+          "start": 51,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "inspect",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "individual",
+          "start": 71,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "outputs",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": "before",
+          "start": 90,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": "sending",
+          "start": 97,
+          "end": 104
+        },
+        {
+          "index": 18,
+          "text": "a",
+          "start": 105,
+          "end": 106
+        },
+        {
+          "index": 19,
+          "text": "mail",
+          "start": 107,
+          "end": 111
+        },
+        {
+          "index": 20,
+          "text": "merge",
+          "start": 112,
+          "end": 117
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mail-merge.combining-template-with-recipient-data.n",
+        "field.data-entry-space.n",
+        "form.structured-information-document.n",
+        "filter.result-limiting-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module09.08",
+      "text": "Confirm whether track changes is enabled, and use the comment thread to ask the reviewer about this edit.",
+      "meaning": "Clarify document-review tools and the review request.",
+      "context": "Collaborating on a draft.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "whether",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "track",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "changes",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "is",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "enabled",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "use",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "comment",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "thread",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "ask",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "reviewer",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "about",
+          "start": 89,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "this",
+          "start": 95,
+          "end": 99
+        },
+        {
+          "index": 18,
+          "text": "edit",
+          "start": 100,
+          "end": 104
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 104,
+          "end": 105
+        }
+      ],
+      "focus_lexeme_ids": [
+        "track-changes.feature-recording-document-edits.n",
+        "comment-thread.linked-discussion-about-document-content.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module09.09",
+      "text": "The dashboard shows my read-only access to the approved folder on the shared drive.",
+      "meaning": "Describe the displayed access restriction.",
+      "context": "An administrator checks access to shared documents.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "dashboard",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "shows",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "my",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "read-only",
+          "start": 23,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "access",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 40,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "approved",
+          "start": 47,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "folder",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "on",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "shared",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "drive",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "read-only-access.permission-to-view-without-editing.n",
+        "shared-drive.storage-accessible-to-authorized-group.n",
+        "dashboard.information-display.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module09.10",
+      "text": "Check the filename, version history, and audit trail before selecting the button that replaces the stored document.",
+      "meaning": "Request record and revision checks.",
+      "context": "Preparing an authorized document update.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "filename",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "version",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "history",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "audit",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "trail",
+          "start": 47,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "selecting",
+          "start": 60,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "button",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "that",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "replaces",
+          "start": 86,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 17,
+          "text": "stored",
+          "start": 99,
+          "end": 105
+        },
+        {
+          "index": 18,
+          "text": "document",
+          "start": 106,
+          "end": 114
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "filename.file-identifying-name.n",
+        "version-history.record-of-document-changes.n",
+        "audit-trail.recorded-change-history.n",
+        "button.interface-action-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

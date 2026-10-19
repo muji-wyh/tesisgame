@@ -1,0 +1,21 @@
+Error: Godot failed (exit 1):
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Microsoft) - ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)
+
+WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE.
+   at: DisplayServerWindows (platform/windows/display_server_windows.cpp:8059)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "sidecar" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://build/professional-english/retail-term-art-review/cash-register-r04/candidate-r01/render-and-check.gd:129)
+ERROR: Failed to load script "res://build/professional-english/retail-term-art-review/cash-register-r04/candidate-r01/render-and-check.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+
+    at Object.runGodot (Q:\.codex\worktrees\current-age-vocabulary\tesisgame\tools\run-godot.cjs:20:11)
+    at Object.<anonymous> (Q:\.codex\worktrees\current-age-vocabulary\tesisgame\build\professional-english\retail-term-art-review\cash-register-r04\candidate-r01\run-candidate.cjs:44:66)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47

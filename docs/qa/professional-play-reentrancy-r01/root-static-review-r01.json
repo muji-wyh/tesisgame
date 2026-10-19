@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "reviewed_on": "2026-10-16",
+  "reviewer": "Codex root independent static and retained-evidence review",
+  "accepted_for_stated_scope": true,
+  "findings": [],
+  "input_hashes_verified": 24,
+  "saved_preimages_verified": 2,
+  "native_rerun": false,
+  "observed": {
+    "current_checks": 31,
+    "current_failures": 0,
+    "historical_observations": 17,
+    "historical_invariant_failures": 14
+  },
+  "reviewed_files": [
+    {
+      "path": "scripts/professional_play.gd",
+      "raw_sha256": "348431e211ca691aa873e201d8a5688e3e8f1cc63bc2fda6b8851b3c41a22db0"
+    },
+    {
+      "path": "tests/godot/professional_play_tests.gd",
+      "raw_sha256": "c6fea401bb2eea0e0399aec939ec5e84f0c31e308a5bdc4554dc25acecb9c7f6"
+    },
+    {
+      "path": "build/professional-english/professional-play-reentrancy-r01/run-native.cjs",
+      "raw_sha256": "187c13ed8b62ebbcffc435bc231d408323cc42f8b6fec5a8e1f5986c91bedd52"
+    },
+    {
+      "path": "build/professional-english/professional-play-reentrancy-r01/native_entry.gd",
+      "raw_sha256": "2f01df0aba92e9557dcded19badc87881acb1187133d752141fe2124079bb8b1"
+    },
+    {
+      "path": "build/professional-english/professional-play-reentrancy-r01/validation-receipt.json",
+      "raw_sha256": "8b8f1f8cb4b317a250167968b7a58e6a0809895875f35989aba7b03bba0bac78"
+    },
+    {
+      "path": "build/professional-english/professional-play-reentrancy-r01/execution-input-inventory.json",
+      "raw_sha256": "36e6c8ac536f79d651f92d003d18d1775f68c08209a6bf050d7b5531c1495371"
+    },
+    {
+      "path": "build/professional-english/professional-play-reentrancy-r01/change-journal.json",
+      "raw_sha256": "fd224457cf41465fd247fa6125319e541e5f814830eb2332698366737257fee4"
+    }
+  ],
+  "conclusion": "Request ownership is established before synchronous session boundaries, context is frozen before caller mutation, and stale controller continuations stop after request/cancel/leave/retry/open callbacks. Ready notification captures its original payload and suppresses obsolete preparation emission. Existing initial-storage recovery remains covered.",
+  "limits": [
+    "Controller callback tests use explicit session/loader/cache doubles and real Access bookkeeping. They do not prove real media transport/decode or full application rendering.",
+    "The saved-preimage run excludes four paths that would intentionally trigger old empty-pending errors; all four run against the fixed controller.",
+    "No domain policy, content gate, media acceptance or ready-module status changed."
+  ]
+}

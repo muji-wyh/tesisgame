@@ -1,0 +1,3406 @@
+{
+	"actual_board_execution": false,
+	"audio_playback": false,
+	"brief_revision_accepted": false,
+	"caller_sources": {
+		"match": "776b1c63cb6998e6968e76865093963a3900333f5f59786fe5bc34e46a9f7f49",
+		"memory": "51083ab9d49640247783ef57438a03af4da50361bf7b3d99e6a593bf5db021f4",
+		"pair_colors": "eb8b0461f2fa9b48a90e3b1b8e74f85002503469bdb7f4caf9c26bf869fc5b8b"
+	},
+	"captures": [
+		{
+			"badge_visible": false,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-unmatched.png",
+			"fill": "fffef9ff",
+			"pair_number": 0,
+			"pair_tint": "346953ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "577413d0e99dd71945c838124d2cfa159c453b5ca30572c4718ea4d3d7a27cea",
+			"sha256": "589d32067f659d535329968025ac659aa45a655d04cfe8b04a3000d74b4af843",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": false,
+				"mode": "match",
+				"name": "match-unmatched",
+				"pair": -1,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": false,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-unmatched.png",
+			"fill": "fffef9ff",
+			"pair_number": 0,
+			"pair_tint": "346953ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "6c24401ca574d9acc759d352512fe06acf0c8005b86295842c86621a0553266e",
+			"sha256": "fc39c372a23a33e1c2663e503ed20fb055e093f1c834d255706df6bfb9deb83b",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": false,
+				"mode": "match",
+				"name": "match-unmatched",
+				"pair": -1,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": false,
+			"card_size": [
+				144.0,
+				74.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-memory-unmatched.png",
+			"fill": "fffef9ff",
+			"pair_number": 0,
+			"pair_tint": "346953ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				120.0,
+				54.0
+			],
+			"rendered_image_size": [
+				43.6640625,
+				54.0
+			],
+			"rgba_sha256": "174167198b0ec1249ff8974387787204761f3584c38d2ab5ec55e9df335d08bb",
+			"sha256": "65de6273f16b5e6f5321db4424a8a3555e9a075c2210135a563e4a0886ccf51f",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": false,
+				"mode": "memory",
+				"name": "memory-unmatched",
+				"pair": -1,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": false,
+			"card_size": [
+				144.0,
+				74.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-memory-unmatched.png",
+			"fill": "fffef9ff",
+			"pair_number": 0,
+			"pair_tint": "346953ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				120.0,
+				54.0
+			],
+			"rendered_image_size": [
+				60.8986784140969,
+				54.0
+			],
+			"rgba_sha256": "5b22a0b912dd024ac2e633bdf0748eac420f77e1e7ca2a8de6727f51b9601fc6",
+			"sha256": "9aad34703dd9102b8bb27e937ebaba3c630c5b4f7e44914b0cc53f32994505cd",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": false,
+				"mode": "memory",
+				"name": "memory-unmatched",
+				"pair": -1,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				144.0,
+				74.0
+			],
+			"control_disabled": true,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-memory-matched.png",
+			"fill": "e7f5e9ff",
+			"pair_number": 0,
+			"pair_tint": "346953ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				120.0,
+				54.0
+			],
+			"rendered_image_size": [
+				43.6640625,
+				54.0
+			],
+			"rgba_sha256": "9a3826a59c6f20b21c2731ecc06dcfd15acbcd4e448cf6a364e32d89df3fec20",
+			"sha256": "17ec116670baa733175a647a64f571263466d8e86cb41af85999658e53baceb3",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "memory",
+				"name": "memory-matched",
+				"pair": -1,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				144.0,
+				74.0
+			],
+			"control_disabled": true,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-memory-matched.png",
+			"fill": "e7f5e9ff",
+			"pair_number": 0,
+			"pair_tint": "346953ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				120.0,
+				54.0
+			],
+			"rendered_image_size": [
+				60.8986784140969,
+				54.0
+			],
+			"rgba_sha256": "972feb6730c0ed15aee69d1fe5c532304dc8201f1570816fa3ab7fa94dae867d",
+			"sha256": "edee4b6c7ae74f9f6be6be8af47fba5d35f8b6e074d04d4a41ef393ab2a4a69b",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "memory",
+				"name": "memory-matched",
+				"pair": -1,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-pair-1-settled.png",
+			"fill": "f7faf9ff",
+			"pair_number": 1,
+			"pair_tint": "31856aff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "15c7469738c4f23238d9cc84d754c3736f03211e0399325639f062429f7a308f",
+			"sha256": "32e0ca6eeca3a75b8c37499e7342e3a6675ba4deea294bf5629f70a93d294461",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-1-settled",
+				"pair": 0,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-pair-1-settled.png",
+			"fill": "f7faf9ff",
+			"pair_number": 1,
+			"pair_tint": "31856aff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "7dc2bc797c8abf6223a9343c3007158115d9e478900494425e65d98243ab6fc3",
+			"sha256": "1ed1784ba9fd4912dc6270c085648f6b910b9f8926e32d83d042ff1bd794034d",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-1-settled",
+				"pair": 0,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-pair-1-focused.png",
+			"fill": "e0ede9ff",
+			"pair_number": 1,
+			"pair_tint": "31856aff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "aba012bb28d59d39539f927f895f460227d3bb0344a133b20b09c96706a64b20",
+			"sha256": "432b2dd990d1e8158c7e0cd3ff23586054a8c03879a3992a0c4f44be7b207d44",
+			"state": {
+				"alpha": 1.0,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-1-focused",
+				"pair": 0,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-pair-1-focused.png",
+			"fill": "e0ede9ff",
+			"pair_number": 1,
+			"pair_tint": "31856aff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "e186f0e3214651c3b3db764edd663e2e97755ed3849043f73cf2d20fe469830f",
+			"sha256": "b9986ca90e941bc7d638a4b2545d54364a705b15b45224cb39d1e06fda35a920",
+			"state": {
+				"alpha": 1.0,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-1-focused",
+				"pair": 0,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-pair-2-settled.png",
+			"fill": "f7fafcff",
+			"pair_number": 2,
+			"pair_tint": "377eacff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "f5dfdd43491b1be05e1ec1701df598a721561836a640bd6dac2417d2a1da448c",
+			"sha256": "58c00eefb13791189284b7e79bd592074f24c8c819714e416e037876721006cc",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-2-settled",
+				"pair": 1,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-pair-2-settled.png",
+			"fill": "f7fafcff",
+			"pair_number": 2,
+			"pair_tint": "377eacff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "e6b2bb18ca919456d305568cae65f885d0a36b11afadff8bed40c6c7aee83d32",
+			"sha256": "acebb9d49869287f79e6804d311c9b6271439aa452cd6b51f6b532e9fcca1e10",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-2-settled",
+				"pair": 1,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-pair-2-focused.png",
+			"fill": "e1ecf3ff",
+			"pair_number": 2,
+			"pair_tint": "377eacff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "924e066db6537543743e026757390c2bde4198993ed1c023bc270970175ba776",
+			"sha256": "1d2ae1d47cf11462e8ab1c1b149fd2281a25dd4fa384a39ad8a0395ea16a0f86",
+			"state": {
+				"alpha": 1.0,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-2-focused",
+				"pair": 1,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-pair-2-focused.png",
+			"fill": "e1ecf3ff",
+			"pair_number": 2,
+			"pair_tint": "377eacff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "fcc1befc07b5c9df473ba10c38a39dfeeecbb6436244a9109684d122c3da67ad",
+			"sha256": "5246f1f3df898e65b1bf6c2712f8048a4520668f650c81b04cc6c216e1e604d6",
+			"state": {
+				"alpha": 1.0,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-2-focused",
+				"pair": 1,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-pair-3-settled.png",
+			"fill": "faf9fcff",
+			"pair_number": 3,
+			"pair_tint": "8a66b0ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "c69b468064e0f6b8c1a28f083c7500ffb43053943fb24333d3dc33fa438cb8f7",
+			"sha256": "c4358b9eba92dcc3e81346f6f5ed624a3922260d621e1f5055415f4b9b90d715",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-3-settled",
+				"pair": 2,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-pair-3-settled.png",
+			"fill": "faf9fcff",
+			"pair_number": 3,
+			"pair_tint": "8a66b0ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "b4315a23ce8aa17a71d9393a72713955e1c89bc398faebec96ccf7ddf3803d0b",
+			"sha256": "8dcab2213e629f774440d099cfa4ac5485628a0dbd6d5a52d735feb65db09310",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-3-settled",
+				"pair": 2,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-pair-3-focused.png",
+			"fill": "ede8f3ff",
+			"pair_number": 3,
+			"pair_tint": "8a66b0ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "46c52f186bac6b153f89ecbadcb57180d9cfc7688223cd8981bf6245918d3c47",
+			"sha256": "f45bd06126c283f0b6b1f968fd5b8e686636a20057b303fb3e7bf5abe41158f2",
+			"state": {
+				"alpha": 1.0,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-3-focused",
+				"pair": 2,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-pair-3-focused.png",
+			"fill": "ede8f3ff",
+			"pair_number": 3,
+			"pair_tint": "8a66b0ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "4a793fc7ffd493f3c0762fd6955c1ca57978dfe3a0ea1357f67e2a1480b03b91",
+			"sha256": "887870975002ce0f0295327feea0a8bea910697de828f507a6721c9b89cb6e64",
+			"state": {
+				"alpha": 1.0,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-3-focused",
+				"pair": 2,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-pair-4-settled.png",
+			"fill": "fcfaf7ff",
+			"pair_number": 4,
+			"pair_tint": "b48330ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "bec4875119f88bac06015c6099c7d55acab9cc2883cc29986e86eb975810cc42",
+			"sha256": "e9265d5a554ba8ecc3d7ad2bad6a8b94a791fef8339f383e1c93ee83f056b631",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-4-settled",
+				"pair": 3,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-pair-4-settled.png",
+			"fill": "fcfaf7ff",
+			"pair_number": 4,
+			"pair_tint": "b48330ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "e9660b2d0aa967d88fd5c19f96683630359a0a3a37770a4bb88b6834fb588d39",
+			"sha256": "491244a8a067a212c727f77ee604eda09e4209e3b013ec68080a18cb4d230cc7",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-4-settled",
+				"pair": 3,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-pair-4-focused.png",
+			"fill": "f4ece0ff",
+			"pair_number": 4,
+			"pair_tint": "b48330ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "7269beaef9e5ffa3c6831933950ab8f70de146e9f44964840a2b91207c32502a",
+			"sha256": "8cf8833e1b1febc2c1cae51c8284747f22c49327a1b1443b7fe2c1d5c8875d0f",
+			"state": {
+				"alpha": 1.0,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-4-focused",
+				"pair": 3,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-pair-4-focused.png",
+			"fill": "f4ece0ff",
+			"pair_number": 4,
+			"pair_tint": "b48330ff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "dd508f59d9d395be5715f4057bea23d309d79a33e7d347c6470b8176ef3799e8",
+			"sha256": "1eb9ca0950e780739c1e299229d4f12eb463e530185265ca23e45759cdb00a1a",
+			"state": {
+				"alpha": 1.0,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-4-focused",
+				"pair": 3,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-pair-5-settled.png",
+			"fill": "fcf9faff",
+			"pair_number": 5,
+			"pair_tint": "b05d7bff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "1b1a51ce412bbf88a36314839197c779d431f1bb63da308d6ce831bb60e14fff",
+			"sha256": "2d7d8caa3b7fcc13752a279789f3296b608230a978251d67634af808be4ebfb6",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-5-settled",
+				"pair": 4,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-pair-5-settled.png",
+			"fill": "fcf9faff",
+			"pair_number": 5,
+			"pair_tint": "b05d7bff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "5f14c60c52514df23da7c2a31e0efa8ec1a8919bbf9e8e8e3ab72e390a2491dc",
+			"sha256": "75fe38b5667f5e63515be0e2242d0c25e27f70cbabc1d396bfc08d79ac8f2211",
+			"state": {
+				"alpha": 1.0,
+				"focused": false,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-5-settled",
+				"pair": 4,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-pair-5-focused.png",
+			"fill": "f3e7ebff",
+			"pair_number": 5,
+			"pair_tint": "b05d7bff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "77eafb7ed023a1cb1174d97d8217af3be33f72f0936717e548cb9d69bfe10d99",
+			"sha256": "d66a2a4bdda1f4daededf07f092e33e58f691216fedf30cdf68b77aa496219e3",
+			"state": {
+				"alpha": 1.0,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-5-focused",
+				"pair": 4,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": false,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-pair-5-focused.png",
+			"fill": "f3e7ebff",
+			"pair_number": 5,
+			"pair_tint": "b05d7bff",
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "909b4d0cfa47ce2e86bf23bb02b439f658f2a1c64f2df9be1002c4cf15b1039d",
+			"sha256": "6b5bc60fa5866a2d693e441fd94f659d121770b00218b29a2663420364057be4",
+			"state": {
+				"alpha": 1.0,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-pair-5-focused",
+				"pair": 4,
+				"scope": "current_caller_equivalent"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": true,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-match-stress-068.png",
+			"fill": "f4ece0ff",
+			"pair_number": 4,
+			"pair_tint": "b48330ff",
+			"picture_alpha": 0.680000007152557,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				42.046875,
+				52.0
+			],
+			"rgba_sha256": "5e5bcc77bf9e095dbfd94bd6695fbb87f097f30c42806cd8b18bab7c1446d43e",
+			"sha256": "1e19307a045adc83c27b3c5a32865d32953186f63e100cf5a9380f7383394d94",
+			"state": {
+				"alpha": 0.68,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-stress-068",
+				"pair": 3,
+				"scope": "wordcard_only_conservative_stress"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"control_disabled": true,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-match-stress-068.png",
+			"fill": "f4ece0ff",
+			"pair_number": 4,
+			"pair_tint": "b48330ff",
+			"picture_alpha": 0.680000007152557,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"rendered_image_size": [
+				58.6431718061674,
+				52.0
+			],
+			"rgba_sha256": "6d8cd905b2dde5a234f214d15e96ed1ee72b3e4b03ba7aea37c2718fa595a55b",
+			"sha256": "832db177c0c22ceb309f258690bb7ec785479dd1527860bb090e1176fcc6317f",
+			"state": {
+				"alpha": 0.68,
+				"focused": true,
+				"matched": true,
+				"mode": "match",
+				"name": "match-stress-068",
+				"pair": 3,
+				"scope": "wordcard_only_conservative_stress"
+			},
+			"subject": "accepted_basket_reference"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				144.0,
+				74.0
+			],
+			"control_disabled": true,
+			"cue_visibility": {
+				"no_gift_specific_decoration": "pending_root_visual_review",
+				"open_cavity": "pending_root_visual_review",
+				"solid_tall_body_distinct_from_slotted_basket": "pending_root_visual_review",
+				"two_separate_loop_handles": "pending_root_visual_review"
+			},
+			"file": "bag-memory-stress-068.png",
+			"fill": "e7f5e9ff",
+			"pair_number": 0,
+			"pair_tint": "346953ff",
+			"picture_alpha": 0.680000007152557,
+			"picture_size": [
+				120.0,
+				54.0
+			],
+			"rendered_image_size": [
+				43.6640625,
+				54.0
+			],
+			"rgba_sha256": "6c7a4d098f0deb218c0ec3de056fb3de0708bbbbd014f3d4b5cb659e330821a4",
+			"sha256": "edd6074c945551f6dec0a9db660fce80f26a2d598e6f731ccf8d727f5daa9698",
+			"state": {
+				"alpha": 0.68,
+				"focused": false,
+				"matched": true,
+				"mode": "memory",
+				"name": "memory-stress-068",
+				"pair": -1,
+				"scope": "wordcard_only_conservative_stress"
+			},
+			"subject": "bag_candidate"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				144.0,
+				74.0
+			],
+			"control_disabled": true,
+			"cue_visibility": {
+				"broad_carrying_handle": "pending_root_visual_review",
+				"open_basket": "pending_root_visual_review",
+				"squat_slotted_body_distinct_from_solid_bag": "pending_root_visual_review"
+			},
+			"file": "basket-memory-stress-068.png",
+			"fill": "e7f5e9ff",
+			"pair_number": 0,
+			"pair_tint": "346953ff",
+			"picture_alpha": 0.680000007152557,
+			"picture_size": [
+				120.0,
+				54.0
+			],
+			"rendered_image_size": [
+				60.8986784140969,
+				54.0
+			],
+			"rgba_sha256": "6b479d9454061ce27a33399cdf82750182eefa317b926466db177af476fdd19a",
+			"sha256": "eb6992c06abd32ee2e23efb8864941277e95735b1f0134212125ea1b830b5d13",
+			"state": {
+				"alpha": 0.68,
+				"focused": false,
+				"matched": true,
+				"mode": "memory",
+				"name": "memory-stress-068",
+				"pair": -1,
+				"scope": "wordcard_only_conservative_stress"
+			},
+			"subject": "accepted_basket_reference"
+		}
+	],
+	"checks": [
+		{
+			"check": "Current lexeme bytes match preparation checkpoint",
+			"passed": true
+		},
+		{
+			"check": "Full unchanged entry preimage: shopping-bag.goods-carrier.n",
+			"passed": true
+		},
+		{
+			"check": "Full unchanged entry preimage: shopping-basket.store-container.n",
+			"passed": true
+		},
+		{
+			"check": "Candidate image remains unintegrated and unaccepted",
+			"passed": true
+		},
+		{
+			"check": "Approved Ava recording descriptor remains exact without playback",
+			"passed": true
+		},
+		{
+			"check": "Original brief is retained; revision is only proposed",
+			"passed": true
+		},
+		{
+			"check": "Actual current catalog loads",
+			"passed": true
+		},
+		{
+			"check": "Actual Retail course exists",
+			"passed": true
+		},
+		{
+			"check": "Current actual Retail module remains draft: module01",
+			"passed": true
+		},
+		{
+			"check": "Current actual Retail module remains draft: module02",
+			"passed": true
+		},
+		{
+			"check": "Current actual Retail module remains draft: module03",
+			"passed": true
+		},
+		{
+			"check": "Current actual Retail module remains draft: module04",
+			"passed": true
+		},
+		{
+			"check": "Current actual Retail module remains draft: module05",
+			"passed": true
+		},
+		{
+			"check": "Current actual Retail module remains draft: module06",
+			"passed": true
+		},
+		{
+			"check": "Current actual Retail module remains draft: module07",
+			"passed": true
+		},
+		{
+			"check": "Current actual Retail module remains draft: module08",
+			"passed": true
+		},
+		{
+			"check": "Current actual Retail module remains draft: module09",
+			"passed": true
+		},
+		{
+			"check": "Current actual Retail module remains draft: module10",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable: match",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable: memory",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable: pop",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable: jelly",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable: word_jelly",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable: phrase",
+			"passed": true
+		},
+		{
+			"check": "Scratch image-only manifest satisfies current schema and budgets",
+			"passed": true
+		},
+		{
+			"check": "Exactly bag candidate and accepted basket are requested",
+			"passed": true
+		},
+		{
+			"check": "Real raw loader has no injected fetch callback",
+			"passed": true
+		},
+		{
+			"check": "Loader completion belongs to this exact request generation",
+			"passed": true
+		},
+		{
+			"check": "Actual loader reads, hashes and decodes both immutable scratch sidecars",
+			"passed": true
+		},
+		{
+			"check": "Both images acquire one actual scoped lease",
+			"passed": true
+		},
+		{
+			"check": "Scoped image resolves: sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"passed": true
+		},
+		{
+			"check": "Exact decoded dimensions: sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"passed": true
+		},
+		{
+			"check": "WordArt returns actual leased image: sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"passed": true
+		},
+		{
+			"check": "Immutable fixture SHA matches: sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"passed": true
+		},
+		{
+			"check": "Loader-decoded RGBA pixels equal exact PNG: sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"passed": true
+		},
+		{
+			"check": "Scoped image resolves: sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+			"passed": true
+		},
+		{
+			"check": "Exact decoded dimensions: sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+			"passed": true
+		},
+		{
+			"check": "WordArt returns actual leased image: sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+			"passed": true
+		},
+		{
+			"check": "Immutable fixture SHA matches: sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+			"passed": true
+		},
+		{
+			"check": "Loader-decoded RGBA pixels equal exact PNG: sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+			"passed": true
+		},
+		{
+			"check": "Actual cache accounts for two images, exact bytes and one lease",
+			"passed": true
+		},
+		{
+			"check": "Only the exact two image identities are active",
+			"passed": true
+		},
+		{
+			"check": "Lease alone retains both decoded resources after deactivation and trim",
+			"passed": true
+		},
+		{
+			"check": "Lease-only image remains resolvable: sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"passed": true
+		},
+		{
+			"check": "Lease-only image remains resolvable: sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+			"passed": true
+		},
+		{
+			"check": "Five real Match pair colors have focused and settled cases plus unmatched, Memory and stress states",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-unmatched/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-unmatched/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: memory-unmatched/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: memory-unmatched/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: memory-matched/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: memory-matched/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-1-settled/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-1-settled/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-pair-1-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-1-focused/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-1-focused/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-pair-1-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-2-settled/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-2-settled/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-pair-2-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-2-focused/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-2-focused/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-pair-2-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-3-settled/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-3-settled/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-pair-3-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-3-focused/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-3-focused/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-pair-3-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-4-settled/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-4-settled/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-pair-4-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-4-focused/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-4-focused/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-pair-4-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-5-settled/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-5-settled/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-pair-5-settled",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-5-focused/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-pair-5-focused/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-pair-5-focused",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-stress-068/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: match-stress-068/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-match-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: memory-stress-068/0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard uses leased texture without replacement: memory-stress-068/1",
+			"passed": true
+		},
+		{
+			"check": "Unscaled native viewport: memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Native comparison panel saved: memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: bag-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Exact established review card dimensions: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Exact picture insets: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Native UI scale equals one: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "No motion or flip scaling: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "No keyboard focus or mouse hover contamination: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Image face is visible: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual aspect-centered image mode: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual badge visibility: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual numbered or generic badge: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual pair focus state: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress opacity: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Explicit caller or stress disabled state: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Native card crop saved: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Actual unmatched or matched fill: basket-memory-stress-068",
+			"passed": true
+		},
+		{
+			"check": "Contact assembled from exact native panels",
+			"passed": true
+		},
+		{
+			"check": "Nearest-neighbor review aid preserves actual pixels",
+			"passed": true
+		},
+		{
+			"check": "Final teardown releases all resources, bytes, reservations, leases and active identities",
+			"passed": true
+		},
+		{
+			"check": "Released scoped URL cannot revive image: sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"passed": true
+		},
+		{
+			"check": "No strong texture reference survives: sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"passed": true
+		},
+		{
+			"check": "Released scoped URL cannot revive image: sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+			"passed": true
+		},
+		{
+			"check": "No strong texture reference survives: sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+			"passed": true
+		},
+		{
+			"check": "Persisted lexeme bytes remain unchanged",
+			"passed": true
+		}
+	],
+	"cue_visibility_acceptance": false,
+	"failed": 0,
+	"frozen_inputs_sha256": "ff7f3b93ca1fa060d2440d3b908c9ef80767dcc2a28c0f5e06161a25c4f90564",
+	"image_pixels": [
+		{
+			"decoded_rgba_sha256": "7f9ee4507e21c185c15b5f23ee55c3afa5fcd55b1193d5662553b7863767bae3",
+			"id": "sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"scoped_path": "professional://round1/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"source_rgba_sha256": "7f9ee4507e21c185c15b5f23ee55c3afa5fcd55b1193d5662553b7863767bae3"
+		},
+		{
+			"decoded_rgba_sha256": "4c741a0409e4306200a79e1143cf46dc93d71d2f12fb31ee2d5a117859f9bee4",
+			"id": "sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+			"scoped_path": "professional://round1/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+			"source_rgba_sha256": "4c741a0409e4306200a79e1143cf46dc93d71d2f12fb31ee2d5a117859f9bee4"
+		}
+	],
+	"lease_only_cache": {
+		"active_ids": [],
+		"leases": 1,
+		"limit_bytes": 134217728,
+		"pinned_bytes": 3555328,
+		"reserved_bytes": 0,
+		"resident_bytes": 3555328,
+		"resources": 2
+	},
+	"loaded_cache": {
+		"active_ids": [
+			"sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+			"sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+		],
+		"leases": 1,
+		"limit_bytes": 134217728,
+		"pinned_bytes": 3555328,
+		"reserved_bytes": 0,
+		"resident_bytes": 3555328,
+		"resources": 2
+	},
+	"manifest": {
+		"course_id": "retail",
+		"curriculum_revision": "scratch-review-r01",
+		"module_id": "shopping-bag-candidate-r01",
+		"resources": [
+			{
+				"compressed_bytes": 135843.0,
+				"decoded_bytes": 1695744.0,
+				"format": "png",
+				"height": 512.0,
+				"id": "sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+				"kind": "image",
+				"path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+				"sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+				"width": 414.0
+			},
+			{
+				"compressed_bytes": 105604.0,
+				"decoded_bytes": 1859584.0,
+				"format": "png",
+				"height": 454.0,
+				"id": "sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+				"kind": "image",
+				"path": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+				"sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+				"width": 512.0
+			}
+		],
+		"schema_version": 1.0
+	},
+	"participant_recognition_study": false,
+	"production_acceptance": false,
+	"reference_review_sizes": {
+		"claim": "Established observed asset-review dimensions; current live boards compute sizes from viewport.",
+		"match": [
+			126,
+			72
+		],
+		"memory": [
+			144,
+			74
+		]
+	},
+	"released_cache": {
+		"active_ids": [],
+		"leases": 0,
+		"limit_bytes": 134217728,
+		"pinned_bytes": 0,
+		"reserved_bytes": 0,
+		"resident_bytes": 0,
+		"resources": 0
+	},
+	"released_scoped_urls": [
+		true,
+		true
+	],
+	"released_texture_weakrefs": [
+		true,
+		true
+	],
+	"schema": 1,
+	"scope": "Two-image scratch fixture through real raw Loader, cache lease, Access, WordArt and native WordCard. Presentation copies current caller alpha/tint/focus; does not instantiate a complete board or prove a universal responsive-layout minimum.",
+	"status": "candidate_probe_passed_pending_visual_review"
+}

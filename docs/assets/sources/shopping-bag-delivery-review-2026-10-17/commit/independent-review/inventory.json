@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_source_only_review",
+  "reviewer": "Codex runtime_recovery",
+  "source_accepted": true,
+  "exact_commit_contract_accepted": false,
+  "execution_performed": false,
+  "files": [
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/inspection.json",
+      "bytes": 18142,
+      "sha256": "7946b3eafb4874256ec8bc7c08fc560ba88b9a74e042ac7d185905801d7e4024"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/source-review.json",
+      "bytes": 5427,
+      "sha256": "4fdfdd1a4dc4037711c4c6666ed4beec2842da373fb63beb72e84602391cea8b"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/SOURCE-REVIEW.md",
+      "bytes": 2321,
+      "sha256": "1da2c424e915a1090e1f220820a919c9d8c77a0644b517477d0538cb6c163da8"
+    }
+  ]
+}

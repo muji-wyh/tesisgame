@@ -1,0 +1,1756 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hospitality_tourism.module08.01",
+      "text": "Refer the lost property query and lost-property register entry to the responsible team; record any reported suspicious activity on the authorized incident form.",
+      "meaning": "Refer missing-belonging information and accurately record a reported concern.",
+      "context": "A worker follows the authorized reporting process without inferring wrongdoing.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Refer",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "lost",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "property",
+          "start": 15,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "query",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "lost-property",
+          "start": 34,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "register",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "entry",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "to",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "responsible",
+          "start": 70,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "team",
+          "start": 82,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 86,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "record",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "any",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": "reported",
+          "start": 99,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "suspicious",
+          "start": 108,
+          "end": 118
+        },
+        {
+          "index": 18,
+          "text": "activity",
+          "start": 119,
+          "end": 127
+        },
+        {
+          "index": 19,
+          "text": "on",
+          "start": 128,
+          "end": 130
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 131,
+          "end": 134
+        },
+        {
+          "index": 21,
+          "text": "authorized",
+          "start": 135,
+          "end": 145
+        },
+        {
+          "index": 22,
+          "text": "incident",
+          "start": 146,
+          "end": 154
+        },
+        {
+          "index": 23,
+          "text": "form",
+          "start": 155,
+          "end": 159
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 159,
+          "end": 160
+        }
+      ],
+      "focus_lexeme_ids": [
+        "lost-property.belongings-left-behind-or-reported-missing.n",
+        "lost-property-register.record-of-found-or-reported-missing-belongings.n",
+        "suspicious-activity.concerning-behavior.n",
+        "incident-form.event-report-document.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module08.02",
+      "text": "Complete the authorized identity check; confirm consent and authority separately before considering room access or key replacement.",
+      "meaning": "Distinguish identity, agreement, and authority for access decisions.",
+      "context": "A worker follows the applicable access process without treating identity alone as authorization.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Complete",
+          "start": 0,
+          "end": 8
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "authorized",
+          "start": 13,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "identity",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 4,
+          "text": "check",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": ";",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "confirm",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "consent",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "authority",
+          "start": 60,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "separately",
+          "start": 70,
+          "end": 80
+        },
+        {
+          "index": 11,
+          "text": "before",
+          "start": 81,
+          "end": 87
+        },
+        {
+          "index": 12,
+          "text": "considering",
+          "start": 88,
+          "end": 99
+        },
+        {
+          "index": 13,
+          "text": "room",
+          "start": 100,
+          "end": 104
+        },
+        {
+          "index": 14,
+          "text": "access",
+          "start": 105,
+          "end": 111
+        },
+        {
+          "index": 15,
+          "text": "or",
+          "start": 112,
+          "end": 114
+        },
+        {
+          "index": 16,
+          "text": "key",
+          "start": 115,
+          "end": 118
+        },
+        {
+          "index": 17,
+          "text": "replacement",
+          "start": 119,
+          "end": 130
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 130,
+          "end": 131
+        }
+      ],
+      "focus_lexeme_ids": [
+        "identity-check.identity-verification.n",
+        "room-access.permission-or-means-to-enter-specified-room.n",
+        "key-replacement.authorized-provision-of-replacement-key-or-card.n",
+        "consent.informed-agreement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module08.03",
+      "text": "Respect the guest's privacy and follow the property's applicable arrangements when a do-not-disturb sign is displayed.",
+      "meaning": "Respect the privacy notice without inventing an emergency exception or procedure.",
+      "context": "Coordinating routine room service.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Respect",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "guest's",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "privacy",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "follow",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "property's",
+          "start": 43,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "applicable",
+          "start": 54,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": "arrangements",
+          "start": 65,
+          "end": 77
+        },
+        {
+          "index": 10,
+          "text": "when",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 11,
+          "text": "a",
+          "start": 83,
+          "end": 84
+        },
+        {
+          "index": 12,
+          "text": "do-not-disturb",
+          "start": 85,
+          "end": 99
+        },
+        {
+          "index": 13,
+          "text": "sign",
+          "start": 100,
+          "end": 104
+        },
+        {
+          "index": 14,
+          "text": "is",
+          "start": 105,
+          "end": 107
+        },
+        {
+          "index": 15,
+          "text": "displayed",
+          "start": 108,
+          "end": 117
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "do-not-disturb-sign.notice-requesting-no-routine-disturbance.n",
+        "privacy.personal-space-and-information-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module08.04",
+      "text": "Ask the responsible contact about accessibility and assistance dog arrangements under the applicable rules.",
+      "meaning": "Ask about inclusive use of services and assistance-dog arrangements.",
+      "context": "A worker checks the applicable rules and guest requirements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "responsible",
+          "start": 8,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "contact",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "about",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "accessibility",
+          "start": 34,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "assistance",
+          "start": 52,
+          "end": 62
+        },
+        {
+          "index": 8,
+          "text": "dog",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 9,
+          "text": "arrangements",
+          "start": 67,
+          "end": 79
+        },
+        {
+          "index": 10,
+          "text": "under",
+          "start": 80,
+          "end": 85
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 12,
+          "text": "applicable",
+          "start": 90,
+          "end": 100
+        },
+        {
+          "index": 13,
+          "text": "rules",
+          "start": 101,
+          "end": 106
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 106,
+          "end": 107
+        }
+      ],
+      "focus_lexeme_ids": [
+        "assistance-dog.dog-trained-for-disability-related-assistance.n",
+        "accessibility.inclusive-usability.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module08.05",
+      "text": "Confirm whether the hearing loop is working and whether it meets the guest's stated communication needs.",
+      "meaning": "Check an actual access feature with the person concerned.",
+      "context": "Arranging a reception conversation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "whether",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "hearing",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "loop",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "is",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "working",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "whether",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "it",
+          "start": 56,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "meets",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "guest's",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "stated",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "communication",
+          "start": 84,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": "needs",
+          "start": 98,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hearing-loop.system-transmitting-audio-to-compatible-hearing-equipment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module08.06",
+      "text": "Step-free access describes one route feature; ask about any other feature or reasonable adjustment the guest needs.",
+      "meaning": "Avoid treating one access feature as universal suitability.",
+      "context": "Reviewing access information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Step-free",
+          "start": 0,
+          "end": 9
+        },
+        {
+          "index": 1,
+          "text": "access",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "describes",
+          "start": 17,
+          "end": 26
+        },
+        {
+          "index": 3,
+          "text": "one",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "route",
+          "start": 31,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "feature",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "ask",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "about",
+          "start": 50,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "any",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "other",
+          "start": 60,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "feature",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "or",
+          "start": 74,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "reasonable",
+          "start": 77,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "adjustment",
+          "start": 88,
+          "end": 98
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": "guest",
+          "start": 103,
+          "end": 108
+        },
+        {
+          "index": 17,
+          "text": "needs",
+          "start": 109,
+          "end": 114
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "step-free-access.route-usable-without-steps.n",
+        "reasonable-adjustment.access-support-change.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module08.07",
+      "text": "Ask the qualified team about allergen cross-contact, the cleaning product's safety data sheet, and required PPE, including whether a protective glove is appropriate.",
+      "meaning": "Request food-handling guidance and task-specific cleaning safety information.",
+      "context": "A worker seeks qualified guidance without prescribing chemicals, protection, or allergen-control procedures.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "qualified",
+          "start": 8,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "team",
+          "start": 18,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "about",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "allergen",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "cross-contact",
+          "start": 38,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "cleaning",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "product's",
+          "start": 66,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": "safety",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "data",
+          "start": 83,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "sheet",
+          "start": 88,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 93,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": "required",
+          "start": 99,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "PPE",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 18,
+          "text": ",",
+          "start": 111,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": "including",
+          "start": 113,
+          "end": 122
+        },
+        {
+          "index": 20,
+          "text": "whether",
+          "start": 123,
+          "end": 130
+        },
+        {
+          "index": 21,
+          "text": "a",
+          "start": 131,
+          "end": 132
+        },
+        {
+          "index": 22,
+          "text": "protective",
+          "start": 133,
+          "end": 143
+        },
+        {
+          "index": 23,
+          "text": "glove",
+          "start": 144,
+          "end": 149
+        },
+        {
+          "index": 24,
+          "text": "is",
+          "start": 150,
+          "end": 152
+        },
+        {
+          "index": 25,
+          "text": "appropriate",
+          "start": 153,
+          "end": 164
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 164,
+          "end": 165
+        }
+      ],
+      "focus_lexeme_ids": [
+        "allergen-cross-contact.unintended-allergen-transfer.n",
+        "safety-data-sheet.chemical-hazard-document.n",
+        "ppe.personal-protective-equipment.n",
+        "protective-glove.hand-protection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module08.08",
+      "text": "Report the leak, wet floor, and obstruction near the assembly point; ask about the approved manual handling arrangements before moving anything.",
+      "meaning": "Report observed hazards and seek handling guidance.",
+      "context": "A worker identifies the designated emergency meeting place without giving evacuation or lifting instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Report",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "leak",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 15,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "wet",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "floor",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 8,
+          "text": "obstruction",
+          "start": 32,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "near",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "assembly",
+          "start": 53,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "point",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "ask",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "about",
+          "start": 73,
+          "end": 78
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 17,
+          "text": "approved",
+          "start": 83,
+          "end": 91
+        },
+        {
+          "index": 18,
+          "text": "manual",
+          "start": 92,
+          "end": 98
+        },
+        {
+          "index": 19,
+          "text": "handling",
+          "start": 99,
+          "end": 107
+        },
+        {
+          "index": 20,
+          "text": "arrangements",
+          "start": 108,
+          "end": 120
+        },
+        {
+          "index": 21,
+          "text": "before",
+          "start": 121,
+          "end": 127
+        },
+        {
+          "index": 22,
+          "text": "moving",
+          "start": 128,
+          "end": 134
+        },
+        {
+          "index": 23,
+          "text": "anything",
+          "start": 135,
+          "end": 143
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 143,
+          "end": 144
+        }
+      ],
+      "focus_lexeme_ids": [
+        "wet-floor.damp-walking-surface.n",
+        "obstruction.blocked-route-object.n",
+        "leak.unintended-escape.n",
+        "assembly-point.designated-meeting-place.n",
+        "manual-handling.human-load-movement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "hse-hospitality-getting-started",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module08.09",
+      "text": "Report the safeguarding concern through the applicable safeguarding process and refer the relevant risk assessment to the responsible contact.",
+      "meaning": "Refer a concern and the applicable hazard-and-risk review.",
+      "context": "A worker uses the assigned safeguarding process without deciding the outcome.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Report",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "safeguarding",
+          "start": 11,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "concern",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "through",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "applicable",
+          "start": 44,
+          "end": 54
+        },
+        {
+          "index": 7,
+          "text": "safeguarding",
+          "start": 55,
+          "end": 67
+        },
+        {
+          "index": 8,
+          "text": "process",
+          "start": 68,
+          "end": 75
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 10,
+          "text": "refer",
+          "start": 80,
+          "end": 85
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 12,
+          "text": "relevant",
+          "start": 90,
+          "end": 98
+        },
+        {
+          "index": 13,
+          "text": "risk",
+          "start": 99,
+          "end": 103
+        },
+        {
+          "index": 14,
+          "text": "assessment",
+          "start": 104,
+          "end": 114
+        },
+        {
+          "index": 15,
+          "text": "to",
+          "start": 115,
+          "end": 117
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 118,
+          "end": 121
+        },
+        {
+          "index": 17,
+          "text": "responsible",
+          "start": 122,
+          "end": 133
+        },
+        {
+          "index": 18,
+          "text": "contact",
+          "start": 134,
+          "end": 141
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 141,
+          "end": 142
+        }
+      ],
+      "focus_lexeme_ids": [
+        "safeguarding-concern.possible-abuse-or-neglect-concern.n",
+        "safeguarding.protection-from-abuse-or-neglect.n",
+        "risk-assessment.hazard-evaluation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module08.10",
+      "text": "Apply data minimization to personal data and report a suspected data breach through the approved channel.",
+      "meaning": "Protect guest information and refer an incident.",
+      "context": "Handling a guest-record concern.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Apply",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "data",
+          "start": 6,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "minimization",
+          "start": 11,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 24,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "personal",
+          "start": 27,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "data",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "report",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "suspected",
+          "start": 54,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "data",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "breach",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "through",
+          "start": 76,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "approved",
+          "start": 88,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "channel",
+          "start": 97,
+          "end": 104
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 104,
+          "end": 105
+        }
+      ],
+      "focus_lexeme_ids": [
+        "personal-data.identifiable-person-information.n",
+        "data-minimization.limiting-data-to-what-purpose-requires.n",
+        "data-breach.information-security-incident.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

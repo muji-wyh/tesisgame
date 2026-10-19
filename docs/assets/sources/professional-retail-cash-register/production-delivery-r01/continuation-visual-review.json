@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "status": "continuation_ai_visually_reviewed_actual_production_contact",
+  "reviewed_at": "2026-10-16T13:26:22.558Z",
+  "reviewer": "Codex continuation recovery subagent, independent inspection of installed full image and actual production contact",
+  "image": {
+    "path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+    "raw_sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+  },
+  "production_receipt": {
+    "path": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/production-check-r01.json",
+    "raw_sha256": "006034e3fcf10b75337979185c25278dec03b1a42facc08a548bfe95be68c39d"
+  },
+  "contact": {
+    "path": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/verification/actual-production-word-card-contact.png",
+    "raw_sha256": "a50ab829fad8f48a672fb31b5ed6e26ce07aab69be58c19483d86f915d2f6cf4"
+  },
+  "observations": [
+    "The complete lavender cash register is contained within all four actual native-size minimum cards.",
+    "The dark display strip, raised physical key bank and lower drawer remain distinguishable at Match 126 by 72 and Memory 144 by 74 pixels.",
+    "Matched states retain the actual 0.68 picture alpha and badges; neither badge covers the machine.",
+    "The installed full image preserves the complete original machine, receipt, side handle, key bank and drawer; no sale digits are visible or inferred."
+  ],
+  "scope": "Visual inspection complements existing 81/0 native delivery and R27 evidence. No native/browser/test rerun, audio playback, participant recognition, full-round or module-readiness claim."
+}

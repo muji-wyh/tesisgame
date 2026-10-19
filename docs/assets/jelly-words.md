@@ -11,19 +11,20 @@ and license records remain in the linked asset documents.
 | Four gel skins and contact shadow | Zuhria Alfitra / pzUH, GameArt2D Jelly Squash Free Sprites, CC0 1.0; acquired and integrated previously | The actual mint skin was inspected before reuse. Existing painted contours and material maps stretch with the accumulated parts. The source is static; runtime contact, continuous union, growth, collection, and settling are authored by this game. |
 | Word pictures and pronunciation | Existing current-age vocabulary packs; individual acquisition and license records remain in the vocabulary asset manifests | The normal WordArt loader supplies the exact dictionary picture only after a valid word is built. Existing animated word artwork remains supported. |
 | Chest models, local light accents, paper confetti | Existing acquired chest and particle assets; creators and licenses recorded in the linked fragment record | The shared ChestCelebration and RewardConfetti timelines provide first-chest synthesis, upgrade rotation, enlargement, flash, and paper bursts. Reused as integrated assets, not source previews. |
-| Contact, merge, and disappear audio | User-selected contact and merge WAVs; original creators greenlinker and rubberduck, CC0. Existing clear combines rubberduck and Aeva CC0 recordings; exact provenance in the Jelly Match records | Contact fires on first painted-body contact, merge on commitment, and the unchanged clear cue on collection release. No new recording or processing. |
+| Contact, merge, and disappear audio | User-selected contact and merge WAVs; original creators greenlinker and rubberduck, CC0. Seven collection notes adapt the existing rubberduck and Aeva CC0 clear recording; exact provenance in the Jelly Match records and [collection manifest](jelly-collection-audio.json) | Contact fires on first painted-body contact, merge on commitment, and the next collection note on release. Collection cycles through Do, Re, Mi, Fa, Sol, La, Ti and repeats. |
 | Rejected merge audio | Existing user-supplied wrong-answer excerpt; creator, acquisition status and unsupplied license terms are recorded in [pair feedback](pair-feedback-audio.md) | Reuses the integrated 860 ms `wrong.wav` at gain 0.48 once when a failed drop separates. No new extraction, processing or animation asset. |
 
-The six-column board starts with eighteen settled chunks in three full bottom
-rows. Letter chunks concatenate in drag-source then drop-target order. A merge
-is accepted only when that exact spelling is in the selected learning-age
-dictionary; reverse-only matches and incomplete prefixes are rejected.
-Each supplied word has two complementary chunks at every age, so it can be
-completed in one valid merge. Authored longer chunk sequences combine adjacent
-parts at a balanced boundary. A completed word is collectible, and its picture
+The board has six columns and eight rows. Growth entries awaiting morphology
+review retain their legacy two-chunk spelling activity and eighteen-piece
+opening. Reviewed entries use authored meaningful parts and exact composition
+rules, including legal intermediate results and spelling transformations.
+Atomic words and abbreviations stay whole. Their opening uses at most eighteen
+occupied cells. See the [morphology contract](../vocabulary/morphology-contract.md)
+for review, canonical identity, placement, and learning-evidence rules.
+A completed word is collectible, and its picture
 and warm gel rim indicate readiness without adding a
 floating instruction label. Each collected word has an independent 1% chance
-of bonus coins, worth 50 coins for two chunks or 100 for three or more. Opening chests
+of a fixed 50-coin bonus, independent of component count and footprint. Opening chests
 is the main source of coins. A collection without bonus coins still records
 the learned word and collects all carried chest fragments, without a coin
 flight or coin sound. The roll is retained across collection retries and uses
@@ -39,12 +40,14 @@ This reuses the acquired chest texture and its existing source/license records
 in [Jelly fragments](jelly-fragments.md) and [chest replacement](chest-refresh.md).
 The chest is a static cropped render here, with runtime scale animation; no new
 artwork or audio is acquired. The count capsule is an interface layout primitive.
-Long spellings fit their actual wrapped font lines so a two-part body keeps
-every letter visible beside its picture.
+Reviewed spellings use frozen footprints of one to six columns and one to two
+rows, measured at a 16-pixel font and 32-pixel cell pitch. Wrapping uses only
+authored boundaries. Exceptional overflow retains its exact spelling and opens
+a paused, scrollable Read view; resizing never changes the logical footprint.
 The model owns the merge and collection clocks, wallet receipt, fragment count,
 and chest tier. Visual callbacks never grant coins.
 
-Each valid manual drop requests its word pronunciation immediately when the
+Each manual drop completing a whole word requests its pronunciation immediately when the
 merge is accepted, alongside the fusion animation. This removes the previous
 760 ms wait for the animation to finish, using the unchanged
 [Ava Sweet recordings](ava-voice.md). Animation completion never repeats the cue. Rapid manual
@@ -56,10 +59,14 @@ direct word taps still pronounce the selected word. Leaving play or muting
 clears queued speech without replaying it on return.
 
 Two [coin powerups](jelly-powerups.md) share the board controls. Auto merge costs
-600 coins initially, then 900 and 1200 on further uses in the round. It launches
-a random eligible Jelly every 200 ms, dragging it into
+600 coins initially, then 900 and 1200 on further uses in the round. In the legacy
+activity it launches a random eligible Jelly every 200 ms, dragging it into
 its matching target over 300 ms. Consecutive flights briefly overlap, leaving
-the completed words on the board for ordinary collection. Treasure costs 200,
+the completed words on the board for ordinary collection. Reviewed composition
+checks an entire completion path and all intermediate rectangles before charging,
+then executes that route sequentially. Partial-only paths cannot buy the tool.
+Its assisted result remains collectable without creating mastery evidence.
+Treasure costs 200,
 300, then 400 coins per round and delivers a random total of two to eight carried fragments to the current
 board, preferring bodies without fragments. Payment is persisted before either
 ability starts. Treasure can be purchased again during delivery, with each paid
@@ -85,13 +92,13 @@ picture, mass, fragments, and reward receipt without paying coins.
 Reduced motion keeps the same placement rules and static preview, placing
 the body directly at its supported destination.
 
-New six-root supply packets mix parts from different words, leaving intervening
-roots between siblings whenever the packet permits it. The same arrangement
-feeds the three opening rows. Word provenance, part order, and fragment markers
-stay attached to each root; already visible previews are never reshuffled.
+New six-part supply packets mix parts from different words, leaving intervening
+pieces between siblings whenever the packet permits it. Word provenance, part
+order, and fragment markers stay attached to each piece, including targets that
+span packet boundaries; already visible previews are never reshuffled.
 Neighboring bodies leave a nine-percent cell gap for clearer separation.
 
-On pointer press, every settled target that completes a current-age word in
+On pointer press, every settled target that legally composes with the selected part in
 source-then-target order receives a warm local glow, a slow light sweep across
 the acquired gel paint, and a gentle 3.5-5.5 percent breathing enlargement of
 its skin. Keyboard source selection shows the same candidates. The cue reuses
@@ -111,8 +118,10 @@ alternating soft twinkles authored at runtime. No new artwork
 or audio was acquired. Lettering, pictures, fragment markers, hit areas and rewards
 stay unchanged. Release, cancellation or leaving play clears the cue. Reduced
 motion keeps static light, glints and the painted rim without a sweep or enlargement.
-All completion feedback, including the contact highlight, uses the same forward
-spelling: holding `sma` lights `ll` for `small`, while holding `ll` does not light
+All composition feedback, including the contact highlight, uses the same resolver
+as manual merging and Auto merge. Reviewed partial joins are valid; results that
+lack room do not light up or incur an incorrect-answer penalty. In legacy
+spelling play, holding `sma` lights `ll` for `small`, while holding `ll` does not light
 `sma`. Incompatible targets keep their resting paint, including reverse partners
 that share an idle pair color: holding `t` never recolors or lights `ca`, while
 holding `ca` lights `t` for `cat`. Every other physical contact still compresses
@@ -129,27 +138,29 @@ a learning attempt.
 
 Supply releases across alternating columns (1, 4, 2, 5, 3, 6), with 0.15 seconds
 between starts. The bodies accelerate under the existing gravity and recover
-after landing. Shared entry lanes retain extra clearance so a later root cannot
+after landing. Shared entry lanes retain extra clearance so a later piece cannot
 overtake an earlier one. Each preview slot refills after its own departing body
 has cleared it. Reduced motion keeps the same readiness clocks while placing
-bodies directly at their reserved destinations. The six-column board, initial
-three rows, merge, and collection rules remain unchanged. Automatic supply starts
-with a twenty-second interval. Every four successful completed-word collections reduce
+bodies directly at their reserved destinations. Automatic supply starts
+with a twenty-second baseline interval. Every four successful completed-word collections reduce
 the next cycle's interval by two seconds, down to ten seconds after twenty
 collections. Tap and Collect pickups count equally; idle time, merge-only play,
 Auto Merge, and failed collections do not increase difficulty. Each successful
 packet dispatch, automatic or manual, fixes the interval for the following
 cycle. Collections never shorten the current Next countdown, and rejected
 dispatches leave it intact. New rounds restore the twenty-second opening
-interval; the existing danger grace period remains independent. This polish
+baseline interval. Reviewed rounds multiply that baseline by
+`max(1, preview occupied area / 6)` for the next wave; atomic collections count
+once, while partial merges never count. The existing danger grace period remains independent. This polish
 reuses the integrated gel artwork and landing
 audio above; it adds no downloaded assets.
 
-The committed six-root preview is mixed before it is shown. Each slot releases
-straight into its corresponding board column, including above uneven stacks.
-A sealed entry keeps its root in the same preview slot until that column opens.
-Each dispatch releases at most one root per open column and refills only those
-departing slots; blocked roots keep their IDs, letters, and carried fragments.
+The committed preview has six lanes. Reviewed cards span their measured widths,
+so fewer than six cards may be shown. The next FIFO card waits for a contiguous
+span without rearranging cards. Each card enters through its advertised columns
+only when its full rectangle fits; a sealed entry keeps its identity, exact text,
+and fragments in the same preview span. A dispatch launches only cards already
+advertised at its start, even when their departures immediately refill lanes.
 Repeated dispatches preserve safe arrival spacing within each column. A timed
 partial release also cancels a held tray press, preventing pointer-up from
 releasing the replacements a second time.
@@ -161,7 +172,7 @@ rows, with one pickup every 120 ms. Each batch collection finishes within that
 same beat, keeping reward transactions sequential, with the existing pop sound
 at 60 ms to match the squash and release. Each jelly squashes, lifts
 with alternating sideways drift, and clears through the ordinary wallet and
-fragment transaction. Unmatched roots remain on the board.
+fragment transaction. Unmatched parts remain on the board.
 Existing movement settles before the first pickup; queued words then keep their
 places so gravity and deferred growth cannot delay the following beats.
 The current batch finishes before another can begin; pause freezes its clock,
@@ -212,7 +223,10 @@ Keyboard navigation, activation, collection cadence and rewards remain unchanged
 each layout keeps stable touch bounds as the available count changes. Earned
 chest celebrations still queue until collection ends.
 
-The existing collection pop marks each pickup. Each collected word now owns an
+The seven [collection notes](jelly-collection-audio.md) play in ascending Do, Re,
+Mi, Fa, Sol, La, Ti order and repeat from Do, with one advance per accepted pickup
+and a short common envelope to articulate the 120 ms batch rhythm.
+Each collected word now owns an
 independent picture-and-spelling burst: new words coexist with older ones instead
 of replacing them. A separate presentation RNG varies size and position across
 the upper playfield, scores overlap against active words, and avoids the chest.

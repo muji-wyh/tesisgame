@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "status": "frozen_author_proposal_unparsed_unexecuted_pending_root_dispatch",
+  "owner": "Codex language_delivery",
+  "directory": "build/professional-english/foundation02-third10-delivery-preparation-r01",
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "docs_mutated": false,
+  "application_modules_imported": false,
+  "tests_executed": false,
+  "native_dispatched": false,
+  "build_dispatched": false,
+  "serializer_or_transaction_executed": false,
+  "historical_scripts_replayed": false,
+  "author_sources_parsed": false,
+  "author_sources_executed": false,
+  "static_observations": {
+    "method": "Read-only JSON parsing, raw SHA256 calculations, source-text searches and provenance identity scanning. No application validator or test modules imported.",
+    "original_pin_checks": 368,
+    "original_distinct_pinned_paths": 365,
+    "original_pin_mismatches": 0,
+    "required_future_destinations_absent": 3,
+    "additional_r33_pathlist_raw_hash_matches": true,
+    "selected_ids_in_all_five_foundation01_context_snapshots": 8,
+    "selected_ids_found_in_retail03_or_retail04_protected_donors": 0,
+    "shared_test_line_endings": "LF; no CRLF observed"
+  },
+  "artifacts": [
+    {"path":"input-pins.json","raw_sha256":"b47f2ded5171cf76c3426fb65cfe38dd1356fc51aab64504951dc47ad20b6837"},
+    {"path":"projection.cjs","raw_sha256":"ad1143ca6951aa7851a0991fd7fc61711cfe7fc13516557f99b07c99e5b7a4f5"},
+    {"path":"test-transforms.cjs","raw_sha256":"f311764bac315212c3e24f22fe799c69bd151ff96331192187d4988fd80cd52f"},
+    {"path":"prepare.cjs","raw_sha256":"f318e537c4b8d7f332a6ca98f15cd6054711a33d649d3b5de9cb0ad36dc96c8a"},
+    {"path":"HANDOFF.md","raw_sha256":"9e3446444a8b4ec8b8e285331852616d7abe9f088df3fd530abd5294631b3e17"},
+    {"path":"TRANSACTION.md","raw_sha256":"e597a6d497697abb8421b477f5c89b19be040231dfb25849544e3b8a36d5c9bb"}
+  ],
+  "required_next_evidence": [
+    "Root-owned parse and one-shot preparation witness with exact sources, command outcome and logs",
+    "Current scoped validation or independently reviewed exact dependency-transfer evidence",
+    "Native afterimage parse/execution evidence",
+    "Independent technical review of metadata, source limitations, guards and preserved historical tests",
+    "New reviewed commit entrypoint and persisted transaction-evidence callback",
+    "Guarded committed journal and post-integration persisted audit/Node/native witness"
+  ],
+  "current_production_counts": {"review_status":130,"review_language":317,"foundation02_language":18,"ready_modules":0},
+  "expected_future_counts_only": {"review_status":138,"review_language":325,"foundation02_language":26,"ready_modules":0}
+}

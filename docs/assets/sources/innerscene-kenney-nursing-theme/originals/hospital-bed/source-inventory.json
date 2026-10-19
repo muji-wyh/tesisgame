@@ -1,0 +1,237 @@
+{
+  "asset": "Hospital bed raised backrest",
+  "creator": "Innerscene",
+  "source_url": "https://www.innerscene.com/tools/library/3d-parts/hospital-bed-raised-backrest-6bb95542",
+  "download_url": "https://www.innerscene.com/api/library/hospital-bed-raised-backrest-6bb95542/download",
+  "alternate_dae_source_url": "https://www.innerscene.com/tools/library/3d-parts/hospital-bed-raised-backrest-collada-dae-fb70109e",
+  "terms_url": "https://www.innerscene.com/tools/library/terms",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "license_review": "The original-model page and library terms both expressly permit copying, modification, redistribution, and commercial use without credit. The source identifies this as an original unbranded model. The GLB root also includes license CC0-1.0 and original_design true.",
+  "acquired_on": "2026-10-16",
+  "acquisition_status": "downloaded_from_original_source_for_review",
+  "source_filename": "hospital-bed-raised-backrest.glb",
+  "source_bytes": 651572,
+  "source_sha256": "2d66623eaa1162b358d404df5288ce6a29416fc506b50ffd0718d832435c1ab5",
+  "dae_sha256": "4f13079ebc19740af90a4707606bf2b652456926d8068142ea51d75c33b8b50c",
+  "generator": "Khronos glTF Blender I/O v5.2.40",
+  "mesh_count": 62,
+  "node_count": 63,
+  "skin_count": 0,
+  "primitive_count": 62,
+  "vertex_count": 18100,
+  "triangle_count": 16488,
+  "primitive_modes": [
+    4
+  ],
+  "material_count": 6,
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "steel",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.800000011920929,
+        "roughnessFactor": 0.30000001192092896
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "Warm healthcare polymer",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.46000000834465027
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "black",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicFactor": 0.18000000715255737,
+        "roughnessFactor": 0.41999998688697815
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "rubber",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.800000011920929
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "Healthcare blue upholstery",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 4
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.6700000166893005
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "Warm white mattress textile",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 5
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.8899999856948853
+      }
+    }
+  ],
+  "images": [
+    {
+      "name": "ad0428c73d2586a6",
+      "file": "material-0.png",
+      "mime_type": "image/png",
+      "bytes": 240,
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "name": "f5e5d67e8a78ce8c",
+      "file": "material-1.png",
+      "mime_type": "image/png",
+      "bytes": 239,
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "name": "7ded83a72da74f86",
+      "file": "material-2.png",
+      "mime_type": "image/png",
+      "bytes": 240,
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "name": "69bc7362f40880d9",
+      "file": "material-3.png",
+      "mime_type": "image/png",
+      "bytes": 238,
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "name": "ee4b036a6084c31c",
+      "file": "material-4.png",
+      "mime_type": "image/png",
+      "bytes": 240,
+      "dimensions": [
+        64,
+        64
+      ]
+    },
+    {
+      "name": "340de412f153bf5b",
+      "file": "material-5.png",
+      "mime_type": "image/png",
+      "bytes": 239,
+      "dimensions": [
+        64,
+        64
+      ]
+    }
+  ],
+  "external_dependencies": [],
+  "available_animations": [],
+  "animation_review": "No baked animation clips or skeletal skins are present. Named mechanical meshes are static geometry and are not evidence of a rig or usable articulation.",
+  "node_names": [
+    "Backrest support plate",
+    "Bed control mounting stem",
+    "Bed end panel",
+    "Bed end panel.001",
+    "Bed foot control",
+    "Bed mattress platform",
+    "Bed side safety rail",
+    "Bed side safety rail.001",
+    "Bed side safety rail.002",
+    "Bed side safety rail.003",
+    "Cast polyurethane wheel",
+    "Cast polyurethane wheel.001",
+    "Cast polyurethane wheel.002",
+    "Cast polyurethane wheel.003",
+    "Caster fork",
+    "Caster fork.001",
+    "Caster fork.002",
+    "Caster fork.003",
+    "Caster mounting plate",
+    "Caster mounting plate.001",
+    "Caster mounting plate.002",
+    "Caster mounting plate.003",
+    "Caster mounting stem",
+    "Caster mounting stem.001",
+    "Caster mounting stem.002",
+    "Caster mounting stem.003",
+    "Caster swivel",
+    "Caster swivel.001",
+    "Caster swivel.002",
+    "Caster swivel.003",
+    "Caster wheel hub",
+    "Caster wheel hub.001",
+    "Caster wheel hub.002",
+    "Caster wheel hub.003",
+    "Caster wheel hub.004",
+    "Caster wheel hub.005",
+    "Caster wheel hub.006",
+    "Caster wheel hub.007",
+    "End lifting grip",
+    "End lifting grip.001",
+    "Inset end panel",
+    "Inset end panel.001",
+    "Lift pedestal",
+    "Lift pedestal.001",
+    "Mattress leg and seat section",
+    "Patient bed rolling base",
+    "Pedestal upper slider",
+    "Pedestal upper slider.001",
+    "Raised mattress backrest",
+    "Raised pillow",
+    "Safety rail upright",
+    "Safety rail upright.001",
+    "Safety rail upright.002",
+    "Safety rail upright.003",
+    "Safety rail upright.004",
+    "Safety rail upright.005",
+    "Safety rail upright.006",
+    "Safety rail upright.007",
+    "Side rail center panel",
+    "Side rail center panel.001",
+    "Side rail center panel.002",
+    "Side rail center panel.003",
+    "Hospital bed raised backrest"
+  ],
+  "nominal_dimensions_meters_from_source": [
+    2.2,
+    1.312,
+    1
+  ],
+  "source_preview_status": "The source page was read. No promotional source preview is used as game artwork.",
+  "conversion_status": "No geometry conversion; original GLB is loaded directly for review.",
+  "integration_status": "not_integrated",
+  "theme_readiness": "unchanged_pending",
+  "clinical_review": "No occupational or medical accuracy approval; dimensions and furniture are for illustration only.",
+  "visual_review_status": "reviewed_as_a_source_prop_candidate; see visual-review.md"
+}

@@ -1,0 +1,2519 @@
+{
+  "schema": 1,
+  "ok": true,
+  "started_at": "2026-10-16T20:59:50.180Z",
+  "finished_at": "2026-10-16T21:00:00.859Z",
+  "url": "http://127.0.0.1:5231/",
+  "synthetic_only": true,
+  "mode": "phrase",
+  "harness_inventory": {
+    "path": "inventory.json",
+    "bytes": 2060,
+    "sha256": "86978ca1b5921ef3a945c806d0c6c92d25bf2b467c636d820bf8b9c1168e4a24"
+  },
+  "export_receipt": {
+    "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/export-receipt.json",
+    "bytes": 175806,
+    "sha256": "6af2c3e988b0cec313f8ff73d51d2416618d4cca3ca5302b7a0e8d3198c452bb"
+  },
+  "shell_supplement_receipt": {
+    "path": "attempt-001/shell-supplement.json",
+    "bytes": 4302,
+    "sha256": "be4fd060e55388d2590d7c077ac6800c221e8d6eb308ab550972fd9eae55b06a"
+  },
+  "inherited_inputs": {
+    "path": "inherited-inputs.json",
+    "bytes": 11062,
+    "sha256": "e38f78572410065afc3c5bfc4f8053b332e9c911c6e9af83c1824a72a85af432"
+  },
+  "real_owner": true,
+  "real_media_bridge": true,
+  "real_indexeddb": true,
+  "owner_test_double": false,
+  "caller_pin_override": false,
+  "sources_unchanged": true,
+  "web_outputs_unchanged": true,
+  "observations": [
+    {
+      "label": "boot:idle",
+      "snapshot": {
+        "audio_bound": false,
+        "cache": {
+          "active_ids": [],
+          "leases": 0,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 0,
+          "reserved_bytes": 0,
+          "resident_bytes": 0,
+          "resources": 0
+        },
+        "case": "boot",
+        "case_status": "idle",
+        "claim_count": 0,
+        "failures": [],
+        "invalidated_count": 0,
+        "last_scope_accessible": false,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 0,
+          "cache_hits": 0,
+          "cache_insertions": 0,
+          "cached_modules": 0,
+          "closed": false,
+          "configured": true,
+          "decode_calls": 0,
+          "encoded_bytes_read": 0,
+          "epoch": 1,
+          "installed": false,
+          "largest_read_chunk": 0,
+          "largest_steps_per_turn": 0,
+          "last_request": {},
+          "manifest_file_reads": 0,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 0,
+          "process_turns": 0,
+          "publications": 0,
+          "resolve_calls": 0,
+          "selection": 0,
+          "steps": 0
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": -1,
+        "phase": "idle",
+        "picture_bound": false,
+        "ready_count": 0,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {},
+          "error": {},
+          "generation": 0,
+          "outbox_pending": 0,
+          "pending": [],
+          "pending_count": 0,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": false,
+          "saved_context": null,
+          "source_id": ""
+        },
+        "store_pending": 0,
+        "summary": {},
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 0,
+        "media_completions": 0,
+        "media_cancels": 0,
+        "progress_requests": 1,
+        "progress_completions": 1,
+        "held_released": 0,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "cold:ready",
+      "snapshot": {
+        "audio_bound": false,
+        "cache": {
+          "active_ids": [
+            "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+            "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+            "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+            "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+            "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+            "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+          ],
+          "leases": 1,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 17798266,
+          "reserved_bytes": 0,
+          "resident_bytes": 17798266,
+          "resources": 6
+        },
+        "case": "cold",
+        "case_status": "ready",
+        "claim_count": 0,
+        "failures": [],
+        "invalidated_count": 0,
+        "last_scope_accessible": false,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 1,
+          "cache_hits": 0,
+          "cache_insertions": 1,
+          "cached_modules": 1,
+          "closed": false,
+          "configured": true,
+          "decode_calls": 5,
+          "encoded_bytes_read": 400091,
+          "epoch": 1,
+          "installed": true,
+          "largest_read_chunk": 16384,
+          "largest_steps_per_turn": 21,
+          "last_request": {
+            "code": "",
+            "encoded_bytes_read": 400091,
+            "manifest_file_reads": 1,
+            "ok": true,
+            "policy_file_reads": 5,
+            "request_id": 2,
+            "warm_cache_hit": false
+          },
+          "manifest_file_reads": 1,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 5,
+          "process_turns": 7,
+          "publications": 1,
+          "resolve_calls": 1,
+          "selection": 2,
+          "steps": 47
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": 1,
+        "phase": "ready",
+        "picture_bound": false,
+        "ready_count": 1,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "error": {},
+          "generation": 2,
+          "outbox_pending": 0,
+          "pending": [],
+          "pending_count": 0,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": true,
+          "saved_context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "source_id": "professional:0:2455580"
+        },
+        "store_pending": 0,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 2,
+        "progress_requests": 4,
+        "progress_completions": 4,
+        "held_released": 0,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "cold:claimed",
+      "snapshot": {
+        "audio_bound": true,
+        "cache": {
+          "active_ids": [
+            "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+            "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+            "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+            "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+            "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+            "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+          ],
+          "leases": 1,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 17798266,
+          "reserved_bytes": 0,
+          "resident_bytes": 17798266,
+          "resources": 6
+        },
+        "case": "cold",
+        "case_status": "claimed",
+        "claim_count": 1,
+        "failures": [],
+        "invalidated_count": 0,
+        "last_scope_accessible": true,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 1,
+          "cache_hits": 0,
+          "cache_insertions": 1,
+          "cached_modules": 1,
+          "closed": false,
+          "configured": true,
+          "decode_calls": 5,
+          "encoded_bytes_read": 400091,
+          "epoch": 1,
+          "installed": true,
+          "largest_read_chunk": 16384,
+          "largest_steps_per_turn": 21,
+          "last_request": {
+            "code": "",
+            "encoded_bytes_read": 400091,
+            "manifest_file_reads": 1,
+            "ok": true,
+            "policy_file_reads": 5,
+            "request_id": 2,
+            "warm_cache_hit": false
+          },
+          "manifest_file_reads": 1,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 5,
+          "process_turns": 7,
+          "publications": 1,
+          "resolve_calls": 1,
+          "selection": 2,
+          "steps": 47
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": -1,
+        "phase": "idle",
+        "picture_bound": true,
+        "ready_count": 1,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "error": {},
+          "generation": 2,
+          "outbox_pending": 0,
+          "pending": [],
+          "pending_count": 0,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": true,
+          "saved_context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "source_id": "professional:0:2455580"
+        },
+        "store_pending": 0,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 2,
+        "progress_requests": 4,
+        "progress_completions": 4,
+        "held_released": 0,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "warm:ready",
+      "snapshot": {
+        "audio_bound": true,
+        "cache": {
+          "active_ids": [
+            "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+            "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+            "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+            "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+            "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+            "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+          ],
+          "leases": 2,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 17798266,
+          "reserved_bytes": 0,
+          "resident_bytes": 17798266,
+          "resources": 6
+        },
+        "case": "warm",
+        "case_status": "ready",
+        "claim_count": 1,
+        "failures": [],
+        "invalidated_count": 0,
+        "last_scope_accessible": true,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 1,
+          "cache_hits": 1,
+          "cache_insertions": 1,
+          "cached_modules": 1,
+          "closed": false,
+          "configured": true,
+          "decode_calls": 5,
+          "encoded_bytes_read": 400091,
+          "epoch": 1,
+          "installed": true,
+          "largest_read_chunk": 16384,
+          "largest_steps_per_turn": 21,
+          "last_request": {
+            "code": "",
+            "encoded_bytes_read": 0,
+            "manifest_file_reads": 0,
+            "ok": true,
+            "policy_file_reads": 0,
+            "request_id": 4,
+            "warm_cache_hit": true
+          },
+          "manifest_file_reads": 1,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 5,
+          "process_turns": 9,
+          "publications": 2,
+          "resolve_calls": 2,
+          "selection": 4,
+          "steps": 50
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": 2,
+        "phase": "ready",
+        "picture_bound": true,
+        "ready_count": 2,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "error": {},
+          "generation": 4,
+          "outbox_pending": 0,
+          "pending": [],
+          "pending_count": 0,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": true,
+          "saved_context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "source_id": "professional:0:4363560"
+        },
+        "store_pending": 0,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 4,
+        "progress_requests": 7,
+        "progress_completions": 7,
+        "held_released": 0,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          },
+          {
+            "operation": "register",
+            "request_id": 5
+          },
+          {
+            "operation": "context",
+            "request_id": 6
+          },
+          {
+            "operation": "load",
+            "request_id": 7
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "warm:claimed",
+      "snapshot": {
+        "audio_bound": true,
+        "cache": {
+          "active_ids": [
+            "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+            "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+            "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+            "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+            "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+            "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+          ],
+          "leases": 1,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 17798266,
+          "reserved_bytes": 0,
+          "resident_bytes": 17798266,
+          "resources": 6
+        },
+        "case": "warm",
+        "case_status": "claimed",
+        "claim_count": 2,
+        "failures": [],
+        "invalidated_count": 0,
+        "last_scope_accessible": true,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 1,
+          "cache_hits": 1,
+          "cache_insertions": 1,
+          "cached_modules": 1,
+          "closed": false,
+          "configured": true,
+          "decode_calls": 5,
+          "encoded_bytes_read": 400091,
+          "epoch": 1,
+          "installed": true,
+          "largest_read_chunk": 16384,
+          "largest_steps_per_turn": 21,
+          "last_request": {
+            "code": "",
+            "encoded_bytes_read": 0,
+            "manifest_file_reads": 0,
+            "ok": true,
+            "policy_file_reads": 0,
+            "request_id": 4,
+            "warm_cache_hit": true
+          },
+          "manifest_file_reads": 1,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 5,
+          "process_turns": 9,
+          "publications": 2,
+          "resolve_calls": 2,
+          "selection": 4,
+          "steps": 50
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": -1,
+        "phase": "idle",
+        "picture_bound": true,
+        "ready_count": 2,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "error": {},
+          "generation": 4,
+          "outbox_pending": 0,
+          "pending": [],
+          "pending_count": 0,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": true,
+          "saved_context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "source_id": "professional:0:4363560"
+        },
+        "store_pending": 0,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 4,
+        "progress_requests": 7,
+        "progress_completions": 7,
+        "held_released": 0,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          },
+          {
+            "operation": "register",
+            "request_id": 5
+          },
+          {
+            "operation": "context",
+            "request_id": 6
+          },
+          {
+            "operation": "load",
+            "request_id": 7
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "cancel_checkpoint:cancelled",
+      "snapshot": {
+        "audio_bound": true,
+        "cache": {
+          "active_ids": [
+            "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+            "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+            "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+            "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+            "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+            "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+          ],
+          "leases": 1,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 17798266,
+          "reserved_bytes": 0,
+          "resident_bytes": 17798266,
+          "resources": 6
+        },
+        "case": "cancel_checkpoint",
+        "case_status": "cancelled",
+        "claim_count": 2,
+        "failures": [],
+        "invalidated_count": 0,
+        "last_scope_accessible": true,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 0,
+          "cache_hits": 1,
+          "cache_insertions": 1,
+          "cached_modules": 1,
+          "closed": false,
+          "configured": true,
+          "decode_calls": 5,
+          "encoded_bytes_read": 400091,
+          "epoch": 1,
+          "installed": true,
+          "largest_read_chunk": 16384,
+          "largest_steps_per_turn": 21,
+          "last_request": {
+            "code": "pending",
+            "encoded_bytes_read": 0,
+            "manifest_file_reads": 0,
+            "ok": false,
+            "policy_file_reads": 0,
+            "request_id": 6,
+            "warm_cache_hit": false
+          },
+          "manifest_file_reads": 1,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 5,
+          "process_turns": 10,
+          "publications": 2,
+          "resolve_calls": 2,
+          "selection": 7,
+          "steps": 51
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": -1,
+        "phase": "restoring",
+        "picture_bound": true,
+        "ready_count": 2,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "error": {},
+          "generation": 6,
+          "outbox_pending": 0,
+          "pending": [
+            {
+              "generation": 6,
+              "id": "",
+              "kind": "open",
+              "phase": "context",
+              "source_id": "professional:0:4363560"
+            }
+          ],
+          "pending_count": 1,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": false,
+          "saved_context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "source_id": "professional:0:4363560"
+        },
+        "store_pending": 1,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 6,
+        "progress_requests": 9,
+        "progress_completions": 8,
+        "held_released": 0,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          },
+          {
+            "operation": "register",
+            "request_id": 5
+          },
+          {
+            "operation": "context",
+            "request_id": 6
+          },
+          {
+            "operation": "load",
+            "request_id": 7
+          },
+          {
+            "operation": "register",
+            "request_id": 8
+          },
+          {
+            "operation": "context",
+            "request_id": 9
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "cancelled-and-restored",
+      "snapshot": {
+        "audio_bound": true,
+        "cache": {
+          "active_ids": [
+            "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+            "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+            "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+            "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+            "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+            "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+          ],
+          "leases": 1,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 17798266,
+          "reserved_bytes": 0,
+          "resident_bytes": 17798266,
+          "resources": 6
+        },
+        "case": "cancel_checkpoint",
+        "case_status": "cancelled",
+        "claim_count": 2,
+        "failures": [],
+        "invalidated_count": 0,
+        "last_scope_accessible": true,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 0,
+          "cache_hits": 1,
+          "cache_insertions": 1,
+          "cached_modules": 1,
+          "closed": false,
+          "configured": true,
+          "decode_calls": 5,
+          "encoded_bytes_read": 400091,
+          "epoch": 1,
+          "installed": true,
+          "largest_read_chunk": 16384,
+          "largest_steps_per_turn": 21,
+          "last_request": {
+            "code": "pending",
+            "encoded_bytes_read": 0,
+            "manifest_file_reads": 0,
+            "ok": false,
+            "policy_file_reads": 0,
+            "request_id": 6,
+            "warm_cache_hit": false
+          },
+          "manifest_file_reads": 1,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 5,
+          "process_turns": 10,
+          "publications": 2,
+          "resolve_calls": 2,
+          "selection": 7,
+          "steps": 51
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": -1,
+        "phase": "idle",
+        "picture_bound": true,
+        "ready_count": 2,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "error": {},
+          "generation": 6,
+          "outbox_pending": 0,
+          "pending": [],
+          "pending_count": 0,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": true,
+          "saved_context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "source_id": "professional:0:4363560"
+        },
+        "store_pending": 0,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 6,
+        "progress_requests": 10,
+        "progress_completions": 10,
+        "held_released": 0,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          },
+          {
+            "operation": "register",
+            "request_id": 5
+          },
+          {
+            "operation": "context",
+            "request_id": 6
+          },
+          {
+            "operation": "load",
+            "request_id": 7
+          },
+          {
+            "operation": "register",
+            "request_id": 8
+          },
+          {
+            "operation": "context",
+            "request_id": 9
+          },
+          {
+            "operation": "load",
+            "request_id": 10
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "retire_storage:storage_held",
+      "snapshot": {
+        "audio_bound": true,
+        "cache": {
+          "active_ids": [
+            "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+            "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+            "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+            "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+            "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+            "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+          ],
+          "leases": 2,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 17798266,
+          "reserved_bytes": 0,
+          "resident_bytes": 17798266,
+          "resources": 6
+        },
+        "case": "retire_storage",
+        "case_status": "storage_held",
+        "claim_count": 2,
+        "failures": [],
+        "invalidated_count": 0,
+        "last_scope_accessible": true,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 1,
+          "cache_hits": 2,
+          "cache_insertions": 1,
+          "cached_modules": 1,
+          "closed": false,
+          "configured": true,
+          "decode_calls": 5,
+          "encoded_bytes_read": 400091,
+          "epoch": 1,
+          "installed": true,
+          "largest_read_chunk": 16384,
+          "largest_steps_per_turn": 21,
+          "last_request": {
+            "code": "",
+            "encoded_bytes_read": 0,
+            "manifest_file_reads": 0,
+            "ok": true,
+            "policy_file_reads": 0,
+            "request_id": 9,
+            "warm_cache_hit": true
+          },
+          "manifest_file_reads": 1,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 5,
+          "process_turns": 12,
+          "publications": 3,
+          "resolve_calls": 3,
+          "selection": 9,
+          "steps": 54
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": 5,
+        "phase": "storage",
+        "picture_bound": true,
+        "ready_count": 2,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "error": {},
+          "generation": 8,
+          "outbox_pending": 0,
+          "pending": [
+            {
+              "generation": 8,
+              "id": "",
+              "kind": "open",
+              "phase": "register",
+              "source_id": "professional:0:6699775"
+            }
+          ],
+          "pending_count": 1,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": false,
+          "saved_context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "source_id": "professional:0:6699775"
+        },
+        "store_pending": 1,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 8,
+        "progress_requests": 11,
+        "progress_completions": 11,
+        "held_released": 0,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          },
+          {
+            "operation": "register",
+            "request_id": 5
+          },
+          {
+            "operation": "context",
+            "request_id": 6
+          },
+          {
+            "operation": "load",
+            "request_id": 7
+          },
+          {
+            "operation": "register",
+            "request_id": 8
+          },
+          {
+            "operation": "context",
+            "request_id": 9
+          },
+          {
+            "operation": "load",
+            "request_id": 10
+          },
+          {
+            "operation": "register",
+            "request_id": 11
+          }
+        ],
+        "held": 1,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "retire_storage:retired",
+      "snapshot": {
+        "audio_bound": true,
+        "cache": {
+          "active_ids": [
+            "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+            "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+            "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+            "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+            "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+            "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+          ],
+          "leases": 1,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 17798266,
+          "reserved_bytes": 0,
+          "resident_bytes": 17798266,
+          "resources": 6
+        },
+        "case": "retire_storage",
+        "case_status": "retired",
+        "claim_count": 2,
+        "failures": [],
+        "invalidated_count": 1,
+        "last_scope_accessible": true,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 0,
+          "cache_hits": 2,
+          "cache_insertions": 1,
+          "cached_modules": 0,
+          "closed": true,
+          "configured": false,
+          "decode_calls": 5,
+          "encoded_bytes_read": 400091,
+          "epoch": 3,
+          "installed": false,
+          "largest_read_chunk": 16384,
+          "largest_steps_per_turn": 21,
+          "last_request": {
+            "code": "",
+            "encoded_bytes_read": 0,
+            "manifest_file_reads": 0,
+            "ok": true,
+            "policy_file_reads": 0,
+            "request_id": 9,
+            "warm_cache_hit": true
+          },
+          "manifest_file_reads": 1,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 5,
+          "process_turns": 12,
+          "publications": 3,
+          "resolve_calls": 3,
+          "selection": 13,
+          "steps": 54
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": -1,
+        "phase": "restoring",
+        "picture_bound": true,
+        "ready_count": 2,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "error": {},
+          "generation": 9,
+          "outbox_pending": 0,
+          "pending": [
+            {
+              "generation": 9,
+              "id": "",
+              "kind": "open",
+              "phase": "register",
+              "source_id": "professional:0:4363560"
+            }
+          ],
+          "pending_count": 1,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": false,
+          "saved_context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "source_id": "professional:0:4363560"
+        },
+        "store_pending": 1,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 10,
+        "progress_requests": 13,
+        "progress_completions": 12,
+        "held_released": 1,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          },
+          {
+            "operation": "register",
+            "request_id": 5
+          },
+          {
+            "operation": "context",
+            "request_id": 6
+          },
+          {
+            "operation": "load",
+            "request_id": 7
+          },
+          {
+            "operation": "register",
+            "request_id": 8
+          },
+          {
+            "operation": "context",
+            "request_id": 9
+          },
+          {
+            "operation": "load",
+            "request_id": 10
+          },
+          {
+            "operation": "register",
+            "request_id": 11
+          },
+          {
+            "operation": "register",
+            "request_id": 12
+          },
+          {
+            "operation": "context",
+            "request_id": 13
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "retired-and-restored",
+      "snapshot": {
+        "audio_bound": true,
+        "cache": {
+          "active_ids": [
+            "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+            "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+            "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+            "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+            "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+            "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+          ],
+          "leases": 1,
+          "limit_bytes": 134217728,
+          "pinned_bytes": 17798266,
+          "reserved_bytes": 0,
+          "resident_bytes": 17798266,
+          "resources": 6
+        },
+        "case": "retire_storage",
+        "case_status": "retired",
+        "claim_count": 2,
+        "failures": [],
+        "invalidated_count": 1,
+        "last_scope_accessible": true,
+        "mode": "phrase",
+        "owner": {
+          "active_catalog_capabilities": 0,
+          "active_jobs": 0,
+          "active_tokens": 0,
+          "cache_hits": 2,
+          "cache_insertions": 1,
+          "cached_modules": 0,
+          "closed": true,
+          "configured": false,
+          "decode_calls": 5,
+          "encoded_bytes_read": 400091,
+          "epoch": 3,
+          "installed": false,
+          "largest_read_chunk": 16384,
+          "largest_steps_per_turn": 21,
+          "last_request": {
+            "code": "",
+            "encoded_bytes_read": 0,
+            "manifest_file_reads": 0,
+            "ok": true,
+            "policy_file_reads": 0,
+            "request_id": 9,
+            "warm_cache_hit": true
+          },
+          "manifest_file_reads": 1,
+          "open_files": 0,
+          "phase": "idle",
+          "policy_file_reads": 5,
+          "process_turns": 12,
+          "publications": 3,
+          "resolve_calls": 3,
+          "selection": 13,
+          "steps": 54
+        },
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "pending_selection": -1,
+        "phase": "idle",
+        "picture_bound": true,
+        "ready_count": 2,
+        "schema": 1,
+        "session": {
+          "blocked": false,
+          "configured": true,
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "error": {},
+          "generation": 9,
+          "outbox_pending": 0,
+          "pending": [],
+          "pending_count": 0,
+          "progress": {
+            "completions": {},
+            "expressions": {},
+            "requirements": {},
+            "schema": 1,
+            "sequence": 0,
+            "skills": {}
+          },
+          "progress_loaded": true,
+          "ready": true,
+          "saved_context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "source_id": "professional:0:4363560"
+        },
+        "store_pending": 0,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 10,
+        "progress_requests": 14,
+        "progress_completions": 14,
+        "held_released": 1,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          },
+          {
+            "operation": "register",
+            "request_id": 5
+          },
+          {
+            "operation": "context",
+            "request_id": 6
+          },
+          {
+            "operation": "load",
+            "request_id": 7
+          },
+          {
+            "operation": "register",
+            "request_id": 8
+          },
+          {
+            "operation": "context",
+            "request_id": 9
+          },
+          {
+            "operation": "load",
+            "request_id": 10
+          },
+          {
+            "operation": "register",
+            "request_id": 11
+          },
+          {
+            "operation": "register",
+            "request_id": 12
+          },
+          {
+            "operation": "context",
+            "request_id": 13
+          },
+          {
+            "operation": "load",
+            "request_id": 14
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "retire_storage:disposed",
+      "snapshot": {
+        "audio_bound": false,
+        "cache_alive": false,
+        "case": "retire_storage",
+        "case_status": "disposed",
+        "claim_count": 2,
+        "disposed": {
+          "cache": {
+            "active_ids": [
+              "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+              "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+              "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+              "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+              "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+              "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+            ],
+            "leases": 0,
+            "limit_bytes": 134217728,
+            "pinned_bytes": 17798266,
+            "reserved_bytes": 0,
+            "resident_bytes": 17798266,
+            "resources": 6
+          },
+          "last_scope_accessible": false,
+          "owner": {
+            "active_catalog_capabilities": 0,
+            "active_jobs": 0,
+            "active_tokens": 0,
+            "cache_hits": 2,
+            "cache_insertions": 1,
+            "cached_modules": 0,
+            "closed": true,
+            "configured": false,
+            "decode_calls": 5,
+            "encoded_bytes_read": 400091,
+            "epoch": 3,
+            "installed": false,
+            "largest_read_chunk": 16384,
+            "largest_steps_per_turn": 21,
+            "last_request": {
+              "code": "",
+              "encoded_bytes_read": 0,
+              "manifest_file_reads": 0,
+              "ok": true,
+              "policy_file_reads": 0,
+              "request_id": 9,
+              "warm_cache_hit": true
+            },
+            "manifest_file_reads": 1,
+            "open_files": 0,
+            "phase": "idle",
+            "policy_file_reads": 5,
+            "process_turns": 12,
+            "publications": 3,
+            "resolve_calls": 3,
+            "selection": 13,
+            "steps": 54
+          },
+          "store_callbacks": 0,
+          "store_closed": true,
+          "store_pending": 0,
+          "store_timers": 0
+        },
+        "failures": [],
+        "invalidated_count": 1,
+        "last_scope_accessible": false,
+        "mode": "phrase",
+        "owner_alive": false,
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "picture_bound": false,
+        "ready_count": 2,
+        "schema": 1,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 11,
+        "progress_requests": 14,
+        "progress_completions": 14,
+        "held_released": 1,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          },
+          {
+            "operation": "register",
+            "request_id": 5
+          },
+          {
+            "operation": "context",
+            "request_id": 6
+          },
+          {
+            "operation": "load",
+            "request_id": 7
+          },
+          {
+            "operation": "register",
+            "request_id": 8
+          },
+          {
+            "operation": "context",
+            "request_id": 9
+          },
+          {
+            "operation": "load",
+            "request_id": 10
+          },
+          {
+            "operation": "register",
+            "request_id": 11
+          },
+          {
+            "operation": "register",
+            "request_id": 12
+          },
+          {
+            "operation": "context",
+            "request_id": 13
+          },
+          {
+            "operation": "load",
+            "request_id": 14
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    },
+    {
+      "label": "disposed-and-freed",
+      "snapshot": {
+        "audio_bound": false,
+        "cache_alive": false,
+        "case": "retire_storage",
+        "case_status": "disposed",
+        "claim_count": 2,
+        "disposed": {
+          "cache": {
+            "active_ids": [
+              "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+              "sha256:3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+              "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+              "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+              "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+              "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+            ],
+            "leases": 0,
+            "limit_bytes": 134217728,
+            "pinned_bytes": 17798266,
+            "reserved_bytes": 0,
+            "resident_bytes": 17798266,
+            "resources": 6
+          },
+          "last_scope_accessible": false,
+          "owner": {
+            "active_catalog_capabilities": 0,
+            "active_jobs": 0,
+            "active_tokens": 0,
+            "cache_hits": 2,
+            "cache_insertions": 1,
+            "cached_modules": 0,
+            "closed": true,
+            "configured": false,
+            "decode_calls": 5,
+            "encoded_bytes_read": 400091,
+            "epoch": 3,
+            "installed": false,
+            "largest_read_chunk": 16384,
+            "largest_steps_per_turn": 21,
+            "last_request": {
+              "code": "",
+              "encoded_bytes_read": 0,
+              "manifest_file_reads": 0,
+              "ok": true,
+              "policy_file_reads": 0,
+              "request_id": 9,
+              "warm_cache_hit": true
+            },
+            "manifest_file_reads": 1,
+            "open_files": 0,
+            "phase": "idle",
+            "policy_file_reads": 5,
+            "process_turns": 12,
+            "publications": 3,
+            "resolve_calls": 3,
+            "selection": 13,
+            "steps": 54
+          },
+          "store_callbacks": 0,
+          "store_closed": true,
+          "store_pending": 0,
+          "store_timers": 0
+        },
+        "failures": [],
+        "invalidated_count": 1,
+        "last_scope_accessible": false,
+        "mode": "phrase",
+        "owner_alive": false,
+        "pack_proof": {
+          "generated_inventory": [
+            {
+              "bytes": 21177,
+              "path": "res://data/professional/domain-policy/generated/index.json",
+              "sha256": "522c1cbdff5689f6c7342287c215bc531f973e4bf0ccf59cd9bc5c5e1dec8e85"
+            },
+            {
+              "bytes": 2815,
+              "path": "res://data/professional/domain-policy/generated/media-manifests/09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb.json",
+              "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+            },
+            {
+              "bytes": 283578,
+              "path": "res://data/professional/domain-policy/generated/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+              "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+            },
+            {
+              "bytes": 1320,
+              "path": "res://data/professional/domain-policy/generated/release.json",
+              "sha256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379"
+            },
+            {
+              "bytes": 91201,
+              "path": "res://data/professional/domain-policy/generated/themes.json",
+              "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+            }
+          ],
+          "kind": "professional_domain_pack_proof_v1",
+          "ok": true,
+          "pin_constants": {
+            "CONTEXT_BOUNDARY": "containing-modules-v1",
+            "DESCRIPTOR_BYTES": 1320,
+            "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+            "DESCRIPTOR_SHA256": "929e0f5b947efa1aed66317d6468d4ff1e03a088fe4d071ceb617d5560326379",
+            "GENERATED_ROOT": "res://data/professional/domain-policy/generated/",
+            "POLICY_VERSION": "ordinary-lexical-v3",
+            "SCHEMA_VERSION": 1
+          },
+          "schema_version": 1
+        },
+        "picture_bound": false,
+        "ready_count": 2,
+        "schema": 1,
+        "summary": {
+          "context": {
+            "course_id": "retail",
+            "curriculum_revision": "professional-v1",
+            "mode": "phrase",
+            "module_id": "module03",
+            "track": "professional"
+          },
+          "expressions": 10,
+          "module_words": 50,
+          "required_resource_ids": 6,
+          "words": 50
+        },
+        "synthetic_only": true
+      },
+      "host": {
+        "media_requests": 6,
+        "media_completions": 6,
+        "media_cancels": 11,
+        "progress_requests": 14,
+        "progress_completions": 14,
+        "held_released": 1,
+        "operations": [
+          {
+            "operation": "load",
+            "request_id": 1
+          },
+          {
+            "operation": "register",
+            "request_id": 2
+          },
+          {
+            "operation": "context",
+            "request_id": 3
+          },
+          {
+            "operation": "load",
+            "request_id": 4
+          },
+          {
+            "operation": "register",
+            "request_id": 5
+          },
+          {
+            "operation": "context",
+            "request_id": 6
+          },
+          {
+            "operation": "load",
+            "request_id": 7
+          },
+          {
+            "operation": "register",
+            "request_id": 8
+          },
+          {
+            "operation": "context",
+            "request_id": 9
+          },
+          {
+            "operation": "load",
+            "request_id": 10
+          },
+          {
+            "operation": "register",
+            "request_id": 11
+          },
+          {
+            "operation": "register",
+            "request_id": 12
+          },
+          {
+            "operation": "context",
+            "request_id": 13
+          },
+          {
+            "operation": "load",
+            "request_id": 14
+          }
+        ],
+        "held": 0,
+        "hold_next_open": false
+      },
+      "engine_error": null
+    }
+  ],
+  "requests": [
+    {
+      "path": "/",
+      "bytes": 4869
+    },
+    {
+      "path": "/professional-media.js",
+      "bytes": 11851
+    },
+    {
+      "path": "/professional-progress.js",
+      "bytes": 19082
+    },
+    {
+      "path": "/index.js",
+      "bytes": 281121
+    },
+    {
+      "path": "/index.wasm",
+      "bytes": 39509339
+    },
+    {
+      "path": "/index.pck",
+      "bytes": 1526148
+    },
+    {
+      "path": "/index.audio.position.worklet.js",
+      "bytes": 2973
+    },
+    {
+      "path": "/index.audio.worklet.js",
+      "bytes": 7298
+    },
+    {
+      "path": "/professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+      "bytes": 148338
+    },
+    {
+      "path": "/professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+      "bytes": 82598
+    },
+    {
+      "path": "/professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png",
+      "bytes": 79563
+    },
+    {
+      "path": "/professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png",
+      "bytes": 91063
+    },
+    {
+      "path": "/professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png",
+      "bytes": 120608
+    },
+    {
+      "path": "/professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png",
+      "bytes": 357001
+    }
+  ],
+  "page_errors": [],
+  "scope": "Actual isolated Web ready/claim, warm zero policy and manifest reads, checkpoint cancellation, retirement during a delayed real storage callback, and fixture-owned resource disposal.",
+  "unproven": [
+    "full game_ui.new_round and view teardown",
+    "other five real modes",
+    "accepted answer/wallet/outbox settlement",
+    "physical devices",
+    "audibility",
+    "performance and memory targets"
+  ]
+}

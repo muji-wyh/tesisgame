@@ -6,7 +6,8 @@ const { spawn, spawnSync } = require('node:child_process');
 const PROFILE = Object.freeze({
   voice: 'en-US-AvaNeural', rate: '-15%', pitch: '+8Hz', volume: '+0%'
 });
-const EDGE_TTS_VERSION = '7.2.8';
+const EDGE_TTS_VERSION = '7.3.1';
+const RETAINED_CLIENT_VERSIONS = new Set(['7.2.8', EDGE_TTS_VERSION]);
 const MANIFEST_PATH = 'docs/assets/ava-voice.json';
 const PROMPT_IDS = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy']
   .map(season => `${season}-theme`);
@@ -195,7 +196,7 @@ function retainedRecords(root, messages) {
   try { previous = JSON.parse(fs.readFileSync(path.join(root, MANIFEST_PATH), 'utf8')); }
   catch { /* The complete replacement below is required for undocumented audio. */ }
   const approved = previous?.provider === 'Microsoft Edge TTS' &&
-    previous.client?.name === 'edge-tts' && previous.client?.version === EDGE_TTS_VERSION &&
+    previous.client?.name === 'edge-tts' && RETAINED_CLIENT_VERSIONS.has(previous.client?.version) &&
     Object.entries(PROFILE).every(([key, value]) => previous.profile?.[key] === value) &&
     Array.isArray(previous.files);
   const retained = new Map();
@@ -205,12 +206,15 @@ function retainedRecords(root, messages) {
     const bytes = fs.readFileSync(filename);
     const record = fileRecord(message, bytes);
     const matching = approved && previous.files.filter(file => file.id === message.id);
+    // Older catalogs record the client once. New mixed batches retain it per file.
+    const client = matching?.length === 1 ? (matching[0].client ?? previous.client) : null;
     if (!matching || matching.length !== 1 ||
+        client?.name !== 'edge-tts' || !RETAINED_CLIENT_VERSIONS.has(client?.version) ||
         Object.entries(record).some(([key, value]) => matching[0][key] !== value)) {
       throw new Error(`Cannot use --missing: ${message.id} is not documented with the approved Ava profile and current text/hash. Run a full generation without --missing.`);
     }
     assertWave(bytes);
-    retained.set(message.id, record);
+    retained.set(message.id, {...record, client: {name:client.name, version:client.version}});
   }
   return retained;
 }
@@ -307,7 +311,8 @@ async function generateVoices({
         fs.writeFileSync(metadataPending, JSON.stringify({ identity: entry.identity, sha256: digest(bytes) }, null, 2) + '\n');
         fs.renameSync(metadataPending, entry.metadata);
       }
-      retained.set(entry.id, fileRecord(entry, fs.readFileSync(entry.pending)));
+      retained.set(entry.id, {...fileRecord(entry, fs.readFileSync(entry.pending)),
+        client: {name:'edge-tts', version:EDGE_TTS_VERSION}});
     }
     const manifestPending = path.join(staging, 'ava-voice.json');
     fs.writeFileSync(manifestPending, JSON.stringify({

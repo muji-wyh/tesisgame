@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "status": "accepted_exact_persisted_validator_source_and_input_for_one_root_dispatch",
+  "accepted": true,
+  "dispatch_approval": true,
+  "reviewer": "/root/runtime_recovery",
+  "author": "/root",
+  "recorded_at": "2026-10-16T23:04:58.322Z",
+  "source": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r02/invoke.cjs",
+    "bytes": 5916,
+    "sha256": "6e138489e51f4789c1f2fd6a4039aa7e2f1af44ec435ff4309c33e568053bac5"
+  },
+  "input": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+    "bytes": 1808178,
+    "sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+  },
+  "revision": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r02/revision.json",
+    "bytes": 1731,
+    "sha256": "0043946a99313859eaef5f84a1af937aa71b5dcb1d19c8659873fd51f4a48edd"
+  },
+  "inspection": {
+    "path": "build/professional-english/shopping-bag-persisted-independent-review-r02/inspection.json",
+    "bytes": 10385,
+    "sha256": "f1169471e501070a008602651eb7fa7f5f9b331ffb19edd7ad3f18c6dc7bba60"
+  },
+  "inspection_original_preserved": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-independent-review-r02/inspection.json",
+    "bytes": 10385,
+    "sha256": "f1169471e501070a008602651eb7fa7f5f9b331ffb19edd7ad3f18c6dc7bba60"
+  },
+  "prior_acceptance": {
+    "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-review.json",
+    "bytes": 6633,
+    "sha256": "ff849f233383e842b35c9f5503efa44f2c1f313eccc23e89ea5fc47a9cc87778"
+  },
+  "blocking_findings": [],
+  "source_assessment": {
+    "only_changed_line": 72,
+    "all_other_source_bytes_identical_to_previously_accepted_r01": true,
+    "exact_input_byte_identical_to_r01": true,
+    "correction": "Accept one exact numeric summary row per required field with either TAP # or spec U+2139 prefix and LF or CRLF endings. Missing and ambiguous rows fail explicitly.",
+    "independent_parser_samples_passed": 21,
+    "source_parser_line_evaluated": false,
+    "wrapper_or_project_imported": false,
+    "one_shot_attempt_and_exact_hash_arguments_preserved": true,
+    "command_arguments_and_timeout_and_final_check_unchanged": true
+  },
+  "failed_prior_attempt": {
+    "receipt": {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/receipt.json",
+      "bytes": 2981,
+      "sha256": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d"
+    },
+    "status": "preserved_failed_wrapper_attempt",
+    "cause": "TAP-only parser did not recognize the genuine Node spec reporter prefix. Both child commands exited zero, but the wrapper receipt remains unsuccessful.",
+    "both_child_commands_exit_zero": true,
+    "independent_raw_log_counts": {
+      "tests": 255,
+      "pass": 255,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "postcheck_error": null,
+    "retained_copy_receipt": {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/copy-receipt.json",
+      "bytes": 3851,
+      "sha256": "12ab287773dca29de5c0372ac538e688939a35df51c6cfc984db55b2267282fb"
+    },
+    "exact_copy_pairs_verified": 11,
+    "replayed": false,
+    "relabeled_successful": false
+  },
+  "actual_inputs": {
+    "expected_input_count": 11740,
+    "expected_input_bytes": 1024576014,
+    "evidence_count": 579,
+    "evidence_bytes": 49217089,
+    "overlap": 89,
+    "evidence_only": 490,
+    "conflict_checked_union": 12230,
+    "all_rehashed": true,
+    "conflicts": 0,
+    "installed_targets": 153,
+    "journal_files": 467,
+    "latest_state": "000308-committed.json",
+    "state_count": 308,
+    "previous_independent_full_chain_verified_and_exact_bytes_preserved": true,
+    "active_lock_absent": true,
+    "r02_attempt_absent": true
+  },
+  "input_union_correction": {
+    "expected_inputs": 11740,
+    "evidence_files": 579,
+    "shared_paths": 89,
+    "evidence_only_paths": 490,
+    "conflict_checked_union": 12230,
+    "meaning": "The evidence list is separately protected and is not a subset of expected_inputs. This wrapper correctly rechecks both lists. Any later helper must union them with conflict checks."
+  },
+  "allowed_scope": {
+    "working_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+    "command": [
+      "node",
+      "build/professional-english/shopping-bag-persisted-validation-r02/invoke.cjs",
+      "6e138489e51f4789c1f2fd6a4039aa7e2f1af44ec435ff4309c33e568053bac5",
+      "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+    ],
+    "child_commands": [
+      [
+        "tools/validate-professional-content.cjs",
+        "--json"
+      ],
+      [
+        "--test",
+        "tests/professional-content.test.cjs",
+        "tests/professional-retail-morphology.test.cjs",
+        "tests/professional-retail-media.test.cjs"
+      ]
+    ],
+    "output_directory": "build/professional-english/shopping-bag-persisted-validation-r02/attempt-001",
+    "invocations": 1
+  },
+  "conditions": [
+    "Root preserves the exact accepted source and input hashes and owns the exclusive writer window for one fresh r02 dispatch.",
+    "Acceptance does not predeclare a persisted result. Require a new receipt with ok true, both commands successful, 255 passing tests, zero failed/cancelled/skipped tests, exact audit summary and null postcheck_error.",
+    "Root separately confirms that build/professional-english/transactions/active-transaction.json remains absent after r02; the wrapper does not inspect that path.",
+    "Preserve r01 source, input, failed receipt, logs, reviews, inspector typo record and durable copies unchanged. Do not replay any consumed attempt.",
+    "The frozen r02 source may not be edited after acceptance. Any new correction or consumed failure requires a fresh revision and review."
+  ],
+  "execution": {
+    "node_builtin_raw_byte_json_path_and_independent_regex_inspection_only": true,
+    "project_or_proposal_code_imported": false,
+    "persisted_runner_executed": false,
+    "tests_executed": false,
+    "native_executed": false,
+    "browser_executed": false,
+    "transaction_executed": false,
+    "production_mutated": false
+  },
+  "limitations": [
+    "This review accepts only the exact r02 source and unchanged actual input for the stated one-shot audit and Node-suite run.",
+    "It provides no fifth10 preparation approval, no native or browser or listening result, and no ready-module or release acceptance.",
+    "The original inspection was saved just before the requested review-directory name arrived. Its bytes were copied exactly into this directory; the original is preserved."
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_morphology_structure_review_not_activation",
+  "frozen_at": "2026-10-16T22:14:07.3202581Z",
+  "files": [
+    {
+      "path": "accepted-analysis-structure.json",
+      "bytes": 1559,
+      "sha256": "a14730c9239eff17513700bc126e960a68c2a8f0100e259a7b297a92acc4dd6c"
+    },
+    {
+      "path": "capture-attempt.json",
+      "bytes": 169,
+      "sha256": "d8bdf6c7418ff060ecbf33aef72111c3b61b6b9ea6bf00b1cc7d497852630390"
+    },
+    {
+      "path": "capture-failure.json",
+      "bytes": 717102,
+      "sha256": "b64cbabe7d926efec66140b396b2ac2a9f6d44078b04a8b8dba1fe4144e51bea"
+    },
+    {
+      "path": "capture-r02-attempt.json",
+      "bytes": 169,
+      "sha256": "76ba7f740cf9a48129b79b9fd06bf2f18d4e7693245ab65c71acce0204926434"
+    },
+    {
+      "path": "capture-r02-result.json",
+      "bytes": 712034,
+      "sha256": "faf3ceb2b1632f5d135633bcd07038fd137b2ae256257f60a32ee8bc9f7a9f65"
+    },
+    {
+      "path": "capture-r02.cjs",
+      "bytes": 10900,
+      "sha256": "6ab3b22ef7572b0502a42e562a8adb58051cc2a4344658cf6509c79b61f73886"
+    },
+    {
+      "path": "capture.cjs",
+      "bytes": 10854,
+      "sha256": "64740771c6e13eb0ffd0a1b38d2d9e4ae020cac25b8a80ff5d4c1eea86ac1586"
+    },
+    {
+      "path": "family-supplement.cjs",
+      "bytes": 2516,
+      "sha256": "edb6c1c925e7198bec2647f264ab9fbcf5d690d9b762dda3db5b12e823bad365"
+    },
+    {
+      "path": "family-supplement.json",
+      "bytes": 51203,
+      "sha256": "8cffbf8510f76c687000c3d2a3dde5a037ded09699559dd93b5e240be23f1463"
+    },
+    {
+      "path": "freeze-checks.json",
+      "bytes": 299,
+      "sha256": "3136367a37bec888f9a24ce5114882506df8a0ee9dfd425d2f4dd3085993a848"
+    },
+    {
+      "path": "input-pins.json",
+      "bytes": 50655,
+      "sha256": "65e0628cb925409db2d0ca7674f2e63c057c8975229b4af8bcdd9f8e6ed92918"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3084,
+      "sha256": "0f6f486b4d0b45a8cfaaadcdcfefbe0fff3dc9bb9bafab42fd621d4e363fedd1"
+    },
+    {
+      "path": "review.json",
+      "bytes": 9459,
+      "sha256": "b330dc32283ccb3498a355e3233c844364a65d4b52b7ffedb7e65351f8d53123"
+    },
+    {
+      "path": "source-observations.json",
+      "bytes": 5053,
+      "sha256": "f953cfe0de68e63fbb7ee89cd4b587f5e993fda40dba0fe6b6953110b1cdea8f"
+    }
+  ],
+  "inventory_excludes_itself": true,
+  "final_live_binding": "UNBOUND"
+}

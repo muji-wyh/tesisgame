@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseTheme, chooseMode, rendered, enterGame, openGame, matchWords, discoverMatchCards,
+const { metrics, tap, chooseMode, rendered, enterGame, openGame, matchWords, discoverMatchCards,
   headerPoint, boardPoint, resultPoint, openRewards, collectionHeaderRect, acceptCelebration } = require('./game-ui.cjs');
+const growthTheme = require('../../data/professional/themes.json').profiles.find(profile => profile.id === 'growth_garden');
 
 const GROWTH_KEY = 'growWithPip.growth.v1';
 const MEDAL_KEY = 'wordBuddies.medalProgress';
@@ -41,9 +42,15 @@ async function finishMatch(page, knownCards = null) {
   return [...cards.keys()];
 }
 
-test('the settlement dialog enables Play again after opening the chest and starts Match directly', async ({ page }, testInfo) => {
+test('holding a settlement chest saves once and Play again starts Match directly', async ({ page }, testInfo) => {
+  test.setTimeout(240000);
+  await page.addInitScript(() => {
+    if (localStorage.getItem('wordBuddies.medalProgress') === null) localStorage.setItem('wordBuddies.medalProgress',
+      '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\nstate={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":0,"round":{}}}\n');
+  });
   const errors = await openGame(page);
-  await chooseTheme(page, 5);
+  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', growthTheme.palette.background.toLowerCase());
   const world = await page.locator('meta[name="theme-color"]').getAttribute('content');
   const originalCards = await discoverMatchCards(page), pieces = await pieceCount(page);
   const originalWords = [...new Set(originalCards.map(card => card.word))];
@@ -52,11 +59,10 @@ test('the settlement dialog enables Play again after opening the chest and start
   const closedBounds = await metrics(page);
   expect(closedBounds.growth.settlement.visible).toBe(true);
   expect(closedBounds.growth.board.visible).toBe(true);
-  expect(closedBounds.growth.result.controls.find(control => control.name === 'SettlementReplay').disabled).toBe(true);
+  expect(closedBounds.growth.result.controls.find(control => control.name === 'SettlementReplay').disabled).toBe(false);
   const next = resultPoint(closedBounds, 'newAdventure');
-  await tap(page, next.x, next.y);
   await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
-  expect(await pieceCount(page), 'Disabled Play again cannot skip an unopened chest.').toBe(pieces);
+  expect(await pieceCount(page), 'The unopened settlement has not yet claimed its reward.').toBe(pieces);
   const bounds = await metrics(page), chest = resultPoint(bounds, 'chest');
   await page.mouse.move(bounds.x + chest.x * bounds.scale, bounds.y + chest.y * bounds.scale);
   await page.mouse.down();
@@ -87,6 +93,7 @@ test('the settlement dialog enables Play again after opening the chest and start
 });
 
 test('Growth notebook and Back preserve the Match board and selected card', async ({ page }, testInfo) => {
+  test.setTimeout(180000);
   const errors = await openGame(page);
   const cards = await discoverMatchCards(page), selected = cards[3];
   const point = boardPoint(await metrics(page), selected.index);

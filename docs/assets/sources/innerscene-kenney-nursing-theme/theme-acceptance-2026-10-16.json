@@ -1,0 +1,281 @@
+{
+  "date": "2026-10-16",
+  "status": "accepted_full_theme_art_and_native_presentation",
+  "theme_id": "professional_nursing",
+  "theme_status": "ready",
+  "ambient_status": "ready",
+  "scope": "Complete sourced Nursing theme art and native presentation, based on independent source/frame/pose and measured timing review, four-size actual Main six-game presentation, separate actual production-catalog Home preview, and persisted raw-loader/cache/lifecycle evidence. No continuous audiovisual playback, listening, browser/export, real microphone, clinical procedure, curriculum or module approval.",
+  "only_change": "professional_nursing.status: pending -> ready",
+  "profile": {
+    "id": "professional_nursing",
+    "title": "Care Ward",
+    "track": "professional",
+    "course_id": "nursing",
+    "status": "ready",
+    "palette": {
+      "background": "#F4F5EF",
+      "surface": "#FFFFFF",
+      "text": "#253B35",
+      "accent": "#356B80",
+      "light": "#D9E7DB",
+      "spark": "#E7B56D"
+    },
+    "art": {
+      "environment": {
+        "status": "integrated",
+        "path": "res://professional-media/712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png",
+        "sha256": "712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9",
+        "source": "https://www.innerscene.com/tools/library/3d-parts/privacy-curtain-and-ceiling-track-0353bfbc",
+        "creator": "Innerscene; Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Sourced Care Ward environment candidate with recorded source geometry and textile adaptations.",
+        "available_animations": [],
+        "adaptations": [
+          "Uniformly scaled acquired source models and retained source materials.",
+          "Corrected source textile cap-smoothed normals.",
+          "Original side triangles subdivided in memory into seven height bands, with lower 45 percent depth bend and fixed upper region/hardware.",
+          "Sixteen newly authored samples over eight seconds; not an included animation or cloth simulation."
+        ]
+      },
+      "props": {
+        "status": "integrated",
+        "path": "res://professional-media/65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png",
+        "sha256": "65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973",
+        "source": "https://www.innerscene.com/tools/library/3d-parts/privacy-curtain-and-ceiling-track-0353bfbc",
+        "creator": "Innerscene; Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Sourced Care Ward props candidate with recorded source geometry and textile adaptations.",
+        "available_animations": [],
+        "adaptations": [
+          "Uniformly scaled acquired source models and retained source materials.",
+          "Corrected source textile cap-smoothed normals.",
+          "Original side triangles subdivided in memory into seven height bands, with lower 45 percent depth bend and fixed upper region/hardware.",
+          "Sixteen newly authored samples over eight seconds; not an included animation or cloth simulation."
+        ]
+      },
+      "home": {
+        "status": "integrated",
+        "path": "res://professional-media/41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png",
+        "sha256": "41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5",
+        "source": "https://www.innerscene.com/tools/library/3d-parts/privacy-curtain-and-ceiling-track-0353bfbc",
+        "creator": "Innerscene; Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Sourced Care Ward home candidate with recorded source geometry and textile adaptations.",
+        "available_animations": [],
+        "adaptations": [
+          "Uniformly scaled acquired source models and retained source materials.",
+          "Corrected source textile cap-smoothed normals.",
+          "Original side triangles subdivided in memory into seven height bands, with lower 45 percent depth bend and fixed upper region/hardware.",
+          "Sixteen newly authored samples over eight seconds; not an included animation or cloth simulation."
+        ]
+      }
+    },
+    "ambient_motion": {
+      "status": "ready",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+        "reviewed_at": "2026-10-16"
+      },
+      "brief": "Only the lower privacy-textile hem bends by at most two centimetres over an eight-second cycle. The upper 55 percent, rings, rail, brackets and all room objects remain fixed. Frame zero is reduced-motion rest.",
+      "clips": [
+        {
+          "id": "nursing-curtain-hem-sway",
+          "columns": 4,
+          "rows": 4,
+          "frame_count": 16,
+          "rest_frame": 0,
+          "frames_per_second": 2,
+          "rect": [
+            0.4775390625,
+            0.345703125,
+            0.255859375,
+            0.20703125
+          ],
+          "image": {
+            "status": "integrated",
+            "path": "res://professional-media/3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png",
+            "sha256": "3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714",
+            "source": "https://www.innerscene.com/tools/library/3d-parts/privacy-curtain-and-ceiling-track-0353bfbc",
+            "creator": "Innerscene; Kenney",
+            "license": "CC0 1.0",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+              "reviewed_at": "2026-10-16"
+            },
+            "brief": "Sourced Care Ward motion candidate with recorded source geometry and textile adaptations.",
+            "available_animations": [],
+            "adaptations": [
+              "Uniformly scaled acquired source models and retained source materials.",
+              "Corrected source textile cap-smoothed normals.",
+              "Original side triangles subdivided in memory into seven height bands, with lower 45 percent depth bend and fixed upper region/hardware.",
+              "Sixteen newly authored samples over eight seconds; not an included animation or cloth simulation."
+            ]
+          }
+        }
+      ]
+    },
+    "audio": {
+      "music": "res://assets/audio/bgm/spring.wav",
+      "interaction_bank": "res://scripts/game_audio.gd",
+      "chest_sound_theme": "spring",
+      "policy": "Reuse the existing audio cues without changing their recordings or timing."
+    },
+    "rewards": {
+      "legacy_theme_id": "spring",
+      "chest_id": "royal",
+      "collection_namespace": "existing"
+    },
+    "transition_ms": 200,
+    "preview": {
+      "status": "integrated",
+      "path": "res://assets/images/professional-previews/nursing.png",
+      "sha256": "9dea5958b2143012b69d0119ce3b6c2fe9c3eaa0ad5e5b544cdcedd632fa73ee",
+      "source": "https://kenney.nl/assets/furniture-kit; https://kenney.nl/assets/mini-characters; https://www.innerscene.com/tools/library/3d-parts/hospital-bed-raised-backrest-6bb95542",
+      "creator": "Kenney; Innerscene",
+      "license": "CC0 1.0",
+      "acquisition_status": "integrated",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+      "available_animations": [],
+      "adaptations": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Model scale and contact heights corrected after source-bound and rendered inspection.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ]
+    }
+  },
+  "preimage": {
+    "path": "data/professional/themes.json",
+    "sha256": "a707f0802dd34910788abda28fd773cde16ef2f25a677bf122b24ff9f4286386",
+    "bytes": 91203
+  },
+  "themes_file": {
+    "path": "data/professional/themes.json",
+    "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669",
+    "bytes": 91201
+  },
+  "decision": {
+    "path": "build/professional-english/nursing-theme-review/root-acceptance-decision.json",
+    "sha256": "d827cb45a439022d87dd5968c421cb37af234fc4d15a04e47924025bcb81e4eb",
+    "bytes": 1447
+  },
+  "integration_receipt": {
+    "path": "build/professional-english/nursing-theme-review/integration/review-receipt.json",
+    "sha256": "ce6845cac43426d9c3467a612b4f397f601ca343c3fff88cefc83393fbd160dd",
+    "bytes": 22574
+  },
+  "main_receipt": {
+    "path": "build/professional-english/nursing-theme-review/main-r02/review-receipt.json",
+    "sha256": "76e107e6c7f0e1ed3ed18af1c93f8f809d3f5338ed283c1ad1f980f97f74d1fe",
+    "bytes": 15087
+  },
+  "home_report": {
+    "path": "build/professional-english/nursing-theme-review/home-r01/report.json",
+    "sha256": "d699f7033ab3ad3402dbda0bf6226288d77500f62e1b7e11162bd6599871c690",
+    "bytes": 7404
+  },
+  "home_review": {
+    "path": "build/professional-english/nursing-theme-review/home-r01/review.md",
+    "sha256": "cc58e7276ef0da9290a9eb7d832add08a3767e6525aa43b197f464a8a6a97048",
+    "bytes": 1587
+  },
+  "production_runtime_report": {
+    "path": "build/professional-english/nursing-theme-review/integration/runtime/report.json",
+    "sha256": "692a0d7439072f5823ad54be35f6ec685e8de4228755fdb55b4a676f5c753177",
+    "bytes": 3229
+  },
+  "execution_inputs": {
+    "path": "build/professional-english/nursing-theme-review/integration/execution-inputs-result.json",
+    "sha256": "eda4cdbbd9a168e54ee447012a43834efe44708e2ca7467aa3736c96ca27a0ac",
+    "bytes": 1745
+  },
+  "production_inputs_unchanged": 11,
+  "pending_module_report": {
+    "path": "build/professional-english/nursing-theme-review/acceptance/pending-modules-report.json",
+    "sha256": "80ea22364b54c78a6ac99db3777c1bdf7d9e378fc44e25ce8afe7ba843f66abb",
+    "bytes": 7600
+  },
+  "pending_module_checks": 72,
+  "pending_module_modes_rejected": 60,
+  "nursing_data_files_unchanged": 17,
+  "other_profiles_unchanged": true,
+  "protected_nursing_profile_fields_unchanged": true,
+  "preview_unchanged": true,
+  "media_hashes": [
+    "712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9",
+    "65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973",
+    "41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5",
+    "3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714"
+  ],
+  "schema_errors": [],
+  "motion_errors": [],
+  "content_audit": {
+    "ok": true,
+    "errors": 0,
+    "warnings": 29721,
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 60,
+      "morphology_authored": 4021,
+      "morphology_reviewed": 19,
+      "integrated_word_images": 2,
+      "integrated_word_audio": 2,
+      "release_ready": false
+    }
+  },
+  "document": {
+    "path": "docs/assets/professional-nursing-theme.md",
+    "sha256": "9f1cc731c50d065bc4af0e065cd88055c84a78b56cfa222640e81544877bbb8f",
+    "bytes": 4242
+  },
+  "budget": {
+    "encoded_theme_bytes": 772803,
+    "decoded_theme_bytes": 32275456,
+    "version_2_decoded_bytes_per_bundle_limit": 33554432,
+    "version_2_encoded_bytes_per_module_limit": 10485760,
+    "version_2_resident_bytes_limit": 134217728,
+    "remaining_decoded_bytes_in_theme_bundle": 1278976,
+    "separate_lesson_bundles_supported": true,
+    "combined_lesson_manifest_validation_required": true
+  },
+  "historical_document_correction": "The pending integration document called 32 MiB a module limit; this final document records the version 2 per-bundle limit and separate 10 MiB transfer / 128 MiB residency limits. The historical integration receipt is preserved.",
+  "no_module_manifest_written": true,
+  "no_curriculum_approval": true
+}

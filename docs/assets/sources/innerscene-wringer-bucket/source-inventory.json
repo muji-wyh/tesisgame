@@ -1,0 +1,21 @@
+{
+  "name": "wringer-bucket",
+  "bytes": 407800,
+  "sha256": "2052641f9a5027b35889adcf07864a4b7127b5259f28d37c1d2693bce96f5cfb",
+  "meshes": 35,
+  "triangles": 13400,
+  "materials": 4,
+  "images": 5,
+  "skins": 0,
+  "animations": [],
+  "external": [],
+  "creator": "Innerscene",
+  "source_page": "https://www.innerscene.com/tools/library/3d-parts/mop-bucket-wringer-bucket-75de0942",
+  "download_url": "https://www.innerscene.com/api/library/mop-bucket-wringer-bucket-75de0942/download",
+  "terms": "https://www.innerscene.com/tools/library/terms",
+  "acquired_at": "2026-10-16",
+  "acquisition_status": "downloaded_from_original_source",
+  "license": "CC0 1.0 Universal",
+  "visual_review": "Original materials and geometry inspected in front/rear native renders and 296 by 185 phone images. Static source only; no operating procedure approved.",
+  "production_integration": "pending"
+}

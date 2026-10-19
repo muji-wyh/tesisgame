@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T14:17:01.939Z",
+  "root": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+  "command": [
+    "--headless",
+    "--path",
+    "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+    "--script",
+    "res://build/professional-english/professional-play-reentrancy-r01/native_entry.gd"
+  ],
+  "timeout_ms": 60000,
+  "input_inventory_sha256": "36e6c8ac536f79d651f92d003d18d1775f68c08209a6bf050d7b5531c1495371"
+}

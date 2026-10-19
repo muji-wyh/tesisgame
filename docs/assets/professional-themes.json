@@ -1,0 +1,2519 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-16",
+  "collection": "Acquired Kenney and Innerscene CC0 source models and Perhelion CC0 wall illustration",
+  "supplied_source_root": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0",
+  "acquisition": "Kenney library supplied by the user; original Innerscene care, facilities, workshop, electronics, telephone, calculator, scanner, display, examination, and records models downloaded under explicit CC0 dedications. Perhelion's original CC0 scales illustration acquired from Wikimedia Commons. No purchase performed.",
+  "renderer": "ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)",
+  "packs": [
+    {
+      "id": "mini-market",
+      "name": "Mini Market",
+      "version": "1.0",
+      "creator": "Kenney; additional credits: Fleur Keijsers and Guus Vermeulen",
+      "url": "https://kenney.nl/assets/mini-market",
+      "local_directory": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/License.txt",
+      "license_sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+      "license_destination": "assets/images/professional-previews/LICENSE-mini-market-CC0.txt",
+      "acquisition_status": "user_supplied_acquired_library",
+      "attribution": "Kenney credit is welcomed, not required by the supplied CC0 dedication."
+    },
+    {
+      "id": "furniture-kit",
+      "name": "Furniture Kit",
+      "version": "2.1",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/furniture-kit",
+      "local_directory": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/License.txt",
+      "license_sha256": "0ef3667d547d93dea1e3e47aa1c323eaef4913f25c0f2c2cfe31899f2ee134b7",
+      "license_destination": "assets/images/professional-previews/LICENSE-furniture-kit-CC0.txt",
+      "acquisition_status": "user_supplied_acquired_library",
+      "attribution": "Kenney credit is welcomed, not required by the supplied CC0 dedication."
+    },
+    {
+      "id": "food-kit",
+      "name": "Food Kit",
+      "version": "2.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/food-kit",
+      "local_directory": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit/License.txt",
+      "license_sha256": "32a081c2035dd4db47d850c83244da048165f0e53d71c076b76c1afc0590bc7f",
+      "license_destination": "assets/images/professional-previews/LICENSE-food-kit-CC0.txt",
+      "acquisition_status": "user_supplied_acquired_library",
+      "attribution": "Kenney credit is welcomed, not required by the supplied CC0 dedication."
+    },
+    {
+      "id": "mini-characters",
+      "name": "Mini Characters",
+      "version": "1.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/mini-characters",
+      "local_directory": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/License.txt",
+      "license_sha256": "28358ae5accc85b572eb42507956afc8beae05acb4648bb9026a5714d421b785",
+      "license_destination": "assets/images/professional-previews/LICENSE-mini-characters-CC0.txt",
+      "acquisition_status": "user_supplied_acquired_library",
+      "attribution": "Kenney credit is welcomed, not required by the supplied CC0 dedication."
+    },
+    {
+      "id": "innerscene-hospital-bed",
+      "name": "Hospital bed raised backrest",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/hospital-bed-raised-backrest-6bb95542",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-hospital-bed",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-hospital-bed/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-hospital-bed-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "factory-kit",
+      "name": "Factory Kit",
+      "version": "3.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/factory-kit",
+      "local_directory": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/License.txt",
+      "license_sha256": "61e86565dd297e143ad631594980eda0a17fc81a4cd7c6d71acf2f5e0cad30b6",
+      "license_destination": "assets/images/professional-previews/LICENSE-factory-kit-CC0.txt",
+      "acquisition_status": "user_supplied_acquired_library",
+      "attribution": "Kenney credit is welcomed, not required by the supplied CC0 dedication."
+    },
+    {
+      "id": "mini-skate",
+      "name": "Mini Skate",
+      "version": "1.2",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/mini-skate",
+      "local_directory": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Skate",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Skate/License.txt",
+      "license_sha256": "6a075a1edb319f16d86cb6b9065436ce89dd851c234704ad160b4255b85e1b67",
+      "license_destination": "assets/images/professional-previews/LICENSE-mini-skate-CC0.txt",
+      "acquisition_status": "user_supplied_acquired_library",
+      "attribution": "Kenney credit is welcomed, not required by the supplied CC0 dedication."
+    },
+    {
+      "id": "innerscene-forklift",
+      "name": "Electric counterbalance forklift",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/electric-counterbalance-forklift-7acc0547",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-forklift",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-forklift/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-forklift-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "car-kit",
+      "name": "Car Kit",
+      "version": "3.1",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/car-kit",
+      "local_directory": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Car Kit",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Car Kit/License.txt",
+      "license_sha256": "c33b7f6453d134deae7b1b8493717d9ccfa754c25ab97f6de89b88f8fda19b00",
+      "license_destination": "assets/images/professional-previews/LICENSE-car-kit-CC0.txt",
+      "acquisition_status": "user_supplied_acquired_library",
+      "attribution": "Kenney credit is welcomed, not required by the supplied CC0 dedication."
+    },
+    {
+      "id": "innerscene-wringer-bucket",
+      "name": "wringer bucket",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/mop-bucket-wringer-bucket-75de0942",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-wringer-bucket",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-wringer-bucket/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-wringer-bucket-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-wet-dry-vacuum",
+      "name": "wet dry vacuum",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/workshop-vac-wet-dry-vacuum-119e0848",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-wet-dry-vacuum",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-wet-dry-vacuum/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-wet-dry-vacuum-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-sponge-mop",
+      "name": "sponge mop",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/mop-squeeze-sponge-mop-e07fedc4",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-sponge-mop",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-sponge-mop/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-sponge-mop-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-carpentry-workbench",
+      "name": "carpentry workbench",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/carpenter-workbench-carpentry-workbench-9855fae6",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-carpentry-workbench",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-carpentry-workbench/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-carpentry-workbench-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-electronics-repair-bench",
+      "name": "electronics repair bench",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/electronics-repair-bench-technical-workbench-96f9d5a8",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-electronics-repair-bench",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-electronics-repair-bench/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-electronics-repair-bench-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-network-switch",
+      "name": "network switch",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/network-eight-network-switch-36db103d",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-network-switch",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-network-switch/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-network-switch-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-cordless-drill",
+      "name": "cordless drill",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/drill-compact-cordless-drill-90e6de1c",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-cordless-drill",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-cordless-drill/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-cordless-drill-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-step-ladder",
+      "name": "step ladder",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/step-fold-step-ladder-acbe7baf",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-step-ladder",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-step-ladder/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-step-ladder-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-screwdriver",
+      "name": "screwdriver",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/driver-hand-screwdriver-61ecc731",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-screwdriver",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-screwdriver/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-screwdriver-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "survival-kit",
+      "name": "Survival Kit",
+      "version": "2.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/survival-kit",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Survival Kit",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Survival Kit/License.txt",
+      "license_sha256": "62c8356876481204fa4d40dc59183dfed777adf987d7f2a1390fffe8a699f3ff",
+      "license_destination": "assets/images/professional-previews/LICENSE-survival-kit-CC0.txt",
+      "acquisition_status": "user_supplied_acquired_library",
+      "attribution": "Kenney credit is welcomed, not required by the supplied CC0 dedication."
+    },
+    {
+      "id": "innerscene-office-phone",
+      "name": "office phone",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/desk-call-office-phone-dbbf9f01",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-office-phone",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-office-phone/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-office-phone-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-calculator",
+      "name": "calculator",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/desk-sum-calculator-6fa207a5",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-calculator",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-calculator/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-calculator-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-document-scanner",
+      "name": "document scanner",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/scan-feed-sheet-fed-scanner-6229d7f6",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-document-scanner",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-document-scanner/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-document-scanner-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-clinical-exam-table",
+      "name": "clinical exam table",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/clinical-examination-table-abcf7263",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-clinical-exam-table",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-clinical-exam-table/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-clinical-exam-table-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-medical-supply-cart",
+      "name": "medical supply cart",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/three-shelf-medical-supply-cart-45cc326c",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-medical-supply-cart",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-medical-supply-cart/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-medical-supply-cart-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-display-pedestal",
+      "name": "display pedestal",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/canted-display-pedestal-display-plinth-22ced290",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-display-pedestal",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-display-pedestal/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-display-pedestal-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-studio-headphones",
+      "name": "studio headphones",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/monitor-cans-studio-headphones-215d0bbe",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-studio-headphones",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-studio-headphones/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-studio-headphones-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-lateral-filing-cabinet",
+      "name": "lateral filing cabinet",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/two-drawer-lateral-filing-cabinet-157adbfa",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-lateral-filing-cabinet",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-lateral-filing-cabinet/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-lateral-filing-cabinet-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "innerscene-filled-bookshelf",
+      "name": "filled bookshelf",
+      "version": "2026-10-16 acquisition",
+      "creator": "Innerscene",
+      "url": "https://www.innerscene.com/tools/library/3d-parts/filled-bookshelf-medium-original-interior-furnishing-71edbaa9",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-filled-bookshelf",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-filled-bookshelf/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-innerscene-filled-bookshelf-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Innerscene attribution retained for provenance; CC0 does not require credit."
+    },
+    {
+      "id": "perhelion-justice",
+      "name": "Balanced scale of Justice",
+      "version": "2026-10-16 acquisition",
+      "creator": "Perhelion",
+      "url": "https://commons.wikimedia.org/wiki/File:Balanced_scale_of_Justice.svg",
+      "local_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/perhelion-justice",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_original": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/perhelion-justice/LICENSE-CC0.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license_destination": "assets/images/professional-previews/LICENSE-perhelion-justice-CC0.txt",
+      "acquisition_status": "downloaded_from_original_source",
+      "attribution": "Perhelion attribution retained for provenance; CC0 does not require credit."
+    }
+  ],
+  "source_files": [
+    {
+      "id": "Car Kit/delivery",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Car Kit/Models/GLB format/delivery.glb",
+      "sha256": "426a3e3a2c242c05c889b1445ba02ef95b2c8b7cd6f597e1275ef736a826014b",
+      "animations": [],
+      "bounds": [
+        -0.75,
+        0,
+        -1.64999985694885,
+        1.5,
+        1.64999985694885,
+        3.24999976158142
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Car Kit/Models/GLB format/Textures/colormap.png",
+          "sha256": "f3622a03a20c6696065cae9cbe391351be873508af190c2ebd1d420c055787a5"
+        }
+      ]
+    },
+    {
+      "id": "Factory Kit/box-small",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/box-small.glb",
+      "sha256": "fd2ea1ac4f24a9515dc9c53a4a589a8897c824fa5865771799f965a252f684f0",
+      "animations": [],
+      "bounds": [
+        -0.297500014305115,
+        0,
+        -0.25,
+        0.595000028610229,
+        0.550000011920929,
+        0.5
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/Textures/colormap.png",
+          "sha256": "35d7bd6900dde0208429eeaec87fa17fbf024ed59f3f4eab54bc92802eba9dd7"
+        }
+      ]
+    },
+    {
+      "id": "Factory Kit/cog-c",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/cog-c.glb",
+      "sha256": "b70cb142382c89ac028d443005658dbc2e45a909740bf9f17672baf5ac323fca",
+      "animations": [],
+      "bounds": [
+        -0.5,
+        -0.150000005960464,
+        -0.5,
+        1,
+        0.224999994039536,
+        1
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/Textures/colormap.png",
+          "sha256": "35d7bd6900dde0208429eeaec87fa17fbf024ed59f3f4eab54bc92802eba9dd7"
+        }
+      ]
+    },
+    {
+      "id": "Factory Kit/conveyor-sides",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/conveyor-sides.glb",
+      "sha256": "ccd6c3d5afd23a4e4390d9a73c44c810b72fe8b611cb3508623a843d807a87aa",
+      "animations": [],
+      "bounds": [
+        -0.5,
+        0,
+        -0.5,
+        1,
+        0.400000005960464,
+        1
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/Textures/colormap.png",
+          "sha256": "35d7bd6900dde0208429eeaec87fa17fbf024ed59f3f4eab54bc92802eba9dd7"
+        }
+      ]
+    },
+    {
+      "id": "Factory Kit/floor",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/floor.glb",
+      "sha256": "6fd1acd1b3fed85093fd000410cd9b010f4c169e4f10a53699993f0c5667b3a9",
+      "animations": [],
+      "bounds": [
+        -0.5,
+        0,
+        -0.5,
+        1,
+        0.00000999999974737875,
+        1
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/Textures/colormap.png",
+          "sha256": "35d7bd6900dde0208429eeaec87fa17fbf024ed59f3f4eab54bc92802eba9dd7"
+        }
+      ]
+    },
+    {
+      "id": "Factory Kit/machine-fortified",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/machine-fortified.glb",
+      "sha256": "0907f6616f49bbdaa20241ac4b568b780f30352f204851c53568b8e7df59b528",
+      "animations": [],
+      "bounds": [
+        -0.600000023841858,
+        -4.10674855233495e-10,
+        -0.800000011920929,
+        1.20000004768372,
+        1.35049879550934,
+        1.60000002384186
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/Textures/colormap.png",
+          "sha256": "35d7bd6900dde0208429eeaec87fa17fbf024ed59f3f4eab54bc92802eba9dd7"
+        }
+      ]
+    },
+    {
+      "id": "Factory Kit/machine-window",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/machine-window.glb",
+      "sha256": "1387bd337354fca7c7cb4163e6bd4bef8711373bbe23dae01ba9d42cd35681b7",
+      "animations": [],
+      "bounds": [
+        -0.600000023841858,
+        -4.10674855233495e-10,
+        -0.75,
+        1.20000004768372,
+        1.28970670700073,
+        1.5
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/Textures/colormap.png",
+          "sha256": "35d7bd6900dde0208429eeaec87fa17fbf024ed59f3f4eab54bc92802eba9dd7"
+        }
+      ]
+    },
+    {
+      "id": "Food Kit/plate-dinner",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit/Models/GLB format/plate-dinner.glb",
+      "sha256": "f6085c9caae201e0d2f0e6ea816ba3ed38e22df0eb08b10c0b9356b0212ad18f",
+      "animations": [],
+      "bounds": [
+        -0.445886969566345,
+        0,
+        -0.445886969566345,
+        0.89177393913269,
+        0.221358984708786,
+        0.89177393913269
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Food Kit/Models/GLB format/Textures/colormap.png",
+          "sha256": "75baf74d9483a0fc56ac21ceba346fbe16fc24a2a1bf0524c53e6bbe802e1153"
+        }
+      ]
+    },
+    {
+      "id": "Furniture Kit/bear",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/bear.glb",
+      "sha256": "fd87c08f81dcd652b1f7f61afae9d1f040fa1322ac4ddda6f543ed423b954aed",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.247500002384186,
+        0.389711439609528,
+        0.449999988079071,
+        0.247500002384186
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/benchCushion",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/benchCushion.glb",
+      "sha256": "5186ad938f8b9eff255361fd1fdc48a81f08c318161cde27c93753ab95a2d354",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.200000002980232,
+        0.400000005960464,
+        0.46000000834465,
+        0.200000002980232
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/bookcaseClosedDoors",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+      "sha256": "ff33f535acdb1825c0e958a293642b39665adcae0b1317b650e83d2bb687f4e2",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.25,
+        0.400000005960464,
+        0.849999964237213,
+        0.25
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/bookcaseClosedWide",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/bookcaseClosedWide.glb",
+      "sha256": "55b9903e9646dc407ed5237a1c41c1f0a14f9edc22e3392bdb9a4804d846af6a",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.25,
+        0.800000011920929,
+        0.789999961853027,
+        0.25
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/bookcaseOpen",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/bookcaseOpen.glb",
+      "sha256": "750702218d68c062b15dfef6ab06a4014d1cfa8bd05f02e57c53b7e13bec157c",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.25,
+        0.400000005960464,
+        0.879999935626984,
+        0.25
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/bookcaseOpenLow",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/bookcaseOpenLow.glb",
+      "sha256": "6d4d625faf977a2dbf155f1313cd32c6310e463114a1cd4c08cb9f80a5fb1d75",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.25,
+        0.400000005960464,
+        0.400000005960464,
+        0.25
+      ],
+      "dependencies": [],
+      "retained_copy": {
+        "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/bookcaseOpenLow.glb",
+        "sha256": "6d4d625faf977a2dbf155f1313cd32c6310e463114a1cd4c08cb9f80a5fb1d75",
+        "dependencies": []
+      }
+    },
+    {
+      "id": "Furniture Kit/books",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/books.glb",
+      "sha256": "b8dc56e5d29f6fc1f4727fccb1b9642627fee9942c48060a00034e98df02701c",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.0944999977946281,
+        0.150447592139244,
+        0.103902257978916,
+        0.0944999977946281
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/cabinetBedDrawerTable",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+      "sha256": "fec6271639df5aff9f8ac75d6679385eab2abb7c8d2f51abeba3ed689ddb6f0d",
+      "animations": [],
+      "bounds": [
+        -0.00999999977648258,
+        0,
+        -0.205000013113022,
+        0.265999972820282,
+        0.263199985027313,
+        0.21730001270771
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/cardboardBoxClosed",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/cardboardBoxClosed.glb",
+      "sha256": "4af079dca52960912764574950f0549ff2ae1224b3db1528718629473a2d5d81",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.212499991059303,
+        0.212499991059303,
+        0.28099998831749,
+        0.212499991059303
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/cardboardBoxOpen",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/cardboardBoxOpen.glb",
+      "sha256": "960da412564774c75e7b32f9af0100895e1edb877fc1e70dd34ee2422a2196d4",
+      "animations": [],
+      "bounds": [
+        -0.0796874985098839,
+        0,
+        -0.212499991059303,
+        0.371874988079071,
+        0.28099998831749,
+        0.212499991059303
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/chair",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/chair.glb",
+      "sha256": "c8a11eec93e89e31250ba91afc1b8d56c3bec7ae86640fd1239f595ff4180883",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.200000002980232,
+        0.200000002980232,
+        0.469999998807907,
+        0.200000002980232
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/chairCushion",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/chairCushion.glb",
+      "sha256": "33544228984857f2cb502b58452fed72157335f9b1caf29e96da5c9094c53fdc",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.200000002980232,
+        0.200000002980232,
+        0.46000000834465,
+        0.200000002980232
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/chairDesk",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/chairDesk.glb",
+      "sha256": "46406619186034cbe92b19b79a5f1a8e3f442a17a70a7524ef2c0ad0f35095c6",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.314299046993256,
+        0.334950000047684,
+        0.607599973678589,
+        0.314299046993256
+      ],
+      "dependencies": [],
+      "retained_copy": {
+        "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/chairDesk.glb",
+        "sha256": "46406619186034cbe92b19b79a5f1a8e3f442a17a70a7524ef2c0ad0f35095c6",
+        "dependencies": []
+      }
+    },
+    {
+      "id": "Furniture Kit/chairRounded",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/chairRounded.glb",
+      "sha256": "53f4933ec547179c499f04dbda1231cf44b83ec82c7f4ab981cdf680aee5c973",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.200000002980232,
+        0.200000002980232,
+        0.454999983310699,
+        0.200000002980232
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/coatRackStanding",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/coatRackStanding.glb",
+      "sha256": "d8231c22dab63ceb9fc8678f6c8ceafc62afa8726b51a73b4ce349043d3cdc91",
+      "animations": [],
+      "bounds": [
+        -0.136399999260902,
+        3.078e-29,
+        -0.136399999260902,
+        0.272799998521805,
+        0.769999980926514,
+        0.272799998521805
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/computerKeyboard",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/computerKeyboard.glb",
+      "sha256": "9d9135789de2120e9f41ce3f0a56dd1b15f40adcc7888739bb842a2d820da322",
+      "animations": [],
+      "bounds": [
+        0,
+        1.6e-31,
+        -0.118191994726658,
+        0.282200008630753,
+        0.0275560002774,
+        0.118191994726658
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/computerMouse",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/computerMouse.glb",
+      "sha256": "d3ad1a923f0f7707ef367bb969eb94c9076e211c98c830ba52e133fadc5cdfc0",
+      "animations": [],
+      "bounds": [
+        -0.0248499996960163,
+        0,
+        -0.0851037949323654,
+        0.0496999993920326,
+        0.0235719997435808,
+        0.0851037949323654
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/computerScreen",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/computerScreen.glb",
+      "sha256": "5942cbad29a2d2b956619569926e81d50a4174403d592fece6556e57632dc643",
+      "animations": [],
+      "bounds": [
+        -1.44382282161564e-15,
+        -8e-32,
+        -0.104003995656967,
+        0.392688006162643,
+        0.294285207986832,
+        0.104003995656967
+      ],
+      "dependencies": [],
+      "retained_copy": {
+        "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/computerScreen.glb",
+        "sha256": "5942cbad29a2d2b956619569926e81d50a4174403d592fece6556e57632dc643",
+        "dependencies": []
+      }
+    },
+    {
+      "id": "Furniture Kit/desk",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/desk.glb",
+      "sha256": "0164fe828f028b321730fb8c74502e353583f751be74da1682d42fff7d3c5a42",
+      "animations": [],
+      "bounds": [
+        -0.00999999977648258,
+        0,
+        -0.379999995231628,
+        0.734475433826447,
+        0.384407550096512,
+        0.392300009727478
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/deskCorner",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/deskCorner.glb",
+      "sha256": "a6a77ba0083d5ecd34ad50f738867b03ed7b7f469429bb1acc78f423bcc3f034",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.974475502967834,
+        0.974475502967834,
+        0.384407550096512,
+        0.974475502967834
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/floorFull",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/floorFull.glb",
+      "sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -1,
+        1,
+        0.0500000007450581,
+        1
+      ],
+      "dependencies": [],
+      "retained_copy": {
+        "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/floorFull.glb",
+        "sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+        "dependencies": []
+      }
+    },
+    {
+      "id": "Furniture Kit/hoodLarge",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/hoodLarge.glb",
+      "sha256": "e9b60fa02bba74d99103e8ba9d7ca99fbd99299bc57c4f5f84b2add2a6a3afcc",
+      "animations": [],
+      "bounds": [
+        -1.44382282161564e-15,
+        0,
+        -0.284900009632111,
+        0.430000007152557,
+        0.369531720876694,
+        0.284900009632111
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/kitchenBar",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/kitchenBar.glb",
+      "sha256": "792c3d31e60c8a8d8c7a28cf7d1efe004c5a601adc1b163a8799dde32c1b559d",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.209999993443489,
+        0.430000007152557,
+        0.419999986886978,
+        0.209999993443489
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/kitchenCabinet",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/kitchenCabinet.glb",
+      "sha256": "7238c57778935ae25db5e57e9f7af3ba7068c71b005ff7cfbff3b6f3b1a13200",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.449999988079071,
+        0.430000007152557,
+        0.449999988079071,
+        0.449999988079071
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/kitchenCoffeeMachine",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/kitchenCoffeeMachine.glb",
+      "sha256": "063f582c6fa0f00a9f24e3393dac2295491c4becdaf5513c893ab1a2826b6ec3",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.240167051553726,
+        0.18953999876976,
+        0.177488997578621,
+        0.240167051553726
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/kitchenFridge",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/kitchenFridge.glb",
+      "sha256": "8af4f4bbb1b5525ad8226e97926a5af60fa8fb20a3cb74dbda5328a9d320dbab",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.281933903694153,
+        0.430000007152557,
+        0.920000016689301,
+        0.29193389415741
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/kitchenSink",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/kitchenSink.glb",
+      "sha256": "7b9610277d71f00dcf1bba49cf4d98d77ce5177e84bf76c7da2f8893e542f743",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.449999988079071,
+        0.430000007152557,
+        0.489999979734421,
+        0.449999988079071
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/kitchenStove",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/kitchenStove.glb",
+      "sha256": "3239edb36295dfca9530a9b9a6ad0aff98ce62e7cf8d13ca2a5a1a6b2a904656",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.449999988079071,
+        0.430000007152557,
+        0.449999988079071,
+        0.449999988079071
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/lampRoundFloor",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/lampRoundFloor.glb",
+      "sha256": "50fe1b5b588edf15bfa9cc880f71a02a4fda6036350b24733d0ef4de5cc5e908",
+      "animations": [],
+      "bounds": [
+        -0.0160197094082832,
+        0,
+        -0.147780001163483,
+        0.152039408683777,
+        0.860000014305115,
+        0.175559997558594
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/lampRoundTable",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/lampRoundTable.glb",
+      "sha256": "75bb644caaa3da003b4fcad7a931722dd61cd2858aab70cf660021d5061fa1b2",
+      "animations": [],
+      "bounds": [
+        -0.0160197094082832,
+        0,
+        -0.147780001163483,
+        0.152039408683777,
+        0.314249992370605,
+        0.175559997558594
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/laptop",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/laptop.glb",
+      "sha256": "5fa8a1f4a71ab8d82ef64da77a6973ffd350c6d4557516069a4ffd4bb8d808af",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.240065157413483,
+        0.263999998569489,
+        0.161809399724007,
+        0.240065157413483
+      ],
+      "dependencies": [],
+      "retained_copy": {
+        "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/laptop.glb",
+        "sha256": "5fa8a1f4a71ab8d82ef64da77a6973ffd350c6d4557516069a4ffd4bb8d808af",
+        "dependencies": []
+      }
+    },
+    {
+      "id": "Furniture Kit/loungeChair",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/loungeChair.glb",
+      "sha256": "ddfe6bc4b3451bca61666d7b614552d6ed2a03d82fc76244b72ae3155874dc6c",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.410000026226044,
+        0.489999979734421,
+        0.46000000834465,
+        0.410000026226044
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/loungeDesignSofa",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/loungeDesignSofa.glb",
+      "sha256": "0dd73c4f78ae011d5fa72753b33a5ea75e17c7885b9b32ea66f45a82cf329854",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.410000026226044,
+        1.12000000476837,
+        0.400000005960464,
+        0.410000026226044
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/loungeSofa",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/loungeSofa.glb",
+      "sha256": "1886b811c0d3ad0d8525a4fd43adf4112c497c8e0ed906f06877ca3517f4c7dd",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.410000026226044,
+        0.979999959468842,
+        0.46000000834465,
+        0.410000026226044
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/pillowBlue",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/pillowBlue.glb",
+      "sha256": "2ddbf606fbc77bddf3e81e52a50bff81f3c1601da0ed19a7319724aac75a7229",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.0633899495005608,
+        0.230000004172325,
+        0.12851220369339,
+        0.0633899495005608
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/pottedPlant",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/pottedPlant.glb",
+      "sha256": "5b760eda2766f75fda36b2c5df652a1662f82981ef64cd8fa7fe7bcd386b3a15",
+      "animations": [],
+      "bounds": [
+        -0.106029637157917,
+        0,
+        -0.120730973780155,
+        0.212059274315834,
+        0.6540167927742,
+        0.24146194756031
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/rugDoormat",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/rugDoormat.glb",
+      "sha256": "bd888e41853342cdc0d34d3f09b99cedc50a144f47b514943b65cdb9a2cfd802",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.237009033560753,
+        0.429300010204315,
+        0.00999999977648258,
+        0.237009033560753
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/rugRound",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/rugRound.glb",
+      "sha256": "c4cdc8f51ed2dbfb853b147521ed40e995307392fd3b19045b2203ea50f376db",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.920000016689301,
+        0.920000016689301,
+        0.0100099993869662,
+        0.920000016689301
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/sideTable",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/sideTable.glb",
+      "sha256": "8227810584f7d37582e4e9ec821c56f1dc54b99c88a8dc74242ea3b7402bc472",
+      "animations": [],
+      "bounds": [
+        -0.00999999977648258,
+        0,
+        -0.209999993443489,
+        0.534475445747375,
+        0.384407550096512,
+        0.219999998807907
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/tableCloth",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/tableCloth.glb",
+      "sha256": "64de52b5c4370724c29feefd68a65b157c55c88592e2096987bbce007ae80bcb",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.447373330593109,
+        0.841487944126129,
+        0.326733976602554,
+        0.447373330593109
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/tableCoffee",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/tableCoffee.glb",
+      "sha256": "e38bea760fbd514efbb75528d09b4752c91af44677bbb97e6d4386c263525179",
+      "animations": [],
+      "bounds": [
+        -0.460996091365814,
+        -3.60955705403911e-16,
+        -0.300000011920929,
+        0.660996079444885,
+        0.230000004172325,
+        0.400000005960464
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/tableCoffeeGlassSquare",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/tableCoffeeGlassSquare.glb",
+      "sha256": "e4a7ebef6ad0dbafee629df78b0edd88433a1059c4dd5fb3d70304ba2f71b945",
+      "animations": [],
+      "bounds": [
+        -0.460996091365814,
+        -3.60955705403911e-16,
+        -0.300000011920929,
+        0.400000005960464,
+        0.230010002851486,
+        0.400000005960464
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/tableRound",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/tableRound.glb",
+      "sha256": "f8daea9124a542a00b7bdacfddac82dc468573d43e44d7b54dd6316e9695754b",
+      "animations": [],
+      "bounds": [
+        0,
+        -0.269999980926514,
+        -0.800000011920929,
+        0.692820310592651,
+        0.366733968257904,
+        0.800000011920929
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Furniture Kit/wall",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/wall.glb",
+      "sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.0500000007450581,
+        1,
+        1.28953170776367,
+        0.0500000007450581
+      ],
+      "dependencies": [],
+      "retained_copy": {
+        "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/wall.glb",
+        "sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+        "dependencies": []
+      }
+    },
+    {
+      "id": "Furniture Kit/wallWindow",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/wallWindow.glb",
+      "sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.0695500001311302,
+        1,
+        1.28953170776367,
+        0.0891000032424927
+      ],
+      "dependencies": [],
+      "retained_copy": {
+        "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/wallWindow.glb",
+        "sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+        "dependencies": []
+      }
+    },
+    {
+      "id": "Innerscene/calculator",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-calculator/calculator.glb",
+      "sha256": "4973a6c56fdfe23579ed10088456fce57160d85eb3c333d74305139976ee6f78",
+      "animations": [],
+      "dependencies": [],
+      "bounds": [
+        -0.0544999986886978,
+        0,
+        -0.0850000008940697,
+        0.108999997377396,
+        0.0329999998211861,
+        0.170000001788139
+      ]
+    },
+    {
+      "id": "Innerscene/carpenters-workbench-with-vise",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-carpentry-workbench/carpenters-workbench-with-vise.glb",
+      "sha256": "1674b0434d27fe150aeacad353df395702be2a2a1dde53c87094bd121d042d99",
+      "animations": [],
+      "bounds": [
+        -0.910000026226044,
+        0,
+        -0.362500011920929,
+        1.82000005245209,
+        0.937999963760376,
+        0.889500021934509
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Innerscene/clinical-exam-table",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-clinical-exam-table/clinical-exam-table.glb",
+      "sha256": "0877da612ccaf7a9a4bcfe9445eafaff8fcd8b2f0fb8252d2333a7ddc7b73a09",
+      "animations": [],
+      "dependencies": [],
+      "bounds": [
+        -0.800000011920929,
+        0,
+        -0.344999998807907,
+        1.78986263275146,
+        1.09847712516785,
+        0.965000033378601
+      ]
+    },
+    {
+      "id": "Innerscene/cordless-drill-driver",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-cordless-drill/cordless-drill-driver.glb",
+      "sha256": "ac77b56ad604ea49b7d1cea58cfb0b32041813e2483d7579bf0e7ce6bc0390f8",
+      "animations": [],
+      "bounds": [
+        -0.0430000014603138,
+        0,
+        -0.0869999974966049,
+        0.0860000029206276,
+        0.241999983787537,
+        0.226999998092651
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Innerscene/display-pedestal",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-display-pedestal/display-pedestal.glb",
+      "sha256": "7af772939927ea1a4015187ccadd4c6e378ae237c9b6650ecf83c4ef1e3cccc7",
+      "animations": [],
+      "dependencies": [],
+      "bounds": [
+        -0.219388261437416,
+        0,
+        -0.224999994039536,
+        0.478388249874115,
+        1.04799997806549,
+        0.444657683372498
+      ]
+    },
+    {
+      "id": "Innerscene/document-scanner",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-document-scanner/document-scanner.glb",
+      "sha256": "4116f2b8b2a71cfd556a24e62a40c477243edd6eb7c9b0bd8355695c0ab7c7d0",
+      "animations": [],
+      "dependencies": [],
+      "bounds": [
+        -0.142499998211861,
+        0,
+        -0.167075648903847,
+        0.284999996423721,
+        0.259060502052307,
+        0.435075640678406
+      ]
+    },
+    {
+      "id": "Innerscene/eight-port-network-switch",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-network-switch/eight-port-network-switch.glb",
+      "sha256": "d224778ca911e42fc528a7bf2e344a994abd35b68960607dc2118fdbc7c57edf",
+      "animations": [],
+      "bounds": [
+        -0.112499997019768,
+        0,
+        -0.0524999983608723,
+        0.224999994039536,
+        0.0430000014603138,
+        0.111000001430511
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Innerscene/electric-counterbalance-forklift",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-forklift/electric-counterbalance-forklift.glb",
+      "sha256": "e6faa144b0479cd422e8ea6dfc9795468384ae17bd45db58b67c2b2ba657ebaf",
+      "animations": [],
+      "bounds": [
+        -0.609700083732605,
+        0,
+        -0.960000038146973,
+        1.21940016746521,
+        2.3050000667572,
+        3.34999990463257
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Innerscene/electronics-repair-bench",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-electronics-repair-bench/electronics-repair-bench.glb",
+      "sha256": "36b8a7dd48e809a31b6fc29619eff4fe25040220c13cf287fb7f287da07cb22b",
+      "animations": [],
+      "bounds": [
+        -0.730000019073486,
+        0,
+        -0.390500009059906,
+        1.46000003814697,
+        1.36600005626678,
+        0.76199996471405
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Innerscene/filled-bookshelf",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-filled-bookshelf/filled-bookshelf.glb",
+      "sha256": "87d1b0cf77d228c955af35a3871617e12eb8a952f90d31fb360380469e817722",
+      "animations": [],
+      "dependencies": [],
+      "bounds": [
+        -0.5,
+        0,
+        -0.159999996423721,
+        1,
+        1.79999995231628,
+        0.319999992847443
+      ]
+    },
+    {
+      "id": "Innerscene/folding-step-ladder",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-step-ladder/folding-step-ladder.glb",
+      "sha256": "1c196d7859478418772faae83c836793e0af598cd622484cd6f9f5e6d7922005",
+      "animations": [],
+      "bounds": [
+        -0.25,
+        0,
+        -0.332500010728836,
+        0.5,
+        0.985043823719025,
+        0.605000019073486
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Innerscene/hand-screwdriver-tool",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-screwdriver/hand-screwdriver-tool.glb",
+      "sha256": "b4dba1bd38e34e80fbe27d9ed563fed1b0162c73994d155158ce728bc71fdaca",
+      "animations": [],
+      "bounds": [
+        -0.0180000010877848,
+        9.31322574615479e-9,
+        -0.142499998211861,
+        0.0360000021755695,
+        0.0359999984502792,
+        0.281499981880188
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Innerscene/hospital-bed-raised-backrest",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-hospital-bed/hospital-bed-raised-backrest.glb",
+      "sha256": "2d66623eaa1162b358d404df5288ce6a29416fc506b50ffd0718d832435c1ab5",
+      "animations": [],
+      "bounds": [
+        -1.10000002384186,
+        0,
+        -0.5,
+        2.20000004768372,
+        1.32129299640656,
+        1
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Innerscene/lateral-filing-cabinet",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-lateral-filing-cabinet/lateral-filing-cabinet.glb",
+      "sha256": "0fc5163e762efc18f341798f8c271dcadc10705e0d6744394e928488fdf4d85b",
+      "animations": [],
+      "dependencies": [],
+      "bounds": [
+        -0.449999988079071,
+        0,
+        -0.230000004172325,
+        0.899999976158142,
+        0.722500085830688,
+        0.509053945541382
+      ]
+    },
+    {
+      "id": "Innerscene/medical-supply-cart",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-medical-supply-cart/medical-supply-cart.glb",
+      "sha256": "ecab70adf0e563f62cd27a1baf21380868c0c0e52a5c1b2e93f5873b1a8c02f6",
+      "animations": [],
+      "dependencies": [],
+      "bounds": [
+        -0.350000023841858,
+        -3.72529029846191e-9,
+        -0.282934308052063,
+        0.855294227600098,
+        0.95308643579483,
+        0.565868616104126
+      ]
+    },
+    {
+      "id": "Innerscene/office-phone",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-office-phone/office-phone.glb",
+      "sha256": "6fdcb76cfb0ba0b4d3f3765bfc7f5c69888a035040f32c21e005aa69326b48de",
+      "animations": [],
+      "dependencies": [],
+      "bounds": [
+        -0.110167674720287,
+        0,
+        -0.104000002145767,
+        0.210167676210403,
+        0.142107382416725,
+        0.206999987363815
+      ]
+    },
+    {
+      "id": "Innerscene/sponge-mop",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-sponge-mop/sponge-mop.glb",
+      "sha256": "3b21e8407846feeacd43d24d974399e08d87ed233924cf87d1a175258bb8e126",
+      "animations": [],
+      "bounds": [
+        -0.140000000596046,
+        0,
+        -0.0769365131855011,
+        0.280000001192093,
+        1.20137882232666,
+        0.136855870485306
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Innerscene/studio-headphones",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-studio-headphones/studio-headphones.glb",
+      "sha256": "509a8fd537249e3389f36c68df5bbc2d23fd1d672e55c2c6d7785b90e590a46a",
+      "animations": [],
+      "dependencies": [],
+      "bounds": [
+        -0.123999990522861,
+        0,
+        -0.0391864851117134,
+        0.247999995946884,
+        0.196000009775162,
+        0.0783729702234268
+      ]
+    },
+    {
+      "id": "Innerscene/wet-dry-vacuum",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-wet-dry-vacuum/wet-dry-vacuum.glb",
+      "sha256": "bd9cd8039a69ae812c4126a05135e8fe858661279c71bab929ab2bcd7a96bcf4",
+      "animations": [],
+      "bounds": [
+        -0.162499994039536,
+        0,
+        -0.303312808275223,
+        0.48649999499321,
+        0.549899518489838,
+        0.647818088531494
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Innerscene/wringer-bucket",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/innerscene-wringer-bucket/wringer-bucket.glb",
+      "sha256": "2052641f9a5027b35889adcf07864a4b7127b5259f28d37c1d2693bce96f5cfb",
+      "animations": [],
+      "bounds": [
+        -0.194999992847443,
+        -3.72529029846191e-9,
+        -0.162000000476837,
+        0.389999985694885,
+        0.510786414146423,
+        0.312000006437302
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "Mini Characters/wheelchair",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Models/GLB format/wheelchair.glb",
+      "sha256": "cb7b6cbebc7bbe238ae926b26305661eb66e17659fafa8fa0c098f5e7955fabe",
+      "animations": [],
+      "bounds": [
+        -0.250000029802322,
+        1.24176346982807e-9,
+        -0.364638775587082,
+        0.500000059604645,
+        0.495000034570694,
+        0.582415103912354
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/cash-register",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/cash-register.glb",
+      "sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+      "animations": [],
+      "bounds": [
+        -0.400000005960464,
+        0,
+        -0.400000005960464,
+        0.850000023841858,
+        0.594900012016296,
+        0.850000023841858
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/display-bread",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/display-bread.glb",
+      "sha256": "33a57fee0e331e5e40df5f0dc7af302e93266fd978dda810ab9f0ea4a2c205d1",
+      "animations": [],
+      "bounds": [
+        -0.350000023841858,
+        0,
+        -0.300000011920929,
+        0.700000047683716,
+        0.5,
+        0.600000023841858
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/display-fruit",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/display-fruit.glb",
+      "sha256": "4cc38dcbd0f703d5bc829ff4a627648872dd3f6578f3e7e01fdcee066367873b",
+      "animations": [],
+      "bounds": [
+        -0.300000011920929,
+        0,
+        -0.300000011920929,
+        0.600000023841858,
+        0.515960574150085,
+        0.600000023841858
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/floor",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/floor.glb",
+      "sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+      "animations": [],
+      "bounds": [
+        -0.5,
+        0,
+        -0.5,
+        1,
+        0.025000000372529,
+        1
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/freezers-standing",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/freezers-standing.glb",
+      "sha256": "0fe103e694d7b9a733d2c1a8dde3fcb15fd355d63aba376aa8d7aa8e752ed9a1",
+      "animations": [],
+      "bounds": [
+        -0.5,
+        0,
+        -0.5,
+        1,
+        0.899999976158142,
+        0.5
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/shelf-bags",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/shelf-bags.glb",
+      "sha256": "17725a5f680aff17dbc6ac3398ef0339d78b5b76bbfaa29292a5084479c4bd69",
+      "animations": [],
+      "bounds": [
+        -0.400000005960464,
+        0,
+        -0.350000023841858,
+        0.800000011920929,
+        0.892496466636658,
+        0.700000047683716
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/shelf-boxes",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/shelf-boxes.glb",
+      "sha256": "3f340fe9207a4b85739d8d11104cf5b4cad3a130afcbfc1fadb47c17d6a9e210",
+      "animations": [],
+      "bounds": [
+        -0.400000005960464,
+        0,
+        -0.350000023841858,
+        0.800000011920929,
+        0.850000023841858,
+        0.700000047683716
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/shopping-basket",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/shopping-basket.glb",
+      "sha256": "a7704926cb56c5a9ab74488230fc7c4d7b914387c59e9c1b6f62376965c0ea7d",
+      "animations": [],
+      "bounds": [
+        -0.174999997019768,
+        0,
+        -0.175000011920929,
+        0.349999994039536,
+        0.25,
+        0.350000023841858
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/shopping-cart",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/shopping-cart.glb",
+      "sha256": "8933fdece5c43b619ea6902fa03a5fea9f490486048ae7543cc8b03ee98c98dd",
+      "animations": [],
+      "bounds": [
+        -0.150000005960464,
+        0,
+        -0.253914892673492,
+        0.300000011920929,
+        0.390559583902359,
+        0.47891491651535
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/wall",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/wall.glb",
+      "sha256": "a926d264ec7d6a4344ee36e732f2f179469bfb727b89e5ada9d61226ff5eff2c",
+      "animations": [],
+      "bounds": [
+        -0.5,
+        0,
+        -0.300000011920929,
+        1,
+        1,
+        0.600000023841858
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/wall-window",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/wall-window.glb",
+      "sha256": "58b59e2c18459b2190298021506882bc5f521289c694519c1b2cd6439e409cb0",
+      "animations": [],
+      "bounds": [
+        -0.5,
+        0,
+        -0.300000011920929,
+        1,
+        1,
+        0.600000023841858
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ]
+    },
+    {
+      "id": "Mini Skate/pallet",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Skate/Models/GLB format/pallet.glb",
+      "sha256": "90312cbba080e0852f4ab92a50744fa0349ddf4683f48ce92f24f29a2bcb2e75",
+      "animations": [],
+      "bounds": [
+        -0.211428567767143,
+        -1.29470087130651e-14,
+        -0.211428567767143,
+        0.422857165336609,
+        0.13400000333786,
+        0.422857135534287
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Skate/Models/GLB format/Textures/colormap.png",
+          "sha256": "66fd49be148f32e88f6c8cace67120250d1943a7856601158ad0ff24651db0b0"
+        }
+      ]
+    },
+    {
+      "id": "Perhelion/Balanced scale of Justice",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/perhelion-justice/balanced-scale-of-justice.svg",
+      "sha256": "27dfbd55daa3207f77fd23eb5d1b3645509755af0f1584926adc5f927ec42c70",
+      "animations": [],
+      "dependencies": [],
+      "asset_type": "vector_illustration",
+      "original_dimensions": [
+        1600,
+        1256
+      ],
+      "adaptation": "Unchanged source illustration mounted on the original room wall using a transparent carrier surface."
+    },
+    {
+      "id": "Survival Kit/resource-planks",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Survival Kit/Models/GLB format/resource-planks.glb",
+      "sha256": "d3804257474a3baab7ac067be91de5c3d6d18d5803775dc876cb6d9442c30873",
+      "animations": [],
+      "bounds": [
+        -0.186470508575439,
+        0,
+        -0.312977015972137,
+        0.372941017150879,
+        0.0935999974608421,
+        0.625954031944275
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Survival Kit/Models/GLB format/Textures/colormap.png",
+          "sha256": "6ca023be9f12e8c2358fcf94320c8a894b4c05a3dd0bad1f5c268312053caca1"
+        }
+      ]
+    },
+    {
+      "id": "Survival Kit/tool-hammer",
+      "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Survival Kit/Models/GLB format/tool-hammer.glb",
+      "sha256": "9b27f03c26dabd49a7ea358615e63fe65e1c3d0157887d4ee1ecdfa1f0e688f3",
+      "animations": [],
+      "bounds": [
+        -0.044999998062849,
+        0,
+        -0.0199999995529652,
+        0.0899999961256981,
+        0.153479993343353,
+        0.0399999991059303
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Survival Kit/Models/GLB format/Textures/colormap.png",
+          "sha256": "6ca023be9f12e8c2358fcf94320c8a894b4c05a3dd0bad1f5c268312053caca1"
+        }
+      ]
+    }
+  ],
+  "previews": [
+    {
+      "id": "retail",
+      "theme_id": "professional_retail",
+      "source_id": "mini-market",
+      "source_composition": "build/professional-english/theme-review/retail-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/retail-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/retail-preview-candidate.png",
+      "reviewed_sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+      "destination": "assets/images/professional-previews/retail.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 91063,
+      "processing": [
+        "Composed only from acquired source GLB meshes, preserving their geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "software-data",
+      "theme_id": "professional_software_data",
+      "source_id": "furniture-kit",
+      "source_composition": "build/professional-english/theme-review/software-data-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/software-data-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/software-data-preview-candidate.png",
+      "reviewed_sha256": "5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+      "destination": "assets/images/professional-previews/software-data.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 46113,
+      "processing": [
+        "Composed only from acquired source GLB meshes, preserving their geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "caregiving",
+      "theme_id": "professional_caregiving",
+      "source_ids": [
+        "furniture-kit",
+        "mini-characters"
+      ],
+      "source_composition": "build/professional-english/theme-review/caregiving-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/caregiving-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/caregiving-preview-candidate.png",
+      "reviewed_sha256": "5158de0b177ab2e5159ca226f18c6c5a8536b39dbaab69c18791c80cdeef421a",
+      "destination": "assets/images/professional-previews/caregiving.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 43374,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Model scale and contact heights corrected after source-bound and rendered inspection.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "food-service",
+      "theme_id": "professional_food_service",
+      "source_ids": [
+        "furniture-kit",
+        "food-kit"
+      ],
+      "source_composition": "build/professional-english/theme-review/food-service-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/food-service-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/food-service-preview-candidate.png",
+      "reviewed_sha256": "cb6952f9d40d6c9b7b074557e861e5bbe975c3826f83ed5eba83567313ec2ab3",
+      "destination": "assets/images/professional-previews/food-service.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 50834,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Model scale and contact heights corrected after source-bound and rendered inspection.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "office-admin",
+      "theme_id": "professional_office_admin",
+      "source_ids": [
+        "furniture-kit"
+      ],
+      "source_composition": "build/professional-english/theme-review/office-admin-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/office-admin-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/office-admin-preview-candidate.png",
+      "reviewed_sha256": "6ba67a3c508d6211bea2370589837e7e445c561b9b9ae9a5811639d2746239c8",
+      "destination": "assets/images/professional-previews/office-admin.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 45642,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Model scale and contact heights corrected after source-bound and rendered inspection.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "hr-recruitment",
+      "theme_id": "professional_hr_recruitment",
+      "source_ids": [
+        "furniture-kit"
+      ],
+      "source_composition": "build/professional-english/theme-review/hr-recruitment-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/hr-recruitment-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/hr-recruitment-preview-candidate.png",
+      "reviewed_sha256": "bb6ff2a331ad371a83fcc2eeadebe071fa275af3795d63054dc842646110f09a",
+      "destination": "assets/images/professional-previews/hr-recruitment.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 39673,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Model scale and contact heights corrected after source-bound and rendered inspection.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "nursing",
+      "theme_id": "professional_nursing",
+      "source_ids": [
+        "furniture-kit",
+        "mini-characters",
+        "innerscene-hospital-bed"
+      ],
+      "source_composition": "build/professional-english/theme-review/nursing-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/nursing-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/nursing-preview-candidate.png",
+      "reviewed_sha256": "9dea5958b2143012b69d0119ce3b6c2fe9c3eaa0ad5e5b544cdcedd632fa73ee",
+      "destination": "assets/images/professional-previews/nursing.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 52556,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Model scale and contact heights corrected after source-bound and rendered inspection.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "warehouse-logistics",
+      "theme_id": "professional_warehouse_logistics",
+      "source_ids": [
+        "factory-kit",
+        "mini-skate",
+        "furniture-kit",
+        "innerscene-forklift"
+      ],
+      "source_composition": "build/professional-english/theme-review/warehouse-logistics-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/warehouse-logistics-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/warehouse-logistics-preview-candidate.png",
+      "reviewed_sha256": "723cea4f1883ab238425f4f2c779e93030bbf5eda964f8fb52bd7c60b5be29f9",
+      "destination": "assets/images/professional-previews/warehouse-logistics.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 43881,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Surface heights derived from source bounds; oversized warehouse structural modules rejected before integration.",
+        "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "hospitality-tourism",
+      "theme_id": "professional_hospitality_tourism",
+      "source_ids": [
+        "furniture-kit"
+      ],
+      "source_composition": "build/professional-english/theme-review/hospitality-tourism-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/hospitality-tourism-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/hospitality-tourism-preview-candidate.png",
+      "reviewed_sha256": "422cc920c1ab1dbbe090454a2b82b018a350f18650dff3287ff4e2af467c14ee",
+      "destination": "assets/images/professional-previews/hospitality-tourism.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 42546,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Surface heights derived from source bounds; oversized warehouse structural modules rejected before integration.",
+        "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "education-childcare",
+      "theme_id": "professional_education_childcare",
+      "source_ids": [
+        "furniture-kit"
+      ],
+      "source_composition": "build/professional-english/theme-review/education-childcare-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/education-childcare-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/education-childcare-preview-candidate.png",
+      "reviewed_sha256": "a65495ef4fc41b0a802547a036f3f90db9198ce0855006b16f017ddfa61b7d29",
+      "destination": "assets/images/professional-previews/education-childcare.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 41771,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Surface heights derived from source bounds; oversized warehouse structural modules rejected before integration.",
+        "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "transport-delivery",
+      "theme_id": "professional_transport_delivery",
+      "source_ids": [
+        "car-kit",
+        "mini-skate",
+        "furniture-kit"
+      ],
+      "source_composition": "build/professional-english/theme-review/transport-delivery-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/transport-delivery-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/transport-delivery-preview-candidate.png",
+      "reviewed_sha256": "ce672584af56edb6608203a5f16d93f8a846eb324073c362118037164a7ef234",
+      "destination": "assets/images/professional-previews/transport-delivery.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 56497,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Source bounds set proportional equipment scales and tabletop contacts; mop placed visibly against the utility-room wall.",
+        "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "manufacturing-maintenance",
+      "theme_id": "professional_manufacturing_maintenance",
+      "source_ids": [
+        "factory-kit",
+        "furniture-kit"
+      ],
+      "source_composition": "build/professional-english/theme-review/manufacturing-maintenance-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/manufacturing-maintenance-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/manufacturing-maintenance-preview-candidate.png",
+      "reviewed_sha256": "b9794f4f4ed02559b0fa2c1a810d2cd78d40252950aaa424e7656de2f9b06cb3",
+      "destination": "assets/images/professional-previews/manufacturing-maintenance.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 53089,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Source bounds set proportional equipment scales and tabletop contacts; mop placed visibly against the utility-room wall.",
+        "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "cleaning-facilities",
+      "theme_id": "professional_cleaning_facilities",
+      "source_ids": [
+        "furniture-kit",
+        "innerscene-wringer-bucket",
+        "innerscene-wet-dry-vacuum",
+        "innerscene-sponge-mop"
+      ],
+      "source_composition": "build/professional-english/theme-review/cleaning-facilities-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/cleaning-facilities-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/cleaning-facilities-preview-candidate.png",
+      "reviewed_sha256": "ec93a90cb516a727cac00af0b64875fc9c426a2a8c265db24bd7e7849e7a6c12",
+      "destination": "assets/images/professional-previews/cleaning-facilities.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 40571,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Source bounds set proportional equipment scales and tabletop contacts; mop placed visibly against the utility-room wall.",
+        "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "construction-trades",
+      "theme_id": "professional_construction_trades",
+      "source_ids": [
+        "furniture-kit",
+        "innerscene-carpentry-workbench",
+        "innerscene-cordless-drill",
+        "innerscene-step-ladder",
+        "survival-kit"
+      ],
+      "source_composition": "build/professional-english/theme-review/construction-trades-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/construction-trades-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/construction-trades-preview-candidate.png",
+      "reviewed_sha256": "ee917b37e665e6326c291c899f9a09adbf03675d96d572913a9d40a5bd82e6b6",
+      "destination": "assets/images/professional-previews/construction-trades.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 59658,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Authored bench surface bounds determine tool contact heights; the hammer is laid flat and network switch stays within the mat.",
+        "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "it-support",
+      "theme_id": "professional_it_support",
+      "source_ids": [
+        "furniture-kit",
+        "innerscene-electronics-repair-bench",
+        "innerscene-network-switch",
+        "innerscene-screwdriver"
+      ],
+      "source_composition": "build/professional-english/theme-review/it-support-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/it-support-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/it-support-preview-candidate.png",
+      "reviewed_sha256": "c78665355a7ec8447d4575e19167b9a8e06452e3f8066174ef0e20a92d129048",
+      "destination": "assets/images/professional-previews/it-support.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 59268,
+      "processing": [
+        "Composed from acquired source GLB meshes, preserving geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Authored bench surface bounds determine tool contact heights; the hammer is laid flat and network switch stays within the mat.",
+        "Resized to 512 by 320 using Lanczos filtering; final candidate and 296 by 185 phone image visually inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending."
+    },
+    {
+      "id": "customer-support",
+      "theme_id": "professional_customer_support",
+      "source_ids": [
+        "furniture-kit",
+        "innerscene-office-phone"
+      ],
+      "source_composition": "build/professional-english/theme-review/customer-support-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/customer-support-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/customer-support-preview-candidate.png",
+      "reviewed_sha256": "5a3a35221e881999e047390136f1cbe8a12aa238102e3b309bd2df3fe1cd6b8d",
+      "destination": "assets/images/professional-previews/customer-support.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 40615,
+      "processing": [
+        "Composed from acquired original GLB meshes, preserving source geometry and materials with uniform scaling.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; source listing preview images are not used as scene art.",
+        "Actual source bounds determine support heights for the phone, calculator, scanner, headphones, and other tabletop props.",
+        "Resized using Lanczos filtering; exact canonical 512 by 320 and 296 by 185 images independently inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex composition author and independent root review of exact final canonical source/phone images; static Home scope only",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion, occupational review, and course readiness remain pending."
+    },
+    {
+      "id": "accounting-finance",
+      "theme_id": "professional_accounting_finance",
+      "source_ids": [
+        "furniture-kit",
+        "innerscene-calculator",
+        "innerscene-document-scanner",
+        "innerscene-lateral-filing-cabinet"
+      ],
+      "source_composition": "build/professional-english/theme-review/accounting-finance-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/accounting-finance-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/accounting-finance-preview-candidate.png",
+      "reviewed_sha256": "31ea949bb0ca8e5774302dd8b22e18066a189baac9ad736d7935980c2e2c171a",
+      "destination": "assets/images/professional-previews/accounting-finance.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 43089,
+      "processing": [
+        "Composed from acquired original GLB meshes, preserving source geometry and materials with uniform scaling.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; source listing preview images are not used as scene art.",
+        "Actual source bounds determine support heights for the phone, calculator, scanner, headphones, and other tabletop props.",
+        "Resized using Lanczos filtering; exact canonical 512 by 320 and 296 by 185 images independently inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex composition author and independent root review of exact final canonical source/phone images; static Home scope only",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion, occupational review, and course readiness remain pending."
+    },
+    {
+      "id": "sales-marketing",
+      "theme_id": "professional_sales_marketing",
+      "source_ids": [
+        "furniture-kit",
+        "innerscene-display-pedestal",
+        "innerscene-studio-headphones"
+      ],
+      "source_composition": "build/professional-english/theme-review/sales-marketing-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/sales-marketing-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/sales-marketing-preview-candidate.png",
+      "reviewed_sha256": "283866d94d5fbe50b66f602bffe428632dcebcb188d8ef2db59fd769157437c7",
+      "destination": "assets/images/professional-previews/sales-marketing.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 43114,
+      "processing": [
+        "Composed from acquired original GLB meshes, preserving source geometry and materials with uniform scaling.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; source listing preview images are not used as scene art.",
+        "Actual source bounds determine support heights for the phone, calculator, scanner, headphones, and other tabletop props.",
+        "Resized using Lanczos filtering; exact canonical 512 by 320 and 296 by 185 images independently inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex composition author and independent root review of exact final canonical source/phone images; static Home scope only",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion, occupational review, and course readiness remain pending."
+    },
+    {
+      "id": "clinical-medicine",
+      "theme_id": "professional_clinical_medicine",
+      "source_ids": [
+        "furniture-kit",
+        "innerscene-clinical-exam-table",
+        "innerscene-medical-supply-cart"
+      ],
+      "source_composition": "build/professional-english/theme-review/clinical-medicine-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/clinical-medicine-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/clinical-medicine-preview-candidate.png",
+      "reviewed_sha256": "6b52f53f4d60046db67b948f5a2dfc8e4dc7604e8cee5b34ba1f020c93048367",
+      "destination": "assets/images/professional-previews/clinical-medicine.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 52554,
+      "processing": [
+        "Composed from acquired original GLB meshes, preserving source geometry and materials with uniform scaling.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; source listing preview images are not used as scene art.",
+        "Actual source bounds determine support heights for the phone, calculator, scanner, headphones, and other tabletop props.",
+        "Resized using Lanczos filtering; exact canonical 512 by 320 and 296 by 185 images independently inspected."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex composition author and independent root review of exact final canonical source/phone images; static Home scope only",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion, occupational review, and course readiness remain pending."
+    },
+    {
+      "id": "legal-paralegal",
+      "theme_id": "professional_legal_paralegal",
+      "source_ids": [
+        "furniture-kit",
+        "innerscene-filled-bookshelf",
+        "innerscene-lateral-filing-cabinet",
+        "perhelion-justice"
+      ],
+      "source_composition": "build/professional-english/theme-review/legal-paralegal-source-composition.png",
+      "phone_review": "build/professional-english/theme-review/legal-paralegal-phone-review.png",
+      "reviewed_candidate": "build/professional-english/theme-review/legal-paralegal-preview-candidate.png",
+      "reviewed_sha256": "0ef10dbaf2d1f7e8879beefaa10e02058a2a1a95343fc33e948e2f7a119a0eb6",
+      "destination": "assets/images/professional-previews/legal-paralegal.png",
+      "width": 512,
+      "height": 320,
+      "bytes": 52601,
+      "processing": [
+        "Composed from acquired original GLB meshes, preserving source geometry and materials with uniform scaling.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; source listing preview images are not used as scene art.",
+        "Actual source bounds determine support heights for the phone, calculator, scanner, headphones, and other tabletop props.",
+        "Resized using Lanczos filtering; exact canonical 512 by 320 and 296 by 185 images independently inspected.",
+        "Perhelion's original CC0 scales SVG is used unchanged as wall art on a transparent carrier surface; no generated symbol or frame."
+      ],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex composition author and independent root review of exact final canonical source/phone images; static Home scope only",
+        "reviewed_at": "2026-10-16"
+      },
+      "available_animations": [],
+      "scope": "Small local Home career preview only. Full theme environment, props, motion, occupational review, and course readiness remain pending."
+    }
+  ],
+  "nursing_status": "Nursing Home preview integrated; full ward environment, props, motion and course readiness remain pending."
+}

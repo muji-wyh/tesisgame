@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T13:26:22.559Z",
+  "scope": "Exact durable copies of already completed cash-register delivery and R27 evidence, plus new visual review. Original evidence remains unchanged.",
+  "files": [
+    {
+      "source": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/production-check-r01.json",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/production-check-r01.json",
+      "bytes": 2477,
+      "raw_sha256": "006034e3fcf10b75337979185c25278dec03b1a42facc08a548bfe95be68c39d"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/production-check-r01.log",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/production-check-r01.log",
+      "bytes": 566,
+      "raw_sha256": "e01d83793ffe787df693dd3eb06a4ed31638fdc996474f54d9df3fdd93a8cdb2"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/verification/report.json",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/report.json",
+      "bytes": 11696,
+      "raw_sha256": "315bd48ae671634d3332edac925c17532a966514ac8516b19b637956bfce5e8f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/verification/actual-production-word-card-contact.png",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/actual-production-word-card-contact.png",
+      "bytes": 48746,
+      "raw_sha256": "a50ab829fad8f48a672fb31b5ed6e26ce07aab69be58c19483d86f915d2f6cf4"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/verification/match-unmatched.png",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/match-unmatched.png",
+      "bytes": 4913,
+      "raw_sha256": "dbe7d62c3a1a2060f261fe8bd57ade724da013a66158db6ef0c7c540b0de61cb"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/verification/match-matched.png",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/match-matched.png",
+      "bytes": 5465,
+      "raw_sha256": "620e636eafd3138e50d22fb8f415ec13e4d136dfa5645222db1bad9ee7708f5a"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/verification/memory-unmatched.png",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/memory-unmatched.png",
+      "bytes": 4804,
+      "raw_sha256": "061f44ac132a8fb5b9b7cfc5c1bd3cef35c0521dac7f382ea4d77ce9530d147a"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/verification/memory-matched.png",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/memory-matched.png",
+      "bytes": 5100,
+      "raw_sha256": "15f257e70cc015128b8f94d98288bd075a26ea5a93d1c6a7b25f0ab7b79886e3"
+    },
+    {
+      "source": "build/professional-english/continuation-validation-r27.json",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/continuation-validation-r27.json",
+      "bytes": 167846,
+      "raw_sha256": "9c2e556a73f7c436778e706b6947132877b79b9730fe6d527cc7c96609eeb8cc"
+    },
+    {
+      "source": "build/professional-english/transactions/cash-register-image-r01/states/000192-committed.json",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/image-transaction-committed.json",
+      "bytes": 23702,
+      "raw_sha256": "dd39a8a4cf2b8484112334d1dbfd58e38d157cbb72d6d31e20e987d25468a6c7"
+    },
+    {
+      "source": "build/professional-english/transactions/cash-register-image-tests-r01/states/000012-committed.json",
+      "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/tests-transaction-committed.json",
+      "bytes": 1371,
+      "raw_sha256": "3014654d6a4aa235ba80a5f55a3d9ab09ddd3912c63d8ea2ab45f2541bec950f"
+    }
+  ],
+  "visual_review": {
+    "path": "docs/assets/sources/professional-retail-cash-register/production-delivery-r01/continuation-visual-review.json",
+    "raw_sha256": "aeafd019f1f57c26f47889bb5800a5672245792f6ce4c079417158f4bed6bca1"
+  }
+}

@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "weighing-scale.measurement-device.n",
+      "text": "weighing scale",
+      "display_text": "weighing scale",
+      "pos": "noun",
+      "definition": "A device used to measure how heavy someone or something is.",
+      "example": "The weighing scale shows the weight on a digital display.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "weighing scale",
+        "weighing scales"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a neutral digital weighing device with a clear platform and attached numerical display, large enough to identify its function without retail prices or clinical interpretation. Keep the platform unobstructed or use one plain test object for scale. Reject a ruler, balance graphic without a device, or food-only scene that changes the shared meaning.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.weighing-scale.measurement-device.n.morphology.retail03.third10.held-corrected.v1",
+        "lexeme_id": "weighing-scale.measurement-device.n",
+        "text": "weighing scale",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.weigh",
+            "canonical": "weigh",
+            "type": "stem",
+            "surface": "weigh",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.affix.ing.activity",
+            "canonical": "-ing",
+            "type": "suffix",
+            "surface": "ing",
+            "break_offsets": []
+          },
+          {
+            "id": "p3",
+            "canonical_id": "growth.part.scale.weighing-device",
+            "canonical": "scale",
+            "type": "word",
+            "surface": "scale",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "weighing",
+            "left": "p1",
+            "right": "p2",
+            "surface": "weighing",
+            "rule": "authored-weigh-plus-activity-ing",
+            "break_offsets": []
+          },
+          {
+            "id": "whole",
+            "left": "weighing",
+            "right": "p3",
+            "surface": "weighing scale",
+            "rule": "preserve-word-boundary",
+            "break_offsets": [
+              9
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+          "notes": "The device-for-weighing reading uses weigh plus the nominal activity -ing, then the existing reviewed Growth weighing-device scale identity. Root independently accepted this exact corrected target after reviewing all five legacy scale uses; the other four pending graphs retain their original mixed identity and are not approved or migrated. Their tiles therefore remain incompatible with this target until separately corrected. The eight memberships retain the broad people-or-things meaning. Clinical, food and lifting procedures are outside this morphology review. Weighing scales remains an accepted whole-word alternative requiring its own exact plural graph. The original held draft and rationale remain in the acceptance provenance.",
+          "references": [
+            "https://www.dictionary.com/browse/weigh",
+            "https://www.dictionary.com/browse/ing",
+            "https://www.dictionary.com/browse/scale",
+            "https://www.oxfordlearnersdictionaries.com/definition/english/scale_1",
+            "https://adamequipment.com/products/pallet-truck-scale.html",
+            "https://www.cuh.nhs.uk/patient-information/if-i-have-pain-how-will-it-be-managed/",
+            "https://www.dictionary.com/browse/limescale"
+          ],
+          "source_record_ids": [
+            "retail03-morph-third10-dcom-weigh",
+            "retail03-morph-third10-dcom-ing",
+            "retail03-morph-third10-dcom-scale",
+            "retail03-morph-third10-oxford-scale",
+            "retail03-morph-third10-adam-pallet-truck-scale",
+            "retail03-morph-third10-cuh-pain-scale",
+            "retail03-morph-third10-dcom-limescale"
+          ],
+          "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+          "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16",
+          "acceptance_record": "data/professional/provenance/retail-module03-morphology-third10-2026-10-16.json"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "pending",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "nhs-home-equipment",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "retail03-ox-scale",
+          "status": "verified",
+          "scope": "Selected passage consulted: Noun weighing-instrument sense 6. Scales is the plural-form name of a weighing instrument; North American English also uses scale. Weighing scales is explicit. Selected lexical sense and explicitly stated alternatives only. Unrelated word-of-the-day level labels do not rate this term. No media acquired. This editorial proposal does not approve language, morphology, domain practice, or media."
+        }
+      ],
+      "editorial_notes": "Canonical sense shared across pilot courses. Validate picture fit for each workplace. Retail module03 editorial decision: Retain the generic measurement-device meaning shared by Retail and Nursing. Do not narrow it to fruit, checkout equipment, or a medical-only body scale. Add weighing scales as the explicitly supported plural-form instrument name. The accepted answer does not create another sense. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-media production remain pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+    },
+    {
+      "id": "touchscreen.input-display.n",
+      "text": "touchscreen",
+      "display_text": "touchscreen",
+      "pos": "noun",
+      "definition": "A display that responds when someone touches its surface.",
+      "example": "Choose an option on the touchscreen.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "touchscreen",
+        "touch screen"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a display with a fingertip visibly selecting one large interface button and a subtle visual response at the contact point. Keep the screen and hand large, with two or three clear interface elements and no readable private data. Reject a physical keypad, noninteractive monitor, touchpad, or floating hologram. Check the interaction cue at phone size.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.touchscreen.input-display.n.morphology.retail03.fifth10.proposal.v1",
+        "lexeme_id": "touchscreen.input-display.n",
+        "text": "touchscreen",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "growth.touch",
+            "canonical": "touch",
+            "type": "compound",
+            "surface": "touch",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.screen",
+            "canonical": "screen",
+            "type": "compound",
+            "surface": "screen",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "touchscreen",
+            "rule": "authored-closed-touch-plus-screen",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+          "notes": "Actual reviewed Growth tactile touch plus current screen selecting the electronic display. The closed compound responds to contact on its display. The related broad Professional screen family does not make a shield, clinical check, or touchpad the same complete sense. The real Growth shield-screen identity stays exact. Touch screen needs a separate exact-spelling graph; the domain gate stays pending.",
+          "references": [
+            "https://www.dictionary.com/browse/touch",
+            "https://www.merriam-webster.com/dictionary/screen",
+            "https://www.merriam-webster.com/dictionary/touchscreen",
+            "https://www.etymonline.com/word/screen",
+            "https://www.etymonline.com/word/touch-screen"
+          ],
+          "source_record_ids": [
+            "retail03-morph-fifth10-dcom-touch",
+            "retail03-morph-fifth10-mw-screen",
+            "retail03-morph-fifth10-mw-touchscreen",
+            "retail03-morph-fifth10-etym-screen",
+            "retail03-morph-fifth10-etym-touch-screen"
+          ],
+          "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+          "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16",
+          "acceptance_record": "data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "pending",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "retail03-mw-touchscreen",
+          "status": "verified",
+          "scope": "Selected passage consulted: Touch screen headword, touchscreen variant and definition. Both spellings name an interactive display operated by touching it. Selected lexical sense only; pronunciation recordings and images were not acquired. Headword syllable dots do not establish morphology. This editorial proposal does not approve language, morphology, domain practice, or media."
+        }
+      ],
+      "editorial_notes": "Canonical sense shared across pilot courses. Validate picture fit for each workplace. Retail module03 editorial decision: Retain the interactive display responding to touch. The shared Software sense remains unchanged; the example is a simple interface selection. Add touch screen as the dictionary headword spelling while retaining touchscreen. Do not add touchpad, which is not a display. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-media production remain pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+    }
+  ]
+}

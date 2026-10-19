@@ -1,0 +1,834 @@
+{
+  "date": "2026-10-16",
+  "status": "frozen_scratch_candidate_pending_independent_root_acceptance",
+  "reviewer": "Codex retail_register_art (AI source and author visual review; not independent production acceptance)",
+  "sense_id": "counter.service-surface.n",
+  "definition": "A raised work surface used to serve customers.",
+  "example": "Please place the parcel on the counter.",
+  "approved_brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+  "sources": [
+    {
+      "url": "https://kenney.nl/assets/furniture-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "local_version": "Furniture Kit 2.1; retained license creation date 2018-11-11 13:11; acquired All-in-1 3.7.0 library",
+      "selected_asset": "kitchenBar",
+      "status": "Previously acquired original; four complete instances used",
+      "available_animations": [],
+      "record": {
+        "path": "source-record.json",
+        "bytes": 16021,
+        "sha256": "edb234925afd17d496484103e4823dfe4eb680b557ab356da5db6476205a242d"
+      }
+    },
+    {
+      "url": "https://kenney.nl/assets/car-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "local_version": "Car Kit 3.1; license creation 2026-04-02 14:03; acquired All-in-1 3.7.0 library",
+      "selected_asset": "box",
+      "status": "Previously acquired original; one complete instance used",
+      "available_animations": [],
+      "record": {
+        "path": "parcel-source-record.json",
+        "bytes": 4267,
+        "sha256": "2c3ca62cb730c23c00ef93e04b284bef91fadc833fe59287150e903e3f7268de"
+      }
+    }
+  ],
+  "source_integrity": {
+    "original_and_retained_file_checks": 20,
+    "failures": 0,
+    "original_files_unchanged": true,
+    "source_geometry_modified": false,
+    "source_materials_modified": false,
+    "source_textures_modified": false,
+    "source_child_transforms_modified": false
+  },
+  "selected_candidate": {
+    "file": {
+      "path": "candidate-broad-return/counter.png",
+      "bytes": 31426,
+      "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a"
+    },
+    "size": [
+      512,
+      293
+    ],
+    "decoded_cpu_gpu_bytes": 1200128,
+    "rgba_pixel_sha256": "342eb324b6655d4fb2437974a1dbcc8e83d7d37875459e54c0f6926102be9a98",
+    "source_instances": [
+      {
+        "geometry_materials_textures_and_child_transforms": "preserved",
+        "root_position": [
+          -0.644999980926514,
+          0,
+          0
+        ],
+        "root_uniform_scale": 1,
+        "root_y_rotation_degrees": 0,
+        "sha256": "792c3d31e60c8a8d8c7a28cf7d1efe004c5a601adc1b163a8799dde32c1b559d",
+        "source": "res://build/professional-english/retail-term-art-review/counter-r01/source/original/kitchenBar.glb"
+      },
+      {
+        "geometry_materials_textures_and_child_transforms": "preserved",
+        "root_position": [
+          -0.215000003576279,
+          0,
+          0
+        ],
+        "root_uniform_scale": 1,
+        "root_y_rotation_degrees": 0,
+        "sha256": "792c3d31e60c8a8d8c7a28cf7d1efe004c5a601adc1b163a8799dde32c1b559d",
+        "source": "res://build/professional-english/retail-term-art-review/counter-r01/source/original/kitchenBar.glb"
+      },
+      {
+        "geometry_materials_textures_and_child_transforms": "preserved",
+        "root_position": [
+          0.215000003576279,
+          0,
+          0
+        ],
+        "root_uniform_scale": 1,
+        "root_y_rotation_degrees": 0,
+        "sha256": "792c3d31e60c8a8d8c7a28cf7d1efe004c5a601adc1b163a8799dde32c1b559d",
+        "source": "res://build/professional-english/retail-term-art-review/counter-r01/source/original/kitchenBar.glb"
+      },
+      {
+        "geometry_materials_textures_and_child_transforms": "preserved",
+        "root_position": [
+          0.644999980926514,
+          0,
+          -0.209999993443489
+        ],
+        "root_uniform_scale": 1,
+        "root_y_rotation_degrees": 90,
+        "sha256": "792c3d31e60c8a8d8c7a28cf7d1efe004c5a601adc1b163a8799dde32c1b559d",
+        "source": "res://build/professional-english/retail-term-art-review/counter-r01/source/original/kitchenBar.glb"
+      },
+      {
+        "geometry_materials_textures_and_child_transforms": "preserved",
+        "root_position": [
+          -0.200000002980232,
+          0.419999986886978,
+          -0.104999996721745
+        ],
+        "root_uniform_scale": 0.16,
+        "root_y_rotation_degrees": -10,
+        "sha256": "b773815c791d2708a2a70f1a9bb6d197d7211269ad96e273f9e364ea536c1b18",
+        "source": "res://build/professional-english/retail-term-art-review/counter-r01/source/parcel/original/box.glb"
+      }
+    ],
+    "assembly_transform": "The five source model roots are placed as recorded, then their common assembly root is recentered by the original composed mesh bounds. Exact calculation is retained in render-broad-return.gd.",
+    "camera": {
+      "lighting": {
+        "ambient_energy": 0.18,
+        "directional_energy": 0.38,
+        "directional_rotation": [
+          -50,
+          -35,
+          0
+        ]
+      },
+      "orthographic_size": 1.55,
+      "position": [
+        -1.1,
+        1.8,
+        4
+      ],
+      "target": [
+        0,
+        0.24,
+        0
+      ]
+    },
+    "raw_size": [
+      768,
+      768
+    ],
+    "focus_rectangle": [
+      0,
+      0,
+      768,
+      768
+    ],
+    "alpha_bounds": [
+      90,
+      217,
+      645,
+      356
+    ],
+    "crop": [
+      74,
+      201,
+      677,
+      388
+    ],
+    "image_integrity": {
+      "path": "image-integrity.json",
+      "bytes": 502,
+      "sha256": "8447fa08768111bdc67c489c9e521db3579f28f195bdadf1d060ec67d3b429be"
+    },
+    "rendering_script": {
+      "path": "render-broad-return.gd",
+      "bytes": 10030,
+      "sha256": "de0877f706bf8a2685d31d213695d8b20c11bfce8618bd71b4a091930a133ab7"
+    },
+    "production_integration": false,
+    "independent_acceptance": null
+  },
+  "native_validation": {
+    "invocations": 5,
+    "all_first_attempt_success": true,
+    "source_views": 10,
+    "source_reports": [
+      {
+        "path": "source-inspection/report.json",
+        "bytes": 3117,
+        "sha256": "d7264fb3693231f2dd98493a9a48a60631de31c196a24e5d9054935ca415c303"
+      },
+      {
+        "path": "source-inspection-parcel/report.json",
+        "bytes": 2038,
+        "sha256": "f92a668e47d9851735fa75e403fd9a0c9007470c84684b8141210fdda9036eb9"
+      }
+    ],
+    "source_logs": [
+      {
+        "path": "source-inspection/render-r01.log",
+        "bytes": 554,
+        "sha256": "8da382de8b44c2064de5e8e69feae8bbbb1566eb6d10d09670a882954b30465a"
+      },
+      {
+        "path": "source-inspection-parcel/render-r01.log",
+        "bytes": 597,
+        "sha256": "634b6fe5809e63e9e8fde0a5fba39b61578f58c7a5e76a7a9ba1408febf39a30"
+      }
+    ],
+    "layouts": [
+      {
+        "layout": "straight",
+        "checks": 21,
+        "failures": 0,
+        "report": {
+          "path": "candidate-straight/report.json",
+          "bytes": 5780,
+          "sha256": "92fbed0fb495f448bb7905dcd9eacc6899c361e837cceb15703b96548739337f"
+        },
+        "log": {
+          "path": "candidate-straight/render-r01.log",
+          "bytes": 573,
+          "sha256": "a27f78c1aa2e95d68e184e8bbefb44bff9d7dcc0453b905f15c4b4e7f50aa8d8"
+        }
+      },
+      {
+        "layout": "return",
+        "checks": 21,
+        "failures": 0,
+        "report": {
+          "path": "candidate-return/report.json",
+          "bytes": 6198,
+          "sha256": "2aa28b659ff7b396ce20f86448ff9183a712d4f8eddaf5f8098f4043c117fbb7"
+        },
+        "log": {
+          "path": "candidate-return/render-r01.log",
+          "bytes": 571,
+          "sha256": "45df45a84e167239e959a67a660f091719e9af54dc885b7a1caacbdcb48f613e"
+        }
+      },
+      {
+        "layout": "broad-return",
+        "checks": 21,
+        "failures": 0,
+        "report": {
+          "path": "candidate-broad-return/report.json",
+          "bytes": 6624,
+          "sha256": "6f4f04b8cc27d97ff3d642b7b321610b2459735d1b8325af8ff232180e4821ef"
+        },
+        "log": {
+          "path": "candidate-broad-return/render-r01.log",
+          "bytes": 577,
+          "sha256": "cb4770faa4ca51b99441f81b5aa20fdcece00a5cce0f9d42ae3547aa862a2c37"
+        }
+      }
+    ],
+    "selected_checks": 21,
+    "selected_failures": 0,
+    "measurements": [
+      {
+        "badge_visible": false,
+        "card_script": "res://scripts/word_card.gd",
+        "card_size": [
+          126,
+          72
+        ],
+        "image_render_size": [
+          90.8668941979522,
+          52
+        ],
+        "picture_alpha": 1,
+        "picture_size": [
+          102,
+          52
+        ],
+        "state": "match-unmatched",
+        "texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+      },
+      {
+        "badge_visible": true,
+        "card_script": "res://scripts/word_card.gd",
+        "card_size": [
+          126,
+          72
+        ],
+        "image_render_size": [
+          90.8668941979522,
+          52
+        ],
+        "picture_alpha": 0.680000007152557,
+        "picture_size": [
+          102,
+          52
+        ],
+        "state": "match-matched",
+        "texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+      },
+      {
+        "badge_visible": false,
+        "card_script": "res://scripts/word_card.gd",
+        "card_size": [
+          144,
+          74
+        ],
+        "image_render_size": [
+          94.3617747440273,
+          54
+        ],
+        "picture_alpha": 1,
+        "picture_size": [
+          120,
+          54
+        ],
+        "state": "memory-unmatched",
+        "texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+      },
+      {
+        "badge_visible": true,
+        "card_script": "res://scripts/word_card.gd",
+        "card_size": [
+          144,
+          74
+        ],
+        "image_render_size": [
+          94.3617747440273,
+          54
+        ],
+        "picture_alpha": 0.680000007152557,
+        "picture_size": [
+          120,
+          54
+        ],
+        "state": "memory-matched",
+        "texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+      }
+    ],
+    "exact_selected_files_and_crop_pixel_hashes": [
+      {
+        "file": "candidate-broad-return/counter.png",
+        "size": [
+          512,
+          293
+        ],
+        "png_bytes": 31426,
+        "png_sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+        "pixel_encoding": "Unpremultiplied RGBA8, row-major, top-to-bottom; hash covers pixel bytes only; dimensions recorded separately.",
+        "rgba_pixel_sha256": "342eb324b6655d4fb2437974a1dbcc8e83d7d37875459e54c0f6926102be9a98"
+      },
+      {
+        "file": "candidate-broad-return/match-unmatched.png",
+        "size": [
+          126,
+          72
+        ],
+        "png_bytes": 3612,
+        "png_sha256": "a0eab47555a0150a4d3b83848cec2cb44f3894fb6ad4837c0fa8fec6683498ee",
+        "pixel_encoding": "Unpremultiplied RGBA8, row-major, top-to-bottom; hash covers pixel bytes only; dimensions recorded separately.",
+        "rgba_pixel_sha256": "0a0dab31dceb9e28e5db6ea66c0a8715e52e4325bd70164c3ee1032351e0433c"
+      },
+      {
+        "file": "candidate-broad-return/match-matched.png",
+        "size": [
+          126,
+          72
+        ],
+        "png_bytes": 4094,
+        "png_sha256": "3e9c35d09a474c131b0c4ad5c7d16c4ae0947ec5303e4c100e19b4ec51af91ed",
+        "pixel_encoding": "Unpremultiplied RGBA8, row-major, top-to-bottom; hash covers pixel bytes only; dimensions recorded separately.",
+        "rgba_pixel_sha256": "32d3d390d460b122eb9970702ea78b6da15287991a7e50476a738f05110e6668"
+      },
+      {
+        "file": "candidate-broad-return/memory-unmatched.png",
+        "size": [
+          144,
+          74
+        ],
+        "png_bytes": 3468,
+        "png_sha256": "84c0e81111513dcfed8279439b95a90a58034e6f87f0c7ee4ddb06d2e6aa70b5",
+        "pixel_encoding": "Unpremultiplied RGBA8, row-major, top-to-bottom; hash covers pixel bytes only; dimensions recorded separately.",
+        "rgba_pixel_sha256": "f4973fa8fe4d2644e03a10383052fd0fc96cee24b9a7fdf211c10dfb0ae49442"
+      },
+      {
+        "file": "candidate-broad-return/memory-matched.png",
+        "size": [
+          144,
+          74
+        ],
+        "png_bytes": 3831,
+        "png_sha256": "ab30bfeeeece8468293a4ec1439cc3d5e58837ece3930e157dc877c2dcd6f0b8",
+        "pixel_encoding": "Unpremultiplied RGBA8, row-major, top-to-bottom; hash covers pixel bytes only; dimensions recorded separately.",
+        "rgba_pixel_sha256": "bec00058a5f9ad062b604624184f03df8ab65d0afc50f34861f767830d31d270"
+      }
+    ],
+    "scope": "Actual native WordCards with direct scratch ImageTexture assignment; not production Loader delivery, participant recognition, audio, curriculum or release acceptance.",
+    "native_slot_released_to_root_for_R09": true
+  },
+  "author_visual_findings": {
+    "recommendation": "Broad-return layout is the strongest candidate for independent root acceptance.",
+    "meaning": "A broad raised pale surface and solid wood front dominate; the perpendicular return establishes a staff-side recess, and one small sealed parcel supports the service-counter example without indicating checkout, refund or pickup.",
+    "small_card": "The selected image fills approximately 90.87 x 52 pixels in the 126 x 72 Match card. Main front panels, continuous top and inner return corner remain visible in both real matched and unmatched states.",
+    "limits": [
+      "The near-white top loses some edge contrast against the white card.",
+      "The matched badge overlaps the far-right end of the return, while the main surface and inner corner remain visible.",
+      "No participant recognition study or separate service-function classification is claimed."
+    ],
+    "unselected_sources": [
+      "Furniture Kit cardboardBoxClosed has lifted flaps in actual source inspection and is not used.",
+      "Furniture Kit kitchenBarEnd was inspected but not used."
+    ],
+    "unselected_layouts": [
+      "Straight composition has less spatial evidence of the staff side.",
+      "Two-front-panel return layout renders only approximately 54.33 x 52 pixels at the minimum Match size; the selected broader composition provides a larger readable front."
+    ]
+  },
+  "production_content_written_by_this_task": false,
+  "production_media_status_at_packaging": "pending",
+  "render_dependencies": [
+    {
+      "path": "scripts/word_card.gd",
+      "sha256": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+    },
+    {
+      "path": "scripts/ui_style.gd",
+      "sha256": "5991ec95ba399174d3f207f6a16d3fdd4e614938093c1cb42a6a7768b5de9221"
+    },
+    {
+      "path": "scripts/professional_catalog.gd",
+      "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+    },
+    {
+      "path": "tools/run-godot.cjs",
+      "sha256": "a411f937acd304761e0ac9f6513f45e0f2a6aa886856e3b32a537a04ff5189be"
+    }
+  ],
+  "evidence_files": [
+    {
+      "path": "README.md",
+      "bytes": 4241,
+      "sha256": "af4ffa538a881a10f37b5021af993a8381369f09c40573a025324321af7073ba"
+    },
+    {
+      "path": "candidate-broad-return/actual-word-card-contact-3x.png",
+      "bytes": 62823,
+      "sha256": "c6a21d935e41464d2c2b72fa35569977eec6049aae7b5cd2e2ad3681dba1af34"
+    },
+    {
+      "path": "candidate-broad-return/actual-word-card-contact.png",
+      "bytes": 44313,
+      "sha256": "77a3712500e0689df0e1c936987afa21e5e61ae99c712ad3c7691415dcfb6443"
+    },
+    {
+      "path": "candidate-broad-return/counter.png",
+      "bytes": 31426,
+      "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a"
+    },
+    {
+      "path": "candidate-broad-return/match-matched.png",
+      "bytes": 4094,
+      "sha256": "3e9c35d09a474c131b0c4ad5c7d16c4ae0947ec5303e4c100e19b4ec51af91ed"
+    },
+    {
+      "path": "candidate-broad-return/match-unmatched.png",
+      "bytes": 3612,
+      "sha256": "a0eab47555a0150a4d3b83848cec2cb44f3894fb6ad4837c0fa8fec6683498ee"
+    },
+    {
+      "path": "candidate-broad-return/memory-matched.png",
+      "bytes": 3831,
+      "sha256": "ab30bfeeeece8468293a4ec1439cc3d5e58837ece3930e157dc877c2dcd6f0b8"
+    },
+    {
+      "path": "candidate-broad-return/memory-unmatched.png",
+      "bytes": 3468,
+      "sha256": "84c0e81111513dcfed8279439b95a90a58034e6f87f0c7ee4ddb06d2e6aa70b5"
+    },
+    {
+      "path": "candidate-broad-return/render-r01.log",
+      "bytes": 577,
+      "sha256": "cb4770faa4ca51b99441f81b5aa20fdcece00a5cce0f9d42ae3547aa862a2c37"
+    },
+    {
+      "path": "candidate-broad-return/render-raw.png",
+      "bytes": 14266,
+      "sha256": "bfd48800767944fa4f3f60f6deff430de2b829439e88fc9cfaea43b3a6f87a83"
+    },
+    {
+      "path": "candidate-broad-return/report.json",
+      "bytes": 6624,
+      "sha256": "6f4f04b8cc27d97ff3d642b7b321610b2459735d1b8325af8ff232180e4821ef"
+    },
+    {
+      "path": "candidate-return/actual-word-card-contact-3x.png",
+      "bytes": 59962,
+      "sha256": "8e52d9a244243c0f6f4248ceb1d9ae2ef76e1c76f941f01b2361f9246c027028"
+    },
+    {
+      "path": "candidate-return/actual-word-card-contact.png",
+      "bytes": 42127,
+      "sha256": "ffaa0949045c2c66f82a641e6095d34ce159e70696a63a794bb79b67f355f549"
+    },
+    {
+      "path": "candidate-return/counter.png",
+      "bytes": 56236,
+      "sha256": "49a8374e755b02c2e9df315cacccae22701d9cdead28d6f292b223434b05769c"
+    },
+    {
+      "path": "candidate-return/match-matched.png",
+      "bytes": 3751,
+      "sha256": "f8a5327f59158d8929036e47cd2132d14f33e6f9503c639bf4c391a27dcc41b0"
+    },
+    {
+      "path": "candidate-return/match-unmatched.png",
+      "bytes": 3053,
+      "sha256": "c6dc15333b7cbb3c14888f23281961c764a1bd329bd9d909fec64eda51fe2aad"
+    },
+    {
+      "path": "candidate-return/memory-matched.png",
+      "bytes": 3317,
+      "sha256": "a95822b10403c37a80b8114021c11a5321e4ff34aca09e2672b61794a53a3e2f"
+    },
+    {
+      "path": "candidate-return/memory-unmatched.png",
+      "bytes": 2931,
+      "sha256": "5a9981ed399a4688e2cf15e2770e4dd61a4d7f733cda06785a960b25af0115b2"
+    },
+    {
+      "path": "candidate-return/render-r01.log",
+      "bytes": 571,
+      "sha256": "45df45a84e167239e959a67a660f091719e9af54dc885b7a1caacbdcb48f613e"
+    },
+    {
+      "path": "candidate-return/render-raw.png",
+      "bytes": 23240,
+      "sha256": "e8eb39d60187a557d076858904b66b88585bd3f604f8d9c64ff274ed06c7445c"
+    },
+    {
+      "path": "candidate-return/report.json",
+      "bytes": 6198,
+      "sha256": "2aa28b659ff7b396ce20f86448ff9183a712d4f8eddaf5f8098f4043c117fbb7"
+    },
+    {
+      "path": "candidate-straight/actual-word-card-contact-3x.png",
+      "bytes": 62224,
+      "sha256": "9c518bac8598af490e22a7826d066447e4d27c0e7a219f4cd9721cf247c20bad"
+    },
+    {
+      "path": "candidate-straight/actual-word-card-contact.png",
+      "bytes": 43981,
+      "sha256": "25a997e27cd6fb00427ec43b911fe0bb10de24e27e5d917a134dabc8c832c4c2"
+    },
+    {
+      "path": "candidate-straight/counter.png",
+      "bytes": 44603,
+      "sha256": "10e3b1d7846063c7c0c274ce534eaf6d02144efe2b2dc2b85be4ea60c2f4fe79"
+    },
+    {
+      "path": "candidate-straight/match-matched.png",
+      "bytes": 3945,
+      "sha256": "c9f7c199ce0b80dee1c62d075e5190c42e01b9454d55444b8cacf4621e10d7e0"
+    },
+    {
+      "path": "candidate-straight/match-unmatched.png",
+      "bytes": 3319,
+      "sha256": "e87c9a80c27db12034e69c452e4bcb749e32506c523d046d6cdb0db19dc3bd22"
+    },
+    {
+      "path": "candidate-straight/memory-matched.png",
+      "bytes": 3547,
+      "sha256": "fc755a13fd1a85dc2ba7a57525c5da488f0ab640c65024077e0d39d03c3c6791"
+    },
+    {
+      "path": "candidate-straight/memory-unmatched.png",
+      "bytes": 3150,
+      "sha256": "b17e21029197619cf6c0137659264e7fc464dce1ca92170bfdfd7b0e22895e4b"
+    },
+    {
+      "path": "candidate-straight/render-r01.log",
+      "bytes": 573,
+      "sha256": "a27f78c1aa2e95d68e184e8bbefb44bff9d7dcc0453b905f15c4b4e7f50aa8d8"
+    },
+    {
+      "path": "candidate-straight/render-raw.png",
+      "bytes": 17651,
+      "sha256": "88fff9f57906a406d70f4b982301f957b9a7c21df54f6de6421d73169aef256a"
+    },
+    {
+      "path": "candidate-straight/report.json",
+      "bytes": 5780,
+      "sha256": "92fbed0fb495f448bb7905dcd9eacc6899c361e837cceb15703b96548739337f"
+    },
+    {
+      "path": "image-integrity.json",
+      "bytes": 502,
+      "sha256": "8447fa08768111bdc67c489c9e521db3579f28f195bdadf1d060ec67d3b429be"
+    },
+    {
+      "path": "inspect-parcel-source.gd",
+      "bytes": 4206,
+      "sha256": "f20d0038fa5223fbbe559cd190075f452235dcf3c12dc5a0868b5ac65023ba97"
+    },
+    {
+      "path": "inspect-source.gd",
+      "bytes": 4102,
+      "sha256": "47438196f97c01a63fc827612489c10c99d2a6ed587fb75716fb414d46f096c2"
+    },
+    {
+      "path": "native-source-contact.png",
+      "bytes": 115427,
+      "sha256": "86259eff8be080fc23840f0b309be729af69c728b4b400082756755096b302a3"
+    },
+    {
+      "path": "package-review.cjs",
+      "bytes": 8458,
+      "sha256": "216b685321754fb1d682ccdf9e985c25a9cbe342ebddafd88e6d871ab2295d84"
+    },
+    {
+      "path": "parcel-source-record.json",
+      "bytes": 4267,
+      "sha256": "2c3ca62cb730c23c00ef93e04b284bef91fadc833fe59287150e903e3f7268de"
+    },
+    {
+      "path": "prepare-candidate-renderers.cjs",
+      "bytes": 5013,
+      "sha256": "4039f99bec2326e5cd77be524472570c63ee64dc251adbac8063ad03a693ce75"
+    },
+    {
+      "path": "render-broad-return.gd",
+      "bytes": 10030,
+      "sha256": "de0877f706bf8a2685d31d213695d8b20c11bfce8618bd71b4a091930a133ab7"
+    },
+    {
+      "path": "render-return.gd",
+      "bytes": 9940,
+      "sha256": "bf44fef9ff866b640f7f3cc73a7925cf4d18d6f831fcaec481269de232cb78d8"
+    },
+    {
+      "path": "render-straight.gd",
+      "bytes": 9885,
+      "sha256": "3a733640b8b6757fe28e6855179534d3510ccc66e7a7b2afcbdad7dced999328"
+    },
+    {
+      "path": "selected-pixel-hashes.json",
+      "bytes": 2517,
+      "sha256": "0ab666ad2a1332e61feacc7e0c444a29c1e58611edd746945e26343b9a8cea57"
+    },
+    {
+      "path": "source-inspection-parcel/box-front.png",
+      "bytes": 46917,
+      "sha256": "bb0624832fe0cefc05b3d46e5259b48ded1e2bc6f26b5a5d0e7840b67b19e0f2"
+    },
+    {
+      "path": "source-inspection-parcel/box-rear.png",
+      "bytes": 45735,
+      "sha256": "0779e174d9c1f0f9be29ff202d7f4adfc085e58c8b41503d65e6bdb189ccae9a"
+    },
+    {
+      "path": "source-inspection-parcel/kitchenBar-front.png",
+      "bytes": 6933,
+      "sha256": "7ac8880264f6d044a7d25836c1a08782f7e65d6783d04b8db4ef6b7d6fbec42a"
+    },
+    {
+      "path": "source-inspection-parcel/kitchenBar-rear.png",
+      "bytes": 7838,
+      "sha256": "ebe63010513aeb7e1b2339fd17bc538bf566c0903d30f12882781632a95df245"
+    },
+    {
+      "path": "source-inspection-parcel/render-r01.log",
+      "bytes": 597,
+      "sha256": "634b6fe5809e63e9e8fde0a5fba39b61578f58c7a5e76a7a9ba1408febf39a30"
+    },
+    {
+      "path": "source-inspection-parcel/report.json",
+      "bytes": 2038,
+      "sha256": "f92a668e47d9851735fa75e403fd9a0c9007470c84684b8141210fdda9036eb9"
+    },
+    {
+      "path": "source-inspection/cardboardBoxClosed-front.png",
+      "bytes": 6315,
+      "sha256": "a537a10c5a93a94473b535c4ee31c4f5ca616f22ffca18c8d5251c2b68f6a80a"
+    },
+    {
+      "path": "source-inspection/cardboardBoxClosed-rear.png",
+      "bytes": 7468,
+      "sha256": "05d07094c3e513e4c31432c07636f9e9cf1e61585f4ac90717b174d5ece116fa"
+    },
+    {
+      "path": "source-inspection/kitchenBar-front.png",
+      "bytes": 5339,
+      "sha256": "17c76c02cd6613db1cff2e8ff6542e3edeafb211c047c923e76bf14091996fb4"
+    },
+    {
+      "path": "source-inspection/kitchenBar-rear.png",
+      "bytes": 6115,
+      "sha256": "31e396a3619eb8b4eb475dacf462a7025d63cf506e5c6ae4192ad930e8a43b3b"
+    },
+    {
+      "path": "source-inspection/kitchenBarEnd-front.png",
+      "bytes": 4065,
+      "sha256": "c801d64836f47a49252f54e68964977cfc8806fbdd68acac5138d3fd2d50fa79"
+    },
+    {
+      "path": "source-inspection/kitchenBarEnd-rear.png",
+      "bytes": 4862,
+      "sha256": "0959a3be066b999d29859476a564e1690df434f19781c52e60a4c05754c5a6bb"
+    },
+    {
+      "path": "source-inspection/render-r01.log",
+      "bytes": 554,
+      "sha256": "8da382de8b44c2064de5e8e69feae8bbbb1566eb6d10d09670a882954b30465a"
+    },
+    {
+      "path": "source-inspection/report.json",
+      "bytes": 3117,
+      "sha256": "d7264fb3693231f2dd98493a9a48a60631de31c196a24e5d9054935ca415c303"
+    },
+    {
+      "path": "source-preview-contact.png",
+      "bytes": 20205,
+      "sha256": "f33fb5e54983444229de2e8ebeb238bcec0c5e297c8baef18b3095cbaeba552a"
+    },
+    {
+      "path": "source-record.json",
+      "bytes": 16021,
+      "sha256": "edb234925afd17d496484103e4823dfe4eb680b557ab356da5db6476205a242d"
+    },
+    {
+      "path": "source-web-review.json",
+      "bytes": 1051,
+      "sha256": "36b5d64665b3df7639422ccb52cc163b444b275c3682234229c4cd0101b6daf1"
+    },
+    {
+      "path": "source/License.txt",
+      "bytes": 614,
+      "sha256": "0ef3667d547d93dea1e3e47aa1c323eaef4913f25c0f2c2cfe31899f2ee134b7"
+    },
+    {
+      "path": "source/original/cardboardBoxClosed.glb",
+      "bytes": 5400,
+      "sha256": "4af079dca52960912764574950f0549ff2ae1224b3db1528718629473a2d5d81"
+    },
+    {
+      "path": "source/original/kitchenBar.glb",
+      "bytes": 6004,
+      "sha256": "792c3d31e60c8a8d8c7a28cf7d1efe004c5a601adc1b163a8799dde32c1b559d"
+    },
+    {
+      "path": "source/original/kitchenBarEnd.glb",
+      "bytes": 11084,
+      "sha256": "410c6d83defe4ed248a8ec32f81553b56c8b610372d02ecf0e547e3f52cdc0a1"
+    },
+    {
+      "path": "source/parcel/License.txt",
+      "bytes": 696,
+      "sha256": "c33b7f6453d134deae7b1b8493717d9ccfa754c25ab97f6de89b88f8fda19b00"
+    },
+    {
+      "path": "source/parcel/original/Textures/colormap.png",
+      "bytes": 12371,
+      "sha256": "f3622a03a20c6696065cae9cbe391351be873508af190c2ebd1d420c055787a5"
+    },
+    {
+      "path": "source/parcel/original/box.glb",
+      "bytes": 14108,
+      "sha256": "b773815c791d2708a2a70f1a9bb6d197d7211269ad96e273f9e364ea536c1b18"
+    },
+    {
+      "path": "source/parcel/previews/box.png",
+      "bytes": 2167,
+      "sha256": "09f15ddc812880968ec354f09c8cdd03adc95c407471ba5d3cf32734562c1d73"
+    },
+    {
+      "path": "source/previews/cardboardBoxClosed_NE.png",
+      "bytes": 2922,
+      "sha256": "77d272d27d6f04f9e076c8206343704df9b7b2cf17471157ec04f762fb2645c9"
+    },
+    {
+      "path": "source/previews/cardboardBoxClosed_NW.png",
+      "bytes": 2473,
+      "sha256": "a72e1005c17a5ae4ec541f85147f42f073a92b09cf35fe7589396554dad57717"
+    },
+    {
+      "path": "source/previews/cardboardBoxClosed_SE.png",
+      "bytes": 2629,
+      "sha256": "ba14375a0997a51318194b667616e4172ff88ffdeee68e1ee4cc84e4da552f25"
+    },
+    {
+      "path": "source/previews/cardboardBoxClosed_SW.png",
+      "bytes": 2837,
+      "sha256": "90e8bd70736bcaed62f233068d2b97c357e1d04229712ac682090c56dd5167f6"
+    },
+    {
+      "path": "source/previews/kitchenBarEnd_NE.png",
+      "bytes": 1514,
+      "sha256": "fdd50c40655ef4b35c1be562b54339728ee82e209cd81286d4452f68d84cce10"
+    },
+    {
+      "path": "source/previews/kitchenBarEnd_NW.png",
+      "bytes": 1798,
+      "sha256": "7c64accdc2f8c3a66ed0f4caa1cb23bd04a56e6257b121f1a27d2f174c59f2fc"
+    },
+    {
+      "path": "source/previews/kitchenBarEnd_SE.png",
+      "bytes": 1846,
+      "sha256": "45fe0fb31bcacace2454b08dfdbf72f0b862aa65961d25e2cead1fc0147c8dd1"
+    },
+    {
+      "path": "source/previews/kitchenBarEnd_SW.png",
+      "bytes": 1438,
+      "sha256": "516d4d4e7e69bd7c6e7a878ed97c15b1184951cfa9bf71d735e8456302a645b7"
+    },
+    {
+      "path": "source/previews/kitchenBar_NE.png",
+      "bytes": 4815,
+      "sha256": "e0c7b842670c963fbb8f3ef7bb2a7067c4ccf79d13f58e23079af6e4dc114192"
+    },
+    {
+      "path": "source/previews/kitchenBar_NW.png",
+      "bytes": 4896,
+      "sha256": "7410800762f2c1990a39aac4ac07afbe33e89befc89e44315c28c834e1a92b43"
+    },
+    {
+      "path": "source/previews/kitchenBar_SE.png",
+      "bytes": 4796,
+      "sha256": "3495f168a701c4f7d36817e0b1890d036d58fbce8298b60cedfba454a8be1fe0"
+    },
+    {
+      "path": "source/previews/kitchenBar_SW.png",
+      "bytes": 4955,
+      "sha256": "d414ebd7492f51fe7c527c8bf2e82583e77f43e399c9b4cf15e31c22f2c144e3"
+    }
+  ]
+}

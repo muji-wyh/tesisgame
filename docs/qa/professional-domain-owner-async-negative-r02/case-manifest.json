@@ -1,0 +1,214 @@
+{
+  "schema": 1,
+  "authority": "none",
+  "curriculum_revision": "professional-v1",
+  "cases": [
+    {
+      "id": "valid",
+      "owner_path": "res://cases/valid/owner.gd",
+      "expected_error": "",
+      "forbidden_phase": "",
+      "scope": "Exact historical audited synthetic fixture under fixed test paths.",
+      "expected_ok": true,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "missing-descriptor",
+      "owner_path": "res://cases/missing-descriptor/owner.gd",
+      "expected_error": "Missing fixture resource.",
+      "forbidden_phase": "descriptor_read",
+      "scope": "Absent fixed descriptor.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "descriptor-nonobject",
+      "owner_path": "res://cases/descriptor-nonobject/owner.gd",
+      "expected_error": "not a JSON object",
+      "forbidden_phase": "descriptor_validate",
+      "scope": "Native JSON value is not an object.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "descriptor-unsupported",
+      "owner_path": "res://cases/descriptor-unsupported/owner.gd",
+      "expected_error": "unavailable or unsupported",
+      "forbidden_phase": "index_open",
+      "scope": "Unsupported descriptor contract.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "descriptor-caller-path",
+      "owner_path": "res://cases/descriptor-caller-path/owner.gd",
+      "expected_error": "invalid fixed resource",
+      "forbidden_phase": "index_open",
+      "scope": "Caller-like descriptor path rejected.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "missing-index",
+      "owner_path": "res://cases/missing-index/owner.gd",
+      "expected_error": "Missing fixture resource.",
+      "forbidden_phase": "index_read",
+      "scope": "Absent fixed index.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "index-hash",
+      "owner_path": "res://cases/index-hash/owner.gd",
+      "expected_error": "digest differs",
+      "forbidden_phase": "index_decode",
+      "scope": "Same-length index corruption is rejected before decode.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "index-length",
+      "owner_path": "res://cases/index-length/owner.gd",
+      "expected_error": "length differs",
+      "forbidden_phase": "index_read",
+      "scope": "Exact index length mismatch.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "index-policy",
+      "owner_path": "res://cases/index-policy/owner.gd",
+      "expected_error": "Unsupported compiled fixture index",
+      "forbidden_phase": "themes_open",
+      "scope": "Rebound synthetic hash cannot relax supported policy.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "index-duplicate",
+      "owner_path": "res://cases/index-duplicate/owner.gd",
+      "expected_error": "Duplicate fixture module identity",
+      "forbidden_phase": "themes_open",
+      "scope": "Rebound synthetic duplicate index row.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "index-unsafe-path",
+      "owner_path": "res://cases/index-unsafe-path/owner.gd",
+      "expected_error": "Invalid fixture ready descriptor",
+      "forbidden_phase": "themes_open",
+      "scope": "Unsafe selected module path rejected.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "missing-themes",
+      "owner_path": "res://cases/missing-themes/owner.gd",
+      "expected_error": "Missing fixture resource.",
+      "forbidden_phase": "themes_read",
+      "scope": "Absent fixed theme snapshot.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "themes-hash",
+      "owner_path": "res://cases/themes-hash/owner.gd",
+      "expected_error": "digest differs",
+      "forbidden_phase": "themes_decode",
+      "scope": "Same-length theme corruption is rejected before decode.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "themes-duplicate",
+      "owner_path": "res://cases/themes-duplicate/owner.gd",
+      "expected_error": "Fixture theme identity is invalid",
+      "forbidden_phase": "select",
+      "scope": "Rebound synthetic theme identity duplication.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "missing-payload",
+      "owner_path": "res://cases/missing-payload/owner.gd",
+      "expected_error": "Missing fixture resource.",
+      "forbidden_phase": "payload_read",
+      "scope": "Absent selected module.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "payload-hash",
+      "owner_path": "res://cases/payload-hash/owner.gd",
+      "expected_error": "digest differs",
+      "forbidden_phase": "payload_decode",
+      "scope": "Same-length payload corruption is rejected before native decode.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "payload-length",
+      "owner_path": "res://cases/payload-length/owner.gd",
+      "expected_error": "length differs",
+      "forbidden_phase": "payload_read",
+      "scope": "Exact selected payload length mismatch.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "payload-identity",
+      "owner_path": "res://cases/payload-identity/owner.gd",
+      "expected_error": "payload identity differs",
+      "forbidden_phase": "resolve",
+      "scope": "Rebound synthetic payload cannot replace selected module identity.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "payload-membership",
+      "owner_path": "res://cases/payload-membership/owner.gd",
+      "expected_error": "membership count differs",
+      "forbidden_phase": "resolve",
+      "scope": "Rebound synthetic payload cannot omit a selected sense.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "payload-exception",
+      "owner_path": "res://cases/payload-exception/owner.gd",
+      "expected_error": "grants an exception",
+      "forbidden_phase": "resolve",
+      "scope": "Rebound synthetic payload cannot introduce an accepted exception.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "payload-domain-review",
+      "owner_path": "res://cases/payload-domain-review/owner.gd",
+      "expected_error": "requires the original lexical and expression domain reviews",
+      "forbidden_phase": "resolve",
+      "scope": "Rebound synthetic payload retains coarse-required domain review.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "missing-media-manifest",
+      "owner_path": "res://cases/missing-media-manifest/owner.gd",
+      "expected_error": "media manifest is unavailable",
+      "forbidden_phase": "publish",
+      "scope": "Unchanged actual catalog rejects missing manifest; no media fetch.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    },
+    {
+      "id": "media-manifest-hash",
+      "owner_path": "res://cases/media-manifest-hash/owner.gd",
+      "expected_error": "SHA-256 integrity check",
+      "forbidden_phase": "publish",
+      "scope": "Unchanged actual media-manifest parser rejects corrupt bytes; no media fetch.",
+      "expected_ok": false,
+      "fixed_resource_substitution_only": true
+    }
+  ]
+}

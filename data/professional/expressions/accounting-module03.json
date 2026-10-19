@@ -1,0 +1,1472 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.accounting_finance.module03.01",
+      "text": "The calculator is on the desk beside the monitor and mouse.",
+      "meaning": "Locate the calculation and computer equipment.",
+      "context": "Orienting a colleague to the workstation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "calculator",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 15,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "on",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "desk",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "beside",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "monitor",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "mouse",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 58,
+          "end": 59
+        }
+      ],
+      "focus_lexeme_ids": [
+        "calculator.device-or-application-for-numerical-calculations.n",
+        "desk.work-table-with-writing-surface.n",
+        "monitor.computer-display.n",
+        "mouse.computer-input.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module03.02",
+      "text": "Please bring a chair into the office and leave the envelope on the shelf.",
+      "meaning": "Request a simple room arrangement and document placement.",
+      "context": "Preparing a finance discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "bring",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "a",
+          "start": 13,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "chair",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "into",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "office",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "leave",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "envelope",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "on",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "shelf",
+          "start": 67,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 72,
+          "end": 73
+        }
+      ],
+      "focus_lexeme_ids": [
+        "chair.single-person-seat-with-back.n",
+        "office.space-for-administrative-or-professional-work.n",
+        "envelope.paper-cover-for-mailed-document.n",
+        "shelf.storage-surface.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module03.03",
+      "text": "The projector is ready for the meeting, and the safe is secured by the authorized custodian.",
+      "meaning": "Confirm presentation readiness and the stated storage condition.",
+      "context": "Preparing the office for a review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "projector",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "ready",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "for",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "meeting",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "safe",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "is",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 12,
+          "text": "secured",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "by",
+          "start": 64,
+          "end": 66
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 15,
+          "text": "authorized",
+          "start": 71,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "custodian",
+          "start": 82,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "projector.display-device.n",
+        "safe.secure-lockable-container-for-valuables.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module03.04",
+      "text": "Please keep the receipt book separate from the invoice book so payment records stay distinct from requests.",
+      "meaning": "Distinguish two kinds of financial documents.",
+      "context": "Organizing fictional transaction records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "keep",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "receipt",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "book",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "separate",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "from",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "invoice",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "book",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "so",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "payment",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "records",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "stay",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "distinct",
+          "start": 84,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "from",
+          "start": 93,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "requests",
+          "start": 98,
+          "end": 106
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 106,
+          "end": 107
+        }
+      ],
+      "focus_lexeme_ids": [
+        "receipt-book.book-used-to-issue-and-record-receipts.n",
+        "invoice-book.book-used-to-prepare-and-record-invoices.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module03.05",
+      "text": "The file divider separates the document wallet from the archived papers in this folder.",
+      "meaning": "Explain the arrangement of stored papers.",
+      "context": "Preparing a document file for review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "file",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "divider",
+          "start": 9,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "separates",
+          "start": 17,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "document",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "wallet",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "from",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "archived",
+          "start": 56,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "papers",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "in",
+          "start": 72,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "this",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "folder",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "file-divider.sheet-separating-sections-in-file.n",
+        "document-wallet.folded-holder-for-loose-documents.n",
+        "folder.folded-cover-for-holding-paper-documents.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module03.06",
+      "text": "The date stamp records arrival; use of the signature stamp needs the applicable authorization.",
+      "meaning": "Distinguish a received date from authorized signature use.",
+      "context": "Discussing office document handling.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "date",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "stamp",
+          "start": 9,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "records",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "arrival",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": ";",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "use",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "of",
+          "start": 36,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "signature",
+          "start": 43,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "stamp",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "needs",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "applicable",
+          "start": 69,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "authorization",
+          "start": 80,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "date-stamp.stamp-that-marks-a-date.n",
+        "signature-stamp.stamp-that-reproduces-a-signature.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module03.07",
+      "text": "Please compare the adding machine printout with the worksheet before filing it in the archive box.",
+      "meaning": "Request a check before storing a calculation record.",
+      "context": "Organizing a fictional supporting calculation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "compare",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "adding",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "machine",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "printout",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "with",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "worksheet",
+          "start": 52,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "before",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "filing",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": "it",
+          "start": 76,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 79,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "archive",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "box",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "adding-machine.calculation-device-often-with-printed-record.n",
+        "archive-box.box-for-organized-longer-term-record-storage.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module03.08",
+      "text": "The cash box and coin tray are ready for the authorized count.",
+      "meaning": "Confirm the identified containers for a scheduled task.",
+      "context": "Coordinating an assigned cash count.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "cash",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "box",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "coin",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "tray",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "ready",
+          "start": 31,
+          "end": 36
+        },
+        {
+          "index": 8,
+          "text": "for",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 10,
+          "text": "authorized",
+          "start": 45,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "count",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 61,
+          "end": 62
+        }
+      ],
+      "focus_lexeme_ids": [
+        "cash-box.small-container-for-storing-cash.n",
+        "coin-tray.tray-with-sections-for-organizing-coins.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module03.09",
+      "text": "The checkbook and deposit bag are stored under the office's access arrangements.",
+      "meaning": "Describe controlled storage without giving access instructions.",
+      "context": "Explaining where authorized staff manage financial materials.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "checkbook",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "deposit",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "bag",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "are",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "stored",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "under",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "office's",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "access",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "arrangements",
+          "start": 67,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "checkbook.book-of-blank-bank-checks.n",
+        "deposit-bag.bag-used-to-carry-money-for-bank-deposit.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module03.10",
+      "text": "The desk organizer holds the paper clip beside the clipboard and stapler.",
+      "meaning": "Locate small office tools.",
+      "context": "Helping a colleague find filing equipment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "desk",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "organizer",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "holds",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "paper",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "clip",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "beside",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "clipboard",
+          "start": 51,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "stapler",
+          "start": 65,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 72,
+          "end": 73
+        }
+      ],
+      "focus_lexeme_ids": [
+        "desk-organizer.container-for-arranging-small-desk-items.n",
+        "paper-clip.removable-wire-paper-fastener.n",
+        "clipboard.board-with-paper-holding-clip.n",
+        "stapler.tool-for-fastening-pages.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

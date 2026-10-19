@@ -1,0 +1,1737 @@
+[
+  {
+    "path": "data/professional/catalog.json",
+    "bytes": 33329,
+    "raw_sha256": "ff39f26ad1a6868dcb6ce96e6f2c007f0c9dcbe2eafee906c8ee9360af99e544"
+  },
+  {
+    "path": "data/professional/lexemes/shared-pilot.json",
+    "bytes": 21356,
+    "raw_sha256": "8c25b6341d72cb8ef07e6710f6a0b7ed9a05ecb61141e6317f17c826419f5d56"
+  },
+  {
+    "path": "data/professional/lexemes/retail-pilot.json",
+    "bytes": 358948,
+    "raw_sha256": "7efcb9f1ce7cd931982ca6978278f547e05745059762c3558f5ef1864faea897"
+  },
+  {
+    "path": "data/professional/lexemes/nursing-pilot.json",
+    "bytes": 176266,
+    "raw_sha256": "f0777eff27fed1a46113220f5343169a9cae9af4ed1c5721c5fb1c487aba6333"
+  },
+  {
+    "path": "data/professional/lexemes/software-data-pilot.json",
+    "bytes": 221226,
+    "raw_sha256": "aed0680a69532b9b9d1bb781c212ee90ad65895833419baf2b395b338a7dc51b"
+  },
+  {
+    "path": "data/professional/lexemes/foundation-module01.json",
+    "bytes": 313832,
+    "raw_sha256": "a7853d049a715ce992978744c93f81cb481a6cae2b97879cdbc83d2a81629b70"
+  },
+  {
+    "path": "data/professional/lexemes/foundation-module02.json",
+    "bytes": 267505,
+    "raw_sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad"
+  },
+  {
+    "path": "data/professional/lexemes/retail-module04.json",
+    "bytes": 322464,
+    "raw_sha256": "d6abaeaec930a02a47460c9a5751d7b0cd55693205e56283249da30768efe4c8"
+  },
+  {
+    "path": "data/professional/lexemes/retail-module05.json",
+    "bytes": 341482,
+    "raw_sha256": "78967500d9d48f2bcff24d2dddd633f67a12712fa702e19f6dac0e8e0ce8a215"
+  },
+  {
+    "path": "data/professional/lexemes/retail-module06.json",
+    "bytes": 317054,
+    "raw_sha256": "e789916be9423c0e4153972fded7032d64f2e1fd16ad4919d1bdc63143b23da5"
+  },
+  {
+    "path": "data/professional/lexemes/retail-module07.json",
+    "bytes": 380328,
+    "raw_sha256": "6ddedb6643c345d26fccb7f9163ebbb35199b68bc148cfb4357a830acb5059b5"
+  },
+  {
+    "path": "data/professional/lexemes/retail-module08.json",
+    "bytes": 292281,
+    "raw_sha256": "fa88cf2d1900b0b25e1b4e3a2ba0192c4b8ee03d612b39b9e5eaf55a3e8440e6"
+  },
+  {
+    "path": "data/professional/lexemes/retail-module09.json",
+    "bytes": 275519,
+    "raw_sha256": "76888177494656000227c04ba63e159f88d6304b8852c07f7f7b20988fb23cff"
+  },
+  {
+    "path": "data/professional/lexemes/retail-module10.json",
+    "bytes": 264078,
+    "raw_sha256": "7fd709707cb37d463e8d57207889594b0d644e8a1170dc9982f2cf407675fd6a"
+  },
+  {
+    "path": "data/professional/lexemes/software-data-module04.json",
+    "bytes": 154401,
+    "raw_sha256": "9269efb19e6ebf92e594f782e88cc26e849d134363ca527f1e38876ada7d502c"
+  },
+  {
+    "path": "data/professional/lexemes/software-data-module05.json",
+    "bytes": 162659,
+    "raw_sha256": "c36f78dd78561d58d4b4157e6813e84876bfbbef1374b048af7b7331b7753f1e"
+  },
+  {
+    "path": "data/professional/lexemes/software-data-module06.json",
+    "bytes": 190155,
+    "raw_sha256": "24c3e7225afc2596cc4954969581ae03aa18b3f45cfe3a1d077a0da960666c95"
+  },
+  {
+    "path": "data/professional/lexemes/software-data-module07.json",
+    "bytes": 159810,
+    "raw_sha256": "54605a91a455b5d329539e10ef5838c9e5acd40bd6e19a62b51c62dcebefa274"
+  },
+  {
+    "path": "data/professional/lexemes/software-data-module08.json",
+    "bytes": 215489,
+    "raw_sha256": "d846ee927986ed1521cbd725df3d75637ff8a421f3218534cebff16b078f8562"
+  },
+  {
+    "path": "data/professional/lexemes/software-data-module09.json",
+    "bytes": 131462,
+    "raw_sha256": "af362050d3a94907421d654a567cc7740713cd528044ec869f80a815ccf26e2d"
+  },
+  {
+    "path": "data/professional/lexemes/software-data-module10.json",
+    "bytes": 171647,
+    "raw_sha256": "e30f0d9e20bfa8181dbe136c9911558ccc908e28a7eef7523af7e110243b57d3"
+  },
+  {
+    "path": "data/professional/lexemes/nursing-module04.json",
+    "bytes": 219676,
+    "raw_sha256": "704045fa5fd9532a8f1763f91a85721dae60226bd63ae5f38e6c276f47ab2a9d"
+  },
+  {
+    "path": "data/professional/lexemes/nursing-module05.json",
+    "bytes": 229902,
+    "raw_sha256": "7bb2a58246bd1053b2e4f724e25229baf904f460692a2afb5d5bd97163586d55"
+  },
+  {
+    "path": "data/professional/lexemes/nursing-module06.json",
+    "bytes": 210275,
+    "raw_sha256": "2194c71291392832639cb963595b4852832759c10ebe775ad4df8535a274fdd1"
+  },
+  {
+    "path": "data/professional/lexemes/nursing-module07.json",
+    "bytes": 256455,
+    "raw_sha256": "43a41dc9e2bd347e0c67adb36aa9dbc04e3d57d95b5d60e348ed95362044e6c1"
+  },
+  {
+    "path": "data/professional/lexemes/nursing-module08.json",
+    "bytes": 236268,
+    "raw_sha256": "a5ab09d52a466091d36229b528e31f6254bac1c3c5a963c87d9aab9819f8527c"
+  },
+  {
+    "path": "data/professional/lexemes/nursing-module09.json",
+    "bytes": 237350,
+    "raw_sha256": "0c239dece5e67d4ea6ea494fafbcf192212edaefb0c24af819cdd41f608ca188"
+  },
+  {
+    "path": "data/professional/lexemes/nursing-module10.json",
+    "bytes": 212165,
+    "raw_sha256": "aa43569ad7c2e8da1e7eaf1058dd7e11f8dc0c07f52b29923ec39927d530c986"
+  },
+  {
+    "path": "data/professional/lexemes/caregiving-module03.json",
+    "bytes": 135081,
+    "raw_sha256": "8428425d59d1bb8a0e5532c213c2bf1ca15fb5df3236d6b56822b521b76e1337"
+  },
+  {
+    "path": "data/professional/lexemes/caregiving-module04.json",
+    "bytes": 104752,
+    "raw_sha256": "e825d87302ffa9dc0cd91c67929b51a68188e9639672064c5f6e2a325a3c71e4"
+  },
+  {
+    "path": "data/professional/lexemes/caregiving-module05.json",
+    "bytes": 84311,
+    "raw_sha256": "3ed722261ea33bc53de1bab193ac016291b03e7861f3f3e4dbc135e115a39c22"
+  },
+  {
+    "path": "data/professional/lexemes/caregiving-module06.json",
+    "bytes": 135750,
+    "raw_sha256": "1ef9b196737342becc36981abdcc17cde7b792be40465d89f52994650502145c"
+  },
+  {
+    "path": "data/professional/lexemes/caregiving-module07.json",
+    "bytes": 78024,
+    "raw_sha256": "2bfcbc82cb659d7877bc31940f1d030485cf0cee220d40e6ad7c9e54f621b328"
+  },
+  {
+    "path": "data/professional/lexemes/caregiving-module08.json",
+    "bytes": 80315,
+    "raw_sha256": "8773a479f87276a398733646eba80d1e1476813dd7d48ac03c92b4886b07121b"
+  },
+  {
+    "path": "data/professional/lexemes/caregiving-module09.json",
+    "bytes": 50266,
+    "raw_sha256": "b9b2176be88aa624b9af7aa768e41118767273a19522a091ead55d27b6f1eac7"
+  },
+  {
+    "path": "data/professional/lexemes/caregiving-module10.json",
+    "bytes": 62080,
+    "raw_sha256": "8a129963ae322e5549dca9cea242985585534a81016e2f740c3bdc729aec298f"
+  },
+  {
+    "path": "data/professional/lexemes/food-service-module03.json",
+    "bytes": 116047,
+    "raw_sha256": "d125814b112b99a2000bdadaf0897641e7f2cecb277c44f79e40df93e33e4323"
+  },
+  {
+    "path": "data/professional/lexemes/food-service-module04.json",
+    "bytes": 104900,
+    "raw_sha256": "d2926ff66f0d6d0cf6bb153f06dcd70c071481f21f100afeecc45f5e6c01087e"
+  },
+  {
+    "path": "data/professional/lexemes/food-service-module05.json",
+    "bytes": 84580,
+    "raw_sha256": "eacc026a108befa831a135568459eea2ac729d82f09b486fefa32779ec19ff64"
+  },
+  {
+    "path": "data/professional/lexemes/food-service-module06.json",
+    "bytes": 112473,
+    "raw_sha256": "7c933a50ed34204153d601534410733812b7084532349c768669979a963b129e"
+  },
+  {
+    "path": "data/professional/lexemes/food-service-module07.json",
+    "bytes": 41318,
+    "raw_sha256": "fedb8229fefd4cc7259458f136416cb537dbdb7f1ef38902a9c6e09fd0123775"
+  },
+  {
+    "path": "data/professional/lexemes/food-service-module08.json",
+    "bytes": 74838,
+    "raw_sha256": "b32c8727152bb1576483fbe64c50d664510e5a5a2801bbc8ef2a79afeae6daaf"
+  },
+  {
+    "path": "data/professional/lexemes/food-service-module09.json",
+    "bytes": 42277,
+    "raw_sha256": "bb5f405594fa89d7324368292e714afff03a74eb19185d42bb7273adb3480d23"
+  },
+  {
+    "path": "data/professional/lexemes/food-service-module10.json",
+    "bytes": 72386,
+    "raw_sha256": "f2f0a106ce4558fa0ced817f6afcea0ebed000a6e99b69961e521743a9a6bfe3"
+  },
+  {
+    "path": "data/professional/lexemes/customer-support-module03.json",
+    "bytes": 87785,
+    "raw_sha256": "f4479b3487ff4153dd7bdb8651bd49d66dc09d133e82cb6cc7a1e8d43ed3fad0"
+  },
+  {
+    "path": "data/professional/lexemes/customer-support-module04.json",
+    "bytes": 51785,
+    "raw_sha256": "d35983572f3fd2817dd56dd657e3584f1ddffde5480927d9c4b5d726d2c99221"
+  },
+  {
+    "path": "data/professional/lexemes/customer-support-module05.json",
+    "bytes": 133891,
+    "raw_sha256": "92ac90d8b3b9677d3418f1c2c5a878a832f99c81e27c047a781f55c9c65d8a81"
+  },
+  {
+    "path": "data/professional/lexemes/customer-support-module06.json",
+    "bytes": 100351,
+    "raw_sha256": "e81eab83922b203efe5a0dc2cc7bc672bdb2169b06917a6d05799f944edf78e4"
+  },
+  {
+    "path": "data/professional/lexemes/customer-support-module07.json",
+    "bytes": 147410,
+    "raw_sha256": "a608e8b6aaed2d564c009b6ffc415d9b2f0e8b26f3ed86d25413a63e69f0314c"
+  },
+  {
+    "path": "data/professional/lexemes/customer-support-module08.json",
+    "bytes": 55110,
+    "raw_sha256": "c9df805ae1b8c42e886e591791465deb78fc996dc8053324b36a92324f135a3b"
+  },
+  {
+    "path": "data/professional/lexemes/customer-support-module09.json",
+    "bytes": 44575,
+    "raw_sha256": "b645299a3346a8cdd286feeb1a39f1b9cdbce82f6f5000b02e7090a0b8ec8755"
+  },
+  {
+    "path": "data/professional/lexemes/customer-support-module10.json",
+    "bytes": 85787,
+    "raw_sha256": "d304e760e44595155f7db38456aedc07b99753fdc5b766d25316992e9c68b38d"
+  },
+  {
+    "path": "data/professional/lexemes/office-admin-module03.json",
+    "bytes": 154037,
+    "raw_sha256": "f4293e3dffc5cc2976d36d9ef6943f979730b8705cae44c0bce0aa087d46dd7f"
+  },
+  {
+    "path": "data/professional/lexemes/office-admin-module04.json",
+    "bytes": 211721,
+    "raw_sha256": "a24e01786ca007a7488ea677ed399a909ea01c8a747189e0e4ece5fa55ce38d4"
+  },
+  {
+    "path": "data/professional/lexemes/office-admin-module05.json",
+    "bytes": 68911,
+    "raw_sha256": "59707f4c785caebb298c01eaae4a62e09cb95cbb32998d19f2dbe9ed1931666f"
+  },
+  {
+    "path": "data/professional/lexemes/office-admin-module06.json",
+    "bytes": 131217,
+    "raw_sha256": "47233b4f0c44fb95bf88ae0bc12340e49da8f5ec6777836081fd0a9f1a1ebc9d"
+  },
+  {
+    "path": "data/professional/lexemes/office-admin-module07.json",
+    "bytes": 66437,
+    "raw_sha256": "d20cf0c1d1f7f61fc2a36e0ce6801b4a2aadc754c517193c38738fd988aef907"
+  },
+  {
+    "path": "data/professional/lexemes/office-admin-module08.json",
+    "bytes": 25943,
+    "raw_sha256": "c5fe0dfed8e50bfd3d0a5504564138c7e490bb3f8e4a9beccb1e8f583b021fc2"
+  },
+  {
+    "path": "data/professional/lexemes/office-admin-module09.json",
+    "bytes": 104381,
+    "raw_sha256": "b8487a2a6fc0370bf4a1a7c5bebdc182736041d152df9b5c7abc9407acd0f5e5"
+  },
+  {
+    "path": "data/professional/lexemes/office-admin-module10.json",
+    "bytes": 59974,
+    "raw_sha256": "815e5a89ca238e5518aa097a4b4219c3438399cab7f81f6d424259c990cc2dd2"
+  },
+  {
+    "path": "data/professional/lexemes/warehouse-module03.json",
+    "bytes": 131004,
+    "raw_sha256": "1c0c0b759817f75dafbf7e873b301856f3d96a773dcadd3134ba3680c946790d"
+  },
+  {
+    "path": "data/professional/lexemes/warehouse-module04.json",
+    "bytes": 46064,
+    "raw_sha256": "0af14ec05c68295e5ecf26e509118c167c2cb624587b90369c59bed9049cf2fc"
+  },
+  {
+    "path": "data/professional/lexemes/warehouse-module05.json",
+    "bytes": 77071,
+    "raw_sha256": "e94963122f4a08e9a5135d6f1f5240800c6ff04854f2369c97eaa36ac4237aec"
+  },
+  {
+    "path": "data/professional/lexemes/warehouse-module06.json",
+    "bytes": 158512,
+    "raw_sha256": "1ba55aa1730c51d10e116aeb58892d5db08d4875d1518287b7e98a6ddb7e8f0a"
+  },
+  {
+    "path": "data/professional/lexemes/warehouse-module07.json",
+    "bytes": 90578,
+    "raw_sha256": "6bc27059756162e621eb5b5461a3ea8e25da1595bd41224d2e22d96139c47ef5"
+  },
+  {
+    "path": "data/professional/lexemes/warehouse-module08.json",
+    "bytes": 49645,
+    "raw_sha256": "07ae92ab2bf9c3f58a6df4893b4f128df7ff95ea853d9aa570224a1258cff397"
+  },
+  {
+    "path": "data/professional/lexemes/warehouse-module09.json",
+    "bytes": 71906,
+    "raw_sha256": "b0f9b3b00e17b38c5a7ebc38f6f9a5f83b1a7b1f4ed3a4469d93f73f77905b60"
+  },
+  {
+    "path": "data/professional/lexemes/warehouse-module10.json",
+    "bytes": 81838,
+    "raw_sha256": "cfa111f8d4d2d2127ef8a4c191d7f66117749e103c90cb0af01143b10c414f97"
+  },
+  {
+    "path": "data/professional/lexemes/hospitality-module03.json",
+    "bytes": 115480,
+    "raw_sha256": "101f699dad56a7cb618c6a76c3bc6f099eaeceeea2016539e3c10d02fd4d6f0e"
+  },
+  {
+    "path": "data/professional/lexemes/hospitality-module04.json",
+    "bytes": 138906,
+    "raw_sha256": "8320e6db164e8ee2539df478c8385cc55ea9c3e64c8339f31bac033de3a4e13f"
+  },
+  {
+    "path": "data/professional/lexemes/hospitality-module05.json",
+    "bytes": 53759,
+    "raw_sha256": "98fe9ae8a99d3066bfd2a3a65ad946ae240259fe2a7acfe7f4e68d477fea7c28"
+  },
+  {
+    "path": "data/professional/lexemes/hospitality-module06.json",
+    "bytes": 113014,
+    "raw_sha256": "7a01f11696ea45684ec5ce491b6de161138f8073770ff598f180304587b4a3d8"
+  },
+  {
+    "path": "data/professional/lexemes/hospitality-module07.json",
+    "bytes": 123440,
+    "raw_sha256": "60391f79d08ef68c40d9e6dfbee4388b3650a8a7981d827a06e5960daa093199"
+  },
+  {
+    "path": "data/professional/lexemes/hospitality-module08.json",
+    "bytes": 37174,
+    "raw_sha256": "23833f01c3f6a77da2029d6ed9d205f67854202784da424467967be6b7a46674"
+  },
+  {
+    "path": "data/professional/lexemes/hospitality-module09.json",
+    "bytes": 70088,
+    "raw_sha256": "0ee3c872e5fd10553838ae9737f571462fe1581a76456329cc09071e09f23b29"
+  },
+  {
+    "path": "data/professional/lexemes/hospitality-module10.json",
+    "bytes": 69235,
+    "raw_sha256": "410378efd79cb13fd8ab8b72ed5d4a405c37a97751bb90a037a77bf9793fb70b"
+  },
+  {
+    "path": "data/professional/lexemes/transport-module03.json",
+    "bytes": 120256,
+    "raw_sha256": "7c0d08e06aa810721c58ce633807eeab35d5c7016b1ccd6836aed27c93596279"
+  },
+  {
+    "path": "data/professional/lexemes/transport-module04.json",
+    "bytes": 68927,
+    "raw_sha256": "524b00f000fade0ac759feefc9f40c396c41529e3b579949635e2c88d00d45fd"
+  },
+  {
+    "path": "data/professional/lexemes/transport-module05.json",
+    "bytes": 49955,
+    "raw_sha256": "1aa36ed6c8375f735acfc75ffd1a143635ddfa259f2824386efffabcbc567ed0"
+  },
+  {
+    "path": "data/professional/lexemes/transport-module06.json",
+    "bytes": 171614,
+    "raw_sha256": "4b40e71517e50c29508e6ef4c63e39148b210c56d5a5c7ee5255bab1da9e5f0c"
+  },
+  {
+    "path": "data/professional/lexemes/transport-module07.json",
+    "bytes": 54588,
+    "raw_sha256": "5b893027bcaaaa0e6dde9565fe28adb7bd44ba2d18b3547a5a24a7f0244111e3"
+  },
+  {
+    "path": "data/professional/lexemes/transport-module08.json",
+    "bytes": 41710,
+    "raw_sha256": "ed3ca8f512eefe53d84b9a9d82929734fa7f595815fe4340b0aed31cb3513cd0"
+  },
+  {
+    "path": "data/professional/lexemes/transport-module09.json",
+    "bytes": 45817,
+    "raw_sha256": "7b1cefebaf077e1d40fcb210c7d803b47a1e901e9c1fc4b9d2ec14390ca0b256"
+  },
+  {
+    "path": "data/professional/lexemes/transport-module10.json",
+    "bytes": 56123,
+    "raw_sha256": "6d3404a9dc20134f75569fc56835c1c031bbdaf7305dc526a7bf9700e104ce88"
+  },
+  {
+    "path": "data/professional/lexemes/it-support-module03.json",
+    "bytes": 99585,
+    "raw_sha256": "b339c1b0b6d0a399950fa1d80b9814cc68eb88af1151dbd1bf5c31b04ed70bb3"
+  },
+  {
+    "path": "data/professional/lexemes/it-support-module04.json",
+    "bytes": 172914,
+    "raw_sha256": "94cd611f178fdcf11c08ae46f18ed43cee20a7eb7ef3c6bf2bc743de3bbf35f2"
+  },
+  {
+    "path": "data/professional/lexemes/it-support-module05.json",
+    "bytes": 135455,
+    "raw_sha256": "bfee9030c747cdb846b52f7b5ada761fa6c994ae4d294705ca885fe1203d98f4"
+  },
+  {
+    "path": "data/professional/lexemes/it-support-module06.json",
+    "bytes": 205957,
+    "raw_sha256": "d665d894b3c4f047a2a2e82ca4f4cabb78ba5f3401a9fc7e6cddde52fe3e5b54"
+  },
+  {
+    "path": "data/professional/lexemes/it-support-module07.json",
+    "bytes": 185651,
+    "raw_sha256": "c184096c81c9a6b1d66b1166efd3a84a9030287157a26c0c374754ffaf12ad04"
+  },
+  {
+    "path": "data/professional/lexemes/it-support-module08.json",
+    "bytes": 119153,
+    "raw_sha256": "7389aa0b02706000ac5ba43ad4555e4a6c16f5b21f107e11cf30947db2ea68dc"
+  },
+  {
+    "path": "data/professional/lexemes/it-support-module09.json",
+    "bytes": 139410,
+    "raw_sha256": "df40d2b2b257083f60ea49c98d9a37b113d37a7eb327103eabb2bc379c3c9b4e"
+  },
+  {
+    "path": "data/professional/lexemes/it-support-module10.json",
+    "bytes": 117332,
+    "raw_sha256": "28fea8724bbb62e9eec9f841ae75cab57c8242d790c97cdc9de648ee7bd58c0d"
+  },
+  {
+    "path": "data/professional/lexemes/shared-coordination.json",
+    "bytes": 15042,
+    "raw_sha256": "b0bae7097233f766d5be5f9119d65d6acf94fc6ad95811aa9b70a16ce8aa47cc"
+  },
+  {
+    "path": "data/professional/lexemes/education-module03.json",
+    "bytes": 250931,
+    "raw_sha256": "b26e1e8565987d7955e3c28a9e9931bb3834f8a4fd8e6b5327c71f53bec052d5"
+  },
+  {
+    "path": "data/professional/lexemes/education-module04.json",
+    "bytes": 209222,
+    "raw_sha256": "45be334bf3575302e555f5492724deaf219deed63856de67029247a9e7a26b6d"
+  },
+  {
+    "path": "data/professional/lexemes/education-module05.json",
+    "bytes": 174265,
+    "raw_sha256": "39fbbfda84192007ff0544ae536415b6d59074e41ed9ecb68c90e59262f499d9"
+  },
+  {
+    "path": "data/professional/lexemes/education-module06.json",
+    "bytes": 239604,
+    "raw_sha256": "b04860128a4d35548902cdd24742e626ffa0d8f32f7f8323cb6f5fcd755cefab"
+  },
+  {
+    "path": "data/professional/lexemes/education-module07.json",
+    "bytes": 162563,
+    "raw_sha256": "67a67abf3a832a8089f807095afc7b299490a57a1619f56a6457f75cf82221ec"
+  },
+  {
+    "path": "data/professional/lexemes/education-module08.json",
+    "bytes": 150384,
+    "raw_sha256": "948c51b4e91ee6eef65084fb35b70407c2acaf7df3ca976886cdf6db97b74693"
+  },
+  {
+    "path": "data/professional/lexemes/education-module09.json",
+    "bytes": 96746,
+    "raw_sha256": "3a86d73ca0fe5e26c06bab62d2da5abc4cd09a11be34aff304d441a2468d73d8"
+  },
+  {
+    "path": "data/professional/lexemes/education-module10.json",
+    "bytes": 235954,
+    "raw_sha256": "b5e5dc4463ee4ac0a46dab6eff484bd5db2442f298938117063eccaa2c9ddb13"
+  },
+  {
+    "path": "data/professional/lexemes/hr-module03.json",
+    "bytes": 97857,
+    "raw_sha256": "42594da833f6fadce591bf89133d83a9ca3d871519cb72a34092b3de301387df"
+  },
+  {
+    "path": "data/professional/lexemes/hr-module04.json",
+    "bytes": 228055,
+    "raw_sha256": "049b2ad946715c2beb115804911a8b0282a50da189e56d2b90eaf0ddc4c7722a"
+  },
+  {
+    "path": "data/professional/lexemes/hr-module05.json",
+    "bytes": 152168,
+    "raw_sha256": "b1cb299df79f6c55d60595fef760d54ca2c508260ea0a9d712a3a9db55ad5d69"
+  },
+  {
+    "path": "data/professional/lexemes/hr-module06.json",
+    "bytes": 235900,
+    "raw_sha256": "3e2b050646acbd27556b31558f91641b0efb14cc55f45320829fa07f685b88b0"
+  },
+  {
+    "path": "data/professional/lexemes/hr-module07.json",
+    "bytes": 187082,
+    "raw_sha256": "3db53c6f134efe8407e6b89b6fe38f0836335c987b314cc18fab634eb1ca12f1"
+  },
+  {
+    "path": "data/professional/lexemes/hr-module08.json",
+    "bytes": 182272,
+    "raw_sha256": "d13db40c4cad4a29671a6340191e7faa59acdddc9bfee0fa06d9593e4e994f4b"
+  },
+  {
+    "path": "data/professional/lexemes/hr-module09.json",
+    "bytes": 200733,
+    "raw_sha256": "c21d9ab234047d79f63226ac0d0247c2f8060fb926fdaf3fea9ddf2f3a47064d"
+  },
+  {
+    "path": "data/professional/lexemes/hr-module10.json",
+    "bytes": 214580,
+    "raw_sha256": "89ead45befdca574f13395ab312f4792928526cbebeeaf4593890538df25d8f3"
+  },
+  {
+    "path": "data/professional/lexemes/construction-module03.json",
+    "bytes": 242754,
+    "raw_sha256": "0b0944ce4f55b31afc1da3284380a4c13f128fed53492ac6563bf975d0711a4f"
+  },
+  {
+    "path": "data/professional/lexemes/construction-module04.json",
+    "bytes": 236157,
+    "raw_sha256": "74873574616d05312c92e2c27ad42264a7d83d33bbc6e1c842854502a4fccb32"
+  },
+  {
+    "path": "data/professional/lexemes/construction-module05.json",
+    "bytes": 167933,
+    "raw_sha256": "0b833f58ce9176ddc979eaa23935ae5b6b9b1b1d1e3e3e374f598cdc31d4243a"
+  },
+  {
+    "path": "data/professional/lexemes/construction-module06.json",
+    "bytes": 230567,
+    "raw_sha256": "89bb536140f8101a48b04da1d0b43223fbc271ab402789bf5d247e02ce63cbeb"
+  },
+  {
+    "path": "data/professional/lexemes/construction-module07.json",
+    "bytes": 266633,
+    "raw_sha256": "01accf5b6969b0b7058e72175f1a26ce95ba6f70e3903e661afdcd25bd5c491e"
+  },
+  {
+    "path": "data/professional/lexemes/construction-module08.json",
+    "bytes": 100608,
+    "raw_sha256": "7f7da9f908ff36796de8479c25275a3df462fcf5b74375e92c226cef3cb7f3df"
+  },
+  {
+    "path": "data/professional/lexemes/construction-module09.json",
+    "bytes": 223518,
+    "raw_sha256": "622727048c41f1285cb637b707497be393a2e99412373e8444194a4dc67b63f4"
+  },
+  {
+    "path": "data/professional/lexemes/construction-module10.json",
+    "bytes": 243940,
+    "raw_sha256": "b4f7349d1a5cdba17f86d3c8ad16f0422d5f974e3a91a1bcf5ec94fa9512fe9f"
+  },
+  {
+    "path": "data/professional/lexemes/cleaning-module03.json",
+    "bytes": 163054,
+    "raw_sha256": "f5f3698bf04449785873d3b286efe7f7dad4cce59c0d3c24f796cf3c60142861"
+  },
+  {
+    "path": "data/professional/lexemes/cleaning-module04.json",
+    "bytes": 160827,
+    "raw_sha256": "6c9766213049425e3f560f4486ef20843e2e6b346bf11ba2b221236aae745e04"
+  },
+  {
+    "path": "data/professional/lexemes/cleaning-module05.json",
+    "bytes": 106233,
+    "raw_sha256": "7665d8387005bfd18c4937a9b91101f78e58ee485fb692238bf5fdae92e54846"
+  },
+  {
+    "path": "data/professional/lexemes/cleaning-module06.json",
+    "bytes": 201971,
+    "raw_sha256": "de86b7447515f0e78bb5025a3f0e337790589484754bc1d54f85af7bd400ca06"
+  },
+  {
+    "path": "data/professional/lexemes/cleaning-module07.json",
+    "bytes": 132009,
+    "raw_sha256": "9752ef12caddeb4d47c46db792b88aafe59db475a847ff70054b6e9cad460dd1"
+  },
+  {
+    "path": "data/professional/lexemes/cleaning-module08.json",
+    "bytes": 85071,
+    "raw_sha256": "6a0432e6a17f9407b7d11657c54206f02b26aed40a55c5597ad4496c2cbb01d0"
+  },
+  {
+    "path": "data/professional/lexemes/cleaning-module09.json",
+    "bytes": 84018,
+    "raw_sha256": "c8d04d319af583403f24b10f96e04475dabe05a2aa4cc566174e30996308c825"
+  },
+  {
+    "path": "data/professional/lexemes/cleaning-module10.json",
+    "bytes": 77195,
+    "raw_sha256": "bbd9dea2d575fa1978d02c3f3f139dcd4ccf7b23047d628b84e3f6836d8308e9"
+  },
+  {
+    "path": "data/professional/lexemes/manufacturing-module03.json",
+    "bytes": 197341,
+    "raw_sha256": "cf7a38ec0c5755f6e4a5f23d25d2559b53d5c41e78849db64fe35402f7d8c5ef"
+  },
+  {
+    "path": "data/professional/lexemes/manufacturing-module04.json",
+    "bytes": 175128,
+    "raw_sha256": "78719a105fc37ecfaa34e638103d03e3de221c5e00ec2cba4ae75778423e8af4"
+  },
+  {
+    "path": "data/professional/lexemes/manufacturing-module05.json",
+    "bytes": 110855,
+    "raw_sha256": "a7b82590e2b11cb04f0306bd54a49566fbc9f359cc1c37fe07afe75d4bd297ab"
+  },
+  {
+    "path": "data/professional/lexemes/manufacturing-module06.json",
+    "bytes": 212915,
+    "raw_sha256": "eb09a5f92b898a50426522eaf3b2108498c4207f9841dc93af5db1fe9566c329"
+  },
+  {
+    "path": "data/professional/lexemes/manufacturing-module07.json",
+    "bytes": 160580,
+    "raw_sha256": "c20e16d6e03b1a4a6f89500166f92e31c654ed68e417624ab4d2d72fd94af9d6"
+  },
+  {
+    "path": "data/professional/lexemes/manufacturing-module08.json",
+    "bytes": 167442,
+    "raw_sha256": "19f4eb2364bdf0fb0601c66f5417196598d95ee7754630bcdc1ffe9b2db3da08"
+  },
+  {
+    "path": "data/professional/lexemes/manufacturing-module09.json",
+    "bytes": 118056,
+    "raw_sha256": "8e62d0ca4c9b9bfcccb8da325f422d52ee2d21e350053d7d56d4ce313a535465"
+  },
+  {
+    "path": "data/professional/lexemes/manufacturing-module10.json",
+    "bytes": 217435,
+    "raw_sha256": "2760ec647ccb06c9cb798a13a13c7d92e7ef0ad734ae1f3090d4b3d696755535"
+  },
+  {
+    "path": "data/professional/lexemes/sales-module03.json",
+    "bytes": 82396,
+    "raw_sha256": "99c64649e3cb5d428feac5172360430046f9c67c853dc53879581d36d72f4c5f"
+  },
+  {
+    "path": "data/professional/lexemes/sales-module04.json",
+    "bytes": 227906,
+    "raw_sha256": "27f85ca90addca04177098c8171f1e9530f19aeba3aab92d9f751af665e7d5d3"
+  },
+  {
+    "path": "data/professional/lexemes/sales-module05.json",
+    "bytes": 141436,
+    "raw_sha256": "94697557f7919feaa41cb3de0ac6dfdef288b728fc5e022c2c9de18d7c427a55"
+  },
+  {
+    "path": "data/professional/lexemes/sales-module06.json",
+    "bytes": 194443,
+    "raw_sha256": "cb0a42100851c816724b45218ce1229f22e95fcf6aa6cace9e692def8617e1e7"
+  },
+  {
+    "path": "data/professional/lexemes/sales-module07.json",
+    "bytes": 208213,
+    "raw_sha256": "e2fb08cdc9f4787163cdb54093ae2135beed3e2cdbbccc23b5d392828401f2c8"
+  },
+  {
+    "path": "data/professional/lexemes/sales-module08.json",
+    "bytes": 196181,
+    "raw_sha256": "a2aaf44c2bf3592ddd4a8523ac0bb71c3203b3113c31521725cf0c740328e39d"
+  },
+  {
+    "path": "data/professional/lexemes/sales-module09.json",
+    "bytes": 196079,
+    "raw_sha256": "95d956baeee8934385b0d9781a95aa73127ce63635181c7759627bb95e5e1bc3"
+  },
+  {
+    "path": "data/professional/lexemes/sales-module10.json",
+    "bytes": 113725,
+    "raw_sha256": "ba8cc970a165941c748343c2eddc9fdc87ca7b1bbc93baf15d065dc4032ad610"
+  },
+  {
+    "path": "data/professional/lexemes/clinical-module03.json",
+    "bytes": 107745,
+    "raw_sha256": "03186681146fdef00322ade1c5ccabd69e75fa149a7790845d03d02220af1be1"
+  },
+  {
+    "path": "data/professional/lexemes/clinical-module04.json",
+    "bytes": 72329,
+    "raw_sha256": "f79af0f3c91cb230ac27fc7d8b3ec28aef9cf102b9fab156aa46094f7c1e38ba"
+  },
+  {
+    "path": "data/professional/lexemes/clinical-module05.json",
+    "bytes": 120842,
+    "raw_sha256": "716a9479aea913940f8acd9979d9782538340004c24deb51253aba318c205c09"
+  },
+  {
+    "path": "data/professional/lexemes/clinical-module06.json",
+    "bytes": 84021,
+    "raw_sha256": "fc18da97d63c5dc34ddc2959eae9cad7948a07a024e50c70fbac751771b18830"
+  },
+  {
+    "path": "data/professional/lexemes/clinical-module07.json",
+    "bytes": 208517,
+    "raw_sha256": "fcb51b72023b70c1b4c1a43406f664996a824565e5b3f819353c53fd2eda83cb"
+  },
+  {
+    "path": "data/professional/lexemes/clinical-module08.json",
+    "bytes": 74100,
+    "raw_sha256": "cccbdcda1ec538cd5260b3fe4f432749e1e0d8c8277554c4c4d15fa510458f94"
+  },
+  {
+    "path": "data/professional/lexemes/clinical-module09.json",
+    "bytes": 16356,
+    "raw_sha256": "93be37931ea8113950d7288db9b678a5ccf145eaedd37be53614643397693cb8"
+  },
+  {
+    "path": "data/professional/lexemes/clinical-module10.json",
+    "bytes": 78755,
+    "raw_sha256": "5376f7d761e1d791c0f8bafed53f0fddd0dd94d24da8a980425250b393623a3f"
+  },
+  {
+    "path": "data/professional/lexemes/accounting-module03.json",
+    "bytes": 71600,
+    "raw_sha256": "4cc8f99dec1d458ec45d3b9d89ac3a3e6d58d1b4936a4ce7ae8ea9486f7024ec"
+  },
+  {
+    "path": "data/professional/lexemes/accounting-module04.json",
+    "bytes": 220059,
+    "raw_sha256": "fb43b8f738a0345ed29f28b24b5dfc4f05a30341b55707040dfba8ddc95865bb"
+  },
+  {
+    "path": "data/professional/lexemes/accounting-module05.json",
+    "bytes": 151767,
+    "raw_sha256": "42d69fe15d0f9c60cbfdd9e6c36a157ef2020eb1b9401602c405b4a89f3c0d74"
+  },
+  {
+    "path": "data/professional/lexemes/accounting-module06.json",
+    "bytes": 193139,
+    "raw_sha256": "f06b5538e247d7360d7ce94794b8943a786502b4fe9361282824fca7233f25de"
+  },
+  {
+    "path": "data/professional/lexemes/accounting-module07.json",
+    "bytes": 261919,
+    "raw_sha256": "635e272515e1a57e7fb299662925f55d0271dca7115f9707c2f52ac800d9ac2c"
+  },
+  {
+    "path": "data/professional/lexemes/accounting-module08.json",
+    "bytes": 207115,
+    "raw_sha256": "13fb14296d9cb9d03d3e8fb2477605783893fb1a00a2647d972cad84288310ff"
+  },
+  {
+    "path": "data/professional/lexemes/accounting-module09.json",
+    "bytes": 234643,
+    "raw_sha256": "65d94e67b3cce4669a723541f474dfac2534bdca115a4bc456ced67bf8c18bfc"
+  },
+  {
+    "path": "data/professional/lexemes/accounting-module10.json",
+    "bytes": 187518,
+    "raw_sha256": "cafedccbb50711af9d8f1f7310dcdb6bd60f91f2751ea35e8f6d413679db4f11"
+  },
+  {
+    "path": "data/professional/lexemes/legal-module03.json",
+    "bytes": 216376,
+    "raw_sha256": "66ab1d636e721a2f6d645fabd0d8e5042dd105b36f6ee94e46233ac4ee48b060"
+  },
+  {
+    "path": "data/professional/lexemes/legal-module04.json",
+    "bytes": 126296,
+    "raw_sha256": "ecdde5edc905a15fbea435b90cf39070e41dbb1612640d4eda4546b856e9bf6d"
+  },
+  {
+    "path": "data/professional/lexemes/legal-module05.json",
+    "bytes": 285859,
+    "raw_sha256": "37bb41528fd361f0205afa300c564e07cf982b9c24f15c0c68e9840d39644d0d"
+  },
+  {
+    "path": "data/professional/lexemes/legal-module06.json",
+    "bytes": 249398,
+    "raw_sha256": "6f814699ab08b55e525443a56c6fdc306bc1c08852da65f09bb257c06f9fb0f7"
+  },
+  {
+    "path": "data/professional/lexemes/legal-module07.json",
+    "bytes": 224093,
+    "raw_sha256": "bb91d3a48796a996f97ec288ab8146f8d2bff4ce03f3539e084607ab6ba1fc3c"
+  },
+  {
+    "path": "data/professional/lexemes/legal-module08.json",
+    "bytes": 97185,
+    "raw_sha256": "22bcdba0591d9db891ddf3e66e5073807f114831fcbe9c44ff71d71e30ee642c"
+  },
+  {
+    "path": "data/professional/lexemes/legal-module09.json",
+    "bytes": 305764,
+    "raw_sha256": "b6c45105758a975ea48f8a61928f753c5d1e39e51e6519c3f7e08ca27716d2df"
+  },
+  {
+    "path": "data/professional/expressions/retail-pilot.json",
+    "bytes": 28145,
+    "raw_sha256": "49edf3bf0049f1816565c34a1effa0254356b3c995b058b4dbe4b82000b42884"
+  },
+  {
+    "path": "data/professional/expressions/nursing-pilot.json",
+    "bytes": 22985,
+    "raw_sha256": "a312b502a8a125426b3d33d6ba70abe1ec91a3cedf8038ce8dc3d761ed085ee3"
+  },
+  {
+    "path": "data/professional/expressions/software-data-pilot.json",
+    "bytes": 27813,
+    "raw_sha256": "ceaa13f8e174abe2f2e19b2cb79f36f3cdfb308d714476fa4bb2e8a481a0a068"
+  },
+  {
+    "path": "data/professional/expressions/foundation-module01.json",
+    "bytes": 30340,
+    "raw_sha256": "428ff84a40186b150e72e25a27ad121097f7ed807919c8a67dde815cbffa1436"
+  },
+  {
+    "path": "data/professional/expressions/foundation-module02.json",
+    "bytes": 33602,
+    "raw_sha256": "62468cc44a6fc0c1226d0533351d2c3bd8f414a530a350b436464dce5eb00bc9"
+  },
+  {
+    "path": "data/professional/expressions/retail-module04.json",
+    "bytes": 64858,
+    "raw_sha256": "85cc40129c0c62145d34b00394435beda98fcfb1886631ce72fc53b02fe2d2db"
+  },
+  {
+    "path": "data/professional/expressions/retail-module05.json",
+    "bytes": 64771,
+    "raw_sha256": "2dbd11fa16ae9fe6ebacd4bf14cff5e65d3976b142858758ce5cd389d1acc1c9"
+  },
+  {
+    "path": "data/professional/expressions/retail-module06.json",
+    "bytes": 70533,
+    "raw_sha256": "ef159961108b43f96ca7d8b1eeb02d6bf8a24b5f845a345dcfea8703a22ce369"
+  },
+  {
+    "path": "data/professional/expressions/retail-module07.json",
+    "bytes": 74912,
+    "raw_sha256": "5dc812e0626a4cc033b469d1ca290a4d4eb08b826c3fbb0a94ed83a8fa4bcd17"
+  },
+  {
+    "path": "data/professional/expressions/retail-module08.json",
+    "bytes": 37827,
+    "raw_sha256": "d38bef42a871932c5352021d01addfba267f2439d8ab8284e1ae556603b49742"
+  },
+  {
+    "path": "data/professional/expressions/retail-module09.json",
+    "bytes": 37309,
+    "raw_sha256": "644427c387b099a74c4ce9dd57736ac451767a0203bbf8ed90b7c029730faeac"
+  },
+  {
+    "path": "data/professional/expressions/retail-module10.json",
+    "bytes": 36135,
+    "raw_sha256": "3ab9e41fa7348735fd3a262168df6254efebc192e3f79f59587ff6e2386b9cbd"
+  },
+  {
+    "path": "data/professional/expressions/software-data-module04.json",
+    "bytes": 34938,
+    "raw_sha256": "3d984a06f09739cc792e803f4c17ffde23a696e4d25802f575c1b8b391fcfca1"
+  },
+  {
+    "path": "data/professional/expressions/software-data-module05.json",
+    "bytes": 43427,
+    "raw_sha256": "f004a6f32cdedc91f8db03c5da9faa7a4913223ad0285798bd13235949dffa3f"
+  },
+  {
+    "path": "data/professional/expressions/software-data-module06.json",
+    "bytes": 34273,
+    "raw_sha256": "ba0a78b4a77bf49fe389b6f947edd4795e9fab6d0b5d3093d9dfee06394a50b9"
+  },
+  {
+    "path": "data/professional/expressions/software-data-module07.json",
+    "bytes": 36946,
+    "raw_sha256": "ef448f9f08abf6ccb44536678a9bcee221da9b8b8a02b7f12271e2f3573dd4d7"
+  },
+  {
+    "path": "data/professional/expressions/software-data-module08.json",
+    "bytes": 36521,
+    "raw_sha256": "0c590d89a4255c00c4548a9b3c2fee5dd415f94b9bfc91d3d56efc631ae15c07"
+  },
+  {
+    "path": "data/professional/expressions/software-data-module09.json",
+    "bytes": 35170,
+    "raw_sha256": "785f8705a3575b29278ce79e9d4f4384938c4f99f46abf2d34228752db37f576"
+  },
+  {
+    "path": "data/professional/expressions/software-data-module10.json",
+    "bytes": 35032,
+    "raw_sha256": "541478897d18aaa0e1c049e817f3e4b257986eac9f94813e62cecef6f1930152"
+  },
+  {
+    "path": "data/professional/expressions/nursing-module04.json",
+    "bytes": 39498,
+    "raw_sha256": "ca97a60267cece730a295c76df36bade70f32b9121068cae93eb63d765055b56"
+  },
+  {
+    "path": "data/professional/expressions/nursing-module05.json",
+    "bytes": 43071,
+    "raw_sha256": "95ad9cce094db417fea47ab7cd92399814459fe9b88ee84d5d405654b3f5ba9d"
+  },
+  {
+    "path": "data/professional/expressions/nursing-module06.json",
+    "bytes": 38647,
+    "raw_sha256": "7aea619a44d177eac7ffce991a45d3e134cdd1607df3d6bed0bdd0ea42025c5d"
+  },
+  {
+    "path": "data/professional/expressions/nursing-module07.json",
+    "bytes": 36421,
+    "raw_sha256": "9d9d14f5a92b6d7de5aae97de58d79be0b4e4633ce87c8d6ba5d3e8c9d25fc1d"
+  },
+  {
+    "path": "data/professional/expressions/nursing-module08.json",
+    "bytes": 37848,
+    "raw_sha256": "fe246c77bf741617f0dd12ce4344d083fdbf3190b2d63149d443fcac33ed8c97"
+  },
+  {
+    "path": "data/professional/expressions/nursing-module09.json",
+    "bytes": 39122,
+    "raw_sha256": "850e6e0d957e47399fd09eaa6a4fe412a24e9dc722c9178242f942998fb346ec"
+  },
+  {
+    "path": "data/professional/expressions/nursing-module10.json",
+    "bytes": 38058,
+    "raw_sha256": "ff41dedebae6f946c2311a558e61791f67c910c74d396ea9c760a88d5ce2fa33"
+  },
+  {
+    "path": "data/professional/expressions/caregiving-module03.json",
+    "bytes": 32214,
+    "raw_sha256": "fcc8bb6e4b08a97c97fbecd80cbe291f5b47c78aec00606bd31ae1be7c8dbdcf"
+  },
+  {
+    "path": "data/professional/expressions/caregiving-module04.json",
+    "bytes": 37535,
+    "raw_sha256": "bad2ef4fa14e53cc25d604219bc566e85773295af8fb229d943ac076c663fd65"
+  },
+  {
+    "path": "data/professional/expressions/caregiving-module05.json",
+    "bytes": 43117,
+    "raw_sha256": "83a7b342b219a3844781112fc3090904472b7dca9eeb935425e4cc65302c17fd"
+  },
+  {
+    "path": "data/professional/expressions/caregiving-module06.json",
+    "bytes": 37441,
+    "raw_sha256": "7befc46b26fd3ba83c75865c661570daaf338032f3d19756b2ac6b901fc4328f"
+  },
+  {
+    "path": "data/professional/expressions/caregiving-module07.json",
+    "bytes": 36678,
+    "raw_sha256": "1d29e325954ee55e2e9109e26cd3c6805264a0a6f815022fcf015903c0d25203"
+  },
+  {
+    "path": "data/professional/expressions/caregiving-module08.json",
+    "bytes": 36458,
+    "raw_sha256": "ef0f406fb9810164cc327ed7057d7d6c064084f8dd2aabe4528725d424e7dd16"
+  },
+  {
+    "path": "data/professional/expressions/caregiving-module09.json",
+    "bytes": 33158,
+    "raw_sha256": "4a80331e436eba2e79f325a3e30c921c0a22c9b58477492f055e69da00196a44"
+  },
+  {
+    "path": "data/professional/expressions/caregiving-module10.json",
+    "bytes": 34355,
+    "raw_sha256": "086ad7b2ca06487940aa587055c8ab27174299fe7c0fab42f2748acb13b5f6b4"
+  },
+  {
+    "path": "data/professional/expressions/food-service-module03.json",
+    "bytes": 31385,
+    "raw_sha256": "892929f2cca7fad991e2bccf6e4ffaa592921f9afc31058c6086dcc0902e4087"
+  },
+  {
+    "path": "data/professional/expressions/food-service-module04.json",
+    "bytes": 36265,
+    "raw_sha256": "2a02ec6ea99b52ba41fb993dd792f127d7bb88c86a4b1331e8bc9a98614a74ba"
+  },
+  {
+    "path": "data/professional/expressions/food-service-module05.json",
+    "bytes": 41660,
+    "raw_sha256": "eedc8563a92fb1b4775f500b2da263fed2fd857390b6e0b932f599389141357e"
+  },
+  {
+    "path": "data/professional/expressions/food-service-module06.json",
+    "bytes": 38172,
+    "raw_sha256": "765c669c7a5fed8a43fec379ea4a56321f42d664fbb686b668ed6526c91e8b17"
+  },
+  {
+    "path": "data/professional/expressions/food-service-module07.json",
+    "bytes": 39085,
+    "raw_sha256": "5d3dd5643cc72eaf0bb07132f7f04996d6f7092c805ad169d731927c221054e2"
+  },
+  {
+    "path": "data/professional/expressions/food-service-module08.json",
+    "bytes": 41256,
+    "raw_sha256": "3748b5018a6f2ab6d4f0aed5f9810a2ace7892f2572e083d97014f8d40f1b072"
+  },
+  {
+    "path": "data/professional/expressions/food-service-module09.json",
+    "bytes": 36238,
+    "raw_sha256": "49b01a081f3bff7796c3343fad6f5519bfa36d1c37d573f07a696383d3d8b173"
+  },
+  {
+    "path": "data/professional/expressions/food-service-module10.json",
+    "bytes": 34371,
+    "raw_sha256": "c4df59b51d609a118dfbceff7de7a6b1301998622844088849809ec653e6b5e0"
+  },
+  {
+    "path": "data/professional/expressions/customer-support-module03.json",
+    "bytes": 36683,
+    "raw_sha256": "169c49beeaa94ee5502e3f7c0c44f83898bff264af4b0ded09ed134295b1e813"
+  },
+  {
+    "path": "data/professional/expressions/customer-support-module04.json",
+    "bytes": 40074,
+    "raw_sha256": "f71389a91cf37c23400ffe04c0b8b4e9032b112e50bc954ac473ea51c13b105f"
+  },
+  {
+    "path": "data/professional/expressions/customer-support-module05.json",
+    "bytes": 44410,
+    "raw_sha256": "6b5b667d4859f16f61a80c1efcae934076b71f371370b80c242ab425a0e455f9"
+  },
+  {
+    "path": "data/professional/expressions/customer-support-module06.json",
+    "bytes": 38032,
+    "raw_sha256": "1b199855c3955809f4bbb0447c5b82657b1d8fa29aaf930df5df35966c7d415c"
+  },
+  {
+    "path": "data/professional/expressions/customer-support-module07.json",
+    "bytes": 40493,
+    "raw_sha256": "a168a0017d3508dc8de4fd424f61a0c9cc517bf5ec64e621bd28ebaee824962b"
+  },
+  {
+    "path": "data/professional/expressions/customer-support-module08.json",
+    "bytes": 39988,
+    "raw_sha256": "5c581ebef353cda972c9d3f33893edd9ed8e3ae078fdee361afb8dd535ca5f2f"
+  },
+  {
+    "path": "data/professional/expressions/customer-support-module09.json",
+    "bytes": 38355,
+    "raw_sha256": "273bd95dc2014b5e282cb041bba6d026732fde45aea2db9caa8f0e1ad917d28d"
+  },
+  {
+    "path": "data/professional/expressions/customer-support-module10.json",
+    "bytes": 37196,
+    "raw_sha256": "17cae45380e5c1271c61aa81521790b99b5c87f9f80173bc7cec9c9ee206a925"
+  },
+  {
+    "path": "data/professional/expressions/office-admin-module03.json",
+    "bytes": 34692,
+    "raw_sha256": "57b65e28d8c19e5a94ec3fa1e5a74994086603574a2cde0c26a31a2f25ee87d8"
+  },
+  {
+    "path": "data/professional/expressions/office-admin-module04.json",
+    "bytes": 39821,
+    "raw_sha256": "feb94d5c2fc90aac7342a5055e2fc9bb61750f9c8536d2172fa199a7a10251a3"
+  },
+  {
+    "path": "data/professional/expressions/office-admin-module05.json",
+    "bytes": 43314,
+    "raw_sha256": "7cff8ccd4cb295ad83c2978377a0ee70a994df4ad6f68c05e78f175b176bcf81"
+  },
+  {
+    "path": "data/professional/expressions/office-admin-module06.json",
+    "bytes": 36172,
+    "raw_sha256": "67788472867ad78db594251f0ba946d0ee0851d443505668487d1b528e4f5002"
+  },
+  {
+    "path": "data/professional/expressions/office-admin-module07.json",
+    "bytes": 38987,
+    "raw_sha256": "2a443de9529d7fa32d23badef2900a81753299b46120ad1a2e55c6f3e8cabfa9"
+  },
+  {
+    "path": "data/professional/expressions/office-admin-module08.json",
+    "bytes": 40007,
+    "raw_sha256": "25200480f511bfc327cee08e1936322c939746fa3933256b01a41c7e512373e9"
+  },
+  {
+    "path": "data/professional/expressions/office-admin-module09.json",
+    "bytes": 39005,
+    "raw_sha256": "8599ede9001c80590343790aeed943cc0c81449537b6af313902a7f6d6691980"
+  },
+  {
+    "path": "data/professional/expressions/office-admin-module10.json",
+    "bytes": 35398,
+    "raw_sha256": "36890a44d6da9901d49f5328d14091832aabf690cd6b383401248d1d419d7675"
+  },
+  {
+    "path": "data/professional/expressions/warehouse-module03.json",
+    "bytes": 33633,
+    "raw_sha256": "bfff841933fcf8c5dffd102a7c67cd0f584a899e9f8a578ccb5d9beb36df3c61"
+  },
+  {
+    "path": "data/professional/expressions/warehouse-module04.json",
+    "bytes": 36784,
+    "raw_sha256": "f071fe20dd099e8eccb67b1c743eaad712bb8585ac77c4527ba318ec6805bf94"
+  },
+  {
+    "path": "data/professional/expressions/warehouse-module05.json",
+    "bytes": 41578,
+    "raw_sha256": "a58a9d911a2c72c6298f59ee36d43b2446922c39555fdb5ede17cbdb4ad62c3d"
+  },
+  {
+    "path": "data/professional/expressions/warehouse-module06.json",
+    "bytes": 38333,
+    "raw_sha256": "bb7b097895b27c0131165f60c9d7303a25384716ddfa6c486d95c1e76d91d215"
+  },
+  {
+    "path": "data/professional/expressions/warehouse-module07.json",
+    "bytes": 40392,
+    "raw_sha256": "bb2de0432888efcbd196c00ba52c2aaab28c0cae66e5ae5e73fde4122f98a117"
+  },
+  {
+    "path": "data/professional/expressions/warehouse-module08.json",
+    "bytes": 41527,
+    "raw_sha256": "975bef2aa86c8c12ac7ab4d65fe769791991d33f767245fbd7624debd0c868af"
+  },
+  {
+    "path": "data/professional/expressions/warehouse-module09.json",
+    "bytes": 37052,
+    "raw_sha256": "03f48b42b476da155390d6b6e91dc3b80e9b6a592df0e81b8b54022916fb2273"
+  },
+  {
+    "path": "data/professional/expressions/warehouse-module10.json",
+    "bytes": 34909,
+    "raw_sha256": "23f05efb4b11d23df5486a91c142f80d195c9ee28b70c73446e04930963183f5"
+  },
+  {
+    "path": "data/professional/expressions/hospitality-module03.json",
+    "bytes": 34165,
+    "raw_sha256": "0cc80ec0e9d812b40b775079a1180f96813df89d51af9ecf68b3b2e2e7085d4c"
+  },
+  {
+    "path": "data/professional/expressions/hospitality-module04.json",
+    "bytes": 36158,
+    "raw_sha256": "ce40d80c1f63668c4a46c236f2b90060f6e7c9aec83e3607dfe6d5a730634aa1"
+  },
+  {
+    "path": "data/professional/expressions/hospitality-module05.json",
+    "bytes": 46380,
+    "raw_sha256": "3672d7cbfc224874d19cec90cac9fa748bd360bb47201f54da2ddfc619ad04a5"
+  },
+  {
+    "path": "data/professional/expressions/hospitality-module06.json",
+    "bytes": 37505,
+    "raw_sha256": "898e6e44a08b75a857d3a085045886c257752a8c9ea5ab31cccca92563425400"
+  },
+  {
+    "path": "data/professional/expressions/hospitality-module07.json",
+    "bytes": 40487,
+    "raw_sha256": "3ccf5631d3bdcd82f52bf6b0ce03adcb0a19f5a48f6b88f2d37618dc3b49622b"
+  },
+  {
+    "path": "data/professional/expressions/hospitality-module08.json",
+    "bytes": 42376,
+    "raw_sha256": "86c77b1ed08e4e04b3e3dfed48f8cb760af86a8582b7034d2959811fe1be2102"
+  },
+  {
+    "path": "data/professional/expressions/hospitality-module09.json",
+    "bytes": 37703,
+    "raw_sha256": "e918b7b7f701ded331b3e24566b143123f09bfaedabb78d98a06b3ca60a05668"
+  },
+  {
+    "path": "data/professional/expressions/hospitality-module10.json",
+    "bytes": 35833,
+    "raw_sha256": "741a0e18d1fda8d30b48f06f59c811803421a51c2f26b6736a48908f2b574f12"
+  },
+  {
+    "path": "data/professional/expressions/transport-module03.json",
+    "bytes": 37409,
+    "raw_sha256": "8255fb2ae03cfb269635d2b872b7417a3e5421188df70370c60150a49083e81b"
+  },
+  {
+    "path": "data/professional/expressions/transport-module04.json",
+    "bytes": 38460,
+    "raw_sha256": "48ecd5ed276ab4319361f5020edd4951ed1cce7815cfc1ec8efa95a9a6c54029"
+  },
+  {
+    "path": "data/professional/expressions/transport-module05.json",
+    "bytes": 46400,
+    "raw_sha256": "f1177d17250dcd8c778971c69f88bf61e35f095a56f91b560fe6998665df72ca"
+  },
+  {
+    "path": "data/professional/expressions/transport-module06.json",
+    "bytes": 38985,
+    "raw_sha256": "560146857ed6dda4466934f860dfaa27ee452b6a1e134d675fb0d2b60b4df32f"
+  },
+  {
+    "path": "data/professional/expressions/transport-module07.json",
+    "bytes": 46804,
+    "raw_sha256": "1b1d274f4b1481b545664baf03a74ee2b5e8b15076ec65b3fc444ddc1b7cf3a4"
+  },
+  {
+    "path": "data/professional/expressions/transport-module08.json",
+    "bytes": 43015,
+    "raw_sha256": "50c734f92e2ba6589b42414f96745f2f4099d64f4f4d40582a94d2e1dbc4d85b"
+  },
+  {
+    "path": "data/professional/expressions/transport-module09.json",
+    "bytes": 38789,
+    "raw_sha256": "48fcc9fc6336ed527e1cb384f35b95853144d725e06ff8d650d809e670e18825"
+  },
+  {
+    "path": "data/professional/expressions/transport-module10.json",
+    "bytes": 38290,
+    "raw_sha256": "a4558fc85115def9d1d5f6ab4dd347cb6d18507a830aca281f795551f426da13"
+  },
+  {
+    "path": "data/professional/expressions/it-support-module03.json",
+    "bytes": 35831,
+    "raw_sha256": "00ea545d1c22ac2486eb56df6492c95ce2b0afc6c49ffc27bf8742961992f4c2"
+  },
+  {
+    "path": "data/professional/expressions/it-support-module04.json",
+    "bytes": 36283,
+    "raw_sha256": "aa63ff2d90dbb2e73fff9e71f047264f5eaa19cdd72f4045e7d1d86cc7229a9a"
+  },
+  {
+    "path": "data/professional/expressions/it-support-module05.json",
+    "bytes": 44058,
+    "raw_sha256": "28d8f09b3d0940472386355f7ad9fe3d5ad7828742fc3754dcf64d6546378270"
+  },
+  {
+    "path": "data/professional/expressions/it-support-module06.json",
+    "bytes": 38784,
+    "raw_sha256": "e1233450abed9cb09b9159975769aa09f66c05bf875ca5343edaf531439c4d69"
+  },
+  {
+    "path": "data/professional/expressions/it-support-module07.json",
+    "bytes": 38556,
+    "raw_sha256": "d3c5acf138ad43c0a9a645aea0bde79273394936034e9bb29aba25444318c7df"
+  },
+  {
+    "path": "data/professional/expressions/it-support-module08.json",
+    "bytes": 38363,
+    "raw_sha256": "5533bd8f7ff499bbc9c439209180a51b16c162e29148cc1a839f82e3cbb23881"
+  },
+  {
+    "path": "data/professional/expressions/it-support-module09.json",
+    "bytes": 39557,
+    "raw_sha256": "68d4453b3ec94c495a3798cae1c956595ea658f64f0fc246fe7077341986b040"
+  },
+  {
+    "path": "data/professional/expressions/it-support-module10.json",
+    "bytes": 36243,
+    "raw_sha256": "82a338b237a903a784c73833490e124d18b1d424f21a60f9c0aa66a1898239ea"
+  },
+  {
+    "path": "data/professional/expressions/education-module03.json",
+    "bytes": 44007,
+    "raw_sha256": "70477d618ebe5981a3554b1c24cf8ef468013123f914400bb8e93eccce78e9fe"
+  },
+  {
+    "path": "data/professional/expressions/education-module04.json",
+    "bytes": 47767,
+    "raw_sha256": "3419c8f8b43ae8f48c54d9b41671d777fe5836cbf4350e7f84871c69a82c8405"
+  },
+  {
+    "path": "data/professional/expressions/education-module05.json",
+    "bytes": 52795,
+    "raw_sha256": "2c1b5a636476e8d0432a51a29b980fa469b5298ebd96dd58c8ef2d47b4237686"
+  },
+  {
+    "path": "data/professional/expressions/education-module06.json",
+    "bytes": 47042,
+    "raw_sha256": "d4e94457578063fcb32c0191db23501357fa033f65f4181641d91ee5207ea686"
+  },
+  {
+    "path": "data/professional/expressions/education-module07.json",
+    "bytes": 46638,
+    "raw_sha256": "689a528c587a7f9b534e115fd3903af642d20b39ee939c06e0e31b2016a59acc"
+  },
+  {
+    "path": "data/professional/expressions/education-module08.json",
+    "bytes": 51405,
+    "raw_sha256": "9a37038bce59d540ccc43509ccb4fbe38062d0404d29add275082a51953cfe9c"
+  },
+  {
+    "path": "data/professional/expressions/education-module09.json",
+    "bytes": 50339,
+    "raw_sha256": "2b9ee696ffaad81e64ba250d8a2157078d88556ba4af560cd858c69dca30549f"
+  },
+  {
+    "path": "data/professional/expressions/education-module10.json",
+    "bytes": 52737,
+    "raw_sha256": "a8ca9351e529c69500a3bd7e717207dd5dfd98761b9c4d88dc911249b3261941"
+  },
+  {
+    "path": "data/professional/expressions/hr-module03.json",
+    "bytes": 32981,
+    "raw_sha256": "647a052d5e6e52764d583e352ca62d984304b3a3dfdc2c2046079c78d93a7643"
+  },
+  {
+    "path": "data/professional/expressions/hr-module04.json",
+    "bytes": 40263,
+    "raw_sha256": "be73917fc575b8dc90b9069573f89622d689c65e2c6f61100be542d8108410fb"
+  },
+  {
+    "path": "data/professional/expressions/hr-module05.json",
+    "bytes": 41726,
+    "raw_sha256": "5553a84b3e93758c0daf9e76a47dc515e863460f903650eebff9f1173ae93351"
+  },
+  {
+    "path": "data/professional/expressions/hr-module06.json",
+    "bytes": 41224,
+    "raw_sha256": "6d0a52a1178d2c0b111399181fc1cfa1e20ece74284486d819d520a7f5e2c78a"
+  },
+  {
+    "path": "data/professional/expressions/hr-module07.json",
+    "bytes": 35235,
+    "raw_sha256": "63d5362bb9d1b50f97e389d0ee5729d59453ec05f99e8b6b38dac983006fdf9c"
+  },
+  {
+    "path": "data/professional/expressions/hr-module08.json",
+    "bytes": 38718,
+    "raw_sha256": "237c1c3ab34f70f758909611d6f11c3e901198752728d163e8b99868fc9d0e91"
+  },
+  {
+    "path": "data/professional/expressions/hr-module09.json",
+    "bytes": 36765,
+    "raw_sha256": "6d9e1997ff1c0a7ac77ddf149e7ee8b3fb474c5ad475698c76d7e54a8fd16470"
+  },
+  {
+    "path": "data/professional/expressions/hr-module10.json",
+    "bytes": 36276,
+    "raw_sha256": "38746436584db04a5da64fcae398c0afa9d3425bf7d899dfb75d587654be0200"
+  },
+  {
+    "path": "data/professional/expressions/construction-module03.json",
+    "bytes": 41947,
+    "raw_sha256": "31a96db033fe76e79c8d22d35896bf08f3bbe61a21b493879e86ee6eba4835ed"
+  },
+  {
+    "path": "data/professional/expressions/construction-module04.json",
+    "bytes": 45262,
+    "raw_sha256": "901e2842388c022aa5b57edae68f9a31ddea67f30b07df3962184793f78b651d"
+  },
+  {
+    "path": "data/professional/expressions/construction-module05.json",
+    "bytes": 54003,
+    "raw_sha256": "bbd45dd4ed9640073a8e6c8a9b8c5ac3bc6303167ba38f352ca50f56d92b6c3d"
+  },
+  {
+    "path": "data/professional/expressions/construction-module06.json",
+    "bytes": 44096,
+    "raw_sha256": "9edf59ae9542cb669c6701f4af1e8632050f77283989bcaa61df1d636ef21e82"
+  },
+  {
+    "path": "data/professional/expressions/construction-module07.json",
+    "bytes": 45442,
+    "raw_sha256": "0c00152df75175bd177f0ac25b9039ed7ab98b4da5b5eb822672a5ea79ebf5f8"
+  },
+  {
+    "path": "data/professional/expressions/construction-module08.json",
+    "bytes": 47393,
+    "raw_sha256": "e5e7be90a303949e511d201c77481e420bb56518c8a1bd999b50d173972ad956"
+  },
+  {
+    "path": "data/professional/expressions/construction-module09.json",
+    "bytes": 44688,
+    "raw_sha256": "7028582f49f481039589218c0dfa46c455b7889a9e1d9c412e9f3b99bf0059fb"
+  },
+  {
+    "path": "data/professional/expressions/construction-module10.json",
+    "bytes": 60224,
+    "raw_sha256": "5f069186aaf8a60b940cafb9aadf93c5f898a6641521c565bd1cd95b9952a3da"
+  },
+  {
+    "path": "data/professional/expressions/cleaning-module03.json",
+    "bytes": 41387,
+    "raw_sha256": "d5bf525c8d5ef6a79096261e0e2a429ab7c546afe7f6aeffa2c85ff5a9771534"
+  },
+  {
+    "path": "data/professional/expressions/cleaning-module04.json",
+    "bytes": 43948,
+    "raw_sha256": "92a693216e63209d1708a4e27b234b54467bbb28c730f726ce0aef07203079b1"
+  },
+  {
+    "path": "data/professional/expressions/cleaning-module05.json",
+    "bytes": 47591,
+    "raw_sha256": "3aa57df3799709ac0a4e9e79191031aeee78130e16e938e92ee927d267b6a8b5"
+  },
+  {
+    "path": "data/professional/expressions/cleaning-module06.json",
+    "bytes": 53717,
+    "raw_sha256": "9f8641394291f4b8f8e036524e8d6dfc6a13830ec2972a27e46d03ac7def1ede"
+  },
+  {
+    "path": "data/professional/expressions/cleaning-module07.json",
+    "bytes": 39718,
+    "raw_sha256": "c4d32eab82af496ddd292768e988c170b3fc1ac2eece9a6c103e46ee009d8211"
+  },
+  {
+    "path": "data/professional/expressions/cleaning-module08.json",
+    "bytes": 46404,
+    "raw_sha256": "ae3639dff5a4ed4f76570e58cfc52a8d7abea8e8e59691baf568061462acbf1e"
+  },
+  {
+    "path": "data/professional/expressions/cleaning-module09.json",
+    "bytes": 46575,
+    "raw_sha256": "1abb2002ee1697c65b59c1ea5ddb644415c94b27ffa00a034f9e0094d030986f"
+  },
+  {
+    "path": "data/professional/expressions/cleaning-module10.json",
+    "bytes": 46752,
+    "raw_sha256": "fc392429d1d47801659054ab455673ca2d4496422eb68badba5a6cb1c80a2da7"
+  },
+  {
+    "path": "data/professional/expressions/manufacturing-module03.json",
+    "bytes": 46583,
+    "raw_sha256": "2bc5212f6d1a0fa796db0f1fe58b867426d64d565f8ca856581bb8f913400233"
+  },
+  {
+    "path": "data/professional/expressions/manufacturing-module04.json",
+    "bytes": 46183,
+    "raw_sha256": "00f517e70f4ac3dffe7f7790871fdc24342b37f5b078b49853e0e1ad7ce47302"
+  },
+  {
+    "path": "data/professional/expressions/manufacturing-module05.json",
+    "bytes": 54677,
+    "raw_sha256": "18d6b0063a354883fc8ab3b5cec44435e760d1041d9f8ee009e324a23ade22bc"
+  },
+  {
+    "path": "data/professional/expressions/manufacturing-module06.json",
+    "bytes": 44919,
+    "raw_sha256": "6ab377058c54911b62a35b6d71751c01831db88a5411cda6adfaa9511dd0ed5e"
+  },
+  {
+    "path": "data/professional/expressions/manufacturing-module07.json",
+    "bytes": 45000,
+    "raw_sha256": "b803259c420e863cb7efac575661869424c84b5844a2cce2866cdda329beb624"
+  },
+  {
+    "path": "data/professional/expressions/manufacturing-module08.json",
+    "bytes": 46767,
+    "raw_sha256": "fad8a286a09184fe927489077aff85b17ac0f88eaf03c0cb910747c1d520fe96"
+  },
+  {
+    "path": "data/professional/expressions/manufacturing-module09.json",
+    "bytes": 46641,
+    "raw_sha256": "23e1ec23e843d2850dc23f869b7d1c330e3bbaec11181562645bbf611d34fee8"
+  },
+  {
+    "path": "data/professional/expressions/manufacturing-module10.json",
+    "bytes": 54192,
+    "raw_sha256": "c71bca601cfd715efef147141270ecdd4c15e48bd8a888e378a2975deb31aac2"
+  },
+  {
+    "path": "data/professional/expressions/sales-module03.json",
+    "bytes": 36580,
+    "raw_sha256": "556b49e8adfe18eab7f7fa279c75dea34b2398f619bd676c066cb27daf1f9919"
+  },
+  {
+    "path": "data/professional/expressions/sales-module04.json",
+    "bytes": 43699,
+    "raw_sha256": "3243f13ef6ca6a2dc7cb888cf63ff04a3317b2baf6d0d45ddfdb11677b26646b"
+  },
+  {
+    "path": "data/professional/expressions/sales-module05.json",
+    "bytes": 47077,
+    "raw_sha256": "c68d7a35d3d4d6ab8ee9b02bbd4a8dfc97f1ec5b37ecbdc61db7cb00a4693089"
+  },
+  {
+    "path": "data/professional/expressions/sales-module06.json",
+    "bytes": 38018,
+    "raw_sha256": "bfc13e5bbc50dafa2dd6194ca999bb51a69fd182accf5449126d42dc9a45cc35"
+  },
+  {
+    "path": "data/professional/expressions/sales-module07.json",
+    "bytes": 43136,
+    "raw_sha256": "f9c6fcf82cc7bcef266581f5f142f03e630013c626f556756afbf319db94e284"
+  },
+  {
+    "path": "data/professional/expressions/sales-module08.json",
+    "bytes": 39011,
+    "raw_sha256": "e2f77a5313bdfb688d40dd8e20a31597b057ae5bb24418abd08fff3b0b88e92b"
+  },
+  {
+    "path": "data/professional/expressions/sales-module09.json",
+    "bytes": 44337,
+    "raw_sha256": "2dd094920a9f126459fa840690cba7254af516f50e6ab7334dfff65295124325"
+  },
+  {
+    "path": "data/professional/expressions/sales-module10.json",
+    "bytes": 39129,
+    "raw_sha256": "43d31c5cca1591eaa3c347d52e9324318a566f983d4d8f9fd9c0192a974953e9"
+  },
+  {
+    "path": "data/professional/expressions/clinical-module03.json",
+    "bytes": 42992,
+    "raw_sha256": "70f136de39ac9e2b28e1eded94e42808e64e1f83cbec5aaed96ff27ac29f8786"
+  },
+  {
+    "path": "data/professional/expressions/clinical-module04.json",
+    "bytes": 44473,
+    "raw_sha256": "5ecc7d2305e9fd9134babfbbe7d6162a61250b355226ad8d56b4a1e10ae6103d"
+  },
+  {
+    "path": "data/professional/expressions/clinical-module05.json",
+    "bytes": 50036,
+    "raw_sha256": "3a66509e22a694e31b80666922af46136f823a664d6b5ee1b3bf8d63df61d6b8"
+  },
+  {
+    "path": "data/professional/expressions/clinical-module06.json",
+    "bytes": 46598,
+    "raw_sha256": "080b0f86fcb22324426977f98ef86d7291d1990bd5b43b64fbc4e6997ec1c72d"
+  },
+  {
+    "path": "data/professional/expressions/clinical-module07.json",
+    "bytes": 49878,
+    "raw_sha256": "3b09ba45a8dd2abe3bc16aeea2d7a809194aaddfcbb25e2f41783ff6ced3f84a"
+  },
+  {
+    "path": "data/professional/expressions/clinical-module08.json",
+    "bytes": 54522,
+    "raw_sha256": "055ff56379a126512195d7ee50038d6437455da4ea3b6cbeabf99fdb2041a0a8"
+  },
+  {
+    "path": "data/professional/expressions/clinical-module09.json",
+    "bytes": 44044,
+    "raw_sha256": "f8c69265281e961c778cd0c5a5234fafaba8f33feec931f3983f6faeef75a26d"
+  },
+  {
+    "path": "data/professional/expressions/clinical-module10.json",
+    "bytes": 48954,
+    "raw_sha256": "67b3b63e69519f41691714a80e910ca5fc18906aa00bf62c204ef91ec55184bd"
+  },
+  {
+    "path": "data/professional/expressions/accounting-module03.json",
+    "bytes": 37797,
+    "raw_sha256": "a3fe3a96597de5ad16c3eb7f373d76bb57e8c83b2d9caca9349498c0e9abff0c"
+  },
+  {
+    "path": "data/professional/expressions/accounting-module04.json",
+    "bytes": 44369,
+    "raw_sha256": "2794a4a90ceb77625708877b3859bc965a1c0ff86ea51069838128523fc38ffe"
+  },
+  {
+    "path": "data/professional/expressions/accounting-module05.json",
+    "bytes": 52031,
+    "raw_sha256": "d3edd7ca64ac0a60a5d54b3dd34a01d243af176d1e2fd2c07a91c0e8114f2367"
+  },
+  {
+    "path": "data/professional/expressions/accounting-module06.json",
+    "bytes": 48472,
+    "raw_sha256": "b74731cc160373735228ae6e372a68a328cff40563324feb3114804fec4208de"
+  },
+  {
+    "path": "data/professional/expressions/accounting-module07.json",
+    "bytes": 49421,
+    "raw_sha256": "6cf9e226181f94ca79c1d68d09c0d4e3e628696e80d6e10bd6fbf54bde1f2e9f"
+  },
+  {
+    "path": "data/professional/expressions/accounting-module08.json",
+    "bytes": 48131,
+    "raw_sha256": "145bbde3828007bbc930e285124a752a0502dffb30d52043a9ee8d5b02a2bb2c"
+  },
+  {
+    "path": "data/professional/expressions/accounting-module09.json",
+    "bytes": 53135,
+    "raw_sha256": "ae4e609c275f4a0f40e54050a294987002d1b126324eec22dd6a1f2b02b98143"
+  },
+  {
+    "path": "data/professional/expressions/accounting-module10.json",
+    "bytes": 52429,
+    "raw_sha256": "46c9a9c4f7074de560224c56007dac33eff74cb8fdc1681e5ff69a83ecd646dd"
+  },
+  {
+    "path": "data/professional/expressions/legal-module03.json",
+    "bytes": 45545,
+    "raw_sha256": "7e5d8ada7a70d0c4aed0a36cc603b725858145fd0c3a2a353334032f4d09f2ed"
+  },
+  {
+    "path": "data/professional/expressions/legal-module04.json",
+    "bytes": 53001,
+    "raw_sha256": "d4b580b356e655c0c2bded9bff421f244e64a09fff3818676932525d77c615a7"
+  },
+  {
+    "path": "data/professional/expressions/legal-module05.json",
+    "bytes": 56245,
+    "raw_sha256": "c889c2d1065f7cdfee47e075cebad0b16d29a365c97aa3593065ac3e566d2465"
+  },
+  {
+    "path": "data/professional/expressions/legal-module06.json",
+    "bytes": 45109,
+    "raw_sha256": "275a8020de3a0b9805838ffe53350674e6579117842231887a900b32c011861b"
+  },
+  {
+    "path": "data/professional/expressions/legal-module07.json",
+    "bytes": 55144,
+    "raw_sha256": "9d63ddf66c7cdc17abd1e8311537ceaa688483bf3972651758969efc0bb2a28a"
+  },
+  {
+    "path": "data/professional/expressions/legal-module08.json",
+    "bytes": 49153,
+    "raw_sha256": "b3915bffd9cc177f1564bd35b8be4bfd239de3dc81476efbc047538c51a5df48"
+  },
+  {
+    "path": "data/professional/expressions/legal-module09.json",
+    "bytes": 73062,
+    "raw_sha256": "a9115e0fa9cf40cccf982ea95ed0175c6b798614b73ddc44f2bfd78c0c1c34de"
+  },
+  {
+    "path": "data/professional/expressions/legal-module10.json",
+    "bytes": 44438,
+    "raw_sha256": "90cec549a2bc59277cd14e6d108270af56028fb203c0a12c64a2e113a79df928"
+  },
+  {
+    "path": "data/professional/courses/caregiving.json",
+    "bytes": 37152,
+    "raw_sha256": "df3cac47b0b0167fd539e64675528a8f17a210a6863f16e2e3307ccd0a760c18"
+  },
+  {
+    "path": "data/professional/courses/retail.json",
+    "bytes": 31222,
+    "raw_sha256": "7124ef1d09da0c47f1d5fb2945bfebbe49e5f180f5fbdcd66fe73991ea7d4c61"
+  },
+  {
+    "path": "data/professional/courses/food_service.json",
+    "bytes": 35078,
+    "raw_sha256": "e2f44772648f061d706913a9dc097f2f5575155f31f63ddc580edb52deb9aaf8"
+  },
+  {
+    "path": "data/professional/courses/nursing.json",
+    "bytes": 34930,
+    "raw_sha256": "6198c2f5bddf30a96754e3272ad8512573ae6981e77a8c34a69ab2bcf21d3af3"
+  },
+  {
+    "path": "data/professional/courses/customer_support.json",
+    "bytes": 39761,
+    "raw_sha256": "9dfe879d18ff6e77f780a56d4aa5af8ff213e262e973196b3e6db967ccb06cb7"
+  },
+  {
+    "path": "data/professional/courses/office_admin.json",
+    "bytes": 40237,
+    "raw_sha256": "d13c4a75f4824d767f8c40fa59d71154cb8bc950e6f74b526afc511d9b744d49"
+  },
+  {
+    "path": "data/professional/courses/warehouse_logistics.json",
+    "bytes": 41108,
+    "raw_sha256": "dbf5c7eaa4fe2c5f4f91bd96955b418ed96fb96a6ae3a0c7f52fba2760372428"
+  },
+  {
+    "path": "data/professional/courses/hospitality_tourism.json",
+    "bytes": 42934,
+    "raw_sha256": "9cad8ff14fc30d7f93ea7815954e437d140570e9e6ce8ed754052e3089a1c873"
+  },
+  {
+    "path": "data/professional/courses/transport_delivery.json",
+    "bytes": 43037,
+    "raw_sha256": "ed60050415a70a3efdd6b7df4112e92819d9b994cdca25257804c1ad5a878926"
+  },
+  {
+    "path": "data/professional/courses/construction_trades.json",
+    "bytes": 44282,
+    "raw_sha256": "b49ebf7090f641bd9d6528df4ca18d9372452d13d285d73782fd487b64f83291"
+  },
+  {
+    "path": "data/professional/courses/cleaning_facilities.json",
+    "bytes": 46123,
+    "raw_sha256": "092c5e21555e2f5062c6b012de2f5a3b7c7505553033336e01bdec50cee46034"
+  },
+  {
+    "path": "data/professional/courses/education_childcare.json",
+    "bytes": 44728,
+    "raw_sha256": "b82356a3acd11d197d9743b84e2f16df09cb994db3062722332895fda45f494b"
+  },
+  {
+    "path": "data/professional/courses/manufacturing_maintenance.json",
+    "bytes": 49134,
+    "raw_sha256": "4e2a3f89219d8a882ca5c4abfcce7286b67024c0ebdb6c2ce928e2491b4d7f6d"
+  },
+  {
+    "path": "data/professional/courses/it_support.json",
+    "bytes": 42350,
+    "raw_sha256": "0e76705b1698a01c14834114ccd629f24b65de36603b5030f462d6d673987eb7"
+  },
+  {
+    "path": "data/professional/courses/software_data.json",
+    "bytes": 33982,
+    "raw_sha256": "54156b9ac460f600cbb6f9645bab75d0488913ac4e4c772645a3679cf25beda0"
+  },
+  {
+    "path": "data/professional/courses/accounting_finance.json",
+    "bytes": 47335,
+    "raw_sha256": "fe76b0cd1c49ae318591fcbe9ce41281f1397bc0551a6bd323dd5e7c76b5379d"
+  },
+  {
+    "path": "data/professional/courses/sales_marketing.json",
+    "bytes": 46192,
+    "raw_sha256": "57fc012d0fe5b3f88c1d90695841b3647a0a90676378beb2cd2915189c502f7e"
+  },
+  {
+    "path": "data/professional/courses/hr_recruitment.json",
+    "bytes": 45787,
+    "raw_sha256": "454b8f5a2396367fa001be0bbca61b1fd24d5f2ca1b0eaedc6e5db2830288d35"
+  },
+  {
+    "path": "data/professional/courses/clinical_medicine.json",
+    "bytes": 41705,
+    "raw_sha256": "ce4f29e27391cda08bb3b7ab36f4c0624fbf421459d64782c5dda5a31759fe4c"
+  },
+  {
+    "path": "data/professional/courses/legal_paralegal.json",
+    "bytes": 49295,
+    "raw_sha256": "9e981d2b04559c340a51bbc35314a8500acc8f97f92a664d63e9f82b8e7c010b"
+  },
+  {
+    "path": "data/professional/provenance/foundation-module02-language-second10-2026-10-17.json",
+    "bytes": 866140,
+    "raw_sha256": "7b2c674a5249ef8c59afc2ab9e620cd2ed8d4e6a55704a231ca53f00005cd4fc"
+  }
+]

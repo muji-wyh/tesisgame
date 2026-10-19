@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "status": "author_schema_and_preservation_guards_passed_not_independent_acceptance",
+  "date": "2026-10-16",
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "native_runtime_executed": false,
+  "selected_entries": 10,
+  "substantively_amended_candidates": 9,
+  "metadata_only_candidates": 1,
+  "proposed_definition_changes": 5,
+  "proposed_example_changes": 1,
+  "proposed_difficulty_changes": 6,
+  "difficulty_proposals": {
+    "deadline": "B2",
+    "overtime": "B2",
+    "calendar": "B1",
+    "agenda": "B2",
+    "update": "B1",
+    "reminder": "B1"
+  },
+  "explicit_difficulty_hold": {
+    "attendance": {
+      "observed": "C1",
+      "stored_unaccepted": "A2"
+    }
+  },
+  "source_level_disagreement": {
+    "overtime": {
+      "oxford": "C1",
+      "collins": "B2",
+      "author_proposal": "B2",
+      "independent_acceptance": false
+    }
+  },
+  "author_judgment_without_selected_source_level": {
+    "availability": "retain B1",
+    "update": "propose B1",
+    "reminder": "propose B1"
+  },
+  "course_floor_decision": {
+    "break": {
+      "source": "A1",
+      "stored": "A2",
+      "independent_acceptance": false
+    }
+  },
+  "all_language_gates_pending": true,
+  "all_other_gates_exact": true,
+  "accepted_forms_and_regions_exact": true,
+  "source_consultations": 18,
+  "failed_accesses": 0,
+  "additive_source_records": 18,
+  "all20course_third10_identical": true,
+  "selected_memberships": 200,
+  "protected_unique_entries": 156,
+  "protected_expressions": 57,
+  "scoped_expression_uses": 53,
+  "scoped_expression_memberships": 186,
+  "selected_focus_expressions": 6,
+  "other_local_expressions": 4,
+  "related_entry_boundaries": 58,
+  "classification_counts": {
+    "focus": {
+      "expressions": 6,
+      "occurrences": 8
+    },
+    "background": {
+      "expressions": 3,
+      "occurrences": 3
+    },
+    "compound": {
+      "expressions": 5,
+      "occurrences": 5
+    },
+    "domain_compound": {
+      "expressions": 2,
+      "occurrences": 2
+    },
+    "verb": {
+      "expressions": 11,
+      "occurrences": 11
+    },
+    "damage": {
+      "expressions": 8,
+      "occurrences": 8
+    },
+    "structural": {
+      "expressions": 2,
+      "occurrences": 2
+    },
+    "resource": {
+      "expressions": 12,
+      "occurrences": 12
+    },
+    "system": {
+      "expressions": 1,
+      "occurrences": 1
+    },
+    "software_change": {
+      "expressions": 1,
+      "occurrences": 1
+    },
+    "hold_report_or_change": {
+      "expressions": 3,
+      "occurrences": 3
+    },
+    "hold_expected_or_actual": {
+      "expressions": 1,
+      "occurrences": 1
+    },
+    "hold_resource_calendar": {
+      "expressions": 1,
+      "occurrences": 1
+    }
+  },
+  "protected_modules": 79,
+  "protected_existing_sources": 116,
+  "protected_growth_files": 10,
+  "protected_prior_artifacts": 6,
+  "candidate_schema_errors": 0,
+  "scope_guards_passed": 1885,
+  "scoped_production_records_unchanged": true,
+  "global_registry_changed_during_preparation": false,
+  "global_registry_hashes_informational": true,
+  "preimages_json_sha256": "ce53eb62283f4d4df70686d4bf6a176b5c2aaedbbe737323f9ebd725d9145b9d",
+  "source_ledger_json_sha256": "e1aeb75a92369e40b0dd6d9510a590f6524aa86e4d868c3d4303a8d0512ae5f7",
+  "expression_review_json_sha256": "f34ed83ddb41b16dd8082190cc2609d740781773007d14b1765a88ea294c7dd6",
+  "language_ledger_json_sha256": "4517fbb347f59056b589bc5dd7b26ce3b4b0255ca2ab2fad0b0241094756eb4d",
+  "prepare_script_raw_sha256": "e9d126e2475e95a0e6a1311f2ede3bd48115fb22c4a852b3b22365dd0f6dba24"
+}

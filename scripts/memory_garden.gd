@@ -224,13 +224,7 @@ func start_round(words: Array, palette: Dictionary, seed_value: int = -1) -> voi
 	study_button.reset_feedback()
 	memory.stop()
 	_feedback_timer.stop()
-	for index in range(card_buttons.size()):
-		var button = card_buttons[index]
-		button.pressed.disconnect(_choose.bind(index))
-		button.clear_feedback()
-		_board.remove_child(button)
-		button.queue_free()
-	card_buttons.clear()
+	_clear_cards()
 	memory = Memory.new()
 	_paused = false
 	if memory.reset(words, seed_value):
@@ -277,10 +271,23 @@ func stop() -> void:
 	if _feedback_timer != null:
 		_feedback_timer.stop()
 	_paused = false
-	for button in card_buttons:
-		button.clear_feedback()
+	_clear_cards()
+	memory.cards.clear()
 	_refresh()
 	prompt_ready.emit()
+
+
+func _clear_cards() -> void:
+	# Stop owns permanent teardown. Pause keeps the current board resumable.
+	for index in range(card_buttons.size()):
+		var button = card_buttons[index]
+		button.pressed.disconnect(_choose.bind(index))
+		button.clear_feedback()
+		button.picture.texture = null
+		button.card_data.clear()
+		_board.remove_child(button)
+		button.queue_free()
+	card_buttons.clear()
 
 
 func controls() -> Array[Control]:

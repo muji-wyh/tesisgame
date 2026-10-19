@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_three_field_language_review_not_delivered",
+  "frozen_at": "2026-10-16T21:06:58.978Z",
+  "reviewer": "Codex runtime_recovery independent AI language reviewer; not human or subject-matter approval",
+  "hash_algorithm": "SHA256",
+  "note": "Raw file hashes. This inventory excludes itself. Existing production holds and gates remain unchanged.",
+  "accepted_projection_count": 3,
+  "current_whole_entry_holds_preserved": 6,
+  "automatic_application_permitted": false,
+  "files": [
+    {
+      "path": "REVIEW.md",
+      "bytes": 8471,
+      "sha256": "45bb37be53141c32322f2c2cae5d6c381037e086ec4c04013664a6ba875c6e1f"
+    },
+    {
+      "path": "assemble-review-record.cjs",
+      "bytes": 16021,
+      "sha256": "2c95bd3b3899fe6fb2e581857d4dd59d9268a76fd325896c7e6d8c063da52b7a"
+    },
+    {
+      "path": "assembly-receipt.json",
+      "bytes": 2195,
+      "sha256": "3c631f01ce62f3ad4295fa84f3ff5356a151dacf6ebf8013cc6b6c02875441c6"
+    },
+    {
+      "path": "context-checks.json",
+      "bytes": 66405,
+      "sha256": "2a4a1c5b34e3e5dc8d8b44af82ae654d7369bca049ed576984c78536cd07cdfc"
+    },
+    {
+      "path": "fresh-independent-http.json",
+      "bytes": 5713,
+      "sha256": "ec0925018bc4a19645c6e1b7c1c0695acc6f05241d373d884f5815e322d1ba84"
+    },
+    {
+      "path": "input-verification.json",
+      "bytes": 122799,
+      "sha256": "e68dbb74b29aa63d40bfe27f13c1dac7de88156f8f7cf231b69ca7fc739f24d4"
+    },
+    {
+      "path": "language-projections.json",
+      "bytes": 64341,
+      "sha256": "531122b370d14a559791f360b04c3b373c697fcf92f94dc8ab6428861a9304cf"
+    },
+    {
+      "path": "reference-retrieval-start.json",
+      "bytes": 1412,
+      "sha256": "276389f66a00baa9868fd2ae7cb7fce062b15972095e123c902d3bffb599ec89"
+    },
+    {
+      "path": "retrieve-reference-evidence.cjs",
+      "bytes": 4297,
+      "sha256": "fd50917549ee2a40f63db12d2ed4bdc0c7be8a9893ecb8ea740c4dd35a3ebf87"
+    },
+    {
+      "path": "reviewer-decisions.json",
+      "bytes": 9851,
+      "sha256": "80d07670034418d6a973d1a776d4e410903e6fa274ea1aa3daf3ef91c4a0da39"
+    },
+    {
+      "path": "seal-inventory.cjs",
+      "bytes": 2559,
+      "sha256": "7ba9a2713eb8872768fc286e1404f9562eee537c9aadcbd7a3bdb9f241f70cbc"
+    },
+    {
+      "path": "source-observations.json",
+      "bytes": 9348,
+      "sha256": "a2cf97e889a612c071063c0f6a8ecd89a97118689bd7e0dbb2372a52daa6a72f"
+    }
+  ]
+}

@@ -1,0 +1,1544 @@
+{
+  "schema": 1,
+  "status": "prepared_afterimage_pending_final_integration_review_and_actual_delivery",
+  "proposed_path": "data/professional/provenance/retail-shopping-bag-image-2026-10-17.json",
+  "integrated_on": null,
+  "integration_approval": null,
+  "candidate_visual_acceptance": {
+    "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/visual-review.json",
+    "sha256": "fa9e40fa7475be0bdd5831ba1907577707fb3557f9f177e7b3f0453df569a97b",
+    "status": "candidate_and_brief_accepted_for_scoped_production_proposal",
+    "review_scope": "Exact source-derived candidate and revised brief; not production integration."
+  },
+  "source_records": [
+    "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-record.json"
+  ],
+  "retained_evidence": [
+    "docs/assets/sources/shopping-bag-additional-leads-2026-10-17",
+    "docs/assets/sources/shopping-bag-candidate-review-2026-10-17"
+  ],
+  "retained_files": [
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/README.md",
+      "bytes": 7506,
+      "sha256": "c9cfe94e88e6c4648f07e182f00ea1814c8e12b9cc9ef7ce11acbffdabe2579c"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-record.json",
+      "bytes": 4055,
+      "sha256": "208f160c8b25f1c27f3d458be20db7f11d23680b6f7dc6f14df7c565e060d62e"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-evidence/icon-page.html",
+      "bytes": 73501,
+      "sha256": "4e3fa8944f1c528f496f165cf189d719614d8377684ec699af6135751d389aac"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-evidence/library-v1-license-page.html",
+      "bytes": 71695,
+      "sha256": "096190ee4db963fbe0373a6cb37ca7411835bdfa38d3e4150b5bf0d349be3cdc"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-evidence/CC0-1.0-legalcode.txt",
+      "bytes": 7048,
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-evidence/retrievals.json",
+      "bytes": 1323,
+      "sha256": "2b0dced40546248ef9b899e9ae0b7991ca8e12e48edcd3a2e7e6878977d6645a"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/acquired/3dicons-bag-dynamic-color.png",
+      "bytes": 2963534,
+      "sha256": "93065262e9028397705eb2ddcaf985942eb3ae81abf21dc5187e331ea5e004da"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/size-study/bag-crop-512-study.png",
+      "bytes": 135843,
+      "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/README.md",
+      "bytes": 2498,
+      "sha256": "cbb3f8b08ee7ef7a08ba5b71b5e1f37659e56640d7e97c046aeb37c480ad73ed"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/visual-review.json",
+      "bytes": 11625,
+      "sha256": "fa9e40fa7475be0bdd5831ba1907577707fb3557f9f177e7b3f0453df569a97b"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/source-review.json",
+      "bytes": 2529,
+      "sha256": "daaf46b70634aed91d0f4d99b4b871f7e6191d2231c080f4ccd7a27d1fccf96b"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/prepared-inspection.json",
+      "bytes": 2268,
+      "sha256": "7e4e506405efa7d857a8b7630606fba00fa70849388a7d7c2410f0855f082281"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/copy-receipt.json",
+      "bytes": 19846,
+      "sha256": "6811e85aa4d9b39f44bc09bcba292f3eafed905abf223f3ff41b211763ecca83"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/brief-revision-proposal.json",
+      "bytes": 2527,
+      "sha256": "c8997bfa4b132d6f356d515aaa81f3f4cfb697f28723eee6be693e8c41644739"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/candidate-receipt.json",
+      "bytes": 10147,
+      "sha256": "48b8553e2b9e4f5eed52340d833608baf10fb1c4140b1d380db1a75d4aa0d62d"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/output/report.json",
+      "bytes": 87826,
+      "sha256": "b66061388d92cca865e2e49207a24b01d92001465e4d33b0768b893b65cf852e"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/output/actual-wordcard-comparison.png",
+      "bytes": 184430,
+      "sha256": "4bace55f87ae52a5f241d4bba383a00b242dac03d3acd06e89cbcfe3a07c9902"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/prepared/bag-entry-preimage.json",
+      "bytes": 6908,
+      "sha256": "cec2b375554a5a6ac2e834aa24074fb8b3924f83b1c992e8c6a69804e0e73760"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/prepared/basket-entry-preimage.json",
+      "bytes": 8626,
+      "sha256": "4d1aeb1e2be6e5e29af1110e63c58df6f8d794daf86d75cf99d0f8aeedb03aa5"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/prepared/manifest.json",
+      "bytes": 1046,
+      "sha256": "64c3789aafac42d981c691c439eab21fdef29372e834867a107de1c1a07333ed"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/prepared/fixture/professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "bytes": 135843,
+      "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb"
+    }
+  ],
+  "original_brief": "Show a reusable fabric shopping bag upright with two handles and a few purchased items peeking above the opening. Make the flexible sides and carrying handles clearly distinct from a rigid shopping basket. Reject a backpack, paper-only carrier definition, wheeled trolley, or decorative gift bag that obscures the intended shopping use.",
+  "accepted_brief": "Show a plain open retail shopping bag upright in a three-quarter view, with a tall solid-sided body, two separate loop handles and a visible opening. Preserve the inspected 3dicons dynamic color source. Keep the tall solid body and paired loops visually distinct from the accepted squat slotted shopping basket. Exclude wheels, backpack straps, a closed top, a bow, a gift tag, tissue paper and gift-specific decoration. The illustration does not narrow the definition to a particular material or require visible contents.",
+  "resource": {
+    "id": "sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+    "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+    "path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+    "kind": "image",
+    "format": "png",
+    "compressed_bytes": 135843,
+    "decoded_bytes": 1695744,
+    "width": 414,
+    "height": 512
+  },
+  "patches": [
+    {
+      "id": "shopping-bag.goods-carrier.n",
+      "before": {
+        "id": "shopping-bag.goods-carrier.n",
+        "text": "shopping bag",
+        "display_text": "shopping bag",
+        "pos": "noun",
+        "definition": "A bag used to carry purchased items.",
+        "example": "Would you like a shopping bag for these items?",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "shopping bag"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Show a reusable fabric shopping bag upright with two handles and a few purchased items peeking above the opening. Make the flexible sides and carrying handles clearly distinct from a rigid shopping basket. Reject a backpack, paper-only carrier definition, wheeled trolley, or decorative gift bag that obscures the intended shopping use.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "integrated",
+            "path": "res://professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+            "sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72",
+            "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+            "creator": "Microsoft Ava Neural; original project term text",
+            "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+              "reviewed_at": "2026-10-16"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.shopping-bag.goods-carrier.n.morphology.retail03.fifth10.proposal.v1",
+          "lexeme_id": "shopping-bag.goods-carrier.n",
+          "text": "shopping bag",
+          "kind": "phrase",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.shop",
+              "canonical": "shop",
+              "type": "stem",
+              "surface": "shop",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "english.affix.ing.activity",
+              "canonical": "-ing",
+              "type": "suffix",
+              "surface": "ing",
+              "break_offsets": []
+            },
+            {
+              "id": "p3",
+              "canonical_id": "growth.bag",
+              "canonical": "bag",
+              "type": "word",
+              "surface": "bag",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "shopping",
+              "left": "p1",
+              "right": "p2",
+              "surface": "shopping",
+              "rule": "authored-shop-plus-activity-ing-double-final-p",
+              "break_offsets": []
+            },
+            {
+              "id": "whole",
+              "left": "shopping",
+              "right": "p3",
+              "surface": "shopping bag",
+              "rule": "preserve-word-boundary",
+              "break_offsets": [
+                9
+              ]
+            }
+          ],
+          "roots": [
+            "whole"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+            "notes": "Use the same reviewed shop and activity -ing relationship as shopping basket/cart, with explicit doubled p, followed by the actual reviewed Growth container bag. Shopping is the nominal buying activity used as a modifier. Generic and result-noun endings remain distinct. The carrier can be reusable; no narrower carrier-bag alternative is added.",
+            "references": [
+              "https://www.dictionary.com/browse/shop",
+              "https://www.dictionary.com/browse/shopping",
+              "https://www.dictionary.com/browse/ing",
+              "https://www.dictionary.com/browse/bag"
+            ],
+            "source_record_ids": [
+              "retail03-morph-fifth10-dcom-shop",
+              "retail03-morph-fifth10-dcom-shopping",
+              "retail03-morph-fifth10-dcom-ing",
+              "retail03-morph-fifth10-dcom-bag"
+            ],
+            "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+            "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "retail03-ox-shopping-bag",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun senses 1 and 2. The broad sense includes reusable bags. British carrier bag corresponds specifically to the paper/plastic purchase-bag sense. Selected lexical sense and explicitly stated alternatives only. Unrelated word-of-the-day level labels do not rate this term. No media acquired. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the broad purchased-goods carrier, including the current reusable bag example in the art brief. Retain shopping bag. Carrier bag is not added globally because the consulted British alternative corresponds specifically to the paper/plastic sense, narrower than this reusable-bag depiction. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-image production remain pending. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "after": {
+        "id": "shopping-bag.goods-carrier.n",
+        "text": "shopping bag",
+        "display_text": "shopping bag",
+        "pos": "noun",
+        "definition": "A bag used to carry purchased items.",
+        "example": "Would you like a shopping bag for these items?",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "shopping bag"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "integrated",
+            "path": "res://professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+            "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+            "source": "res://docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-record.json",
+            "creator": "Vijay Verma (@realvjy)",
+            "license": "CC0 1.0",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root independent AI scoped carrier picture and brief review; see docs/assets/sources/shopping-bag-candidate-review-2026-10-17/visual-review.json",
+              "reviewed_at": "2026-10-17"
+            },
+            "brief": "Show a plain open retail shopping bag upright in a three-quarter view, with a tall solid-sided body, two separate loop handles and a visible opening. Preserve the inspected 3dicons dynamic color source. Keep the tall solid body and paired loops visually distinct from the accepted squat slotted shopping basket. Exclude wheels, backpack straps, a closed top, a bow, a gift tag, tissue paper and gift-specific decoration. The illustration does not narrow the definition to a particular material or require visible contents.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [
+              "Original acquired 3dicons v1 Bag dynamic-angle color PNG; no redraw, recolor, added contents or changed material.",
+              "Alpha-bounds crop with a 16-source-pixel margin, followed by a Lanczos resize to a maximum of 512 pixels.",
+              "Exact accepted 414 by 512 transparent PNG retained without further conversion; no source model or animation was acquired."
+            ]
+          },
+          "audio": {
+            "status": "integrated",
+            "path": "res://professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+            "sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72",
+            "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+            "creator": "Microsoft Ava Neural; original project term text",
+            "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+              "reviewed_at": "2026-10-16"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.shopping-bag.goods-carrier.n.morphology.retail03.fifth10.proposal.v1",
+          "lexeme_id": "shopping-bag.goods-carrier.n",
+          "text": "shopping bag",
+          "kind": "phrase",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.shop",
+              "canonical": "shop",
+              "type": "stem",
+              "surface": "shop",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "english.affix.ing.activity",
+              "canonical": "-ing",
+              "type": "suffix",
+              "surface": "ing",
+              "break_offsets": []
+            },
+            {
+              "id": "p3",
+              "canonical_id": "growth.bag",
+              "canonical": "bag",
+              "type": "word",
+              "surface": "bag",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "shopping",
+              "left": "p1",
+              "right": "p2",
+              "surface": "shopping",
+              "rule": "authored-shop-plus-activity-ing-double-final-p",
+              "break_offsets": []
+            },
+            {
+              "id": "whole",
+              "left": "shopping",
+              "right": "p3",
+              "surface": "shopping bag",
+              "rule": "preserve-word-boundary",
+              "break_offsets": [
+                9
+              ]
+            }
+          ],
+          "roots": [
+            "whole"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+            "notes": "Use the same reviewed shop and activity -ing relationship as shopping basket/cart, with explicit doubled p, followed by the actual reviewed Growth container bag. Shopping is the nominal buying activity used as a modifier. Generic and result-noun endings remain distinct. The carrier can be reusable; no narrower carrier-bag alternative is added.",
+            "references": [
+              "https://www.dictionary.com/browse/shop",
+              "https://www.dictionary.com/browse/shopping",
+              "https://www.dictionary.com/browse/ing",
+              "https://www.dictionary.com/browse/bag"
+            ],
+            "source_record_ids": [
+              "retail03-morph-fifth10-dcom-shop",
+              "retail03-morph-fifth10-dcom-shopping",
+              "retail03-morph-fifth10-dcom-ing",
+              "retail03-morph-fifth10-dcom-bag"
+            ],
+            "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+            "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "retail03-ox-shopping-bag",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun senses 1 and 2. The broad sense includes reusable bags. British carrier bag corresponds specifically to the paper/plastic purchase-bag sense. Selected lexical sense and explicitly stated alternatives only. Unrelated word-of-the-day level labels do not rate this term. No media acquired. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the broad purchased-goods carrier, including reusable bags; the accepted illustration does not specify material or require visible contents. Retain shopping bag. Carrier bag is not added globally because the consulted British alternative corresponds specifically to the paper/plastic sense, narrower than the selected broad purchased-goods-carrier sense. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The shopping-bag image has completed scoped carrier picture review. The accepted plain open bag brief replaces the original fabric, flexible-side and visible-purchases requirements, which are not depicted. Empty gift bags may share this form; intended shopping use is supplied by context. The original brief and its mismatch remain in retained provenance. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "before_sha256": "ba96e5d4ba9911b68ddb630d3413cac52d155a3d27c7452aaee97ba5284f7e07",
+      "after_sha256": "25300b5f9d78a6327c16c27143f1aeddd9dba1c41bdd4e42c20f30d36148cc85",
+      "protected_fields_sha256": "091cb33bb94c158215dc8db8c4198482b0c2f991ce4b964786321d5114c51d69",
+      "note_change": {
+        "kind": "three_exact_single_occurrence_replacements",
+        "replacements": [
+          {
+            "before": "Retain the broad purchased-goods carrier, including the current reusable bag example in the art brief.",
+            "after": "Retain the broad purchased-goods carrier, including reusable bags; the accepted illustration does not specify material or require visible contents."
+          },
+          {
+            "before": "Carrier bag is not added globally because the consulted British alternative corresponds specifically to the paper/plastic sense, narrower than this reusable-bag depiction.",
+            "after": "Carrier bag is not added globally because the consulted British alternative corresponds specifically to the paper/plastic sense, narrower than the selected broad purchased-goods-carrier sense."
+          },
+          {
+            "before": "Picture suitability and word-image production remain pending.",
+            "after": "The shopping-bag image has completed scoped carrier picture review. The accepted plain open bag brief replaces the original fabric, flexible-side and visible-purchases requirements, which are not depicted. Empty gift bags may share this form; intended shopping use is supplied by context. The original brief and its mismatch remain in retained provenance."
+          }
+        ]
+      },
+      "resource": {
+        "id": "sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+        "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+        "path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+        "kind": "image",
+        "format": "png",
+        "compressed_bytes": 135843,
+        "decoded_bytes": 1695744,
+        "width": 414,
+        "height": 512
+      }
+    }
+  ],
+  "before_registry_sha256": "9a9b3c8665ce920fcddd584456e4ca47b8c365d8d2c43daacb9ea908c540ee1c",
+  "after_registry_sha256": "dcfe28d7c7c6048206b740459a65ce9b482ba2768d388b0b29d7ab31174ed1a0",
+  "lineage": {
+    "fourth10_committed_receipt": {
+      "path": "docs/content-review/foundation-module02-language-fourth10-2026-10-17/commit-receipt.json",
+      "bytes": 2685,
+      "raw_sha256": "96fff4c1ac94147e99efcb8f18ff07711a5c2e53729fa07695d7d2296ae037f8",
+      "success_assertions": [
+        {
+          "keys": [
+            "status"
+          ],
+          "expected": "committed"
+        },
+        {
+          "keys": [
+            "result",
+            "status"
+          ],
+          "expected": "committed"
+        },
+        {
+          "keys": [
+            "result",
+            "committed"
+          ],
+          "expected": true
+        },
+        {
+          "keys": [
+            "registry_after_sha256"
+          ],
+          "expected": "9a9b3c8665ce920fcddd584456e4ca47b8c365d8d2c43daacb9ea908c540ee1c"
+        }
+      ]
+    },
+    "fourth10_persisted_validation_receipt": {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/receipt.json",
+      "bytes": 2818,
+      "raw_sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7",
+      "success_assertions": [
+        {
+          "keys": [
+            "ok"
+          ],
+          "expected": true
+        },
+        {
+          "keys": [
+            "error"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "checked_inputs"
+          ],
+          "expected": 865
+        },
+        {
+          "keys": [
+            "commands",
+            0,
+            "exit_code"
+          ],
+          "expected": 0
+        },
+        {
+          "keys": [
+            "commands",
+            0,
+            "signal"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            0,
+            "error"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            1,
+            "exit_code"
+          ],
+          "expected": 0
+        },
+        {
+          "keys": [
+            "commands",
+            1,
+            "signal"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            1,
+            "error"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            2,
+            "exit_code"
+          ],
+          "expected": 0
+        },
+        {
+          "keys": [
+            "commands",
+            2,
+            "signal"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            2,
+            "error"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            3,
+            "exit_code"
+          ],
+          "expected": 0
+        },
+        {
+          "keys": [
+            "commands",
+            3,
+            "signal"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            3,
+            "error"
+          ],
+          "expected": null
+        }
+      ]
+    },
+    "actual_post_fourth10_baseline": {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/actual-baseline-binding.json",
+      "raw_sha256": "1506caf881745539b971881e978e5a5f60fc8de8640066169953f6ee45417da6",
+      "registry_json_sha256": "9a9b3c8665ce920fcddd584456e4ca47b8c365d8d2c43daacb9ea908c540ee1c"
+    },
+    "reviewed_test_delta": null,
+    "guarded_commit_receipt": null,
+    "fresh_persisted_verification": null,
+    "fourth10_committed_journal": {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-committed-state.json",
+      "bytes": 43202,
+      "raw_sha256": "93c800d4ed9c94c47932d0f2b807d4d13e4a0c1330bcc5ed1cf8882a235a48b1",
+      "success_assertions": [
+        {
+          "keys": [
+            "status"
+          ],
+          "expected": "committed"
+        },
+        {
+          "keys": [
+            "sequence"
+          ],
+          "expected": 268
+        },
+        {
+          "keys": [
+            "prepared_sha256"
+          ],
+          "expected": "45cd8e892cc69577d5403aac5a5ffc1a34d7a7374e59a296440a573f52a8f1b8"
+        }
+      ]
+    }
+  },
+  "source_registry_change": false,
+  "module_or_manifest_change": false,
+  "scope": "Only shopping-bag.goods-carrier.n media.image and the three exact obsolete editorial-note clauses change. The exact accepted PNG is added. All lexical, audio, morphology, review, reference, expression, module, Growth and runtime fields remain exact.",
+  "limitations": [
+    "An empty generic bag cannot prove shopping use independently of context; gift bags may share this form.",
+    "Fabric, flexibility and visible purchases from the old brief are not depicted and are not claimed. The accepted broader carrier definition is unchanged.",
+    "This is an AI visual/editorial decision at the captured component sizes, not human participant recognition or responsive full-board acceptance.",
+    "No source model or animation was acquired. No audio was played, changed or newly approved.",
+    "Production image metadata, final packaging and persisted delivery still require a separate scoped implementation and verification."
+  ],
+  "audit": {
+    "source_acquired": true,
+    "derivative_visually_accepted": true,
+    "brief_revision_accepted": true,
+    "integration_proposal_accepted": true,
+    "production_integrated": false,
+    "fresh_production_delivery_verified": false,
+    "new_listening_approval": false,
+    "ready_module_or_course": false
+  },
+  "finalization_rule": "Do not install this template verbatim. Fill the actual independently reviewed rebase/baseline and commit lineage at their real stages; retain candidate acceptance separately. Never set successful integration or delivery flags before the corresponding evidence exists.",
+  "accepted_proposal": {
+    "inventory": {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/inventory.json",
+      "raw_sha256": "5289682bdc2ebe875adac1f70b7985fe2dd665d4ade232b89b4386f26341716e"
+    },
+    "review": {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/independent-proposal-review/review.json",
+      "raw_sha256": "f56ba6b21b583e4ebb59b933ca82b982394512be31400f1c2fb6e0cf83407f8f"
+    },
+    "image_descriptor": {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/image-descriptor.proposed.json",
+      "raw_sha256": "f60ef7ca8846b15eb89000b7937cae10c74749d5a649a56e32400252f9ab16f5"
+    }
+  },
+  "protected_media": [
+    {
+      "sense_id": "aisle.passage.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+        "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+        "source": "res://docs/assets/sources/professional-retail-ava/acquisition.json",
+        "creator": "Microsoft Ava Neural; original project texts",
+        "license": "Microsoft Services Agreement applies to synthesized output; the client LGPL license does not confer separate rights to speech. No additional license claim.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact sample listening approval in tesis-iter-2; provenance: listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "8f8003d4c7f08691875b0e9739872ed8e0448a15dca0ea8583781343e72212f2",
+      "file": {
+        "path": "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+        "bytes": 82598,
+        "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3"
+      }
+    },
+    {
+      "sense_id": "checkout.payment-area.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+        "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+        "source": "res://docs/assets/sources/professional-retail-checkout/source-record.json",
+        "creator": "Kenney; Mini Market additional credits: Fleur Keijsers and Guus Vermeulen",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex independent AI source and scoped payment-area picture review; see root-image-review.json",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show a complete staffed checkout lane: customer side, short goods belt or counter, and a register, with a shopper presenting purchases. Frame the lane as one place while the equipment stays subordinate. Reject a close-up of a register alone, a help desk, or a hotel reception. No readable payment credentials or brand marks.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": []
+      },
+      "descriptor_json_sha256": "3540fed8356667cb283a60d14508479a5da93b980e882b2281aad6eef3e68929",
+      "file": {
+        "path": "professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+        "bytes": 148338,
+        "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe"
+      }
+    },
+    {
+      "sense_id": "checkout.payment-area.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+        "sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224",
+        "source": "res://docs/assets/sources/professional-retail-ava/counter-checkout/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact counter and checkout samples approved in the continuation chat; see counter-checkout listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "799ce8d5241d4d9125ac17873d3e8d5f919594d09e600cb33875a29550ff5d0d",
+      "file": {
+        "path": "professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+        "bytes": 82598,
+        "sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224"
+      }
+    },
+    {
+      "sense_id": "counter.service-surface.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png",
+        "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+        "source": "Kenney Furniture Kit 2.1: https://kenney.nl/assets/furniture-kit; Kenney Car Kit 3.1: https://kenney.nl/assets/car-kit",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root independent AI source, physical-sense and minimum-card picture review",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Four complete acquired Furniture Kit 2.1 kitchenBar models form a broad raised surface with a solid front and a perpendicular staff-side return. Original geometry, materials, textures and source child transforms are preserved; only complete model roots are placed and rotated, then the common assembly is recentered.",
+          "One complete acquired Car Kit 3.1 box model supplies the small sealed parcel. Its original geometry, materials, texture and child transforms are preserved; the root is uniformly scaled to 0.16, rotated -10 degrees and placed at the countertop height of 0.42. No added register, refund receipt, printed label or service-function prop is used.",
+          "The orthographic camera is at [-1.1,1.8,4], aimed at [0,0.24,0], size 1.55. Ambient energy 0.18 and directional energy 0.38 illuminate a transparent 768 by 768 render. The complete alpha bounds remain within the frame; a 16-pixel margin and proportional Lanczos downscale produce 512 by 293.",
+          "Independent root review covers the exact broad-return image and actual Match 126 by 72 and Memory 144 by 74 cards, including the real badge and matched alpha. The pale top has reduced contour contrast on white and the badge overlaps the far-right return, while the solid front and staff-side recess remain readable. This scoped AI picture review is not a participant recognition study, service-function classification, domain approval or module-readiness claim."
+        ]
+      },
+      "descriptor_json_sha256": "fd0bd516076694647ad5d661dd264dfe58550b8c9253187be05e31afde8e8360",
+      "file": {
+        "path": "professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png",
+        "bytes": 31426,
+        "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a"
+      }
+    },
+    {
+      "sense_id": "counter.service-surface.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav",
+        "sha256": "685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3",
+        "source": "res://docs/assets/sources/professional-retail-ava/counter-checkout/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact counter and checkout samples approved in the continuation chat; see counter-checkout listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "2f489e4ac7a7f7f62371de1b2baa4a94ac3d1c0f96e15ce26f89a1c39ef7a12f",
+      "file": {
+        "path": "professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav",
+        "bytes": 82598,
+        "sha256": "685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3"
+      }
+    },
+    {
+      "sense_id": "cash-register.sales-device.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+        "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+        "source": "res://docs/assets/sources/professional-retail-cash-register/source-record.json",
+        "creator": "Isa Lousberg (Tiny Treats)",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root independent AI source and scoped cash-register picture review; see root-picture-acceptance-r01.json",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Use a dedicated three-quarter view of a complete retail register with sale display, physical keys, and the drawer base visible as one machine. Make the machine fill the frame. Keep any receipt secondary; exclude a detached drawer, a handheld scanner, or an isolated payment reader. Inspect the Mini Market cash-register lead before making the term render.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Original full source model and atlas, unchanged materials and child transforms",
+          "Root centering, root-reviewed camera and original inspection studio lighting",
+          "Transparent background, 16-pixel alpha-bound padding, 512-pixel-wide Lanczos resize"
+        ]
+      },
+      "descriptor_json_sha256": "639e63b912cf2e91b5d9d82f533607cbc386917b3215e8f4584c4e6e03f6128f",
+      "file": {
+        "path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+        "bytes": 172442,
+        "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+      }
+    },
+    {
+      "sense_id": "cash-register.sales-device.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+        "sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763",
+        "source": "res://docs/assets/sources/professional-retail-ava/acquisition.json",
+        "creator": "Microsoft Ava Neural; original project texts",
+        "license": "Microsoft Services Agreement applies to synthesized output; the client LGPL license does not confer separate rights to speech. No additional license claim.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact sample listening approval in tesis-iter-2; provenance: listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "d330d6d558adb9b5c9e19520d376d77b45616a049b3e8e77f645b4871b8dc201",
+      "file": {
+        "path": "professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+        "bytes": 82598,
+        "sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763"
+      }
+    },
+    {
+      "sense_id": "card-reader.payment-device.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+        "sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45",
+        "source": "res://docs/assets/sources/professional-retail-ava/card-reader-barcode/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact card reader and barcode samples approved in tesis-iter-4; see card-reader-barcode listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "8b346e8297ac37f54b3b2565260763827b9aeb7eae3c3a6c8713c62dd9091b53",
+      "file": {
+        "path": "professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+        "bytes": 82598,
+        "sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45"
+      }
+    },
+    {
+      "sense_id": "barcode.product-code.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+        "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c",
+        "source": "res://docs/assets/sources/professional-retail-barcode/source-record.json",
+        "creator": "netalloy (barcode artwork); Kenney (Car Kit parcel)",
+        "license": "CC0 1.0 Universal",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex independent AI source and scoped barcode picture review; see root-image-review.json",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Make a linear barcode on an unbranded package the dominant feature, large enough that separate bars and spaces remain clear on a phone. Use a quiet package edge only for context. No price text, real customer identifier, or claim that the pictured code is a licensed or usable product code; reject a scanner or price-tag image as the main subject.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Change only source SVG viewBox from 0 0 300 300 to 92 79 173 88, retaining every original bar and space. The narrow border is cropped at its edge; no barcode strokes are fabricated.",
+          "Rasterize this source crop at 692 by 352, then apply it as a planar artwork surface on the unchanged complete Kenney parcel.",
+          "Use recorded camera and lighting with an intentional package-edge close-up; preserve all original parcel nodes, geometry, materials, texture and child transforms.",
+          "Downscale the 768 by 440 rendered composition proportionally to 512 by 293."
+        ]
+      },
+      "descriptor_json_sha256": "ca1c7b92c7d3bbfd048c2bc374ab8f674c1f520ee55bb86b55a0ed8448a7c9db",
+      "file": {
+        "path": "professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+        "bytes": 27650,
+        "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+      }
+    },
+    {
+      "sense_id": "barcode.product-code.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav",
+        "sha256": "01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5",
+        "source": "res://docs/assets/sources/professional-retail-ava/card-reader-barcode/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact card reader and barcode samples approved in tesis-iter-4; see card-reader-barcode listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "861d318bba664730a665fd408a28b0280eb31f272acf0bffa15eb1b15ceecfec",
+      "file": {
+        "path": "professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav",
+        "bytes": 82598,
+        "sha256": "01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5"
+      }
+    },
+    {
+      "sense_id": "shopping-basket.store-container.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+        "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+        "source": "https://kenney.nl/assets/mini-market",
+        "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex source inspection and independent root physical-sense picture review at actual minimum Match and Memory card sizes, including cart/basket comparison",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show an empty compact rigid retail shopping basket in a three-quarter view, with its raised hand-carry handle and open basket clearly visible at the actual minimum card size. Keep the handheld basket distinct from a wheeled shopping cart. Exclude wheels, fabric sides, a lid, and groceries that obscure the handle or opening. Use the inspected original Mini Market shopping-basket mesh without geometry or material changes.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Rendered the acquired Mini Market shopping-basket mesh with its original geometry, materials and external colormap; no model parts, textures or groceries were invented.",
+          "Three-quarter view shades the raised hand-carry handle for contrast against the actual light card surface. The empty basket preserves the handle and opening; the original groceries-in-basket brief and its accepted revision are retained in provenance.",
+          "768 by 768 transparent source render, alpha-bounds crop with a 16-pixel margin, and Lanczos reduction to 512 by 454. The exact accepted PNG is retained without further conversion.",
+          "Independently inspected in actual native WordCard at Match 126 by 72 and Memory 144 by 74, unmatched and matched with the real badge and alpha tint, including side-by-side comparison with the accepted cart. This is agent picture review, not a participant recognition test; see docs/assets/professional-retail-shopping-basket.md for source history and separate delivery verification."
+        ]
+      },
+      "descriptor_json_sha256": "c42e46b66006a37da97d49473123642dd0da7fd86e065cdc2c162d5640b9b017",
+      "file": {
+        "path": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+        "bytes": 105604,
+        "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+      }
+    },
+    {
+      "sense_id": "shopping-basket.store-container.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav",
+        "sha256": "aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12",
+        "source": "res://docs/assets/sources/professional-retail-ava/cart-basket/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping cart and shopping basket samples approved in the continuation chat; see cart-basket listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "a6d269b24cd3c10a3fabd111e68fcb148d8e9be3ca03eb633ec65e380ed74006",
+      "file": {
+        "path": "professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav",
+        "bytes": 82598,
+        "sha256": "aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12"
+      }
+    },
+    {
+      "sense_id": "shopping-cart.store-trolley.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+        "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+        "source": "https://kenney.nl/assets/mini-market",
+        "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex source inspection and independent root physical-sense picture review at actual minimum Match and Memory card sizes",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show a full-size retail trolley in a three-quarter side view with basket, push handle, lower frame, and four wheels legible. Keep it mostly empty so its structure is visible. Exclude a hand-carried basket, flat warehouse trolley, wheelchair, or online cart icon. Inspect the Mini Market shopping-cart lead before rendering.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Rendered the acquired Mini Market shopping-cart mesh with its original geometry, materials and external colormap; no model parts or textures were invented.",
+          "Near-eye-level three-quarter side camera preserves the empty basket, orange push handle, lower frame and four wheel silhouettes. One rear wheel is partly occluded by the frame; this perspective limitation was explicitly accepted during independent root review.",
+          "768 by 768 transparent source render, alpha-bounds crop with a 16-pixel margin, and Lanczos reduction to 512 by 415. The exact accepted PNG is retained without further conversion.",
+          "Independently inspected in actual native WordCard at Match 126 by 72 and Memory 144 by 74, both unmatched and matched with the real badge and alpha tint. This is picture suitability review only; see docs/assets/professional-retail-shopping-cart.md for provenance and separate delivery verification."
+        ]
+      },
+      "descriptor_json_sha256": "bdebd007958c4b8472c5a792d4313131205ee023a2827450afb4dc2e1d046ec7",
+      "file": {
+        "path": "professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+        "bytes": 93422,
+        "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1"
+      }
+    },
+    {
+      "sense_id": "shopping-cart.store-trolley.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56.wav",
+        "sha256": "150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56",
+        "source": "res://docs/assets/sources/professional-retail-ava/cart-basket/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping cart and shopping basket samples approved in the continuation chat; see cart-basket listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "737a51d9b1c6a5d031a84bc4399cd6b99d4e5f08bef5adf51baca16cb73fddd1",
+      "file": {
+        "path": "professional-media/150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56.wav",
+        "bytes": 82598,
+        "sha256": "150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56"
+      }
+    },
+    {
+      "sense_id": "shelf.storage-surface.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04.png",
+        "sha256": "bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04",
+        "source": "https://kenney.nl/assets/mini-market",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root independent AI source, physical-sense and minimum-card picture review",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show one clearly emphasized horizontal shelf within a simple shelving frame, carrying a few boxes with space above and below it. Use lighting and a close crop to identify that single support surface without a printed word or colored label. Reject an entire aisle, a freestanding table, or a wall cabinet. Inspect the Mini Market shelf lead and avoid overfilling it.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Rendered the acquired Kenney Mini Market 1.0 shelf-boxes GLB with its original colormap. Frame and visible box geometry, materials, textures and per-node transforms are preserved; only the model root is recentered.",
+          "Six source carton nodes and two rear box nodes are hidden at scene level, leaving the source frame and its two front upper boxes. No replacement geometry or added text/target label is used.",
+          "Camera and studio lighting emphasize one upper support surface. A 768 by 768 transparent render is cropped to focus rectangle [0,0,768,640], then alpha bounds plus a 16-pixel margin and Lanczos resizing produce 512 by 309. The crop deliberately cuts the backing panel below the selected shelf and excludes the lower shelf and feet.",
+          "Root inspected eight original source views, four sparse compositions, and actual Match 126 by 72 and Memory 144 by 74 cards in unmatched/matched states. The support edge remains distinguishable with the real badge and matched alpha. This is scoped AI image review, not a participant recognition study or domain/module approval."
+        ]
+      },
+      "descriptor_json_sha256": "7d3cc7997459036dd8b2de74328da408041381279c60af5e5808ec4f45f8affe",
+      "file": {
+        "path": "professional-media/bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04.png",
+        "bytes": 56729,
+        "sha256": "bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04"
+      }
+    },
+    {
+      "sense_id": "shelf.storage-surface.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3.wav",
+        "sha256": "778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3",
+        "source": "res://docs/assets/sources/professional-retail-ava/pallet-shelf/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact pallet and shelf samples approved in the continuation chat; see pallet-shelf listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "2b6b14cc1e456a92a15718ebd8b7109bef9e3bb39ac9eea51a472465b17e4821",
+      "file": {
+        "path": "professional-media/778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3.wav",
+        "bytes": 82598,
+        "sha256": "778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3"
+      }
+    },
+    {
+      "sense_id": "pallet.goods-platform.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8.png",
+        "sha256": "7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8",
+        "source": "https://kenney.nl/assets/mini-skate",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root independent source, physical-sense and actual minimum-card picture review",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show a clean wooden goods pallet in a low three-quarter view so top slats, spacer blocks, and fork-entry gaps are visible. One small carton may show scale without obscuring the platform. Reject a pile of boards, a bed, or a loaded pallet hidden entirely by boxes. A weathered source asset is not automatically compatible with the clean Retail art direction.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Rendered the acquired Mini Skate 1.2 pallet mesh with its original external colormap. Geometry, materials, textures and source node transforms remain unchanged; only the root is recentered.",
+          "Low three-quarter camera and studio lighting retain the three top slats, spacer/support blocks and visible side fork opening. The optional carton is omitted; no additional model parts were invented.",
+          "Transparent 768 by 768 render, alpha-bounds crop with 16-pixel padding and Lanczos reduction to 512 by 278. The accepted PNG is copied exactly.",
+          "Root inspected eight source views, actual native Match 126 by 72 and Memory 144 by 74 cards in unmatched/matched states, and comparison with the accepted cart/basket. Matched badges leave the principal slats and lower opening readable. This is scoped AI picture review, not a participant recognition study or pallet-load specification."
+        ]
+      },
+      "descriptor_json_sha256": "7584a679157e99a4d5856fde1f7e97bb7066688e85de2c692e96d9c35a88d75f",
+      "file": {
+        "path": "professional-media/7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8.png",
+        "bytes": 86689,
+        "sha256": "7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8"
+      }
+    },
+    {
+      "sense_id": "pallet.goods-platform.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f.wav",
+        "sha256": "8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f",
+        "source": "res://docs/assets/sources/professional-retail-ava/pallet-shelf/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact pallet and shelf samples approved in the continuation chat; see pallet-shelf listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "f35080689a5c15240a1de8611545f35c6c7521102242408c1486c0e23412ef85",
+      "file": {
+        "path": "professional-media/8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f.wav",
+        "bytes": 82598,
+        "sha256": "8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f"
+      }
+    },
+    {
+      "sense_id": "gift-wrap.wrapping-paper.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+        "sha256": "cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2",
+        "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "261cba9b353ded9348733723d85ffe2b71d6a1e89a8f01834c321269eeb040ab",
+      "file": {
+        "path": "professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+        "bytes": 82598,
+        "sha256": "cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2"
+      }
+    },
+    {
+      "sense_id": "shopping-bag.goods-carrier.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+        "sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72",
+        "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "70dbda1733e5c25f396eb644cf19433e9555697bfdcd2913725dcedd145f3edc",
+      "file": {
+        "path": "professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+        "bytes": 82598,
+        "sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72"
+      }
+    }
+  ],
+  "protected_state": {
+    "other_lexemes_json_sha256": "4bd66cb8d65ecae7c533ef1cd4ad9905d578912daf160b373a0ae5b8a99913fd",
+    "catalog_json_sha256": "fa54b3db53df9816bd2af57f08a3adfc8647c1f2db0f79754db6557e0ca00442",
+    "courses_json_sha256": "780a3e385fc713b8f7db16594b2010e1b329d40c6bc1b3d783df49fcc6cc90d1",
+    "expressions_json_sha256": "6123997d5d536376c2b5de984e7014848de50f49e022a4ab996a69e7b134d15e",
+    "sources_json_sha256": "c9c3bc8fc72113d3804cc2a49067bc30bc6aba0964b52f20216a8d7bbf0ec6c1",
+    "themes_json_sha256": "d61cc725d971313efbec74494879afcc19dc67723d0f5b72292326f5b21bfc8e",
+    "lexemeOrigins_json_sha256": "5fd02bdcb728ab1aaa519f288320c03de9a7d981914d5702008ac1a5ca136140",
+    "expressionOrigins_json_sha256": "b83e6056d03fc77753d1588a44d6ee299da376fd62e6a2bf3c8eea30233872c2"
+  },
+  "retained_delivery_evidence": [
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/actual-baseline-binding.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/actual-baseline-binding.json",
+      "bytes": 1066218,
+      "raw_sha256": "1506caf881745539b971881e978e5a5f60fc8de8640066169953f6ee45417da6"
+    },
+    {
+      "source": "build/professional-english/transactions/foundation02-fourth10-language-r01/states/000268-committed.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-committed-state.json",
+      "bytes": 43202,
+      "raw_sha256": "93c800d4ed9c94c47932d0f2b807d4d13e4a0c1330bcc5ed1cf8882a235a48b1"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-1.log",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-1.log",
+      "bytes": 591,
+      "raw_sha256": "ae490723b3003afdf5acb56d9d1d2523220eaff867fbd91a26fab1b06dd02757"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-2.log",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-2.log",
+      "bytes": 24787,
+      "raw_sha256": "b3f3a6a6f56ce381a742951e4cff7d2266eb7de55e8fc52054d2d5cc7dbeed07"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-3.log",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-3.log",
+      "bytes": 130,
+      "raw_sha256": "c04bf5168c4951be761afab31633b5a6d5e4fdb537a8a4f81c74f259bdfb09a2"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-4.log",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-4.log",
+      "bytes": 241,
+      "raw_sha256": "4a8a7d0fc0ef12f47710cf805557f896c6ad96529ce1cdd2f30cc40a0ac97023"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/receipt.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/receipt.json",
+      "bytes": 2818,
+      "raw_sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/start.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/start.json",
+      "bytes": 121586,
+      "raw_sha256": "c843fe0b209c8201ccd832db9db05852a10a415900b0e3ba605a7e2b1957121c"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/invoke.cjs",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/invoke.cjs",
+      "bytes": 4817,
+      "raw_sha256": "ec257f224e091177f1f8b7193bd3f96ec5773cc96e975377c8d6c276cfb7b491"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-proposal-review-r01/review.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/independent-proposal-review/review.json",
+      "bytes": 2542,
+      "raw_sha256": "f56ba6b21b583e4ebb59b933ca82b982394512be31400f1c2fb6e0cf83407f8f"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/author-proposal.cjs",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/author-proposal.cjs",
+      "bytes": 12592,
+      "raw_sha256": "e0d42ff834a2bb9782ced13841ffaa25291aea459962d306ae31ee99189366c0"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/entry-afterimage.proposed.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/entry-afterimage.proposed.json",
+      "bytes": 8310,
+      "raw_sha256": "c4b48631733df905c383a60ca2ef04724722f2ee80065e6f607e9bef7a61a804"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/entry-preimage.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/entry-preimage.json",
+      "bytes": 6908,
+      "raw_sha256": "cec2b375554a5a6ac2e834aa24074fb8b3924f83b1c992e8c6a69804e0e73760"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/evidence-lock.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/evidence-lock.json",
+      "bytes": 5439,
+      "raw_sha256": "b4ca859f33cd3a38384396808e4b9d68069ba5ff6a82ba924aafb98ee2d03baf"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/generation-observation.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/generation-observation.json",
+      "bytes": 899,
+      "raw_sha256": "a6bebdb163914e0ec51a843fc71a605a3e773e85da94bbe55df4c3e51a66eea4"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/image-descriptor.proposed.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/image-descriptor.proposed.json",
+      "bytes": 1646,
+      "raw_sha256": "f60ef7ca8846b15eb89000b7937cae10c74749d5a649a56e32400252f9ab16f5"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/integration-plan.md",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/integration-plan.md",
+      "bytes": 6919,
+      "raw_sha256": "e5c2c0136a93634d7270fecdb4ced873db02e8c9a330d5d06795d435522df1b0"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/inventory.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/inventory.json",
+      "bytes": 2795,
+      "raw_sha256": "5289682bdc2ebe875adac1f70b7985fe2dd665d4ade232b89b4386f26341716e"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "bytes": 135843,
+      "raw_sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/patch.proposed.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/patch.proposed.json",
+      "bytes": 17945,
+      "raw_sha256": "2246e79884a86f127524cd816900dedc7dede75052b256b45b687899a4f395ad"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/production-document-template.md",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/production-document-template.md",
+      "bytes": 5072,
+      "raw_sha256": "5550617be9d2479f85be87647313d7a3536b0aa634a34d0a2c39111c7ebbdfe2"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/production-provenance-template.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/production-provenance-template.json",
+      "bytes": 28499,
+      "raw_sha256": "2a11e657629bf2e85c580af055cd21e02ee2cbe759acfdef2fa11272b41d7605"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/protected-media-observation.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/protected-media-observation.json",
+      "bytes": 37782,
+      "raw_sha256": "54c830fad620fedfa5f74ed281c229adc2f2dae268f555ddee75e78e7349d613"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/README.md",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/README.md",
+      "bytes": 4063,
+      "raw_sha256": "6c9fc3f9110ea7a93026130e7bc632b5aff8795a0c2dbca099ea96d69fb172c5"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/rebase-contract.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/rebase-contract.json",
+      "bytes": 2346,
+      "raw_sha256": "f614de18d3f439a8e655901e4a57ef0c1bf704429fd26c7dafae9a2112da9ea5"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/resource.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/resource.json",
+      "bytes": 396,
+      "raw_sha256": "ae02c1cc16a1c4d6e1827dfe9adfb072370010d3b5821a3db5beb410838bda64"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/test-delta-plan.md",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/test-delta-plan.md",
+      "bytes": 6523,
+      "raw_sha256": "203df8a9a09a116bcbd69dff313724ce21015f558a4ea7ad0bab3a8dd9f4a700"
+    }
+  ]
+}

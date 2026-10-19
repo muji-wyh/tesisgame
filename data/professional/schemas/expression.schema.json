@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "expression.schema.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]*$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "meaning": {
+      "type": "string",
+      "minLength": 1
+    },
+    "context": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tokens": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "end": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "index",
+          "text",
+          "start",
+          "end"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "focus_lexeme_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_.-]*$"
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "practice_modes": {
+      "const": [
+        "phrase"
+      ]
+    },
+    "media": {
+      "type": "object",
+      "properties": {
+        "audio": {
+          "$ref": "common.schema.json#/$defs/audio"
+        }
+      },
+      "required": [
+        "audio"
+      ],
+      "additionalProperties": false
+    },
+    "review": {
+      "$ref": "common.schema.json#/$defs/review"
+    },
+    "references": {
+      "$ref": "common.schema.json#/$defs/references"
+    }
+  },
+  "required": [
+    "id",
+    "text",
+    "meaning",
+    "context",
+    "tokens",
+    "focus_lexeme_ids",
+    "practice_modes",
+    "media",
+    "review",
+    "references"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,1380 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.sales_marketing.module03.01",
+      "text": "Please put the brochure and sample on the desk beside the chair.",
+      "meaning": "Locate the printed information and product example for a visitor.",
+      "context": "Preparing a customer conversation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "put",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "brochure",
+          "start": 15,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "sample",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "on",
+          "start": 35,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "desk",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "beside",
+          "start": 47,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "chair",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 63,
+          "end": 64
+        }
+      ],
+      "focus_lexeme_ids": [
+        "brochure.informational-booklet-or-folded-publication.n",
+        "sample.trial-quantity.n",
+        "desk.work-table-with-writing-surface.n",
+        "chair.single-person-seat-with-back.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module03.02",
+      "text": "The tablet and projector are ready, and the prototype is on the shelf.",
+      "meaning": "Confirm the location of presentation equipment and an early model.",
+      "context": "Preparing a demonstration.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "tablet",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "projector",
+          "start": 15,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "are",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "ready",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "prototype",
+          "start": 44,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "is",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "on",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "shelf",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 69,
+          "end": 70
+        }
+      ],
+      "focus_lexeme_ids": [
+        "tablet.portable-computer.n",
+        "projector.display-device.n",
+        "prototype.early-design-model.n",
+        "shelf.storage-surface.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module03.03",
+      "text": "Please check the label on the swatch before comparing it with the product photograph.",
+      "meaning": "Ask someone to identify the correct material sample.",
+      "context": "Checking customer presentation materials.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "label",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "on",
+          "start": 23,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "swatch",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "before",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "comparing",
+          "start": 44,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "it",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "with",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "product",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "photograph",
+          "start": 74,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "label.attached-information-marker.n",
+        "swatch.small-sample-of-material-or-color.n",
+        "product-photograph.photograph-showing-product.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module03.04",
+      "text": "The catalog and price list are available in the showroom.",
+      "meaning": "Explain where visitors can find product and price information.",
+      "context": "Welcoming a potential customer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "catalog",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "price",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "list",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "are",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "available",
+          "start": 31,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "in",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "showroom",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 56,
+          "end": 57
+        }
+      ],
+      "focus_lexeme_ids": [
+        "catalog.organized-listing-of-products-or-services.n",
+        "price-list.listing-of-products-or-services-and-prices.n",
+        "showroom.space-for-displaying-products-to-customers.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module03.05",
+      "text": "Could you compare the wording on the flyer, poster and banner before we print them?",
+      "meaning": "Request a consistency check across event material.",
+      "context": "Reviewing a planned trade-show display.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "compare",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "wording",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "on",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "flyer",
+          "start": 37,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "poster",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "banner",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "before",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "we",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "print",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "them",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": "?",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "flyer.single-sheet-promotional-handout.n",
+        "poster.large-printed-sheet-for-display.n",
+        "banner.long-display-strip-carrying-message.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module03.06",
+      "text": "The display stand holds the order form beside the sample case.",
+      "meaning": "Describe the arrangement of sales materials.",
+      "context": "Preparing a trade booth.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "display",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "stand",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "holds",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "order",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "form",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "beside",
+          "start": 39,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "sample",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "case",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 61,
+          "end": 62
+        }
+      ],
+      "focus_lexeme_ids": [
+        "display-stand.structure-supporting-items-for-display.n",
+        "order-form.form-for-requesting-specified-goods-or-services.n",
+        "sample-case.portable-case-holding-product-examples.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module03.07",
+      "text": "Please bring your business card and name badge to the trade booth.",
+      "meaning": "Ask a colleague to bring identification and contact material.",
+      "context": "Coordinating an event arrival.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "bring",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "your",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "business",
+          "start": 18,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "card",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "name",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "badge",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 47,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "trade",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "booth",
+          "start": 60,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 65,
+          "end": 66
+        }
+      ],
+      "focus_lexeme_ids": [
+        "business-card.small-card-with-professional-contact-details.n",
+        "name-badge.badge-displaying-persons-name.n",
+        "trade-booth.display-space-at-trade-event.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module03.08",
+      "text": "The lighting helps visitors inspect the packaging inside the display cabinet.",
+      "meaning": "Explain how the display is arranged.",
+      "context": "Discussing showroom presentation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "lighting",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "helps",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "visitors",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "inspect",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "packaging",
+          "start": 40,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "inside",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "display",
+          "start": 61,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "cabinet",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "lighting.arrangement-or-provision-of-light-in-space.n",
+        "packaging.materials-used-to-contain-protect-or-present-product.n",
+        "display-cabinet.cabinet-for-presenting-visible-items.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module03.09",
+      "text": "The presentation slide shows the demonstration area next to the reception desk.",
+      "meaning": "Give a visitor an orientation reference.",
+      "context": "Introducing a venue.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "presentation",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "slide",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "shows",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "demonstration",
+          "start": 33,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": "area",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "next",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "reception",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "desk",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 78,
+          "end": 79
+        }
+      ],
+      "focus_lexeme_ids": [
+        "presentation-slide.single-page-of-visual-presentation.n",
+        "demonstration-area.space-set-aside-for-showing-product-use.n",
+        "reception-desk.visitor-welcome-workstation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module03.10",
+      "text": "The meeting table is ready for the video conference with the customer.",
+      "meaning": "Confirm that the meeting space is prepared.",
+      "context": "Coordinating a remote sales discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "meeting",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "table",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "ready",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "for",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "video",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "conference",
+          "start": 41,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "with",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "customer",
+          "start": 61,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 69,
+          "end": 70
+        }
+      ],
+      "focus_lexeme_ids": [
+        "meeting-table.table-around-which-people-meet.n",
+        "video-conference.meeting-using-live-video-connections.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 19,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "32f6e5d4459cabdbf84268fbb825acba1edc7e477e439a2f9227428dee1980d5",
+  "recorded_at": "2026-10-16T22:48:02.428Z",
+  "index": 8,
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-committed-state.json"
+}

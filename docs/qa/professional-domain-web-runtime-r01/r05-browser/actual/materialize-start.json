@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T20:59:29.640Z",
+  "stage": "copy_existing_export_and_change_shell_resize_policy",
+  "harness_inventory": {
+    "path": "inventory.json",
+    "bytes": 2060,
+    "sha256": "86978ca1b5921ef3a945c806d0c6c92d25bf2b467c636d820bf8b9c1168e4a24"
+  },
+  "inherited_export_receipt": {
+    "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/export-receipt.json",
+    "bytes": 175806,
+    "sha256": "6af2c3e988b0cec313f8ff73d51d2416618d4cca3ca5302b7a0e8d3198c452bb"
+  },
+  "inherited_inputs": {
+    "path": "inherited-inputs.json",
+    "bytes": 11062,
+    "sha256": "e38f78572410065afc3c5bfc4f8053b332e9c911c6e9af83c1824a72a85af432"
+  }
+}

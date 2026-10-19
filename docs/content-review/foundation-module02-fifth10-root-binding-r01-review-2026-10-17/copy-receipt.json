@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "status": "exact_rejected_helper_source_and_review_copies",
+  "files": [
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/README.md",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/author/README.md",
+      "bytes": 7980,
+      "sha256": "8a1afc4e302a455a896cadaf9a14c5806fe68b30d95a472472c2702422944cc8"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/REVIEW-CONTRACT.md",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/author/REVIEW-CONTRACT.md",
+      "bytes": 2024,
+      "sha256": "542595789dd61c004a8db36967231bcdbfbd6242153812ef79c8d9cc194cc508"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/author-observations.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/author/author-observations.json",
+      "bytes": 1542,
+      "sha256": "01f1376765310331f51be33e3218da101e0880e9ebb2c11c90c103efb5549659"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/capture.cjs",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/author/capture.cjs",
+      "bytes": 40568,
+      "sha256": "884dee02200c7216fe1ed0d4b498c3b39fba005c83c511b27ba6de55a460493a"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/closure-supplement.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/author/closure-supplement.json",
+      "bytes": 102249,
+      "sha256": "074fd5e5c3d6538c3d29f0db1831ec9c5cbbec2930ed9c11462606314819cf1b"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/guard-cases.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/author/guard-cases.json",
+      "bytes": 5255,
+      "sha256": "ab194e1fd2e53ee4ca8ade9ca2671af7de0b02b1f9b38e249ec6e157b98865e0"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/root-capture-input.template.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/author/root-capture-input.template.json",
+      "bytes": 1135,
+      "sha256": "1126208253e5aca43d26302472f5042f364af5ad6d5f10966db37f762d5c6f7e"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/source-inventory.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/author/source-inventory.json",
+      "bytes": 1666,
+      "sha256": "706a57585e1d96755755ac6c081b1623ac19bd55a0d83cb7f4742ae963797c9a"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inspect-source.cjs",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/review/inspect-source.cjs",
+      "bytes": 16539,
+      "sha256": "6bd098cf205b6648e64122f2d9fadf56c33690b7c75ed5b120f8326d0053b5f7"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inspection-r01/inputs.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/review/inspection-r01/inputs.json",
+      "bytes": 35087,
+      "sha256": "ffc2bc4b220bcb98b8a170c93103dd180150d9009cf4a21372e1a9b0ea4c97e1"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inspection-r01/inspection.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/review/inspection-r01/inspection.json",
+      "bytes": 379640,
+      "sha256": "7a189c5fdc0b0b8fb709aeba3aa2fda8e226b80359a10de2579ba404e440c620"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inspection-r01/start.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/review/inspection-r01/start.json",
+      "bytes": 208,
+      "sha256": "ce229d36ddb0c14f7370cef6265aef0ede622f27294877252a0210dd5211afc5"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/predecessor-limitation.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/review/predecessor-limitation.json",
+      "bytes": 1020,
+      "sha256": "d984d3048c5b739b9ac519cbc927123006970b30dd7414140ec722bb1b33ad8e"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/README.md",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/review/README.md",
+      "bytes": 1622,
+      "sha256": "b192cd20b791982c622f090bb110082453ac6733dfd4bca6e71adb046cc74eb1"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/review.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/review/review.json",
+      "bytes": 9310,
+      "sha256": "1583da74f8140e7d749b0c251fe805ecacfd412841ac0ddb9a7f2a3332081ebd"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inventory.json",
+      "target": "docs/content-review/foundation-module02-fifth10-root-binding-r01-review-2026-10-17/review/inventory.json",
+      "bytes": 1550,
+      "sha256": "9ee41dab3cf3443627efa661180a7850ef119d88f3ced5790dc4fca1aa10ab39"
+    }
+  ]
+}

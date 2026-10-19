@@ -10,3 +10,5 @@ Authored spring sound made with an Arturia MicroFreak; not rubber foley
 
 License: https://creativecommons.org/publicdomain/zero/1.0/
 Adaptations: tools/import-jelly-match-assets.py; provenance: docs/assets/jelly-match.json
+Collection-note adaptations: tools/prepare-jelly-collection-audio.py
+Collection-note provenance: docs/assets/jelly-collection-audio.json

@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "status": "independent_read_only_inspector_failed_before_review",
+  "source": {
+    "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspect.ps1",
+    "sha256": "8434f2ce7be88c6addbf58b2b34cc3f9b9d052476ad7de30c6eb83b754498023"
+  },
+  "start": {
+    "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-start.json",
+    "sha256": "422ca383eac6be1544cd41b51bb6fcced9ac2b2640b13b86847e25210efa0331"
+  },
+  "error": "Overlapping PCK payload: scripts/professional_domain_catalog.gdc",
+  "diagnosis": "The inspector stored PCK rows as OrderedDictionary objects and used Sort-Object offset, which did not order their dictionary keys numerically. A separate read-only parse into PSCustomObject rows found zero overlapping payload ranges. This is an inspector defect, not a fixture failure.",
+  "correction": "Fresh inspect-r02.ps1 converts PCK and edge rows to PSCustomObject and uses distinct start/result names. Original source/start remain untouched.",
+  "fixture_runtime_replayed": false
+}

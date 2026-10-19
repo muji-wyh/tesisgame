@@ -49,6 +49,7 @@ var completion_pending: bool = false
 var _configured: bool = false
 var _attempt_sequence: int = 0
 var _muted: bool = false
+var _learning_backdrop_active: bool = false
 var _question_id: String = ""
 var _finished_question: Dictionary = {}
 var _finished_options: Array[Dictionary] = []
@@ -145,7 +146,7 @@ func _button(text: String, node_name: String, callback: Callable) -> Button:
 	return button
 
 
-func configure(vocabulary: Array, age_band: String, theme_id: String, seed_value: int = -1) -> bool:
+func configure(vocabulary: Array, age_band: String, theme_id: String, seed_value: int = -1, professional_expressions: Array = []) -> bool:
 	cancel_input()
 	_attempt_sequence = 0
 	_paused = false
@@ -157,7 +158,8 @@ func configure(vocabulary: Array, age_band: String, theme_id: String, seed_value
 	_finished_options.clear()
 	_finished_answer.clear()
 	_bank_scroll = 0.0
-	_configured = game.reset(vocabulary, age_band, seed_value)
+	_configured = game.reset_professional(professional_expressions, seed_value) if not professional_expressions.is_empty() \
+		else game.reset(vocabulary, age_band, seed_value)
 	apply_theme(Data.theme(theme_id), theme_id)
 	pip.settle()
 	pip.set_idle_paused(false)
@@ -194,6 +196,14 @@ func set_muted(value: bool) -> void:
 	_refresh()
 
 
+func set_learning_backdrop(active: bool) -> void:
+	if _learning_backdrop_active == active:
+		return
+	_learning_backdrop_active = active
+	_progress_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if active else HORIZONTAL_ALIGNMENT_RIGHT
+	queue_redraw()
+
+
 func pause(value: bool = true) -> void:
 	if _paused == value:
 		return
@@ -212,13 +222,32 @@ func resume() -> void:
 
 
 func stop() -> void:
+	set_learning_backdrop(false)
 	_paused = true
 	_celebrating = false
 	completion_pending = false
 	cancel_input()
+	if is_instance_valid(_reorder_tween):
+		_reorder_tween.kill()
+	_configured = false
+	_finished_question.clear()
+	_finished_options.clear()
+	_finished_answer.clear()
+	game.questions.clear()
+	game.options.clear()
+	game.answer.clear()
+	game._question_options.clear()
+	game.phase = "finished"
+	_question_id = ""
+	_rebuild_buttons()
 	pip.settle()
 	pip.set_idle_paused(true)
-	_refresh()
+	listen_button.configure({}, false, _palette.get("accent", Style.GOOD))
+	listen_button.set_paused(true)
+	for control in [listen_button, action_button, _progress, _progress_caption, _bank_clip, _answer_clip]:
+		control.hide()
+	action_button.disabled = true
+	_publish.call_deferred()
 
 
 func cancel_input() -> void:
@@ -236,6 +265,7 @@ func cancel_input() -> void:
 		_settle_tween.kill()
 	if is_instance_valid(_preview):
 		_preview.hide()
+		_preview.icon = null
 	for button in option_buttons + answer_buttons:
 		button.modulate = Color.WHITE
 	for button in option_buttons + answer_buttons + [listen_button, action_button]:
@@ -339,10 +369,11 @@ func _activate() -> void:
 		return
 	var correct: bool = result == "correct"
 	var involved: Array[String] = []
-	for id in game.current_question().words:
+	var professional: bool = game.current_question().get("track") == "professional"
+	for id in game.current_question().get("focus_lexeme_ids", []) if professional else game.current_question().words:
 		if not involved.has(str(id)):
 			involved.append(str(id))
-	if not correct:
+	if not correct and not professional:
 		for index in game.answer:
 			if index < 0 or index >= game.options.size():
 				continue
@@ -710,6 +741,11 @@ func _draw() -> void:
 		return
 	var s: float = Style.ui_scale(self)
 	var accent: Color = _palette.get("accent", Style.GOOD)
+	if _learning_backdrop_active:
+		var paper := Style.box(Color("#fffef9"), Color.TRANSPARENT, ceili(8 / s), 0)
+		for caption: Label in [_progress_caption, _feedback]:
+			if caption.is_visible_in_tree():
+				paper.draw(get_canvas_item(), _local_rect(caption).grow(4 / s))
 	if _answer_clip.has_focus():
 		var focus := Style.box(Color.TRANSPARENT, Style.INK, ceili(14 / s), ceili(2 / s))
 		focus.draw(get_canvas_item(), _local_rect(_answer_clip).grow(2 / s))
@@ -840,6 +876,7 @@ func _refresh() -> void:
 func _rebuild_buttons() -> void:
 	var options: Array[Dictionary] = _display_options()
 	for button in option_buttons + answer_buttons:
+		button.icon = null
 		button.get_parent().remove_child(button)
 		button.queue_free()
 	option_buttons.clear()
@@ -1054,6 +1091,7 @@ func snapshot() -> Dictionary:
 	var options: Array[Dictionary] = _display_options()
 	var result: Dictionary = game.snapshot()
 	result["visible"] = is_visible_in_tree()
+	result["learning_backdrop_active"] = _learning_backdrop_active
 	result["paused"] = _paused
 	result["celebrating"] = _celebrating
 	result["completion_pending"] = completion_pending

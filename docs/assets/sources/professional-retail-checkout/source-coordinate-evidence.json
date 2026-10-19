@@ -1,0 +1,31 @@
+{
+  "scope": "Read-only decoded original mesh coordinate evidence supporting initial placement; no geometric or material edit and no native visual claim.",
+  "source_sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+  "belt_top_candidate_vertices": {
+    "count": 30,
+    "min": [
+      -0.4000000059604645,
+      0.25,
+      -0.3499999940395355
+    ],
+    "max": [
+      0,
+      0.25,
+      0.45000001788139343
+    ]
+  },
+  "register_surface_vertices": {
+    "count": 65,
+    "min": [
+      -0.050000011920928955,
+      0.30000001192092896,
+      -0.04999999701976776
+    ],
+    "max": [
+      0.44999998807907104,
+      0.30000001192092896,
+      0.45000001788139343
+    ]
+  },
+  "placement_rationale": "Groceries use original top height 0.25, x negative. Staff initially occupies the open side behind the terminal. Native source and composition review must confirm contact, clearance and orientation."
+}

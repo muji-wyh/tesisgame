@@ -1,0 +1,1801 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.education_childcare.module10.01",
+      "text": "The teacher and teaching assistant discussed the learning focus with the early years practitioner and childcare worker.",
+      "meaning": "Identify different roles without assuming identical responsibilities.",
+      "context": "Coordinating a learning session.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "teacher",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "teaching",
+          "start": 16,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "assistant",
+          "start": 25,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "discussed",
+          "start": 35,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "learning",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "focus",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "with",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "early",
+          "start": 73,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "years",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "practitioner",
+          "start": 85,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 98,
+          "end": 101
+        },
+        {
+          "index": 15,
+          "text": "childcare",
+          "start": 102,
+          "end": 111
+        },
+        {
+          "index": 16,
+          "text": "worker",
+          "start": 112,
+          "end": 118
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 118,
+          "end": 119
+        }
+      ],
+      "focus_lexeme_ids": [
+        "teacher.person-whose-work-supports-teaching-and-learning.n",
+        "teaching-assistant.worker-supporting-teacher-and-learners.n",
+        "early-years-practitioner.professional-supporting-early-childhood-learning-and-care.n",
+        "childcare-worker.worker-caring-for-children-in-service-setting.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module10.02",
+      "text": "The school principal and childcare center director confirmed which local arrangements applied to the shared visit.",
+      "meaning": "Clarify responsibility across two settings.",
+      "context": "Planning a joint activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "school",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "principal",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "childcare",
+          "start": 25,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "center",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "director",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "confirmed",
+          "start": 51,
+          "end": 60
+        },
+        {
+          "index": 8,
+          "text": "which",
+          "start": 61,
+          "end": 66
+        },
+        {
+          "index": 9,
+          "text": "local",
+          "start": 67,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "arrangements",
+          "start": 73,
+          "end": 85
+        },
+        {
+          "index": 11,
+          "text": "applied",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 94,
+          "end": 96
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 97,
+          "end": 100
+        },
+        {
+          "index": 14,
+          "text": "shared",
+          "start": 101,
+          "end": 107
+        },
+        {
+          "index": 15,
+          "text": "visit",
+          "start": 108,
+          "end": 113
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 113,
+          "end": 114
+        }
+      ],
+      "focus_lexeme_ids": [
+        "school-principal.person-leading-school.n",
+        "childcare-center-director.person-managing-childcare-center.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module10.03",
+      "text": "The school counselor, educational psychologist, speech therapist, and occupational therapist have distinct professional scopes.",
+      "meaning": "Distinguish specialist roles without suggesting interchangeable expertise.",
+      "context": "Preparing a role information sheet.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "school",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "counselor",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "educational",
+          "start": 22,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "psychologist",
+          "start": 34,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "speech",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "therapist",
+          "start": 55,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "occupational",
+          "start": 70,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "therapist",
+          "start": 83,
+          "end": 92
+        },
+        {
+          "index": 13,
+          "text": "have",
+          "start": 93,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": "distinct",
+          "start": 98,
+          "end": 106
+        },
+        {
+          "index": 15,
+          "text": "professional",
+          "start": 107,
+          "end": 119
+        },
+        {
+          "index": 16,
+          "text": "scopes",
+          "start": 120,
+          "end": 126
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 126,
+          "end": 127
+        }
+      ],
+      "focus_lexeme_ids": [
+        "school-counselor.professional-supporting-students-through-counseling-role.n",
+        "educational-psychologist.psychologist-working-with-learning-and-development.n",
+        "speech-therapist.communication-swallowing-professional.n",
+        "occupational-therapist.daily-activity-professional.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module10.04",
+      "text": "The special education teacher and special educational needs coordinator discussed family communication with the family liaison officer.",
+      "meaning": "Connect educational support with accessible family contact.",
+      "context": "Arranging a support meeting.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "special",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "education",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "teacher",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "special",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "educational",
+          "start": 42,
+          "end": 53
+        },
+        {
+          "index": 7,
+          "text": "needs",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 8,
+          "text": "coordinator",
+          "start": 60,
+          "end": 71
+        },
+        {
+          "index": 9,
+          "text": "discussed",
+          "start": 72,
+          "end": 81
+        },
+        {
+          "index": 10,
+          "text": "family",
+          "start": 82,
+          "end": 88
+        },
+        {
+          "index": 11,
+          "text": "communication",
+          "start": 89,
+          "end": 102
+        },
+        {
+          "index": 12,
+          "text": "with",
+          "start": 103,
+          "end": 107
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 14,
+          "text": "family",
+          "start": 112,
+          "end": 118
+        },
+        {
+          "index": 15,
+          "text": "liaison",
+          "start": 119,
+          "end": 126
+        },
+        {
+          "index": 16,
+          "text": "officer",
+          "start": 127,
+          "end": 134
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 134,
+          "end": 135
+        }
+      ],
+      "focus_lexeme_ids": [
+        "special-education-teacher.teacher-supporting-learners-with-special-education-needs.n",
+        "special-educational-needs-coordinator.person-coordinating-special-educational-provision.n",
+        "family-liaison-officer.worker-linking-families-with-setting-and-services.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module10.05",
+      "text": "The playworker and substitute teacher received the relevant role information; the volunteer and placement student confirmed their supervision arrangements.",
+      "meaning": "Clarify roles and supervision without inferring authorization from a title.",
+      "context": "Welcoming temporary team members.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "playworker",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "substitute",
+          "start": 19,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "teacher",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "received",
+          "start": 38,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "relevant",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 8,
+          "text": "role",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": "information",
+          "start": 65,
+          "end": 76
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "volunteer",
+          "start": 82,
+          "end": 91
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 14,
+          "text": "placement",
+          "start": 96,
+          "end": 105
+        },
+        {
+          "index": 15,
+          "text": "student",
+          "start": 106,
+          "end": 113
+        },
+        {
+          "index": 16,
+          "text": "confirmed",
+          "start": 114,
+          "end": 123
+        },
+        {
+          "index": 17,
+          "text": "their",
+          "start": 124,
+          "end": 129
+        },
+        {
+          "index": 18,
+          "text": "supervision",
+          "start": 130,
+          "end": 141
+        },
+        {
+          "index": 19,
+          "text": "arrangements",
+          "start": 142,
+          "end": 154
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 154,
+          "end": 155
+        }
+      ],
+      "focus_lexeme_ids": [
+        "playworker.worker-supporting-childrens-play.n",
+        "substitute-teacher.teacher-temporarily-replacing-another-teacher.n",
+        "volunteer.person-offering-work-without-usual-payment.n",
+        "placement-student.student-undertaking-supervised-work-placement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module10.06",
+      "text": "The mentor and mentee agreed a professional development focus and checked the relevant training record.",
+      "meaning": "Make a mentoring conversation purposeful and documented.",
+      "context": "Planning staff learning.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "mentor",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "mentee",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "agreed",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "professional",
+          "start": 31,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "development",
+          "start": 44,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "focus",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "checked",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "relevant",
+          "start": 78,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "training",
+          "start": 87,
+          "end": 95
+        },
+        {
+          "index": 14,
+          "text": "record",
+          "start": 96,
+          "end": 102
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mentor.experienced-person-supporting-anothers-development.n",
+        "mentee.person-supported-by-mentor.n",
+        "professional-development.learning-to-develop-professional-knowledge-and-practice.n",
+        "training-record.record-of-completed-or-planned-training.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module10.07",
+      "text": "The team briefing introduced the planning session, reflective practice, and agreed peer observation focus.",
+      "meaning": "Connect team communication with professional learning.",
+      "context": "Preparing a development meeting.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "team",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "briefing",
+          "start": 9,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "introduced",
+          "start": 18,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "planning",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "session",
+          "start": 42,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "reflective",
+          "start": 51,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "practice",
+          "start": 62,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "agreed",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "peer",
+          "start": 83,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "observation",
+          "start": 88,
+          "end": 99
+        },
+        {
+          "index": 15,
+          "text": "focus",
+          "start": 100,
+          "end": 105
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 105,
+          "end": 106
+        }
+      ],
+      "focus_lexeme_ids": [
+        "team-briefing.short-meeting-sharing-relevant-team-information.n",
+        "planning-session.work-preparation-meeting.n",
+        "reflective-practice.considering-experience-to-improve-professional-work.n",
+        "peer-observation.observation-of-colleagues-practice-for-agreed-purpose.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module10.08",
+      "text": "The lesson observation informs an action plan and improvement plan, within the setting's quality assurance arrangements.",
+      "meaning": "Connect evidence with planned improvements without assuming a performance rating.",
+      "context": "Reviewing the setting's next steps.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "lesson",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "observation",
+          "start": 11,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "informs",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "an",
+          "start": 31,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "action",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "plan",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "improvement",
+          "start": 50,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "plan",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "within",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "setting's",
+          "start": 79,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "quality",
+          "start": 89,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "assurance",
+          "start": 97,
+          "end": 106
+        },
+        {
+          "index": 16,
+          "text": "arrangements",
+          "start": 107,
+          "end": 119
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 119,
+          "end": 120
+        }
+      ],
+      "focus_lexeme_ids": [
+        "lesson-observation.observation-of-teaching-and-learning-session.n",
+        "action-plan.plan-specifying-actions-responsibility-and-follow-up.n",
+        "improvement-plan.plan-for-improving-defined-aspect-of-work.n",
+        "quality-assurance.planned-work-to-support-consistent-quality.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module10.09",
+      "text": "The induction explains the code of conduct, job description, probation arrangements, and the purpose of the performance review.",
+      "meaning": "Clarify employment and role information through the actual local documents.",
+      "context": "Preparing a new staff member's questions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "induction",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "explains",
+          "start": 14,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "code",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "conduct",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "job",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "description",
+          "start": 48,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "probation",
+          "start": 61,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "arrangements",
+          "start": 71,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 83,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 16,
+          "text": "purpose",
+          "start": 93,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "of",
+          "start": 101,
+          "end": 103
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 19,
+          "text": "performance",
+          "start": 108,
+          "end": 119
+        },
+        {
+          "index": 20,
+          "text": "review",
+          "start": 120,
+          "end": 126
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 126,
+          "end": 127
+        }
+      ],
+      "focus_lexeme_ids": [
+        "induction.introduction-to-workplace-and-role.n",
+        "code-of-conduct.documented-expectations-for-professional-behavior.n",
+        "job-description.written-account-of-role-duties.n",
+        "probation.initial-employment-period-for-assessing-suitability.n",
+        "performance-review.structured-discussion-of-work-performance-and-development.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module10.10",
+      "text": "Review the workload, staff rota, cover arrangement, and budget before confirming resource allocation for the school term.",
+      "meaning": "Coordinate staffing and resources within the actual plan.",
+      "context": "Planning the next period of work.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Review",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "workload",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 19,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "staff",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "rota",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "cover",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "arrangement",
+          "start": 39,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "budget",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "before",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "confirming",
+          "start": 70,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "resource",
+          "start": 81,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "allocation",
+          "start": 90,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "for",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 105,
+          "end": 108
+        },
+        {
+          "index": 18,
+          "text": "school",
+          "start": 109,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": "term",
+          "start": 116,
+          "end": 120
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 120,
+          "end": 121
+        }
+      ],
+      "focus_lexeme_ids": [
+        "workload.amount-of-assigned-work.n",
+        "staff-rota.staff-duty-schedule.n",
+        "cover-arrangement.plan-for-providing-temporary-staff-replacement.n",
+        "budget.plan-for-available-income-and-spending.n",
+        "resource-allocation.assignment-of-resources-to-purposes-or-work.n",
+        "school-term.division-of-school-year.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

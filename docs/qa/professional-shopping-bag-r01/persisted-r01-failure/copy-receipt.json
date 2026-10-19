@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "status": "exact_failed_attempt_and_review_copies",
+  "files": [
+    {
+      "source": "build/professional-english/shopping-bag-persisted-validation-r01/invoke.cjs",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/invoke.cjs",
+      "bytes": 5772,
+      "sha256": "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-persisted-validation-r01/input.json",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/input.json",
+      "bytes": 1808178,
+      "sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/start.json",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/attempt-001/start.json",
+      "bytes": 235,
+      "sha256": "b6643d6fe0740319f41cac846afcad62402ab4477e5af17b6ec0d07af2ab24ec"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/command-1.log",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/attempt-001/command-1.log",
+      "bytes": 5791184,
+      "sha256": "0020b63f47249956e1122188f101d26390511a6b02ec16e52377033dd6504ae6"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/command-2.log",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/attempt-001/command-2.log",
+      "bytes": 27390,
+      "sha256": "5c51c6b4a8a8b4016fab7fee1126473f50ebb799dfc70df7df953f54e291fc23"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/receipt.json",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/attempt-001/receipt.json",
+      "bytes": 2981,
+      "sha256": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-inspection.json",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/independent-review/persisted-input-inspection.json",
+      "bytes": 5124,
+      "sha256": "6c5eb8791d18f9c2523d3ec7db324463237bfd13c458ba89066781d284cd7042"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-review.json",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/independent-review/persisted-input-review.json",
+      "bytes": 6633,
+      "sha256": "ff849f233383e842b35c9f5503efa44f2c1f313eccc23e89ea5fc47a9cc87778"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-review-inventory.json",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/independent-review/persisted-input-review-inventory.json",
+      "bytes": 1760,
+      "sha256": "8b3c36993af113b47da5ca5f4667386b3d6c8b4ed7e39e35a486d731fdda3aed"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-inspection-authoring-failure-r01.json",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/independent-review/persisted-inspection-authoring-failure-r01.json",
+      "bytes": 1542,
+      "sha256": "be0769d96bea1c7e8955d69d6af85b632a8d184a640fa98b7f921af10864a13a"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-persisted-r01-failure-inspection/inspection.json",
+      "target": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/root-inspection.json",
+      "bytes": 726,
+      "sha256": "7f30e468dc35210e69e6a3b91bf0162bba6ac4d167de9c639de71501629afca1"
+    }
+  ]
+}

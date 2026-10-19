@@ -1,0 +1,18 @@
+{
+  "label": "professional_round_loader-runtime",
+  "command": [
+    "godot",
+    "--headless",
+    "--path",
+    "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+    "--script",
+    "res://tests/godot/professional_round_loader_tests.gd"
+  ],
+  "started_at": "2026-10-16T19:37:13.897Z",
+  "finished_at": "2026-10-16T19:37:15.670Z",
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "log_sha256": "01a2143b848f3a40ce4a5a0548ca0d58bcdf6f780b6310984b5ccddf0693feb2",
+  "ok": true
+}

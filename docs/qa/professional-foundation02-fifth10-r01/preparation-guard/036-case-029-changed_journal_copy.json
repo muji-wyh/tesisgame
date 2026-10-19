@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "id": "changed_journal_copy",
+  "specification": "changed_journal_copy",
+  "classification": "semantic_guard_with_rebound_fixture_envelopes",
+  "expected": "reject",
+  "mutation": "Alter selected copied state and rebind receipt/persisted hashes so original-versus-copy byte comparison is reached.",
+  "synthetic_in_memory_only": true,
+  "source_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "actual_preparation_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "opened": false,
+  "recheck_passed": false,
+  "passed": true,
+  "virtual_io": {
+    "imports": [
+      "node:fs",
+      "node:path",
+      "node:crypto",
+      "node:assert/strict"
+    ],
+    "file_reads": 12506,
+    "directory_reads": 1,
+    "existence_reads": 0,
+    "denied": []
+  },
+  "virtual_changes": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "61f54ed2a10dcca2cb6de6ae6319a5f37b773068c02c8746c99fd91d92cda0d2"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/memory-only/changed_journal_copy/shopping_bag-committed_journal.json",
+      "original": null,
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/memory-only/changed_journal_copy/shopping_bag-committed_journal.json",
+        "bytes": 47574,
+        "raw_sha256": "8b6dc083801be10c42228babea2cc700782c47e4520376859886855db7047f61"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/memory-only/changed_journal_copy/shopping_bag-prepared_journal.json",
+      "original": null,
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/memory-only/changed_journal_copy/shopping_bag-prepared_journal.json",
+        "bytes": 147774,
+        "raw_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3189422,
+        "raw_sha256": "430bf02170a17b653557049c589dd5aa0f9c8900ec60913da523cee53267e5d3"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "1ca9d33a0995447bdc2ee37876e922a07063b837858339a0af0deef746dcbb6a"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+      "original": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+        "bytes": 1808178,
+        "raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+      },
+      "fixture": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+        "bytes": 1808178,
+        "raw_sha256": "74c651dfc8f245295b56ae1eaa8771997c76e66995b548c258f68263b8bddb13"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+      "original": {
+        "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+        "bytes": 59877,
+        "raw_sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+      },
+      "fixture": {
+        "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+        "bytes": 59877,
+        "raw_sha256": "1ffc129715df934f52d4a9c72a94771e75e27dfa6231825295a749f5d6b37e70"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+      "original": {
+        "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+        "bytes": 2187,
+        "raw_sha256": "2b5675bdee6517924e260bb05e97b239d7838cd822f67ca6c35566a18833b5a9"
+      },
+      "fixture": {
+        "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+        "bytes": 2187,
+        "raw_sha256": "96466b887d726c04debde025841141c8744960e0d311524d716df46ac50251d6"
+      },
+      "scope": "memory_only"
+    }
+  ],
+  "rejection": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "Durable journal copy differs from actual original\n+ actual - expected\n... Skipped lines\n\n+ Buffer(47574) [Uint8Array] [\n- Buffer(47518) [Uint8Array] [\n    123,\n    10,\n    32,\n    32,\n    34,\n...\n    93,\n+   44,\n    10,\n+   32,\n+   32,\n+   34,\n+   103,\n+   117,\n+   97,\n+   114,\n+   100,\n+   95,\n+   102,\n+   105,\n+   120,\n+   116,\n+   117,\n+   114,\n+   101,\n+   95,\n+   109,\n+   97,\n+   114,\n+   107,\n+   101,\n+   114,\n+   34,\n+   58,\n+   32,\n+   34,\n+   99,\n+   111,\n+   112,\n+   121,\n+   45,\n+   100,\n+   105,\n+   102,\n+   102,\n+   101,\n+   114,\n+   115,\n+   45,\n+   102,\n+   114,\n+   111,\n+   109,\n+   45,\n+   111,\n+   114,\n+   105,\n+   103,\n+   105,\n+   110,\n+   97,\n+   108,\n+   34,\n+   10,\n    125,\n    10\n  ]\n",
+    "stack": "node:assert:152\n  throw new AssertionError(obj);\n  ^\n\nAssertionError [ERR_ASSERTION]: Durable journal copy differs from actual original\n+ actual - expected\n... Skipped lines\n\n+ Buffer(47574) [Uint8Array] [\n- Buffer(47518) [Uint8Array] [\n    123,\n    10,\n    32,\n    32,\n    34,\n...\n    93,\n+   44,\n    10,\n+   32,\n+   32,\n+   34,\n+   103,\n+   117,\n+   97,\n+   114,\n+   100,\n+   95,\n+   102,\n+   105,\n+   120,\n+   116,\n+   117,\n+   114,\n+   101,\n+   95,\n+   109,\n+   97,\n+   114,\n+   107,\n+   101,\n+   114,\n+   34,\n+   58,\n+   32,\n+   34,\n+   99,\n+   111,\n+   112,\n+   121,\n+   45,\n+   100,\n+   105,\n+   102,\n+   102,\n+   101,\n+   114,\n+   115,\n+   45,\n+   102,\n+   114,\n+   111,\n+   109,\n+   45,\n+   111,\n+   114,\n+   105,\n+   103,\n+   105,\n+   110,\n+   97,\n+   108,\n+   34,\n+   10,\n    125,\n    10\n  ]\n\n    at exactJournal (fifth10-frozen-binding.cjs:71:47)\n    at predecessorJournal (fifth10-frozen-binding.cjs:76:19)\n    at successfulPredecessor (fifth10-frozen-binding.cjs:137:57)\n    at Object.openSession (fifth10-frozen-binding.cjs:194:15)\n    at fifth10-memory-guard-call.cjs:1:44\n    at Script.runInContext (node:vm:149:12)\n    at run (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:428:82)\n    at Object.open (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:430:12)\n    at main (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:229:19)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:584:1)"
+  },
+  "expected_assertion": {
+    "line": 71,
+    "column_start": 40,
+    "column_end": 127,
+    "source_fragment": "assert.deepEqual(bytes, original, 'Durable journal copy differs from actual original');"
+  },
+  "actual_first_binding_frame": {
+    "line": 71,
+    "column": 47
+  }
+}

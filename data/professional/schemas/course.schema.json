@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "course.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "curriculum_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "theme_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]*$"
+    },
+    "vocabulary_target": {
+      "const": 500
+    },
+    "expression_target": {
+      "const": 100
+    },
+    "modules": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^module(0[1-9]|10)$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requirements_revision": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "planned",
+              "draft",
+              "ready"
+            ]
+          },
+          "foundation": {
+            "type": "boolean"
+          },
+          "vocabulary_target": {
+            "const": 50
+          },
+          "expression_target": {
+            "const": 10
+          },
+          "objectives": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true,
+            "minItems": 1
+          },
+          "lexeme_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_.-]*$"
+            },
+            "uniqueItems": true,
+            "maxItems": 50
+          },
+          "expression_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_.-]*$"
+            },
+            "uniqueItems": true,
+            "maxItems": 10
+          },
+          "lexeme_files": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "common.schema.json#/$defs/resource_path"
+            }
+          },
+          "expression_files": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "common.schema.json#/$defs/resource_path"
+            }
+          },
+          "media_manifest": {
+            "type": "object",
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "pattern": "^res://data/professional/media-manifests/[a-zA-Z0-9_.-]+\\.json$"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "requirements_revision",
+          "status",
+          "foundation",
+          "vocabulary_target",
+          "expression_target",
+          "objectives",
+          "lexeme_ids",
+          "expression_ids",
+          "lexeme_files",
+          "expression_files"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "curriculum_revision",
+    "theme_id",
+    "vocabulary_target",
+    "expression_target",
+    "modules"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "status": "frozen_exact_persisted_input_acceptance",
+  "reviewer": "Codex runtime_recovery",
+  "source_sha256": "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f",
+  "input_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f",
+  "files": [
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-inspection.json",
+      "bytes": 5124,
+      "sha256": "6c5eb8791d18f9c2523d3ec7db324463237bfd13c458ba89066781d284cd7042"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-inspection-authoring-failure-r01.json",
+      "bytes": 1542,
+      "sha256": "be0769d96bea1c7e8955d69d6af85b632a8d184a640fa98b7f921af10864a13a"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-review.json",
+      "bytes": 6633,
+      "sha256": "ff849f233383e842b35c9f5503efa44f2c1f313eccc23e89ea5fc47a9cc87778"
+    }
+  ],
+  "preserved_prior_inventories": [
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/inventory.json",
+      "bytes": 919,
+      "sha256": "f99e091e7ece2a899df31fd6e50ef5b79054d678cc9849d01a516f4ed554c2d5"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-review-inventory.json",
+      "bytes": 694,
+      "sha256": "d2b505c502f5930cddaced894997b982e74e249351a5e0ad49b4c3ee610cab95"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-review-inventory.json",
+      "bytes": 1694,
+      "sha256": "856b500ad7081a6f8d1ce8f6c2a4503906269acc759306cc0472df3ca62e33c5"
+    }
+  ]
+}

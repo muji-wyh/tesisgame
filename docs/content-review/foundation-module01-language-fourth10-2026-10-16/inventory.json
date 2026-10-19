@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "status": "frozen_fourth10_author_evidence_inventory",
+  "artifacts": [
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/capture-preimages.cjs",
+      "raw_sha256": "d35d4bbbad4529db303c9f57edddff34208ac0347d0a3f08c875485e6c0667b3"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/preimages.json",
+      "raw_sha256": "5d0627d8092018c16b8603b2187a2e1fb8e30507d06d8baeb5065dfd077d7673",
+      "json_sha256": "8561aac1ac5f64688f74d10694bc7063b7e8e57c099809a260fc1b463293179f"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/source-notes.cjs",
+      "raw_sha256": "c02056eda6eab79e7b8f2fb318dd3319ec55faeb58408b4b97129dd101465b25"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/decision-notes.cjs",
+      "raw_sha256": "2950c6383d2f4a41fc342d4c31bc63173e16e161fa19435fd5f35e02153184c9"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/context-notes.cjs",
+      "raw_sha256": "f886648e89a349ffff656fba94deb0a39cd97f3e554000d18fbe116753cb7a7a"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/prepare-ledger.cjs",
+      "raw_sha256": "dbd00e88f31f59ac7b308089bae340fc9fa51a3cf2beaad29f45b83db87652e5"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/source-consultations.json",
+      "raw_sha256": "4c9e25feea8300a7f4a9fea2853b357aeb564c598e76d0bc7462e0ec654a11aa",
+      "json_sha256": "22307715bfa6c08eebcb81a2731e3d0c08b0cb10774d1facbc0a3c91707f59ba"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/expression-use-review.json",
+      "raw_sha256": "e3117148f4be9a89664c4b4aa3d6617f9e771386da6fc3aaa6001508c35d93e1",
+      "json_sha256": "8f02831121d93c88510cac103298479bc5fd5214e06c3bbaa26b00aac245b560"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/language-ledger.json",
+      "raw_sha256": "93ffa0315b1e0d4567eb176b399f37da86bc86573c71852164a0cf9d2e419a2a",
+      "json_sha256": "7b0912391dfa6f852769379622f23ed6a764d3f0f86fe1c798deae0ba04d32e8"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/structural-audit.json",
+      "raw_sha256": "9008ad6fd6a556fa90a9581503e00d3dbb66454df616bfbe6a0010c55aaa6090",
+      "json_sha256": "68aef0eb3ea120a7db2e7c321e5d84cba87021af7e59150697e413b97d598b80"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fourth10/HANDOFF.md",
+      "raw_sha256": "ed8f7140930a323c2ff6167d5456001d153ba86ff08402f0cb13807b36939318"
+    }
+  ],
+  "inventory_excludes_itself": true
+}

@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "ok": true,
+  "duration_ms": 3584,
+  "checks": 125,
+  "failures": 0,
+  "error": null,
+  "input_count": 23,
+  "inputs_unchanged": true,
+  "changed_paths": [],
+  "report_sha256": "21e59e47a219572201e06b9c64fefb13834039ed18d78cdf0a614da7e2fa2bbc",
+  "log_sha256": "f5c1068dff354ab1133df7a60a03562ddfa3db4136b822e90df5a3a51e493286",
+  "authority": "none",
+  "production_changes": false,
+  "browser_export_tested": false,
+  "performance_acceptance": false,
+  "scope": "Actual phased owner I/O/hash/decode/resolve with fixed synthetic fixture; current copied production catalog/resolver, defensive copies, generation/token/cache and cancellation tests."
+}

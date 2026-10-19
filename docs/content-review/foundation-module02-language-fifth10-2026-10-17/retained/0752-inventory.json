@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_review",
+  "recorded_at": "2026-10-16T20:24:42.595Z",
+  "directory": "build/professional-english/foundation02-fifth10-independent-review-r01",
+  "inventory_self_hash_excluded": true,
+  "production_mutated": false,
+  "executed_source_equality_verified": true,
+  "artifacts": [
+    {
+      "path": "README.md",
+      "sha256": "c6b4562629e7964032fe61fe269c85b6a85e688373e9a83e30adf8285babf923",
+      "bytes": 4211
+    },
+    {
+      "path": "assemble-independent-review.cjs",
+      "sha256": "8ca8d1dd88f9833272d66d4d69879a4ba54ca85903baaff3309ec96a477e4ae1",
+      "bytes": 45810
+    },
+    {
+      "path": "assembly-result.json",
+      "sha256": "fb94a6c37a89dc3b793b3c166b17d395f317884969d93295fecaaa4b23b0cd36",
+      "bytes": 1202
+    },
+    {
+      "path": "assembly-start.json",
+      "sha256": "29808ea081c4ec7171e42fd30139f469d07b945331b10cbec8cf85b300fba03d",
+      "bytes": 296
+    },
+    {
+      "path": "context-review.json",
+      "sha256": "44e3d928da7a4fc06db061c9090480d9182ae2f24698d3d4de7caab4e9549037",
+      "bytes": 465569
+    },
+    {
+      "path": "input-audit.json",
+      "sha256": "5033253372dc4cb1834355d7d94e372ac70740b94a949d044171db575be59200",
+      "bytes": 197057
+    },
+    {
+      "path": "review-ledger.json",
+      "sha256": "92c5b326565f95d9dacb8c11f8ca6684b5c39200b4ebcae57f3108a3c7a720b1",
+      "bytes": 80788
+    },
+    {
+      "path": "source-observations.json",
+      "sha256": "db1c2b165a7696e7ae9e5292ceb51de0de8db6e57b85fe63b424a499504b6562",
+      "bytes": 40272
+    }
+  ]
+}

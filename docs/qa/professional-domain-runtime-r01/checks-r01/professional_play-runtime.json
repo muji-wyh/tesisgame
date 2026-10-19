@@ -1,0 +1,18 @@
+{
+  "label": "professional_play-runtime",
+  "command": [
+    "godot",
+    "--headless",
+    "--path",
+    "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+    "--script",
+    "res://tests/godot/professional_play_tests.gd"
+  ],
+  "started_at": "2026-10-16T19:37:16.634Z",
+  "finished_at": "2026-10-16T19:37:18.013Z",
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "log_sha256": "9fa02c14826324d2e70ee9d1c381172fd8c6e9611f7389cfd48eec0a7df144b2",
+  "ok": true
+}

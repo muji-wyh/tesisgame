@@ -1,0 +1,111 @@
+{
+  "id": "inform.give-information.v",
+  "text": "inform",
+  "display_text": "inform",
+  "pos": "verb",
+  "definition": "To give someone information about something.",
+  "example": "Please inform the team if the meeting time changes.",
+  "difficulty": "B2",
+  "accepted_forms": [
+    "inform"
+  ],
+  "regions": [
+    "general"
+  ],
+  "practice_modes": [
+    "word_jelly",
+    "phrase"
+  ],
+  "media": {
+    "image": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "brief": "Show a colleague telling a small team about a changed meeting time, using a visible shared schedule and attentive recipients. Depict giving information rather than issuing an order or sending an automated system alert. This contextual scene is not approved for isolated picture identification.",
+      "picture_suitable": false,
+      "available_animations": [],
+      "adaptations": []
+    },
+    "audio": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "morphology": {
+    "schema": 1,
+    "id": "inform.give-information.v.analysis.proposal.v1",
+    "lexeme_id": "inform.give-information.v",
+    "text": "inform",
+    "kind": "atomic",
+    "review": {
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "notes": "Proposed intact modern teaching unit only, pending independent morphology and canonical-family review. Oxford records a historical formation involving in and form; that history does not establish a transparent modern negative in plus form lesson for giving information. The provisional atomic identity is separate from the unreviewed morph.inform stem in informed consent. Neither this proposal nor the clinical draft approves shared compatibility, word-part analysis, or clinical language.",
+      "references": [
+        "https://www.oxfordlearnersdictionaries.com/definition/english/inform"
+      ]
+    },
+    "parts": [
+      {
+        "id": "p1",
+        "canonical_id": "english.atomic.inform.give-information",
+        "type": "atomic",
+        "canonical": "inform",
+        "surface": "inform"
+      }
+    ],
+    "nodes": [],
+    "roots": [
+      "p1"
+    ]
+  },
+  "review": {
+    "status": "pending",
+    "language": "pending",
+    "domain": "not_required",
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "references": [
+    {
+      "source_id": "foundation02-notify-resolution-oxford-inform",
+      "status": "pending_term_check",
+      "scope": "Author consulted selected giving-information verb sense 1. Public sense tag cefr=b2 and recipient/of/about/that/if patterns support the bounded proposal. Independent term-level language review is pending. Other senses and all morphology, clinical, media and expression acceptance are excluded."
+    },
+    {
+      "source_id": "foundation02-notify-resolution-collins-inform",
+      "status": "pending_term_check",
+      "scope": "Author consulted the COBUILD giving-information verb sense, explicitly B1+. This is supporting placement evidence, not an accepted exercise or a universal rating of all inform meanings."
+    },
+    {
+      "source_id": "foundation02-notify-resolution-cefrj-v15",
+      "status": "pending_term_check",
+      "scope": "Fresh CEFR-J v1.5 headword/POS row inform, verb, B1 supports a lower-range placement; it is not selected-sense or sentence certification. Editorial B2 uses the dictionary sense evidence and remains pending independent review."
+    }
+  ],
+  "editorial_notes": "Research-only proposal for a distinct giving-information verb identity. Inform is broader than formal notify and is not an accepted spelling variant or rename of notify.inform.v. Proposed editorial B2 uses Oxford selected-sense B2, Collins B1+, and CEFR-J headword/POS B1 evidence without averaging labels. Exclude inform on, inform oneself, influencing a decision, and informed clinical consent. The one-part morphology, canonical identity, image brief, all media and the exact shared expression remain pending. No notify skills, exposure history, event receipts or expression completion may be copied to this identity. No course or module is made ready by this proposal."
+}

@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "status": "unexecuted_commit_proposal_pending_independent_review",
+  "recorded_at": "2026-10-16T20:31:49.698Z",
+  "directory": "build/professional-english/foundation02-third10-commit-proposal-r02",
+  "production_mutated": false,
+  "proposal_dispatched": false,
+  "artifacts": [
+    {
+      "path": "INPUTS.md",
+      "sha256": "f737e4cfcc3596d746eea48dcc819998c87d81e49c1eb84d2124f292f12b9081",
+      "bytes": 7967
+    },
+    {
+      "path": "commit.cjs",
+      "sha256": "20ff01bea2ea5027abbe7d02459a9e6caf24e74ea85d22e678bc813545476824",
+      "bytes": 8705
+    },
+    {
+      "path": "committed-evidence.test.cjs",
+      "sha256": "7b3bb20de53ac5cc50f3632ae7f5a6e945abfaabe91ab76a762b78be8fd5219a",
+      "bytes": 477
+    },
+    {
+      "path": "evidence-contract.cjs",
+      "sha256": "6ab049a0544a0b5cc6e2db711bbdc91b6c84f9ec4ef68846c9180b355504e18c",
+      "bytes": 21458
+    },
+    {
+      "path": "root-commit-input.example.json",
+      "sha256": "809ed1296b0221fad47fc8cc1383d87bb07f4c703fb0e34a39ee0cecb48c353c",
+      "bytes": 1259
+    }
+  ],
+  "author": "Codex root, narrow correction of Codex recover_delivery proposal",
+  "predecessor": {
+    "path": "build/professional-english/foundation02-third10-commit-proposal-r01/author-inventory.json",
+    "sha256": "2b4531d1b1a715bca3f165d6af94c4328aecd249ae1b68707b4e2a6c6b8f631d"
+  },
+  "measured_failure": {
+    "path": "build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r01/result.json",
+    "sha256": "cb83dc13933486d7ce6c7d9a78ea37dc490609281bb2f50800bcc42ec7b6663d"
+  }
+}

@@ -1,0 +1,421 @@
+{
+  "schema": 1,
+  "status": "exact_candidate_sources_preparation_native_artifacts_copied",
+  "tests_replayed": false,
+  "files": [
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/brief-revision-proposal.json",
+      "path": "candidate/brief-revision-proposal.json",
+      "sha256": "c8997bfa4b132d6f356d515aaa81f3f4cfb697f28723eee6be693e8c41644739",
+      "bytes": 2527
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/candidate-receipt.json",
+      "path": "candidate/candidate-receipt.json",
+      "sha256": "48b8553e2b9e4f5eed52340d833608baf10fb1c4140b1d380db1a75d4aa0d62d",
+      "bytes": 10147
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/common.cjs",
+      "path": "candidate/common.cjs",
+      "sha256": "4cf077adb0b5a80b25013c39d753b4bd563cc21a93cd520f9ba374c729a457ec",
+      "bytes": 3857
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/inventory.json",
+      "path": "candidate/inventory.json",
+      "sha256": "409de482e4c7067494aa8f10201f3dcb4dcc29bdc5c3bb9cdb46a4748467e426",
+      "bytes": 1378
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/native-attempt-start.json",
+      "path": "candidate/native-attempt-start.json",
+      "sha256": "6842ed5efc352cab1f3a39e86a351618d84ec4d97b3d30c2f32c472d3ca8a4e5",
+      "bytes": 717
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/native.log",
+      "path": "candidate/native.log",
+      "sha256": "f1e2c61491771c1c87da9033afff20562e0b7188253d810d4cbddaa135b51498",
+      "bytes": 542
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/actual-wordcard-comparison-3x.png",
+      "path": "candidate/output/actual-wordcard-comparison-3x.png",
+      "sha256": "1040bf8e7e309600d9324f5c8918e3970ee53be97a310f0deeedcf4322e4b1f6",
+      "bytes": 277782
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/actual-wordcard-comparison.png",
+      "path": "candidate/output/actual-wordcard-comparison.png",
+      "sha256": "4bace55f87ae52a5f241d4bba383a00b242dac03d3acd06e89cbcfe3a07c9902",
+      "bytes": 184430
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-pair-1-focused.png",
+      "path": "candidate/output/bag-match-pair-1-focused.png",
+      "sha256": "432b2dd990d1e8158c7e0cd3ff23586054a8c03879a3992a0c4f44be7b207d44",
+      "bytes": 5759
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-pair-1-settled.png",
+      "path": "candidate/output/bag-match-pair-1-settled.png",
+      "sha256": "32e0ca6eeca3a75b8c37499e7342e3a6675ba4deea294bf5629f70a93d294461",
+      "bytes": 5775
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-pair-2-focused.png",
+      "path": "candidate/output/bag-match-pair-2-focused.png",
+      "sha256": "1d2ae1d47cf11462e8ab1c1b149fd2281a25dd4fa384a39ad8a0395ea16a0f86",
+      "bytes": 5855
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-pair-2-settled.png",
+      "path": "candidate/output/bag-match-pair-2-settled.png",
+      "sha256": "58c00eefb13791189284b7e79bd592074f24c8c819714e416e037876721006cc",
+      "bytes": 5885
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-pair-3-focused.png",
+      "path": "candidate/output/bag-match-pair-3-focused.png",
+      "sha256": "f45bd06126c283f0b6b1f968fd5b8e686636a20057b303fb3e7bf5abe41158f2",
+      "bytes": 5910
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-pair-3-settled.png",
+      "path": "candidate/output/bag-match-pair-3-settled.png",
+      "sha256": "c4358b9eba92dcc3e81346f6f5ed624a3922260d621e1f5055415f4b9b90d715",
+      "bytes": 5938
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-pair-4-focused.png",
+      "path": "candidate/output/bag-match-pair-4-focused.png",
+      "sha256": "8cf8833e1b1febc2c1cae51c8284747f22c49327a1b1443b7fe2c1d5c8875d0f",
+      "bytes": 5850
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-pair-4-settled.png",
+      "path": "candidate/output/bag-match-pair-4-settled.png",
+      "sha256": "e9265d5a554ba8ecc3d7ad2bad6a8b94a791fef8339f383e1c93ee83f056b631",
+      "bytes": 5874
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-pair-5-focused.png",
+      "path": "candidate/output/bag-match-pair-5-focused.png",
+      "sha256": "d66a2a4bdda1f4daededf07f092e33e58f691216fedf30cdf68b77aa496219e3",
+      "bytes": 5928
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-pair-5-settled.png",
+      "path": "candidate/output/bag-match-pair-5-settled.png",
+      "sha256": "2d7d8caa3b7fcc13752a279789f3296b608230a978251d67634af808be4ebfb6",
+      "bytes": 5944
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-stress-068.png",
+      "path": "candidate/output/bag-match-stress-068.png",
+      "sha256": "1e19307a045adc83c27b3c5a32865d32953186f63e100cf5a9380f7383394d94",
+      "bytes": 5620
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-match-unmatched.png",
+      "path": "candidate/output/bag-match-unmatched.png",
+      "sha256": "589d32067f659d535329968025ac659aa45a655d04cfe8b04a3000d74b4af843",
+      "bytes": 5028
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-memory-matched.png",
+      "path": "candidate/output/bag-memory-matched.png",
+      "sha256": "17ec116670baa733175a647a64f571263466d8e86cb41af85999658e53baceb3",
+      "bytes": 6131
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-memory-stress-068.png",
+      "path": "candidate/output/bag-memory-stress-068.png",
+      "sha256": "edd6074c945551f6dec0a9db660fce80f26a2d598e6f731ccf8d727f5daa9698",
+      "bytes": 5872
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/bag-memory-unmatched.png",
+      "path": "candidate/output/bag-memory-unmatched.png",
+      "sha256": "65de6273f16b5e6f5321db4424a8a3555e9a075c2210135a563e4a0886ccf51f",
+      "bytes": 4836
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-pair-1-focused.png",
+      "path": "candidate/output/basket-match-pair-1-focused.png",
+      "sha256": "b9986ca90e941bc7d638a4b2545d54364a705b15b45224cb39d1e06fda35a920",
+      "bytes": 5592
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-pair-1-settled.png",
+      "path": "candidate/output/basket-match-pair-1-settled.png",
+      "sha256": "1ed1784ba9fd4912dc6270c085648f6b910b9f8926e32d83d042ff1bd794034d",
+      "bytes": 5591
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-pair-2-focused.png",
+      "path": "candidate/output/basket-match-pair-2-focused.png",
+      "sha256": "5246f1f3df898e65b1bf6c2712f8048a4520668f650c81b04cc6c216e1e604d6",
+      "bytes": 5736
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-pair-2-settled.png",
+      "path": "candidate/output/basket-match-pair-2-settled.png",
+      "sha256": "acebb9d49869287f79e6804d311c9b6271439aa452cd6b51f6b532e9fcca1e10",
+      "bytes": 5750
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-pair-3-focused.png",
+      "path": "candidate/output/basket-match-pair-3-focused.png",
+      "sha256": "887870975002ce0f0295327feea0a8bea910697de828f507a6721c9b89cb6e64",
+      "bytes": 5747
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-pair-3-settled.png",
+      "path": "candidate/output/basket-match-pair-3-settled.png",
+      "sha256": "8dcab2213e629f774440d099cfa4ac5485628a0dbd6d5a52d735feb65db09310",
+      "bytes": 5831
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-pair-4-focused.png",
+      "path": "candidate/output/basket-match-pair-4-focused.png",
+      "sha256": "1eb9ca0950e780739c1e299229d4f12eb463e530185265ca23e45759cdb00a1a",
+      "bytes": 5718
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-pair-4-settled.png",
+      "path": "candidate/output/basket-match-pair-4-settled.png",
+      "sha256": "491244a8a067a212c727f77ee604eda09e4209e3b013ec68080a18cb4d230cc7",
+      "bytes": 5721
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-pair-5-focused.png",
+      "path": "candidate/output/basket-match-pair-5-focused.png",
+      "sha256": "6b5bc60fa5866a2d693e441fd94f659d121770b00218b29a2663420364057be4",
+      "bytes": 5752
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-pair-5-settled.png",
+      "path": "candidate/output/basket-match-pair-5-settled.png",
+      "sha256": "75fe38b5667f5e63515be0e2242d0c25e27f70cbabc1d396bfc08d79ac8f2211",
+      "bytes": 5791
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-stress-068.png",
+      "path": "candidate/output/basket-match-stress-068.png",
+      "sha256": "832db177c0c22ceb309f258690bb7ec785479dd1527860bb090e1176fcc6317f",
+      "bytes": 5502
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-match-unmatched.png",
+      "path": "candidate/output/basket-match-unmatched.png",
+      "sha256": "fc39c372a23a33e1c2663e503ed20fb055e093f1c834d255706df6bfb9deb83b",
+      "bytes": 4825
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-memory-matched.png",
+      "path": "candidate/output/basket-memory-matched.png",
+      "sha256": "edee4b6c7ae74f9f6be6be8af47fba5d35f8b6e074d04d4a41ef393ab2a4a69b",
+      "bytes": 6017
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-memory-stress-068.png",
+      "path": "candidate/output/basket-memory-stress-068.png",
+      "sha256": "eb6992c06abd32ee2e23efb8864941277e95735b1f0134212125ea1b830b5d13",
+      "bytes": 5788
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/basket-memory-unmatched.png",
+      "path": "candidate/output/basket-memory-unmatched.png",
+      "sha256": "9aad34703dd9102b8bb27e937ebaba3c630c5b4f7e44914b0cc53f32994505cd",
+      "bytes": 4699
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-pair-1-focused.png",
+      "path": "candidate/output/panel-match-pair-1-focused.png",
+      "sha256": "1875b2ed0e849329cf5a1ab4fa13dda41bc393880deefdcd7f993697303bb875",
+      "bytes": 22163
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-pair-1-settled.png",
+      "path": "candidate/output/panel-match-pair-1-settled.png",
+      "sha256": "b40696bd9b4f9586cef5575266f495ceb1cbf631403b6fad040121d1d325e200",
+      "bytes": 21909
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-pair-2-focused.png",
+      "path": "candidate/output/panel-match-pair-2-focused.png",
+      "sha256": "fc62bc93ba1cc1e9121f6c5e70a50819a2f4057ebacc2d5211c078e85c7c7b77",
+      "bytes": 22405
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-pair-2-settled.png",
+      "path": "candidate/output/panel-match-pair-2-settled.png",
+      "sha256": "b24c1946a2c2710a7f642063f9f3ab643029046bac6052f4ed014077964a9a9d",
+      "bytes": 22166
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-pair-3-focused.png",
+      "path": "candidate/output/panel-match-pair-3-focused.png",
+      "sha256": "e18ab507c9e37bfea3d7340753b6fb3d50f911b6fb98126565f0d2da8fc6c5c7",
+      "bytes": 22489
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-pair-3-settled.png",
+      "path": "candidate/output/panel-match-pair-3-settled.png",
+      "sha256": "badf73be61e0604d44624a49dcf3879827177759b177212ba79ee60a64d35409",
+      "bytes": 22316
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-pair-4-focused.png",
+      "path": "candidate/output/panel-match-pair-4-focused.png",
+      "sha256": "5c0e67ff3229e6c53ae977ad71bba98e9eea366165b05135370e27f16dfc269d",
+      "bytes": 22314
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-pair-4-settled.png",
+      "path": "candidate/output/panel-match-pair-4-settled.png",
+      "sha256": "8faf933626dc71c9764ba858eca32cf5e51d7b70ff81d5edffd4a6b2f955347d",
+      "bytes": 22106
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-pair-5-focused.png",
+      "path": "candidate/output/panel-match-pair-5-focused.png",
+      "sha256": "81b9dec9765e31dff9973a9cd9ea2d94056a3ff143253942e0eeaa3c2067c71b",
+      "bytes": 22416
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-pair-5-settled.png",
+      "path": "candidate/output/panel-match-pair-5-settled.png",
+      "sha256": "e2a21ac6c27083b632322f4755b5cf8d2ec51bb5712fb0bd5f6df4d955d69487",
+      "bytes": 22243
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-stress-068.png",
+      "path": "candidate/output/panel-match-stress-068.png",
+      "sha256": "7865a148b3dc11bdfb11ce8ccfbf92854f2e7449bc2b8a739b9491b2ffe8b9f6",
+      "bytes": 20920
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-match-unmatched.png",
+      "path": "candidate/output/panel-match-unmatched.png",
+      "sha256": "0af4e308511254ad91283972c7235a02f69a87fefb096231f10216ffddf626a1",
+      "bytes": 20709
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-memory-matched.png",
+      "path": "candidate/output/panel-memory-matched.png",
+      "sha256": "422b61161a91aeb1b9279b84c5af701623a012de423577c2eeaddf81a6319bce",
+      "bytes": 21228
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-memory-stress-068.png",
+      "path": "candidate/output/panel-memory-stress-068.png",
+      "sha256": "13760271e3f7ba7198c67eaafc9f200289d61aa4d9fe80b8e1c446b4bb116c3f",
+      "bytes": 21376
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/panel-memory-unmatched.png",
+      "path": "candidate/output/panel-memory-unmatched.png",
+      "sha256": "decd0cfe46c2fa94950a70831fe7e3e1be7566eda865f368e7a96893b2b7bc12",
+      "bytes": 20639
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/output/report.json",
+      "path": "candidate/output/report.json",
+      "sha256": "b66061388d92cca865e2e49207a24b01d92001465e4d33b0768b893b65cf852e",
+      "bytes": 87826
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/preparation-attempt-start.json",
+      "path": "candidate/preparation-attempt-start.json",
+      "sha256": "94dcadf8ae991937d8f6dad7a4c902b9a2892fb450c1f174d4e2b6c124eaeb57",
+      "bytes": 336
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/preparation-receipt.json",
+      "path": "candidate/preparation-receipt.json",
+      "sha256": "d255e8adbed792f45f0b5d77773e37dc7287f5fec4584c76afac1c20b077e709",
+      "bytes": 527
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/prepare-candidate.cjs",
+      "path": "candidate/prepare-candidate.cjs",
+      "sha256": "6917262f644d10b0e5058e057e0f65e9d8e5c491576a2608090c0fa0f3a95fe2",
+      "bytes": 8669
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/prepared/bag-entry-preimage.json",
+      "path": "candidate/prepared/bag-entry-preimage.json",
+      "sha256": "cec2b375554a5a6ac2e834aa24074fb8b3924f83b1c992e8c6a69804e0e73760",
+      "bytes": 6908
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/prepared/basket-entry-preimage.json",
+      "path": "candidate/prepared/basket-entry-preimage.json",
+      "sha256": "4d1aeb1e2be6e5e29af1110e63c58df6f8d794daf86d75cf99d0f8aeedb03aa5",
+      "bytes": 8626
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/prepared/fixture/professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "path": "candidate/prepared/fixture/professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+      "bytes": 135843
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/prepared/fixture/professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+      "path": "candidate/prepared/fixture/professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "bytes": 105604
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/prepared/frozen-inputs.json",
+      "path": "candidate/prepared/frozen-inputs.json",
+      "sha256": "ff7f3b93ca1fa060d2440d3b908c9ef80767dcc2a28c0f5e06161a25c4f90564",
+      "bytes": 267267
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/prepared/manifest.json",
+      "path": "candidate/prepared/manifest.json",
+      "sha256": "64c3789aafac42d981c691c439eab21fdef29372e834867a107de1c1a07333ed",
+      "bytes": 1046
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/README.md",
+      "path": "candidate/README.md",
+      "sha256": "d463183735c29216bf18832bb62607a4285aa8e3fb24810e19d278312ae06eb3",
+      "bytes": 7913
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/render-and-check.gd",
+      "path": "candidate/render-and-check.gd",
+      "sha256": "cb9dfeb2938762407e0782b0ef7b58a332fb9b9c99634fb2c927292eb515deb6",
+      "bytes": 19321
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/review-checklist.json",
+      "path": "candidate/review-checklist.json",
+      "sha256": "bf9c496f2fecf8d3f0dcf6dbd828b54aa9debb36737e6d1d43fd6a550d1c123b",
+      "bytes": 2360
+    },
+    {
+      "source": "build/professional-english/shopping-bag-candidate-r01/run-candidate.cjs",
+      "path": "candidate/run-candidate.cjs",
+      "sha256": "0edccb0c80e38fd6a6beb6a44f435b2dbdb25ed51c743cc9391d29fc2b89c55e",
+      "bytes": 9491
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-review-r01/source-review.json",
+      "path": "source-review.json",
+      "sha256": "daaf46b70634aed91d0f4d99b4b871f7e6191d2231c080f4ccd7a27d1fccf96b",
+      "bytes": 2529
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-review-r01/prepared-inspection.json",
+      "path": "prepared-inspection.json",
+      "sha256": "7e4e506405efa7d857a8b7630606fba00fa70849388a7d7c2410f0855f082281",
+      "bytes": 2268
+    }
+  ]
+}

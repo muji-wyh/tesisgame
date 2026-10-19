@@ -1,0 +1,26 @@
+'use strict';
+// Root-owned scratch binding. No production content is written.
+const lib=require('./delivery-lib.cjs');
+const {fs,path,root,C,read,raw,hash,inRoot,writeNew}=lib;
+const options=lib.args(['--preparation-sha256','--validation-sha256','--counter-delivery-sha256'],[],['--validation-path','--counter-delivery-path']);
+const check=lib.checks(),{same}=check,preFile=path.join(__dirname,'preimages.json'),bindingFile=path.join(__dirname,'binding-receipt.json');
+same(fs.existsSync(preFile),false);same(fs.existsSync(bindingFile),false);same(fs.existsSync(inRoot(C.transaction)),false);
+const preparationFile=path.join(__dirname,'preparation-receipt.json');same(raw(preparationFile),options['--preparation-sha256']);
+const preparation=read(preparationFile);same(preparation.status,'prepared_transactional_audio_revision_unbound_no_production_writes');same(preparation.production_content_written,false);same(preparation.baseline_bound,false);
+same(Object.keys(preparation.delivery_files).sort(),[...C.files].sort());for(const[file,sha]of Object.entries(preparation.delivery_files))same(raw(path.join(__dirname,file)),sha);
+const sources=lib.verifySources(same),helper=lib.verifyHelper(same),data=lib.loadProfessionalContent(root);
+const validation={path:options['--validation-path'],raw_sha256:options['--validation-sha256']};
+const measured=lib.verifyValidation(same,validation,data);
+const imageDelivery={path:options['--counter-delivery-path'],raw_sha256:options['--counter-delivery-sha256']};
+lib.verifyImageDelivery(same,imageDelivery,data);
+const beforeAudit=lib.auditProfessionalContent({rootDir:root,data});same(beforeAudit.errors,[]);same(beforeAudit.summary.integrated_word_audio,8);same(beforeAudit.summary.integrated_word_images,5);
+const proposed=lib.propose(same,data,sources),audit=lib.auditProfessionalContent({rootDir:root,data:proposed.next});
+const missing=proposed.patches.filter(p=>!fs.existsSync(inRoot(p.resource.path))).map(p=>({code:'media.missing',path:'lexeme/'+p.sense_id+'/audio',message:'Referenced asset does not exist'})).sort((a,b)=>a.path.localeCompare(b.path));
+same(audit.errors,missing);same(audit.summary.integrated_word_audio,10);same(audit.summary.integrated_word_images,5);
+const pre={schema:1,status:'frozen_exact_validated_counter_image_state_for_approved_pair_audio',recorded_at:new Date().toISOString(),preparation_receipt_raw_sha256:raw(preparationFile),human_approval_raw_sha256:C.humanSha,technical_qa_raw_sha256:C.qaSha,validation:{...validation,measured_input_count:measured.measured_input_count},validated_measured_inputs:measured.after_input_sha256,counter_image_delivery:imageDelivery,counter_image_provenance_raw_sha256:raw(inRoot(C.imageProvenance)),baseline_registry_sha256:hash(data),proposed_registry_sha256:hash(proposed.next),target:C.target,target_raw_sha256:raw(inRoot(C.target)),target_before_base64:fs.readFileSync(inRoot(C.target)).toString('base64'),professional_json_raw_sha256:Object.fromEntries(lib.professionalFiles().map(file=>[file,raw(inRoot(file))])),delivery_files:preparation.delivery_files,helper,patches:proposed.patches,preserved_audio_files:sources.preserved,allowed_output_paths:lib.outputPaths(sources),output_preimages:lib.observePreimages(same,sources),proposed_audit:{errors:0,warnings:audit.warnings.length,summary:audit.summary},scope:'Only exact counter and checkout audio descriptors and their obsolete pending-audio clauses may change. Existing counter image, all other fields and 1903 prior audio files remain exact.'};
+lib.verifySources(same);lib.verifyValidation(same,validation,lib.loadProfessionalContent(root));lib.verifyImageDelivery(same,imageDelivery,data);
+same(hash(lib.loadProfessionalContent(root)),pre.baseline_registry_sha256);same(lib.observePreimages(same,sources),pre.output_preimages);
+for(const[file,sha]of Object.entries(pre.delivery_files))same(raw(path.join(__dirname,file)),sha);same(raw(preparationFile),pre.preparation_receipt_raw_sha256);
+writeNew(preFile,pre);
+const binding={schema:1,status:'transactional_audio_baseline_bound_no_production_writes',checks:check.count(),preimages_raw_sha256:raw(preFile),preparation_receipt_raw_sha256:raw(preparationFile),baseline_registry_sha256:pre.baseline_registry_sha256,proposed_registry_sha256:pre.proposed_registry_sha256,validation_raw_sha256:pre.validation.raw_sha256,counter_image_delivery_raw_sha256:imageDelivery.raw_sha256,serializer_raw_sha256:raw(path.join(__dirname,'integrate-reviewed.cjs')),production_content_written:false};
+writeNew(bindingFile,binding);console.log(JSON.stringify(binding));

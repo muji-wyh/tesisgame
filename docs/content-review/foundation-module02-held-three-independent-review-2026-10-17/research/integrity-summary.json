@@ -1,0 +1,52 @@
+{
+  "status": "research_only_unaccepted",
+  "sealed_at": "2026-10-16T20:54:14.613Z",
+  "source_files_unique": 352,
+  "source_drift_since_capture": [
+    {
+      "path": "docs/plans/professional-english-checkpoint.md",
+      "before_sha256": "6c673fb04c733a040708ae24314ffac04acb1289add8936d8a3c958b017f4bab",
+      "current_sha256": "acb489741afd5a606214d44944a5506b5888cfa4c0f4d585756661c2098c72b7"
+    }
+  ],
+  "six_held_entry_hashes": [
+    {
+      "id": "collect.gather.v",
+      "expected_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "current_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981"
+    },
+    {
+      "id": "notify.inform.v",
+      "expected_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "current_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc"
+    },
+    {
+      "id": "postpone.delay-until-later.v",
+      "expected_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+      "current_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded"
+    },
+    {
+      "id": "verify.establish-accuracy.v",
+      "expected_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "current_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a"
+    },
+    {
+      "id": "unsafe.presenting-danger.adj",
+      "expected_sha256": "b03ac8acf04932b9dfc3d44775939399ad37f73a1149faf72b708f244fc23286",
+      "current_sha256": "b03ac8acf04932b9dfc3d44775939399ad37f73a1149faf72b708f244fc23286"
+    },
+    {
+      "id": "hazard.possible-harm.n",
+      "expected_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+      "current_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045"
+    }
+  ],
+  "all_six_historical_holds_exact": true,
+  "parent_receipt_sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8",
+  "production_changes_by_this_agent": false,
+  "tests_native_or_production_serializers_run": false,
+  "observations": [
+    "Source file hashes and object hashes are distinct.",
+    "Other agents can continue disjoint work; this seals this research packet only."
+  ]
+}

@@ -1,0 +1,314 @@
+{
+  "schema": 1,
+  "reviewer": "/root/commit_review",
+  "reviewed_at": "2026-10-17T00:12:38.274Z",
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "preparation": {
+    "receipt": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/preparation-receipt.json",
+      "bytes": 141586,
+      "raw_sha256": "05b647a58164deebc356e8a197506e3260850e47f9c417632c802424b11ebf0a"
+    },
+    "execution_end": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/execution-end.json",
+      "bytes": 244,
+      "raw_sha256": "23a1a3bd8ee8da89400a76924d16f1fc2c2eb34463979105f6a24cf66a037ef0"
+    },
+    "target_plan": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/target-plan.json",
+      "bytes": 376416,
+      "raw_sha256": "c91ca58e6c550a19b76b132dda4f3df01ad409235b3b164e6ad1666d47237be0"
+    },
+    "projection_observation": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/projection-observation.json",
+      "bytes": 997,
+      "raw_sha256": "8a17f3c1ed0844c749b5b52387a5e5c56ff1e4c9bdfb01f8b170d415d9c17423"
+    },
+    "root_input": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/input.json",
+      "bytes": 2659,
+      "raw_sha256": "e5533d9c5876251b97df37e3c3dd2965b91eb711ecc67dc60cc24981d3b410fc"
+    }
+  },
+  "preparation_source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-native-route-repair-proposal-r01/source-inventory.json",
+    "bytes": 1628,
+    "raw_sha256": "4dd4ce123daba7f38f4e4f6669a1a4ed3a0c100ac07e1f6c6dc4375ccd2fe067"
+  },
+  "actual_binding_acceptance": {
+    "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+    "bytes": 8270,
+    "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+  },
+  "correction": {
+    "receipt": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01/correction-receipt.json",
+      "bytes": 6458,
+      "raw_sha256": "539f1ecce9a3ff4bf72c299251f4f44b3981e164ddc0105324ba2ecc498e91f8"
+    },
+    "attempt_end": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01/attempt-end.json",
+      "bytes": 202,
+      "raw_sha256": "fdefa34ad5be6d7e5f65d6a0728ec102c2578d98a9b9ad45ea7fab26b5856f7e"
+    },
+    "root_dispatch": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/dispatch-r01/witness.json",
+      "bytes": 2558,
+      "raw_sha256": "72a06095d9e8c71cad165e228e8366a5d3e80f7419457968ac79a7fa51bee405"
+    },
+    "output_manifest": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01/output-manifest.json",
+      "bytes": 209842,
+      "raw_sha256": "42f5dc0c309348e5878905f07b256963458248c6e150528329d88ef7d039a920"
+    },
+    "source_observations": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01/source-observations.json",
+      "bytes": 2809640,
+      "raw_sha256": "f4999368431a7d83f2366cbd543a4a0212b276c607b8da7d5ff9f78e0ab2e8c9"
+    }
+  },
+  "projected_afterimages_accepted": true,
+  "findings": [],
+  "independent_inspection": {
+    "source": {
+      "path": "build/professional-english/foundation02-fifth10-corrected-afterimage-review-r01/inspect-raw-r02.cjs",
+      "bytes": 23302,
+      "raw_sha256": "328cd4adfd070ea3dbce3ed99ea8b127022423f334581ef3ec74e3a8a950684a"
+    },
+    "result": {
+      "path": "build/professional-english/foundation02-fifth10-corrected-afterimage-review-r01/inspection-r02/inspection.json",
+      "bytes": 1808,
+      "raw_sha256": "96b2400505069e49770475a73a19456372f7de8504c265339552aaff8a428b2b"
+    },
+    "inputs": {
+      "path": "build/professional-english/foundation02-fifth10-corrected-afterimage-review-r01/inspection-r02/inputs.json",
+      "bytes": 3022591,
+      "raw_sha256": "71044abd29a89a036f91e58a53e1e207f3b1d2d6cb339041853ea03df71418f4"
+    },
+    "comparisons_passed": 124403,
+    "comparisons_failed": 0,
+    "inputs_rehashed_at_end": 14141
+  },
+  "historical_inspection_failure": {
+    "source": {
+      "path": "build/professional-english/foundation02-fifth10-corrected-afterimage-review-r01/inspect-raw.cjs",
+      "bytes": 22915,
+      "raw_sha256": "7426cbb7d476c3a4a27f6b6dd8e1c2006707cc22405ee68e4bbc52175e5c232f"
+    },
+    "result": {
+      "path": "build/professional-english/foundation02-fifth10-corrected-afterimage-review-r01/inspection-r01/inspection.json",
+      "bytes": 1996,
+      "raw_sha256": "785885604fe43e3b9b25aa83938a6d2955c7aabb26e1125cf2ca3ab450066c79"
+    },
+    "inputs": {
+      "path": "build/professional-english/foundation02-fifth10-corrected-afterimage-review-r01/inspection-r01/inputs.json",
+      "bytes": 7263,
+      "raw_sha256": "d07edf6d27925387b7160d4b7534a25c21f69b96f6936e7d985ace0a649286a1"
+    },
+    "classification": "Reviewer-only manifest array-order assumption. Exact path sets match; corrected keyed comparison passed. Original failed evidence remains immutable."
+  },
+  "prior_immutable_afterimage_reviews": {
+    "projected": {
+      "path": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/projected-review.json",
+      "bytes": 9600,
+      "raw_sha256": "65672f5349b942ae7d3b1c7f388d29561a141d0ddb58259511f6e7202ec4a854"
+    },
+    "native": {
+      "path": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/native-review.json",
+      "bytes": 9607,
+      "raw_sha256": "cbfb692c19949c7bd5d138b91343fef429b9f3bd70b11cfb7c810a92f13b1ffc"
+    }
+  },
+  "expected_audit_summary": {
+    "courses": 20,
+    "modules": 200,
+    "themes": 21,
+    "unique_lexemes": 4939,
+    "vocabulary_memberships": 10000,
+    "vocabulary_memberships_target": 10000,
+    "vocabulary_memberships_remaining": 0,
+    "expressions": 1620,
+    "expression_memberships": 2000,
+    "expression_memberships_target": 2000,
+    "expression_memberships_remaining": 0,
+    "ready_modules": 0,
+    "reviewed_lexemes": 156,
+    "morphology_authored": 4045,
+    "morphology_reviewed": 89,
+    "integrated_word_images": 9,
+    "integrated_word_audio": 12,
+    "release_ready": false
+  },
+  "expected_audit_errors": 0,
+  "expected_callbacks_by_file": {
+    "tests/professional-content.test.cjs": 197,
+    "tests/professional-retail-morphology.test.cjs": 40,
+    "tests/professional-retail-media.test.cjs": 26
+  },
+  "expected_callback_count": 263,
+  "expected_native_check_count": 3922,
+  "accepted_measurements": {
+    "baseline_inputs": 12443,
+    "receipt_artifacts": 833,
+    "physical_preparation_files": 835,
+    "targets": 823,
+    "replacements": 6,
+    "retained": 815,
+    "additions": 817,
+    "accepted_entries": 8,
+    "held_entries": 6,
+    "donor_rows": 50,
+    "counts": {
+      "before": {
+        "reviewed_status": 148,
+        "reviewed_language": 335,
+        "foundation02_language": 36,
+        "sources": 949,
+        "lexemes": 4939,
+        "expressions": 1620,
+        "images": 9,
+        "audio": 12,
+        "ready_modules": 0
+      },
+      "after": {
+        "reviewed_status": 156,
+        "reviewed_language": 343,
+        "foundation02_language": 44,
+        "sources": 965,
+        "lexemes": 4939,
+        "expressions": 1620,
+        "images": 9,
+        "audio": 12,
+        "ready_modules": 0
+      }
+    },
+    "content_delta": {
+      "definition": 4,
+      "example": 1,
+      "difficulty": 5
+    },
+    "registry_before_sha256": "dcfe28d7c7c6048206b740459a65ce9b482ba2768d388b0b29d7ab31174ed1a0",
+    "registry_after_sha256": "709b2621940b4698af615ed9c4b9a679006bfc83a877cc6f7d0f29517a3b2fd3",
+    "transformations": [
+      {
+        "path": "tests/professional-content.test.cjs",
+        "edits": 11,
+        "appended_tests": 5,
+        "afterimage": {
+          "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/professional-content.test.cjs.after",
+          "bytes": 361493,
+          "raw_sha256": "a580a471118252ed764e86f3f1fceea457859b604c350ad2feaefe681584f2e2"
+        }
+      },
+      {
+        "path": "tests/professional-retail-morphology.test.cjs",
+        "edits": 2,
+        "appended_tests": 2,
+        "afterimage": {
+          "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/professional-retail-morphology.test.cjs.after",
+          "bytes": 93105,
+          "raw_sha256": "997e15f9f0df2baac33813cb91ab3fba5bb694029afa9fdbdb094617ab9fc0cf"
+        }
+      },
+      {
+        "path": "tests/professional-retail-media.test.cjs",
+        "edits": 3,
+        "appended_tests": 1,
+        "afterimage": {
+          "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/professional-retail-media.test.cjs.after",
+          "bytes": 55641,
+          "raw_sha256": "92e002fb593c5429842cc7b66491652f32c97d21824f4c0a0dea4ec035b5ecbb"
+        }
+      },
+      {
+        "path": "tests/godot/professional_retail_morphology_tests.gd",
+        "edits": 3,
+        "appended_tests": 1,
+        "afterimage": {
+          "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/professional_retail_morphology_tests.gd.after",
+          "bytes": 119476,
+          "raw_sha256": "9472e72651070de7f9fb38614fbf6e736978370580d6890bd210be2e0e59b832"
+        }
+      }
+    ],
+    "expected_projected_callbacks": 263,
+    "expected_audit_summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 156,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 9,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "expected_audit_errors": 0,
+    "actual_audit_executed": false,
+    "actual_callback_execution": false,
+    "corrected_outputs": {
+      "output_count": 835,
+      "byte_identical_outputs": 829,
+      "changed_outputs": [
+        "execution-end.json",
+        "execution-start.json",
+        "preparation-receipt.json",
+        "professional_retail_morphology_tests.gd.after",
+        "target-plan.json",
+        "test-edit-ledger.json"
+      ],
+      "targets": 823,
+      "retained_files": 815,
+      "replacements": 6,
+      "pending_finalizations": 2,
+      "baseline_files": 12443,
+      "repair_observations": 13292,
+      "accepted_entries": 8,
+      "whole_holds": 6,
+      "whole_donor_rows": 50,
+      "expected_callbacks": 263,
+      "expected_native_checks": 3922
+    }
+  },
+  "observations": [
+    "The root-dispatched correction witness, exact input/contract, accepted source review, successful external correction receipt and attempt-end agree. Their raw pins and all referenced existing lineage files were rechecked.",
+    "All 835 original and corrected files were enumerated and hashed. The same 835 names remain; 829 files are byte-identical, and exactly six native/metadata files differ. Manifest ordering differs only because the original uses locale order and the corrected output uses code-point order; keyed path comparison confirms identity.",
+    "The native file differs by exactly one 250-byte replacement. Only safe.free-from-unacceptable-danger.adj enters the existing exact whole-entry before/after reversal. Full historical entry equality, exact live morphology equality, pending review and compiler rejection remain required. Other broad entries, the reversal helper, full-field drift assertions and all other native bytes are unchanged.",
+    "The 823-target set, six replacement preimages, 815 retained source copies and two unfinalized metadata targets are exact. Only the native target afterimage byte count/hash changes. The production provenance, production document and projection observation are byte-identical to r03.",
+    "All eight accepted lexical afterimages, six complete holds and fifty full indexed donor rows were checked. The safe broad donor is the exact prior entry. No additional lexical, morphology, media, domain or readiness acceptance is inferred.",
+    "All 12,443 bound baseline files and all 13,292 correction source observations were checked. The inspection rehashed 14,141 unique observed inputs unchanged. The 817 planned additions, transaction directory, active lock and activation receipt remain absent.",
+    "The original successful projected result and failed native result remain historical. Corrected candidate execution, final metadata, contract acceptance, installation and persisted validation remain unobserved and unaccepted."
+  ],
+  "scope": {
+    "raw_json_hash_and_source_only": true,
+    "projected_validator_or_callbacks_executed": false,
+    "native_executed": false,
+    "production_mutated": false,
+    "installation_accepted": false,
+    "final_transaction_bytes_accepted": false,
+    "persisted_fifth10_accepted": false,
+    "new_language_morphology_expression_specialist_media_listening_readiness_or_release_acceptance": false
+  },
+  "remaining_prerequisites": [
+    "Root must bind exact fresh candidate inputs to this actual corrected preparation and the external correction packet, and separately verify their source acceptance before one-shot dispatch.",
+    "Run fresh projected r03 and native r03 candidates. Prior projected success and native failure cannot be reused as corrected execution results.",
+    "Final delivery metadata and exact commit contract require separate acceptance, bounded guards, installation and persisted checks."
+  ],
+  "status": "accepted_actual_corrected_fifth10_preparation_afterimages",
+  "accepted": true,
+  "projected_validation_execution_accepted": true,
+  "native_candidate_execution_accepted": true
+}

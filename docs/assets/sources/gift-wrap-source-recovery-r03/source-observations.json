@@ -1,0 +1,180 @@
+{
+  "schema": 1,
+  "status": "read_only_source_observation_during_research_not_final_binding",
+  "observed_at": "2026-10-17T00:48:33.526Z",
+  "files": [
+    {
+      "path": "data/professional/lexemes/retail-pilot.json",
+      "bytes": 360374,
+      "sha256": "e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2"
+    },
+    {
+      "path": "scripts/word_card.gd",
+      "bytes": 15387,
+      "sha256": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+    },
+    {
+      "path": "scripts/memory_garden.gd",
+      "bytes": 22814,
+      "sha256": "51083ab9d49640247783ef57438a03af4da50361bf7b3d99e6a593bf5db021f4"
+    },
+    {
+      "path": "docs/assets/art-direction.md",
+      "bytes": 2299,
+      "sha256": "4a09177defe0841c01308590c5e6990e919a76b50bbaaa05fa6ca6fd5f476109"
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/gift-wrap-source-recovery-r02/source-review.json",
+      "bytes": 12665,
+      "sha256": "7aef64f57f485c51107d6eb65579d80e7e9935badff4b06645e7118a233b0e07"
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/gift-wrap-and-bag-source-review-r01/source-review.json",
+      "bytes": 4592,
+      "sha256": "3354fd40d65b6502f329684ac799b036b139370fdf3a488f95137d7bac84e886"
+    }
+  ],
+  "gift_wrap_entry": {
+    "id": "gift-wrap.wrapping-paper.n",
+    "text": "gift wrap",
+    "display_text": "gift wrap",
+    "pos": "noun",
+    "definition": "Decorative paper used to cover a present.",
+    "example": "The customer chose blue gift wrap.",
+    "difficulty": "A2",
+    "accepted_forms": [
+      "gift wrap",
+      "wrapping paper"
+    ],
+    "regions": [
+      "general"
+    ],
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "jelly",
+      "word_jelly"
+    ],
+    "media": {
+      "image": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "Show a large loose sheet and partly unrolled roll of decorative paper beside one partly wrapped present, with the paper as the main subject. Use a cheerful repeating motif without text. Reject a completed gift box alone, a wrapping action close-up, a ribbon-only picture, or patterned cloth.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": []
+      },
+      "audio": {
+        "status": "integrated",
+        "path": "res://professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+        "sha256": "cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2",
+        "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      }
+    },
+    "morphology": {
+      "schema": 1,
+      "id": "professional.gift-wrap.wrapping-paper.n.morphology.retail03.fifth10.proposal.v1",
+      "lexeme_id": "gift-wrap.wrapping-paper.n",
+      "text": "gift wrap",
+      "kind": "phrase",
+      "parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.gift",
+          "canonical": "gift",
+          "type": "word",
+          "surface": "gift",
+          "break_offsets": []
+        },
+        {
+          "id": "p2",
+          "canonical_id": "morph.wrap",
+          "canonical": "wrap",
+          "type": "word",
+          "surface": "wrap",
+          "break_offsets": []
+        }
+      ],
+      "nodes": [
+        {
+          "id": "whole",
+          "left": "p1",
+          "right": "p2",
+          "surface": "gift wrap",
+          "rule": "preserve-word-boundary",
+          "break_offsets": [
+            5
+          ]
+        }
+      ],
+      "roots": [
+        "whole"
+      ],
+      "review": {
+        "status": "reviewed",
+        "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+        "notes": "Current present gift plus covering-material wrap. This complete noun means decorative paper, verified on the Oxford noun page. Give-related history does not create give-plus-t. The related covering-action family is preserved without converting the gift-wrap verb into an accepted noun answer; wrapping paper needs its own exact graph.",
+        "references": [
+          "https://www.dictionary.com/browse/gift",
+          "https://www.dictionary.com/browse/wrap",
+          "https://www.oxfordlearnersdictionaries.com/definition/english/gift-wrap_1"
+        ],
+        "source_record_ids": [
+          "retail03-morph-fifth10-dcom-gift",
+          "retail03-morph-fifth10-dcom-wrap",
+          "retail03-morph-fifth10-oxford-gift-wrap-noun"
+        ],
+        "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+        "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16",
+        "acceptance_record": "data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json"
+      }
+    },
+    "review": {
+      "status": "reviewed",
+      "language": "reviewed",
+      "domain": "not_required",
+      "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+      "reviewed_at": "2026-10-16"
+    },
+    "references": [
+      {
+        "source_id": "bls-cashiers",
+        "status": "pending_term_check",
+        "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+      },
+      {
+        "source_id": "retail03-ox-gift-wrap",
+        "status": "verified",
+        "scope": "Selected passage consulted: Uncountable noun definition. The selected sense is decorative wrapping paper, not the act or verb of wrapping. Selected lexical sense and explicitly stated alternatives only. Unrelated word-of-the-day level labels do not rate this term. No media acquired. This editorial proposal does not approve language, morphology, domain practice, or media."
+      }
+    ],
+    "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the decorative paper noun. The consulted Oxford noun entry, rather than a verb-only gift-wrap page, supports this meaning. Add wrapping paper for the same material sense. Do not make gift-wrap as a verb an interchangeable answer. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-image production remain pending. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+  },
+  "shared_content_modified": false
+}

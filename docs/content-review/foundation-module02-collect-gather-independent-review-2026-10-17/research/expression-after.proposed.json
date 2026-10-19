@@ -1,0 +1,180 @@
+{
+  "id": "expr.foundation.module02.08",
+  "text": "Could you assist me while I collect one form from each team and return the borrowed key?",
+  "meaning": "Ask a colleague to help gather forms from several teams and give a borrowed key back.",
+  "context": "A worker gathers one fictional workshop form from each of three teams and gives a borrowed meeting-room key back to reception.",
+  "tokens": [
+    {
+      "index": 0,
+      "text": "Could",
+      "start": 0,
+      "end": 5
+    },
+    {
+      "index": 1,
+      "text": "you",
+      "start": 6,
+      "end": 9
+    },
+    {
+      "index": 2,
+      "text": "assist",
+      "start": 10,
+      "end": 16
+    },
+    {
+      "index": 3,
+      "text": "me",
+      "start": 17,
+      "end": 19
+    },
+    {
+      "index": 4,
+      "text": "while",
+      "start": 20,
+      "end": 25
+    },
+    {
+      "index": 5,
+      "text": "I",
+      "start": 26,
+      "end": 27
+    },
+    {
+      "index": 6,
+      "text": "collect",
+      "start": 28,
+      "end": 35
+    },
+    {
+      "index": 7,
+      "text": "one",
+      "start": 36,
+      "end": 39
+    },
+    {
+      "index": 8,
+      "text": "form",
+      "start": 40,
+      "end": 44
+    },
+    {
+      "index": 9,
+      "text": "from",
+      "start": 45,
+      "end": 49
+    },
+    {
+      "index": 10,
+      "text": "each",
+      "start": 50,
+      "end": 54
+    },
+    {
+      "index": 11,
+      "text": "team",
+      "start": 55,
+      "end": 59
+    },
+    {
+      "index": 12,
+      "text": "and",
+      "start": 60,
+      "end": 63
+    },
+    {
+      "index": 13,
+      "text": "return",
+      "start": 64,
+      "end": 70
+    },
+    {
+      "index": 14,
+      "text": "the",
+      "start": 71,
+      "end": 74
+    },
+    {
+      "index": 15,
+      "text": "borrowed",
+      "start": 75,
+      "end": 83
+    },
+    {
+      "index": 16,
+      "text": "key",
+      "start": 84,
+      "end": 87
+    },
+    {
+      "index": 17,
+      "text": "?",
+      "start": 87,
+      "end": 88
+    }
+  ],
+  "focus_lexeme_ids": [
+    "assist.help.v",
+    "collect.gather.v",
+    "return.send-back.v"
+  ],
+  "practice_modes": [
+    "phrase"
+  ],
+  "media": {
+    "audio": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "review": {
+    "status": "pending",
+    "language": "pending",
+    "domain": "not_required",
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "references": [
+    {
+      "source_id": "british-council-requests",
+      "status": "pending_term_check",
+      "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+    },
+    {
+      "source_id": "foundation02-collect-repair-oxford-collect",
+      "status": "pending_term_check",
+      "scope": "The proposed form-from-each-team clause assesses gathering, not reception pickup. This source consultation does not independently approve the exact sentence, tokenization, focus binding, courtesy/register or context."
+    },
+    {
+      "source_id": "foundation02-collect-repair-collins-collect",
+      "status": "pending_term_check",
+      "scope": "The proposed form-from-each-team clause assesses gathering, not reception pickup. This source consultation does not independently approve the exact sentence, tokenization, focus binding, courtesy/register or context."
+    },
+    {
+      "source_id": "foundation02-language-third10-oxford-assist",
+      "status": "pending_term_check",
+      "scope": "The separately accepted assist.help.v sense is helping a person with an activity. Fresh Oxford assist sense 1 also supports assist plus a person and marks the verb formal. The exact new expression still awaits independent review."
+    },
+    {
+      "source_id": "foundation02-language-second10-collins-return",
+      "status": "pending_term_check",
+      "scope": "The separately accepted return.send-back.v sense is giving a borrowed item back. Fresh Collins COBUILD return sense 3 supports this selected use; the new borrowed-key wording and reception context exclude purchased-goods returns and intransitive travel. The exact expression is unaccepted."
+    }
+  ]
+}

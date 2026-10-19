@@ -1,0 +1,1425 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hr_recruitment.module06.01",
+      "text": "Please check the resume and portfolio against the stated selection criterion.",
+      "meaning": "Request review of application evidence against a criterion.",
+      "context": "Discussing a candidate's submitted material.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "resume",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "portfolio",
+          "start": 28,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "against",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "stated",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "selection",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "criterion",
+          "start": 67,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "resume.summary-of-persons-work-history-and-qualifications.n",
+        "portfolio.selected-collection-showing-learning-or-work.n",
+        "selection-criterion.standard-used-to-consider-candidates.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-interview-selection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-cipd-recruitment-introduction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module06.02",
+      "text": "Has the referee agreed to provide an employment reference?",
+      "meaning": "Ask whether the proposed reference provider is available.",
+      "context": "Clarifying reference arrangements without assuming permission to contact.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Has",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "referee",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "agreed",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 23,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "provide",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "an",
+          "start": 34,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "employment",
+          "start": 37,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "reference",
+          "start": 48,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "?",
+          "start": 57,
+          "end": 58
+        }
+      ],
+      "focus_lexeme_ids": [
+        "referee.person-supplying-reference-about-applicant.n",
+        "employment-reference.statement-about-persons-work-from-relevant-referee.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-interview-selection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-cipd-recruitment-introduction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module06.03",
+      "text": "The recruitment plan links the staffing need to the recruitment budget.",
+      "meaning": "Explain the relationship among planning documents.",
+      "context": "Reviewing a proposed hiring plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "recruitment",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "plan",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "links",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "staffing",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "need",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "recruitment",
+          "start": 52,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "budget",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "recruitment-plan.plan-for-finding-and-selecting-workers.n",
+        "staffing-need.requirement-for-people-to-carry-out-work.n",
+        "recruitment-budget.planned-spending-for-hiring-activities.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-interview-selection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-cipd-recruitment-introduction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module06.04",
+      "text": "The job advertisement on the job board links to the career page.",
+      "meaning": "Describe how applicants can find role information.",
+      "context": "Checking recruitment communications.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "job",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "advertisement",
+          "start": 8,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "on",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "job",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "board",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "links",
+          "start": 39,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "career",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "page",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 63,
+          "end": 64
+        }
+      ],
+      "focus_lexeme_ids": [
+        "job-advertisement.notice-inviting-applications-for-job.n",
+        "job-board.website-or-display-listing-job-opportunities.n",
+        "career-page.employers-webpage-about-working-there-and-vacancies.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-interview-selection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-cipd-recruitment-introduction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module06.05",
+      "text": "The application acknowledgment confirms receipt, not an offer acceptance.",
+      "meaning": "Distinguish receiving an application from accepting an offer.",
+      "context": "Clarifying message meanings.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "application",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "acknowledgment",
+          "start": 16,
+          "end": 30
+        },
+        {
+          "index": 3,
+          "text": "confirms",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 4,
+          "text": "receipt",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 6,
+          "text": "not",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "an",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "offer",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "acceptance",
+          "start": 62,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 72,
+          "end": 73
+        }
+      ],
+      "focus_lexeme_ids": [
+        "application-acknowledgment.message-confirming-receipt-of-application.n",
+        "offer-acceptance.communication-agreeing-to-employment-offer.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-interview-selection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-cipd-recruitment-introduction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module06.06",
+      "text": "The interview invitation includes the interview schedule and a contact for questions.",
+      "meaning": "Explain the practical information supplied to a candidate.",
+      "context": "Preparing a clear invitation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "interview",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "invitation",
+          "start": 14,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "includes",
+          "start": 25,
+          "end": 33
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "interview",
+          "start": 38,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "schedule",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "contact",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": "for",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "questions",
+          "start": 75,
+          "end": 84
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "interview-invitation.request-for-candidate-to-attend-interview.n",
+        "interview-schedule.planned-times-and-arrangements-for-interviews.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-interview-selection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-cipd-recruitment-introduction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module06.07",
+      "text": "Could you explain how the rubric is used to assess the work sample from the skills test?",
+      "meaning": "Ask how produced work is considered against stated criteria.",
+      "context": "Clarifying a recruitment assessment without prescribing a scoring method.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "explain",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "how",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "rubric",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "is",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "used",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "assess",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "work",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "sample",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "from",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "skills",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": "test",
+          "start": 83,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "?",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "rubric.set-of-criteria-and-descriptions-for-assessment.n",
+        "work-sample.example-of-learner-produced-work.n",
+        "skills-test.assessment-of-particular-practical-abilities.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-interview-selection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-cipd-recruitment-introduction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module06.08",
+      "text": "The interview panel will record relevant evidence in the interview scorecard and interview notes.",
+      "meaning": "Describe where the panel records its assessment.",
+      "context": "Clarifying the purpose of assessment records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "interview",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "panel",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "will",
+          "start": 20,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "record",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "relevant",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "evidence",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "in",
+          "start": 50,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "interview",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "scorecard",
+          "start": 67,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "interview",
+          "start": 81,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": "notes",
+          "start": 91,
+          "end": 96
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "interview-panel.group-conducting-interview-together.n",
+        "interview-scorecard.record-of-interview-assessment-against-criteria.n",
+        "interview-notes.written-record-of-relevant-interview-information.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-interview-selection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-cipd-recruitment-introduction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module06.09",
+      "text": "The conditional offer and offer letter explain the proposed start date and outstanding conditions.",
+      "meaning": "Refer someone to the written terms of an offer.",
+      "context": "Reading an offer without assuming conditions are satisfied.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "conditional",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "offer",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "offer",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "letter",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "explain",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "proposed",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "start",
+          "start": 60,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "date",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "outstanding",
+          "start": 75,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "conditions",
+          "start": 87,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "conditional-offer.offer-subject-to-stated-conditions.n",
+        "offer-letter.letter-setting-out-proposed-employment-offer.n",
+        "start-date.date-on-which-work-or-arrangement-is-due-to-begin.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-interview-selection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-cipd-recruitment-introduction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module06.10",
+      "text": "Please send a clear selection decision and explain how candidate feedback will be provided.",
+      "meaning": "Request a useful outcome communication.",
+      "context": "Closing a recruitment stage respectfully.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "send",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "a",
+          "start": 12,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "clear",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "selection",
+          "start": 20,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "decision",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "explain",
+          "start": 43,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "how",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "candidate",
+          "start": 55,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "feedback",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "will",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "be",
+          "start": 79,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "provided",
+          "start": 82,
+          "end": 90
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "selection-decision.decision-about-who-to-choose-for-role-or-stage.n",
+        "candidate-feedback.information-given-to-candidate-about-application-or-assessment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-interview-selection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-cipd-recruitment-introduction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

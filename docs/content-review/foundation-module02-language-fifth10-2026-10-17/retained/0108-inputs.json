@@ -1,0 +1,966 @@
+{
+  "schema": 1,
+  "files": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/source-inventory.json",
+      "bytes": 1826,
+      "raw_sha256": "b52fea9c2181064d024d35a05f599ad3b24897e2402927031f13e449e5a10993"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/README.md",
+      "bytes": 9717,
+      "raw_sha256": "8c8d23d7b57a87938a638a99df4488389b131565360cf4c488c02e43d5775dd4"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/REVIEW-CONTRACT.md",
+      "bytes": 2024,
+      "raw_sha256": "12bf6fb6f744e653823aa0cb2429f0496275f1666bf27c874f50285ce4ee140d"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/author-observations.json",
+      "bytes": 1068,
+      "raw_sha256": "2fe46c358b3897554cdc603f5fbe7dea37d969ff2b91d4610f128f773c428daf"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/capture.cjs",
+      "bytes": 42867,
+      "raw_sha256": "8fdc5aeaa82eba2d6e4b4eea8a6a53b7b3b18e674d842ce7916263fa82cbe620"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/closure-supplement.json",
+      "bytes": 118057,
+      "raw_sha256": "7ec2451c26d09a8c1b4d8d7319678d8b484e3eb4800b70ab430cc64fffeede37"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/guard-cases.json",
+      "bytes": 6207,
+      "raw_sha256": "8ed954a40c3e99b3da22f5215be5d43a2bd1982ca2732adc8ca380207ee9e454"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/revision-lineage.json",
+      "bytes": 3057,
+      "raw_sha256": "d14d728702ea90c834a598220d0ceb428155a162adc8820f24f6c8cc968ba3b0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/root-capture-input.template.json",
+      "bytes": 1216,
+      "raw_sha256": "7990fd2d94932f6aac46af2480daa834559e6ccb6b0664a9ab6c03bdf9509700"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/source-inventory.json",
+      "bytes": 1666,
+      "raw_sha256": "706a57585e1d96755755ac6c081b1623ac19bd55a0d83cb7f4742ae963797c9a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/README.md",
+      "bytes": 7980,
+      "raw_sha256": "8a1afc4e302a455a896cadaf9a14c5806fe68b30d95a472472c2702422944cc8"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/REVIEW-CONTRACT.md",
+      "bytes": 2024,
+      "raw_sha256": "542595789dd61c004a8db36967231bcdbfbd6242153812ef79c8d9cc194cc508"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/author-observations.json",
+      "bytes": 1542,
+      "raw_sha256": "01f1376765310331f51be33e3218da101e0880e9ebb2c11c90c103efb5549659"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/capture.cjs",
+      "bytes": 40568,
+      "raw_sha256": "884dee02200c7216fe1ed0d4b498c3b39fba005c83c511b27ba6de55a460493a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/closure-supplement.json",
+      "bytes": 102249,
+      "raw_sha256": "074fd5e5c3d6538c3d29f0db1831ec9c5cbbec2930ed9c11462606314819cf1b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/guard-cases.json",
+      "bytes": 5255,
+      "raw_sha256": "ab194e1fd2e53ee4ca8ade9ca2671af7de0b02b1f9b38e249ec6e157b98865e0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/root-capture-input.template.json",
+      "bytes": 1135,
+      "raw_sha256": "1126208253e5aca43d26302472f5042f364af5ad6d5f10966db37f762d5c6f7e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inventory.json",
+      "bytes": 1550,
+      "raw_sha256": "9ee41dab3cf3443627efa661180a7850ef119d88f3ced5790dc4fca1aa10ab39"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inspect-source.cjs",
+      "bytes": 16539,
+      "raw_sha256": "6bd098cf205b6648e64122f2d9fadf56c33690b7c75ed5b120f8326d0053b5f7"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inspection-r01/inputs.json",
+      "bytes": 35087,
+      "raw_sha256": "ffc2bc4b220bcb98b8a170c93103dd180150d9009cf4a21372e1a9b0ea4c97e1"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inspection-r01/inspection.json",
+      "bytes": 379640,
+      "raw_sha256": "7a189c5fdc0b0b8fb709aeba3aa2fda8e226b80359a10de2579ba404e440c620"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inspection-r01/start.json",
+      "bytes": 208,
+      "raw_sha256": "ce229d36ddb0c14f7370cef6265aef0ede622f27294877252a0210dd5211afc5"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/predecessor-limitation.json",
+      "bytes": 1020,
+      "raw_sha256": "d984d3048c5b739b9ac519cbc927123006970b30dd7414140ec722bb1b33ad8e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/README.md",
+      "bytes": 1622,
+      "raw_sha256": "b192cd20b791982c622f090bb110082453ac6733dfd4bca6e71adb046cc74eb1"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/review.json",
+      "bytes": 9310,
+      "raw_sha256": "1583da74f8140e7d749b0c251fe805ecacfd412841ac0ddb9a7f2a3332081ebd"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/source-inventory.json",
+      "bytes": 3279,
+      "raw_sha256": "2f4033d3edfeb6eacc78657e9c215ef8718bd3ceb275c94f4c6168e68d2c6ee3"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/BINDING-CONTRACT.md",
+      "bytes": 11499,
+      "raw_sha256": "aaaee04347850dcbfd0deef8a412897d7780faa360726d725ae107cc20976a4f"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/CALL-GRAPH.md",
+      "bytes": 3633,
+      "raw_sha256": "1bc79f6ba80f61799e73f1683f97e95e7a4f00dac31652f85f56b0485e40be0f"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/README.md",
+      "bytes": 4866,
+      "raw_sha256": "85e7a4468e4d316514beacd8e9a950ee32292b92ff67767154875ad264d458d0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/accepted-contract.json",
+      "bytes": 414984,
+      "raw_sha256": "e930b6e65c44daa4ab27b44523241edc41e10942d92b25f2254f47073acd2235"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/actual-baseline-binding.template.json",
+      "bytes": 688,
+      "raw_sha256": "9f1456746af7d91a3d072c7932ad0579118a96d7876b8b298fc853a48ed4299a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/author-observations.json",
+      "bytes": 43657,
+      "raw_sha256": "c6afb0acba234b42762447169f94547cd21aebba44467b9a5dbc0cb133586012"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/binding.cjs",
+      "bytes": 18553,
+      "raw_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/context-contract.json",
+      "bytes": 1751439,
+      "raw_sha256": "5cf815fb77ebdc45325063e40eb2b1940718e721ed18f46f347277689dd2993a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/donor-row-contract.json",
+      "bytes": 224067,
+      "raw_sha256": "119814498724b14dd5d272a005ecdcc19f646651d321dd78dcafef0fe1c3d638"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/guard-cases.json",
+      "bytes": 7958,
+      "raw_sha256": "3b2ece62d10d405c1b386c0174846fdb11f21a04156444174c9903d67b0f0cfa"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/prepare.cjs",
+      "bytes": 7472,
+      "raw_sha256": "0d736bb531a7ab9dbe767e78015881a5d994f057958bd1b53ad17a28bc97fcf1"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/prior-independent-review.json",
+      "bytes": 8929,
+      "raw_sha256": "b5f9389ea3344d8ce84dd39af20f7b6f0a92a04b00453fca1c8c1c5c25d444c0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/prior-source-inventory.json",
+      "bytes": 2485,
+      "raw_sha256": "21df8c149742cb4fc63acecb033bfb7d499e10310b5467c8ff81bd715db73598"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/projection.cjs",
+      "bytes": 15663,
+      "raw_sha256": "27794f6f3cde0a2e1e5185813e496502c1385a00ddc760f135a2c339810d6302"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/revision-lineage.json",
+      "bytes": 4377,
+      "raw_sha256": "4b622b19ca76c2bc5c9b712ce277d19f31d58c378c6fbb5dd07be5ddbc4082cc"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/root-input.template.json",
+      "bytes": 504,
+      "raw_sha256": "be9032570a02905139580f3af0816e33481e61e305bbfd18e49c01a8ec689afd"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/test-transforms.cjs",
+      "bytes": 27566,
+      "raw_sha256": "e2812802f2146bfe63fcb346db6ee49c2dc1523176d1d28ce03255d34deafd37"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/assemble-evidence.cjs",
+      "bytes": 50063,
+      "raw_sha256": "9c512a2a8dbceb32d5436f33b9e2181a5de81dec1d8b11a7f2ff0efa108c1730"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/assembly-result.json",
+      "bytes": 2064,
+      "raw_sha256": "4aedc1440ebc4620dfe4def1a4c168fe353fb176c01c85432b165d0ca2639487"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/assembly-start.json",
+      "bytes": 278,
+      "raw_sha256": "972506ece89a4dcdd6d25ae7bc32227b0038120a58e76382dc6813f6a8732651"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/baseline.json",
+      "bytes": 1608311,
+      "raw_sha256": "59c33da6c2a31ac2ea3f67bed20966e32f174030c07b16600d13b6f46e3f73e5"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/candidate-ledger.json",
+      "bytes": 98840,
+      "raw_sha256": "171ce3798449f6915be6079f713e2e4c9211cf12d9e98e6945aad249efe9a5e1"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/capture-completion.json",
+      "bytes": 730,
+      "raw_sha256": "6dcae1e10f4e8b4699e0835d6df45baff4b3f9c0f7c9f894889d2cfd1db42907"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/capture-observations.cjs",
+      "bytes": 8821,
+      "raw_sha256": "7a7b227efc5f648ec3d59ea9f846fa48023ea1529cfd2eb079e61d05268811ff"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/capture-start.json",
+      "bytes": 218,
+      "raw_sha256": "058ae44664a558b94e56b5514202b5985b07ad8d759ed6b0e3f90b98ac8f7c61"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/collect-html-metadata.cjs",
+      "bytes": 2980,
+      "raw_sha256": "1d7a1ae71d3defd14b34fb9c772fd918a0ee22ef14ac488b41bf561ab6d39b4b"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/collection-start.json",
+      "bytes": 946,
+      "raw_sha256": "19c12838fd74a5a5d062c4a2bdcc14f92a2c8ddbb42247fb64b4c9d17665a047"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/context-screen.json",
+      "bytes": 1737430,
+      "raw_sha256": "b0be816fd3836b7ee321a715286aae0459c7b775ac69993b4a0d5ba6dfab2c52"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/HANDOFF.md",
+      "bytes": 3557,
+      "raw_sha256": "316e153be9ed3e3185af29d0a2aee319457fc745f232c283e18699b18c7a5963"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/inventory.json",
+      "bytes": 2903,
+      "raw_sha256": "d605cd61042c2f7532090a4aa838b791ad822f800165afe2ad7081624ea4300b"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/original-foundation-module02.json",
+      "bytes": 220456,
+      "raw_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/oxford-html-metadata.json",
+      "bytes": 22094,
+      "raw_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/research-notes.json",
+      "bytes": 32413,
+      "raw_sha256": "7bd12efb9568d6d50b68a1ddf62c86b149cc29c65321b1c959150fcddcb8d639"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+      "bytes": 33947,
+      "raw_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r01/accepted-contract.json",
+      "bytes": 414984,
+      "raw_sha256": "e930b6e65c44daa4ab27b44523241edc41e10942d92b25f2254f47073acd2235"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r01/actual-baseline-binding.template.json",
+      "bytes": 973,
+      "raw_sha256": "ae81d41faddb1d19f8f411b2f3e9fcc9e7957568e7ed15ffcdd6b065c41a627a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r01/BASELINE-REQUIREMENTS.md",
+      "bytes": 6928,
+      "raw_sha256": "5f40fe7a9051db62de6f4af7b71796f64334473c1ce810a5d8b21ceaceccea76"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r01/CALL-GRAPH.md",
+      "bytes": 4384,
+      "raw_sha256": "73ad93b4732e58dae8926546c880f8f7e9b17444856978dfd20ba987b33a3197"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r01/donor-row-contract.json",
+      "bytes": 224067,
+      "raw_sha256": "119814498724b14dd5d272a005ecdcc19f646651d321dd78dcafef0fe1c3d638"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r01/input-observations.json",
+      "bytes": 34597,
+      "raw_sha256": "d7070bc679d38df172f7c47937d9c91d17b62c67e60f599f03057328fc9d59ad"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r01/inventory.json",
+      "bytes": 1846,
+      "raw_sha256": "6335a99461cffb6c72afa0cfec62cbf8fc5615ec8128a2f385b6b0d437764d7b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r01/prepare-outline.cjs",
+      "bytes": 5663,
+      "raw_sha256": "9cbb12d1cd88ccfcac7b915608dfb75a0833369fb896479214fd7bfe19c4f942"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r01/README.md",
+      "bytes": 3421,
+      "raw_sha256": "eaeef80d9ead0b78641a9646ef84300c95788a8f573dc1030a3a7a3a8046d150"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r01/test-transform-outline.cjs",
+      "bytes": 6558,
+      "raw_sha256": "ee063c2fbc0a09a1f4d4b5e0cf90a33f24220ea4235ad8e20c8802039b3fe3e3"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/accepted-contract.json",
+      "bytes": 414984,
+      "raw_sha256": "e930b6e65c44daa4ab27b44523241edc41e10942d92b25f2254f47073acd2235"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/actual-baseline-binding.template.json",
+      "bytes": 671,
+      "raw_sha256": "4e918929f6222881440afa5c4cd3412d9bc1c43ed9a0887793fa43960ef7e2b9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/author-observations.json",
+      "bytes": 43657,
+      "raw_sha256": "c6afb0acba234b42762447169f94547cd21aebba44467b9a5dbc0cb133586012"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/BINDING-CONTRACT.md",
+      "bytes": 7942,
+      "raw_sha256": "6801bc017e13c37d963aefd14065b6d096de1031d1bc2b498c6a9d1be8fa1886"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/binding.cjs",
+      "bytes": 8080,
+      "raw_sha256": "90f45769c16ba4e6e40bb7fd177e7906dc4c141d70b7c616bca3dbe76caba703"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/CALL-GRAPH.md",
+      "bytes": 3633,
+      "raw_sha256": "1bc79f6ba80f61799e73f1683f97e95e7a4f00dac31652f85f56b0485e40be0f"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/context-contract.json",
+      "bytes": 1751439,
+      "raw_sha256": "5cf815fb77ebdc45325063e40eb2b1940718e721ed18f46f347277689dd2993a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/donor-row-contract.json",
+      "bytes": 224067,
+      "raw_sha256": "119814498724b14dd5d272a005ecdcc19f646651d321dd78dcafef0fe1c3d638"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/prepare.cjs",
+      "bytes": 7472,
+      "raw_sha256": "0d736bb531a7ab9dbe767e78015881a5d994f057958bd1b53ad17a28bc97fcf1"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/projection.cjs",
+      "bytes": 15663,
+      "raw_sha256": "27794f6f3cde0a2e1e5185813e496502c1385a00ddc760f135a2c339810d6302"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/README.md",
+      "bytes": 3817,
+      "raw_sha256": "912eab6904f2db36bdd3e27165da9dd13a9390f6dbb88afd8d93f603293b9ace"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/root-input.template.json",
+      "bytes": 432,
+      "raw_sha256": "8d0ec8e557e750a1874774be3aad2ab5792a80a7ef743aae3a1023da17b25b42"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/source-inventory.json",
+      "bytes": 2485,
+      "raw_sha256": "21df8c149742cb4fc63acecb033bfb7d499e10310b5467c8ff81bd715db73598"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/test-transforms.cjs",
+      "bytes": 27566,
+      "raw_sha256": "e2812802f2146bfe63fcb346db6ee49c2dc1523176d1d28ce03255d34deafd37"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/context-preservation.json",
+      "bytes": 1751439,
+      "raw_sha256": "5cf815fb77ebdc45325063e40eb2b1940718e721ed18f46f347277689dd2993a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/evidence-pins.json",
+      "bytes": 9936,
+      "raw_sha256": "209d5439582e7da4bd7b909819de7427d15bd248f2fbd4debcb6e5a3c8ed8ce5"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/HANDOFF.md",
+      "bytes": 6995,
+      "raw_sha256": "ed005b593489932be6e27de91d8c6e6240ee58fa775014701423e2a13cb810bb"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/history-preservation.json",
+      "bytes": 414426,
+      "raw_sha256": "7078897f88e9db12c282e55fcb28dc9e6ffb5619c059b0aaa246aa1a5724355b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/inventory.json",
+      "bytes": 1436,
+      "raw_sha256": "0e806ef501bbd9e90b1a026857292f13c40e96a5a53906a2ec476800f8b71db9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/proposal.json",
+      "bytes": 426549,
+      "raw_sha256": "b72ae6d5f52531e828c5ef819cc4ae34e6a940010a6bebf58d502968d04d6067"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/static-observations.json",
+      "bytes": 1566,
+      "raw_sha256": "0357af64195dfbf5ba85a9255afce9626ba28f1413012ad0290db3a969f954fe"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-independent-review-r01/assemble-independent-review.cjs",
+      "bytes": 45810,
+      "raw_sha256": "8ca8d1dd88f9833272d66d4d69879a4ba54ca85903baaff3309ec96a477e4ae1"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-independent-review-r01/assembly-result.json",
+      "bytes": 1202,
+      "raw_sha256": "fb94a6c37a89dc3b793b3c166b17d395f317884969d93295fecaaa4b23b0cd36"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-independent-review-r01/assembly-start.json",
+      "bytes": 296,
+      "raw_sha256": "29808ea081c4ec7171e42fd30139f469d07b945331b10cbec8cf85b300fba03d"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-independent-review-r01/context-review.json",
+      "bytes": 465569,
+      "raw_sha256": "44e3d928da7a4fc06db061c9090480d9182ae2f24698d3d4de7caab4e9549037"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-independent-review-r01/input-audit.json",
+      "bytes": 197057,
+      "raw_sha256": "5033253372dc4cb1834355d7d94e372ac70740b94a949d044171db575be59200"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-independent-review-r01/inventory.json",
+      "bytes": 1572,
+      "raw_sha256": "34cf5ea6b3406f6618b298c432f9e9c47d2c01fe9b2eabdb6a5e3566f28263f0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-independent-review-r01/README.md",
+      "bytes": 4211,
+      "raw_sha256": "c6b4562629e7964032fe61fe269c85b6a85e688373e9a83e30adf8285babf923"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-independent-review-r01/review-ledger.json",
+      "bytes": 80788,
+      "raw_sha256": "92c5b326565f95d9dacb8c11f8ca6684b5c39200b4ebcae57f3108a3c7a720b1"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-independent-review-r01/source-observations.json",
+      "bytes": 40272,
+      "raw_sha256": "db1c2b165a7696e7ae9e5292ceb51de0de8db6e57b85fe63b424a499504b6562"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/capture-attempt-r01/inputs.json",
+      "bytes": 18201,
+      "raw_sha256": "2c95ee9e07187164636730f4ffd1b108f807346a28974a1a2d228e7e25732857"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/capture-attempt-r01/inspection.json",
+      "bytes": 48811,
+      "raw_sha256": "0440f986b2826f7df0d43f8f8cf65b91a2923fccd93e12a3ff9c2569d1a2cf96"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/capture-attempt-r01/start.json",
+      "bytes": 259,
+      "raw_sha256": "287fb3515879b373c038eb33b89b0b561ba1ded6c2519ed8e98ce26310129977"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/capture.ps1",
+      "bytes": 11386,
+      "raw_sha256": "a3111a9a66c08350fb71c678324ef40842487cfd93e693d81f8f5acbd6b48588"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/inventory.json",
+      "bytes": 1368,
+      "raw_sha256": "9ff8e10e22f6b91063bd8966b9381fc4002f84ccdf2c224a32c70638b9ef752c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/README.md",
+      "bytes": 1875,
+      "raw_sha256": "f3f9e1c02a71606f189203c7abd894f1909d78c6334ba4ddd329dfa30a1c9dc0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/review.json",
+      "bytes": 8929,
+      "raw_sha256": "b5f9389ea3344d8ce84dd39af20f7b6f0a92a04b00453fca1c8c1c5c25d444c0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r03/capture-attempt-r01/inputs.json",
+      "bytes": 204877,
+      "raw_sha256": "17aea2abfd392b52eef106a038de11768000effa80f4c0e153323ebc81f17448"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r03/capture-attempt-r01/inspection.json",
+      "bytes": 303813,
+      "raw_sha256": "ed2345aaf00d7d7692c8d4df1290f11068ec5ba7a3b244b821c05a79f9bef0a4"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r03/capture-attempt-r01/start.json",
+      "bytes": 263,
+      "raw_sha256": "320bc3030e4c0d326d6e84c34207788e6deacf598e8b4b2a62d20a77f0a2bc17"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r03/capture.cjs",
+      "bytes": 19478,
+      "raw_sha256": "c10039773736e354633dc23ef3fdb47edabcef126249d0d70435dd0c44db1e00"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r03/inventory.json",
+      "bytes": 1356,
+      "raw_sha256": "0ca841c345b759921f62e3cbbae87f2e79c32f4f18df2d904174bacdb2318896"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r03/README.md",
+      "bytes": 2408,
+      "raw_sha256": "a176b0c9ff3f8320e2f16f0402eee47122152321e908659264c4ce1a68201fe7"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r03/review.json",
+      "bytes": 8770,
+      "raw_sha256": "5c0472fb71d342262c6c8fcac064b4befef14f95408a5a7ee0aed296eeb8a583"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/capture-start.json",
+      "bytes": 276,
+      "raw_sha256": "c792384c1ad9f293b4c1a4ffd6affe0e8c7117135b188731124dbb10ceae222b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/capture.cjs",
+      "bytes": 36142,
+      "raw_sha256": "651ba393c6bdccb93b21f0f4f256031449c1b0ea601ead03a25266dfcf00a34f"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/input-audit.json",
+      "bytes": 113000,
+      "raw_sha256": "c7cc948d879745960c8faa6440c0464b0fe882e8769c1eabd9ca95c47201d28b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/inspection.json",
+      "bytes": 791764,
+      "raw_sha256": "a563b2959dfae97a7fdc8b612b970158c1ed87e7b7cd64a0050682d1049dd9b2"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/inventory.json",
+      "bytes": 1245,
+      "raw_sha256": "b357729273451d34436cb6ea3ec4f81b943594f9c875938c6d83400f4b6c2ebf"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/README.md",
+      "bytes": 3722,
+      "raw_sha256": "b4ffa30bddf1723718ffa25a1e01e1a1f652164449e6f320ddf24878682deddc"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/review.json",
+      "bytes": 9776,
+      "raw_sha256": "65a00b7d353ade569cfd5fa129c95451dbc1aaf506baeef62cf4b95f44155d0a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/source-review.json",
+      "bytes": 15131,
+      "raw_sha256": "ca061dbe755f41aa2a615d8c9fae19e0901c780fd181f303bb9b69ff7688fa08"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/accepted-language.json",
+      "bytes": 2337675,
+      "raw_sha256": "51d6569514875bc8bceeaa149cef44f7863d28d0e523e4557472909607efeece"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/foundation-module02.json.after",
+      "bytes": 372196,
+      "raw_sha256": "9f698ae9b2572d279709b521e6b7d490ffe3d05b1a8ed362add36e07fd4accbc"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+      "bytes": 226840,
+      "raw_sha256": "b6f797200a9c856b189dfcc3bf1dc20e65a8b9aac361b62bd3959ae460311f4d"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/sources.json.after",
+      "bytes": 869470,
+      "raw_sha256": "310be48d81d29917146db162b26d9927007b68ed12380df4a113458d2de7b330"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/receipt.json",
+      "bytes": 2818,
+      "raw_sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/binding.json",
+      "bytes": 235896,
+      "raw_sha256": "dbacf79ca796410664a1a6af9a577172c93234109b3c33c326ba669a5394dc21"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/review.json",
+      "bytes": 3355,
+      "raw_sha256": "38806f472694084563690f5218ff6af70c3338b3837d79d63c0a9bf3d04d0276"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/input.json",
+      "bytes": 1808178,
+      "raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/invoke.cjs",
+      "bytes": 5772,
+      "raw_sha256": "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "bytes": 3209077,
+      "raw_sha256": "ccd4ab160b89efbc21289c51fd576933d7da19734567ee986656b4462ad06083"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "bytes": 3197142,
+      "raw_sha256": "c6c6083fe03324ac5ea5d1e7c5ec7cf2bad92559616d8437ce32d572fe1b3d92"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "bytes": 2216910,
+      "raw_sha256": "8ab99dbd7a7ea692401c594259986328d43e04e676557c51d15aa675fc7bf83b"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "bytes": 2755242,
+      "raw_sha256": "528267cabf4ef12daa9977da23267131c3b69d223f76d1a4a83fcac9ba9973e7"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "bytes": 2367179,
+      "raw_sha256": "d821f85146ef5e5e14ee5b4cee9ce129d0c6652f683090bc44fb7af14d6d14f1"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+      "bytes": 59877,
+      "raw_sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assemble-independent-review.cjs",
+      "bytes": 45810,
+      "raw_sha256": "8ca8d1dd88f9833272d66d4d69879a4ba54ca85903baaff3309ec96a477e4ae1"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assembly-result.json",
+      "bytes": 1202,
+      "raw_sha256": "fb94a6c37a89dc3b793b3c166b17d395f317884969d93295fecaaa4b23b0cd36"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assembly-start.json",
+      "bytes": 296,
+      "raw_sha256": "29808ea081c4ec7171e42fd30139f469d07b945331b10cbec8cf85b300fba03d"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/context-review.json",
+      "bytes": 465569,
+      "raw_sha256": "44e3d928da7a4fc06db061c9090480d9182ae2f24698d3d4de7caab4e9549037"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/input-audit.json",
+      "bytes": 197057,
+      "raw_sha256": "5033253372dc4cb1834355d7d94e372ac70740b94a949d044171db575be59200"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/inventory.json",
+      "bytes": 1572,
+      "raw_sha256": "34cf5ea6b3406f6618b298c432f9e9c47d2c01fe9b2eabdb6a5e3566f28263f0"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/README.md",
+      "bytes": 4211,
+      "raw_sha256": "c6b4562629e7964032fe61fe269c85b6a85e688373e9a83e30adf8285babf923"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/review-ledger.json",
+      "bytes": 80788,
+      "raw_sha256": "92c5b326565f95d9dacb8c11f8ca6684b5c39200b4ebcae57f3108a3c7a720b1"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/root-copy-receipt.json",
+      "bytes": 1755,
+      "raw_sha256": "c7527db2f3cb893a5fbaa3156b1d679122d56637134c2734750d61b79621302b"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/source-observations.json",
+      "bytes": 40272,
+      "raw_sha256": "db1c2b165a7696e7ae9e5292ceb51de0de8db6e57b85fe63b424a499504b6562"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assemble-evidence.cjs",
+      "bytes": 50063,
+      "raw_sha256": "9c512a2a8dbceb32d5436f33b9e2181a5de81dec1d8b11a7f2ff0efa108c1730"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assembly-result.json",
+      "bytes": 2064,
+      "raw_sha256": "4aedc1440ebc4620dfe4def1a4c168fe353fb176c01c85432b165d0ca2639487"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assembly-start.json",
+      "bytes": 278,
+      "raw_sha256": "972506ece89a4dcdd6d25ae7bc32227b0038120a58e76382dc6813f6a8732651"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/baseline.json",
+      "bytes": 1608311,
+      "raw_sha256": "59c33da6c2a31ac2ea3f67bed20966e32f174030c07b16600d13b6f46e3f73e5"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/candidate-ledger.json",
+      "bytes": 98840,
+      "raw_sha256": "171ce3798449f6915be6079f713e2e4c9211cf12d9e98e6945aad249efe9a5e1"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-completion.json",
+      "bytes": 730,
+      "raw_sha256": "6dcae1e10f4e8b4699e0835d6df45baff4b3f9c0f7c9f894889d2cfd1db42907"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-observations.cjs",
+      "bytes": 8821,
+      "raw_sha256": "7a7b227efc5f648ec3d59ea9f846fa48023ea1529cfd2eb079e61d05268811ff"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-start.json",
+      "bytes": 218,
+      "raw_sha256": "058ae44664a558b94e56b5514202b5985b07ad8d759ed6b0e3f90b98ac8f7c61"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/collect-html-metadata.cjs",
+      "bytes": 2980,
+      "raw_sha256": "1d7a1ae71d3defd14b34fb9c772fd918a0ee22ef14ac488b41bf561ab6d39b4b"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/collection-start.json",
+      "bytes": 946,
+      "raw_sha256": "19c12838fd74a5a5d062c4a2bdcc14f92a2c8ddbb42247fb64b4c9d17665a047"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/context-screen.json",
+      "bytes": 1737430,
+      "raw_sha256": "b0be816fd3836b7ee321a715286aae0459c7b775ac69993b4a0d5ba6dfab2c52"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/HANDOFF.md",
+      "bytes": 3557,
+      "raw_sha256": "316e153be9ed3e3185af29d0a2aee319457fc745f232c283e18699b18c7a5963"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/inventory.json",
+      "bytes": 2903,
+      "raw_sha256": "d605cd61042c2f7532090a4aa838b791ad822f800165afe2ad7081624ea4300b"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/original-foundation-module02.json",
+      "bytes": 220456,
+      "raw_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/oxford-html-metadata.json",
+      "bytes": 22094,
+      "raw_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/research-notes.json",
+      "bytes": 32413,
+      "raw_sha256": "7bd12efb9568d6d50b68a1ddf62c86b149cc29c65321b1c959150fcddcb8d639"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/root-copy-receipt.json",
+      "bytes": 3023,
+      "raw_sha256": "7d327fd3a8c4f50d37a31e39894951d69e801045d688bb7054c20ec36334b226"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/source-index.json",
+      "bytes": 33947,
+      "raw_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-2026-10-17/commit-receipt.json",
+      "bytes": 2685,
+      "raw_sha256": "96fff4c1ac94147e99efcb8f18ff07711a5c2e53729fa07695d7d2296ae037f8"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-inspection.json",
+      "bytes": 5124,
+      "raw_sha256": "6c5eb8791d18f9c2523d3ec7db324463237bfd13c458ba89066781d284cd7042"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-review-inventory.json",
+      "bytes": 1760,
+      "raw_sha256": "8b3c36993af113b47da5ca5f4667386b3d6c8b4ed7e39e35a486d731fdda3aed"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-review.json",
+      "bytes": 6633,
+      "raw_sha256": "ff849f233383e842b35c9f5503efa44f2c1f313eccc23e89ea5fc47a9cc87778"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-inspection-authoring-failure-r01.json",
+      "bytes": 1542,
+      "raw_sha256": "be0769d96bea1c7e8955d69d6af85b632a8d184a640fa98b7f921af10864a13a"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-r01-failure-inspection/inspection.json",
+      "bytes": 726,
+      "raw_sha256": "7f30e468dc35210e69e6a3b91bf0162bba6ac4d167de9c639de71501629afca1"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/command-1.log",
+      "bytes": 5791184,
+      "raw_sha256": "0020b63f47249956e1122188f101d26390511a6b02ec16e52377033dd6504ae6"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/command-2.log",
+      "bytes": 27390,
+      "raw_sha256": "5c51c6b4a8a8b4016fab7fee1126473f50ebb799dfc70df7df953f54e291fc23"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/receipt.json",
+      "bytes": 2981,
+      "raw_sha256": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/start.json",
+      "bytes": 235,
+      "raw_sha256": "b6643d6fe0740319f41cac846afcad62402ab4477e5af17b6ec0d07af2ab24ec"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+      "bytes": 1808178,
+      "raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r02/invoke.cjs",
+      "bytes": 5916,
+      "raw_sha256": "6e138489e51f4789c1f2fd6a4039aa7e2f1af44ec435ff4309c33e568053bac5"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r02/revision.json",
+      "bytes": 1731,
+      "raw_sha256": "0043946a99313859eaef5f84a1af937aa71b5dcb1d19c8659873fd51f4a48edd"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/attempt-001/command-1.log",
+      "bytes": 5791184,
+      "raw_sha256": "0020b63f47249956e1122188f101d26390511a6b02ec16e52377033dd6504ae6"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/attempt-001/command-2.log",
+      "bytes": 27390,
+      "raw_sha256": "5c51c6b4a8a8b4016fab7fee1126473f50ebb799dfc70df7df953f54e291fc23"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/attempt-001/receipt.json",
+      "bytes": 2981,
+      "raw_sha256": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/attempt-001/start.json",
+      "bytes": 235,
+      "raw_sha256": "b6643d6fe0740319f41cac846afcad62402ab4477e5af17b6ec0d07af2ab24ec"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/copy-receipt.json",
+      "bytes": 3851,
+      "raw_sha256": "12ab287773dca29de5c0372ac538e688939a35df51c6cfc984db55b2267282fb"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/independent-review/persisted-input-inspection.json",
+      "bytes": 5124,
+      "raw_sha256": "6c5eb8791d18f9c2523d3ec7db324463237bfd13c458ba89066781d284cd7042"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/independent-review/persisted-input-review-inventory.json",
+      "bytes": 1760,
+      "raw_sha256": "8b3c36993af113b47da5ca5f4667386b3d6c8b4ed7e39e35a486d731fdda3aed"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/independent-review/persisted-input-review.json",
+      "bytes": 6633,
+      "raw_sha256": "ff849f233383e842b35c9f5503efa44f2c1f313eccc23e89ea5fc47a9cc87778"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/independent-review/persisted-inspection-authoring-failure-r01.json",
+      "bytes": 1542,
+      "raw_sha256": "be0769d96bea1c7e8955d69d6af85b632a8d184a640fa98b7f921af10864a13a"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/input.json",
+      "bytes": 1808178,
+      "raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/invoke.cjs",
+      "bytes": 5772,
+      "raw_sha256": "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/README.md",
+      "bytes": 939,
+      "raw_sha256": "1ab5e40cfd7e288cc32f1b12621cbb40a47163302a355fbc5a7e6176714fc770"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/root-inspection.json",
+      "bytes": 726,
+      "raw_sha256": "7f30e468dc35210e69e6a3b91bf0162bba6ac4d167de9c639de71501629afca1"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-independent-review-r02/review.json",
+      "bytes": 6709,
+      "raw_sha256": "4267b52b1feaeb32f03edd54325a6f248fdab37d4fad41a0a4eb3692e6fd6d71"
+    }
+  ],
+  "all_rehashed_unchanged": true
+}

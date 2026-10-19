@@ -1,0 +1,41 @@
+{
+  "command": [
+    "C:\\nvm4w\\nodejs\\node.exe",
+    "--test",
+    "tests/test-runner.test.cjs"
+  ],
+  "started_at": "2026-10-16T19:55:14.814Z",
+  "finished_at": "2026-10-16T19:55:16.097Z",
+  "exit_code": 0,
+  "error": null,
+  "before": [
+    {
+      "path": "tools/run-tests.cjs",
+      "sha256": "336ff3d146c6dd81706f2b6ba82ae678b5f10d549812a00f99ade8fbf3f1f4fe"
+    },
+    {
+      "path": "tests/test-runner.test.cjs",
+      "sha256": "52ddc912b885e2abd794691ba99abca71b02c7dc76c0d3877e0700f35b4fadbc"
+    },
+    {
+      "path": "package.json",
+      "sha256": "034615128abbb9403d0b6ec2747c2ed52a2e65dccb3d8f597c7e82ebe4ca77ce"
+    }
+  ],
+  "after": [
+    {
+      "path": "tools/run-tests.cjs",
+      "sha256": "336ff3d146c6dd81706f2b6ba82ae678b5f10d549812a00f99ade8fbf3f1f4fe"
+    },
+    {
+      "path": "tests/test-runner.test.cjs",
+      "sha256": "52ddc912b885e2abd794691ba99abca71b02c7dc76c0d3877e0700f35b4fadbc"
+    },
+    {
+      "path": "package.json",
+      "sha256": "034615128abbb9403d0b6ec2747c2ed52a2e65dccb3d8f597c7e82ebe4ca77ce"
+    }
+  ],
+  "inputs_unchanged": true,
+  "log_sha256": "396a85292016195047e7f880f489473cbe6cc77222d481b102fa07a8e91a6e06"
+}

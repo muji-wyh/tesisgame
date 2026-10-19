@@ -1,0 +1,3649 @@
+{
+  "schema": 1,
+  "status": "frozen_fourth10_context_review_not_expression_acceptance",
+  "date": "2026-10-16",
+  "production_mutated": false,
+  "preimages_json_sha256": "8561aac1ac5f64688f74d10694bc7063b7e8e57c099809a260fc1b463293179f",
+  "matching_policy": {
+    "fields": [
+      "text",
+      "focus_lexeme_ids"
+    ],
+    "forms": {
+      "announcement": "announcements?",
+      "message": "messages?|messaged|messaging",
+      "email": "e-?mails?|e-?mailed|e-?mailing",
+      "phone call": "(?:phone|telephone) calls?",
+      "voicemail": "voice[ -]?mails?",
+      "extension": "extensions?",
+      "introduction": "introductions?",
+      "greeting": "greetings?",
+      "conversation": "conversations?",
+      "discussion": "discussions?"
+    },
+    "inflected_and_alternate_spelling_hits_included_for_explicit_boundaries": true,
+    "new_bindings_inferred": false
+  },
+  "uses": [
+    {
+      "id": "expr.foundation.module01.03",
+      "text": "The receptionist will welcome the visitor and make a brief introduction.",
+      "context": "A workplace prepares for a visitor.",
+      "resource": "res://data/professional/expressions/foundation-module01.json",
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "before_expression_json_sha256": "01664621e324c463010588edb45013f9dec0f25c3ac3d2340ad6b71529d2e36e",
+      "after_expression_json_sha256": "01664621e324c463010588edb45013f9dec0f25c3ac3d2340ad6b71529d2e36e",
+      "existing_focus_lexeme_ids": [
+        "receptionist.front-desk-worker.n",
+        "visitor.temporary-guest.n",
+        "introduction.first-acquaintance.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "introduction.first-acquaintance.n",
+          "term": "introduction",
+          "existing_selected_focus": true,
+          "authored_classification_code": "hold_people_or_opening",
+          "classification": "Retain ambiguity between introducing people and introductory material; do not accept sense binding.",
+          "individual_observation": "The receptionist and visitor make a people introduction plausible, but a brief introductory welcome talk also fits. Preserve the existing selected focus without certifying it; the revised lexeme example does not resolve this expression."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.08",
+      "text": "The voicemail message gives my extension; I also sent an email about our phone call.",
+      "context": "A worker follows up on a telephone conversation.",
+      "resource": "res://data/professional/expressions/foundation-module01.json",
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "before_expression_json_sha256": "12e2ccf8e04e5ff4f4b2a8e091aa9438b57c1b5ed50a23703daca02b785d018a",
+      "after_expression_json_sha256": "12e2ccf8e04e5ff4f4b2a8e091aa9438b57c1b5ed50a23703daca02b785d018a",
+      "existing_focus_lexeme_ids": [
+        "voicemail.recorded-message.n",
+        "message.communication.n",
+        "extension.internal-phone-number.n",
+        "email.electronic-message.n",
+        "phone-call.telephone-conversation.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": true,
+          "authored_classification_code": "focus",
+          "classification": "Existing selected focus compatible with this ordinary sense; preserve it without granting acceptance.",
+          "individual_observation": "The recorded message conveys information to a person; retain the exact existing message focus."
+        },
+        {
+          "selected_lexeme_id": "email.electronic-message.n",
+          "term": "email",
+          "existing_selected_focus": true,
+          "authored_classification_code": "focus",
+          "classification": "Existing selected focus compatible with this ordinary sense; preserve it without granting acceptance.",
+          "individual_observation": "Sent an email is one electronic communication, not the service or verb; keep the existing focus."
+        },
+        {
+          "selected_lexeme_id": "phone-call.telephone-conversation.n",
+          "term": "phone call",
+          "existing_selected_focus": true,
+          "authored_classification_code": "focus",
+          "classification": "Existing selected focus compatible with this ordinary sense; preserve it without granting acceptance.",
+          "individual_observation": "The context explicitly says telephone conversation; retain that existing focus."
+        },
+        {
+          "selected_lexeme_id": "voicemail.recorded-message.n",
+          "term": "voicemail",
+          "existing_selected_focus": true,
+          "authored_classification_code": "hold_message_or_system_modifier",
+          "classification": "Retain ambiguity of the voicemail modifier; do not certify the countable-message binding.",
+          "individual_observation": "The whole phrase names a recorded message, but attributive voicemail can identify the recording system rather than itself instantiate the countable message. Preserve this existing focus without accepting the sense alignment."
+        },
+        {
+          "selected_lexeme_id": "extension.internal-phone-number.n",
+          "term": "extension",
+          "existing_selected_focus": true,
+          "authored_classification_code": "focus",
+          "classification": "Existing selected focus compatible with this ordinary sense; preserve it without granting acceptance.",
+          "individual_observation": "A number given for follow-up clearly supports the internal telephone-number reading; no dialing rule is inferred."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.09",
+      "text": "The agenda includes a discussion of customer feedback and a supplier update.",
+      "context": "A team prepares to review service and deliveries.",
+      "resource": "res://data/professional/expressions/foundation-module01.json",
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "before_expression_json_sha256": "ccfc504a119e5ff35556644c43135ea1f006c0e22b6da42c8a74c151f427e6d0",
+      "after_expression_json_sha256": "ccfc504a119e5ff35556644c43135ea1f006c0e22b6da42c8a74c151f427e6d0",
+      "existing_focus_lexeme_ids": [
+        "agenda.meeting-plan.n",
+        "discussion.consideration-talk.n",
+        "customer.buyer.n",
+        "feedback.response-information.n",
+        "supplier.goods-provider.n",
+        "update.current-information.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": true,
+          "authored_classification_code": "focus",
+          "classification": "Existing selected focus compatible with this ordinary sense; preserve it without granting acceptance.",
+          "individual_observation": "A team agenda schedules an exchange about feedback and deliveries. Retain this conversational discussion focus, without accepting agenda decisions or specialist content."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module05.06",
+      "text": "Parse the message, deserialize its contents, split the text into fields, and serialize the final result.",
+      "context": "A developer explains a message-processing step.",
+      "resource": "res://data/professional/expressions/software-data-module05.json",
+      "locations": [
+        {
+          "course_id": "software_data",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "48af2bca25be0a0172927f9fcd89aec677bb46796268c2285ae538de7f8b40ac",
+      "after_expression_json_sha256": "48af2bca25be0a0172927f9fcd89aec677bb46796268c2285ae538de7f8b40ac",
+      "existing_focus_lexeme_ids": [
+        "parse.analyze-structured-input.v",
+        "deserialize.reconstruct-transferred-data.v",
+        "serialize.encode-data-for-transfer.v",
+        "split.separate-data-parts.v"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "different_sense",
+          "classification": "Distinct sense or modality; exclude it from the selected sense without changing the expression.",
+          "individual_observation": "Parsing and serialization describe structured machine data. No recipient-directed human message binding follows from the token."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module09.08",
+      "text": "Check the environment variable, file path, directory, filename, file extension, and encoding.",
+      "context": "A team investigates an invented import issue.",
+      "resource": "res://data/professional/expressions/software-data-module09.json",
+      "locations": [
+        {
+          "course_id": "software_data",
+          "module_id": "module09"
+        }
+      ],
+      "before_expression_json_sha256": "4cad28098638fe89536ab33214143163e3b8a21c13dd180d37b56efea3a5db5d",
+      "after_expression_json_sha256": "4cad28098638fe89536ab33214143163e3b8a21c13dd180d37b56efea3a5db5d",
+      "existing_focus_lexeme_ids": [
+        "environment-variable.process-environment-value.n",
+        "file-path.filesystem-location-description.n",
+        "directory.filesystem-entry-container.n",
+        "filename.file-identifying-name.n",
+        "file-extension.filename-ending-marker.n",
+        "encoding.information-representation-scheme.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "extension.internal-phone-number.n",
+          "term": "extension",
+          "existing_selected_focus": false,
+          "authored_classification_code": "different_sense",
+          "classification": "Distinct sense or modality; exclude it from the selected sense without changing the expression.",
+          "individual_observation": "File extension is a filename marker, not an internal phone number."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module04.01",
+      "text": "I am the registered nurse; this healthcare assistant will join our discussion about your neck and chest discomfort.",
+      "context": "A nurse introduces a colleague during a discussion of reported discomfort.",
+      "resource": "res://data/professional/expressions/nursing-module04.json",
+      "locations": [
+        {
+          "course_id": "nursing",
+          "module_id": "module04"
+        }
+      ],
+      "before_expression_json_sha256": "207e01ba0b0f6ed6612d7ee128f1099214f4dd1ac8237ef971d246b51289b7a0",
+      "after_expression_json_sha256": "207e01ba0b0f6ed6612d7ee128f1099214f4dd1ac8237ef971d246b51289b7a0",
+      "existing_focus_lexeme_ids": [
+        "registered-nurse.registered-nursing-professional.n",
+        "healthcare-assistant.supporting-care-worker.n",
+        "neck.head-trunk-connecting-region.n",
+        "chest.upper-trunk-region.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Joining the discussion indicates an exchange about reported discomfort. Preserve the care-team identities and medical gates; the noun accepts no clinical interpretation."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module08.03",
+      "text": "The training discussion covers contamination, cross-contamination, transmission, and infection prevention.",
+      "context": "A trainer presents a communication exercise.",
+      "resource": "res://data/professional/expressions/nursing-module08.json",
+      "locations": [
+        {
+          "course_id": "nursing",
+          "module_id": "module08"
+        }
+      ],
+      "before_expression_json_sha256": "0aafd84a16fd5508a3216f76f39cc7b6d365a06e8cb222b3f690e8fde3be1e93",
+      "after_expression_json_sha256": "0aafd84a16fd5508a3216f76f39cc7b6d365a06e8cb222b3f690e8fde3be1e93",
+      "existing_focus_lexeme_ids": [
+        "contamination.unwanted-substance-presence.n",
+        "cross-contamination.unwanted-material-transfer.n",
+        "transmission.infectious-agent-spread.n",
+        "infection-prevention.infection-risk-reduction-work.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "The trainer presents a discussion exercise. Topic compatibility does not validate infection-prevention content or practical procedures."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module09.05",
+      "text": "The consent form records the discussion, and the specimen label and laboratory request identify the sample and investigation.",
+      "context": "A team checks fictional documentation.",
+      "resource": "res://data/professional/expressions/nursing-module09.json",
+      "locations": [
+        {
+          "course_id": "nursing",
+          "module_id": "module09"
+        }
+      ],
+      "before_expression_json_sha256": "58776da786f80c8e3a6765871a053fb6c37a301f1289fdc1cc69e1916eef711a",
+      "after_expression_json_sha256": "58776da786f80c8e3a6765871a053fb6c37a301f1289fdc1cc69e1916eef711a",
+      "existing_focus_lexeme_ids": [
+        "consent-form.agreement-documentation-form.n",
+        "specimen-label.sample-identification-label.n",
+        "laboratory-request.lab-investigation-request.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "The form records an exchange. It does not itself establish consent, sample validity or investigation authority."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module04.01",
+      "text": "The resident asked the caregiver to include a family member and a companion in the conversation.",
+      "context": "A resident chooses who joins a discussion.",
+      "resource": "res://data/professional/expressions/caregiving-module04.json",
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module04"
+        }
+      ],
+      "before_expression_json_sha256": "1f648bccd3626c215911d96f51c070a80d23f11d8a0de09dd6e500ae4c7c2a6d",
+      "after_expression_json_sha256": "1f648bccd3626c215911d96f51c070a80d23f11d8a0de09dd6e500ae4c7c2a6d",
+      "existing_focus_lexeme_ids": [
+        "resident.person-living-in-place.n",
+        "caregiver.person-providing-care.n",
+        "family-member.person-in-family.n",
+        "companion.person-providing-company.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "conversation.spoken-exchange.n",
+          "term": "conversation",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "The resident chooses participants in an exchange. Retain the conversational reading and exact choice wording without adding a scored focus or care approval."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module10.06",
+      "text": "The discharge planning discussion includes the discharge destination and transport arrangement.",
+      "context": "An adult participates in planning after a care episode.",
+      "resource": "res://data/professional/expressions/caregiving-module10.json",
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module10"
+        }
+      ],
+      "before_expression_json_sha256": "85e4c7489e2bba3af2d4403b4468b8b5a073cd80056d3c17e9cc9646504a017e",
+      "after_expression_json_sha256": "85e4c7489e2bba3af2d4403b4468b8b5a073cd80056d3c17e9cc9646504a017e",
+      "existing_focus_lexeme_ids": [
+        "discharge-planning.preparation-for-care-episode-end.n",
+        "discharge-destination.place-after-care-discharge.n",
+        "transport-arrangement.planned-travel-support.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "The adult participates in a planning exchange. No discharge destination or transport decision is approved."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module03.06",
+      "text": "Would you prefer live chat or a supported messaging app for this conversation?",
+      "context": "An agent checks the customer's preference.",
+      "resource": "res://data/professional/expressions/customer-support-module03.json",
+      "locations": [
+        {
+          "course_id": "customer_support",
+          "module_id": "module03"
+        }
+      ],
+      "before_expression_json_sha256": "bbb7f596cf912fc67f2d80eb591b4c9b2934508a4220ea614361a4302065eb8b",
+      "after_expression_json_sha256": "bbb7f596cf912fc67f2d80eb591b4c9b2934508a4220ea614361a4302065eb8b",
+      "existing_focus_lexeme_ids": [
+        "live-chat.real-time-text-conversation-channel.n",
+        "messaging-app.message-exchange-application.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "derived_form",
+          "classification": "Derived verb/activity modifier is not the selected noun; no binding inferred.",
+          "individual_observation": "Messaging in messaging app is an activity modifier inside an independent product-category term, not an occurrence of the selected message noun."
+        },
+        {
+          "selected_lexeme_id": "conversation.spoken-exchange.n",
+          "term": "conversation",
+          "existing_selected_focus": false,
+          "authored_classification_code": "different_sense",
+          "classification": "Distinct sense or modality; exclude it from the selected sense without changing the expression.",
+          "individual_observation": "Live chat explicitly supports text exchange; the alternative app does not establish speech. Keep this broader conversation usage distinct from the selected spoken sense."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.01",
+      "text": "I will listen, acknowledge your message, record the concern, apologize for the delay, and respond through the agreed channel.",
+      "context": "An agent acknowledges a delayed reply.",
+      "resource": "res://data/professional/expressions/customer-support-module05.json",
+      "locations": [
+        {
+          "course_id": "customer_support",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "6fb833a05e9c359271776b3584bb887e43aa18916620f7e783091c16b3779e6e",
+      "after_expression_json_sha256": "6fb833a05e9c359271776b3584bb887e43aa18916620f7e783091c16b3779e6e",
+      "existing_focus_lexeme_ids": [
+        "acknowledge.recognize-receipt-or-stated-concern.v",
+        "apologize.express-regret.v",
+        "respond.give-reply-or-reaction.v",
+        "listen.attend-to-spoken-information.v",
+        "record.store-observed-information.v"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "background",
+          "classification": "Compatible ordinary background use; no scored binding added.",
+          "individual_observation": "Acknowledging a received message fits recipient-directed information, with no acceptance of the complete response process."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.08",
+      "text": "Please demonstrate how to mute or unmute, explain why you need to hold the caller, and agree when to resume the conversation.",
+      "context": "An agent practices describing a call interruption.",
+      "resource": "res://data/professional/expressions/customer-support-module05.json",
+      "locations": [
+        {
+          "course_id": "customer_support",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "9ba0e88c78731e21fc508e2d6c30196434374082e393ab376dc4b313e62982d3",
+      "after_expression_json_sha256": "9ba0e88c78731e21fc508e2d6c30196434374082e393ab376dc4b313e62982d3",
+      "existing_focus_lexeme_ids": [
+        "mute.temporarily-stop-audio-transmission-or-output.v",
+        "unmute.restore-audio-transmission-or-output.v",
+        "hold.temporarily-pause-call-connection-for-waiting.v",
+        "resume.continue-after-pause.v",
+        "demonstrate.show-how-it-works.v"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "conversation.spoken-exchange.n",
+          "term": "conversation",
+          "existing_selected_focus": false,
+          "authored_classification_code": "background",
+          "classification": "Compatible ordinary background use; no scored binding added.",
+          "individual_observation": "Muting, holding the caller and resuming establish an audio exchange. Retain it without approving call-handling procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module06.07",
+      "text": "The acknowledgment confirms receipt; the summary and confirmation message explain the agreed details.",
+      "context": "An agent explains three message purposes.",
+      "resource": "res://data/professional/expressions/customer-support-module06.json",
+      "locations": [
+        {
+          "course_id": "customer_support",
+          "module_id": "module06"
+        }
+      ],
+      "before_expression_json_sha256": "6159a161f0d582ce0743e96b965a54077e5bd6fce594e69d1331180a238055d1",
+      "after_expression_json_sha256": "6159a161f0d582ce0743e96b965a54077e5bd6fce594e69d1331180a238055d1",
+      "existing_focus_lexeme_ids": [
+        "acknowledgment.recognition-of-message-or-concern.n",
+        "summary.brief-account-of-main-points.n",
+        "confirmation-message.message-confirming-checked-detail-or-arrangement.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "compound",
+          "classification": "Compatible component of an independent complete term; do not accept that term or add a selected binding.",
+          "individual_observation": "Confirmation message is an independent complete term. Its ordinary communication component does not certify the confirmed facts or add a selected binding."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module07.09",
+      "text": "Please send only the relevant error message or error code through the approved route; redact any screenshot first.",
+      "context": "An agent requests suitable diagnostic context.",
+      "resource": "res://data/professional/expressions/customer-support-module07.json",
+      "locations": [
+        {
+          "course_id": "customer_support",
+          "module_id": "module07"
+        }
+      ],
+      "before_expression_json_sha256": "0e885fe9e60b9076a09fef4e942cce8bfec25b6f9fdd10ca2510669076c6b2a5",
+      "after_expression_json_sha256": "0e885fe9e60b9076a09fef4e942cce8bfec25b6f9fdd10ca2510669076c6b2a5",
+      "existing_focus_lexeme_ids": [
+        "error-message.message-reporting-operation-problem.n",
+        "error-code.code-identifying-error-category.n",
+        "screenshot.image-captured-from-screen.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "compound",
+          "classification": "Compatible component of an independent complete term; do not accept that term or add a selected binding.",
+          "individual_observation": "Error message is a complete diagnostic-output term. The request concerns information shown to a person, but source interpretation and redaction requirements remain separate."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module03.10",
+      "text": "Ask the facilities team about the extension lead before changing this workstation.",
+      "context": "Discussing a workspace change.",
+      "resource": "res://data/professional/expressions/office-admin-module03.json",
+      "locations": [
+        {
+          "course_id": "office_admin",
+          "module_id": "module03"
+        }
+      ],
+      "before_expression_json_sha256": "fc17281a8450a01c97a369f19a98aa9170df908d9b0b4fa21b527ed6f43a799f",
+      "after_expression_json_sha256": "fc17281a8450a01c97a369f19a98aa9170df908d9b0b4fa21b527ed6f43a799f",
+      "existing_focus_lexeme_ids": [
+        "extension-lead.electrical-cable-extending-reach.n",
+        "workstation.computer-setup.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "extension.internal-phone-number.n",
+          "term": "extension",
+          "existing_selected_focus": false,
+          "authored_classification_code": "different_sense",
+          "classification": "Distinct sense or modality; exclude it from the selected sense without changing the expression.",
+          "individual_observation": "Extension lead is an electrical assembly, never a telephone-number use. Preserve facilities authorization."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module05.07",
+      "text": "Please listen as I dictate the corrected introduction, then transcribe the approved recording and clarify any unclear wording.",
+      "context": "An administrator prepares a written version of approved material.",
+      "resource": "res://data/professional/expressions/office-admin-module05.json",
+      "locations": [
+        {
+          "course_id": "office_admin",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "26f429b36fafe8f7d6c870b899ac5e77f133f2a95cc4a271e3223fcc8a95275f",
+      "after_expression_json_sha256": "26f429b36fafe8f7d6c870b899ac5e77f133f2a95cc4a271e3223fcc8a95275f",
+      "existing_focus_lexeme_ids": [
+        "transcribe.convert-spoken-content-into-writing.v",
+        "dictate.speak-content-for-transcription.v",
+        "listen.attend-to-spoken-information.v",
+        "clarify.make-meaning-or-detail-clearer.v"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "introduction.first-acquaintance.n",
+          "term": "introduction",
+          "existing_selected_focus": false,
+          "authored_classification_code": "hold_people_or_opening",
+          "classification": "Retain ambiguity between introducing people and introductory material; do not accept sense binding.",
+          "individual_observation": "A corrected introduction being dictated and transcribed is likely opening material, but could also script a people introduction. No people-sense binding or definition broadening is justified."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module08.04",
+      "text": "Do not post a password or one-time code in a message; ask the authorized administrator to check your permission level.",
+      "context": "A worker asks an authorized administrator about account access.",
+      "resource": "res://data/professional/expressions/office-admin-module08.json",
+      "locations": [
+        {
+          "course_id": "office_admin",
+          "module_id": "module08"
+        }
+      ],
+      "before_expression_json_sha256": "0e1233b05dcc8c19996d0097a5a51c42a99cd8d6a91f4defd88b4e19d05d22b3",
+      "after_expression_json_sha256": "0e1233b05dcc8c19996d0097a5a51c42a99cd8d6a91f4defd88b4e19d05d22b3",
+      "existing_focus_lexeme_ids": [
+        "password.secret-access-string.n",
+        "one-time-code.single-use-verification-code.n",
+        "permission-level.access-scope.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "background",
+          "classification": "Compatible ordinary background use; no scored binding added.",
+          "individual_observation": "A posted communication is an ordinary message. The warning and permission-level gates are preserved exactly."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module10.08",
+      "text": "The out-of-office message should use the approved alternative contact and avoid unnecessary personal details.",
+      "context": "Preparing an automatic reply.",
+      "resource": "res://data/professional/expressions/office-admin-module10.json",
+      "locations": [
+        {
+          "course_id": "office_admin",
+          "module_id": "module10"
+        }
+      ],
+      "before_expression_json_sha256": "c180a7aaaeac97f73efcb4343ffcc9b9dd92f5f589cb0952eae175030d7b4280",
+      "after_expression_json_sha256": "c180a7aaaeac97f73efcb4343ffcc9b9dd92f5f589cb0952eae175030d7b4280",
+      "existing_focus_lexeme_ids": [
+        "out-of-office-message.automatic-notice-of-work-absence.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "compound",
+          "classification": "Compatible component of an independent complete term; do not accept that term or add a selected binding.",
+          "individual_observation": "The complete out-of-office message term names an automatic notice. Preserve its purpose and alternative-contact/privacy wording."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.03",
+      "text": "I will forward your message, follow up with the responsible team, escalate unresolved concerns, and respond with the update they confirm.",
+      "context": "A worker coordinates a concern through the agreed route.",
+      "resource": "res://data/professional/expressions/hospitality-module05.json",
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "bdab3f7c96c21f63bf7300978cb5ad54a553ce8d1fe3074d1e9287f0dc1c0f02",
+      "after_expression_json_sha256": "bdab3f7c96c21f63bf7300978cb5ad54a553ce8d1fe3074d1e9287f0dc1c0f02",
+      "existing_focus_lexeme_ids": [
+        "follow-up.take-further-action-on-earlier-matter.v",
+        "respond.give-reply-or-reaction.v",
+        "forward.send-received-message-onward.v",
+        "escalate.refer-for-higher-or-specialist-attention.v"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "background",
+          "classification": "Compatible ordinary background use; no scored binding added.",
+          "individual_observation": "Forwarding a received communication fits the selected message noun; escalation, responsibility and update accuracy remain separate."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.04",
+      "text": "Ask the approved provider to translate the text or interpret the conversation; document only the information needed for the authorized purpose.",
+      "context": "A worker uses the approved provider and records only authorized information.",
+      "resource": "res://data/professional/expressions/hospitality-module05.json",
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "d245331a9a4703af5fa9cc0c6045497f4170752b8a1790b89d0fcf01ab4ff76f",
+      "after_expression_json_sha256": "d245331a9a4703af5fa9cc0c6045497f4170752b8a1790b89d0fcf01ab4ff76f",
+      "existing_focus_lexeme_ids": [
+        "translate.express-content-in-another-language.v",
+        "interpret.convey-spoken-or-signed-language-in-another-language.v",
+        "document.make-care-record.v"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "conversation.spoken-exchange.n",
+          "term": "conversation",
+          "existing_selected_focus": false,
+          "authored_classification_code": "hold_spoken_or_signed",
+          "classification": "Retain unspecified modality; selected spoken conversation does not cover a signed exchange.",
+          "individual_observation": "Interpretation can involve spoken or signed language in the focused interpret lexeme. This text does not establish modality. Preserve the expression and limit selected conversation compatibility to speech; do not erase signed-language scope."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.10",
+      "text": "Do not share a password in a message; use the approved support button to report a user account problem.",
+      "context": "Responding to an account-access issue.",
+      "resource": "res://data/professional/expressions/hospitality-module09.json",
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module09"
+        }
+      ],
+      "before_expression_json_sha256": "3aad2033507301c2bbc838a086d2088f6fe849f15cb61a15d272b12bbb3a0c95",
+      "after_expression_json_sha256": "3aad2033507301c2bbc838a086d2088f6fe849f15cb61a15d272b12bbb3a0c95",
+      "existing_focus_lexeme_ids": [
+        "password.secret-access-string.n",
+        "user-account.personal-system-profile.n",
+        "button.interface-action-control.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "background",
+          "classification": "Compatible ordinary background use; no scored binding added.",
+          "individual_observation": "A communication in which a password could be shared fits the noun. Preserve the account-access safeguard and interface-button sense."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module08.09",
+      "text": "The training discussion covers the vehicle's blind spot and its specific load restraint arrangements.",
+      "context": "Clarifying transport safety topics.",
+      "resource": "res://data/professional/expressions/transport-module08.json",
+      "locations": [
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module08"
+        }
+      ],
+      "before_expression_json_sha256": "30471be4186e1ff5459ef9a3272a86d761b20dd8ccd56fcc9d0798d7f2177e6d",
+      "after_expression_json_sha256": "30471be4186e1ff5459ef9a3272a86d761b20dd8ccd56fcc9d0798d7f2177e6d",
+      "existing_focus_lexeme_ids": [
+        "blind-spot.area-not-visible-from-drivers-position.n",
+        "load-restraint.equipment-or-system-holding-transported-load-in-place.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Training involves an exchange about vehicle risks. Lexical review provides no load-restraint or driving-safety approval."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module04.07",
+      "text": "The discussion distinguishes rhyme from morphology and connects both topics with meaningful literacy activities.",
+      "context": "Planning language learning.",
+      "resource": "res://data/professional/expressions/education-module04.json",
+      "locations": [
+        {
+          "course_id": "education_childcare",
+          "module_id": "module04"
+        }
+      ],
+      "before_expression_json_sha256": "fb69b61c91892129fd17e7fd2c4b97e02d55dd158613ac7b89f70219c00e8a08",
+      "after_expression_json_sha256": "fb69b61c91892129fd17e7fd2c4b97e02d55dd158613ac7b89f70219c00e8a08",
+      "existing_focus_lexeme_ids": [
+        "rhyme.matching-ending-sound-relationship.n",
+        "morphology.study-of-word-structure-and-meaningful-parts.n",
+        "literacy.ability-to-engage-with-written-language.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "A language-learning exchange distinguishes rhyme and morphology. No morphology graph or pedagogical activity is accepted by this noun review."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.01",
+      "text": "We can teach learners to read a short message and write a reply, then discuss what they learn.",
+      "context": "Planning a message-and-reply activity.",
+      "resource": "res://data/professional/expressions/education-module05.json",
+      "locations": [
+        {
+          "course_id": "education_childcare",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "09fae5ddeda53732de466c469d6c16a0716f3ea3bfe6e4e556e6dd411b45a93a",
+      "after_expression_json_sha256": "09fae5ddeda53732de466c469d6c16a0716f3ea3bfe6e4e556e6dd411b45a93a",
+      "existing_focus_lexeme_ids": [
+        "teach.support-acquisition-of-knowledge-or-skill.v",
+        "read.interpret-written-or-printed-language.v",
+        "write.produce-written-language.v",
+        "learn.gain-knowledge-understanding-or-skill.v"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "background",
+          "classification": "Compatible ordinary background use; no scored binding added.",
+          "individual_observation": "Reading a message and writing a reply is an ordinary written communication exchange. The discuss verb does not create a discussion-noun match."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module05.03",
+      "text": "Adapt the card activity to include everyone, guide the discussion, and ask learners to sort and match the pictures.",
+      "context": "Preparing an inclusive card activity.",
+      "resource": "res://data/professional/expressions/education-module05.json",
+      "locations": [
+        {
+          "course_id": "education_childcare",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "177004fb2f75d5538207d06487fe06dc456984319bab3326deb1e60c35475184",
+      "after_expression_json_sha256": "177004fb2f75d5538207d06487fe06dc456984319bab3326deb1e60c35475184",
+      "existing_focus_lexeme_ids": [
+        "adapt.change-to-suit-purpose-or-person.v",
+        "include.make-someone-or-something-part-of-activity.v",
+        "guide.support-direction-with-information-or-cues.v",
+        "sort.group-by-kind.v",
+        "match.pair-items-by-selected-relationship.v"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Guiding a group exchange fits the discussion noun. Inclusion and adaptation requirements remain exact and unreviewed here."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module06.05",
+      "text": "The discussion considers comprehension, handwriting, and mark making as related but different aspects of learning.",
+      "context": "Reviewing learning observations.",
+      "resource": "res://data/professional/expressions/education-module06.json",
+      "locations": [
+        {
+          "course_id": "education_childcare",
+          "module_id": "module06"
+        }
+      ],
+      "before_expression_json_sha256": "49b568852a58c29e605a473e9ce0c4704353860a0b2388ef06d210fc0aee2c3d",
+      "after_expression_json_sha256": "49b568852a58c29e605a473e9ce0c4704353860a0b2388ef06d210fc0aee2c3d",
+      "existing_focus_lexeme_ids": [
+        "comprehension.understanding-meaning-of-language-or-information.n",
+        "handwriting.writing-produced-by-hand.n",
+        "mark-making.making-visible-marks-for-expression-or-exploration.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Reviewing learning observations supports a topic-focused exchange. No claim about literacy assessment is accepted."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module08.02",
+      "text": "The professional boundary discussion covered confidentiality, privacy, and data privacy in their different contexts.",
+      "context": "Participating in staff training.",
+      "resource": "res://data/professional/expressions/education-module08.json",
+      "locations": [
+        {
+          "course_id": "education_childcare",
+          "module_id": "module08"
+        }
+      ],
+      "before_expression_json_sha256": "1e8a068b600f2319f19ea123d4c09e8338ad17eae17e10daf1e5606121831982",
+      "after_expression_json_sha256": "1e8a068b600f2319f19ea123d4c09e8338ad17eae17e10daf1e5606121831982",
+      "existing_focus_lexeme_ids": [
+        "professional-boundary.limit-defining-appropriate-professional-relationship.n",
+        "confidentiality.authorized-information-disclosure.n",
+        "privacy.personal-space-and-information-control.n",
+        "data-privacy.personal-information-protection.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Staff training considers professional and information boundaries. Lexical compatibility does not establish privacy compliance."
+        }
+      ]
+    },
+    {
+      "id": "expr.education_childcare.module09.10",
+      "text": "Use the search field and filter to locate the template, then check the secure message and consent record before the authorized data export.",
+      "context": "Preparing an approved information task.",
+      "resource": "res://data/professional/expressions/education-module09.json",
+      "locations": [
+        {
+          "course_id": "education_childcare",
+          "module_id": "module09"
+        }
+      ],
+      "before_expression_json_sha256": "6fd22206bf494bbfb053eb228232eb9a6d628b2decea1229294f02b66ef5629f",
+      "after_expression_json_sha256": "6fd22206bf494bbfb053eb228232eb9a6d628b2decea1229294f02b66ef5629f",
+      "existing_focus_lexeme_ids": [
+        "search-field.input-area-for-search-query.n",
+        "filter.result-limiting-control.n",
+        "template.reusable-document-pattern.n",
+        "secure-message.message-protected-by-specified-controls.n",
+        "consent-record.documentation-of-consent-arrangements.n",
+        "data-export.transfer-of-data-out-of-system.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "compound",
+          "classification": "Compatible component of an independent complete term; do not accept that term or add a selected binding.",
+          "individual_observation": "Secure message is a complete term whose security depends on controls. Message compatibility does not establish security, consent or export authorization."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module05.10",
+      "text": "Who can mediate an inclusive, transparent discussion with voluntary participation?",
+      "context": "Considering mediation arrangements without promising an outcome.",
+      "resource": "res://data/professional/expressions/hr-module05.json",
+      "locations": [
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "bbdcc7691a235a05ada039f846011bced49768473a36f1e25223caf1c69e1403",
+      "after_expression_json_sha256": "bbdcc7691a235a05ada039f846011bced49768473a36f1e25223caf1c69e1403",
+      "existing_focus_lexeme_ids": [
+        "mediate.help-parties-discuss-disagreement-and-seek-resolution.v",
+        "inclusive.supporting-participation-by-different-people.a",
+        "transparent.clear-about-relevant-process-or-basis.a",
+        "voluntary.done-by-choice-rather-than-compulsion.a"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Mediation involves an exchange with voluntary participation. This accepts no mediation outcome or professional role."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module10.05",
+      "text": "The resignation letter begins the discussion of offboarding and the exit interview.",
+      "context": "Coordinating a departure without inventing mandatory procedures.",
+      "resource": "res://data/professional/expressions/hr-module10.json",
+      "locations": [
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module10"
+        }
+      ],
+      "before_expression_json_sha256": "d43d0ef3878d1ee3b994efc9f423db6b77f503ba3e44b513116d5f1d6808cf4b",
+      "after_expression_json_sha256": "d43d0ef3878d1ee3b994efc9f423db6b77f503ba3e44b513116d5f1d6808cf4b",
+      "existing_focus_lexeme_ids": [
+        "resignation-letter.letter-stating-intention-to-leave-job.n",
+        "offboarding.process-of-managing-persons-departure-from-organization.n",
+        "exit-interview.discussion-about-persons-experience-when-leaving-organization.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "The letter initiates an exchange about departure. Neither an obligatory exit process nor employment advice is inferred."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module03.09",
+      "text": "The hose, stepladder, and extension lead require the relevant authorization before any planned use.",
+      "context": "Clarifying a work assignment.",
+      "resource": "res://data/professional/expressions/cleaning-module03.json",
+      "locations": [
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module03"
+        }
+      ],
+      "before_expression_json_sha256": "3a3381f8ee7eeba53b71a6546aec23157d58ff51b4dee91c69cc56111f934471",
+      "after_expression_json_sha256": "3a3381f8ee7eeba53b71a6546aec23157d58ff51b4dee91c69cc56111f934471",
+      "existing_focus_lexeme_ids": [
+        "hose.flexible-tube-carrying-fluid.n",
+        "stepladder.self-supporting-ladder-with-hinged-sides.n",
+        "extension-lead.electrical-cable-extending-reach.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "extension.internal-phone-number.n",
+          "term": "extension",
+          "existing_selected_focus": false,
+          "authored_classification_code": "different_sense",
+          "classification": "Distinct sense or modality; exclude it from the selected sense without changing the expression.",
+          "individual_observation": "The extension lead is electrical equipment. Keep this separate from the telephone-number noun and preserve authorization requirements."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module09.05",
+      "text": "The application on the mobile device requires an authorized user account; please never send its password in a message.",
+      "context": "Responding to a login problem.",
+      "resource": "res://data/professional/expressions/cleaning-module09.json",
+      "locations": [
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module09"
+        }
+      ],
+      "before_expression_json_sha256": "764f30ec729dd42ae6455645ebf4b63702c6e97893fb90ee5c6597d9252d0fcd",
+      "after_expression_json_sha256": "764f30ec729dd42ae6455645ebf4b63702c6e97893fb90ee5c6597d9252d0fcd",
+      "existing_focus_lexeme_ids": [
+        "application.task-oriented-software.n",
+        "mobile-device.portable-electronic-device-used-for-digital-tasks.n",
+        "user-account.personal-system-profile.n",
+        "password.secret-access-string.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "background",
+          "classification": "Compatible ordinary background use; no scored binding added.",
+          "individual_observation": "Sending information to another person fits the message noun; the password prohibition remains exact."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module10.09",
+      "text": "The complaint and compliment both inform the service review, customer satisfaction discussion, and proposed service improvement.",
+      "context": "Discussing fictional customer feedback.",
+      "resource": "res://data/professional/expressions/cleaning-module10.json",
+      "locations": [
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module10"
+        }
+      ],
+      "before_expression_json_sha256": "1afd5b0259070db8309f493de6dbe84058f199d7e8989e32870ca35e266f4eff",
+      "after_expression_json_sha256": "1afd5b0259070db8309f493de6dbe84058f199d7e8989e32870ca35e266f4eff",
+      "existing_focus_lexeme_ids": [
+        "complaint.expression-of-dissatisfaction.n",
+        "compliment.expression-of-praise-or-appreciation.n",
+        "service-review.discussion-or-examination-of-service-performance-and-arrangements.n",
+        "customer-satisfaction.customer-experience-evaluation.n",
+        "service-improvement.change-intended-to-make-service-better.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "The service-review setting supports an exchange about customer experience. No service result, measure or improvement is endorsed."
+        }
+      ]
+    },
+    {
+      "id": "expr.manufacturing_maintenance.module10.06",
+      "text": "The root cause analysis uses evidence; the five whys discussion alone does not prove a cause.",
+      "context": "Reviewing the basis of a problem-solving conclusion.",
+      "resource": "res://data/professional/expressions/manufacturing-module10.json",
+      "locations": [
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module10"
+        }
+      ],
+      "before_expression_json_sha256": "1a4dbd3b435ae85db4c488ec632959559de0b189c959219a6d8115e4971697e2",
+      "after_expression_json_sha256": "1a4dbd3b435ae85db4c488ec632959559de0b189c959219a6d8115e4971697e2",
+      "existing_focus_lexeme_ids": [
+        "root-cause-analysis.structured-investigation-of-underlying-causes-of-problem.n",
+        "five-whys.questioning-method-exploring-causes-through-repeated-why-questions.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "The problem-solving exchange is explicitly insufficient to prove causation. Retain that distinction and all technical gates."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module05.07",
+      "text": "Please launch the campaign, publish the approved announcement, and distribute the current leaflet after sign-off.",
+      "context": "Preparing an agreed campaign launch.",
+      "resource": "res://data/professional/expressions/sales-module05.json",
+      "locations": [
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "9e5effe3bb7ea226b4708176909376aa7a843067e3b9b040556198047aac02c7",
+      "after_expression_json_sha256": "9e5effe3bb7ea226b4708176909376aa7a843067e3b9b040556198047aac02c7",
+      "existing_focus_lexeme_ids": [
+        "launch.introduce-offering-or-campaign-to-intended-public.v",
+        "publish.make-content-available-to-intended-audience.v",
+        "distribute.give-material-to-intended-recipients.v"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "announcement.public-message.n",
+          "term": "announcement",
+          "existing_selected_focus": false,
+          "authored_classification_code": "background",
+          "classification": "Compatible ordinary background use; no scored binding added.",
+          "individual_observation": "Publishing an approved information statement fits the announcement noun. The lexical candidate does not supply campaign sign-off or authority."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module07.10",
+      "text": "The landing page should repeat the email campaign's offer and show a clear call to action.",
+      "context": "Reviewing a planned customer path.",
+      "resource": "res://data/professional/expressions/sales-module07.json",
+      "locations": [
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module07"
+        }
+      ],
+      "before_expression_json_sha256": "48ae07689553cf5b1014432f19b4279afcc1737903d68f7997523f12944038f3",
+      "after_expression_json_sha256": "48ae07689553cf5b1014432f19b4279afcc1737903d68f7997523f12944038f3",
+      "existing_focus_lexeme_ids": [
+        "landing-page.web-page-arrived-at-from-specific-link-or-advertisement.n",
+        "email-campaign.coordinated-marketing-activity-using-email.n",
+        "call-to-action.message-inviting-specific-next-action.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "email.electronic-message.n",
+          "term": "email",
+          "existing_selected_focus": false,
+          "authored_classification_code": "different_sense",
+          "classification": "Distinct sense or modality; exclude it from the selected sense without changing the expression.",
+          "individual_observation": "Email campaign uses email as a medium/category modifier within a complete term, not as one countable message. No selected message binding is added."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module08.06",
+      "text": "The opt-in and opt-out should match the contact choices recorded for this message category.",
+      "context": "Reviewing message preferences.",
+      "resource": "res://data/professional/expressions/sales-module08.json",
+      "locations": [
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module08"
+        }
+      ],
+      "before_expression_json_sha256": "40cd298f4690add7ae631fdee268665b8bb5f26f31c42a9c44e84bf4a00d2d34",
+      "after_expression_json_sha256": "40cd298f4690add7ae631fdee268665b8bb5f26f31c42a9c44e84bf4a00d2d34",
+      "existing_focus_lexeme_ids": [
+        "opt-in.active-choice-to-participate-or-receive-something.n",
+        "opt-out.choice-to-stop-or-decline-participation.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "background",
+          "classification": "Compatible ordinary background use; no scored binding added.",
+          "individual_observation": "The category concerns communications to recipients. Preserve contact choices and marketing-permission boundaries."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module05.02",
+      "text": "Please document the discussion, record the source, identify the uncertainty and describe the finding accurately.",
+      "context": "Preparing a clinical note.",
+      "resource": "res://data/professional/expressions/clinical-module05.json",
+      "locations": [
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module05"
+        }
+      ],
+      "before_expression_json_sha256": "47658981c156fb7861967007f22b35073bdf3611142e08886f5894de7c517246",
+      "after_expression_json_sha256": "47658981c156fb7861967007f22b35073bdf3611142e08886f5894de7c517246",
+      "existing_focus_lexeme_ids": [
+        "document.make-care-record.v",
+        "record.store-observed-information.v",
+        "identify.establish-identity-or-nature.v",
+        "describe.give-details-in-words.v"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Documenting an exchange in a clinical note fits the ordinary noun. Source, uncertainty and finding accuracy remain protected."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module06.10",
+      "text": "Please confirm the preferred language, interpreter request and care preference before continuing the discussion.",
+      "context": "Preparing a consultation.",
+      "resource": "res://data/professional/expressions/clinical-module06.json",
+      "locations": [
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module06"
+        }
+      ],
+      "before_expression_json_sha256": "54f7c94be213780d570a2aac640b3cc0253c0e0cf90eb2ce833e533131aaf5dd",
+      "after_expression_json_sha256": "54f7c94be213780d570a2aac640b3cc0253c0e0cf90eb2ce833e533131aaf5dd",
+      "existing_focus_lexeme_ids": [
+        "preferred-language.chosen-language-for-communication.n",
+        "interpreter-request.language-support-request.n",
+        "care-preference.person-preferred-care-approach.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Continuing a consultation exchange fits discussion. Interpreter and care preferences do not become optional or clinically approved."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module08.02",
+      "text": "The discussion should support a voluntary and informed decision, including questions about the proposed treatment option.",
+      "context": "Preparing a consultation under applicable requirements.",
+      "resource": "res://data/professional/expressions/clinical-module08.json",
+      "locations": [
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module08"
+        }
+      ],
+      "before_expression_json_sha256": "955bc687ffb855f503817c094cf4900639f8147a38d7582d5dc07717811facef",
+      "after_expression_json_sha256": "955bc687ffb855f503817c094cf4900639f8147a38d7582d5dc07717811facef",
+      "existing_focus_lexeme_ids": [
+        "voluntary.done-by-choice-rather-than-compulsion.a",
+        "informed.having-relevant-information-and-understanding-for-decision.a",
+        "treatment-option.possible-course-of-treatment-for-consideration.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Questions in a consultation form an exchange. Valid consent, voluntariness and treatment choice remain specialist matters."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module08.06",
+      "text": "The PPE discussion refers to the stated exposure and risk assessment, not a universal equipment choice.",
+      "context": "Reviewing a safety communication scenario.",
+      "resource": "res://data/professional/expressions/clinical-module08.json",
+      "locations": [
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module08"
+        }
+      ],
+      "before_expression_json_sha256": "bdcd0560341d6fb73c4f0f76d1dcf798216e16dd74d8be41dfb209c8410003b1",
+      "after_expression_json_sha256": "bdcd0560341d6fb73c4f0f76d1dcf798216e16dd74d8be41dfb209c8410003b1",
+      "existing_focus_lexeme_ids": [
+        "ppe.personal-protective-equipment.n",
+        "exposure.contact-with-potential-health-hazard.n",
+        "risk-assessment.hazard-evaluation.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "The safety exchange addresses stated context. It does not prescribe universal PPE or validate the risk assessment."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module08.09",
+      "text": "Please document the second opinion request, withdrawal of consent and agreed safety-netting discussion accurately.",
+      "context": "Reviewing a fictional consultation record.",
+      "resource": "res://data/professional/expressions/clinical-module08.json",
+      "locations": [
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module08"
+        }
+      ],
+      "before_expression_json_sha256": "b678158a726a92dc62e49a1e49b9458edd2cc46bdd28ecdcba40e7a185e65cba",
+      "after_expression_json_sha256": "b678158a726a92dc62e49a1e49b9458edd2cc46bdd28ecdcba40e7a185e65cba",
+      "existing_focus_lexeme_ids": [
+        "second-opinion.additional-professional-assessment-of-health-question.n",
+        "withdrawal-of-consent.ending-previously-given-agreement.n",
+        "safety-netting.communication-and-arrangements-for-uncertainty-or-change-in-condition.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "The fictional record refers to an agreed exchange. No safety-netting instructions, consent status or second-opinion decision are approved."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.05",
+      "text": "The consent form records part of the discussion; it does not by itself establish valid agreement.",
+      "context": "Reviewing consent documentation.",
+      "resource": "res://data/professional/expressions/clinical-module09.json",
+      "locations": [
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module09"
+        }
+      ],
+      "before_expression_json_sha256": "f7e1fc858b12c48e4c0f9ee04e2a7ced8084e8d7f3f07f8b78857a8843b82243",
+      "after_expression_json_sha256": "f7e1fc858b12c48e4c0f9ee04e2a7ced8084e8d7f3f07f8b78857a8843b82243",
+      "existing_focus_lexeme_ids": [
+        "consent-form.agreement-documentation-form.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "A form records part of the consultation exchange. Retain the explicit limit that the form alone does not establish valid agreement."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.10",
+      "text": "The clinical decision support alert requires professional review, and the acknowledgment only confirms that the message was received.",
+      "context": "Discussing a digital clinical message.",
+      "resource": "res://data/professional/expressions/clinical-module09.json",
+      "locations": [
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module09"
+        }
+      ],
+      "before_expression_json_sha256": "f4b1bac5a559f2481b3681cc626900df1705246810eb69dba336e06ae432e9f9",
+      "after_expression_json_sha256": "f4b1bac5a559f2481b3681cc626900df1705246810eb69dba336e06ae432e9f9",
+      "existing_focus_lexeme_ids": [
+        "clinical-decision-support.information-or-tools-supporting-clinical-decisions.n",
+        "acknowledgment.recognition-of-message-or-concern.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "message.communication.n",
+          "term": "message",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Receipt of a clinical alert is a communication event. It neither endorses the alert nor replaces professional review."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module10.01",
+      "text": "The patient will speak with the physician and pharmacist, with an interpreter arranged for the discussion.",
+      "context": "Coordinating an accessible consultation.",
+      "resource": "res://data/professional/expressions/clinical-module10.json",
+      "locations": [
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module10"
+        }
+      ],
+      "before_expression_json_sha256": "8598aa16b9373007f8fe5f9a41e1eafd3a7382aef1dd7765f670f9aa721d4739",
+      "after_expression_json_sha256": "8598aa16b9373007f8fe5f9a41e1eafd3a7382aef1dd7765f670f9aa721d4739",
+      "existing_focus_lexeme_ids": [
+        "patient.person-receiving-healthcare.n",
+        "physician.medical-practitioner.n",
+        "pharmacist.medicines-professional.n",
+        "interpreter.spoken-language-communication-professional.n"
+      ],
+      "new_scored_bindings": [],
+      "action": "retain_exact",
+      "matches": [
+        {
+          "selected_lexeme_id": "discussion.consideration-talk.n",
+          "term": "discussion",
+          "existing_selected_focus": false,
+          "authored_classification_code": "domain_background",
+          "classification": "Ordinary noun in specialist context; the complete expression and specialist gates remain unaccepted.",
+          "individual_observation": "Speaking with professionals and an interpreter gives a consultation exchange. Roles, accessibility and clinical decisions remain outside this review."
+        }
+      ]
+    }
+  ],
+  "scoped_expression_count": 46,
+  "containing_module_memberships": 103,
+  "selected_focus_expressions": 3,
+  "all_selected_containing_module_expressions": {
+    "modules": [
+      {
+        "course_id": "caregiving",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "retail",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "food_service",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "nursing",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "customer_support",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "office_admin",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "warehouse_logistics",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "hospitality_tourism",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "transport_delivery",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "construction_trades",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "cleaning_facilities",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "education_childcare",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "manufacturing_maintenance",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "it_support",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "software_data",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "accounting_finance",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "sales_marketing",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "hr_recruitment",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "clinical_medicine",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      },
+      {
+        "course_id": "legal_paralegal",
+        "module_id": "module01",
+        "expression_ids": [
+          "expr.foundation.module01.01",
+          "expr.foundation.module01.02",
+          "expr.foundation.module01.03",
+          "expr.foundation.module01.04",
+          "expr.foundation.module01.05",
+          "expr.foundation.module01.06",
+          "expr.foundation.module01.07",
+          "expr.foundation.module01.08",
+          "expr.foundation.module01.09",
+          "expr.foundation.module01.10"
+        ]
+      }
+    ],
+    "unique_expression_ids": [
+      "expr.foundation.module01.01",
+      "expr.foundation.module01.02",
+      "expr.foundation.module01.03",
+      "expr.foundation.module01.04",
+      "expr.foundation.module01.05",
+      "expr.foundation.module01.06",
+      "expr.foundation.module01.07",
+      "expr.foundation.module01.08",
+      "expr.foundation.module01.09",
+      "expr.foundation.module01.10"
+    ],
+    "all_expressions_captured": true
+  },
+  "other_local_expressions": [
+    {
+      "id": "expr.foundation.module01.01",
+      "text": "Please send your availability so our coordinator can update the team schedule.",
+      "context": "A team is arranging shared work.",
+      "before_expression_json_sha256": "75530b832965c8750c17ae358f94cf27091e0d5123e5e4bee726ccf4d2654a9b",
+      "after_expression_json_sha256": "75530b832965c8750c17ae358f94cf27091e0d5123e5e4bee726ccf4d2654a9b",
+      "action": "retain_exact",
+      "individual_observation": "No fourth-ten surface or focus match. Preserve availability scheduling, the update verb and exact third-ten source history."
+    },
+    {
+      "id": "expr.foundation.module01.02",
+      "text": "My shift includes a break before my appointment with the manager.",
+      "context": "A worker discusses the day's arrangements.",
+      "before_expression_json_sha256": "d3c5f147ac5981bdff53d7be8fdd29e3d920de844a6cf5b479c7c19ef3cdb39d",
+      "after_expression_json_sha256": "d3c5f147ac5981bdff53d7be8fdd29e3d920de844a6cf5b479c7c19ef3cdb39d",
+      "action": "retain_exact",
+      "individual_observation": "No fourth-ten surface or focus match. Preserve shift, break and appointment language and all pending gates."
+    },
+    {
+      "id": "expr.foundation.module01.04",
+      "text": "Our employer has invited every employee and contractor to the meeting.",
+      "context": "An organization announces an inclusive meeting.",
+      "before_expression_json_sha256": "8995bb591db9297f41c968ba04851173c46955dcdd6aee56f449160fac2c7d14",
+      "after_expression_json_sha256": "8995bb591db9297f41c968ba04851173c46955dcdd6aee56f449160fac2c7d14",
+      "action": "retain_exact",
+      "individual_observation": "The context describes announcing a meeting, but no selected announcement noun occurs or is focused. Infer no new binding."
+    },
+    {
+      "id": "expr.foundation.module01.05",
+      "text": "Please ask your supervisor for permission to change the task's deadline and priority.",
+      "context": "A worker reviews a task's arrangements.",
+      "before_expression_json_sha256": "cff75c7772c9d2cf1badccb8c2bb4256e4030168290ef7b3ee38a1db495a7671",
+      "after_expression_json_sha256": "cff75c7772c9d2cf1badccb8c2bb4256e4030168290ef7b3ee38a1db495a7671",
+      "action": "retain_exact",
+      "individual_observation": "No fourth-ten match. Supervisor remains an unchanged pending hold; permission, deadline and priority remain exact."
+    },
+    {
+      "id": "expr.foundation.module01.06",
+      "text": "The client's address is included in the invitation.",
+      "context": "A colleague prepares for a client visit.",
+      "before_expression_json_sha256": "312d0e26f4aa60be51bcc585a4462f6ae0e32c5fad90addf0869b089e6c9824a",
+      "after_expression_json_sha256": "312d0e26f4aa60be51bcc585a4462f6ae0e32c5fad90addf0869b089e6c9824a",
+      "action": "retain_exact",
+      "individual_observation": "No fourth-ten match. An invitation can be a message but does not become a selected message binding by implication."
+    },
+    {
+      "id": "expr.foundation.module01.07",
+      "text": "My colleague is our contact for questions about each department's role and responsibility.",
+      "context": "A new worker learns whom to ask about team responsibilities.",
+      "before_expression_json_sha256": "d3549b07652a0f71782cd68620a47d09f76787c13e519dfd826b797909efe704",
+      "after_expression_json_sha256": "d3549b07652a0f71782cd68620a47d09f76787c13e519dfd826b797909efe704",
+      "action": "retain_exact",
+      "individual_observation": "No fourth-ten match. Contact is the helpful-person noun, not a message or telephone event."
+    },
+    {
+      "id": "expr.foundation.module01.10",
+      "text": "Please check the calendar, location, and time zone before accepting the invitation.",
+      "context": "Colleagues work in different locations.",
+      "before_expression_json_sha256": "c1742076917fc4a8085d894d5edbf3ff0912638995504403b359a9d157c9c1a7",
+      "after_expression_json_sha256": "c1742076917fc4a8085d894d5edbf3ff0912638995504403b359a9d157c9c1a7",
+      "action": "retain_exact",
+      "individual_observation": "No fourth-ten match. Preserve organizer, location, time-zone and invitation meanings without inferring a communication channel."
+    }
+  ],
+  "related_entry_boundaries": [
+    {
+      "id": "call-button.assistance-control.n",
+      "text": "call button",
+      "definition": "A control used to request assistance from staff.",
+      "example": "The patient asked where the call button was.",
+      "accepted_forms": [
+        "call button"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "8b0142169ffb13c4ae2f3292f4d7aa21f7704f4ede5fa016aa47d0fb0931a698",
+      "action": "retain_exact_context_only",
+      "classification": "different_sense",
+      "individual_observation": "An assistance control requests staff attention; it is not a completed telephone conversation."
+    },
+    {
+      "id": "contact.helpful-person.n",
+      "text": "contact",
+      "definition": "A person who can provide information, help, or a connection to an organization.",
+      "example": "Our main contact is the project coordinator.",
+      "accepted_forms": [
+        "contact"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "8008c043909f2fb047180819570a8b24f482c23170ed69e5374fd846a9b69216",
+      "action": "retain_exact_context_only",
+      "classification": "related_person",
+      "individual_observation": "A helpful person is distinct from a message, device or act of communication."
+    },
+    {
+      "id": "contact.communicate-with.v",
+      "text": "contact",
+      "definition": "To communicate with a person or organization.",
+      "example": "I will contact the supplier about the missing box.",
+      "accepted_forms": [
+        "contact"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "9ef44563d213719aaf23232130e745969c0851deacd2c99a552d80b5aa21ffda",
+      "action": "retain_exact_context_only",
+      "classification": "related_action",
+      "individual_observation": "The verb can involve calls or messages, but it is not any selected communication noun."
+    },
+    {
+      "id": "notification.system-alert-message.n",
+      "text": "notification",
+      "definition": "A message from a system drawing attention to an event or change.",
+      "example": "A notification appeared when the order was ready.",
+      "accepted_forms": [
+        "notification"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "b91a4be9be890540021c70ba9d5c036dd06b79c8db7976871d7cec623f7ba36c",
+      "action": "retain_exact_context_only",
+      "classification": "related_message_type",
+      "individual_observation": "A system alert may be a message; its narrower event/change purpose remains a separate identity."
+    },
+    {
+      "id": "callback.return-phone-call.n",
+      "text": "callback",
+      "definition": "A phone call made in response to an earlier request or conversation.",
+      "example": "The service team arranged a callback for the customer.",
+      "accepted_forms": [
+        "callback"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "84604b2b24c8b913372e76799a293def1df5ab655c5517a20715f1212cc97fc3",
+      "action": "retain_exact_context_only",
+      "classification": "related_call_type",
+      "individual_observation": "A return call is a specific phone-call purpose; the complete term and timing are not accepted here."
+    },
+    {
+      "id": "statement.program-instruction-unit.n",
+      "text": "statement",
+      "definition": "A unit of code that expresses an action or declaration.",
+      "example": "The statement assigns the new value.",
+      "accepted_forms": [
+        "statement"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "bbc225327eaa23913e51e37fbc5e65e4e4d788d9399c52b3699ea3c30b27615b",
+      "action": "retain_exact_context_only",
+      "classification": "different_sense",
+      "individual_observation": "The code instruction is not an announcement or public information statement."
+    },
+    {
+      "id": "callback.supplied-handler-function.n",
+      "text": "callback",
+      "definition": "A function supplied for another operation to call at a specified point.",
+      "example": "The callback runs when the operation completes.",
+      "accepted_forms": [
+        "callback"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "dbdbc2c213aa110747b825e49416b6e511b68464b548aeb61bcb54fa134f33d3",
+      "action": "retain_exact_context_only",
+      "classification": "different_sense",
+      "individual_observation": "A supplied handler function is unrelated to telephone conversation despite the same callback spelling."
+    },
+    {
+      "id": "file-extension.filename-ending-marker.n",
+      "text": "file extension",
+      "definition": "A suffix of a filename commonly used to indicate its format or intended handling.",
+      "example": "The file extension is .json.",
+      "accepted_forms": [
+        "file extension"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "8faa0ffed4a5be3aa513694fce063e89f834bad2c613de172f0e7e423db83426",
+      "action": "retain_exact_context_only",
+      "classification": "different_sense",
+      "individual_observation": "A filename ending is not a phone number; file formats and technical gates remain exact."
+    },
+    {
+      "id": "on-call-engineer.scheduled-incident-responder.n",
+      "text": "on-call engineer",
+      "definition": "An engineer assigned to respond to relevant service issues during a scheduled period.",
+      "example": "The on-call engineer received the approved incident summary.",
+      "accepted_forms": [
+        "on-call engineer"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "3971db40f0b0fdb3968483cb3b6adb1d5463383309a43314dcb08cb197f56c5e",
+      "action": "retain_exact_context_only",
+      "classification": "different_sense",
+      "individual_observation": "Duty availability describes a role arrangement, not an actual conversation."
+    },
+    {
+      "id": "closed-loop-communication.message-confirmation-cycle.n",
+      "text": "closed-loop communication",
+      "definition": "Communication that includes confirmation that the intended message was received and understood.",
+      "example": "The exercise practiced closed-loop communication.",
+      "accepted_forms": [
+        "closed-loop communication"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "a156e128566af04724e50b69d1e1f9ae03e7433f547e00eb433d23433e9bd91a",
+      "action": "retain_exact_context_only",
+      "classification": "related_communication_process",
+      "individual_observation": "Confirmation of understanding is a whole process; a message definition supplies no process acceptance."
+    },
+    {
+      "id": "communication-aid.tool-supporting-expression-or-understanding.n",
+      "text": "communication aid",
+      "definition": "A tool that helps someone communicate or understand information.",
+      "example": "She chose the communication aid that worked for her.",
+      "accepted_forms": [
+        "communication aid"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "bb6e8eda197f4e2ac2b6e9648989b8c99ecb3bb86eb9184eadd5085d452b08cf",
+      "action": "retain_exact_context_only",
+      "classification": "related_support_tool",
+      "individual_observation": "An aid may support speech, writing or other modes and must not be narrowed to spoken conversation."
+    },
+    {
+      "id": "communication-passport.personal-communication-support-profile.n",
+      "text": "communication passport",
+      "definition": "A personal document explaining how someone communicates and what support they prefer.",
+      "example": "She chose what to include in her communication passport.",
+      "accepted_forms": [
+        "communication passport"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "185d9063cf54a55f7ce8ade5070b707e7f7429f043ea4b0bde8570e901575d30",
+      "action": "retain_exact_context_only",
+      "classification": "related_support_document",
+      "individual_observation": "A preference profile can cover different communication modes; selected spoken language does not restrict it."
+    },
+    {
+      "id": "communication-book.shared-written-message-record.n",
+      "text": "communication book",
+      "definition": "A book used by authorized people to record and exchange relevant messages.",
+      "example": "He checked who was authorized to read the communication book.",
+      "accepted_forms": [
+        "communication book"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "c21fa3cf772fe05e0eee87ad112b133fa7151eff86a82289380744f18c284547",
+      "action": "retain_exact_context_only",
+      "classification": "related_written_record",
+      "individual_observation": "A shared message record is written and subject to reader authorization, not a spoken conversation."
+    },
+    {
+      "id": "telephone.voice-call-device.n",
+      "text": "telephone",
+      "definition": "A device used to speak with someone at a distance over a communication network.",
+      "example": "The agent reported a telephone fault before taking calls.",
+      "accepted_forms": [
+        "telephone"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "b047c8f1e1af27f3f6aa51fdb4d1cd56f59466f1a2803b8722da76a0f9449fe1",
+      "action": "retain_exact_context_only",
+      "classification": "related_device",
+      "individual_observation": "The device supports calls but remains distinct from the call event, message and internal number."
+    },
+    {
+      "id": "live-chat.real-time-text-conversation-channel.n",
+      "text": "live chat",
+      "definition": "A text conversation in which participants exchange messages with little delay.",
+      "example": "The customer chose live chat instead of a phone call.",
+      "accepted_forms": [
+        "live chat"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "30b0cc7cc95c2a3a7f40465dc4df875d34b56d33543213a328ab6d3cb467d928",
+      "action": "retain_exact_context_only",
+      "classification": "different_modality",
+      "individual_observation": "The definition explicitly uses text conversation. Preserve that broader usage and do not bind it to the selected spoken exchange."
+    },
+    {
+      "id": "call-queue.waiting-group-of-telephone-calls.n",
+      "text": "call queue",
+      "definition": "A group of telephone calls waiting to be connected or handled.",
+      "example": "The supervisor checked the call queue.",
+      "accepted_forms": [
+        "call queue"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "f037fc69e2368d2b15aecdb628bebed55a1bf79d6c812bb55e60d01bf05ce0f0",
+      "action": "retain_exact_context_only",
+      "classification": "related_call_state",
+      "individual_observation": "Waiting connections can precede any conversation. Do not require or imply that every queued call has been answered."
+    },
+    {
+      "id": "messaging-app.message-exchange-application.n",
+      "text": "messaging app",
+      "definition": "An application used to send and receive messages.",
+      "example": "The customer asked which messaging app the service supports.",
+      "accepted_forms": [
+        "messaging app"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "ad7c6ac1be77aa13efc3093846376398de49266310afd590576bd612c620bab7",
+      "action": "retain_exact_context_only",
+      "classification": "related_communication_tool",
+      "individual_observation": "An application supports messages; the derived modifier is not the selected message noun or proof of a spoken channel."
+    },
+    {
+      "id": "confirmation-message.message-confirming-checked-detail-or-arrangement.n",
+      "text": "confirmation message",
+      "definition": "A message stating that a detail or arrangement has been confirmed.",
+      "example": "The agent sent a confirmation message for the agreed callback.",
+      "accepted_forms": [
+        "confirmation message"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "07f11003fdce97cee1133e218a00db6407211e2e505687ba8f7593e503e4fcdf",
+      "action": "retain_exact_context_only",
+      "classification": "related_message_type",
+      "individual_observation": "A communication can confirm details, but the facts and confirmation process need their own review."
+    },
+    {
+      "id": "callback-window.agreed-period-for-return-call.n",
+      "text": "callback window",
+      "definition": "A period during which a return phone call is expected or arranged.",
+      "example": "The agent confirmed the callback window and time zone.",
+      "accepted_forms": [
+        "callback window"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "21fbaf1b62490ac8f8ce228c2402769a9ba28fffaf26216d0aa9844a1d3fc055",
+      "action": "retain_exact_context_only",
+      "classification": "related_time_window",
+      "individual_observation": "The time interval is not the call itself and gives no guarantee that contact occurs."
+    },
+    {
+      "id": "error-message.message-reporting-operation-problem.n",
+      "text": "error message",
+      "definition": "A message indicating that an operation encountered a problem.",
+      "example": "The agent asked for the relevant error message without unrelated personal data.",
+      "accepted_forms": [
+        "error message"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "64bf65f592b261e57002399d5db48019769755366b10c2909a9f639b0c7117ff",
+      "action": "retain_exact_context_only",
+      "classification": "related_message_type",
+      "individual_observation": "A diagnostic report can inform a recipient; its technical meaning is not accepted by ordinary message review."
+    },
+    {
+      "id": "call-volume.number-of-calls-in-defined-period.n",
+      "text": "call volume",
+      "definition": "The number of calls counted over a defined period under stated inclusion rules.",
+      "example": "The supervisor checked whether call volume included abandoned calls.",
+      "accepted_forms": [
+        "call volume"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "0dd5b4ca84de688c6f92811a62edd68c8c9652ef9df15dc5aed83c37412dd423",
+      "action": "retain_exact_context_only",
+      "classification": "related_measure",
+      "individual_observation": "The measure may count unanswered or abandoned calls. Preserve its stated inclusion-rule boundary."
+    },
+    {
+      "id": "after-call-work.work-completed-following-phone-conversation.n",
+      "text": "after-call work",
+      "definition": "Work associated with a call that is completed after the conversation, such as recording agreed actions.",
+      "example": "The agent used after-call work time to finish the factual record.",
+      "accepted_forms": [
+        "after-call work"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "d77f21a1627262b938c5a3d20ed21855b03a58342780047715d1b5ec388b0afa",
+      "action": "retain_exact_context_only",
+      "classification": "related_work_activity",
+      "individual_observation": "Post-conversation work remains a distinct task category, not a synonym for the call."
+    },
+    {
+      "id": "extension-lead.electrical-cable-extending-reach.n",
+      "text": "extension lead",
+      "definition": "An electrical cable assembly used to extend the reach of a power connection.",
+      "example": "Ask the facilities team about the damaged extension lead.",
+      "accepted_forms": [
+        "extension lead",
+        "extension cord"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "1c487a1fbc99a4872d70ad3f53e9e861293786f84a1e027acbe37efefdb4050c",
+      "action": "retain_exact_context_only",
+      "classification": "different_sense",
+      "individual_observation": "An electrical cable assembly is wholly separate from the phone-number sense; retain all equipment-safety gates."
+    },
+    {
+      "id": "conference-phone.telephone-for-group-meetings.n",
+      "text": "conference phone",
+      "definition": "A telephone designed to support conversations involving several people in a room.",
+      "example": "The conference phone is on the meeting table.",
+      "accepted_forms": [
+        "conference phone"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "8e9b550321810281083f865d991b00b1668c283f2821655f4217df287aa1b5f4",
+      "action": "retain_exact_context_only",
+      "classification": "related_device",
+      "individual_observation": "The meeting device enables group calls but is not the conversation or discussion itself."
+    },
+    {
+      "id": "salutation.opening-greeting-in-letter.n",
+      "text": "salutation",
+      "definition": "A greeting at the beginning of a letter or message.",
+      "example": "Please check that the salutation matches the recipient.",
+      "accepted_forms": [
+        "salutation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "1fa9933a1e7175380dd39b5a7ad9c2d32bc49146e3c48c8a76d9e552cd3b2d53",
+      "action": "retain_exact_context_only",
+      "classification": "related_written_greeting",
+      "individual_observation": "A letter opening can be a greeting in a broader sense; it is not the selected acknowledgment on meeting or arrival."
+    },
+    {
+      "id": "out-of-office-message.automatic-notice-of-work-absence.n",
+      "text": "out-of-office message",
+      "definition": "A message indicating that someone is away or unavailable, often sent automatically.",
+      "example": "The out-of-office message gives an approved alternative contact.",
+      "accepted_forms": [
+        "out-of-office message"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "99aa609a008515a2e620666fd6da6ac354a71d476fd7e6b3c1c86b4083ad4f09",
+      "action": "retain_exact_context_only",
+      "classification": "related_message_type",
+      "individual_observation": "An automatic absence notice is a specific message type. Keep privacy and approved-contact boundaries."
+    },
+    {
+      "id": "welcome.receive-arriving-person-in-friendly-way.v",
+      "text": "welcome",
+      "definition": "To receive an arriving person in a friendly and positive way.",
+      "example": "We welcome guests and ask how we can help.",
+      "accepted_forms": [
+        "welcome"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "d1e91eae37218c61484b2c9cc6801bd7e44a5139bc2200ae45937ab5d1f8d171",
+      "action": "retain_exact_context_only",
+      "classification": "related_action",
+      "individual_observation": "The action of receiving a person is distinct from a greeting noun or act of introducing people."
+    },
+    {
+      "id": "greet.acknowledge-person-with-words-or-gesture.v",
+      "text": "greet",
+      "definition": "To acknowledge someone with words or a suitable gesture when meeting them.",
+      "example": "Greet the guest and introduce yourself.",
+      "accepted_forms": [
+        "greet"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "9cdcf4a707ca7f06173769861405a6a8114161b1c3a613535b2a6a198bda876a",
+      "action": "retain_exact_context_only",
+      "classification": "related_action",
+      "individual_observation": "The verb describes acknowledgment; no morphology or noun/participle answer equivalence is inferred."
+    },
+    {
+      "id": "secure-message.message-protected-by-specified-controls.n",
+      "text": "secure message",
+      "definition": "A message handled through specified protective controls, whose security depends on the actual service and configuration.",
+      "example": "The report should use the organization's approved secure message service.",
+      "accepted_forms": [
+        "secure message"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "f8d68ee929a35ac63ea2bb31f7be328e9ae8640c6f738673ec75c61ec952a4e1",
+      "action": "retain_exact_context_only",
+      "classification": "related_message_type",
+      "individual_observation": "Message meaning supplies no security guarantee; protection depends on actual service and controls."
+    },
+    {
+      "id": "fraudulent-caller.caller-using-deception-for-dishonest-purpose.n",
+      "text": "fraudulent caller",
+      "definition": "A caller using deception for a dishonest purpose.",
+      "example": "The reported fraudulent caller claimed to be from technical support.",
+      "accepted_forms": [
+        "fraudulent caller"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "7a89c1efec15d9586b9524e136056fb5852ec21ce1da9ee9e0b3a159e75084c2",
+      "action": "retain_exact_context_only",
+      "classification": "related_person",
+      "individual_observation": "A caller is a person rather than a call or voicemail, and deception claims remain independently bounded."
+    },
+    {
+      "id": "notification-area.interface-region-showing-status-and-alert-controls.n",
+      "text": "notification area",
+      "definition": "A region of an interface that shows selected status indicators and notification controls.",
+      "example": "The network indicator is in the notification area.",
+      "accepted_forms": [
+        "notification area"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "9d857ad655b774692a955dd0aa9bec6d8b66e1084ea2b5d91e924859e57b4cdb",
+      "action": "retain_exact_context_only",
+      "classification": "related_interface",
+      "individual_observation": "An interface area displays alerts and controls, not a communication event or physical greeting."
+    },
+    {
+      "id": "browser-extension.component-adding-function-to-web-browser.n",
+      "text": "browser extension",
+      "definition": "A software component that adds or changes functions in a web browser.",
+      "example": "The browser extension requires an approval review.",
+      "accepted_forms": [
+        "browser extension"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "877fc3b0924a751b1408d20438d7739d5d433468b9a8c5ecc4deb1287a7202a2",
+      "action": "retain_exact_context_only",
+      "classification": "different_sense",
+      "individual_observation": "A browser component adds functionality; it is not a telephone number."
+    },
+    {
+      "id": "extension-activity.activity-deepening-or-broadening-learning.n",
+      "text": "extension activity",
+      "definition": "An activity intended to deepen or broaden learning beyond the initial task.",
+      "example": "The extension activity asks learners to explain another possibility.",
+      "accepted_forms": [
+        "extension activity"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "56664fc5bff0625b06faa0455cf9cc619d5273cc30c482d23882e17f104f3ace",
+      "action": "retain_exact_context_only",
+      "classification": "different_sense",
+      "individual_observation": "A learning extension broadens activity and does not use the internal-number meaning."
+    },
+    {
+      "id": "conference-call.audio-call-involving-several-participants.n",
+      "text": "conference call",
+      "definition": "An audio call involving several participants in different places.",
+      "example": "The conference call includes colleagues from three offices.",
+      "accepted_forms": [
+        "conference call"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "9c6f2bd98b1af7b3c322a19b17fef934695616cee08a6565ff4cdd17b4b59134",
+      "action": "retain_exact_context_only",
+      "classification": "related_call_type",
+      "individual_observation": "An audio call with several participants is compatible with the phone-call family but retains its complete identity."
+    },
+    {
+      "id": "telephone-interview.interview-conducted-by-audio-telephone-call.n",
+      "text": "telephone interview",
+      "definition": "An interview conducted through an audio telephone call.",
+      "example": "The telephone interview is scheduled for tomorrow.",
+      "accepted_forms": [
+        "telephone interview"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "d395d27d66063e5a8e8063db97726425fd67bd874209310c04064dd160c10c78",
+      "action": "retain_exact_context_only",
+      "classification": "related_call_type",
+      "individual_observation": "The interview specifies a purpose and audio channel; no interview procedure is accepted here."
+    },
+    {
+      "id": "welcome-pack.collection-of-information-for-person-joining-organization.n",
+      "text": "welcome pack",
+      "definition": "A collection of information or materials for someone joining an organization.",
+      "example": "The welcome pack explains the first-day arrangements.",
+      "accepted_forms": [
+        "welcome pack"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "f9685fc09a0e90c9c535a543f49c8ccc024ac5a1f4f32c9cc79b88ae3fb683e3",
+      "action": "retain_exact_context_only",
+      "classification": "related_information_material",
+      "individual_observation": "A collection of joining materials is not a greeting or introduction act despite its welcoming purpose."
+    },
+    {
+      "id": "change-communication.communication-explaining-proposed-or-agreed-change.n",
+      "text": "change communication",
+      "definition": "Communication explaining a proposed or agreed change.",
+      "example": "The change communication distinguishes decisions from proposals.",
+      "accepted_forms": [
+        "change communication"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "918ee45f6775e90d75577129f5055343fe250aaf11e3c79fa7bf6ce695b92258",
+      "action": "retain_exact_context_only",
+      "classification": "related_message_purpose",
+      "individual_observation": "Change information may be communicated through messages or announcements, but proposal versus decision remains exact."
+    },
+    {
+      "id": "sales-call.telephone-or-online-conversation-about-possible-sale.n",
+      "text": "sales call",
+      "definition": "A telephone or online conversation about a possible sale.",
+      "example": "The sales call focused on the customer's requirements.",
+      "accepted_forms": [
+        "sales call"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "df840990c18646c821f6728de9254b49a3da31ba6244f6110fd37ca6e7e85b45",
+      "action": "retain_exact_context_only",
+      "classification": "related_call_type",
+      "individual_observation": "The complete sales contact includes telephone or online possibilities; do not assume a selected spoken phone call in every online use."
+    },
+    {
+      "id": "call-to-action.message-inviting-specific-next-action.n",
+      "text": "call to action",
+      "definition": "A message inviting an audience to take a specific next action.",
+      "example": "The call to action invites readers to request a demonstration.",
+      "accepted_forms": [
+        "call to action"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "b6e4ad7ab4c43f2466845e0db14e2aa461cb2f3505ba075a127d2e273edec4ce",
+      "action": "retain_exact_context_only",
+      "classification": "different_call_sense",
+      "individual_observation": "The call is an invitation, not a telephone event. Its message purpose grants no permission to perform the requested action."
+    },
+    {
+      "id": "email-campaign.coordinated-marketing-activity-using-email.n",
+      "text": "email campaign",
+      "definition": "A coordinated marketing activity using email messages.",
+      "example": "The email campaign is limited to the intended permission-based list.",
+      "accepted_forms": [
+        "email campaign"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "71d551044ec718e18be31db92d6c8cdaf69da3b066b7bf99652fe1a5cda0a3ed",
+      "action": "retain_exact_context_only",
+      "classification": "related_channel_activity",
+      "individual_observation": "The term concerns an activity using a communication medium and multiple messages, not one selected email message."
+    }
+  ],
+  "expression_ambiguity_hold_ids": [
+    "expr.foundation.module01.03",
+    "expr.foundation.module01.08",
+    "expr.hospitality_tourism.module05.04",
+    "expr.office_admin.module05.07"
+  ],
+  "prior_third10_expression_hold_ids": [
+    "expr.customer_support.module07.08",
+    "expr.hospitality_tourism.module09.02",
+    "expr.hospitality_tourism.module09.08",
+    "expr.office_admin.module06.03",
+    "expr.transport_delivery.module09.06"
+  ],
+  "prior_third10_expression_holds_preserved": [
+    {
+      "id": "expr.customer_support.module07.08",
+      "json_sha256": "0a38463bfd52d25680849405bf15a98fb53ab40029e6b89f20115da28d5240a3",
+      "resource": "res://data/professional/expressions/customer-support-module07.json",
+      "entry": {
+        "id": "expr.customer_support.module07.08",
+        "text": "The verified status page describes the service outage and the time of its latest update.",
+        "meaning": "Refer to current published service information.",
+        "context": "An agent checks a reported interruption.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "verified",
+            "start": 4,
+            "end": 12
+          },
+          {
+            "index": 2,
+            "text": "status",
+            "start": 13,
+            "end": 19
+          },
+          {
+            "index": 3,
+            "text": "page",
+            "start": 20,
+            "end": 24
+          },
+          {
+            "index": 4,
+            "text": "describes",
+            "start": 25,
+            "end": 34
+          },
+          {
+            "index": 5,
+            "text": "the",
+            "start": 35,
+            "end": 38
+          },
+          {
+            "index": 6,
+            "text": "service",
+            "start": 39,
+            "end": 46
+          },
+          {
+            "index": 7,
+            "text": "outage",
+            "start": 47,
+            "end": 53
+          },
+          {
+            "index": 8,
+            "text": "and",
+            "start": 54,
+            "end": 57
+          },
+          {
+            "index": 9,
+            "text": "the",
+            "start": 58,
+            "end": 61
+          },
+          {
+            "index": 10,
+            "text": "time",
+            "start": 62,
+            "end": 66
+          },
+          {
+            "index": 11,
+            "text": "of",
+            "start": 67,
+            "end": 69
+          },
+          {
+            "index": 12,
+            "text": "its",
+            "start": 70,
+            "end": 73
+          },
+          {
+            "index": 13,
+            "text": "latest",
+            "start": 74,
+            "end": 80
+          },
+          {
+            "index": 14,
+            "text": "update",
+            "start": 81,
+            "end": 87
+          },
+          {
+            "index": 15,
+            "text": ".",
+            "start": 87,
+            "end": 88
+          }
+        ],
+        "focus_lexeme_ids": [
+          "status-page.page-reporting-service-condition.n",
+          "service-outage.period-of-service-unavailability.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "zendesk-ticket-lifecycle",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      },
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "customer_support",
+          "module_id": "module07"
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.02",
+      "json_sha256": "945805d1df567b62ae9a663a6ca83996e4283d06ec6f84cca2b9a90715d03193",
+      "resource": "res://data/professional/expressions/hospitality-module09.json",
+      "entry": {
+        "id": "expr.hospitality_tourism.module09.02",
+        "text": "Ask the systems contact whether the channel manager and booking engine have received the approved update.",
+        "meaning": "Refer distribution and reservation-software questions to the responsible role.",
+        "context": "Reviewing an online booking issue.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Ask",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "the",
+            "start": 4,
+            "end": 7
+          },
+          {
+            "index": 2,
+            "text": "systems",
+            "start": 8,
+            "end": 15
+          },
+          {
+            "index": 3,
+            "text": "contact",
+            "start": 16,
+            "end": 23
+          },
+          {
+            "index": 4,
+            "text": "whether",
+            "start": 24,
+            "end": 31
+          },
+          {
+            "index": 5,
+            "text": "the",
+            "start": 32,
+            "end": 35
+          },
+          {
+            "index": 6,
+            "text": "channel",
+            "start": 36,
+            "end": 43
+          },
+          {
+            "index": 7,
+            "text": "manager",
+            "start": 44,
+            "end": 51
+          },
+          {
+            "index": 8,
+            "text": "and",
+            "start": 52,
+            "end": 55
+          },
+          {
+            "index": 9,
+            "text": "booking",
+            "start": 56,
+            "end": 63
+          },
+          {
+            "index": 10,
+            "text": "engine",
+            "start": 64,
+            "end": 70
+          },
+          {
+            "index": 11,
+            "text": "have",
+            "start": 71,
+            "end": 75
+          },
+          {
+            "index": 12,
+            "text": "received",
+            "start": 76,
+            "end": 84
+          },
+          {
+            "index": 13,
+            "text": "the",
+            "start": 85,
+            "end": 88
+          },
+          {
+            "index": 14,
+            "text": "approved",
+            "start": 89,
+            "end": 97
+          },
+          {
+            "index": 15,
+            "text": "update",
+            "start": 98,
+            "end": 104
+          },
+          {
+            "index": 16,
+            "text": ".",
+            "start": 104,
+            "end": 105
+          }
+        ],
+        "focus_lexeme_ids": [
+          "channel-manager.software-coordinating-room-sales-across-booking-channels.n",
+          "booking-engine.software-supporting-online-reservation-creation.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "onet-hotel-desk-clerks",
+            "status": "pending_term_check",
+            "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      },
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module09"
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.08",
+      "json_sha256": "136839c87d9798221ce4edf1d1581e6f7f42b4007e431a8cda08f84f66ad3d9c",
+      "resource": "res://data/professional/expressions/hospitality-module09.json",
+      "entry": {
+        "id": "expr.hospitality_tourism.module09.08",
+        "text": "Check the rate code and availability calendar before confirming the proposed booking amendment.",
+        "meaning": "Compare pricing and availability before a reservation change.",
+        "context": "Reviewing an amendment request.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Check",
+            "start": 0,
+            "end": 5
+          },
+          {
+            "index": 1,
+            "text": "the",
+            "start": 6,
+            "end": 9
+          },
+          {
+            "index": 2,
+            "text": "rate",
+            "start": 10,
+            "end": 14
+          },
+          {
+            "index": 3,
+            "text": "code",
+            "start": 15,
+            "end": 19
+          },
+          {
+            "index": 4,
+            "text": "and",
+            "start": 20,
+            "end": 23
+          },
+          {
+            "index": 5,
+            "text": "availability",
+            "start": 24,
+            "end": 36
+          },
+          {
+            "index": 6,
+            "text": "calendar",
+            "start": 37,
+            "end": 45
+          },
+          {
+            "index": 7,
+            "text": "before",
+            "start": 46,
+            "end": 52
+          },
+          {
+            "index": 8,
+            "text": "confirming",
+            "start": 53,
+            "end": 63
+          },
+          {
+            "index": 9,
+            "text": "the",
+            "start": 64,
+            "end": 67
+          },
+          {
+            "index": 10,
+            "text": "proposed",
+            "start": 68,
+            "end": 76
+          },
+          {
+            "index": 11,
+            "text": "booking",
+            "start": 77,
+            "end": 84
+          },
+          {
+            "index": 12,
+            "text": "amendment",
+            "start": 85,
+            "end": 94
+          },
+          {
+            "index": 13,
+            "text": ".",
+            "start": 94,
+            "end": 95
+          }
+        ],
+        "focus_lexeme_ids": [
+          "rate-code.identifier-for-accommodation-pricing-arrangement.n",
+          "availability-calendar.calendar-showing-bookable-resources-over-time.n",
+          "booking-amendment.change-to-reservation-details-under-agreed-process.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "onet-hotel-desk-clerks",
+            "status": "pending_term_check",
+            "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      },
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n",
+        "calendar.date-organizer.n"
+      ],
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module09"
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module06.03",
+      "json_sha256": "bd4231be7e702337352f157433c82f674167146f79b0d4efb81770e12f3abe1c",
+      "resource": "res://data/professional/expressions/office-admin-module06.json",
+      "entry": {
+        "id": "expr.office_admin.module06.03",
+        "text": "The chairperson will check the attendance list and confirm the quorum under the meeting rules.",
+        "meaning": "Refer formal participation requirements to the applicable rules.",
+        "context": "Preparing a formal meeting.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "chairperson",
+            "start": 4,
+            "end": 15
+          },
+          {
+            "index": 2,
+            "text": "will",
+            "start": 16,
+            "end": 20
+          },
+          {
+            "index": 3,
+            "text": "check",
+            "start": 21,
+            "end": 26
+          },
+          {
+            "index": 4,
+            "text": "the",
+            "start": 27,
+            "end": 30
+          },
+          {
+            "index": 5,
+            "text": "attendance",
+            "start": 31,
+            "end": 41
+          },
+          {
+            "index": 6,
+            "text": "list",
+            "start": 42,
+            "end": 46
+          },
+          {
+            "index": 7,
+            "text": "and",
+            "start": 47,
+            "end": 50
+          },
+          {
+            "index": 8,
+            "text": "confirm",
+            "start": 51,
+            "end": 58
+          },
+          {
+            "index": 9,
+            "text": "the",
+            "start": 59,
+            "end": 62
+          },
+          {
+            "index": 10,
+            "text": "quorum",
+            "start": 63,
+            "end": 69
+          },
+          {
+            "index": 11,
+            "text": "under",
+            "start": 70,
+            "end": 75
+          },
+          {
+            "index": 12,
+            "text": "the",
+            "start": 76,
+            "end": 79
+          },
+          {
+            "index": 13,
+            "text": "meeting",
+            "start": 80,
+            "end": 87
+          },
+          {
+            "index": 14,
+            "text": "rules",
+            "start": 88,
+            "end": 93
+          },
+          {
+            "index": 15,
+            "text": ".",
+            "start": 93,
+            "end": 94
+          }
+        ],
+        "focus_lexeme_ids": [
+          "chairperson.person-leading-meeting-proceedings.n",
+          "attendance-list.list-of-people-attending-event.n",
+          "quorum.minimum-participation-for-valid-business.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "w3c-accessible-events",
+            "status": "pending_term_check",
+            "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      },
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "attendance.presence-record.n"
+      ],
+      "locations": [
+        {
+          "course_id": "office_admin",
+          "module_id": "module06"
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module09.06",
+      "json_sha256": "bd3cf48603c49c520bd9fdebaefc365741ef911bd00f79def7d246efa60488f8",
+      "resource": "res://data/professional/expressions/transport-module09.json",
+      "entry": {
+        "id": "expr.transport_delivery.module09.06",
+        "text": "The delivery app is in offline mode, so confirm which actions are available and which updates are waiting.",
+        "meaning": "Check actual application behavior without assuming automatic synchronization.",
+        "context": "Handling a connectivity problem while stationary.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "delivery",
+            "start": 4,
+            "end": 12
+          },
+          {
+            "index": 2,
+            "text": "app",
+            "start": 13,
+            "end": 16
+          },
+          {
+            "index": 3,
+            "text": "is",
+            "start": 17,
+            "end": 19
+          },
+          {
+            "index": 4,
+            "text": "in",
+            "start": 20,
+            "end": 22
+          },
+          {
+            "index": 5,
+            "text": "offline",
+            "start": 23,
+            "end": 30
+          },
+          {
+            "index": 6,
+            "text": "mode",
+            "start": 31,
+            "end": 35
+          },
+          {
+            "index": 7,
+            "text": ",",
+            "start": 35,
+            "end": 36
+          },
+          {
+            "index": 8,
+            "text": "so",
+            "start": 37,
+            "end": 39
+          },
+          {
+            "index": 9,
+            "text": "confirm",
+            "start": 40,
+            "end": 47
+          },
+          {
+            "index": 10,
+            "text": "which",
+            "start": 48,
+            "end": 53
+          },
+          {
+            "index": 11,
+            "text": "actions",
+            "start": 54,
+            "end": 61
+          },
+          {
+            "index": 12,
+            "text": "are",
+            "start": 62,
+            "end": 65
+          },
+          {
+            "index": 13,
+            "text": "available",
+            "start": 66,
+            "end": 75
+          },
+          {
+            "index": 14,
+            "text": "and",
+            "start": 76,
+            "end": 79
+          },
+          {
+            "index": 15,
+            "text": "which",
+            "start": 80,
+            "end": 85
+          },
+          {
+            "index": 16,
+            "text": "updates",
+            "start": 86,
+            "end": 93
+          },
+          {
+            "index": 17,
+            "text": "are",
+            "start": 94,
+            "end": 97
+          },
+          {
+            "index": 18,
+            "text": "waiting",
+            "start": 98,
+            "end": 105
+          },
+          {
+            "index": 19,
+            "text": ".",
+            "start": 105,
+            "end": 106
+          }
+        ],
+        "focus_lexeme_ids": [
+          "delivery-app.application-supporting-delivery-work.n",
+          "offline-mode.application-operation-without-live-network-connection.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "transport-ups-tracking-status",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-gps-overview",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      },
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module09"
+        }
+      ]
+    }
+  ],
+  "scope_limits": [
+    "No expression text, focus binding, review gate or curriculum membership changes.",
+    "Two existing Foundation focus alignments stay held: people versus opening introduction and voicemail message versus system modifier.",
+    "Text conversation, signed interpretation, structured data messages and email-channel compounds do not automatically become the selected nouns.",
+    "Every specialist communication, consent, safety, privacy and security gate remains exact."
+  ]
+}

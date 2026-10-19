@@ -1,0 +1,492 @@
+{
+  "date": "2026-10-16",
+  "reviewer": "Codex nursing_theme independent recovery review",
+  "decision": "accept_existing_candidate_for_integration_preparation_and_full_application_review",
+  "candidate_profile": {
+    "path": "build/professional-english/nursing-theme-review/motion-r02/candidate-profile.json",
+    "sha256": "4e9fde424d0825cd34478f9e22ea12618688353de02df36ea6f094542d56ee35",
+    "bytes": 7499
+  },
+  "prior_motion_receipt": {
+    "path": "build/professional-english/nursing-theme-review/motion-r03-runtime/motion-review-receipt.json",
+    "sha256": "e7e07175c19d8930dc628f0acafbc9f640162a92adf875e143291f425af2e1f7",
+    "bytes": 84628
+  },
+  "preserved_frozen_files": 443,
+  "unchanged_execution_inputs": 9,
+  "concurrent_input_drift": [
+    {
+      "path": "scripts/learning_content_resolver.gd",
+      "before_sha256": "b6f675f78e6f74bc310acc0b228f75ba584972672fd433846d04d2d954fcd199",
+      "after_sha256": "3ed577145633ff4bda6198eb3f4680d199d608ddac9289f198777a9c4d9468b2",
+      "explanation": "The initial finalization guard stopped on this drift. Parent confirmed its concurrent per-sense content resolver change is unrelated to theme Art and owns separate focused validation. This review does not claim an immutable ten-input replay or validate the new resolver logic."
+    }
+  ],
+  "native": {
+    "checks": 142,
+    "failures": 0,
+    "capture_records": 63,
+    "unique_pngs": 62,
+    "loop_return_ms": 8030,
+    "interval_ms": {
+      "minimum": 469,
+      "maximum": 523,
+      "values": [
+        501,
+        505,
+        517,
+        469,
+        508,
+        521,
+        484,
+        516,
+        490,
+        490,
+        523,
+        475,
+        495,
+        500,
+        516,
+        489
+      ]
+    },
+    "all_captures_equal_prior": true,
+    "source_reconstructions_exact": 16,
+    "released_cache": {
+      "active_ids": [],
+      "leases": 0,
+      "limit_bytes": 134217728,
+      "pinned_bytes": 0,
+      "reserved_bytes": 0,
+      "resident_bytes": 0,
+      "resources": 0
+    }
+  },
+  "focused": {
+    "art_checks": 26,
+    "art_failures": 0,
+    "node_tests": 3,
+    "node_failures": 0,
+    "node_skips": 0
+  },
+  "production_or_asset_or_runtime_edits_by_this_review": false,
+  "pending": [
+    "Guarded production media and descriptor integration with durable provenance",
+    "Real Main/Home/gameplay review and production delivery budgets",
+    "Continuous visual motion playback review",
+    "Browser and device review",
+    "Appropriate clinical-layout review"
+  ],
+  "evidence": [
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/art-tests.log",
+      "sha256": "e30f6faa15c0f16a392c7afba85cfbb5aec49e3493321ac655f796b96fd67559",
+      "bytes": 116
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/compare-registration.py",
+      "sha256": "3addfb124cdad752c8d93a7397a5f5120fe1e5a8e086cb8e11cf27d46a44640b",
+      "bytes": 1819
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/finalize.cjs",
+      "sha256": "8b8b8612b1237c400d9206894d1d3feafeb81cb72d757da13ad3e82b753cc21d",
+      "bytes": 4684
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/image-review.log",
+      "sha256": "13a7f8145784e7b52daf09ce6176e55c04a45521c772a029321ef18eed023042",
+      "bytes": 4707
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/independent-image-check.json",
+      "sha256": "8b2a77b94e0cf9ed7ae26eae0283a94aee5521530ef2b472db62876255d0cde5",
+      "bytes": 376
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/independent-image-check.py",
+      "sha256": "55f95fe8c48e8c920770b587a5a8bebe8fc1f4e57ea09dac2b21845b55684f0d",
+      "bytes": 2160
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/motion-tests.log",
+      "sha256": "cf712768acf5e72f75b370adaec556cb9c3b39279df0ad4a34571f815f793b25",
+      "bytes": 429
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/prepare.cjs",
+      "sha256": "6e100c5e1d7355dcea95390f0b1f6647342884dee348fcfbae9ca5eb93bcb3cf",
+      "bytes": 4618
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/registration-comparison.json",
+      "sha256": "b84a076f15197366874c5337d74c91aa0c384ca56223882e7be3c6805a6e156f",
+      "bytes": 2377
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/registration-review.log",
+      "sha256": "b84a076f15197366874c5337d74c91aa0c384ca56223882e7be3c6805a6e156f",
+      "bytes": 2377
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/review-runtime.py",
+      "sha256": "fd681bb583475c72ccf4f72a9ba2c5c50e4a90d1a854e1b2816fa9d61dfaf10e",
+      "bytes": 3898
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/review.md",
+      "sha256": "be75baf58fbd2785da3da1adefcfb721615353fb76eafc938faaf7c87d7601f7",
+      "bytes": 4930
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/review/actual-native-timed-296x296.gif",
+      "sha256": "93f42301ac4aa42beb213f62f0abd6d6c4dc98d61b344b7daac7bddea2a84c29",
+      "bytes": 249758
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/review/all-native-phone-poses.png",
+      "sha256": "b1670e89b88738f023cd0cdcfb927839516549c29e8f14861863ad7e3820f337",
+      "bytes": 192327
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/review/native-portrait-rest-and-extremes.png",
+      "sha256": "3e19bd385b444f6b24ba0014a7fb0305019e5acbf7a909b7a88722a895e220aa",
+      "bytes": 153726
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime-image-review.json",
+      "sha256": "13a7f8145784e7b52daf09ce6176e55c04a45521c772a029321ef18eed023042",
+      "bytes": 4707
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime.log",
+      "sha256": "bdd9f7f7efc87ed9b358ae7eb284a523a9f99307e36a207a1ba4915428dba873",
+      "bytes": 364
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/home-1280x800.png",
+      "sha256": "1b4619aadfc1937641c974faa6b9bd73444bbb53d2a6594b05755dd4ebf0d633",
+      "bytes": 329680
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/home-296x296.png",
+      "sha256": "daba307580fb94535dc2dfcbff1d7e67b485add6cd1ac93b834a5bd66699e276",
+      "bytes": 34188
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/home-320x568.png",
+      "sha256": "44031e83a7390e0bedc92e0a1f24e317815b08a55c78852ec9e076d0a5d1baa4",
+      "bytes": 75300
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/home-390x844.png",
+      "sha256": "2e95c845d5cc9bfe4231aa76e4c12734b2972d7686b20146c40f0b6409f24b94",
+      "bytes": 122831
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/home-844x390.png",
+      "sha256": "1d069e35994a26b95d482486bb5f2078af44ed9a9600f8624cfa381494026595",
+      "bytes": 159133
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-00.png",
+      "sha256": "fe3a94554bdc7b8b05e7ca068c7dbfa8978ace92c2798521049b4f991b608693",
+      "bytes": 34173
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-01.png",
+      "sha256": "0865a4fb10f982feb950b7efec18ed7c8a38f9310446445488cd158c16379688",
+      "bytes": 34386
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-02.png",
+      "sha256": "8a2a321eac82c774be4d3b8645184c02304fbddab8916c8b7959f15510c06d81",
+      "bytes": 34572
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-03.png",
+      "sha256": "69217a769bde909389dc935635bb855907960da272a03eb628d7e5645f64b565",
+      "bytes": 34616
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-04.png",
+      "sha256": "a0186005cce4281d40921aed0ffb39372048c3f0fbceed1052a95130412cfa2a",
+      "bytes": 34662
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-05.png",
+      "sha256": "69217a769bde909389dc935635bb855907960da272a03eb628d7e5645f64b565",
+      "bytes": 34616
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-06.png",
+      "sha256": "8a2a321eac82c774be4d3b8645184c02304fbddab8916c8b7959f15510c06d81",
+      "bytes": 34572
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-07.png",
+      "sha256": "0865a4fb10f982feb950b7efec18ed7c8a38f9310446445488cd158c16379688",
+      "bytes": 34386
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-08.png",
+      "sha256": "fe3a94554bdc7b8b05e7ca068c7dbfa8978ace92c2798521049b4f991b608693",
+      "bytes": 34173
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-09.png",
+      "sha256": "2290cdb71b5abdab8d6fd83717550c4b946b4fe9a486fd60eff05aecdaaa58ab",
+      "bytes": 34476
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-10.png",
+      "sha256": "de54e6586efccda4d1470c3146281936adfaa64c530f4b49b1fe3b22d026c567",
+      "bytes": 34617
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-11.png",
+      "sha256": "3c703406c914e0e944284ffaa581f582d3682e3b2095f541680f87f985b9d215",
+      "bytes": 34689
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-12.png",
+      "sha256": "704e8950163eb1d952623e4e639c47e89ae8fa1d054cb92f46915c3050fd37cf",
+      "bytes": 34720
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-13.png",
+      "sha256": "3c703406c914e0e944284ffaa581f582d3682e3b2095f541680f87f985b9d215",
+      "bytes": 34689
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-14.png",
+      "sha256": "de54e6586efccda4d1470c3146281936adfaa64c530f4b49b1fe3b22d026c567",
+      "bytes": 34617
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-15.png",
+      "sha256": "2290cdb71b5abdab8d6fd83717550c4b946b4fe9a486fd60eff05aecdaaa58ab",
+      "bytes": 34476
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/live-296x296-16.png",
+      "sha256": "fe3a94554bdc7b8b05e7ca068c7dbfa8978ace92c2798521049b4f991b608693",
+      "bytes": 34173
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-00.png",
+      "sha256": "fe3a94554bdc7b8b05e7ca068c7dbfa8978ace92c2798521049b4f991b608693",
+      "bytes": 34173
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-01.png",
+      "sha256": "0865a4fb10f982feb950b7efec18ed7c8a38f9310446445488cd158c16379688",
+      "bytes": 34386
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-02.png",
+      "sha256": "8a2a321eac82c774be4d3b8645184c02304fbddab8916c8b7959f15510c06d81",
+      "bytes": 34572
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-03.png",
+      "sha256": "69217a769bde909389dc935635bb855907960da272a03eb628d7e5645f64b565",
+      "bytes": 34616
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-04.png",
+      "sha256": "a0186005cce4281d40921aed0ffb39372048c3f0fbceed1052a95130412cfa2a",
+      "bytes": 34662
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-05.png",
+      "sha256": "69217a769bde909389dc935635bb855907960da272a03eb628d7e5645f64b565",
+      "bytes": 34616
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-06.png",
+      "sha256": "8a2a321eac82c774be4d3b8645184c02304fbddab8916c8b7959f15510c06d81",
+      "bytes": 34572
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-07.png",
+      "sha256": "0865a4fb10f982feb950b7efec18ed7c8a38f9310446445488cd158c16379688",
+      "bytes": 34386
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-08.png",
+      "sha256": "fe3a94554bdc7b8b05e7ca068c7dbfa8978ace92c2798521049b4f991b608693",
+      "bytes": 34173
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-09.png",
+      "sha256": "2290cdb71b5abdab8d6fd83717550c4b946b4fe9a486fd60eff05aecdaaa58ab",
+      "bytes": 34476
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-10.png",
+      "sha256": "de54e6586efccda4d1470c3146281936adfaa64c530f4b49b1fe3b22d026c567",
+      "bytes": 34617
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-11.png",
+      "sha256": "3c703406c914e0e944284ffaa581f582d3682e3b2095f541680f87f985b9d215",
+      "bytes": 34689
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-12.png",
+      "sha256": "704e8950163eb1d952623e4e639c47e89ae8fa1d054cb92f46915c3050fd37cf",
+      "bytes": 34720
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-13.png",
+      "sha256": "3c703406c914e0e944284ffaa581f582d3682e3b2095f541680f87f985b9d215",
+      "bytes": 34689
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-14.png",
+      "sha256": "de54e6586efccda4d1470c3146281936adfaa64c530f4b49b1fe3b22d026c567",
+      "bytes": 34617
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-296x296-15.png",
+      "sha256": "2290cdb71b5abdab8d6fd83717550c4b946b4fe9a486fd60eff05aecdaaa58ab",
+      "bytes": 34476
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-00.png",
+      "sha256": "4ac7bd5853472731be1a0d85cd454d49cc62b3cdfcbbc0bc81ce19d3f7e161ba",
+      "bytes": 122786
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-01.png",
+      "sha256": "8b4ada9bcdeb278c38027077e63a9eee9700ef49bb37bd303e7d150b1783dedf",
+      "bytes": 123708
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-02.png",
+      "sha256": "f80953e4f9b7f0b5468df22434fcac1ecd36aa0eb837c672756d85c4710bb43c",
+      "bytes": 124870
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-03.png",
+      "sha256": "b17905c31e95b80a5e6080810f6c885c3fb0f3e626e24993a099bd738490f4a9",
+      "bytes": 125370
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-04.png",
+      "sha256": "0b069b6767e2ab6ff835fcfbec780eb7acc16dfe3a81f6a2525f2ca676ab0440",
+      "bytes": 125693
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-05.png",
+      "sha256": "70c5445be28438aa3aa5482f984cc02170d98eca781d5143752b10f8c8ec465d",
+      "bytes": 125365
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-06.png",
+      "sha256": "fffaa20c4f69811814b418ea3b2bdb6ef1245067b0e529fea38a49373fed03ea",
+      "bytes": 124871
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-07.png",
+      "sha256": "7723770c3fbcc6057faecd69bd601eac81ad71ba4eb1659ed450832746d5f0db",
+      "bytes": 123709
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-08.png",
+      "sha256": "00172725f13543cc5552aa84dccff6893edd9bbc75677b7678a3ef553eeab76d",
+      "bytes": 122786
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-09.png",
+      "sha256": "64344407ef0fc68c9e884425c6ae1acfba08bc81b4cba4b223561c91660610a5",
+      "bytes": 123824
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-10.png",
+      "sha256": "908e11bed422cdf0ca074941fbcc121c2a113e09fd6f7e0a2d546a546650bbe4",
+      "bytes": 124799
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-11.png",
+      "sha256": "ae8fb9834f463a728179bff5ab8950a5fff43e8af07bdad413977f3d629bdfd6",
+      "bytes": 125202
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-12.png",
+      "sha256": "ae0173e5772cd028d725477f2c177c893ed68104bcfbe42c7b8712115b9271e6",
+      "bytes": 125397
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-13.png",
+      "sha256": "9d54dc5345f9d72ffab75bd60d637a32b7bdfea3e5022aedb6359dcb3ec6280a",
+      "bytes": 125200
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-14.png",
+      "sha256": "908e11bed422cdf0ca074941fbcc121c2a113e09fd6f7e0a2d546a546650bbe4",
+      "bytes": 124799
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/pose-390x844-15.png",
+      "sha256": "feffcbfc41211e600f1adc8516b35c1af760812ef232e8c700ee7aa54d56e11a",
+      "bytes": 123824
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/reduced-after-live-296x296.png",
+      "sha256": "fe3a94554bdc7b8b05e7ca068c7dbfa8978ace92c2798521049b4f991b608693",
+      "bytes": 34173
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/reduced-still-296x296.png",
+      "sha256": "fe3a94554bdc7b8b05e7ca068c7dbfa8978ace92c2798521049b4f991b608693",
+      "bytes": 34173
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/report.json",
+      "sha256": "1c473ec1659b11b4b7ee2386bb95065899036a283209aae992254ac17d89ad29",
+      "bytes": 21847
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/rest-1024x1024.png",
+      "sha256": "007d3e9e04af41f58e00b6ec876602d287baea66cd3e5f748c77aae3bd2263b5",
+      "bytes": 194609
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/rest-1280x800.png",
+      "sha256": "376a861e292c55efa9bfa7ea53c15d74e33785a3d12ea7a7441de354ed240fa6",
+      "bytes": 329672
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/rest-296x296.png",
+      "sha256": "fe3a94554bdc7b8b05e7ca068c7dbfa8978ace92c2798521049b4f991b608693",
+      "bytes": 34173
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/rest-320x568.png",
+      "sha256": "e64fb19feab047ce5f6e0268b2264700c9e2ec9091df0a3fa274e0b660da94c6",
+      "bytes": 75327
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/rest-390x844.png",
+      "sha256": "4ac7bd5853472731be1a0d85cd454d49cc62b3cdfcbbc0bc81ce19d3f7e161ba",
+      "bytes": 122786
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/runtime/rest-844x390.png",
+      "sha256": "e202e8126156c69864be9639bbbda517ac96852500c14683628728bdb55fefd2",
+      "bytes": 159076
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/source-audit.json",
+      "sha256": "c2cd6729d388a457ca55a5b6c2c4a4ea0cb029eca06cedb8ee5ffd11c35c2b0e",
+      "bytes": 105698
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/verify-runtime.gd",
+      "sha256": "4dd1d7ea14f7e6b4356f75c7c0eddba1eac0f2a3431c35b353b2a782a6a645e9",
+      "bytes": 9845
+    }
+  ]
+}

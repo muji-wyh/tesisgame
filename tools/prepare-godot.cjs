@@ -13,6 +13,14 @@ function prepare() {
 }
 
 function inlineMascot(html) {
+  if (html.includes('$PROFESSIONAL_MEDIA_JS')) {
+    const media = fs.readFileSync(path.join(root, 'web', 'professional-media.js'), 'utf8');
+    html = html.replaceAll('$PROFESSIONAL_MEDIA_JS', () => media.replaceAll('</script', '<\\/script'));
+  }
+  if (html.includes('$PROFESSIONAL_PROGRESS_JS')) {
+    const progress = fs.readFileSync(path.join(root, 'web', 'professional-progress.js'), 'utf8');
+    html = html.replaceAll('$PROFESSIONAL_PROGRESS_JS', () => progress.replaceAll('</script', '<\\/script'));
+  }
   if (html.includes('$VOCABULARY_LOADER_JS')) {
     const loader = fs.readFileSync(path.join(root, 'web', 'vocabulary-loader.js'), 'utf8');
     html = html.replaceAll('$VOCABULARY_LOADER_JS', () => loader.replaceAll('</script', '<\\/script'));

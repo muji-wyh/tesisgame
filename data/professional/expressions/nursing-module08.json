@@ -1,0 +1,1634 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.nursing.module08.01",
+      "text": "The clinician distinguished infection, inflammation, and colonization in the report.",
+      "meaning": "Clarify terms that should not be treated as interchangeable.",
+      "context": "A team reviews a fictional report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "clinician",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "distinguished",
+          "start": 14,
+          "end": 27
+        },
+        {
+          "index": 3,
+          "text": "infection",
+          "start": 28,
+          "end": 37
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": "inflammation",
+          "start": 39,
+          "end": 51
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "colonization",
+          "start": 57,
+          "end": 69
+        },
+        {
+          "index": 9,
+          "text": "in",
+          "start": 70,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "report",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "infection.microorganism-invasion-and-response.n",
+        "inflammation.body-response-to-injury-or-irritation.n",
+        "colonization.microorganism-presence-without-disease.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cdc-infection-basics",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module08.02",
+      "text": "The report names a pathogen and explains whether it is a bacterium, virus, or fungus.",
+      "meaning": "Describe a report's terminology without diagnosing.",
+      "context": "A clinician explains an invented laboratory summary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "names",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "pathogen",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "explains",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "whether",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "it",
+          "start": 49,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "is",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "bacterium",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "virus",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": "or",
+          "start": 75,
+          "end": 77
+        },
+        {
+          "index": 16,
+          "text": "fungus",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "pathogen.disease-causing-agent.n",
+        "bacterium.single-bacterial-organism.n",
+        "virus.host-dependent-infectious-agent.n",
+        "fungus.fungal-organism.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cdc-infection-basics",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module08.03",
+      "text": "The training discussion covers contamination, cross-contamination, transmission, and infection prevention.",
+      "meaning": "Introduce infection-prevention vocabulary.",
+      "context": "A trainer presents a communication exercise.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "training",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "discussion",
+          "start": 13,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "covers",
+          "start": 24,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "contamination",
+          "start": 31,
+          "end": 44
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "cross-contamination",
+          "start": 46,
+          "end": 65
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 65,
+          "end": 66
+        },
+        {
+          "index": 8,
+          "text": "transmission",
+          "start": 67,
+          "end": 79
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 11,
+          "text": "infection",
+          "start": 85,
+          "end": 94
+        },
+        {
+          "index": 12,
+          "text": "prevention",
+          "start": 95,
+          "end": 105
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 105,
+          "end": 106
+        }
+      ],
+      "focus_lexeme_ids": [
+        "contamination.unwanted-substance-presence.n",
+        "cross-contamination.unwanted-material-transfer.n",
+        "transmission.infectious-agent-spread.n",
+        "infection-prevention.infection-risk-reduction-work.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cdc-infection-basics",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module08.04",
+      "text": "Please show me the current guidance for standard precautions, transmission-based precautions, hand hygiene, PPE, and isolation arrangements.",
+      "meaning": "Request current infection-control guidance.",
+      "context": "A worker asks for the locally applicable guidance.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "show",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "me",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "current",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "guidance",
+          "start": 27,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "standard",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "precautions",
+          "start": 49,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "transmission-based",
+          "start": 62,
+          "end": 80
+        },
+        {
+          "index": 11,
+          "text": "precautions",
+          "start": 81,
+          "end": 92
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 92,
+          "end": 93
+        },
+        {
+          "index": 13,
+          "text": "hand",
+          "start": 94,
+          "end": 98
+        },
+        {
+          "index": 14,
+          "text": "hygiene",
+          "start": 99,
+          "end": 106
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 106,
+          "end": 107
+        },
+        {
+          "index": 16,
+          "text": "PPE",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 111,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 113,
+          "end": 116
+        },
+        {
+          "index": 19,
+          "text": "isolation",
+          "start": 117,
+          "end": 126
+        },
+        {
+          "index": 20,
+          "text": "arrangements",
+          "start": 127,
+          "end": 139
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 139,
+          "end": 140
+        }
+      ],
+      "focus_lexeme_ids": [
+        "standard-precautions.routine-infection-prevention-practices.n",
+        "transmission-based-precautions.additional-transmission-specific-measures.n",
+        "hand-hygiene.hand-cleaning-practices.n",
+        "ppe.personal-protective-equipment.n",
+        "isolation.care-separation-for-infection-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cdc-infection-basics",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module08.05",
+      "text": "The trainer distinguishes asepsis, sterile, clean, soiled, single-use, and reusable.",
+      "meaning": "Clarify terms in product and care documentation.",
+      "context": "A learner reviews terminology without procedural instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "trainer",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "distinguishes",
+          "start": 12,
+          "end": 25
+        },
+        {
+          "index": 3,
+          "text": "asepsis",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "sterile",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "clean",
+          "start": 44,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "soiled",
+          "start": 51,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "single-use",
+          "start": 59,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "reusable",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "asepsis.prevention-of-microbial-contamination.n",
+        "sterile.free-from-viable-microorganisms.a",
+        "clean.free-of-visible-soiling.a",
+        "soiled.marked-by-dirt-or-body-material.a",
+        "single-use.intended-for-one-use.a",
+        "reusable.intended-for-repeated-use.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cdc-infection-basics",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module08.06",
+      "text": "The staff member reported the needlestick injury, sharps injury, or exposure through the appropriate local process.",
+      "meaning": "Describe reporting categories without assigning treatment.",
+      "context": "A fictional incident-reporting exercise.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "staff",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "member",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "reported",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "needlestick",
+          "start": 30,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "injury",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "sharps",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "injury",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "or",
+          "start": 65,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "exposure",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "through",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "appropriate",
+          "start": 89,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "local",
+          "start": 101,
+          "end": 106
+        },
+        {
+          "index": 17,
+          "text": "process",
+          "start": 107,
+          "end": 114
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "needlestick-injury.injury-from-needle-puncture.n",
+        "sharps-injury.injury-from-sharp-medical-item.n",
+        "exposure.contact-with-potential-health-hazard.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cdc-infection-basics",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module08.07",
+      "text": "The team reviewed the adverse event, near miss, medication error, and suspected adverse drug reaction separately.",
+      "meaning": "Distinguish reporting concepts.",
+      "context": "A fictional patient-safety review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "team",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "reviewed",
+          "start": 9,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "adverse",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "event",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "near",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "miss",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "medication",
+          "start": 48,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "error",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "suspected",
+          "start": 70,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "adverse",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": "drug",
+          "start": 88,
+          "end": 92
+        },
+        {
+          "index": 17,
+          "text": "reaction",
+          "start": 93,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": "separately",
+          "start": 102,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "adverse-event.harm-associated-with-care.n",
+        "near-miss.narrowly-avoided-incident.n",
+        "medication-error.preventable-medicine-use-error.n",
+        "adverse-drug-reaction.harmful-unintended-medicine-response.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cdc-infection-basics",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module08.08",
+      "text": "The clinician clarified the reported allergy, possible side effect, potential contraindication, and whether the record described anaphylaxis.",
+      "meaning": "Ask a clinician to distinguish terms recorded in a report.",
+      "context": "The team clarifies a historical record without inferring a new diagnosis.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "clinician",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "clarified",
+          "start": 14,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "reported",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "allergy",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "possible",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "side",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "effect",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "potential",
+          "start": 68,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "contraindication",
+          "start": 78,
+          "end": 94
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 94,
+          "end": 95
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 15,
+          "text": "whether",
+          "start": 100,
+          "end": 107
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": "record",
+          "start": 112,
+          "end": 118
+        },
+        {
+          "index": 18,
+          "text": "described",
+          "start": 119,
+          "end": 128
+        },
+        {
+          "index": 19,
+          "text": "anaphylaxis",
+          "start": 129,
+          "end": 140
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 140,
+          "end": 141
+        }
+      ],
+      "focus_lexeme_ids": [
+        "allergy.immune-mediated-hypersensitivity.n",
+        "side-effect.additional-medicine-effect.n",
+        "contraindication.reason-against-treatment-use.n",
+        "anaphylaxis.severe-systemic-allergic-reaction.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cdc-infection-basics",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module08.09",
+      "text": "The risk assessment records the fall risk, pressure injury risk, aspiration risk, and choking risk for qualified review.",
+      "meaning": "Describe an individualized risk record.",
+      "context": "A team reviews fictional assessment documentation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "risk",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "assessment",
+          "start": 9,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "records",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "fall",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "risk",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "pressure",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "injury",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "risk",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "aspiration",
+          "start": 65,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "risk",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 80,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "choking",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "risk",
+          "start": 94,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": "for",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 19,
+          "text": "qualified",
+          "start": 103,
+          "end": 112
+        },
+        {
+          "index": 20,
+          "text": "review",
+          "start": 113,
+          "end": 119
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 119,
+          "end": 120
+        }
+      ],
+      "focus_lexeme_ids": [
+        "risk-assessment.hazard-evaluation.n",
+        "fall-risk.likelihood-of-falling.n",
+        "pressure-injury-risk.likelihood-of-pressure-related-damage.n",
+        "aspiration-risk.likelihood-of-material-entering-airway.n",
+        "choking-risk.likelihood-of-airway-obstruction.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cdc-infection-basics",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module08.10",
+      "text": "The safety huddle confirmed who would clarify the escalation criteria and safeguarding concern through the appropriate service.",
+      "meaning": "Coordinate responsibility for seeking help.",
+      "context": "A team discusses a fictional unresolved concern.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "safety",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "huddle",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "confirmed",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "who",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "would",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "clarify",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "escalation",
+          "start": 50,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "criteria",
+          "start": 61,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "safeguarding",
+          "start": 74,
+          "end": 86
+        },
+        {
+          "index": 12,
+          "text": "concern",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 13,
+          "text": "through",
+          "start": 95,
+          "end": 102
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 103,
+          "end": 106
+        },
+        {
+          "index": 15,
+          "text": "appropriate",
+          "start": 107,
+          "end": 118
+        },
+        {
+          "index": 16,
+          "text": "service",
+          "start": 119,
+          "end": 126
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 126,
+          "end": 127
+        }
+      ],
+      "focus_lexeme_ids": [
+        "safety-huddle.brief-care-safety-discussion.n",
+        "escalation-criteria.specified-triggers-for-further-help.n",
+        "safeguarding.protection-from-abuse-or-neglect.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cdc-infection-basics",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "schema": 1,
+  "id": "persisted_command_log_mismatch",
+  "specification": "persisted_command_failure",
+  "classification": "semantic_guard_with_rebound_fixture_envelopes",
+  "expected": "reject",
+  "mutation": "Change cached command log and refresh its baseline pin while retaining the receipt log hash.",
+  "synthetic_in_memory_only": true,
+  "source_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "actual_preparation_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "opened": false,
+  "recheck_passed": false,
+  "passed": true,
+  "virtual_io": {
+    "imports": [
+      "node:fs",
+      "node:path",
+      "node:crypto",
+      "node:assert/strict"
+    ],
+    "file_reads": 12812,
+    "directory_reads": 2,
+    "existence_reads": 0,
+    "denied": []
+  },
+  "virtual_changes": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "afd39d0c4eb2d0bb032b199ffa061d5f2da790f53a86f6f7905206f2a9de043b"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "d997ea6d88fb6452aa0aaf1a25c64fcf13a82c37d428c4826b75ee8c07a76ff4"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "be6bd7f72154f93401ff228bb491908c4470e5d3ed2df2dec6a5c7212c6fff1e"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/command-1.log",
+      "original": {
+        "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/command-1.log",
+        "bytes": 5791184,
+        "raw_sha256": "0020b63f47249956e1122188f101d26390511a6b02ec16e52377033dd6504ae6"
+      },
+      "fixture": {
+        "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/command-1.log",
+        "bytes": 5791204,
+        "raw_sha256": "a10af91b3344c5b74aa7ac937c3b88dede3899065bc61a2ec962d9d6635d2ed4"
+      },
+      "scope": "memory_only"
+    }
+  ],
+  "rejection": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/command-1.log\n+ actual - expected\n\n+ 'a10af91b3344c5b74aa7ac937c3b88dede3899065bc61a2ec962d9d6635d2ed4'\n- '0020b63f47249956e1122188f101d26390511a6b02ec16e52377033dd6504ae6'\n",
+    "stack": "node:assert:152\n  throw new AssertionError(obj);\n  ^\n\nAssertionError [ERR_ASSERTION]: docs/qa/professional-shopping-bag-r01/persisted/attempt-001/command-1.log\n+ actual - expected\n\n+ 'a10af91b3344c5b74aa7ac937c3b88dede3899065bc61a2ec962d9d6635d2ed4'\n- '0020b63f47249956e1122188f101d26390511a6b02ec16e52377033dd6504ae6'\n\n    at successfulPredecessor (fifth10-frozen-binding.cjs:152:12)\n    at Object.openSession (fifth10-frozen-binding.cjs:194:15)\n    at fifth10-memory-guard-call.cjs:1:44\n    at Script.runInContext (node:vm:149:12)\n    at run (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:428:82)\n    at Object.open (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:430:12)\n    at main (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:229:19)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:584:1)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)"
+  },
+  "expected_assertion": {
+    "line": 152,
+    "column_start": 5,
+    "column_end": 59,
+    "source_fragment": "assert.equal(sha(read(log)), command.log_sha256, log);"
+  },
+  "actual_first_binding_frame": {
+    "line": 152,
+    "column": 12
+  }
+}

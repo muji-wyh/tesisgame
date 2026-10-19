@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "status": "transactional_scratch_baseline_bound_no_production_writes",
+  "checks": 3222,
+  "preimages_raw_sha256": "e9a081b4478cd4c8bc2f9e00bce790f5153fe82f03bfb7f2cda8454e832d72ff",
+  "baseline_registry_sha256": "44555c97ae8aba9730248d0182723a5543dcfbb765dbeb26d0cf030499b79ffd",
+  "proposed_registry_sha256": "284918768ad2df30585d0efa3ab099a1bfa58ee22d9fc71afa00ae334f81042d",
+  "validation_raw_sha256": "9e3f5c75e0d021f887d1ca5f3b891ebe65b03fc2fa74aaedc21454f563652932",
+  "root_image_review_raw_sha256": "ea82b3f6d34b192268bda35332f749870d18608201e22a87e41a5288739bec88",
+  "serializer_raw_sha256": "f467192789b149b5ff5e7520defff3e27fec2601d8204e86e5df9d8deeef5935",
+  "production_content_written": false
+}

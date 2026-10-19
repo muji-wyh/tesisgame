@@ -1,0 +1,4863 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "data.represented-information.n",
+      "text": "data",
+      "display_text": "data",
+      "pos": "noun",
+      "definition": "Information represented in a form that can be stored, processed, or analyzed.",
+      "example": "The data comes from approved test records.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "data"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented collection of observations prepared for analysis.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "data.represented-information.n.analysis.v1",
+        "lexeme_id": "data.represented-information.n",
+        "text": "data",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.data",
+            "type": "atomic",
+            "canonical": "data",
+            "surface": "data"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "schema.data-structure-description.n",
+      "text": "schema",
+      "display_text": "schema",
+      "pos": "noun",
+      "definition": "A description or organization of the structures used to store data.",
+      "example": "The schema defines the available tables and fields.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "schema"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional database structure with related tables.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "schema.data-structure-description.n.analysis.v1",
+        "lexeme_id": "schema.data-structure-description.n",
+        "text": "schema",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.schema",
+            "type": "atomic",
+            "canonical": "schema",
+            "surface": "schema"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "primary-key.record-identifying-key.n",
+      "text": "primary key",
+      "display_text": "primary key",
+      "pos": "noun",
+      "definition": "A selected key whose values uniquely identify rows in a table.",
+      "example": "The primary key identifies each stored record.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "primary key"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional table with a unique identifier column highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "primary-key.record-identifying-key.n.analysis.v1",
+        "lexeme_id": "primary-key.record-identifying-key.n",
+        "text": "primary key",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.primary",
+            "type": "stem",
+            "canonical": "primary",
+            "surface": "primary"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.key",
+            "type": "stem",
+            "canonical": "key",
+            "surface": "key"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "primary key",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "foreign-key.referencing-data-key.n",
+      "text": "foreign key",
+      "display_text": "foreign key",
+      "pos": "noun",
+      "definition": "A key constrained to refer to values in a specified key of a related or the same table.",
+      "example": "The foreign key connects each line item to its order.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "foreign key"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two invented tables linked by matching identifiers.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "foreign-key.referencing-data-key.n.analysis.v1",
+        "lexeme_id": "foreign-key.referencing-data-key.n",
+        "text": "foreign key",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.foreign",
+            "type": "stem",
+            "canonical": "foreign",
+            "surface": "foreign"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.key",
+            "type": "stem",
+            "canonical": "key",
+            "surface": "key"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "foreign key",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "index.data-access-structure.n",
+      "text": "index",
+      "display_text": "index",
+      "pos": "noun",
+      "definition": "An auxiliary data structure that helps a system find selected data more efficiently.",
+      "example": "The index supports searches on the date column.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "index"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A conceptual lookup structure linked to fictional table rows.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "index.data-access-structure.n.analysis.v1",
+        "lexeme_id": "index.data-access-structure.n",
+        "text": "index",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.index",
+            "type": "atomic",
+            "canonical": "index",
+            "surface": "index"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "query-plan.planned-data-operations.n",
+      "text": "query plan",
+      "display_text": "query plan",
+      "pos": "noun",
+      "definition": "The operations a database system plans to use to execute a query.",
+      "example": "The query plan shows a scan of the table.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "query plan"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional sequence of database operations.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "query-plan.planned-data-operations.n.analysis.v1",
+        "lexeme_id": "query-plan.planned-data-operations.n",
+        "text": "query plan",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.query",
+            "type": "atomic",
+            "canonical": "query",
+            "surface": "query"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.plan",
+            "type": "stem",
+            "canonical": "plan",
+            "surface": "plan"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "query plan",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "join-condition.row-matching-rule.n",
+      "text": "join condition",
+      "display_text": "join condition",
+      "pos": "noun",
+      "definition": "A condition specifying how rows from data sources are matched in a join.",
+      "example": "The join condition compares the customer identifiers.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "join condition"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two invented tables with matching rows highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "join-condition.row-matching-rule.n.analysis.v1",
+        "lexeme_id": "join-condition.row-matching-rule.n",
+        "text": "join condition",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.join",
+            "type": "atomic",
+            "canonical": "join",
+            "surface": "join"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.condition",
+            "type": "stem",
+            "canonical": "condition",
+            "surface": "condition"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "join condition",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "transaction.database-work-unit.n",
+      "text": "transaction",
+      "display_text": "transaction",
+      "pos": "noun",
+      "definition": "A group of database operations treated as one unit of work under the system's transaction rules.",
+      "example": "The transaction updates both related records.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "transaction"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional updates grouped inside one database work unit.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "constraint.enforced-data-rule.n",
+      "text": "constraint",
+      "display_text": "constraint",
+      "pos": "noun",
+      "definition": "A rule that restricts the data a database will accept.",
+      "example": "The constraint prevents an invalid value from being stored.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "constraint"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional table rule rejecting an invalid test value.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "constraint.enforced-data-rule.n.analysis.v1",
+        "lexeme_id": "constraint.enforced-data-rule.n",
+        "text": "constraint",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.constraint",
+            "type": "atomic",
+            "canonical": "constraint",
+            "surface": "constraint"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "unique-constraint.distinct-value-rule.n",
+      "text": "unique constraint",
+      "display_text": "unique constraint",
+      "pos": "noun",
+      "definition": "A database rule requiring the specified values or combinations to be distinct under that system's rules.",
+      "example": "The unique constraint prevents repeated account identifiers.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "unique constraint"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented identifier column with a repeated value rejected.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "unique-constraint.distinct-value-rule.n.analysis.v1",
+        "lexeme_id": "unique-constraint.distinct-value-rule.n",
+        "text": "unique constraint",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.unique",
+            "type": "stem",
+            "canonical": "unique",
+            "surface": "unique"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.constraint",
+            "type": "atomic",
+            "canonical": "constraint",
+            "surface": "constraint"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "unique constraint",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "null.absent-or-unknown-marker.n",
+      "text": "null",
+      "display_text": "null",
+      "pos": "noun",
+      "definition": "A marker used by some data systems for an absent, unknown, or inapplicable value.",
+      "example": "The optional field contains null in this record.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "null"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional record with an explicitly absent optional value.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "null.absent-or-unknown-marker.n.analysis.v1",
+        "lexeme_id": "null.absent-or-unknown-marker.n",
+        "text": "null",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.null",
+            "type": "atomic",
+            "canonical": "null",
+            "surface": "null"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "missing-value.unavailable-observation-value.n",
+      "text": "missing value",
+      "display_text": "missing value",
+      "pos": "noun",
+      "definition": "A value that is absent from a dataset where information could be expected.",
+      "example": "The analyst documented the missing value.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "missing value"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented observation with one value unavailable.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "missing-value.unavailable-observation-value.n.analysis.v1",
+        "lexeme_id": "missing-value.unavailable-observation-value.n",
+        "text": "missing value",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.miss",
+            "type": "stem",
+            "canonical": "miss",
+            "surface": "miss"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.value",
+            "type": "atomic",
+            "canonical": "value",
+            "surface": "value"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "missing",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "missing value",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "outlier.unusually-distant-observation.n",
+      "text": "outlier",
+      "display_text": "outlier",
+      "pos": "noun",
+      "definition": "An observation that is unusually different from others under a stated comparison.",
+      "example": "The outlier needs investigation before any change to the data.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "outlier"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented chart with an unusual observation marked for review.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "outlier.unusually-distant-observation.n.analysis.v1",
+        "lexeme_id": "outlier.unusually-distant-observation.n",
+        "text": "outlier",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.out",
+            "type": "stem",
+            "canonical": "out",
+            "surface": "out"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.lie",
+            "type": "stem",
+            "canonical": "lie",
+            "surface": "li"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "lier",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "outlier",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "duplicate.repeated-data-item.n",
+      "text": "duplicate",
+      "display_text": "duplicate",
+      "pos": "noun",
+      "definition": "An item that repeats another according to the chosen matching rule.",
+      "example": "The import report identifies a possible duplicate.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "duplicate"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional records matching on the selected fields.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "value.data-item-content.n",
+      "text": "value",
+      "display_text": "value",
+      "pos": "noun",
+      "definition": "The particular content associated with a variable, field, or observation.",
+      "example": "The field's value is an empty string.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "value"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional record with one stored content value highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "value.data-item-content.n.analysis.v1",
+        "lexeme_id": "value.data-item-content.n",
+        "text": "value",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.value",
+            "type": "atomic",
+            "canonical": "value",
+            "surface": "value"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "observation.recorded-measurement-or-case.n",
+      "text": "observation",
+      "display_text": "observation",
+      "pos": "noun",
+      "definition": "A recorded finding, measurement, or case considered in an assessment or analysis.",
+      "example": "Each observation represents one completed test run.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "observation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented row describing one test run.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "observation.recorded-measurement-or-case.n.analysis.v1",
+        "lexeme_id": "observation.recorded-measurement-or-case.n",
+        "text": "observation",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.observe",
+            "type": "stem",
+            "canonical": "observe",
+            "surface": "observ"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "observation",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        },
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "sample.selected-observation-subset.n",
+      "text": "sample",
+      "display_text": "sample",
+      "pos": "noun",
+      "definition": "A selected subset of a population used for study.",
+      "example": "The sample includes records from each region.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "sample"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A conceptual subset selected from an invented group of observations.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "sample.selected-observation-subset.n.analysis.v1",
+        "lexeme_id": "sample.selected-observation-subset.n",
+        "text": "sample",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.sample",
+            "type": "atomic",
+            "canonical": "sample",
+            "surface": "sample"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "population.complete-study-group.n",
+      "text": "population",
+      "display_text": "population",
+      "pos": "noun",
+      "definition": "The complete group of cases or measurements a study concerns.",
+      "example": "The population is all approved test runs from that month.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "population"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly bounded invented group of cases for analysis.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "mean.arithmetic-average.n",
+      "text": "mean",
+      "display_text": "mean",
+      "pos": "noun",
+      "definition": "The arithmetic average found by dividing a sum of values by their count.",
+      "example": "The mean is sensitive to a very large value.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "mean"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small invented dataset beside its sum and count.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "mean.arithmetic-average.n.analysis.v1",
+        "lexeme_id": "mean.arithmetic-average.n",
+        "text": "mean",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.mean",
+            "type": "atomic",
+            "canonical": "mean",
+            "surface": "mean"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "median.ordered-middle-value.n",
+      "text": "median",
+      "display_text": "median",
+      "pos": "noun",
+      "definition": "A middle value of ordered data, commonly the average of the two middle values when the count is even.",
+      "example": "The median describes the center of the ordered values.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "median"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An ordered invented dataset with its middle highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "median.ordered-middle-value.n.analysis.v1",
+        "lexeme_id": "median.ordered-middle-value.n",
+        "text": "median",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.median",
+            "type": "atomic",
+            "canonical": "median",
+            "surface": "median"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "mode.most-frequent-value.n",
+      "text": "mode",
+      "display_text": "mode",
+      "pos": "noun",
+      "definition": "A value occurring most often in a dataset; there may be more than one.",
+      "example": "The mode appears in five observations.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "mode"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small invented dataset with the most repeated value highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "mode.most-frequent-value.n.analysis.v1",
+        "lexeme_id": "mode.most-frequent-value.n",
+        "text": "mode",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.mode",
+            "type": "atomic",
+            "canonical": "mode",
+            "surface": "mode"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "range.maximum-minus-minimum.n",
+      "text": "range",
+      "display_text": "range",
+      "pos": "noun",
+      "definition": "The difference between the largest and smallest values in a dataset.",
+      "example": "The range increased after the new observation was added.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "range"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented numeric dataset with the smallest and largest values marked.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "range.maximum-minus-minimum.n.analysis.v1",
+        "lexeme_id": "range.maximum-minus-minimum.n",
+        "text": "range",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.range",
+            "type": "atomic",
+            "canonical": "range",
+            "surface": "range"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "variance.squared-spread-measure.n",
+      "text": "variance",
+      "display_text": "variance",
+      "pos": "noun",
+      "definition": "A measure of spread based on squared differences from a mean, with calculation depending on the population or estimator.",
+      "example": "The analyst reported the variance with the method used.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "variance"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented dataset with squared distances from its mean illustrated.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "standard-deviation.square-root-variance.n",
+      "text": "standard deviation",
+      "display_text": "standard deviation",
+      "pos": "noun",
+      "definition": "A measure of spread equal to the square root of the corresponding variance.",
+      "example": "The standard deviation uses the same units as the observations.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "standard deviation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented distribution with a labeled spread measure.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "standard-deviation.square-root-variance.n.analysis.v1",
+        "lexeme_id": "standard-deviation.square-root-variance.n",
+        "text": "standard deviation",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.standard",
+            "type": "stem",
+            "canonical": "standard",
+            "surface": "standard"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.deviation",
+            "type": "stem",
+            "canonical": "deviation",
+            "surface": "deviation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "standard deviation",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "percentile.ordered-distribution-cut-point.n",
+      "text": "percentile",
+      "display_text": "percentile",
+      "pos": "noun",
+      "definition": "A value marking a chosen percentage position in an ordered distribution under a specified calculation method.",
+      "example": "The report includes the ninety-fifth percentile of response time.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "percentile"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented response-time distribution with a percentage position marked.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "distribution.pattern-of-data-values.n",
+      "text": "distribution",
+      "display_text": "distribution",
+      "pos": "noun",
+      "definition": "The pattern of values and their frequencies or probabilities.",
+      "example": "The distribution has a long upper tail.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "distribution"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented frequency plot with its overall shape visible.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "frequency.occurrence-count-or-rate.n",
+      "text": "frequency",
+      "display_text": "frequency",
+      "pos": "noun",
+      "definition": "The number or rate of occurrences of a value or event in a specified set or period.",
+      "example": "The chart shows the frequency of each response category.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "frequency"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented chart of category counts.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "correlation.statistical-association.n",
+      "text": "correlation",
+      "display_text": "correlation",
+      "pos": "noun",
+      "definition": "A statistical relationship describing how quantities vary together under a chosen measure.",
+      "example": "The correlation alone does not establish a cause.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "correlation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two invented measured quantities plotted together.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "causation.cause-and-effect-relationship.n",
+      "text": "causation",
+      "display_text": "causation",
+      "pos": "noun",
+      "definition": "A relationship in which one factor contributes to producing an effect.",
+      "example": "This observational comparison does not establish causation.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "causation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A conceptual cause-and-effect question marked as requiring evidence.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "bias.systematic-estimation-distortion.n",
+      "text": "bias",
+      "display_text": "bias",
+      "pos": "noun",
+      "definition": "A systematic tendency in data collection or estimation that can distort conclusions.",
+      "example": "The sampling method may introduce bias.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "bias"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented sampling process favoring one group.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bias.systematic-estimation-distortion.n.analysis.v1",
+        "lexeme_id": "bias.systematic-estimation-distortion.n",
+        "text": "bias",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bias",
+            "type": "atomic",
+            "canonical": "bias",
+            "surface": "bias"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "confidence-interval.repeated-sampling-coverage-interval.n",
+      "text": "confidence interval",
+      "display_text": "confidence interval",
+      "pos": "noun",
+      "definition": "An interval produced by a method with a stated long-run coverage rate for the quantity being estimated under its assumptions.",
+      "example": "The report states the confidence interval and its assumptions.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "confidence interval"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Several conceptual repeated samples with their estimated intervals.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "confidence-interval.repeated-sampling-coverage-interval.n.analysis.v1",
+        "lexeme_id": "confidence-interval.repeated-sampling-coverage-interval.n",
+        "text": "confidence interval",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.confidence",
+            "type": "stem",
+            "canonical": "confidence",
+            "surface": "confidence"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.interval",
+            "type": "stem",
+            "canonical": "interval",
+            "surface": "interval"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "confidence interval",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-confidence-intervals",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "hypothesis.testable-statistical-proposition.n",
+      "text": "hypothesis",
+      "display_text": "hypothesis",
+      "pos": "noun",
+      "definition": "A proposition about a population or process that can be examined using evidence.",
+      "example": "The analyst recorded the hypothesis before running the test.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "hypothesis"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional analysis question documented before results are viewed.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nist-measures-of-scale",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "metric.defined-quantitative-indicator.n",
+      "text": "metric",
+      "display_text": "metric",
+      "pos": "noun",
+      "definition": "A defined quantitative indicator used to describe or assess something.",
+      "example": "The team agreed on a metric for response time.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "metric"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional monitoring measure with its definition and unit.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "metric.defined-quantitative-indicator.n.analysis.v1",
+        "lexeme_id": "metric.defined-quantitative-indicator.n",
+        "text": "metric",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.metric",
+            "type": "atomic",
+            "canonical": "metric",
+            "surface": "metric"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-onet-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-google-impressions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "dimension.analysis-grouping-attribute.n",
+      "text": "dimension",
+      "display_text": "dimension",
+      "pos": "noun",
+      "definition": "An attribute used to group, filter, or organize data in an analysis.",
+      "example": "Region is a dimension in the report.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "dimension"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented report grouped by region.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "measure.quantitative-analysis-value.n",
+      "text": "measure",
+      "display_text": "measure",
+      "pos": "noun",
+      "definition": "A quantitative value or calculation used in an analysis.",
+      "example": "The report uses total completed jobs as a measure.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "measure"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented table with a calculated total highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "measure.quantitative-analysis-value.n.analysis.v1",
+        "lexeme_id": "measure.quantitative-analysis-value.n",
+        "text": "measure",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.measure",
+            "type": "atomic",
+            "canonical": "measure",
+            "surface": "measure"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "aggregation.data-summary-combination.n",
+      "text": "aggregation",
+      "display_text": "aggregation",
+      "pos": "noun",
+      "definition": "The combination of detailed data into a summary at a chosen level.",
+      "example": "The aggregation groups counts by day.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "aggregation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Invented hourly counts combined into daily totals.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "aggregation.data-summary-combination.n.analysis.v1",
+        "lexeme_id": "aggregation.data-summary-combination.n",
+        "text": "aggregation",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.aggregate",
+            "type": "stem",
+            "canonical": "aggregate",
+            "surface": "aggregat"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ion.suffix",
+            "type": "suffix",
+            "canonical": "ion",
+            "surface": "ion"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "aggregation",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "granularity.data-detail-level.n",
+      "text": "granularity",
+      "display_text": "granularity",
+      "pos": "noun",
+      "definition": "The level of detail represented by the units in a dataset or report.",
+      "example": "The report's granularity is one row per day.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "granularity"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "The same invented data represented by individual events and daily groups.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "data-quality.data-fitness-for-purpose.n",
+      "text": "data quality",
+      "display_text": "data quality",
+      "pos": "noun",
+      "definition": "The degree to which data satisfies the requirements of its intended use.",
+      "example": "The team checks data quality before publishing the report.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "data quality"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented dataset reviewed against stated requirements.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "data-quality.data-fitness-for-purpose.n.analysis.v1",
+        "lexeme_id": "data-quality.data-fitness-for-purpose.n",
+        "text": "data quality",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.data",
+            "type": "atomic",
+            "canonical": "data",
+            "surface": "data"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.quality",
+            "type": "stem",
+            "canonical": "quality",
+            "surface": "quality"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "data quality",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "data-lineage.data-origin-and-transformation-history.n",
+      "text": "data lineage",
+      "display_text": "data lineage",
+      "pos": "noun",
+      "definition": "Information describing where data came from and how it was transformed.",
+      "example": "The data lineage links the report to its source tables.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "data lineage"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional source-to-report transformation path.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "data-lineage.data-origin-and-transformation-history.n.analysis.v1",
+        "lexeme_id": "data-lineage.data-origin-and-transformation-history.n",
+        "text": "data lineage",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.data",
+            "type": "atomic",
+            "canonical": "data",
+            "surface": "data"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.lineage",
+            "type": "stem",
+            "canonical": "lineage",
+            "surface": "lineage"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "data lineage",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "metadata.data-about-data.n",
+      "text": "metadata",
+      "display_text": "metadata",
+      "pos": "noun",
+      "definition": "Information describing data, such as its structure, origin, or meaning.",
+      "example": "The metadata records the unit for each field.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "metadata"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented field beside its descriptive information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "metadata.data-about-data.n.analysis.v1",
+        "lexeme_id": "metadata.data-about-data.n",
+        "text": "metadata",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.meta.prefix",
+            "type": "prefix",
+            "canonical": "meta",
+            "surface": "meta"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.data",
+            "type": "atomic",
+            "canonical": "data",
+            "surface": "data"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "metadata",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "onet-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-leading-question",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-circumstantial-evidence",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-fre801",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-judiciary-witnesses-oaths",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "normalization.relational-redundancy-reduction.n",
+      "text": "normalization",
+      "display_text": "normalization",
+      "pos": "noun",
+      "definition": "The organization of relational data according to rules intended to reduce problematic redundancy and dependencies.",
+      "example": "The design review considered normalization of the customer tables.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "normalization"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented repeated table structure reorganized into related tables.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "normalization.relational-redundancy-reduction.n.analysis.v1",
+        "lexeme_id": "normalization.relational-redundancy-reduction.n",
+        "text": "normalization",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.normalize",
+            "type": "stem",
+            "canonical": "normalize",
+            "surface": "normaliz"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "normalization",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "denormalization.deliberate-relational-redundancy.n",
+      "text": "denormalization",
+      "display_text": "denormalization",
+      "pos": "noun",
+      "definition": "The deliberate introduction of redundancy into a data design for a stated purpose.",
+      "example": "The team considered denormalization after measuring the query workload.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "denormalization"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional reporting table containing deliberately repeated summary information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "denormalization.deliberate-relational-redundancy.n.analysis.v1",
+        "lexeme_id": "denormalization.deliberate-relational-redundancy.n",
+        "text": "denormalization",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.de.prefix",
+            "type": "prefix",
+            "canonical": "de",
+            "surface": "de"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.normalize",
+            "type": "stem",
+            "canonical": "normalize",
+            "surface": "normaliz"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "normalization",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "denormalization",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "data-warehouse.integrated-analysis-store.n",
+      "text": "data warehouse",
+      "display_text": "data warehouse",
+      "pos": "noun",
+      "definition": "A data system organized to bring together information for reporting and analysis.",
+      "example": "The data warehouse contains approved reporting datasets.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "data warehouse"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Several fictional sources feeding a shared analytical store.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "data-warehouse.integrated-analysis-store.n.analysis.v1",
+        "lexeme_id": "data-warehouse.integrated-analysis-store.n",
+        "text": "data warehouse",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.data",
+            "type": "atomic",
+            "canonical": "data",
+            "surface": "data"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.ware",
+            "type": "stem",
+            "canonical": "ware",
+            "surface": "ware"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.house",
+            "type": "stem",
+            "canonical": "house",
+            "surface": "house"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "warehouse",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "data warehouse",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "data-lake.varied-format-data-store.n",
+      "text": "data lake",
+      "display_text": "data lake",
+      "pos": "noun",
+      "definition": "A data store designed to hold substantial amounts of data in varied formats for later use.",
+      "example": "The data lake stores approved files from several sources.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "data lake"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Invented text, table, and media files in a managed data store.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "data-lake.varied-format-data-store.n.analysis.v1",
+        "lexeme_id": "data-lake.varied-format-data-store.n",
+        "text": "data lake",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.data",
+            "type": "atomic",
+            "canonical": "data",
+            "surface": "data"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.lake",
+            "type": "stem",
+            "canonical": "lake",
+            "surface": "lake"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "data lake",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "etl.extract-transform-load-process.n",
+      "text": "ETL",
+      "display_text": "ETL",
+      "pos": "noun",
+      "definition": "A data process that extracts information, transforms it, and loads the result into a destination.",
+      "example": "The ETL job prepares the reporting table.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "ETL"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional extract, transform, and load sequence.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "etl.extract-transform-load-process.n.analysis.v1",
+        "lexeme_id": "etl.extract-transform-load-process.n",
+        "text": "ETL",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "abbr.etl",
+            "type": "abbreviation",
+            "canonical": "ETL",
+            "surface": "ETL"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "elt.extract-load-transform-process.n",
+      "text": "ELT",
+      "display_text": "ELT",
+      "pos": "noun",
+      "definition": "A data process that extracts information, loads it into a destination, and transforms it there.",
+      "example": "The ELT workflow transforms the loaded records in the analytical system.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "ELT"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional extract, load, and transform sequence.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "elt.extract-load-transform-process.n.analysis.v1",
+        "lexeme_id": "elt.extract-load-transform-process.n",
+        "text": "ELT",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "abbr.elt",
+            "type": "abbreviation",
+            "canonical": "ELT",
+            "surface": "ELT"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "pipeline.connected-processing-stages.n",
+      "text": "pipeline",
+      "display_text": "pipeline",
+      "pos": "noun",
+      "definition": "A connected sequence of processing stages through which data or work moves.",
+      "example": "The pipeline checks the source before transforming the records.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "pipeline"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented sequence of data-processing stages.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "pipeline.connected-processing-stages.n.analysis.v1",
+        "lexeme_id": "pipeline.connected-processing-stages.n",
+        "text": "pipeline",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pipe",
+            "type": "stem",
+            "canonical": "pipe",
+            "surface": "pipe"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.line",
+            "type": "stem",
+            "canonical": "line",
+            "surface": "line"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "pipeline",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "visualization.visual-data-representation.n",
+      "text": "visualization",
+      "display_text": "visualization",
+      "pos": "noun",
+      "definition": "A visual representation used to explore or communicate data.",
+      "example": "The visualization shows how the counts changed over time.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "visualization"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An invented time-series chart with clear units and labels.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "visualization.visual-data-representation.n.analysis.v1",
+        "lexeme_id": "visualization.visual-data-representation.n",
+        "text": "visualization",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.visualize",
+            "type": "stem",
+            "canonical": "visualize",
+            "surface": "visualiz"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "visualization",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "postgresql-tutorial",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    }
+  ]
+}

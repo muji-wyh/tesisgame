@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "id": "partial_prepared_manifest",
+  "specification": "partial_prepared_manifest",
+  "classification": "semantic_guard_with_rebound_fixture_envelopes",
+  "expected": "reject",
+  "mutation": "Remove one plan, prepared and state target, rebind all hashes, and retain the full authoritative receipt manifest.",
+  "synthetic_in_memory_only": true,
+  "source_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "actual_preparation_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "opened": false,
+  "recheck_passed": false,
+  "passed": true,
+  "virtual_io": {
+    "imports": [
+      "node:fs",
+      "node:path",
+      "node:crypto",
+      "node:assert/strict"
+    ],
+    "file_reads": 12505,
+    "directory_reads": 1,
+    "existence_reads": 0,
+    "denied": []
+  },
+  "virtual_changes": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "fcc416dbcd824025282817141f2f43712300653bf8ba31cfa8211f642839a981"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "c096025e97aafa902da87ebd69977d326a581787eb8f3bdd7df7be173019c650"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "b08dec387286d9797f84cab51098d3972f9f02a44ceb652e30e0721024e66289"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+      "original": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+        "bytes": 1808178,
+        "raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+      },
+      "fixture": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+        "bytes": 1808178,
+        "raw_sha256": "cdce232bf404efc6eabcdf36334e04e559770b3e0b3e37587c07a65fc02c798a"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/transactions/shopping-bag-image-r01/prepared.json",
+      "original": {
+        "path": "build/professional-english/transactions/shopping-bag-image-r01/prepared.json",
+        "bytes": 147774,
+        "raw_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a"
+      },
+      "fixture": {
+        "path": "build/professional-english/transactions/shopping-bag-image-r01/prepared.json",
+        "bytes": 146855,
+        "raw_sha256": "31e9a02e0e62fc41b74575d249922dc1d391bc6dab452dfdf44686661f6007d5"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/transactions/shopping-bag-image-r01/states/000308-committed.json",
+      "original": {
+        "path": "build/professional-english/transactions/shopping-bag-image-r01/states/000308-committed.json",
+        "bytes": 47518,
+        "raw_sha256": "6734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150"
+      },
+      "fixture": {
+        "path": "build/professional-english/transactions/shopping-bag-image-r01/states/000308-committed.json",
+        "bytes": 47222,
+        "raw_sha256": "2f75541bd1788f11483b3559f6437ed2303b4ef3a10a5f7196ad24ad514536b4"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+      "original": {
+        "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+        "bytes": 59877,
+        "raw_sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+      },
+      "fixture": {
+        "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+        "bytes": 59877,
+        "raw_sha256": "4ae900a4e402266352573154b432eb29727ca57321e2fd15f0c72c1386e953e3"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+      "original": {
+        "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+        "bytes": 2187,
+        "raw_sha256": "2b5675bdee6517924e260bb05e97b239d7838cd822f67ca6c35566a18833b5a9"
+      },
+      "fixture": {
+        "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+        "bytes": 2187,
+        "raw_sha256": "d9791846bf575dd13c5342a1a1c5ffb42da4b168d354d27ba14b7f29eb41b00b"
+      },
+      "scope": "memory_only"
+    }
+  ],
+  "rejection": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "Receipt target manifest differs from prepared plan\n+ actual - expected\n... Skipped lines\n\n  [\n    {\n      after: {\n        bytes: 360374,\n        sha256: 'e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2'\n...\n    },\n-   {\n-     after: {\n-       bytes: 4739,\n-       sha256: 'af25df7aac66b176586ae39725ad5d89420c1af8c83774b8b050ff9fd4f2e573'\n-     },\n-     before: null,\n-     noop: false,\n-     path: 'docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-guard-r01/invoke.cjs'\n-   }\n  ]\n",
+    "stack": "node:assert:152\n  throw new AssertionError(obj);\n  ^\n\nAssertionError [ERR_ASSERTION]: Receipt target manifest differs from prepared plan\n+ actual - expected\n... Skipped lines\n\n  [\n    {\n      after: {\n        bytes: 360374,\n        sha256: 'e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2'\n...\n    },\n-   {\n-     after: {\n-       bytes: 4739,\n-       sha256: 'af25df7aac66b176586ae39725ad5d89420c1af8c83774b8b050ff9fd4f2e573'\n-     },\n-     before: null,\n-     noop: false,\n-     path: 'docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-guard-r01/invoke.cjs'\n-   }\n  ]\n\n    at predecessorJournal (fifth10-frozen-binding.cjs:85:40)\n    at successfulPredecessor (fifth10-frozen-binding.cjs:137:57)\n    at Object.openSession (fifth10-frozen-binding.cjs:194:15)\n    at fifth10-memory-guard-call.cjs:1:44\n    at Script.runInContext (node:vm:149:12)\n    at run (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:428:82)\n    at Object.open (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:430:12)\n    at main (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:229:19)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:584:1)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)"
+  },
+  "expected_assertion": {
+    "line": 85,
+    "column_start": 33,
+    "column_end": 140,
+    "source_fragment": "if (selected.target_manifest) assert.deepEqual(manifest, selected.target_manifest, 'Receipt target manifest differs from prepared plan');"
+  },
+  "actual_first_binding_frame": {
+    "line": 85,
+    "column": 40
+  }
+}

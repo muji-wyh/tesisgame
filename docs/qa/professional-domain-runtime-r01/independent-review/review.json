@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "kind": "professional_runtime_independent_static_review_v1",
+  "reviewer": "/root/attendance_review",
+  "status": "passed_bounded_static_review_after_correction",
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "play-cancellation-epoch-boundary",
+      "severity": "P2",
+      "file": "scripts/professional_play.gd",
+      "before_sha256": "3295220a63a5593a43a6d08dad21c17ca06336ed069b569f50fed6e808d76602",
+      "after_sha256": "1841fb1b60d6a0b576d352d50221202c94611ec9832f8f5b039e4fe13a078489",
+      "trigger": "A synchronous cancellation or scope-release callback starts a replacement request.",
+      "defect": "An older cancel/leave frame could overwrite the replacement pending state before its later epoch check.",
+      "resolution": "Immediate epoch checks after loader cancellation; detached active/pending state before releasing the captured scope; checks after release, deactivate and trim.",
+      "validation": "Static inspection only. New cancellation callback probes inspected, not executed. No ordinary bundled-host failure was reproduced."
+    }
+  ],
+  "runtime_proof_gaps": [
+    "Whole-scene sibling disposal, callback and resource-release ordering.",
+    "Final claim failure after successful preflight and callbacks during successful view handoff.",
+    "Owner retirement while a real Store request is already dispatched, followed by its delayed response.",
+    "Production Web success, accepted curriculum readiness, real media, human review, performance and memory acceptance."
+  ],
+  "source_inventory": "source-inventory.json",
+  "narrative": "README.md",
+  "execution": {
+    "production_or_test_edits": false,
+    "godot": false,
+    "syntax_checks": false,
+    "tests": false,
+    "builds_or_exports": false,
+    "browser": false,
+    "heavy_verifier": false
+  },
+  "scope": "Independent bounded static source review of loader, Play, and UI integration after author freeze. Root execution is separate. Earlier Web build evidence remains unchanged."
+}

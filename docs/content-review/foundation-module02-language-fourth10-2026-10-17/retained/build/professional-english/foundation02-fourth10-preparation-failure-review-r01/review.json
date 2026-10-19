@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "status": "diagnosis_complete_strict_replacement_constraints_only",
+  "reviewer": "Codex recover_delivery",
+  "recorded_at": "2026-10-16T21:10:15.212Z",
+  "failed_root_receipt": {
+    "path": "build/professional-english/foundation02-fourth10-root-preparation-r01/execution/receipt.json",
+    "bytes": 6317,
+    "sha256": "9305ef12ea2570f4f0502751b551670e1cf992601c9978251b9150100025ab07"
+  },
+  "failed_log": {
+    "path": "build/professional-english/foundation02-fourth10-root-preparation-r01/execution/command-4.log",
+    "bytes": 1179,
+    "sha256": "241d2609dd7cc6def544b42130468140c6689a6b2d8bfddfa8397cde9dbe78b7"
+  },
+  "finding": "r01 wrongly assumes one historical donor per history and selected ID. Fifth10 sign has two legitimate identical whole donor rows from overlapping protected categories.",
+  "prior_review_limit": "The previous static source review missed this exact multiplicity assumption. Its scratch-dispatch acceptance did not establish successful preparation or output acceptance.",
+  "evidence": [
+    "donor-review.json",
+    "input-measurements.json",
+    "preservation-measurements.json",
+    "strict-assertion-recommendation.md"
+  ],
+  "exact_history_id_groups": 50,
+  "exact_whole_donor_rows": 51,
+  "unchanged_input_count": 803,
+  "all_pinned_inputs_unchanged": true,
+  "r01_and_original_source_review_preserved": true,
+  "replacement_constraints": [
+    "Explicit five-history and ten-ID coverage with exact counts: sign [1,1,1,1,2]; each other selected ID [1,1,1,1,1].",
+    "Every donor row must deep-equal the expected whole resource/json_sha256/entry object and every entry must equal the exact before entry.",
+    "The reversed live entry must equal every historical row entry; existing morphology/media/domain checks remain.",
+    "Preserve all historical donor rows and bytes. No deduplication, relaxed minimum counts, first-row-only comparisons, old-callback execution, or r01 revision."
+  ],
+  "project_code_imported": false,
+  "old_prepare_or_transform_callbacks_invoked": false,
+  "syntax_or_project_tests_dispatched": false,
+  "preparation_dispatched": false,
+  "native_dispatched": false,
+  "production_modified": false,
+  "preparation_accepted": false,
+  "next_step": "A separate author may create isolated r02 source for root review and root-owned dispatch."
+}

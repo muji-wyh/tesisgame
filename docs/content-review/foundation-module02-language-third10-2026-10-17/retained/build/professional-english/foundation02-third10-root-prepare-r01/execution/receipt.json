@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "ok": true,
+  "started_at": "2026-10-16T20:04:24.808Z",
+  "finished_at": "2026-10-16T20:07:31.001Z",
+  "before": [
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/author-inventory.json",
+      "sha256": "86e566de767f23aa074db5c1fa276efec30a053674af9ca9791af4fe5498c653"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/HANDOFF.md",
+      "sha256": "9e3446444a8b4ec8b8e285331852616d7abe9f088df3fd530abd5294631b3e17"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/input-pins.json",
+      "sha256": "b47f2ded5171cf76c3426fb65cfe38dd1356fc51aab64504951dc47ad20b6837"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/prepare.cjs",
+      "sha256": "f318e537c4b8d7f332a6ca98f15cd6054711a33d649d3b5de9cb0ad36dc96c8a"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/projection.cjs",
+      "sha256": "ad1143ca6951aa7851a0991fd7fc61711cfe7fc13516557f99b07c99e5b7a4f5"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/test-transforms.cjs",
+      "sha256": "f311764bac315212c3e24f22fe799c69bd151ff96331192187d4988fd80cd52f"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/TRANSACTION.md",
+      "sha256": "e597a6d497697abb8421b477f5c89b19be040231dfb25849544e3b8a36d5c9bb"
+    }
+  ],
+  "after": [
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/author-inventory.json",
+      "sha256": "86e566de767f23aa074db5c1fa276efec30a053674af9ca9791af4fe5498c653"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/HANDOFF.md",
+      "sha256": "9e3446444a8b4ec8b8e285331852616d7abe9f088df3fd530abd5294631b3e17"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/input-pins.json",
+      "sha256": "b47f2ded5171cf76c3426fb65cfe38dd1356fc51aab64504951dc47ad20b6837"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/prepare.cjs",
+      "sha256": "f318e537c4b8d7f332a6ca98f15cd6054711a33d649d3b5de9cb0ad36dc96c8a"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/projection.cjs",
+      "sha256": "ad1143ca6951aa7851a0991fd7fc61711cfe7fc13516557f99b07c99e5b7a4f5"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/test-transforms.cjs",
+      "sha256": "f311764bac315212c3e24f22fe799c69bd151ff96331192187d4988fd80cd52f"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/TRANSACTION.md",
+      "sha256": "e597a6d497697abb8421b477f5c89b19be040231dfb25849544e3b8a36d5c9bb"
+    }
+  ],
+  "static_review": {
+    "path": "build/professional-english/foundation02-third10-delivery-static-review-r01/report.md",
+    "sha256": "3474eda1dd4142ccaedaa9a0673ae3a60b28fccead26a64278ce6b07ff23bee7"
+  },
+  "commands": [
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "--check",
+        "build/professional-english/foundation02-third10-delivery-preparation-r01/projection.cjs"
+      ],
+      "started_at": "2026-10-16T20:04:24.808Z",
+      "finished_at": "2026-10-16T20:04:25.060Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "--check",
+        "build/professional-english/foundation02-third10-delivery-preparation-r01/test-transforms.cjs"
+      ],
+      "started_at": "2026-10-16T20:04:25.060Z",
+      "finished_at": "2026-10-16T20:04:25.358Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "--check",
+        "build/professional-english/foundation02-third10-delivery-preparation-r01/prepare.cjs"
+      ],
+      "started_at": "2026-10-16T20:04:25.358Z",
+      "finished_at": "2026-10-16T20:04:25.602Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "build/professional-english/foundation02-third10-delivery-preparation-r01/prepare.cjs",
+        "--root-dispatch",
+        "confirmed-by-root"
+      ],
+      "started_at": "2026-10-16T20:04:25.602Z",
+      "finished_at": "2026-10-16T20:07:30.959Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "0510cee05e8016089dc00427c5eb9b14272f2f6dbc9df3bfc64ed66193dd3a57"
+    }
+  ],
+  "scope": "Scratch preparation and projected callbacks only; no production mutation or native dispatch."
+}

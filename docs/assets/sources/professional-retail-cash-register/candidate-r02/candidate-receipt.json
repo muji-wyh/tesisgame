@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "status": "candidate_ready_for_independent_visual_review",
+  "ok": true,
+  "scope": "Scratch source conversion and actual Loader/cache/Access/WordArt/minimum WordCard path. Not production integration, image approval, complete round, or module readiness.",
+  "frozen_inputs_raw_sha256": "5392fcd6c7d5313ce24b62ed9f01944ca8d85c8a6fc70a03ec9309f4f11e6357",
+  "native_timeout_ms": 60000,
+  "native_args": [
+    "--path",
+    ".",
+    "--rendering-method",
+    "gl_compatibility",
+    "--audio-driver",
+    "Dummy",
+    "--script",
+    "res://build/professional-english/retail-term-art-review/cash-register-r04/candidate-r02/render-and-check.gd"
+  ],
+  "duration_ms": 8658,
+  "native_error": null,
+  "guard_error": null,
+  "result_error": null,
+  "review_aids_error": null,
+  "checks": 75,
+  "failures": 0,
+  "guarded_production_files": 1087,
+  "guarded_inputs": 727,
+  "source_files_unchanged": true,
+  "candidate_sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+  "native_log_sha256": "8ea9093998a31936dd06f792ea36ed9bca195cf99d9f0ce43fd3665279401a6a",
+  "report_raw_sha256": "1ed30fc6fbe96ff1acf5a484c83301accfddd681f4c2634a05ed5f8bfe9d116e",
+  "artifacts": [
+    {
+      "path": "output/actual-word-card-contact-3x.png",
+      "bytes": 68052,
+      "sha256": "3af002d872f80395dd9ced97791c21c98245b94083321ab74b9ddf382b72062b"
+    },
+    {
+      "path": "output/actual-word-card-contact.png",
+      "bytes": 48488,
+      "sha256": "5c131c5fc8c77aafb6d046875b0180bb414cb1867ad32e3f670e09f9749e692f"
+    },
+    {
+      "path": "output/cash-register.png",
+      "bytes": 172442,
+      "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+    },
+    {
+      "path": "output/fixture/professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+      "bytes": 172442,
+      "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+    },
+    {
+      "path": "output/manifest.json",
+      "bytes": 571,
+      "sha256": "0cc9bfe68bbe25d74170b6ae416666f5d2f74f859c7c02f8d05a5052805caf48"
+    },
+    {
+      "path": "output/match-matched.png",
+      "bytes": 5465,
+      "sha256": "620e636eafd3138e50d22fb8f415ec13e4d136dfa5645222db1bad9ee7708f5a"
+    },
+    {
+      "path": "output/match-unmatched.png",
+      "bytes": 4913,
+      "sha256": "dbe7d62c3a1a2060f261fe8bd57ade724da013a66158db6ef0c7c540b0de61cb"
+    },
+    {
+      "path": "output/memory-matched.png",
+      "bytes": 5100,
+      "sha256": "15f257e70cc015128b8f94d98288bd075a26ea5a93d1c6a7b25f0ab7b79886e3"
+    },
+    {
+      "path": "output/memory-unmatched.png",
+      "bytes": 4804,
+      "sha256": "061f44ac132a8fb5b9b7cfc5c1bd3cef35c0521dac7f382ea4d77ce9530d147a"
+    },
+    {
+      "path": "output/render-raw.png",
+      "bytes": 110884,
+      "sha256": "cd3c9ba5bd9ae299d48384a63300cde2ee619e7e7704bbe3d444634eef6f7e89"
+    },
+    {
+      "path": "output/report.json",
+      "bytes": 14110,
+      "sha256": "1ed30fc6fbe96ff1acf5a484c83301accfddd681f4c2634a05ed5f8bfe9d116e"
+    },
+    {
+      "path": "output/resource.json",
+      "bytes": 387,
+      "sha256": "73bafa7015860c32666e577a86f2d9f4161cc9f7423bb1ef0b9017637ff0423b"
+    },
+    {
+      "path": "output/review-aids.json",
+      "bytes": 5048,
+      "sha256": "35b830f4cfc2dfab34d6d55acdb9c5ad59b2883d8bde9ea4b61c06368533b730"
+    },
+    {
+      "path": "output/source-cue-review.png",
+      "bytes": 93324,
+      "sha256": "ba2cf851864ec1b59269334dc258e0b599e0f9ba304031947d57e2883c7cf462"
+    },
+    {
+      "path": "output/style-comparison-native-crops-2x.png",
+      "bytes": 98191,
+      "sha256": "b0b1c00ddd6c4b34db5612329a627819665b4feb5bd7d7af0d0db7afa23c0af2"
+    },
+    {
+      "path": "output/style-comparison-native-crops.png",
+      "bytes": 74800,
+      "sha256": "d68c0763b31e36ff1ff580e250dc42eeb421904c370cc756cb4fd7e3989a9b55"
+    }
+  ],
+  "production_writes": false,
+  "production_unchanged": true,
+  "image_acceptance": false,
+  "cue_visibility_acceptance": false,
+  "native_outputs_replay_allowed": false
+}

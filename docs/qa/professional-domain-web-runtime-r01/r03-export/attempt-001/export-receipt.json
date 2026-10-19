@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "ok": false,
+  "started_at": "2026-10-16T20:26:15.658Z",
+  "finished_at": "2026-10-16T20:28:16.798Z",
+  "commands": [
+    [
+      "--headless",
+      "--path",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\project",
+      "--import"
+    ],
+    [
+      "--headless",
+      "--path",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\project",
+      "--export-release",
+      "Web",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\web\\index.html"
+    ],
+    [
+      "--headless",
+      "--path",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\web",
+      "--main-pack",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\web\\index.pck",
+      "--script",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\project\\fixture\\verify_pack.gd",
+      "--",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\web-pack-manifest.json",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\web-pack-proof.json"
+    ]
+  ],
+  "harness_inventory": {
+    "path": "inventory.json",
+    "bytes": 2764,
+    "sha256": "1798f43cf2c1880f4df5f8f1e8fcadcb92cae50228f7c40dc7ac319c12bfccde"
+  },
+  "preparation": {
+    "path": "attempt-001/preparation.json",
+    "bytes": 89329,
+    "sha256": "a23209acbb9751e14dbcea0b593f58b5ed72833cfab45102ee4b9d2396fda305"
+  },
+  "error": "Error: Godot failed (exit 1):\nGodot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org\r\n\r\nSCRIPT ERROR: Parse Error: Preload file \"res://fixture/professional_domain_pack_verifier.gd\" does not exist.\r\n   at: GDScript::reload (Q:/.codex/worktrees/current-age-vocabulary/tesisgame/build/professional-english/domain-runtime-web-fixture-r03/attempt-001/project/fixture/verify_pack.gd:2)\r\nERROR: Failed to load script \"Q:/.codex/worktrees/current-age-vocabulary/tesisgame/build/professional-english/domain-runtime-web-fixture-r03/attempt-001/project/fixture/verify_pack.gd\" with error \"Parse error\".\r\n   at: load (modules/gdscript/gdscript_resource_format.cpp:46)\r\n\n    at runGodot (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\tools\\run-godot.cjs:20:11)\n    at run (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\export.cjs:23:20)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\export.cjs:42:3)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)\n    at Module.load (node:internal/modules/cjs/loader:1525:32)\n    at Module._load (node:internal/modules/cjs/loader:1327:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)",
+  "browser_execution": false,
+  "synthetic_only": true
+}

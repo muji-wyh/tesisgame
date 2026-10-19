@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T09:09:46.035Z",
+  "reviewer": "Codex retail_register_art, independent AI lexical crosscheck",
+  "url": "https://www.oxfordlearnersdictionaries.com/definition/english/client",
+  "title": "Oxford Advanced Learner's Dictionary: client",
+  "publisher": "Oxford University Press",
+  "access": "Fresh direct dictionary page opened through web tool; selected noun sense and associated examples/label inspected.",
+  "selected_section": "Noun sense 1, professional advice/services; Business B1 topic label",
+  "selected_short_excerpt": "a person who uses the services or advice of a professional person or organization",
+  "source_excerpt_word_count": 14,
+  "observed_level": "B1",
+  "paraphrased_observations": [
+    "The provider may be a professional individual or an organization; the sense is not restricted to a business provider.",
+    "The accompanying examples include social-work and therapy relationships as well as corporate clients and private clients.",
+    "The page labels the professional-services sense Business B1; its separate computing sense is C2."
+  ],
+  "limits": "Only this lexical sense and its associated examples/level were consulted. No dictionary media, full entry, exercises or reusable source assets were acquired. The web page does not explicitly classify provider legal forms; coverage of public and nonprofit providers is a bounded inference from organization and social-work examples."
+}

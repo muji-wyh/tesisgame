@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "status": "static_review_with_unexecuted_guard_probes_not_commit_approval",
+  "reviewer": "Codex disposal_test_review",
+  "author_of_proposal": "Codex recover_delivery",
+  "reviewed_at": "2026-10-16T20:26:01.3208247Z",
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-third10-commit-proposal-r01/author-inventory.json",
+    "sha256": "2b4531d1b1a715bca3f165d6af94c4328aecd249ae1b68707b4e2a6c6b8f631d"
+  },
+  "prepared_binding": {
+    "path": "build/professional-english/foundation02-third10-prepared-review-r01/binding.json",
+    "sha256": "3139e35a051f9fd4eb38dfca0b122fedc87bf602784c621ce56415006c37ad44"
+  },
+  "reviewed_files": [
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/INPUTS.md",
+      "sha256": "6c05aa35eb28cc74f807b05911c826bba18d12e05e03829fdd349515e93a8d45"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/commit.cjs",
+      "sha256": "20ff01bea2ea5027abbe7d02459a9e6caf24e74ea85d22e678bc813545476824"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/committed-evidence.test.cjs",
+      "sha256": "7b3bb20de53ac5cc50f3632ae7f5a6e945abfaabe91ab76a762b78be8fd5219a"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/evidence-contract.cjs",
+      "sha256": "42ea4433e46a0f0bff0ebfa26f7deb95b7a252a47cc3ad45a1ddbffe8c5d7f3c"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/root-commit-input.example.json",
+      "sha256": "331fdae7123187ee3578c62dbde96889ccf57cb047d1ec2f99ed5cacdef6ca11"
+    }
+  ],
+  "execution_performed_by_author": false,
+  "production_mutated": false,
+  "commit_approved": false,
+  "suspected_gaps_pending_root_probe": [
+    "Missing or empty independent reviewer identity passes the present notEqual check.",
+    "Mutually empty start/end source witness arrays appear accepted after their untrusted postinventory hashes are refreshed."
+  ],
+  "further_observations": [
+    "Helper planning does not reject absent ancestor/descendant overlap; the probe measures actual isolated commit rejection and resulting absence.",
+    "Postcommit inventory transaction_plan_sha256 is not directly compared; receipt/journal plan binding otherwise remains checked."
+  ],
+  "probe_source": "build/professional-english/foundation02-third10-commit-review-r01/probe.cjs",
+  "result_status": "not_executed",
+  "limitations": [
+    "Static source inspection is not execution evidence.",
+    "Synthetic approvals exist only in the future probe memory view.",
+    "Root must assess actual probe results and any fresh proposal independently before technical approval."
+  ]
+}

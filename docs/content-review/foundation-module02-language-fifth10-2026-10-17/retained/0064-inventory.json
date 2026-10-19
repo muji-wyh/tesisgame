@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "status": "frozen_static_proposal_pending_independent_review_and_future_baseline",
+  "author": "Codex runtime_recovery delivery proposal author",
+  "recorded_at": "2026-10-16T21:42:30.301Z",
+  "artifacts": [
+    {
+      "path": "proposal.json",
+      "bytes": 426549,
+      "sha256": "b72ae6d5f52531e828c5ef819cc4ae34e6a940010a6bebf58d502968d04d6067"
+    },
+    {
+      "path": "context-preservation.json",
+      "bytes": 1751439,
+      "sha256": "5cf815fb77ebdc45325063e40eb2b1940718e721ed18f46f347277689dd2993a"
+    },
+    {
+      "path": "history-preservation.json",
+      "bytes": 414426,
+      "sha256": "7078897f88e9db12c282e55fcb28dc9e6ffb5619c059b0aaa246aa1a5724355b"
+    },
+    {
+      "path": "evidence-pins.json",
+      "bytes": 9936,
+      "sha256": "209d5439582e7da4bd7b909819de7427d15bd248f2fbd4debcb6e5a3c8ed8ce5"
+    },
+    {
+      "path": "static-observations.json",
+      "bytes": 1566,
+      "sha256": "0357af64195dfbf5ba85a9255afce9626ba28f1413012ad0290db3a969f954fe"
+    },
+    {
+      "path": "HANDOFF.md",
+      "bytes": 6995,
+      "sha256": "ed005b593489932be6e27de91d8c6e6240ee58fa775014701423e2a13cb810bb"
+    }
+  ],
+  "baseline_bound": false,
+  "proposal_metadata_accepted": false,
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "project_or_proposal_modules_imported": false,
+  "syntax_tests_native_or_preparation_dispatched": false,
+  "inventory_self_excluded": true
+}

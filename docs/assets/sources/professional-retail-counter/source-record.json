@@ -1,0 +1,573 @@
+{
+  "date": "2026-10-16",
+  "status": "previously_acquired_originals_retained_for_scratch_source_inspection",
+  "sense_id": "counter.service-surface.n",
+  "definition": "A raised work surface used to serve customers.",
+  "example": "Please place the parcel on the counter.",
+  "approved_brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+  "source": "https://kenney.nl/assets/furniture-kit",
+  "creator": "Kenney",
+  "license": "CC0 1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "local_version": "Furniture Kit 2.1; retained license creation date 2018-11-11 13:11; acquired All-in-1 3.7.0 library",
+  "files": [
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/kitchenBar.glb",
+      "retained_path": "source/original/kitchenBar.glb",
+      "bytes": 6004,
+      "sha256": "792c3d31e60c8a8d8c7a28cf7d1efe004c5a601adc1b163a8799dde32c1b559d"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/kitchenBar_SE.png",
+      "retained_path": "source/previews/kitchenBar_SE.png",
+      "bytes": 4796,
+      "sha256": "3495f168a701c4f7d36817e0b1890d036d58fbce8298b60cedfba454a8be1fe0"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/kitchenBar_SW.png",
+      "retained_path": "source/previews/kitchenBar_SW.png",
+      "bytes": 4955,
+      "sha256": "d414ebd7492f51fe7c527c8bf2e82583e77f43e399c9b4cf15e31c22f2c144e3"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/kitchenBar_NE.png",
+      "retained_path": "source/previews/kitchenBar_NE.png",
+      "bytes": 4815,
+      "sha256": "e0c7b842670c963fbb8f3ef7bb2a7067c4ccf79d13f58e23079af6e4dc114192"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/kitchenBar_NW.png",
+      "retained_path": "source/previews/kitchenBar_NW.png",
+      "bytes": 4896,
+      "sha256": "7410800762f2c1990a39aac4ac07afbe33e89befc89e44315c28c834e1a92b43"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/kitchenBarEnd.glb",
+      "retained_path": "source/original/kitchenBarEnd.glb",
+      "bytes": 11084,
+      "sha256": "410c6d83defe4ed248a8ec32f81553b56c8b610372d02ecf0e547e3f52cdc0a1"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/kitchenBarEnd_SE.png",
+      "retained_path": "source/previews/kitchenBarEnd_SE.png",
+      "bytes": 1846,
+      "sha256": "45fe0fb31bcacace2454b08dfdbf72f0b862aa65961d25e2cead1fc0147c8dd1"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/kitchenBarEnd_SW.png",
+      "retained_path": "source/previews/kitchenBarEnd_SW.png",
+      "bytes": 1438,
+      "sha256": "516d4d4e7e69bd7c6e7a878ed97c15b1184951cfa9bf71d735e8456302a645b7"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/kitchenBarEnd_NE.png",
+      "retained_path": "source/previews/kitchenBarEnd_NE.png",
+      "bytes": 1514,
+      "sha256": "fdd50c40655ef4b35c1be562b54339728ee82e209cd81286d4452f68d84cce10"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/kitchenBarEnd_NW.png",
+      "retained_path": "source/previews/kitchenBarEnd_NW.png",
+      "bytes": 1798,
+      "sha256": "7c64accdc2f8c3a66ed0f4caa1cb23bd04a56e6257b121f1a27d2f174c59f2fc"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/cardboardBoxClosed.glb",
+      "retained_path": "source/original/cardboardBoxClosed.glb",
+      "bytes": 5400,
+      "sha256": "4af079dca52960912764574950f0549ff2ae1224b3db1528718629473a2d5d81"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/cardboardBoxClosed_SE.png",
+      "retained_path": "source/previews/cardboardBoxClosed_SE.png",
+      "bytes": 2629,
+      "sha256": "ba14375a0997a51318194b667616e4172ff88ffdeee68e1ee4cc84e4da552f25"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/cardboardBoxClosed_SW.png",
+      "retained_path": "source/previews/cardboardBoxClosed_SW.png",
+      "bytes": 2837,
+      "sha256": "90e8bd70736bcaed62f233068d2b97c357e1d04229712ac682090c56dd5167f6"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/cardboardBoxClosed_NE.png",
+      "retained_path": "source/previews/cardboardBoxClosed_NE.png",
+      "bytes": 2922,
+      "sha256": "77d272d27d6f04f9e076c8206343704df9b7b2cf17471157ec04f762fb2645c9"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Isometric/cardboardBoxClosed_NW.png",
+      "retained_path": "source/previews/cardboardBoxClosed_NW.png",
+      "bytes": 2473,
+      "sha256": "a72e1005c17a5ae4ec541f85147f42f073a92b09cf35fe7589396554dad57717"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/License.txt",
+      "retained_path": "source/License.txt",
+      "bytes": 614,
+      "sha256": "0ef3667d547d93dea1e3e47aa1c323eaef4913f25c0f2c2cfe31899f2ee134b7"
+    }
+  ],
+  "models": {
+    "kitchenBar": {
+      "asset": {
+        "generator": "UniGLTF-1.24",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "name": "kitchenBar(Clone)",
+          "translation": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "mesh": 0
+        }
+      ],
+      "meshes": [
+        {
+          "name": "Mesh kitchenBar",
+          "primitives": [
+            {
+              "mode": 4,
+              "indices": 3,
+              "attributes": {
+                "POSITION": 0,
+                "NORMAL": 1,
+                "TEXCOORD_0": 2
+              },
+              "material": 0
+            },
+            {
+              "mode": 4,
+              "indices": 4,
+              "attributes": {
+                "POSITION": 0,
+                "NORMAL": 1,
+                "TEXCOORD_0": 2
+              },
+              "material": 1
+            },
+            {
+              "mode": 4,
+              "indices": 5,
+              "attributes": {
+                "POSITION": 0,
+                "NORMAL": 1,
+                "TEXCOORD_0": 2
+              },
+              "material": 2
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "name": "wood",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              0.8962264,
+              0.6015712,
+              0.3931559,
+              1
+            ],
+            "metallicFactor": 0,
+            "roughnessFactor": 1
+          },
+          "emissiveFactor": [
+            0,
+            0,
+            0
+          ],
+          "doubleSided": false,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "name": "metal",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              0.74061054,
+              0.822866738,
+              0.8396226,
+              1
+            ],
+            "metallicFactor": 0,
+            "roughnessFactor": 1
+          },
+          "emissiveFactor": [
+            0,
+            0,
+            0
+          ],
+          "doubleSided": false,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "name": "woodDark",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              0.678000033,
+              0.455947667,
+              0.2990306,
+              1
+            ],
+            "metallicFactor": 0,
+            "roughnessFactor": 1
+          },
+          "emissiveFactor": [
+            0,
+            0,
+            0
+          ],
+          "doubleSided": false,
+          "alphaMode": "OPAQUE"
+        }
+      ],
+      "images": [],
+      "animations": [],
+      "skins": [],
+      "accessor_bounds": [
+        {
+          "index": 0,
+          "type": "VEC3",
+          "count": 88,
+          "min": [
+            0,
+            0,
+            -0.21
+          ],
+          "max": [
+            0.43,
+            0.42,
+            0
+          ]
+        },
+        {
+          "index": 1,
+          "type": "VEC3",
+          "count": 88
+        },
+        {
+          "index": 2,
+          "type": "VEC2",
+          "count": 88
+        },
+        {
+          "index": 3,
+          "type": "SCALAR",
+          "count": 126
+        },
+        {
+          "index": 4,
+          "type": "SCALAR",
+          "count": 54
+        },
+        {
+          "index": 5,
+          "type": "SCALAR",
+          "count": 48
+        }
+      ]
+    },
+    "kitchenBarEnd": {
+      "asset": {
+        "generator": "UniGLTF-1.24",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "name": "kitchenBarEnd(Clone)",
+          "translation": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "mesh": 0
+        }
+      ],
+      "meshes": [
+        {
+          "name": "Mesh kitchenBarEnd",
+          "primitives": [
+            {
+              "mode": 4,
+              "indices": 3,
+              "attributes": {
+                "POSITION": 0,
+                "NORMAL": 1,
+                "TEXCOORD_0": 2
+              },
+              "material": 0
+            },
+            {
+              "mode": 4,
+              "indices": 4,
+              "attributes": {
+                "POSITION": 0,
+                "NORMAL": 1,
+                "TEXCOORD_0": 2
+              },
+              "material": 1
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "name": "wood",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              0.8962264,
+              0.6015712,
+              0.3931559,
+              1
+            ],
+            "metallicFactor": 0,
+            "roughnessFactor": 1
+          },
+          "emissiveFactor": [
+            0,
+            0,
+            0
+          ],
+          "doubleSided": false,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "name": "metal",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              0.74061054,
+              0.822866738,
+              0.8396226,
+              1
+            ],
+            "metallicFactor": 0,
+            "roughnessFactor": 1
+          },
+          "emissiveFactor": [
+            0,
+            0,
+            0
+          ],
+          "doubleSided": false,
+          "alphaMode": "OPAQUE"
+        }
+      ],
+      "images": [],
+      "animations": [],
+      "skins": [],
+      "accessor_bounds": [
+        {
+          "index": 0,
+          "type": "VEC3",
+          "count": 232,
+          "min": [
+            0,
+            0,
+            -0.21
+          ],
+          "max": [
+            0.1015625,
+            0.42,
+            0
+          ]
+        },
+        {
+          "index": 1,
+          "type": "VEC3",
+          "count": 232
+        },
+        {
+          "index": 2,
+          "type": "VEC2",
+          "count": 232
+        },
+        {
+          "index": 3,
+          "type": "SCALAR",
+          "count": 279
+        },
+        {
+          "index": 4,
+          "type": "SCALAR",
+          "count": 177
+        }
+      ]
+    },
+    "cardboardBoxClosed": {
+      "asset": {
+        "generator": "UniGLTF-1.24",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "name": "cardboardBoxClosed(Clone)",
+          "translation": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "mesh": 0
+        }
+      ],
+      "meshes": [
+        {
+          "name": "Mesh cardboardBoxClosed",
+          "primitives": [
+            {
+              "mode": 4,
+              "indices": 3,
+              "attributes": {
+                "POSITION": 0,
+                "NORMAL": 1,
+                "TEXCOORD_0": 2
+              },
+              "material": 0
+            },
+            {
+              "mode": 4,
+              "indices": 4,
+              "attributes": {
+                "POSITION": 0,
+                "NORMAL": 1,
+                "TEXCOORD_0": 2
+              },
+              "material": 1
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "name": "wood",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              0.8962264,
+              0.6015712,
+              0.3931559,
+              1
+            ],
+            "metallicFactor": 0,
+            "roughnessFactor": 1
+          },
+          "emissiveFactor": [
+            0,
+            0,
+            0
+          ],
+          "doubleSided": false,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "name": "woodDark",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              0.678000033,
+              0.455947667,
+              0.2990306,
+              1
+            ],
+            "metallicFactor": 0,
+            "roughnessFactor": 1
+          },
+          "emissiveFactor": [
+            0,
+            0,
+            0
+          ],
+          "doubleSided": false,
+          "alphaMode": "OPAQUE"
+        }
+      ],
+      "images": [],
+      "animations": [],
+      "skins": [],
+      "accessor_bounds": [
+        {
+          "index": 0,
+          "type": "VEC3",
+          "count": 88,
+          "min": [
+            0,
+            0,
+            -0.212499991
+          ],
+          "max": [
+            0.212499991,
+            0.281,
+            9.02389264e-17
+          ]
+        },
+        {
+          "index": 1,
+          "type": "VEC3",
+          "count": 88
+        },
+        {
+          "index": 2,
+          "type": "VEC2",
+          "count": 88
+        },
+        {
+          "index": 3,
+          "type": "SCALAR",
+          "count": 162
+        },
+        {
+          "index": 4,
+          "type": "SCALAR",
+          "count": 18
+        }
+      ]
+    }
+  },
+  "source_preview_findings": "Original supplied counter previews show a wide pale top and solid orange panel. The closed cardboard box preview shows folded top flaps without personal data or branding. Original four-direction previews retained; actual native source inspection pending.",
+  "planned_scene_adaptations": [
+    "Root-level translation and rotation of original models for composition, with camera and lighting.",
+    "Uniform scale of the original cardboardBoxClosed only if required to keep the parcel secondary.",
+    "Optional repeated full original kitchenBar modules or matching kitchenBarEnd module only if a broader service surface needs them; no generated connector geometry.",
+    "Transparent render, alpha crop with margin and proportional downscale for the card."
+  ],
+  "forbidden_changes": [
+    "No invented counter or parcel geometry.",
+    "No source mesh, material, texture or visible leaf transform editing.",
+    "No actor, register, payment interaction, return/pickup action or answer labels."
+  ],
+  "available_animations": [],
+  "production_integration": false
+}

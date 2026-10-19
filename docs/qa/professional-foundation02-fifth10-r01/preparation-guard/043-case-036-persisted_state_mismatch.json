@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "id": "persisted_state_mismatch",
+  "specification": "persisted_commit_or_state_mismatch",
+  "classification": "semantic_guard_with_rebound_fixture_envelopes",
+  "expected": "reject",
+  "mutation": "Rebind persisted input/receipt while changing the selected committed-state hash.",
+  "synthetic_in_memory_only": true,
+  "source_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "actual_preparation_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "opened": false,
+  "recheck_passed": false,
+  "passed": true,
+  "virtual_io": {
+    "imports": [
+      "node:fs",
+      "node:path",
+      "node:crypto",
+      "node:assert/strict"
+    ],
+    "file_reads": 12501,
+    "directory_reads": 1,
+    "existence_reads": 0,
+    "denied": []
+  },
+  "virtual_changes": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "9ecd6ca57d5f327fd537aa30a7e70e57c4fc69c38ac75ee6ef820dfa790d7e1b"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "3cda87f42647c9a8c47c2437ad5709af3ce22038b65538059ba76b0397654412"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "984ef7b9f4ace86ff7ac3e669b4b69ff25dac09fc7cd532031233c428b9a25de"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+      "original": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+        "bytes": 1808178,
+        "raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+      },
+      "fixture": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+        "bytes": 1808178,
+        "raw_sha256": "fab2f417d2da1ec97fa84ed82123dc0f5ad353823603deff9047cf7ed81a67a8"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+      "original": {
+        "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+        "bytes": 2187,
+        "raw_sha256": "2b5675bdee6517924e260bb05e97b239d7838cd822f67ca6c35566a18833b5a9"
+      },
+      "fixture": {
+        "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+        "bytes": 2187,
+        "raw_sha256": "24ed311ce7c7e1396d0a988ea2179ad9ddffbbd2714867eed9df88e2ac7b9d3e"
+      },
+      "scope": "memory_only"
+    }
+  ],
+  "rejection": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'a734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150'\n- '6734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150'\n",
+    "stack": "node:assert:152\n  throw new AssertionError(obj);\n  ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'a734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150'\n- '6734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150'\n\n    at successfulPredecessor (fifth10-frozen-binding.cjs:126:100)\n    at Object.openSession (fifth10-frozen-binding.cjs:194:15)\n    at fifth10-memory-guard-call.cjs:1:44\n    at Script.runInContext (node:vm:149:12)\n    at run (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:428:82)\n    at Object.open (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:430:12)\n    at main (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:229:19)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:584:1)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)"
+  },
+  "expected_assertion": {
+    "line": 126,
+    "column_start": 93,
+    "column_end": 168,
+    "source_fragment": "assert.equal(persistedInput.committed_journal.sha256, commit.state.sha256);"
+  },
+  "actual_first_binding_frame": {
+    "line": 126,
+    "column": 100
+  }
+}

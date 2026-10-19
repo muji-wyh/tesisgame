@@ -1,0 +1,277 @@
+{
+  "schema": 1,
+  "created_at": "2026-10-16T18:21:01.753Z",
+  "authority": "none",
+  "files": [
+    {
+      "path": "candidate_owner_reference.gd",
+      "bytes": 16162,
+      "sha256": "5ca565b95bad3702c4592acb0b6c34a3c786abd1bba20b66bd1951e5f0a93a50"
+    },
+    {
+      "path": "scripts/professional_catalog.gd",
+      "bytes": 7177,
+      "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+    },
+    {
+      "path": "scripts/learning_context.gd",
+      "bytes": 2446,
+      "sha256": "f7099fa50517a593b2adc95a52566905b3b27b0dde010ed4c834ab96ff3497e5"
+    },
+    {
+      "path": "scripts/learning_content_resolver.gd",
+      "bytes": 17119,
+      "sha256": "d491e2641ee37c201cdb7f132cb472e6f4f18fa31a367bd5d9aa75d0aacedad3"
+    },
+    {
+      "path": "scripts/professional_media_manifest.gd",
+      "bytes": 14605,
+      "sha256": "a6b41f99f97c2b537837ebf457d04e7f9189bf82325ff258747d4e1db7943a1c"
+    },
+    {
+      "path": "scripts/learning_theme_motion.gd",
+      "bytes": 2700,
+      "sha256": "8509e2445381d990cbda4281f9e0b13049d6b58b1f4b07380b704e726f6eb80d"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "bytes": 20942,
+      "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+    },
+    {
+      "path": "scripts/growth_morphology.gd",
+      "bytes": 4976,
+      "sha256": "cf5140ffff2ca4ac2f9bfa7368d07617fa4d2200659f7dbf47a95eeb3f6f4b8f"
+    },
+    {
+      "path": "scripts/morphology_analysis.gd",
+      "bytes": 7877,
+      "sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b"
+    },
+    {
+      "path": "fixture_catalog.gd",
+      "bytes": 1239,
+      "sha256": "8c9ff2d6104d61cba3f97e3ebbe9a478d798d1a5047167fc7e3dac4b98585ad8"
+    },
+    {
+      "path": "project.godot",
+      "bytes": 138,
+      "sha256": "a9dff266191d6d5ee82dadb57b10758b9313102979051124cec5eb7bde188f27"
+    },
+    {
+      "path": "data/professional/media-manifests/synthetic-retail03-only.json",
+      "bytes": 2815,
+      "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+    },
+    {
+      "path": "cases/valid/fixture/release.json",
+      "bytes": 731,
+      "sha256": "ace0d34331dd56a7f6fcb4420290cc6dc1967e5985bbea1d2f16c40290cae8bf"
+    },
+    {
+      "path": "cases/valid/fixture/release/index.json",
+      "bytes": 20888,
+      "sha256": "f921752c76f2c5d6a828c1f5a82526839e7030ae8e94bcd0a0d9a24ba7c7a9cd"
+    },
+    {
+      "path": "cases/valid/fixture/themes.json",
+      "bytes": 91201,
+      "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+    },
+    {
+      "path": "cases/valid/fixture/release/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+      "bytes": 283578,
+      "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+    },
+    {
+      "path": "cases/valid/owner.gd",
+      "bytes": 16198,
+      "sha256": "dac4c6420a11f950d139d9876616447aae10d5298ed412fd50258c40aa5ffa09"
+    },
+    {
+      "path": "case-manifest.json",
+      "bytes": 7843,
+      "sha256": "16bb44b959b1ced915cde5986c37034eec269c9167893960938cd61b67799091"
+    },
+    {
+      "path": "negative_tests.gd",
+      "bytes": 9454,
+      "sha256": "a51020957372b3859cc81ad6fb305c43eecc74715f7cda9d5ffa5b2107277a19"
+    }
+  ],
+  "expected_missing": [],
+  "source_guards": [
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/candidate_owner_reference.gd",
+      "bytes": 16162,
+      "sha256": "5ca565b95bad3702c4592acb0b6c34a3c786abd1bba20b66bd1951e5f0a93a50"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/scripts/professional_catalog.gd",
+      "bytes": 7177,
+      "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+    },
+    {
+      "path": "scripts/professional_catalog.gd",
+      "bytes": 7177,
+      "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/scripts/learning_context.gd",
+      "bytes": 2446,
+      "sha256": "f7099fa50517a593b2adc95a52566905b3b27b0dde010ed4c834ab96ff3497e5"
+    },
+    {
+      "path": "scripts/learning_context.gd",
+      "bytes": 2446,
+      "sha256": "f7099fa50517a593b2adc95a52566905b3b27b0dde010ed4c834ab96ff3497e5"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/scripts/learning_content_resolver.gd",
+      "bytes": 17119,
+      "sha256": "d491e2641ee37c201cdb7f132cb472e6f4f18fa31a367bd5d9aa75d0aacedad3"
+    },
+    {
+      "path": "scripts/learning_content_resolver.gd",
+      "bytes": 17119,
+      "sha256": "d491e2641ee37c201cdb7f132cb472e6f4f18fa31a367bd5d9aa75d0aacedad3"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/scripts/professional_media_manifest.gd",
+      "bytes": 14605,
+      "sha256": "a6b41f99f97c2b537837ebf457d04e7f9189bf82325ff258747d4e1db7943a1c"
+    },
+    {
+      "path": "scripts/professional_media_manifest.gd",
+      "bytes": 14605,
+      "sha256": "a6b41f99f97c2b537837ebf457d04e7f9189bf82325ff258747d4e1db7943a1c"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/scripts/learning_theme_motion.gd",
+      "bytes": 2700,
+      "sha256": "8509e2445381d990cbda4281f9e0b13049d6b58b1f4b07380b704e726f6eb80d"
+    },
+    {
+      "path": "scripts/learning_theme_motion.gd",
+      "bytes": 2700,
+      "sha256": "8509e2445381d990cbda4281f9e0b13049d6b58b1f4b07380b704e726f6eb80d"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/scripts/game_data.gd",
+      "bytes": 20942,
+      "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "bytes": 20942,
+      "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/scripts/growth_morphology.gd",
+      "bytes": 4976,
+      "sha256": "cf5140ffff2ca4ac2f9bfa7368d07617fa4d2200659f7dbf47a95eeb3f6f4b8f"
+    },
+    {
+      "path": "scripts/growth_morphology.gd",
+      "bytes": 4976,
+      "sha256": "cf5140ffff2ca4ac2f9bfa7368d07617fa4d2200659f7dbf47a95eeb3f6f4b8f"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/scripts/morphology_analysis.gd",
+      "bytes": 7877,
+      "sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b"
+    },
+    {
+      "path": "scripts/morphology_analysis.gd",
+      "bytes": 7877,
+      "sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/fixture_catalog.gd",
+      "bytes": 1239,
+      "sha256": "8c9ff2d6104d61cba3f97e3ebbe9a478d798d1a5047167fc7e3dac4b98585ad8"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/project.godot",
+      "bytes": 138,
+      "sha256": "a9dff266191d6d5ee82dadb57b10758b9313102979051124cec5eb7bde188f27"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/data/professional/media-manifests/synthetic-retail03-only.json",
+      "bytes": 2815,
+      "sha256": "09a571489adac77bf5884be6dbe64850b20f6e1442bae298b2ea9bcd227c4dcb"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/cases/valid/fixture/release.json",
+      "bytes": 731,
+      "sha256": "ace0d34331dd56a7f6fcb4420290cc6dc1967e5985bbea1d2f16c40290cae8bf"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/cases/valid/fixture/release/index.json",
+      "bytes": 20888,
+      "sha256": "f921752c76f2c5d6a828c1f5a82526839e7030ae8e94bcd0a0d9a24ba7c7a9cd"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/cases/valid/fixture/themes.json",
+      "bytes": 91201,
+      "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/cases/valid/fixture/release/modules/08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba.json",
+      "bytes": 283578,
+      "sha256": "08b61358575eeb3623641ab1d63bbc0977a3d1b8fcda862fec398d4c8cf9a6ba"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/cases/valid/owner.gd",
+      "bytes": 16198,
+      "sha256": "dac4c6420a11f950d139d9876616447aae10d5298ed412fd50258c40aa5ffa09"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/case-manifest.json",
+      "bytes": 7843,
+      "sha256": "16bb44b959b1ced915cde5986c37034eec269c9167893960938cd61b67799091"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/project/negative_tests.gd",
+      "bytes": 9207,
+      "sha256": "8e15eebf24c6040eb50530137535346ed284f84135349a674d7decc8c521880f"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/validation-receipt.json",
+      "bytes": 1023,
+      "sha256": "311bbf2bec145a18f0819bfa6c1aeac949e0828793e42d10a90f0c3315943f02"
+    }
+  ],
+  "harness_files": [
+    {
+      "path": "prepare.cjs",
+      "bytes": 6745,
+      "sha256": "2937d4fdc5a77bcf54fd8763bdb2962506ccb8fdbe806501825d7b094cdf476a"
+    },
+    {
+      "path": "negative_tests.gd",
+      "bytes": 9454,
+      "sha256": "a51020957372b3859cc81ad6fb305c43eecc74715f7cda9d5ffa5b2107277a19"
+    },
+    {
+      "path": "run-native.cjs",
+      "bytes": 4348,
+      "sha256": "bdde6a60668d88e5f77cffcb8140b4e7a8e117244c31b75126dd0990348edeb5"
+    }
+  ],
+  "runner_dependency": {
+    "path": "tools/run-godot.cjs",
+    "bytes": 1228,
+    "sha256": "a411f937acd304761e0ac9f6513f45e0f2a6aa886856e3b32a537a04ff5189be"
+  },
+  "original_failed_receipt": {
+    "path": "build/professional-english/runtime-continuation-2026-10-17-r02/attempts/attempt-001/validation-receipt.json",
+    "sha256": "311bbf2bec145a18f0819bfa6c1aeac949e0828793e42d10a90f0c3315943f02"
+  },
+  "negative_cases": 0,
+  "affected_request_replacements": 5,
+  "production_scripts_copied_unchanged": 8,
+  "candidate_logic_unchanged": true,
+  "media_files_copied": 0,
+  "scope": "Correct only optional-message expectation; execute the five affected replacement selections and record their actual results. Prior 22 package negatives are not rerun."
+}

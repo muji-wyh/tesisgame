@@ -1,0 +1,319 @@
+{
+  "schema": 1,
+  "status": "static_source_references_for_unexecuted_web_fixture",
+  "captured_at": "2026-10-16T20:08:49.4248758Z",
+  "runtime_scripts": [
+    "scripts/professional_play.gd",
+    "scripts/professional_round_loader.gd",
+    "scripts/professional_domain_owner.gd",
+    "scripts/professional_domain_catalog.gd",
+    "scripts/professional_catalog.gd",
+    "scripts/professional_media_loader.gd",
+    "scripts/professional_media_cache.gd",
+    "scripts/professional_media_access.gd",
+    "scripts/professional_media_manifest.gd",
+    "scripts/professional_store.gd",
+    "scripts/professional_session.gd",
+    "scripts/professional_progress.gd",
+    "scripts/learning_context.gd",
+    "scripts/learning_content_resolver.gd",
+    "scripts/learning_theme_motion.gd",
+    "scripts/game_data.gd",
+    "scripts/morphology_analysis.gd",
+    "scripts/growth_morphology.gd",
+    "scripts/chest_sound_bank.gd",
+    "scripts/chest_feel.gd"
+  ],
+  "files": [
+    {
+      "path": "package-lock.json",
+      "bytes": 23994,
+      "sha256": "e18b9297199440aee319b92a1895e8c6b8f5825c9396d065cbdfddbe5c25a3d8"
+    },
+    {
+      "path": "package.json",
+      "bytes": 2252,
+      "sha256": "034615128abbb9403d0b6ec2747c2ed52a2e65dccb3d8f597c7e82ebe4ca77ce"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "bytes": 20942,
+      "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+    },
+    {
+      "path": "scripts/growth_morphology.gd",
+      "bytes": 4976,
+      "sha256": "cf5140ffff2ca4ac2f9bfa7368d07617fa4d2200659f7dbf47a95eeb3f6f4b8f"
+    },
+    {
+      "path": "scripts/learning_content_resolver.gd",
+      "bytes": 17119,
+      "sha256": "d491e2641ee37c201cdb7f132cb472e6f4f18fa31a367bd5d9aa75d0aacedad3"
+    },
+    {
+      "path": "scripts/learning_context.gd",
+      "bytes": 2446,
+      "sha256": "f7099fa50517a593b2adc95a52566905b3b27b0dde010ed4c834ab96ff3497e5"
+    },
+    {
+      "path": "scripts/learning_theme_motion.gd",
+      "bytes": 2700,
+      "sha256": "8509e2445381d990cbda4281f9e0b13049d6b58b1f4b07380b704e726f6eb80d"
+    },
+    {
+      "path": "scripts/morphology_analysis.gd",
+      "bytes": 7877,
+      "sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b"
+    },
+    {
+      "path": "scripts/professional_catalog.gd",
+      "bytes": 7570,
+      "sha256": "a80f9f847e515f882bc2ef94c2a284d6938ea811b4a7ac64882f90223909467b"
+    },
+    {
+      "path": "scripts/professional_domain_catalog.gd",
+      "bytes": 3137,
+      "sha256": "9b9959ecf79894abfd1f6ec279bf597987e68068bd0d3ef5f257c8237f574b19"
+    },
+    {
+      "path": "scripts/professional_domain_owner.gd",
+      "bytes": 30569,
+      "sha256": "a5d38afb67e53eede47fc2a50bec1e42060c39597021d3c0774be8cd45855feb"
+    },
+    {
+      "path": "scripts/professional_media_access.gd",
+      "bytes": 3639,
+      "sha256": "ad4350579562aec2d49c72c0ccfd72c54df162992fe8e30604504b52aef30025"
+    },
+    {
+      "path": "scripts/professional_media_cache.gd",
+      "bytes": 6801,
+      "sha256": "98d128ec9a80d178f95cd9484f6e4107a2075e49114228be7b0c16c2a24485f1"
+    },
+    {
+      "path": "scripts/professional_media_loader.gd",
+      "bytes": 7369,
+      "sha256": "d9d348d665b443300009f7490dbcb613a73eff58f9e91d6e70e364c9c76e7390"
+    },
+    {
+      "path": "scripts/professional_media_manifest.gd",
+      "bytes": 14605,
+      "sha256": "a6b41f99f97c2b537837ebf457d04e7f9189bf82325ff258747d4e1db7943a1c"
+    },
+    {
+      "path": "scripts/professional_play.gd",
+      "bytes": 9745,
+      "sha256": "e1af572288b804bb0fc51d98bb35926096cfd732da595170ab9c8247b0d6ee40"
+    },
+    {
+      "path": "scripts/professional_progress.gd",
+      "bytes": 12616,
+      "sha256": "56437fdfb907bc9cfcbeb0b9ba1442f98f6c07aaf21bc81024af9a70838f5c4f"
+    },
+    {
+      "path": "scripts/professional_round_loader.gd",
+      "bytes": 10408,
+      "sha256": "83186aeb5c993e6dcd544f71e6939de8a3b08ab60b3fc610987b22bf94d3182d"
+    },
+    {
+      "path": "scripts/professional_session.gd",
+      "bytes": 13663,
+      "sha256": "a6d5115d6e65a74c97cd129be4a3613358295566ac2065d046ac440560be8616"
+    },
+    {
+      "path": "scripts/professional_store.gd",
+      "bytes": 13762,
+      "sha256": "671fe81e308241e976d2307d1dc3ed7544226314b5d12f5e4215754f90197c2f"
+    },
+    {
+      "path": "tests/godot/professional_domain_pack_verifier.gd",
+      "bytes": 4906,
+      "sha256": "bb3804fb61b3df6ae0a5befdafa2c683a9645504253043559430f267c43ce9a1"
+    },
+    {
+      "path": "tests/professional-domain-release.test.cjs",
+      "bytes": 24633,
+      "sha256": "6490439f777a7430246b52c2dc42edf082b52496cc3d2a61ad0fe0239e51defd"
+    },
+    {
+      "path": "tools/package-professional-media.cjs",
+      "bytes": 3809,
+      "sha256": "c67e0696ab7131d98c3798d9369667f4c654b4d6366cb2867ef763d06941861f"
+    },
+    {
+      "path": "tools/professional-domain-web.cjs",
+      "bytes": 5080,
+      "sha256": "863a0555c85e5954296a0dc8238869750fde9be7fd2b66e7514afbdb6f28d71a"
+    },
+    {
+      "path": "tools/professional-domain/audit.cjs",
+      "bytes": 24733,
+      "sha256": "ad35adb9e82f42003568e11118a4f59064bfb510335d4259d76690d614c4fc4a"
+    },
+    {
+      "path": "tools/professional-domain/codec.cjs",
+      "bytes": 10419,
+      "sha256": "e4a92e81f4882d37105792526ebf8415d848a06e0f24ab244c939583a2dc9587"
+    },
+    {
+      "path": "tools/professional-domain/compiler.cjs",
+      "bytes": 6613,
+      "sha256": "dea40cba27f75860180a43858711139179f2aed497725c7238ad102e2f3373af"
+    },
+    {
+      "path": "tools/professional-domain/contract.cjs",
+      "bytes": 4499,
+      "sha256": "d7de4bbc01347f2e91c0fedcc7efbd9cf7cbad343c9ce126e0d7cbf0e97832ba"
+    },
+    {
+      "path": "tools/professional-domain/inputs.cjs",
+      "bytes": 6374,
+      "sha256": "7542c46925b133a864a9d4cf8edf6dd2a4e023e71d71d545e767cd655334ad4e"
+    },
+    {
+      "path": "tools/professional-domain/package.cjs",
+      "bytes": 7133,
+      "sha256": "7f0ae386b9b6b0d561026908628e0bb611475f3087473c747687a33fa2e92629"
+    },
+    {
+      "path": "tools/professional-domain/release-gates.cjs",
+      "bytes": 3912,
+      "sha256": "39f468c828b8cdecc7245c7e04d2995e5bf7250247a93ed7251193e18f2d44be"
+    },
+    {
+      "path": "tools/professional-domain/snapshot.cjs",
+      "bytes": 4586,
+      "sha256": "a64ed84edfb80bbba9954805b7443f18184f76adaef4850cfe38e9b36302c71e"
+    },
+    {
+      "path": "tools/professional-domain/source-model.cjs",
+      "bytes": 8620,
+      "sha256": "59844f5dae1dd9b3955dfcd5b7e8f7f76e983a9db3c1d924f976f275e38f19e3"
+    },
+    {
+      "path": "tools/professional-picture-pools.cjs",
+      "bytes": 3496,
+      "sha256": "ca37e39c0987fb4d2738fec4b951bc2646464c36aa8acd9827173542e08e3629"
+    },
+    {
+      "path": "tools/run-godot.cjs",
+      "bytes": 1228,
+      "sha256": "a411f937acd304761e0ac9f6513f45e0f2a6aa886856e3b32a537a04ff5189be"
+    },
+    {
+      "path": "tools/validate-professional-content.cjs",
+      "bytes": 31243,
+      "sha256": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd"
+    },
+    {
+      "path": "tools/validate-theme-motion.cjs",
+      "bytes": 2288,
+      "sha256": "bb2a9c07829a3b60616c663662875ba0cdbdf6af9fe9b607517ebf89ff721b04"
+    },
+    {
+      "path": "web/professional-media.js",
+      "bytes": 11851,
+      "sha256": "db9ac8f3aeaaafb8f1ac411a56d56f0bfd6d8ad2862348868d42666d3021630a"
+    },
+    {
+      "path": "web/professional-progress.js",
+      "bytes": 19082,
+      "sha256": "e1b1ae3f2045c3bfaa4fde84703f30617547817a9409d602444d2c2e4f1ec8c9"
+    },
+    {
+      "path": "tools/patch-web-engine.cjs",
+      "bytes": 11180,
+      "sha256": "de929aa3797842df8a26198f19d1c38ad3743026a7d10fada0a925d4244dab28"
+    },
+    {
+      "path": "scripts/chest_sound_bank.gd",
+      "bytes": 10846,
+      "sha256": "446827c73227db9f44677b1dabcc961bffd7b1b277247883f4eb3828c7b0ee36"
+    },
+    {
+      "path": "scripts/chest_feel.gd",
+      "bytes": 14988,
+      "sha256": "9e0a8f2c9caed80d73c1bab495b4aa1b4476232810bddb58c26164790a70a565"
+    },
+    {
+      "path": "scripts/game_audio.gd",
+      "bytes": 37273,
+      "sha256": "d7c42eb1b554f10b7ab99a2cec7ccd842b92e1b9a06e6bcaf131501167099859"
+    }
+  ],
+  "source_data_snapshot": "r03 captures a fresh audited source; no predecessor attempt outputs are copied.",
+  "previous_reference_sha256": "bc415215f9db3ab97b7ebea2b597c8f9c589f51ec3716f404a308cb6fa9e5d08",
+  "rebind_reason": "No source binding change. The only preparation behavior change adds and binds empty project/build/.gdignore before prepareRelease to prevent Godot import writes into immutable audit evidence.",
+  "rebound_files": [],
+  "snapshot_supporting_scripts": [
+    "scripts/game_audio.gd"
+  ],
+  "predecessor_reference_history": {
+    "captured_at": "2026-10-16T19:52:19.8688323Z",
+    "previous_reference_sha256": "8ff542f3a550d81c3b6eaf03f71ac1a4f0b5839be54ad565a1a34a1c950f117a",
+    "rebind_reason": "Root froze the 18-script production runtime closure after the disposal lifecycle fix; static reference rebind only.",
+    "rebound_files": [
+      {
+        "path": "scripts/professional_play.gd",
+        "prior_sha256": "1841fb1b60d6a0b576d352d50221202c94611ec9832f8f5b039e4fe13a078489",
+        "sha256": "e1af572288b804bb0fc51d98bb35926096cfd732da595170ab9c8247b0d6ee40",
+        "bytes": 9745
+      }
+    ]
+  },
+  "predecessor": {
+    "fixture": "domain-runtime-web-fixture-r01",
+    "source_references": {
+      "path": "build/professional-english/domain-runtime-web-fixture-r01/source-references.json",
+      "bytes": 8539,
+      "sha256": "bc415215f9db3ab97b7ebea2b597c8f9c589f51ec3716f404a308cb6fa9e5d08"
+    },
+    "inventory": {
+      "path": "build/professional-english/domain-runtime-web-fixture-r01/inventory.json",
+      "bytes": 3903,
+      "sha256": "01c63cd7d72f2d707034a14a012a4481b17dd1b0da225bd7634770072cb288cc"
+    },
+    "root_preparation_receipt": {
+      "path": "build/professional-english/domain-runtime-web-root-r01/prepare/receipt.json",
+      "bytes": 883,
+      "sha256": "efe4d7420e4e4a0a12d1ae07b985bd02994ef253924350301583c8817f9e0081"
+    },
+    "fixture_preparation_receipt": {
+      "path": "build/professional-english/domain-runtime-web-fixture-r01/attempt-001/preparation.json",
+      "bytes": 88861,
+      "sha256": "37746e8039ac4307e451a10c0648c1c1b884129f4ca5a6f5c296bdec2ddb452e"
+    }
+  },
+  "dependency_revision": {
+    "added_runtime_scripts": [
+      "scripts/chest_sound_bank.gd",
+      "scripts/chest_feel.gd"
+    ],
+    "added_supporting_source_binding": "scripts/game_audio.gd",
+    "copy_reason": "The production snapshot already copies game_audio.gd via theme.audio.interaction_bank. It must not also enter the explicit wx runtime-script copy loop.",
+    "closure_evidence": "static-closure-review.json",
+    "production_logic_changed": false
+  },
+  "r02_predecessor": {
+    "inventory": {
+      "path": "build/professional-english/domain-runtime-web-fixture-r02/inventory.json",
+      "bytes": 6969,
+      "sha256": "014f1abfd7dd01c2fa12ac4d2a19cf88e1a7c660e00edf62f1c38c1fa73cb810"
+    },
+    "preparation": {
+      "path": "build/professional-english/domain-runtime-web-fixture-r02/attempt-001/preparation.json",
+      "bytes": 89182,
+      "sha256": "76aac84c86b920fc988d34e5545ccf7b304a8a73b6fbf760ef1093889c4828ef"
+    },
+    "failed_export": {
+      "path": "build/professional-english/domain-runtime-web-fixture-r02/attempt-001/export-receipt.json",
+      "bytes": 1692,
+      "sha256": "808f87b7c958508cd6a3fa0e16e81e90d6811d8537220b082fb00453c7c4681a"
+    },
+    "drift": {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r02-import-drift.json",
+      "bytes": 7439,
+      "sha256": "0a51d47b4e1c161b54eae860cb77667059b972f29d53320f10733e7e1b9fedba"
+    }
+  }
+}

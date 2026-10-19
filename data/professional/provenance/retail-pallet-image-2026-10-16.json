@@ -1,0 +1,345 @@
+{
+  "schema": 1,
+  "status": "reviewed_image_integrated_pending_production_delivery_validation",
+  "independent_approval": {
+    "status": "accepted_exact_pallet_image_and_obsolete_note_only",
+    "reviewer": "Codex root (independent AI source and physical-sense picture review)",
+    "date": "2026-10-16",
+    "receipt_raw_sha256": "33d91cd06431f290359bd125c3d7e16dae1ad75d6c947f310f5bcc63f7715a9c",
+    "image_sha256": "7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8",
+    "findings": [
+      "Original source and CC0 license inspected; local Mini Skate 1.2 is explicitly distinguished from current public version 2.0.",
+      "Three top slats, supporting blocks and side fork opening remain recognizable at actual minimum native card scale. The brief explicitly permits an empty pallet.",
+      "Clean Kenney coloring, geometry and lighting fit the accepted cart/basket visual family. Matched tint and real badge preserve the key features.",
+      "The asset is a static stylized goods platform. No supplied animation, human scale cue, regulatory load claim, domain review or curriculum readiness is inferred."
+    ],
+    "inspected": [
+      "source-inspection/contact.png",
+      "candidate/pallet.png",
+      "candidate/actual-word-card-contact.png",
+      "candidate/style-comparison-native-crops-2x.png",
+      "source/License.txt",
+      "source-record.json",
+      "render-candidate.gd"
+    ]
+  },
+  "source_record": "docs/assets/sources/professional-retail-pallet/source-record.json",
+  "retained_evidence": "docs/assets/sources/professional-retail-pallet",
+  "resource": {
+    "id": "sha256:7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8",
+    "sha256": "7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8",
+    "path": "professional-media/7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8.png",
+    "kind": "image",
+    "format": "png",
+    "compressed_bytes": 86689,
+    "decoded_bytes": 1138688,
+    "width": 512,
+    "height": 278
+  },
+  "patches": [
+    {
+      "id": "pallet.goods-platform.n",
+      "before": {
+        "id": "pallet.goods-platform.n",
+        "text": "pallet",
+        "display_text": "pallet",
+        "pos": "noun",
+        "definition": "A low platform used to support goods during storage or transport.",
+        "example": "The boxes arrived on a wooden pallet.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "pallet"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Show a clean wooden goods pallet in a low three-quarter view so top slats, spacer blocks, and fork-entry gaps are visible. One small carton may show scale without obscuring the platform. Reject a pile of boards, a bed, or a loaded pallet hidden entirely by boxes. A weathered source asset is not automatically compatible with the clean Retail art direction.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.pallet.goods-platform.n.morphology.retail03.third10.proposal.v1",
+          "lexeme_id": "pallet.goods-platform.n",
+          "text": "pallet",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.pallet",
+              "canonical": "pallet",
+              "type": "atomic",
+              "surface": "pallet",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+            "notes": "Deliberate whole current goods-platform base. The Middle French palette and older shovel/diminutive history is recorded without pretending that English pal plus let is a transparent productive derivation. Bed pallet and the spelling palette are not graph alternatives. Atomic collection is exposure, not composition mastery.",
+            "references": [
+              "https://www.dictionary.com/browse/pallet",
+              "https://www.dictionary.com/browse/palette"
+            ],
+            "source_record_ids": [
+              "retail03-morph-third10-dcom-pallet",
+              "retail03-morph-third10-dcom-palette"
+            ],
+            "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+            "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-third10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "bls-material-movers",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "retail03-mw-pallet",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun 1 sense 1. A portable support platform is used to handle, store or move goods; bed and mechanical senses are separate. Selected lexical sense only; pronunciation recordings and images were not acquired. Headword syllable dots do not establish morphology. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the low portable goods-support platform. Exclude bedding and mechanical-lever senses. Retain pallet; palette and palate are unrelated words. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-media production remain pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "after": {
+        "id": "pallet.goods-platform.n",
+        "text": "pallet",
+        "display_text": "pallet",
+        "pos": "noun",
+        "definition": "A low platform used to support goods during storage or transport.",
+        "example": "The boxes arrived on a wooden pallet.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "pallet"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "integrated",
+            "path": "res://professional-media/7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8.png",
+            "sha256": "7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8",
+            "source": "https://kenney.nl/assets/mini-skate",
+            "creator": "Kenney",
+            "license": "CC0 1.0",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root independent source, physical-sense and actual minimum-card picture review",
+              "reviewed_at": "2026-10-16"
+            },
+            "brief": "Show a clean wooden goods pallet in a low three-quarter view so top slats, spacer blocks, and fork-entry gaps are visible. One small carton may show scale without obscuring the platform. Reject a pile of boards, a bed, or a loaded pallet hidden entirely by boxes. A weathered source asset is not automatically compatible with the clean Retail art direction.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [
+              "Rendered the acquired Mini Skate 1.2 pallet mesh with its original external colormap. Geometry, materials, textures and source node transforms remain unchanged; only the root is recentered.",
+              "Low three-quarter camera and studio lighting retain the three top slats, spacer/support blocks and visible side fork opening. The optional carton is omitted; no additional model parts were invented.",
+              "Transparent 768 by 768 render, alpha-bounds crop with 16-pixel padding and Lanczos reduction to 512 by 278. The accepted PNG is copied exactly.",
+              "Root inspected eight source views, actual native Match 126 by 72 and Memory 144 by 74 cards in unmatched/matched states, and comparison with the accepted cart/basket. Matched badges leave the principal slats and lower opening readable. This is scoped AI picture review, not a participant recognition study or pallet-load specification."
+            ]
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.pallet.goods-platform.n.morphology.retail03.third10.proposal.v1",
+          "lexeme_id": "pallet.goods-platform.n",
+          "text": "pallet",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.pallet",
+              "canonical": "pallet",
+              "type": "atomic",
+              "surface": "pallet",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+            "notes": "Deliberate whole current goods-platform base. The Middle French palette and older shovel/diminutive history is recorded without pretending that English pal plus let is a transparent productive derivation. Bed pallet and the spelling palette are not graph alternatives. Atomic collection is exposure, not composition mastery.",
+            "references": [
+              "https://www.dictionary.com/browse/pallet",
+              "https://www.dictionary.com/browse/palette"
+            ],
+            "source_record_ids": [
+              "retail03-morph-third10-dcom-pallet",
+              "retail03-morph-third10-dcom-palette"
+            ],
+            "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+            "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-third10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "bls-material-movers",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "retail03-mw-pallet",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun 1 sense 1. A portable support platform is used to handle, store or move goods; bed and mechanical senses are separate. Selected lexical sense only; pronunciation recordings and images were not acquired. Headword syllable dots do not establish morphology. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the low portable goods-support platform. Exclude bedding and mechanical-lever senses. Retain pallet; palette and palate are unrelated words. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The pallet image has completed scoped physical-sense picture review and integration; word audio remains pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "before_sha256": "d86c1a22d74ff96e3826769a95e5975943b0527dbe7ff3e7861b28d2c877bd81",
+      "protected_fields_sha256": "04e774f8c208d36f7acf8db90d441addf89d1c98e1f2cd0e715fcc89784792e9"
+    }
+  ],
+  "before_registry_sha256": "4300b9e3d0203bf66fc527607cb8162c34f88fe6869d67031621fa7b6abf3eca",
+  "after_registry_sha256": "a0fb575567d11457d151b6f8d91d26104d92271d7e26562ede6018df48845aa6",
+  "audit": {
+    "errors": 0,
+    "warnings": 29631,
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 62,
+      "morphology_authored": 4028,
+      "morphology_reviewed": 39,
+      "integrated_word_images": 3,
+      "integrated_word_audio": 4,
+      "release_ready": false
+    }
+  }
+}

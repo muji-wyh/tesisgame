@@ -1,0 +1,1324 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.foundation.module01.01",
+      "text": "Please send your availability so our coordinator can update the team schedule.",
+      "meaning": "Ask colleagues for times when they can take part.",
+      "context": "A team is arranging shared work.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "send",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "your",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "availability",
+          "start": 17,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "so",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "our",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "coordinator",
+          "start": 37,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "can",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "update",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "team",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "schedule",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 77,
+          "end": 78
+        }
+      ],
+      "focus_lexeme_ids": [
+        "availability.free-time.n",
+        "coordinator.organizer.n",
+        "team.working-group.n",
+        "schedule.time-plan.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-meetings",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.02",
+      "text": "My shift includes a break before my appointment with the manager.",
+      "meaning": "Describe a rest period and a meeting within a work schedule.",
+      "context": "A worker discusses the day's arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "My",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "shift",
+          "start": 3,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "includes",
+          "start": 9,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "break",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "my",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "appointment",
+          "start": 36,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "with",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "manager",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 64,
+          "end": 65
+        }
+      ],
+      "focus_lexeme_ids": [
+        "break.work-pause.n",
+        "appointment.arranged-meeting.n",
+        "manager.work-leader.n",
+        "shift.work-period.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-meetings",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.03",
+      "text": "The receptionist will welcome the visitor and make a brief introduction.",
+      "meaning": "Explain how a guest will be welcomed.",
+      "context": "A workplace prepares for a visitor.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "receptionist",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "welcome",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "visitor",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "make",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "brief",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "introduction",
+          "start": 59,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 71,
+          "end": 72
+        }
+      ],
+      "focus_lexeme_ids": [
+        "receptionist.front-desk-worker.n",
+        "visitor.temporary-guest.n",
+        "introduction.first-acquaintance.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-meetings",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.04",
+      "text": "Our employer has invited every employee and contractor to the meeting.",
+      "meaning": "State who is included in a work gathering.",
+      "context": "An organization announces an inclusive meeting.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Our",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "employer",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "invited",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "every",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "employee",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "contractor",
+          "start": 44,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 55,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "meeting",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 69,
+          "end": 70
+        }
+      ],
+      "focus_lexeme_ids": [
+        "employer.hiring-organization.n",
+        "employee.worker.n",
+        "contractor.contracted-worker.n",
+        "meeting.work-discussion.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-meetings",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.05",
+      "text": "Please ask your supervisor for permission to change the task's deadline and priority.",
+      "meaning": "Check authority before changing when work is due or how important it is.",
+      "context": "A worker reviews a task's arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "ask",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "your",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "supervisor",
+          "start": 16,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "for",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "permission",
+          "start": 31,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "change",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "task's",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "deadline",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "priority",
+          "start": 76,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "supervisor.work-overseer.n",
+        "permission.authorized-consent.n",
+        "task.work-item.n",
+        "deadline.final-time.n",
+        "priority.relative-importance.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-meetings",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.06",
+      "text": "The client's address is included in the invitation.",
+      "meaning": "Explain where to find a client's location details.",
+      "context": "A colleague prepares for a client visit.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "client's",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "address",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 21,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "included",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "in",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "invitation",
+          "start": 40,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": ".",
+          "start": 50,
+          "end": 51
+        }
+      ],
+      "focus_lexeme_ids": [
+        "client.service-customer.n",
+        "address.postal-location.n",
+        "invitation.attendance-request.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-meetings",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.07",
+      "text": "My colleague is our contact for questions about each department's role and responsibility.",
+      "meaning": "Identify the person who can explain organizational duties.",
+      "context": "A new worker learns whom to ask about team responsibilities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "My",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "colleague",
+          "start": 3,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 13,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "our",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "contact",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "for",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "questions",
+          "start": 32,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "about",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "each",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "department's",
+          "start": 53,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "role",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "responsibility",
+          "start": 75,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "colleague.workmate.n",
+        "contact.helpful-person.n",
+        "department.organization-section.n",
+        "role.work-function.n",
+        "responsibility.assigned-duty.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-meetings",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.08",
+      "text": "The voicemail message gives my extension; I also sent an email about our phone call.",
+      "meaning": "Explain where a colleague can find an internal telephone number and follow-up details.",
+      "context": "A worker follows up on a telephone conversation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "voicemail",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "message",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "gives",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "my",
+          "start": 28,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "extension",
+          "start": 31,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "I",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "also",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "sent",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "an",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "email",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "about",
+          "start": 63,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "our",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "phone",
+          "start": 73,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "call",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "voicemail.recorded-message.n",
+        "message.communication.n",
+        "extension.internal-phone-number.n",
+        "email.electronic-message.n",
+        "phone-call.telephone-conversation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-meetings",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.09",
+      "text": "The agenda includes a discussion of customer feedback and a supplier update.",
+      "meaning": "Describe the planned subjects of a meeting.",
+      "context": "A team prepares to review service and deliveries.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "agenda",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "includes",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "discussion",
+          "start": 22,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "customer",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "feedback",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "supplier",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "update",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 75,
+          "end": 76
+        }
+      ],
+      "focus_lexeme_ids": [
+        "agenda.meeting-plan.n",
+        "discussion.consideration-talk.n",
+        "customer.buyer.n",
+        "feedback.response-information.n",
+        "supplier.goods-provider.n",
+        "update.current-information.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-meetings",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module01.10",
+      "text": "Please check the calendar, location, and time zone before accepting the invitation.",
+      "meaning": "Ask someone to verify the details of an event.",
+      "context": "Colleagues work in different locations.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "calendar",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "location",
+          "start": 27,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "time",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "zone",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 51,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "accepting",
+          "start": 58,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "invitation",
+          "start": 72,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "calendar.date-organizer.n",
+        "location.place.n",
+        "time-zone.regional-time.n",
+        "invitation.attendance-request.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-meetings",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    }
+  ]
+}

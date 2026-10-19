@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-16T19:37:07.797Z",
+  "finished_at": "2026-10-16T19:38:02.648Z",
+  "results": [
+    {
+      "label": "professional_domain_owner-syntax",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--check-only",
+        "--script",
+        "res://tests/godot/professional_domain_owner_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:07.798Z",
+      "finished_at": "2026-10-16T19:37:08.881Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "ok": true
+    },
+    {
+      "label": "professional_store-syntax",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--check-only",
+        "--script",
+        "res://tests/godot/professional_store_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:08.887Z",
+      "finished_at": "2026-10-16T19:37:09.635Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "ok": true
+    },
+    {
+      "label": "professional_play-syntax",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--check-only",
+        "--script",
+        "res://tests/godot/professional_play_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:09.636Z",
+      "finished_at": "2026-10-16T19:37:11.024Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "ok": true
+    },
+    {
+      "label": "professional_application_flow-syntax",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--check-only",
+        "--script",
+        "res://tests/godot/professional_application_flow_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:11.025Z",
+      "finished_at": "2026-10-16T19:37:12.475Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "ok": true
+    },
+    {
+      "label": "professional_domain_owner-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_domain_owner_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:12.475Z",
+      "finished_at": "2026-10-16T19:37:13.896Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "8fa2d0554951a5d147b166ff037bc60fe6379d58af985d4397d3cb24286a8399",
+      "ok": true
+    },
+    {
+      "label": "professional_round_loader-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_round_loader_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:13.897Z",
+      "finished_at": "2026-10-16T19:37:15.670Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "01a2143b848f3a40ce4a5a0548ca0d58bcdf6f780b6310984b5ccddf0693feb2",
+      "ok": true
+    },
+    {
+      "label": "professional_store-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_store_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:15.671Z",
+      "finished_at": "2026-10-16T19:37:16.618Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "632f16db360e4a5df718af8ac632450c3090235837edd6dd447ae13d1bf6a312",
+      "ok": true
+    },
+    {
+      "label": "professional_play-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_play_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:16.634Z",
+      "finished_at": "2026-10-16T19:37:18.013Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "9fa02c14826324d2e70ee9d1c381172fd8c6e9611f7389cfd48eec0a7df144b2",
+      "ok": true
+    },
+    {
+      "label": "professional_progress-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_progress_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:18.024Z",
+      "finished_at": "2026-10-16T19:37:19.776Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "e6655f386035693c50ce3720e5a81de6146601e242032c905023b111cf44bd11",
+      "ok": true
+    },
+    {
+      "label": "professional_session-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_session_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:19.777Z",
+      "finished_at": "2026-10-16T19:37:22.051Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "8aa7390386a52d1d9f4bc709f39383d5eef9c112d6a21f9a091b2da5c80c6f30",
+      "ok": true
+    },
+    {
+      "label": "professional_media_bundles-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_media_bundles_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:22.052Z",
+      "finished_at": "2026-10-16T19:37:24.070Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "493cb357401cebf30e47a00032ae0de2ab8c8b5dbdaf4d89df5e9f3def18a6b7",
+      "ok": true
+    },
+    {
+      "label": "professional_application_flow-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_application_flow_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:24.071Z",
+      "finished_at": "2026-10-16T19:37:58.147Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "fb28a4bbd73842f7619d3b49ec57bcadd8d3cbbacb30c17f9097ee44c2fe575f",
+      "ok": true
+    },
+    {
+      "label": "professional_view_teardown-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_view_teardown_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:37:58.147Z",
+      "finished_at": "2026-10-16T19:38:02.250Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "07159dec6e5ae8d95ff29687b9903c95e597f8a01653f219781568c3084c7a96",
+      "ok": true
+    }
+  ],
+  "planned_executions": 13,
+  "inputs_unchanged": true,
+  "input_count": 265,
+  "ok": true,
+  "scope": "Native owner unavailable path and loader/store/controller/application fixtures. No compiled Web success, curriculum, media approval, physical-device, performance or acoustic acceptance."
+}

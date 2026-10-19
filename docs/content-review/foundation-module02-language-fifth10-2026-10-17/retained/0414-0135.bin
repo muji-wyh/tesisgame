@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "status": "not_approved_missing_dependency_pins_undispatched_preserved",
+  "candidate": {
+    "directory": "build/professional-english/shopping-bag-projected-validation-r02",
+    "runner_sha256": "815e2387471801fbaeb148a1c27a668265fe352a6b3875b37b381b948bf03073",
+    "input_sha256": "0d25315b1d2ab178fbe4445d4412e54b7de03743d9f241822d14554f84900408",
+    "dependency_supplement_sha256": "b938822e5668fec48d5670af8faa208362befce63c53d96c814abd4c9663882d"
+  },
+  "project_execution": false,
+  "attempt_exists": false,
+  "dispatch_approval": false,
+  "reason": "Existing callback reads of historical retained evidence, lineage, native local files and literal diagnostic paths are not pinned in r02 expected_inputs. The observedRead proxy will reject them. Freeze a fresh candidate revision with exact dependency supplement; preserve r02 unchanged.",
+  "dependency_evidence": [
+    {
+      "path": "build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r02-static-dependency-gaps.json",
+      "sha256": "7fbcd0f7c2f630f804834df345cc75d0db29fa6c120a334dbfe24320a5090e36"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r03-recursive-dependency-supplement.json",
+      "sha256": "6bc3e1804aa16c00a34554cc320eb9d2217dbcd5758093da2438032c3834f062"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r03-derived-path-coverage.json",
+      "sha256": "1ca0917426af502fa3aa08084afdeb1ab488bae8e103a9230f0ea06023b1ab3a"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r03-derived-recursive-supplement.json",
+      "sha256": "6e423a80b14411ee12e88d85f107f4a28ea4b79bfd2da026f5a61ac4782c68e1"
+    }
+  ],
+  "next_expected_count": 11569,
+  "prior_r01_failure_preserved": true
+}

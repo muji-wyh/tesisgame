@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "status": "read_only_structural_preview_not_test_execution",
+  "tests_executed": false,
+  "native_executed": false,
+  "baseline_bound": false,
+  "settled_input_validation": {
+    "path": "build/professional-english/continuation-validation-r20.json",
+    "raw_sha256": "621f703956ab43605f34db9aad744f25a84f355a2e8b7f0eee4aff10009a3b39"
+  },
+  "observed_registry_sha256_informational": "5d692996a93bc663d381791b6392d9501abb1f9ea4d74bd19f83252ef7789c70",
+  "proposed_registry_sha256_informational": "f8f2fefe0ce63dc21b017f54fad2f4b28ffad840eec942bace8070c812d51a9f",
+  "proposed_audit": {
+    "errors": 0,
+    "warnings": 29544,
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 81,
+      "morphology_authored": 4044,
+      "morphology_reviewed": 79,
+      "integrated_word_images": 6,
+      "integrated_word_audio": 10,
+      "release_ready": false
+    }
+  },
+  "transforms": {
+    "tests/professional-content.test.cjs": {
+      "before_raw_sha256": "965d32a876064b210457d1bcd5da0e2787f034a6212b3ed260c450620d0f589d",
+      "after_raw_sha256": "a821e520197fb3771b00b8be4c1bb965e0649941d97928758f5c7b870929269e",
+      "preview": "build/professional-english/foundation-module01-language-review/second10/delivery-r01/preview/tests/professional-content.test.cjs"
+    },
+    "tests/professional-retail-morphology.test.cjs": {
+      "before_raw_sha256": "9a137971643fecc5faa3368b4ee2efc8facc9302a870711faceed9861db442b3",
+      "after_raw_sha256": "dc66ffcdaa76bf2142270d914070b99e70533e0bb0f98e6fa755375aaaa3d071",
+      "preview": "build/professional-english/foundation-module01-language-review/second10/delivery-r01/preview/tests/professional-retail-morphology.test.cjs"
+    },
+    "tests/godot/professional_retail_morphology_tests.gd": {
+      "before_raw_sha256": "7dafe1048249167531e53d5c30784c215b3283d2665a6518a7bf44c7124d417c",
+      "after_raw_sha256": "ef28a77e66cb14ffffa34d5434645b92bfb8882aa4bfe74cf1ce042f30313d99",
+      "preview": "build/professional-english/foundation-module01-language-review/second10/delivery-r01/preview/tests/godot/professional_retail_morphology_tests.gd"
+    }
+  },
+  "script_syntax": "all_delivery_cjs_and_two_transformed_cjs_parse; native preview inspected as source only",
+  "protected_current_professional_json_count": 399,
+  "shared_tests_mutated": false
+}

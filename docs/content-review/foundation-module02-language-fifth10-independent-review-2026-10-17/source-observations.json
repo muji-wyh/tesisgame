@@ -1,0 +1,801 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_rendered_consultation_with_attributed_author_metadata",
+  "method": "Reviewer freshly opened all twenty original Oxford and Collins pages and inspected selected or explicitly related sense sections. HTML attributes/body hashes below come only from frozen author artifacts. No publisher page bodies, definitions, examples, exercises or media are imported.",
+  "requests": {
+    "total_open_requests": 30,
+    "unique_successful_original_dictionary_pages": 20,
+    "failed_additional_pages": 1,
+    "followup_requests": 9
+  },
+  "failed_additional_access": {
+    "url": "https://dictionary.cambridge.org/dictionary/english/unsafe",
+    "result": "Internal Error",
+    "evidence_used": false,
+    "http_status": null,
+    "body_hash": null
+  },
+  "followup_limitations": [
+    "Three followups using prior connector references resolved to incident, procedure and solution rather than the intended broken, safe and unclear pages. Those responses were excluded for the intended targets; fresh canonical-URL followups recovered and inspected the intended sections.",
+    "One other procedure followup correctly displayed the selected Scientific research B2 topic.",
+    "Rendered line numbers describe the consulted snapshots and may change when publisher pages change. Canonical URLs are authoritative identifiers."
+  ],
+  "level_policy": "Record labels literally and attribute their sense and source. B1+ is not silently rounded. Missing labels are missing evidence, not a proof of absence of difficulty. Oxford cefr and fkcefr are distinct literal attributes. Topic labels, selected metadata, related senses and unrelated footers remain separate.",
+  "sources": [
+    {
+      "source_id": "foundation02-language-fifth10-oxford-broken",
+      "term": "broken",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/broken_1",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "Adjective sense 1, rendered lines 112-125",
+        "summary": "Physical damage or inability to function; selected Health problems topic A2.",
+        "level": "A2",
+        "label_scope": "Health problems topic attached to selected adjective sense 1",
+        "boundary": "Promises, interrupted activity/language and emotional uses remain separate.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": "oxford-html-metadata.json",
+        "metadata_artifact_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+        "observed_html_selected_levels": [
+          {
+            "element_id": "broken_sng_1",
+            "sense_number": "1",
+            "cefr": "a2",
+            "fkcefr": null,
+            "html_offset": 53621
+          }
+        ],
+        "author_http_status": 200,
+        "author_raw_body_bytes": 84143,
+        "author_raw_body_sha256": "19ddfbc1283edd8f3fe26da8dc65abbf6215826b39439f8fd2f381cf71e539e5",
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-collins-broken",
+      "term": "broken",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/broken",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "COBUILD lines 222-224; British adjective sense 2, lines 289-293, and sense 7, lines 321-324",
+        "summary": "The British adjective sections support physical breakage and nonfunctioning, with no observed level on those sections.",
+        "level": null,
+        "label_scope": null,
+        "other_labels": [
+          {
+            "literal": "A2",
+            "scope": "COBUILD past-participle cross-reference",
+            "use_as_selected_adjective_level": false
+          }
+        ],
+        "boundary": "Do not use the participle cross-reference level as an adjective-sense level.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": null,
+        "metadata_artifact_sha256": null,
+        "observed_html_selected_levels": [],
+        "author_http_status": null,
+        "author_raw_body_bytes": null,
+        "author_raw_body_sha256": null,
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-oxford-urgent",
+      "term": "urgent",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/urgent",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "Adjective sense 1, lines 105-118",
+        "summary": "Attention or action is needed immediately; no selected rendered level observed.",
+        "level": null,
+        "label_scope": null,
+        "boundary": "No medical triage, legal deadline or obligatory response threshold accepted.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": "oxford-html-metadata.json",
+        "metadata_artifact_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+        "observed_html_selected_levels": [
+          {
+            "element_id": "urgent_sng_1",
+            "sense_number": "1",
+            "cefr": "b2",
+            "fkcefr": null,
+            "html_offset": 53179
+          }
+        ],
+        "author_http_status": 200,
+        "author_raw_body_bytes": 74269,
+        "author_raw_body_sha256": "02247e1f4be189f5d8d6be03ee0bb2d5317bcb8b94a65124e692bccdb570b0ef",
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-collins-urgent",
+      "term": "urgent",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/urgent",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "COBUILD adjective sense 1, lines 222-230",
+        "summary": "The selected prompt-action meaning has literal B1+.",
+        "level": "B1+",
+        "label_scope": "Selected needing-prompt-action adjective sense",
+        "boundary": "B1+ remains literal and differs from Oxford selected b2 metadata.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": null,
+        "metadata_artifact_sha256": null,
+        "observed_html_selected_levels": [],
+        "author_http_status": null,
+        "author_raw_body_bytes": null,
+        "author_raw_body_sha256": null,
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-oxford-unclear",
+      "term": "unclear",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/unclear",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "Adjective sense 1, lines 113-118",
+        "summary": "Information or wording not definite or easy to understand; selected topic B1.",
+        "level": "B1",
+        "label_scope": "Topic attached to selected information/wording sense",
+        "boundary": "A person who does not understand is a distinct use.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": "oxford-html-metadata.json",
+        "metadata_artifact_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+        "observed_html_selected_levels": [
+          {
+            "element_id": "unclear_sng_1",
+            "sense_number": "1",
+            "cefr": "b1",
+            "fkcefr": null,
+            "html_offset": 54101
+          }
+        ],
+        "author_http_status": 200,
+        "author_raw_body_bytes": 72127,
+        "author_raw_body_sha256": "aa74a0f5ff385d5b5701b1284b9b2c632fe353cd5593f29b5edfc24a780422a2",
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-collins-unclear",
+      "term": "unclear",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/unclear",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "COBUILD sense 1, lines 222-232; British dictionary lines 276-280",
+        "summary": "COBUILD B2 describes an unknown or uncertain situation; British ambiguous/not-definite wording is ungraded.",
+        "level": "B2",
+        "label_scope": "Related unknown/uncertain situation sense; not an exact separate wording level",
+        "boundary": "The B2 person-not-understanding sense is also separate; no averaging of sense labels.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": null,
+        "metadata_artifact_sha256": null,
+        "observed_html_selected_levels": [],
+        "author_http_status": null,
+        "author_raw_body_bytes": null,
+        "author_raw_body_sha256": null,
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-oxford-safe",
+      "term": "safe",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/safe_1",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "Adjective sense 2, lines 150-165",
+        "summary": "Things or activities unlikely to cause physical harm; no selected rendered level observed.",
+        "level": null,
+        "label_scope": null,
+        "boundary": "Protected person/property sense 1 and secure-container noun are distinct.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": "oxford-html-metadata.json",
+        "metadata_artifact_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+        "observed_html_selected_levels": [
+          {
+            "element_id": "safe_sng_2",
+            "sense_number": "2",
+            "cefr": "a2",
+            "fkcefr": null,
+            "html_offset": 58937
+          }
+        ],
+        "author_http_status": 200,
+        "author_raw_body_bytes": 113107,
+        "author_raw_body_sha256": "059740ac10c0447a3ed2e2ec4fcd548e32ffeddf559bc527f80df538cfb47942",
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-collins-safe",
+      "term": "safe",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/safe",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "COBUILD adjective sense 1, lines 224-234",
+        "summary": "Things or activities that do not cause physical harm; selected A2.",
+        "level": "A2",
+        "label_scope": "Selected physical-danger thing/activity adjective",
+        "boundary": "No technical unacceptable-risk threshold or safety certification follows.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": null,
+        "metadata_artifact_sha256": null,
+        "observed_html_selected_levels": [],
+        "author_http_status": null,
+        "author_raw_body_bytes": null,
+        "author_raw_body_sha256": null,
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-oxford-unsafe",
+      "term": "unsafe",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/unsafe",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "Adjective sense 1, lines 103-106",
+        "summary": "Dangerous thing, place or activity; no selected level observed.",
+        "level": null,
+        "label_scope": null,
+        "other_labels": [
+          {
+            "literal": "B2",
+            "scope": "Word of the Day reasonably in footer",
+            "use_as_selected_adjective_level": false
+          }
+        ],
+        "boundary": "A person in danger and an unsafe legal conviction are distinct; footer B2 is excluded.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": "oxford-html-metadata.json",
+        "metadata_artifact_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+        "observed_html_selected_levels": [
+          {
+            "element_id": "unsafe_sng_1",
+            "sense_number": "1",
+            "cefr": null,
+            "fkcefr": null,
+            "html_offset": 52962
+          }
+        ],
+        "author_http_status": 200,
+        "author_raw_body_bytes": 71641,
+        "author_raw_body_sha256": "6f91ed34b39cca74e21221d5f162b0fe8d966580fdc50123901587d9ce509903",
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-collins-unsafe",
+      "term": "unsafe",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/unsafe",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "COBUILD adjective sense 1, lines 222-230",
+        "summary": "A dangerous building, machine, activity or area; no selected level observed.",
+        "level": null,
+        "label_scope": null,
+        "boundary": "Person and conviction meanings do not establish the level of this selected sense.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": null,
+        "metadata_artifact_sha256": null,
+        "observed_html_selected_levels": [],
+        "author_http_status": null,
+        "author_raw_body_bytes": null,
+        "author_raw_body_sha256": null,
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-oxford-hazard",
+      "term": "hazard",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/hazard_1",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "Dangerous-thing noun, lines 105-120",
+        "summary": "A dangerous thing or situation; the selected Danger topic is C1.",
+        "level": "C1",
+        "label_scope": "Danger topic attached to selected noun",
+        "boundary": "Preserve C1 without clamping; frozen fkcefr c1 is not cefr.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": "oxford-html-metadata.json",
+        "metadata_artifact_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+        "observed_html_selected_levels": [
+          {
+            "element_id": "hazard_sng_1",
+            "sense_number": null,
+            "cefr": null,
+            "fkcefr": "c1",
+            "html_offset": 53156
+          }
+        ],
+        "author_http_status": 200,
+        "author_raw_body_bytes": 77036,
+        "author_raw_body_sha256": "b3fe2f58f815d21d5bf08209ce355a38f87c482e3fa8ec2538a9e8d926f44c79",
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-collins-hazard",
+      "term": "hazard",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/hazard",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "COBUILD noun sense 1, lines 224-232",
+        "summary": "A dangerous thing or situation; no selected level observed.",
+        "level": null,
+        "label_scope": null,
+        "boundary": "No lower-level evidence or specialist hazard-category acceptance follows.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": null,
+        "metadata_artifact_sha256": null,
+        "observed_html_selected_levels": [],
+        "author_http_status": null,
+        "author_raw_body_bytes": null,
+        "author_raw_body_sha256": null,
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-oxford-incident",
+      "term": "incident",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/incident_1",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "Noun sense 1, lines 105-122",
+        "summary": "An ordinary event, often unusual or unpleasant; no selected rendered level observed.",
+        "level": null,
+        "label_scope": null,
+        "boundary": "Violent and diplomatic senses remain separate.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": "oxford-html-metadata.json",
+        "metadata_artifact_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+        "observed_html_selected_levels": [
+          {
+            "element_id": "incident_sng_1",
+            "sense_number": "1",
+            "cefr": "b2",
+            "fkcefr": null,
+            "html_offset": 53298
+          }
+        ],
+        "author_http_status": 200,
+        "author_raw_body_bytes": 83427,
+        "author_raw_body_sha256": "9233db099c967ed1694424f21dce47c93aa1c040dcfa8eb5b7594bd043a76778",
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-collins-incident",
+      "term": "incident",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/incident",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "COBUILD noun, lines 224-237",
+        "summary": "The selected event noun has B2 and explicit formal register.",
+        "level": "B2",
+        "label_scope": "Selected event noun",
+        "register": "formal",
+        "boundary": "No reporting duty or specialist incident definition is approved.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": null,
+        "metadata_artifact_sha256": null,
+        "observed_html_selected_levels": [],
+        "author_http_status": null,
+        "author_raw_body_bytes": null,
+        "author_raw_body_sha256": null,
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-oxford-concern",
+      "term": "concern",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/concern_2",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "Related worry-noun sense 1, lines 108-126",
+        "summary": "A feeling of worry is related lexical evidence, not the exact countable worrying-matter sense.",
+        "level": null,
+        "label_scope": null,
+        "boundary": "Important-matter sense 3 and the verb page cannot substitute for the selected countable noun.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": "oxford-html-metadata.json",
+        "metadata_artifact_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+        "observed_html_selected_levels": [
+          {
+            "element_id": "concern_sng_6",
+            "sense_number": "1",
+            "cefr": "b2",
+            "fkcefr": null,
+            "html_offset": 53831
+          }
+        ],
+        "author_http_status": 200,
+        "author_raw_body_bytes": 87451,
+        "author_raw_body_sha256": "e8ce0ba9b14c3fac2e9cb117243704f02d627fca7a289bf1cfbfbfdfcb76a50a",
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-collins-concern",
+      "term": "concern",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/concern",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "COBUILD countable noun sense 3, lines 261-268",
+        "summary": "A worrying fact or situation directly supports the selected countable matter sense, with B2.",
+        "level": "B2",
+        "label_scope": "Exact countable worrying-fact/situation noun",
+        "boundary": "Verb, company, priority and protective-interest uses remain separate.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": null,
+        "metadata_artifact_sha256": null,
+        "observed_html_selected_levels": [],
+        "author_http_status": null,
+        "author_raw_body_bytes": null,
+        "author_raw_body_sha256": null,
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-oxford-solution",
+      "term": "solution",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/solution",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "Problem-response noun sense 1, lines 105-124",
+        "summary": "A way to deal with a problem; no selected rendered level observed.",
+        "level": null,
+        "label_scope": null,
+        "boundary": "Puzzle answers and chemical mixtures are distinct senses.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": "oxford-html-metadata.json",
+        "metadata_artifact_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+        "observed_html_selected_levels": [
+          {
+            "element_id": "solution_sng_1",
+            "sense_number": "1",
+            "cefr": "a2",
+            "fkcefr": null,
+            "html_offset": 53694
+          }
+        ],
+        "author_http_status": 200,
+        "author_raw_body_bytes": 79768,
+        "author_raw_body_sha256": "64a4b75b1c81c5236b60491cbd25f0ca291668b623393629f0e72a668820a60c",
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-collins-solution",
+      "term": "solution",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/solution",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "COBUILD noun sense 1, lines 224-231",
+        "summary": "The selected problem-response sense has literal B1+.",
+        "level": "B1+",
+        "label_scope": "Selected way-to-deal-with-a-problem sense",
+        "boundary": "Preserve disagreement with Oxford selected a2; do not convert B1+.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": null,
+        "metadata_artifact_sha256": null,
+        "observed_html_selected_levels": [],
+        "author_http_status": null,
+        "author_raw_body_bytes": null,
+        "author_raw_body_sha256": null,
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-oxford-procedure",
+      "term": "procedure",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/procedure",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "Established-method noun sense 1, lines 105-126",
+        "summary": "An established or usual method; selected Scientific research topic B2.",
+        "level": "B2",
+        "label_scope": "Scientific research topic attached to selected method sense",
+        "boundary": "A medical operation and specialist procedures are separate.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": "oxford-html-metadata.json",
+        "metadata_artifact_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+        "observed_html_selected_levels": [
+          {
+            "element_id": "procedure_sng_1",
+            "sense_number": "1",
+            "cefr": "b2",
+            "fkcefr": null,
+            "html_offset": 53735
+          }
+        ],
+        "author_http_status": 200,
+        "author_raw_body_bytes": 81126,
+        "author_raw_body_sha256": "9f660a6d0b1ade2cce0cb6de320c090182e0470016039d046f1b60c43b340601",
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    },
+    {
+      "source_id": "foundation02-language-fifth10-collins-procedure",
+      "term": "procedure",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/procedure",
+      "fresh_reviewer_rendered_consultation": {
+        "consulted_on": "2026-10-17",
+        "mechanism": "web connector open",
+        "succeeded": true,
+        "section": "COBUILD general-method noun, lines 224-235",
+        "summary": "A general method of doing something; selected B2.",
+        "level": "B2",
+        "label_scope": "Selected general-method noun",
+        "boundary": "No clinical, legal, isolation or lockout method is approved.",
+        "response_http_status": null,
+        "raw_body_sha256": null,
+        "limitation": "The connector rendered page text; HTTP status and raw body hashes were not exposed or independently recorded."
+      },
+      "frozen_author_metadata_only": {
+        "provenance": "build/professional-english/foundation-module02-language-review/fifth10-research-r01/source-index.json",
+        "provenance_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+        "metadata_artifact": null,
+        "metadata_artifact_sha256": null,
+        "observed_html_selected_levels": [],
+        "author_http_status": null,
+        "author_raw_body_bytes": null,
+        "author_raw_body_sha256": null,
+        "independently_downloaded_html": false
+      },
+      "source_page_retained": false,
+      "source_content_imported": false,
+      "assets_acquired": false,
+      "rights_scope": "Public dictionary consultation only; no license grant for copying, media acquisition, or redistribution is claimed."
+    }
+  ]
+}

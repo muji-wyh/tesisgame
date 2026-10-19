@@ -1,0 +1,1811 @@
+{
+  "schema_version": 1,
+  "kind": "professional_review_field_recount",
+  "observed_at": "2026-10-16T19:14:42.351Z",
+  "scope": "Read-only recount of existing fields. Corrects the checkpoint label; grants no new review, media, module or release acceptance.",
+  "catalog_sha256": "ff39f26ad1a6868dcb6ce96e6f2c007f0c9dcbe2eafee906c8ee9360af99e544",
+  "registry_sha256": "148f9191f91891a564bb79dbce428c60b3b4b1a07e1374135cc0d6a0619165b9",
+  "totals": {
+    "total": 4939,
+    "review_status_reviewed": 130,
+    "review_language_reviewed": 317
+  },
+  "groups": [
+    {
+      "path": "data/professional/lexemes/shared-pilot.json",
+      "total": 2,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 2
+    },
+    {
+      "path": "data/professional/lexemes/retail-pilot.json",
+      "total": 48,
+      "review_status_reviewed": 23,
+      "review_language_reviewed": 48
+    },
+    {
+      "path": "data/professional/lexemes/nursing-pilot.json",
+      "total": 49,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/software-data-pilot.json",
+      "total": 49,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/foundation-module01.json",
+      "total": 50,
+      "review_status_reviewed": 50,
+      "review_language_reviewed": 50
+    },
+    {
+      "path": "data/professional/lexemes/foundation-module02.json",
+      "total": 50,
+      "review_status_reviewed": 18,
+      "review_language_reviewed": 18
+    },
+    {
+      "path": "data/professional/lexemes/retail-module04.json",
+      "total": 50,
+      "review_status_reviewed": 17,
+      "review_language_reviewed": 50
+    },
+    {
+      "path": "data/professional/lexemes/retail-module05.json",
+      "total": 50,
+      "review_status_reviewed": 9,
+      "review_language_reviewed": 50
+    },
+    {
+      "path": "data/professional/lexemes/retail-module06.json",
+      "total": 50,
+      "review_status_reviewed": 11,
+      "review_language_reviewed": 50
+    },
+    {
+      "path": "data/professional/lexemes/retail-module07.json",
+      "total": 50,
+      "review_status_reviewed": 2,
+      "review_language_reviewed": 49
+    },
+    {
+      "path": "data/professional/lexemes/retail-module08.json",
+      "total": 50,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/retail-module09.json",
+      "total": 46,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/retail-module10.json",
+      "total": 50,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module04.json",
+      "total": 50,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module05.json",
+      "total": 50,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module06.json",
+      "total": 49,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module07.json",
+      "total": 48,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module08.json",
+      "total": 45,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module09.json",
+      "total": 35,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module10.json",
+      "total": 38,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module04.json",
+      "total": 50,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module05.json",
+      "total": 48,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module06.json",
+      "total": 50,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module07.json",
+      "total": 47,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module08.json",
+      "total": 47,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module09.json",
+      "total": 40,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module10.json",
+      "total": 40,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module03.json",
+      "total": 35,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module04.json",
+      "total": 28,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module05.json",
+      "total": 23,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module06.json",
+      "total": 36,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module07.json",
+      "total": 20,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module08.json",
+      "total": 18,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module09.json",
+      "total": 10,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module10.json",
+      "total": 13,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module03.json",
+      "total": 30,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module04.json",
+      "total": 31,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module05.json",
+      "total": 25,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module06.json",
+      "total": 30,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module07.json",
+      "total": 10,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module08.json",
+      "total": 15,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module09.json",
+      "total": 10,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module10.json",
+      "total": 20,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module03.json",
+      "total": 20,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module04.json",
+      "total": 10,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module05.json",
+      "total": 30,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module06.json",
+      "total": 25,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module07.json",
+      "total": 28,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module08.json",
+      "total": 10,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module09.json",
+      "total": 10,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module10.json",
+      "total": 15,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module03.json",
+      "total": 33,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module04.json",
+      "total": 45,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module05.json",
+      "total": 18,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module06.json",
+      "total": 30,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module07.json",
+      "total": 12,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module08.json",
+      "total": 5,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module09.json",
+      "total": 22,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module10.json",
+      "total": 13,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module03.json",
+      "total": 30,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module04.json",
+      "total": 11,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module05.json",
+      "total": 18,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module06.json",
+      "total": 30,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module07.json",
+      "total": 22,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module08.json",
+      "total": 8,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module09.json",
+      "total": 15,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module10.json",
+      "total": 15,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module03.json",
+      "total": 30,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module04.json",
+      "total": 35,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module05.json",
+      "total": 16,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module06.json",
+      "total": 27,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module07.json",
+      "total": 31,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module08.json",
+      "total": 8,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module09.json",
+      "total": 15,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module10.json",
+      "total": 15,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/transport-module03.json",
+      "total": 28,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/transport-module04.json",
+      "total": 16,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/transport-module05.json",
+      "total": 12,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/transport-module06.json",
+      "total": 39,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/transport-module07.json",
+      "total": 10,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/transport-module08.json",
+      "total": 8,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/transport-module09.json",
+      "total": 10,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/transport-module10.json",
+      "total": 11,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module03.json",
+      "total": 20,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module04.json",
+      "total": 39,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module05.json",
+      "total": 28,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module06.json",
+      "total": 43,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module07.json",
+      "total": 39,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module08.json",
+      "total": 23,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module09.json",
+      "total": 27,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module10.json",
+      "total": 24,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/shared-coordination.json",
+      "total": 1,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/education-module03.json",
+      "total": 49,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/education-module04.json",
+      "total": 44,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/education-module05.json",
+      "total": 36,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/education-module06.json",
+      "total": 47,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/education-module07.json",
+      "total": 35,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/education-module08.json",
+      "total": 27,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/education-module09.json",
+      "total": 18,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/education-module10.json",
+      "total": 38,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hr-module03.json",
+      "total": 17,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hr-module04.json",
+      "total": 46,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hr-module05.json",
+      "total": 38,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hr-module06.json",
+      "total": 45,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hr-module07.json",
+      "total": 38,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hr-module08.json",
+      "total": 35,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hr-module09.json",
+      "total": 37,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/hr-module10.json",
+      "total": 40,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/construction-module03.json",
+      "total": 46,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/construction-module04.json",
+      "total": 49,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/construction-module05.json",
+      "total": 31,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/construction-module06.json",
+      "total": 45,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/construction-module07.json",
+      "total": 48,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/construction-module08.json",
+      "total": 19,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/construction-module09.json",
+      "total": 37,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/construction-module10.json",
+      "total": 36,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module03.json",
+      "total": 34,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module04.json",
+      "total": 37,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module05.json",
+      "total": 23,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module06.json",
+      "total": 35,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module07.json",
+      "total": 30,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module08.json",
+      "total": 17,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module09.json",
+      "total": 16,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module10.json",
+      "total": 15,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module03.json",
+      "total": 37,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module04.json",
+      "total": 38,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module05.json",
+      "total": 20,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module06.json",
+      "total": 39,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module07.json",
+      "total": 29,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module08.json",
+      "total": 30,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module09.json",
+      "total": 21,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module10.json",
+      "total": 33,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/sales-module03.json",
+      "total": 18,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/sales-module04.json",
+      "total": 46,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/sales-module05.json",
+      "total": 31,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/sales-module06.json",
+      "total": 41,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/sales-module07.json",
+      "total": 41,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/sales-module08.json",
+      "total": 42,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/sales-module09.json",
+      "total": 39,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/sales-module10.json",
+      "total": 23,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module03.json",
+      "total": 21,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module04.json",
+      "total": 14,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module05.json",
+      "total": 29,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module06.json",
+      "total": 16,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module07.json",
+      "total": 40,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module08.json",
+      "total": 12,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module09.json",
+      "total": 3,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module10.json",
+      "total": 18,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module03.json",
+      "total": 15,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module04.json",
+      "total": 46,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module05.json",
+      "total": 31,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module06.json",
+      "total": 35,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module07.json",
+      "total": 46,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module08.json",
+      "total": 38,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module09.json",
+      "total": 39,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module10.json",
+      "total": 31,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/legal-module03.json",
+      "total": 43,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/legal-module04.json",
+      "total": 23,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/legal-module05.json",
+      "total": 47,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/legal-module06.json",
+      "total": 47,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/legal-module07.json",
+      "total": 37,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/legal-module08.json",
+      "total": 17,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    },
+    {
+      "path": "data/professional/lexemes/legal-module09.json",
+      "total": 40,
+      "review_status_reviewed": 0,
+      "review_language_reviewed": 0
+    }
+  ],
+  "lexeme_inputs": [
+    {
+      "path": "data/professional/lexemes/shared-pilot.json",
+      "bytes": 21356,
+      "sha256": "8c25b6341d72cb8ef07e6710f6a0b7ed9a05ecb61141e6317f17c826419f5d56"
+    },
+    {
+      "path": "data/professional/lexemes/retail-pilot.json",
+      "bytes": 358948,
+      "sha256": "7efcb9f1ce7cd931982ca6978278f547e05745059762c3558f5ef1864faea897"
+    },
+    {
+      "path": "data/professional/lexemes/nursing-pilot.json",
+      "bytes": 176266,
+      "sha256": "f0777eff27fed1a46113220f5343169a9cae9af4ed1c5721c5fb1c487aba6333"
+    },
+    {
+      "path": "data/professional/lexemes/software-data-pilot.json",
+      "bytes": 221226,
+      "sha256": "aed0680a69532b9b9d1bb781c212ee90ad65895833419baf2b395b338a7dc51b"
+    },
+    {
+      "path": "data/professional/lexemes/foundation-module01.json",
+      "bytes": 313832,
+      "sha256": "a7853d049a715ce992978744c93f81cb481a6cae2b97879cdbc83d2a81629b70"
+    },
+    {
+      "path": "data/professional/lexemes/foundation-module02.json",
+      "bytes": 220456,
+      "sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41"
+    },
+    {
+      "path": "data/professional/lexemes/retail-module04.json",
+      "bytes": 322464,
+      "sha256": "d6abaeaec930a02a47460c9a5751d7b0cd55693205e56283249da30768efe4c8"
+    },
+    {
+      "path": "data/professional/lexemes/retail-module05.json",
+      "bytes": 341482,
+      "sha256": "78967500d9d48f2bcff24d2dddd633f67a12712fa702e19f6dac0e8e0ce8a215"
+    },
+    {
+      "path": "data/professional/lexemes/retail-module06.json",
+      "bytes": 317054,
+      "sha256": "e789916be9423c0e4153972fded7032d64f2e1fd16ad4919d1bdc63143b23da5"
+    },
+    {
+      "path": "data/professional/lexemes/retail-module07.json",
+      "bytes": 380328,
+      "sha256": "6ddedb6643c345d26fccb7f9163ebbb35199b68bc148cfb4357a830acb5059b5"
+    },
+    {
+      "path": "data/professional/lexemes/retail-module08.json",
+      "bytes": 292281,
+      "sha256": "fa88cf2d1900b0b25e1b4e3a2ba0192c4b8ee03d612b39b9e5eaf55a3e8440e6"
+    },
+    {
+      "path": "data/professional/lexemes/retail-module09.json",
+      "bytes": 275519,
+      "sha256": "76888177494656000227c04ba63e159f88d6304b8852c07f7f7b20988fb23cff"
+    },
+    {
+      "path": "data/professional/lexemes/retail-module10.json",
+      "bytes": 264078,
+      "sha256": "7fd709707cb37d463e8d57207889594b0d644e8a1170dc9982f2cf407675fd6a"
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module04.json",
+      "bytes": 154401,
+      "sha256": "9269efb19e6ebf92e594f782e88cc26e849d134363ca527f1e38876ada7d502c"
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module05.json",
+      "bytes": 162659,
+      "sha256": "c36f78dd78561d58d4b4157e6813e84876bfbbef1374b048af7b7331b7753f1e"
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module06.json",
+      "bytes": 190155,
+      "sha256": "24c3e7225afc2596cc4954969581ae03aa18b3f45cfe3a1d077a0da960666c95"
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module07.json",
+      "bytes": 159810,
+      "sha256": "54605a91a455b5d329539e10ef5838c9e5acd40bd6e19a62b51c62dcebefa274"
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module08.json",
+      "bytes": 215489,
+      "sha256": "d846ee927986ed1521cbd725df3d75637ff8a421f3218534cebff16b078f8562"
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module09.json",
+      "bytes": 131462,
+      "sha256": "af362050d3a94907421d654a567cc7740713cd528044ec869f80a815ccf26e2d"
+    },
+    {
+      "path": "data/professional/lexemes/software-data-module10.json",
+      "bytes": 171647,
+      "sha256": "e30f0d9e20bfa8181dbe136c9911558ccc908e28a7eef7523af7e110243b57d3"
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module04.json",
+      "bytes": 219676,
+      "sha256": "704045fa5fd9532a8f1763f91a85721dae60226bd63ae5f38e6c276f47ab2a9d"
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module05.json",
+      "bytes": 229902,
+      "sha256": "7bb2a58246bd1053b2e4f724e25229baf904f460692a2afb5d5bd97163586d55"
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module06.json",
+      "bytes": 210275,
+      "sha256": "2194c71291392832639cb963595b4852832759c10ebe775ad4df8535a274fdd1"
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module07.json",
+      "bytes": 256455,
+      "sha256": "43a41dc9e2bd347e0c67adb36aa9dbc04e3d57d95b5d60e348ed95362044e6c1"
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module08.json",
+      "bytes": 236268,
+      "sha256": "a5ab09d52a466091d36229b528e31f6254bac1c3c5a963c87d9aab9819f8527c"
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module09.json",
+      "bytes": 237350,
+      "sha256": "0c239dece5e67d4ea6ea494fafbcf192212edaefb0c24af819cdd41f608ca188"
+    },
+    {
+      "path": "data/professional/lexemes/nursing-module10.json",
+      "bytes": 212165,
+      "sha256": "aa43569ad7c2e8da1e7eaf1058dd7e11f8dc0c07f52b29923ec39927d530c986"
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module03.json",
+      "bytes": 135081,
+      "sha256": "8428425d59d1bb8a0e5532c213c2bf1ca15fb5df3236d6b56822b521b76e1337"
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module04.json",
+      "bytes": 104752,
+      "sha256": "e825d87302ffa9dc0cd91c67929b51a68188e9639672064c5f6e2a325a3c71e4"
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module05.json",
+      "bytes": 84311,
+      "sha256": "3ed722261ea33bc53de1bab193ac016291b03e7861f3f3e4dbc135e115a39c22"
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module06.json",
+      "bytes": 135750,
+      "sha256": "1ef9b196737342becc36981abdcc17cde7b792be40465d89f52994650502145c"
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module07.json",
+      "bytes": 78024,
+      "sha256": "2bfcbc82cb659d7877bc31940f1d030485cf0cee220d40e6ad7c9e54f621b328"
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module08.json",
+      "bytes": 80315,
+      "sha256": "8773a479f87276a398733646eba80d1e1476813dd7d48ac03c92b4886b07121b"
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module09.json",
+      "bytes": 50266,
+      "sha256": "b9b2176be88aa624b9af7aa768e41118767273a19522a091ead55d27b6f1eac7"
+    },
+    {
+      "path": "data/professional/lexemes/caregiving-module10.json",
+      "bytes": 62080,
+      "sha256": "8a129963ae322e5549dca9cea242985585534a81016e2f740c3bdc729aec298f"
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module03.json",
+      "bytes": 116047,
+      "sha256": "d125814b112b99a2000bdadaf0897641e7f2cecb277c44f79e40df93e33e4323"
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module04.json",
+      "bytes": 104900,
+      "sha256": "d2926ff66f0d6d0cf6bb153f06dcd70c071481f21f100afeecc45f5e6c01087e"
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module05.json",
+      "bytes": 84580,
+      "sha256": "eacc026a108befa831a135568459eea2ac729d82f09b486fefa32779ec19ff64"
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module06.json",
+      "bytes": 112473,
+      "sha256": "7c933a50ed34204153d601534410733812b7084532349c768669979a963b129e"
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module07.json",
+      "bytes": 41318,
+      "sha256": "fedb8229fefd4cc7259458f136416cb537dbdb7f1ef38902a9c6e09fd0123775"
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module08.json",
+      "bytes": 74838,
+      "sha256": "b32c8727152bb1576483fbe64c50d664510e5a5a2801bbc8ef2a79afeae6daaf"
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module09.json",
+      "bytes": 42277,
+      "sha256": "bb5f405594fa89d7324368292e714afff03a74eb19185d42bb7273adb3480d23"
+    },
+    {
+      "path": "data/professional/lexemes/food-service-module10.json",
+      "bytes": 72386,
+      "sha256": "f2f0a106ce4558fa0ced817f6afcea0ebed000a6e99b69961e521743a9a6bfe3"
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module03.json",
+      "bytes": 87785,
+      "sha256": "f4479b3487ff4153dd7bdb8651bd49d66dc09d133e82cb6cc7a1e8d43ed3fad0"
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module04.json",
+      "bytes": 51785,
+      "sha256": "d35983572f3fd2817dd56dd657e3584f1ddffde5480927d9c4b5d726d2c99221"
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module05.json",
+      "bytes": 133891,
+      "sha256": "92ac90d8b3b9677d3418f1c2c5a878a832f99c81e27c047a781f55c9c65d8a81"
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module06.json",
+      "bytes": 100351,
+      "sha256": "e81eab83922b203efe5a0dc2cc7bc672bdb2169b06917a6d05799f944edf78e4"
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module07.json",
+      "bytes": 147410,
+      "sha256": "a608e8b6aaed2d564c009b6ffc415d9b2f0e8b26f3ed86d25413a63e69f0314c"
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module08.json",
+      "bytes": 55110,
+      "sha256": "c9df805ae1b8c42e886e591791465deb78fc996dc8053324b36a92324f135a3b"
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module09.json",
+      "bytes": 44575,
+      "sha256": "b645299a3346a8cdd286feeb1a39f1b9cdbce82f6f5000b02e7090a0b8ec8755"
+    },
+    {
+      "path": "data/professional/lexemes/customer-support-module10.json",
+      "bytes": 85787,
+      "sha256": "d304e760e44595155f7db38456aedc07b99753fdc5b766d25316992e9c68b38d"
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module03.json",
+      "bytes": 154037,
+      "sha256": "f4293e3dffc5cc2976d36d9ef6943f979730b8705cae44c0bce0aa087d46dd7f"
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module04.json",
+      "bytes": 211721,
+      "sha256": "a24e01786ca007a7488ea677ed399a909ea01c8a747189e0e4ece5fa55ce38d4"
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module05.json",
+      "bytes": 68911,
+      "sha256": "59707f4c785caebb298c01eaae4a62e09cb95cbb32998d19f2dbe9ed1931666f"
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module06.json",
+      "bytes": 131217,
+      "sha256": "47233b4f0c44fb95bf88ae0bc12340e49da8f5ec6777836081fd0a9f1a1ebc9d"
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module07.json",
+      "bytes": 66437,
+      "sha256": "d20cf0c1d1f7f61fc2a36e0ce6801b4a2aadc754c517193c38738fd988aef907"
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module08.json",
+      "bytes": 25943,
+      "sha256": "c5fe0dfed8e50bfd3d0a5504564138c7e490bb3f8e4a9beccb1e8f583b021fc2"
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module09.json",
+      "bytes": 104381,
+      "sha256": "b8487a2a6fc0370bf4a1a7c5bebdc182736041d152df9b5c7abc9407acd0f5e5"
+    },
+    {
+      "path": "data/professional/lexemes/office-admin-module10.json",
+      "bytes": 59974,
+      "sha256": "815e5a89ca238e5518aa097a4b4219c3438399cab7f81f6d424259c990cc2dd2"
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module03.json",
+      "bytes": 131004,
+      "sha256": "1c0c0b759817f75dafbf7e873b301856f3d96a773dcadd3134ba3680c946790d"
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module04.json",
+      "bytes": 46064,
+      "sha256": "0af14ec05c68295e5ecf26e509118c167c2cb624587b90369c59bed9049cf2fc"
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module05.json",
+      "bytes": 77071,
+      "sha256": "e94963122f4a08e9a5135d6f1f5240800c6ff04854f2369c97eaa36ac4237aec"
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module06.json",
+      "bytes": 158512,
+      "sha256": "1ba55aa1730c51d10e116aeb58892d5db08d4875d1518287b7e98a6ddb7e8f0a"
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module07.json",
+      "bytes": 90578,
+      "sha256": "6bc27059756162e621eb5b5461a3ea8e25da1595bd41224d2e22d96139c47ef5"
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module08.json",
+      "bytes": 49645,
+      "sha256": "07ae92ab2bf9c3f58a6df4893b4f128df7ff95ea853d9aa570224a1258cff397"
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module09.json",
+      "bytes": 71906,
+      "sha256": "b0f9b3b00e17b38c5a7ebc38f6f9a5f83b1a7b1f4ed3a4469d93f73f77905b60"
+    },
+    {
+      "path": "data/professional/lexemes/warehouse-module10.json",
+      "bytes": 81838,
+      "sha256": "cfa111f8d4d2d2127ef8a4c191d7f66117749e103c90cb0af01143b10c414f97"
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module03.json",
+      "bytes": 115480,
+      "sha256": "101f699dad56a7cb618c6a76c3bc6f099eaeceeea2016539e3c10d02fd4d6f0e"
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module04.json",
+      "bytes": 138906,
+      "sha256": "8320e6db164e8ee2539df478c8385cc55ea9c3e64c8339f31bac033de3a4e13f"
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module05.json",
+      "bytes": 53759,
+      "sha256": "98fe9ae8a99d3066bfd2a3a65ad946ae240259fe2a7acfe7f4e68d477fea7c28"
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module06.json",
+      "bytes": 113014,
+      "sha256": "7a01f11696ea45684ec5ce491b6de161138f8073770ff598f180304587b4a3d8"
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module07.json",
+      "bytes": 123440,
+      "sha256": "60391f79d08ef68c40d9e6dfbee4388b3650a8a7981d827a06e5960daa093199"
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module08.json",
+      "bytes": 37174,
+      "sha256": "23833f01c3f6a77da2029d6ed9d205f67854202784da424467967be6b7a46674"
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module09.json",
+      "bytes": 70088,
+      "sha256": "0ee3c872e5fd10553838ae9737f571462fe1581a76456329cc09071e09f23b29"
+    },
+    {
+      "path": "data/professional/lexemes/hospitality-module10.json",
+      "bytes": 69235,
+      "sha256": "410378efd79cb13fd8ab8b72ed5d4a405c37a97751bb90a037a77bf9793fb70b"
+    },
+    {
+      "path": "data/professional/lexemes/transport-module03.json",
+      "bytes": 120256,
+      "sha256": "7c0d08e06aa810721c58ce633807eeab35d5c7016b1ccd6836aed27c93596279"
+    },
+    {
+      "path": "data/professional/lexemes/transport-module04.json",
+      "bytes": 68927,
+      "sha256": "524b00f000fade0ac759feefc9f40c396c41529e3b579949635e2c88d00d45fd"
+    },
+    {
+      "path": "data/professional/lexemes/transport-module05.json",
+      "bytes": 49955,
+      "sha256": "1aa36ed6c8375f735acfc75ffd1a143635ddfa259f2824386efffabcbc567ed0"
+    },
+    {
+      "path": "data/professional/lexemes/transport-module06.json",
+      "bytes": 171614,
+      "sha256": "4b40e71517e50c29508e6ef4c63e39148b210c56d5a5c7ee5255bab1da9e5f0c"
+    },
+    {
+      "path": "data/professional/lexemes/transport-module07.json",
+      "bytes": 54588,
+      "sha256": "5b893027bcaaaa0e6dde9565fe28adb7bd44ba2d18b3547a5a24a7f0244111e3"
+    },
+    {
+      "path": "data/professional/lexemes/transport-module08.json",
+      "bytes": 41710,
+      "sha256": "ed3ca8f512eefe53d84b9a9d82929734fa7f595815fe4340b0aed31cb3513cd0"
+    },
+    {
+      "path": "data/professional/lexemes/transport-module09.json",
+      "bytes": 45817,
+      "sha256": "7b1cefebaf077e1d40fcb210c7d803b47a1e901e9c1fc4b9d2ec14390ca0b256"
+    },
+    {
+      "path": "data/professional/lexemes/transport-module10.json",
+      "bytes": 56123,
+      "sha256": "6d3404a9dc20134f75569fc56835c1c031bbdaf7305dc526a7bf9700e104ce88"
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module03.json",
+      "bytes": 99585,
+      "sha256": "b339c1b0b6d0a399950fa1d80b9814cc68eb88af1151dbd1bf5c31b04ed70bb3"
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module04.json",
+      "bytes": 172914,
+      "sha256": "94cd611f178fdcf11c08ae46f18ed43cee20a7eb7ef3c6bf2bc743de3bbf35f2"
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module05.json",
+      "bytes": 135455,
+      "sha256": "bfee9030c747cdb846b52f7b5ada761fa6c994ae4d294705ca885fe1203d98f4"
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module06.json",
+      "bytes": 205957,
+      "sha256": "d665d894b3c4f047a2a2e82ca4f4cabb78ba5f3401a9fc7e6cddde52fe3e5b54"
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module07.json",
+      "bytes": 185651,
+      "sha256": "c184096c81c9a6b1d66b1166efd3a84a9030287157a26c0c374754ffaf12ad04"
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module08.json",
+      "bytes": 119153,
+      "sha256": "7389aa0b02706000ac5ba43ad4555e4a6c16f5b21f107e11cf30947db2ea68dc"
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module09.json",
+      "bytes": 139410,
+      "sha256": "df40d2b2b257083f60ea49c98d9a37b113d37a7eb327103eabb2bc379c3c9b4e"
+    },
+    {
+      "path": "data/professional/lexemes/it-support-module10.json",
+      "bytes": 117332,
+      "sha256": "28fea8724bbb62e9eec9f841ae75cab57c8242d790c97cdc9de648ee7bd58c0d"
+    },
+    {
+      "path": "data/professional/lexemes/shared-coordination.json",
+      "bytes": 15042,
+      "sha256": "b0bae7097233f766d5be5f9119d65d6acf94fc6ad95811aa9b70a16ce8aa47cc"
+    },
+    {
+      "path": "data/professional/lexemes/education-module03.json",
+      "bytes": 250931,
+      "sha256": "b26e1e8565987d7955e3c28a9e9931bb3834f8a4fd8e6b5327c71f53bec052d5"
+    },
+    {
+      "path": "data/professional/lexemes/education-module04.json",
+      "bytes": 209222,
+      "sha256": "45be334bf3575302e555f5492724deaf219deed63856de67029247a9e7a26b6d"
+    },
+    {
+      "path": "data/professional/lexemes/education-module05.json",
+      "bytes": 174265,
+      "sha256": "39fbbfda84192007ff0544ae536415b6d59074e41ed9ecb68c90e59262f499d9"
+    },
+    {
+      "path": "data/professional/lexemes/education-module06.json",
+      "bytes": 239604,
+      "sha256": "b04860128a4d35548902cdd24742e626ffa0d8f32f7f8323cb6f5fcd755cefab"
+    },
+    {
+      "path": "data/professional/lexemes/education-module07.json",
+      "bytes": 162563,
+      "sha256": "67a67abf3a832a8089f807095afc7b299490a57a1619f56a6457f75cf82221ec"
+    },
+    {
+      "path": "data/professional/lexemes/education-module08.json",
+      "bytes": 150384,
+      "sha256": "948c51b4e91ee6eef65084fb35b70407c2acaf7df3ca976886cdf6db97b74693"
+    },
+    {
+      "path": "data/professional/lexemes/education-module09.json",
+      "bytes": 96746,
+      "sha256": "3a86d73ca0fe5e26c06bab62d2da5abc4cd09a11be34aff304d441a2468d73d8"
+    },
+    {
+      "path": "data/professional/lexemes/education-module10.json",
+      "bytes": 235954,
+      "sha256": "b5e5dc4463ee4ac0a46dab6eff484bd5db2442f298938117063eccaa2c9ddb13"
+    },
+    {
+      "path": "data/professional/lexemes/hr-module03.json",
+      "bytes": 97857,
+      "sha256": "42594da833f6fadce591bf89133d83a9ca3d871519cb72a34092b3de301387df"
+    },
+    {
+      "path": "data/professional/lexemes/hr-module04.json",
+      "bytes": 228055,
+      "sha256": "049b2ad946715c2beb115804911a8b0282a50da189e56d2b90eaf0ddc4c7722a"
+    },
+    {
+      "path": "data/professional/lexemes/hr-module05.json",
+      "bytes": 152168,
+      "sha256": "b1cb299df79f6c55d60595fef760d54ca2c508260ea0a9d712a3a9db55ad5d69"
+    },
+    {
+      "path": "data/professional/lexemes/hr-module06.json",
+      "bytes": 235900,
+      "sha256": "3e2b050646acbd27556b31558f91641b0efb14cc55f45320829fa07f685b88b0"
+    },
+    {
+      "path": "data/professional/lexemes/hr-module07.json",
+      "bytes": 187082,
+      "sha256": "3db53c6f134efe8407e6b89b6fe38f0836335c987b314cc18fab634eb1ca12f1"
+    },
+    {
+      "path": "data/professional/lexemes/hr-module08.json",
+      "bytes": 182272,
+      "sha256": "d13db40c4cad4a29671a6340191e7faa59acdddc9bfee0fa06d9593e4e994f4b"
+    },
+    {
+      "path": "data/professional/lexemes/hr-module09.json",
+      "bytes": 200733,
+      "sha256": "c21d9ab234047d79f63226ac0d0247c2f8060fb926fdaf3fea9ddf2f3a47064d"
+    },
+    {
+      "path": "data/professional/lexemes/hr-module10.json",
+      "bytes": 214580,
+      "sha256": "89ead45befdca574f13395ab312f4792928526cbebeeaf4593890538df25d8f3"
+    },
+    {
+      "path": "data/professional/lexemes/construction-module03.json",
+      "bytes": 242754,
+      "sha256": "0b0944ce4f55b31afc1da3284380a4c13f128fed53492ac6563bf975d0711a4f"
+    },
+    {
+      "path": "data/professional/lexemes/construction-module04.json",
+      "bytes": 236157,
+      "sha256": "74873574616d05312c92e2c27ad42264a7d83d33bbc6e1c842854502a4fccb32"
+    },
+    {
+      "path": "data/professional/lexemes/construction-module05.json",
+      "bytes": 167933,
+      "sha256": "0b833f58ce9176ddc979eaa23935ae5b6b9b1b1d1e3e3e374f598cdc31d4243a"
+    },
+    {
+      "path": "data/professional/lexemes/construction-module06.json",
+      "bytes": 230567,
+      "sha256": "89bb536140f8101a48b04da1d0b43223fbc271ab402789bf5d247e02ce63cbeb"
+    },
+    {
+      "path": "data/professional/lexemes/construction-module07.json",
+      "bytes": 266633,
+      "sha256": "01accf5b6969b0b7058e72175f1a26ce95ba6f70e3903e661afdcd25bd5c491e"
+    },
+    {
+      "path": "data/professional/lexemes/construction-module08.json",
+      "bytes": 100608,
+      "sha256": "7f7da9f908ff36796de8479c25275a3df462fcf5b74375e92c226cef3cb7f3df"
+    },
+    {
+      "path": "data/professional/lexemes/construction-module09.json",
+      "bytes": 223518,
+      "sha256": "622727048c41f1285cb637b707497be393a2e99412373e8444194a4dc67b63f4"
+    },
+    {
+      "path": "data/professional/lexemes/construction-module10.json",
+      "bytes": 243940,
+      "sha256": "b4f7349d1a5cdba17f86d3c8ad16f0422d5f974e3a91a1bcf5ec94fa9512fe9f"
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module03.json",
+      "bytes": 163054,
+      "sha256": "f5f3698bf04449785873d3b286efe7f7dad4cce59c0d3c24f796cf3c60142861"
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module04.json",
+      "bytes": 160827,
+      "sha256": "6c9766213049425e3f560f4486ef20843e2e6b346bf11ba2b221236aae745e04"
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module05.json",
+      "bytes": 106233,
+      "sha256": "7665d8387005bfd18c4937a9b91101f78e58ee485fb692238bf5fdae92e54846"
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module06.json",
+      "bytes": 201971,
+      "sha256": "de86b7447515f0e78bb5025a3f0e337790589484754bc1d54f85af7bd400ca06"
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module07.json",
+      "bytes": 132009,
+      "sha256": "9752ef12caddeb4d47c46db792b88aafe59db475a847ff70054b6e9cad460dd1"
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module08.json",
+      "bytes": 85071,
+      "sha256": "6a0432e6a17f9407b7d11657c54206f02b26aed40a55c5597ad4496c2cbb01d0"
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module09.json",
+      "bytes": 84018,
+      "sha256": "c8d04d319af583403f24b10f96e04475dabe05a2aa4cc566174e30996308c825"
+    },
+    {
+      "path": "data/professional/lexemes/cleaning-module10.json",
+      "bytes": 77195,
+      "sha256": "bbd9dea2d575fa1978d02c3f3f139dcd4ccf7b23047d628b84e3f6836d8308e9"
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module03.json",
+      "bytes": 197341,
+      "sha256": "cf7a38ec0c5755f6e4a5f23d25d2559b53d5c41e78849db64fe35402f7d8c5ef"
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module04.json",
+      "bytes": 175128,
+      "sha256": "78719a105fc37ecfaa34e638103d03e3de221c5e00ec2cba4ae75778423e8af4"
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module05.json",
+      "bytes": 110855,
+      "sha256": "a7b82590e2b11cb04f0306bd54a49566fbc9f359cc1c37fe07afe75d4bd297ab"
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module06.json",
+      "bytes": 212915,
+      "sha256": "eb09a5f92b898a50426522eaf3b2108498c4207f9841dc93af5db1fe9566c329"
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module07.json",
+      "bytes": 160580,
+      "sha256": "c20e16d6e03b1a4a6f89500166f92e31c654ed68e417624ab4d2d72fd94af9d6"
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module08.json",
+      "bytes": 167442,
+      "sha256": "19f4eb2364bdf0fb0601c66f5417196598d95ee7754630bcdc1ffe9b2db3da08"
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module09.json",
+      "bytes": 118056,
+      "sha256": "8e62d0ca4c9b9bfcccb8da325f422d52ee2d21e350053d7d56d4ce313a535465"
+    },
+    {
+      "path": "data/professional/lexemes/manufacturing-module10.json",
+      "bytes": 217435,
+      "sha256": "2760ec647ccb06c9cb798a13a13c7d92e7ef0ad734ae1f3090d4b3d696755535"
+    },
+    {
+      "path": "data/professional/lexemes/sales-module03.json",
+      "bytes": 82396,
+      "sha256": "99c64649e3cb5d428feac5172360430046f9c67c853dc53879581d36d72f4c5f"
+    },
+    {
+      "path": "data/professional/lexemes/sales-module04.json",
+      "bytes": 227906,
+      "sha256": "27f85ca90addca04177098c8171f1e9530f19aeba3aab92d9f751af665e7d5d3"
+    },
+    {
+      "path": "data/professional/lexemes/sales-module05.json",
+      "bytes": 141436,
+      "sha256": "94697557f7919feaa41cb3de0ac6dfdef288b728fc5e022c2c9de18d7c427a55"
+    },
+    {
+      "path": "data/professional/lexemes/sales-module06.json",
+      "bytes": 194443,
+      "sha256": "cb0a42100851c816724b45218ce1229f22e95fcf6aa6cace9e692def8617e1e7"
+    },
+    {
+      "path": "data/professional/lexemes/sales-module07.json",
+      "bytes": 208213,
+      "sha256": "e2fb08cdc9f4787163cdb54093ae2135beed3e2cdbbccc23b5d392828401f2c8"
+    },
+    {
+      "path": "data/professional/lexemes/sales-module08.json",
+      "bytes": 196181,
+      "sha256": "a2aaf44c2bf3592ddd4a8523ac0bb71c3203b3113c31521725cf0c740328e39d"
+    },
+    {
+      "path": "data/professional/lexemes/sales-module09.json",
+      "bytes": 196079,
+      "sha256": "95d956baeee8934385b0d9781a95aa73127ce63635181c7759627bb95e5e1bc3"
+    },
+    {
+      "path": "data/professional/lexemes/sales-module10.json",
+      "bytes": 113725,
+      "sha256": "ba8cc970a165941c748343c2eddc9fdc87ca7b1bbc93baf15d065dc4032ad610"
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module03.json",
+      "bytes": 107745,
+      "sha256": "03186681146fdef00322ade1c5ccabd69e75fa149a7790845d03d02220af1be1"
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module04.json",
+      "bytes": 72329,
+      "sha256": "f79af0f3c91cb230ac27fc7d8b3ec28aef9cf102b9fab156aa46094f7c1e38ba"
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module05.json",
+      "bytes": 120842,
+      "sha256": "716a9479aea913940f8acd9979d9782538340004c24deb51253aba318c205c09"
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module06.json",
+      "bytes": 84021,
+      "sha256": "fc18da97d63c5dc34ddc2959eae9cad7948a07a024e50c70fbac751771b18830"
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module07.json",
+      "bytes": 208517,
+      "sha256": "fcb51b72023b70c1b4c1a43406f664996a824565e5b3f819353c53fd2eda83cb"
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module08.json",
+      "bytes": 74100,
+      "sha256": "cccbdcda1ec538cd5260b3fe4f432749e1e0d8c8277554c4c4d15fa510458f94"
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module09.json",
+      "bytes": 16356,
+      "sha256": "93be37931ea8113950d7288db9b678a5ccf145eaedd37be53614643397693cb8"
+    },
+    {
+      "path": "data/professional/lexemes/clinical-module10.json",
+      "bytes": 78755,
+      "sha256": "5376f7d761e1d791c0f8bafed53f0fddd0dd94d24da8a980425250b393623a3f"
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module03.json",
+      "bytes": 71600,
+      "sha256": "4cc8f99dec1d458ec45d3b9d89ac3a3e6d58d1b4936a4ce7ae8ea9486f7024ec"
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module04.json",
+      "bytes": 220059,
+      "sha256": "fb43b8f738a0345ed29f28b24b5dfc4f05a30341b55707040dfba8ddc95865bb"
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module05.json",
+      "bytes": 151767,
+      "sha256": "42d69fe15d0f9c60cbfdd9e6c36a157ef2020eb1b9401602c405b4a89f3c0d74"
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module06.json",
+      "bytes": 193139,
+      "sha256": "f06b5538e247d7360d7ce94794b8943a786502b4fe9361282824fca7233f25de"
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module07.json",
+      "bytes": 261919,
+      "sha256": "635e272515e1a57e7fb299662925f55d0271dca7115f9707c2f52ac800d9ac2c"
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module08.json",
+      "bytes": 207115,
+      "sha256": "13fb14296d9cb9d03d3e8fb2477605783893fb1a00a2647d972cad84288310ff"
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module09.json",
+      "bytes": 234643,
+      "sha256": "65d94e67b3cce4669a723541f474dfac2534bdca115a4bc456ced67bf8c18bfc"
+    },
+    {
+      "path": "data/professional/lexemes/accounting-module10.json",
+      "bytes": 187518,
+      "sha256": "cafedccbb50711af9d8f1f7310dcdb6bd60f91f2751ea35e8f6d413679db4f11"
+    },
+    {
+      "path": "data/professional/lexemes/legal-module03.json",
+      "bytes": 216376,
+      "sha256": "66ab1d636e721a2f6d645fabd0d8e5042dd105b36f6ee94e46233ac4ee48b060"
+    },
+    {
+      "path": "data/professional/lexemes/legal-module04.json",
+      "bytes": 126296,
+      "sha256": "ecdde5edc905a15fbea435b90cf39070e41dbb1612640d4eda4546b856e9bf6d"
+    },
+    {
+      "path": "data/professional/lexemes/legal-module05.json",
+      "bytes": 285859,
+      "sha256": "37bb41528fd361f0205afa300c564e07cf982b9c24f15c0c68e9840d39644d0d"
+    },
+    {
+      "path": "data/professional/lexemes/legal-module06.json",
+      "bytes": 249398,
+      "sha256": "6f814699ab08b55e525443a56c6fdc306bc1c08852da65f09bb257c06f9fb0f7"
+    },
+    {
+      "path": "data/professional/lexemes/legal-module07.json",
+      "bytes": 224093,
+      "sha256": "bb91d3a48796a996f97ec288ab8146f8d2bff4ce03f3539e084607ab6ba1fc3c"
+    },
+    {
+      "path": "data/professional/lexemes/legal-module08.json",
+      "bytes": 97185,
+      "sha256": "22bcdba0591d9db891ddf3e66e5073807f114831fcbe9c44ff71d71e30ee642c"
+    },
+    {
+      "path": "data/professional/lexemes/legal-module09.json",
+      "bytes": 305764,
+      "sha256": "b6c45105758a975ea48f8a61928f753c5d1e39e51e6519c3f7e08ca27716d2df"
+    }
+  ],
+  "source_files_unchanged": true
+}

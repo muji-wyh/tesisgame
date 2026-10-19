@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "status": "frozen_preparation_pending_independent_technical_review",
+  "recorded_at": "2026-10-16T18:27:00.907Z",
+  "baseline_bound": true,
+  "baseline_kind": "composite_validation_baseline",
+  "production_mutated": false,
+  "files": [
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/delivery-lib.cjs",
+      "raw_sha256": "1bf53b6cb9aa31e46716fd382faa104069712e89e5495290c10306f9fc00dc0c"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/test-transforms.cjs",
+      "raw_sha256": "dd85a6a26fd0f21cdfb3447e5fb1c03060cb702728a2ae82d951f74335f9202d"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/prepare.cjs",
+      "raw_sha256": "c3e902078d34033a89be5af6aa4b43afe817d63b9096e017aa166ccf76ef0729"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/deliver.cjs",
+      "raw_sha256": "696ba8cecfaeb57d73c0f124a417d286fa34b9e9df7e3a53b4cb66e3c51e151d"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/baseline-config.json",
+      "raw_sha256": "d3eb180e31c07370640cc1ac3b60f7fe5d7a71aa17b66219bb3637d9efb8d665"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/HANDOFF.md",
+      "raw_sha256": "8b2259ca15f2f835689d17a75ac8e1157b625655ed77db69183027368cd48838"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/accepted-language.json",
+      "raw_sha256": "97413b3675115ffe5102768e93ec146ec8c6d8d88dcc3d652fa28d284b7548bc"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional-content.test.cjs.before",
+      "raw_sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional-content.test.cjs.after",
+      "raw_sha256": "4bf6f5139de27edb44156e33a8e2cdab96d8c1aca82bc5b864244edd67909d1a"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional-retail-morphology.test.cjs.before",
+      "raw_sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional-retail-morphology.test.cjs.after",
+      "raw_sha256": "c7bc3e1448ee006c6441c9cf1eb0fb3be875efc9c762f1a78d9c0c478a62135f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional_retail_morphology_tests.gd.before",
+      "raw_sha256": "f0bd041c0c50413b9f0b399df1abb89aea7d66062c5f4ad5fcbc30290e4208f1"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional_retail_morphology_tests.gd.after",
+      "raw_sha256": "7cd10db267b373fea44ac287924ef67de0d47fa13d4a5c4e2c299afaeea6008c"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/test-patches.json",
+      "raw_sha256": "385ac1d5512e7e65406dc271debf335cd043ae674c2633e169260296cd53f78f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/scratch-validation.json",
+      "raw_sha256": "68de87e2247416021574954de26a32ce7f42d1fe336eeadb7b816bbf7ba768e6"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/binding.json",
+      "raw_sha256": "e87f376881431fb88ebd8356c3d963e899803eedca5da9733ca33d0317dd3fc2"
+    }
+  ],
+  "projected_callbacks": 217,
+  "excluded_persisted_callbacks": 1,
+  "native_execution_pending": true
+}

@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "source_authored_unexecuted_future_outputs_unbound",
+  "author": "/root/morph_review",
+  "recorded_at": "2026-10-16T23:26:26.440Z",
+  "reference_runner": {
+    "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/run.cjs",
+    "bytes": 5991,
+    "raw_sha256": "5e53f7cdeb13a9d45a031f1aec08e46b9752fc445cc0f6815cc6163e657664e2"
+  },
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "baseline_copy_count": 490,
+  "baseline_copy_bytes": 98866703,
+  "baseline_groups": {
+    "professional_data": 418,
+    "growth_morphology": 11,
+    "professional_media": 57,
+    "scripts": 3,
+    "words": 1
+  },
+  "future_overlay_count": 4,
+  "expected_complete_project_input_count": 493,
+  "full_binding_inputs_rechecked_by_proposed_runner": 12443,
+  "future_preparation_selected": false,
+  "future_afterimages_selected": false,
+  "future_afterimage_acceptance_selected": false,
+  "godot_executable_selected": false,
+  "proposal_imported": false,
+  "syntax_checks_executed": false,
+  "project_tests_executed": false,
+  "native_commands_executed": false,
+  "production_or_shared_tests_written": false,
+  "scope": "Existing binding metadata read with built-in Node modules only. Source authored as text. All real future outputs and approvals remain root-selected after actual review."
+}

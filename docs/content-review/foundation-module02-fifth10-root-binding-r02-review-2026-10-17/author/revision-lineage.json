@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "status": "fresh_unexecuted_helper_revision_prior_failure_and_rejection_preserved",
+  "author": "/root/recover_delivery",
+  "prior_helper_source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/source-inventory.json",
+    "bytes": 1666,
+    "raw_sha256": "706a57585e1d96755755ac6c081b1623ac19bd55a0d83cb7f4742ae963797c9a"
+  },
+  "prior_independent_review": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/review.json",
+    "bytes": 9310,
+    "raw_sha256": "1583da74f8140e7d749b0c251fe805ecacfd412841ac0ddb9a7f2a3332081ebd"
+  },
+  "prior_independent_review_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r01/inventory.json",
+    "bytes": 1550,
+    "raw_sha256": "9ee41dab3cf3443627efa661180a7850ef119d88f3ced5790dc4fca1aa10ab39"
+  },
+  "prior_bag_persisted_failure": {
+    "receipt": {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/receipt.json",
+      "bytes": 2981,
+      "raw_sha256": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d"
+    },
+    "copy_receipt": {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted-r01-failure/copy-receipt.json",
+      "bytes": 3851,
+      "raw_sha256": "12ab287773dca29de5c0372ac538e688939a35df51c6cfc984db55b2267282fb"
+    },
+    "copy_count": 11,
+    "status": "actual_failed_wrapper_summary_parser_attempt_preserved_as_failure",
+    "may_substitute_for_success": false
+  },
+  "selected_future_persisted_source": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r02/invoke.cjs",
+    "bytes": 5916,
+    "raw_sha256": "6e138489e51f4789c1f2fd6a4039aa7e2f1af44ec435ff4309c33e568053bac5"
+  },
+  "selected_future_persisted_input": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+    "bytes": 1808178,
+    "raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+  },
+  "resolved_findings": [
+    {
+      "id": "F01",
+      "change": "Build conflict-checked union of expected_inputs and evidence_files; compare hashes only on overlaps and retain every evidence-only path."
+    }
+  ],
+  "predecessor_revision": "Select genuine r02 source/input and future original r02 receipt or its identical root-retained persisted/ copy; retain failed r01 as failure.",
+  "copied_predecessor_registry_and_projection_sections_byte_identical_to_r01": true,
+  "copied_sections_sha256": "20bc694f1718af6ded64d775080d2fa0d0d63034325deab10323187132cce745",
+  "prior_helper_sources_unchanged": 7,
+  "frozen_r03_sources_unchanged": 17,
+  "actual_bag_persisted_success_selected": false,
+  "actual_baseline_binding": null,
+  "source_modules_imported": false,
+  "syntax_checks_run": false,
+  "guard_cases_executed": false,
+  "helper_executed": false,
+  "preparation_executed": false,
+  "project_tests_run": false,
+  "native_browser_build_run": false,
+  "production_or_shared_test_written": false
+}

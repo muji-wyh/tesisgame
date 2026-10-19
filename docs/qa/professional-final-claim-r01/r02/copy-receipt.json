@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "status": "verified_exact_copy_of_passing_affected_probe",
+  "checks": 104,
+  "failures": 0,
+  "source_inputs_unchanged": 559,
+  "proposal_files": 11,
+  "receipt_sha256": "b19da615f7d4f7dd01063d30d31b918eb13830e0448f820bfdf85df1cb7a93e3",
+  "result_sha256": "3ac251b01c3984e8a08552abe27f4cf996e0be440f2b1d08ec71ce7aa2162e1c",
+  "raw_progress_equal": false,
+  "canonical_progress_equal": true,
+  "type_differences": [
+    {
+      "path": "$[\"sequence\"]",
+      "role": "value",
+      "before": "int",
+      "after": "float"
+    },
+    {
+      "path": "$[\"skills\"][\"fixture.sense.35\"][\"recognition\"][\"streak\"]",
+      "role": "value",
+      "before": "int",
+      "after": "float"
+    },
+    {
+      "path": "$[\"skills\"][\"fixture.sense.35\"][\"recognition\"][\"exposures\"]",
+      "role": "value",
+      "before": "int",
+      "after": "float"
+    }
+  ],
+  "original_failure_unchanged": true,
+  "production_changed": false,
+  "files": [
+    {
+      "path": "inventory.json",
+      "bytes": 2099,
+      "sha256": "e7a9d9e9a51a9c828777f1f0d61f989b15af6de3bd361070f4e8759e68f5c02c"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8554,
+      "sha256": "31cbfac1ecb745daeed41a3a6a376e20ac84c663d2703fab5a2675755edcfb41"
+    },
+    {
+      "path": "assets.md",
+      "bytes": 1759,
+      "sha256": "c7ff910730f8201cb66fafbcd510f26e2cc09ec93c7d85ec7615bb6afa434aa0"
+    },
+    {
+      "path": "diagnosis-and-lineage.json",
+      "bytes": 8494,
+      "sha256": "14890bd5505c583f23aa39e617c19bceb7d6e85f45f8e01cf92d09c40de6d882"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 105874,
+      "sha256": "9c4c671b5761b93ea87ba749836f0b5e95319e4ef490f34c4c58220fb1bdc996"
+    },
+    {
+      "path": "preparation-result.json",
+      "bytes": 576,
+      "sha256": "b46620ac947e1121372b54db8037e1909602c671347dd54fb4af77583e0d3a38"
+    },
+    {
+      "path": "preparation-start.json",
+      "bytes": 311,
+      "sha256": "019ba0700bf02db90da3ba7c448dd6b66020aa42c46fba23f27b2ef2d9f24ef3"
+    },
+    {
+      "path": "prepare-proposal.cjs",
+      "bytes": 19045,
+      "sha256": "6313310db8ef55a7619276b5e6a0b0cd6f8289ab88cb3e774d3d51a56237e62e"
+    },
+    {
+      "path": "probe.gd",
+      "bytes": 22666,
+      "sha256": "d529805cbe127207a4eb280e99ef02e80ea2cb03016c2d22876086205197b1be"
+    },
+    {
+      "path": "probe_ui.gd",
+      "bytes": 1532,
+      "sha256": "448c0e7685e37ca7671fdfb13a5c053d53edaed182f16b7888ad65ab5488bf7d"
+    },
+    {
+      "path": "probe_ui.tscn",
+      "bytes": 335,
+      "sha256": "1b3a2a0913b79903ecd20a534b938e3bbb20fb0a4806ffb7a67634a8bff1bbc0"
+    },
+    {
+      "path": "run-once.cjs",
+      "bytes": 5735,
+      "sha256": "4017101edcdbc72abc291e76d92a6d9d1c62ae31acedb16168fe12fb23ae7785"
+    },
+    {
+      "path": "attempt-001/receipt.json",
+      "bytes": 4378,
+      "sha256": "b19da615f7d4f7dd01063d30d31b918eb13830e0448f820bfdf85df1cb7a93e3"
+    },
+    {
+      "path": "attempt-001/result.json",
+      "bytes": 1295170,
+      "sha256": "3ac251b01c3984e8a08552abe27f4cf996e0be440f2b1d08ec71ce7aa2162e1c"
+    },
+    {
+      "path": "attempt-001/check-ui.stdout.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "path": "attempt-001/check-ui.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "attempt-001/check-probe.stdout.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "path": "attempt-001/check-probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "attempt-001/native-probe.stdout.log",
+      "bytes": 137,
+      "sha256": "0f1345e81f49091e407a84e463464aadd75cd09c9a5fe372b0d0490ef64d9469"
+    },
+    {
+      "path": "attempt-001/native-probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

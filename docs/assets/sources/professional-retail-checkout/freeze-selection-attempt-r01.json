@@ -1,0 +1,10 @@
+{
+  "status": "failed_before_receipt_write",
+  "script": "freeze-selection.cjs",
+  "script_sha256": "e6b1fccf89445e95003666f29815d83ff8f35403cd0651d4ffc1a0bdbd6f7f5d",
+  "error": "Incorrect root depth resolved render dependency outside tesisgame; ENOENT for scripts/word_card.gd.",
+  "receipt_written": false,
+  "production_written": false,
+  "native_executed": false,
+  "correction": "freeze-selection-r02.cjs uses four parent levels."
+}

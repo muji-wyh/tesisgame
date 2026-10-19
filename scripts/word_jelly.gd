@@ -13,6 +13,7 @@ const WordReveal = preload("res://scripts/word_jelly_word_reveal.gd")
 const CollectButton = preload("res://scripts/word_jelly_collect_button.gd")
 const PowerupButton = preload("res://scripts/word_jelly_powerup_button.gd")
 const PowerupEffects = preload("res://scripts/word_jelly_powerup_effects.gd")
+const ReadPanel = preload("res://scripts/jelly_read_panel.gd")
 const COLLECTION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const POWERUP_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const WELL_CLOUDS = preload("res://assets/images/jelly-match/well/clouds.png")
@@ -54,6 +55,14 @@ var _reveal_frame_batch: int = -1
 var _reveal_frame_generation: int = -1
 var _error_notice_reserved: bool = false
 var _well_art := TextureRect.new()
+var _read_panel: ReadPanel
+var _read_cell: Dictionary = {}
+var _requested_pause: bool = false
+var _layout_too_small: bool = false
+var _size_cover: ColorRect
+var _size_message: Label
+var _room_notice: Label
+var _room_notice_remaining: float = 0.0
 
 func _init() -> void:
 	super()
@@ -70,6 +79,7 @@ func _init() -> void:
 	add_child(_well_art)
 	move_child(_well_art, 0)
 	game = WordModel.new()
+	_palette.compatibility = game.parts_compatible
 	game.word_attempted.connect(func(id: String, ids: Array[String], correct: bool) -> void:
 		word_attempted.emit(id, ids, correct))
 	game.cue_requested.connect(_cue)
@@ -81,6 +91,7 @@ func _init() -> void:
 	game.finished.connect(_finished)
 	game.powerup_feedback.connect(_powerup_feedback)
 	game.powerup_fragment_arrived.connect(_powerup_fragment_arrived)
+	game.drag_blocked.connect(_drag_blocked)
 	game.fusion_started.connect(_powerup_fusion_started)
 	for tile: Tile in _preview_tiles:
 		remove_child(tile)
@@ -95,6 +106,7 @@ func _init() -> void:
 		add_child(tile)
 		_preview_tiles.append(tile)
 		_preview_origins.append(Vector2.ZERO)
+		tile.read_requested.connect(_show_read)
 	drop_button.set("accessibility_name", "Drop the next word parts")
 	_word_reveal = WordReveal.new()
 	add_child(_word_reveal)
@@ -125,8 +137,46 @@ func _init() -> void:
 	_placement_tile.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_placement_tile.hide()
 	add_child(_placement_tile)
+	_size_cover = ColorRect.new()
+	_size_cover.name = "JellyLayoutPause"
+	_size_cover.color = Color(Style.PAPER, 0.97)
+	_size_cover.z_index = 90
+	_size_cover.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(_size_cover)
+	_size_message = Style.label("Make the window larger or rotate your device.\nYour game is paused.", 18)
+	_size_message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_size_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_size_message.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_size_cover.add_child(_size_message)
+	_size_cover.hide()
+	_read_panel = ReadPanel.new()
+	_read_panel.dismissed.connect(_close_read)
+	_read_panel.pronunciation_requested.connect(func() -> void:
+		if not _read_cell.get("word", {}).is_empty():
+			word_requested.emit(_read_cell.word.duplicate(true)))
+	add_child(_read_panel)
+	_room_notice = Style.label("Make room before moving this jelly.", 16)
+	_room_notice.name = "JellyRoomNotice"
+	_room_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_room_notice.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_room_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_room_notice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_room_notice.z_index = 50
+	_room_notice.add_theme_stylebox_override("normal", Style.box(Style.PAPER, Style.EDGE, 12, 1))
+	_room_notice.hide()
+	add_child(_room_notice)
 
 func stop() -> void:
+	_room_notice_remaining = 0.0
+	if _room_notice != null:
+		_room_notice.hide()
+	_read_cell.clear()
+	_requested_pause = false
+	_layout_too_small = false
+	if _read_panel != null:
+		_read_panel.hide()
+	if _size_cover != null:
+		_size_cover.hide()
 	game.finish_powerup()
 	_powerup_arrivals.clear()
 	if _powerup_effects != null:
@@ -154,13 +204,48 @@ func stop() -> void:
 	_placement_tile.hide()
 
 func pause(value: bool = true) -> void:
+	_requested_pause = value
 	if value and _word_reveal != null:
 		_word_reveal.reset()
-	super.pause(value)
+	_apply_pause_reasons()
 	if _powerup_effects != null:
-		_powerup_effects.visible = not value and _can_play()
+		_powerup_effects.visible = not _paused and _can_play()
 	for button: PowerupButton in powerup_buttons.values():
-		button.pause_feedback(value)
+		button.pause_feedback(_paused)
+
+func _apply_pause_reasons() -> void:
+	super.pause(_requested_pause or _layout_too_small or not _read_cell.is_empty())
+
+func _show_read(id: int) -> void:
+	if not _can_play() or game.powerup_active() or game.collection_batch_active():
+		return
+	var target: Dictionary = _cell(id)
+	if target.is_empty():
+		for item: Dictionary in game.upcoming:
+			if int(item.get("id", -1)) == id:
+				target = item
+				break
+	if target.is_empty() or not target.get("requires_read", false):
+		return
+	_read_cell = target.duplicate(true)
+	_apply_pause_reasons()
+	_read_panel.present(str(target.text), not str(target.get("word", {}).get("audio", "")).is_empty())
+	_publish()
+
+func _close_read() -> void:
+	var id: int = int(_read_cell.get("id", -1))
+	_read_cell.clear()
+	_read_panel.hide()
+	_apply_pause_reasons()
+	if _can_play() and _tiles.has(id):
+		_tiles[id].grab_focus()
+	_publish()
+
+func _read_action_at(point: Vector2) -> bool:
+	for tile: WordTile in _tiles.values() + _preview_tiles:
+		if tile._read_button.is_visible_in_tree() and tile._read_button.get_global_rect().has_point(point):
+			return true
+	return false
 
 func set_reduced_motion(value: bool) -> void:
 	_word_reveal.set_reduced_motion(value)
@@ -185,6 +270,15 @@ func cancel_input() -> void:
 	game.set_held_tile()
 	super.cancel_input()
 
+func _drag_blocked(_reason: String) -> void:
+	_room_notice_remaining = 2.5
+	_room_notice.show()
+	_publish()
+
+func set_learning_backdrop(active: bool) -> void:
+	super.set_learning_backdrop(active)
+	_well_art.visible = not active
+
 func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 	if _placement_tile != null:
 		_placement_tile.tile_id = -1
@@ -208,6 +302,11 @@ func _apply_chest_texture(texture: Texture2D) -> void:
 		visual.merged.set_chest_texture(texture)
 
 func _input(event: InputEvent) -> void:
+	if _read_panel != null and _read_panel.visible:
+		if event.is_action_pressed("ui_cancel"):
+			_close_read()
+			get_viewport().set_input_as_handled()
+		return
 	if _finish_is_pulling():
 		return
 	if game.collection_batch_active() or game.powerup_active():
@@ -232,6 +331,8 @@ func _input(event: InputEvent) -> void:
 func _press(pointer: int, global_point: Vector2) -> bool:
 	# Roots have no pronunciation recording; a completed word keeps its audio.
 	if _pointer != NO_POINTER or not _can_play() or _finish_is_pulling() or game.collection_batch_active() or game.powerup_active():
+		return false
+	if _read_action_at(global_point):
 		return false
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
 	if _preview_rect.has_point(point):
@@ -483,7 +584,9 @@ func _refresh_palette() -> void:
 				reserved.append(color)
 		if str(active.operation) == "merge":
 			items.append(active.result)
-	items.append_array(game.upcoming)
+	for item: Dictionary in game.upcoming:
+		if item.has("id"):
+			items.append(item)
 	_palette.update(items, game._word_lookup, reserved)
 	var selected: int = _source if _source >= 0 else _keyboard_source
 	_palette_indices = _palette.selected(items, game._word_lookup, selected)
@@ -509,6 +612,7 @@ func _sync_tiles() -> void:
 				var preview: WordTile = _preview_tiles[index]
 				if preview.tile_id == int(cell.id):
 					_arrival_origins[int(cell.id)] = {"slot": index,
+						"width": int(cell.get("width", 1)), "height": int(cell.get("height", 1)),
 						"pressure": float(preview._gel.get_shader_parameter("preview_pressure")),
 						"sway": float(preview._gel.get_shader_parameter("preview_sway")),
 						"pull": float(preview._gel.get_shader_parameter("preview_pull"))}
@@ -522,6 +626,7 @@ func _sync_tiles() -> void:
 			var tile := WordTile.new()
 			tile.name = "WordJelly_%d" % id
 			tile.pressed.connect(_activate.bind(id))
+			tile.read_requested.connect(_show_read)
 			add_child(tile)
 			_tiles[id] = tile
 			_configure_tile(tile, cell)
@@ -546,7 +651,9 @@ func _arrival_rect(cell: Dictionary) -> Rect2:
 	var origin: Dictionary = _arrival_origins.get(int(cell.id), {})
 	if not origin.is_empty():
 		var slot: int = int(origin.slot)
-		return Rect2(_preview_origins[slot], _preview_tiles[slot].size)
+		var extent := Vector2(int(origin.get("width", 1)), int(origin.get("height", 1))) * _pitch - Vector2.ONE * _gap
+		return Rect2(Vector2(_preview_rect.position.x + slot * _pitch + _gap * 0.5,
+			_preview_rect.get_center().y - extent.y * 0.5), extent)
 	var rect: Rect2 = _tile_rect(cell)
 	rect.position.y = _board.position.y - _pitch + _gap * 0.5
 	return rect
@@ -768,21 +875,29 @@ func _sync_preview() -> void:
 				var slot: int = int(_arrival_origins[int(cell.id)].slot)
 				# Each departing body frees its own preview slot. Later roots can
 				# keep waiting while the cleared slots quietly refill behind them.
-				refills[slot] = minf(refills[slot], (float(cell.age) - _arrival_delay(cell) - 0.18) / 0.18)
+				for lane in range(slot, mini(WordModel.COLUMNS, slot + int(cell.get("width", 1)))):
+					refills[lane] = minf(refills[lane], (float(cell.age) - _arrival_delay(cell) - 0.18) / 0.18)
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
 		var refill: float = refills[index]
-		var available: bool = _configured and index < game.upcoming.size()
+		var available: bool = _configured and index < game.upcoming.size() and game.upcoming[index].has("id")
 		preview.visible = available and refill > 0.0
 		if not available:
+			preview.tile_id = -1
 			continue
 		var item: Dictionary = game.upcoming[index]
+		for lane in range(index, mini(WordModel.COLUMNS, index + int(item.get("width", 1)))):
+			refill = minf(refill, refills[lane])
+		preview.visible = refill > 0.0
 		# A rapid tap can release a refilling slot before it becomes visible.
 		# Keep its identity current so that departure still owns the right origin.
 		if preview.tile_id != int(item.id):
 			_configure_tile(preview, item)
 		_apply_palette(preview, int(item.id))
 		var pose: Dictionary = _preview_pose(index)
+		preview.size = Vector2(int(item.get("width", 1)), int(item.get("height", 1))) * _pitch - Vector2.ONE * _gap
+		_preview_origins[index] = Vector2(_preview_rect.position.x + index * _pitch + _gap * 0.5,
+			_preview_rect.get_center().y - preview.size.y * 0.5)
 		preview.position = _preview_origins[index]
 		preview.modulate.a = clampf(refill, 0.0, 1.0)
 		preview.deform(0.0, 0.0)
@@ -792,6 +907,9 @@ func _preview_pose(index: int) -> Dictionary:
 	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index, reduced_motion or game.phase != "playing" or not game.can_drop_now())
 
 func _process(delta: float) -> void:
+	if _room_notice_remaining > 0.0:
+		_room_notice_remaining = maxf(0.0, _room_notice_remaining - delta)
+		_room_notice.visible = _room_notice_remaining > 0.0
 	if _finish_is_pulling():
 		super._process(delta)
 		return
@@ -856,10 +974,12 @@ func _refresh_completion_hints() -> void:
 	for id: int in _tiles:
 		var target: Dictionary = _cell(id)
 		var eligible: bool = not prefix.is_empty() and _settled(prefix) and _settled(target) \
-			and Palette.completes(prefix, target, game._word_lookup)
+			and game.can_merge(prefix, target)
 		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
 
 func navigation_controls() -> Array[Control]:
+	if _read_panel != null and _read_panel.visible:
+		return _read_panel.navigation_controls()
 	if not _can_play():
 		return super.navigation_controls()
 	var controls: Array[Control] = []
@@ -869,6 +989,11 @@ func navigation_controls() -> Array[Control]:
 	for cell: Dictionary in ordered:
 		if _settled(cell) and _tiles.has(int(cell.id)) and not game.collection_batch_active() and not game.powerup_active():
 			controls.append(_tiles[int(cell.id)])
+			if _tiles[int(cell.id)]._read_button.visible:
+				controls.append(_tiles[int(cell.id)]._read_button)
+	for preview: WordTile in _preview_tiles:
+		if preview.is_visible_in_tree() and preview._read_button.visible:
+			controls.append(preview._read_button)
 	if not collect_button.disabled:
 		controls.append(collect_button)
 	for button: PowerupButton in powerup_buttons.values():
@@ -898,7 +1023,7 @@ func _contact_state() -> Dictionary:
 		return state
 	# All painted bodies respond to pressure. Only a forward word earns the
 	# separate completion highlight. A failed drop is rejected only on release.
-	var completing: bool = Palette.completes(source, target, game._word_lookup)
+	var completing: bool = game.can_merge(source, target)
 	var direction: Vector2 = (_tiles[_target].get_rect().get_center() - _tiles[_source].get_rect().get_center()).normalized()
 	if direction.length_squared() < 0.1:
 		direction = (_tile_rect(target).get_center() - _tile_rect(source).get_center()).normalized()
@@ -1105,19 +1230,20 @@ func _layout() -> void:
 	if _loot_icon == null or size.x <= 0.0 or size.y <= 0.0:
 		return
 	var s: float = Style.ui_scale(self)
-	var edge: float = 6.0 / s
-	var bottom_padding: float = 12.0 / s
+	var authored: bool = game.uses_authored_morphology()
+	var edge: float = (4.0 if authored else 6.0) / s
+	var bottom_padding: float = (2.0 if authored else 12.0) / s
 	var padding: float = 4.0 / s
 	var feed_gap: float = 4.0 / s
 	var hud_width: float = clampf((size.x - edge * 2.0) * 0.25, 88.0 / s, 144.0 / s)
-	var hud_gap: float = 12.0 / s
+	var hud_gap: float = (8.0 if authored else 12.0) / s
 	var local_finish: bool = finish_button.get_parent() == self
 	var local_chest: bool = not has_header_chest()
-	var top_hud_height: float = 52.0 / s if local_finish or local_chest else 0.0
+	var top_hud_height: float = (44.0 if authored else 52.0) / s if local_finish or local_chest else 0.0
 	var notice_y: float = top_hud_height
 	if not game.error.is_empty():
 		top_hud_height += 42.0 / s
-	var content_top: float = top_hud_height + 12.0 / s
+	var content_top: float = top_hud_height + (2.0 if authored else 12.0) / s
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - content_top)
 	var action_height: float = 56.0 / s
 	var collect_height: float = action_height
@@ -1133,9 +1259,13 @@ func _layout() -> void:
 	if side_hud:
 		collect_height = clampf(available.y - action_height * 2.0 - divider_gap - 8.0 / s, 44.0 / s, action_height)
 	_pitch = side_pitch if side_hud else bottom_pitch
+	var too_small: bool = authored and _pitch * s < 32.0
+	if too_small != _layout_too_small:
+		_layout_too_small = too_small
+		_apply_pause_reasons()
 	_gap = maxf(3.0 / s, _pitch * 0.09)
 	var preview_size: float = _pitch - _gap
-	var preview_height: float = maxf(44.0 / s, preview_size + padding * 2.0)
+	var preview_height: float = maxf(44.0 / s, _pitch * (2.0 if authored else 1.0) - _gap + padding * 2.0)
 	var feed_height: float = preview_height + feed_gap
 	var group_top: float = maxf(content_top, size.y - bottom_padding - footer_height - _pitch * WordModel.ROWS - feed_height)
 	var rail_extent: float = hud_width + hud_gap if side_hud else 0.0
@@ -1178,6 +1308,7 @@ func _layout() -> void:
 	for index in range(_preview_tiles.size()):
 		_preview_tiles[index].size = Vector2.ONE * preview_size
 		_preview_origins[index] = _preview_rect.position + Vector2((float(index) + 0.5) * _pitch - preview_size * 0.5, (preview_height - preview_size) * 0.5)
+	_sync_preview()
 	_style_finish_button()
 	# The app hosts Finish in its header, away from dragging and collection.
 	if local_finish:
@@ -1197,9 +1328,21 @@ func _layout() -> void:
 	_action_divider.position = Vector2(hud_x, collect_button.get_rect().end.y + (divider_gap - _action_divider.size.y) * 0.5)
 	if _powerup_effects != null:
 		_powerup_effects.size = size
+	if _read_panel != null:
+		_read_panel.size = size
+	if _size_cover != null:
+		_size_cover.size = size
+		_size_cover.visible = _configured and _layout_too_small
+		_size_message.position = Vector2.ONE * 16.0 / s
+		_size_message.size = size - Vector2.ONE * 32.0 / s
+		_size_message.add_theme_font_size_override("font_size", ceili(18.0 / s))
 	_notice.position = Vector2(edge, notice_y)
 	_notice.size = Vector2(size.x - edge * 2.0, 42.0 / s)
 	_notice.add_theme_font_size_override("font_size", ceili(12.0 / s))
+	if _room_notice != null:
+		_room_notice.position = _board.position + Vector2(8.0, 8.0) / s
+		_room_notice.size = Vector2(_board.size.x - 16.0 / s, 56.0 / s)
+		_room_notice.add_theme_font_size_override("font_size", ceili(16.0 / s))
 	_reward_presentation.size = size
 	_reward_presentation.set_chest_anchor(chest_anchor_rect())
 	if _word_reveal != null:
@@ -1218,6 +1361,8 @@ func _fit_layout_pitch(available: Vector2, s: float) -> float:
 	# Fit the well together with a full-sized supply row, its 44px hit area,
 	# and the gap below it. Cell size follows the space available on screen.
 	var height_pitch: float = maxf((available.y - 12.0 / s) / (WordModel.ROWS + 0.91), (available.y - 9.0 / s) / (WordModel.ROWS + 1.0))
+	if game.uses_authored_morphology():
+		height_pitch = (available.y - 9.0 / s) / (WordModel.ROWS + 2.0)
 	height_pitch = minf(height_pitch, (available.y - 48.0 / s) / WordModel.ROWS)
 	return maxf(8.0 / s, minf(available.x / WordModel.COLUMNS, height_pitch))
 
@@ -1229,6 +1374,9 @@ func snapshot() -> Dictionary:
 	state["board_ratio"] = float(WordModel.COLUMNS) / WordModel.ROWS
 	state["playfield_rect"] = _rect(get_global_rect())
 	state["word_reveal"] = _word_reveal.snapshot() if _word_reveal != null else {"visible": false}
+	state["read_detail"] = _read_panel.snapshot() if _read_panel != null else {"visible": false}
+	state["layout_paused"] = _layout_too_small
+	state["cell_pitch_pixels"] = _pitch * Style.ui_scale(self)
 	state["collect_button"] = collect_button.snapshot() if collect_button != null else {}
 	state["action_divider"] = {"rect": _rect(_action_divider.get_global_rect()), "visible": _action_divider.is_visible_in_tree()}
 	state["powerup"] = game.powerup_snapshot()
@@ -1247,12 +1395,15 @@ func snapshot() -> Dictionary:
 		state.collect_button.merge({"rect": _rect(collect_button.get_global_rect()), "enabled": not collect_button.disabled, "visible": collect_button.is_visible_in_tree()}, true)
 	state.preview.enabled = state.preview.enabled and not game.collection_batch_active() and not game.powerup_active()
 	state.drag.selected = _keyboard_source
+	state.drag["needs_room"] = _room_notice != null and _room_notice.visible
 	for item: Dictionary in state.tiles:
 		var tile: WordTile = _tiles[int(item.id)]
 		item["completion_hint"] = tile.completion_hint
 		item["completion_scale"] = tile.completion_scale
 		item["picture_visible"] = tile._picture.is_visible_in_tree()
 		item["label_text"] = tile._label.text
+		item["label_font_pixels"] = tile._label.get_theme_font_size("font_size") * Style.ui_scale(self)
+		item["read_available"] = tile._read_button.is_visible_in_tree()
 		item["label_line_count"] = tile._label.get_line_count()
 		item["label_visible_line_count"] = tile._label.get_visible_line_count()
 		item["label_line_height"] = tile._label.get_line_height()

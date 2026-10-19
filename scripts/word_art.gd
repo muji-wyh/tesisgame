@@ -13,6 +13,7 @@ const MANIFEST := "res://data/word-motion.json"
 const IDLE_SECONDS := 2.0
 const MAX_RESIDENT_SHEETS := 64
 const MAX_LOADS_PER_TICK := 4
+const ProfessionalMedia = preload("res://scripts/professional_media_access.gd")
 
 static var _profiles: Dictionary = {}
 static var _manifest_read := false
@@ -56,6 +57,8 @@ static func _read_manifest() -> void:
 
 
 static func texture(source: String, owner: CanvasItem = null) -> Texture2D:
+	if ProfessionalMedia.is_professional(source):
+		return ProfessionalMedia.resource(source) as Texture2D
 	if source.is_empty():
 		return null
 	var path: String = source if source.begins_with("res://") else "res://" + source

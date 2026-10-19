@@ -1,0 +1,13 @@
+{
+  "source": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/guarded-transaction.cjs",
+  "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+  "validation": {
+    "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+    "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+    "tests": 20,
+    "pass": 20,
+    "fail": 0
+  },
+  "adapter_contract": "Synchronous commitTransaction/recoverTransaction/describePlan; exact absolute paths; shared parent build/professional-english/transactions; recovery binds expectedPlanSha256.",
+  "boundaries": "Process-interruption recovery and guarded rollback; not multi-file atomic visibility or power-loss durability."
+}

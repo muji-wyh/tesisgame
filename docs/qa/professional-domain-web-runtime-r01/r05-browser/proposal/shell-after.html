@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Professional domain Web fixture r01</title>
+
+<style>
+body{margin:0;background:#f5f5f5;color:#17202b;font:15px system-ui}
+header{padding:12px 20px}button{margin:3px;padding:7px 12px}
+canvas{display:block;width:960px;height:640px;max-width:100%}
+pre{white-space:pre-wrap;margin:12px 20px;max-height:150px;overflow:auto}
+</style>
+</head>
+<body>
+<header>
+<strong>SYNTHETIC TECHNICAL FIXTURE ONLY</strong>
+<p>Phrase-only runtime witness. This page does not grant real content approval.</p>
+<div id="controls"></div>
+</header>
+<canvas id="canvas" width="960" height="640" tabindex="0"></canvas>
+<pre id="status">Starting the isolated exported application.</pre>
+<script src="professional-media.js"></script>
+<script src="professional-progress.js"></script>
+<script>
+'use strict';
+(() => {
+  const queue = [], held = [];
+  let holdNextOpen = false, audioContext = null;
+  const stats = {media_requests:0,media_completions:0,media_cancels:0,progress_requests:0,progress_completions:0,held_released:0,operations:[]};
+  const media = ProfessionalMedia.createProfessionalMediaBridge();
+  const progress = ProfessionalProgress.createProfessionalProgressBridge({requirements:[],name:'professional-domain-web-fixture-r01'});
+  window.domainFixture = {
+    snapshot:null,events:[],engineError:null,
+    send(command) { queue.push(JSON.stringify(command)); },
+    takeCommand() { return queue.shift() || ''; },
+    publish(text) {
+      const value = JSON.parse(text);
+      this.snapshot = value;
+      if (this.events.length < 1000) this.events.push(value);
+      document.querySelector('#status').textContent = JSON.stringify({case:value.case,status:value.case_status,
+        phase:value.phase,ready:value.ready_count,claims:value.claim_count,failures:value.failures},null,2);
+    },
+    holdNextOpen() { if (holdNextOpen || held.length) throw Error('Storage hold already armed'); holdNextOpen = true; },
+    heldCount() { return held.length; },
+    releaseHeld() {
+      holdNextOpen = false;
+      for (const [callback,value] of held.splice(0)) {
+        stats.held_released += 1;
+        queueMicrotask(() => callback(value));
+      }
+    },
+    stats() { return JSON.parse(JSON.stringify({...stats,held:held.length,hold_next_open:holdNextOpen})); }
+  };
+  window.wordBuddiesHost = Object.freeze({
+    professionalMediaRequest(text,callback) {
+      stats.media_requests += 1;
+      media.professionalMediaRequest(text,value => { stats.media_completions += 1; callback(value); });
+    },
+    professionalMediaCancel(generation) { stats.media_cancels += 1; media.professionalMediaCancel(generation); },
+    professionalProgressRequest(text,callback) {
+      const request = JSON.parse(text);
+      stats.progress_requests += 1;
+      stats.operations.push({operation:request.operation,request_id:request.request_id});
+      const hold = holdNextOpen && request.operation === 'register';
+      if (hold) holdNextOpen = false;
+      progress.professionalProgressRequest(text,value => {
+        stats.progress_completions += 1;
+        if (hold) held.push([callback,value]); else callback(value);
+      });
+    },
+    attachAudioContext(value) { audioContext = value; }
+  });
+  for (const operation of ['cold','claim','listen','warm','cancel_checkpoint','retire_storage','retire','dispose']) {
+    const button = document.createElement('button'); button.id = operation; button.textContent = operation.replaceAll('_',' ');
+    button.addEventListener('click',() => {
+      if (audioContext?.state === 'suspended') void audioContext.resume().catch(()=>{});
+      window.domainFixture.send({op:operation});
+    });
+    document.querySelector('#controls').append(button);
+  }
+  window.addEventListener('error',event => { window.domainFixture.engineError = event.message; });
+  window.addEventListener('unhandledrejection',event => { window.domainFixture.engineError = String(event.reason); });
+  document.addEventListener('DOMContentLoaded',async () => {
+    try {
+      const config = {"args":[],"canvasResizePolicy":1,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":1526148,"index.wasm":39509339},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+      const engine = new Engine({...config,onExit(code) {
+        window.domainFixture.engineError = 'Engine exited: '+code;
+      }});
+      await engine.startGame({canvas:document.querySelector('#canvas')});
+      document.body.dataset.engineReady = 'true';
+    } catch (error) {
+      window.domainFixture.engineError = String(error);
+      document.querySelector('#status').textContent = String(error);
+    }
+  },{once:true});
+})();
+</script>
+<script src="index.js" defer></script>
+</body>
+</html>
+
+

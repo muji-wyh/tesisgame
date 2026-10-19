@@ -1,0 +1,92 @@
+[
+  {
+    "path": "data/professional/sources.json",
+    "bytes": 781399,
+    "raw_sha256": "268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58"
+  },
+  {
+    "path": "data/professional/schemas/lexeme.schema.json",
+    "bytes": 2276,
+    "raw_sha256": "8837fa8779894d7b0d67e9e46d97aefdd7e952b476715df436db03ead4b4ff60"
+  },
+  {
+    "path": "data/professional/schemas/expression.schema.json",
+    "bytes": 1950,
+    "raw_sha256": "0b4ecce1acb728ff044732244a4410424473a42c84d53e9a794d8dbadbeef03a"
+  },
+  {
+    "path": "tools/validate-professional-content.cjs",
+    "bytes": 31243,
+    "raw_sha256": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd"
+  },
+  {
+    "path": "scripts/professional_progress.gd",
+    "bytes": 12616,
+    "raw_sha256": "56437fdfb907bc9cfcbeb0b9ba1442f98f6c07aaf21bc81024af9a70838f5c4f"
+  },
+  {
+    "path": "scripts/professional_store.gd",
+    "bytes": 13762,
+    "raw_sha256": "671fe81e308241e976d2307d1dc3ed7544226314b5d12f5e4215754f90197c2f"
+  },
+  {
+    "path": "scripts/professional_catalog.gd",
+    "bytes": 7570,
+    "raw_sha256": "a80f9f847e515f882bc2ef94c2a284d6938ea811b4a7ac64882f90223909467b"
+  },
+  {
+    "path": "scripts/learning_content_resolver.gd",
+    "bytes": 17119,
+    "raw_sha256": "d491e2641ee37c201cdb7f132cb472e6f4f18fa31a367bd5d9aa75d0aacedad3"
+  },
+  {
+    "path": "scripts/learning_path_selector.gd",
+    "bytes": 20855,
+    "raw_sha256": "930145d368aca58bfd73d076d44047d51f37c06f13758d7a4a38f4a8b7eaf141"
+  },
+  {
+    "path": "scripts/morphology_analysis.gd",
+    "bytes": 7877,
+    "raw_sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b"
+  },
+  {
+    "path": "web/professional-progress.js",
+    "bytes": 19082,
+    "raw_sha256": "e1b1ae3f2045c3bfaa4fde84703f30617547817a9409d602444d2c2e4f1ec8c9"
+  },
+  {
+    "path": "tests/professional-progress.test.cjs",
+    "bytes": 15481,
+    "raw_sha256": "6e823b3b68e9daa17ea3b7a03311614093b1a8634587d28e869e5eb70923dbf5"
+  },
+  {
+    "path": "tests/godot/professional_progress_tests.gd",
+    "bytes": 12313,
+    "raw_sha256": "e8f74e0f55e9802d94e12d213925d0fe1ae448d6632fc56762a3e30c3ff9a827"
+  },
+  {
+    "path": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/PROPOSALS.md",
+    "bytes": 8331,
+    "raw_sha256": "78795d371d0fa363f24aa5777720bd41855797e0b48b846287ebfe292a21d652"
+  },
+  {
+    "path": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/reviewer-decisions.json",
+    "bytes": 9851,
+    "raw_sha256": "80d07670034418d6a973d1a776d4e410903e6fa274ea1aa3daf3ef91c4a0da39"
+  },
+  {
+    "path": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/inventory.json",
+    "bytes": 2487,
+    "raw_sha256": "68813f88a92eefba3ac1f03921ce2080c65cec6f989d8988f14e4a6958923d22"
+  },
+  {
+    "path": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/inventory.json",
+    "bytes": 2434,
+    "raw_sha256": "e2ff507d70142e5c94f63b953ce04e080a85e69d398f8981d33c8b96229624ff"
+  },
+  {
+    "path": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/copy-receipt.json",
+    "bytes": 10794,
+    "raw_sha256": "7bf0a7714605508dcdea528713a2804729bb98abf5b33ffb1c90881aa4c68a89"
+  }
+]

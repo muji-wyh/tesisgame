@@ -1,0 +1,3087 @@
+
+'use strict';
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const path = require('node:path');
+const fs = require('node:fs');
+const os = require('node:os');
+const crypto = require('node:crypto');
+const {
+  COURSE_IDS, loadProfessionalContent, auditProfessionalContent,
+  schemaErrors, morphologyErrors, resourcePath
+} = require('../tools/validate-professional-content.cjs');
+
+const rootDir = path.resolve(__dirname, '..');
+// Historical Foundation deliveries retain their original Growth bytes. The current
+// cohorts must first match the two exact accepted sense-identity corrections.
+function historicalGrowthRaw(file) {
+  const bytes = fs.readFileSync(path.join(rootDir, file));
+  const hash = value => crypto.createHash('sha256').update(value).digest('hex');
+  const changes = {
+    'data/vocabulary/morphology/age-05.json': {id: 'english.stem.break.end-fast', before: 'cf29cf0c1d4a4fa1a528c2954d615d45c123073a335d949a29f5538fd905719a', after: '3de1405d806e343fd1942057a463b891423a46d7034fc3b1569703454301a5d7'},
+    'data/vocabulary/morphology/age-07.json': {id: 'english.stem.break.damage', before: '0a5b68fb84a9b0fa7f9a8d5523699e1a02eb7ec9dfd34d9539289ec092601afc', after: '129f46c5def05f84096a2973eae664db73470c1bd105a828091c6081ad94c22c'},
+  };
+  const change = changes[file];
+  if (!change) return hash(bytes);
+  assert.equal(hash(bytes), change.after, file + ': exact current Growth sense correction');
+  const current = '"canonical_id": "' + change.id + '"';
+  const text = bytes.toString('utf8');
+  assert.equal(text.split(current).length, 2, file + ': one corrected canonical identity');
+  const historical = text.replace(current, '"canonical_id": "growth.break"');
+  assert.equal(hash(historical), change.before, file + ': exact complete historical Growth cohort');
+  return hash(historical);
+}
+
+const source = loadProfessionalContent(rootDir);
+// Pre-morphology language/donor assertions use the exact immutable Foundation02 snapshot.
+// Current graphs and all protected lexical fields have separate exact current coverage.
+const foundation02HistoryPath = 'build/professional-english/foundation02-morphology-integration-proposal-r01/preimages/data/professional/lexemes/foundation-module02.json';
+const foundation02HistoryBytes = fs.readFileSync(path.join(rootDir, foundation02HistoryPath));
+assert.equal(crypto.createHash('sha256').update(foundation02HistoryBytes).digest('hex'), '6cf78346c223e65bb3c4b30af10d2a564f03c10ba1f4593836f8ccbeea2e2576');
+const historicalFoundation02Entries = new Map(JSON.parse(foundation02HistoryBytes).lexemes.map(entry => [entry.id, entry]));
+const foundation02HistoryLexemes = source.lexemes.map(entry => historicalFoundation02Entries.get(entry.id) || entry);
+// Delivery-era whole-entry assertions use the immutable pre-gift Retail snapshot.
+// Current media and all unrelated current Retail fields have direct delta guards.
+const historicalRetailPath = 'build/professional-english/foundation02-held-six-work-r01/historical-source/data/professional/lexemes/retail-pilot.json';
+const historicalRetailBytes = fs.readFileSync(path.join(rootDir, historicalRetailPath));
+assert.equal(crypto.createHash('sha256').update(historicalRetailBytes).digest('hex'), 'e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2');
+const historicalRetailEntries = new Map(JSON.parse(historicalRetailBytes).lexemes.map(entry => [entry.id, entry]));
+
+const foundation01MorphologyRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module01-morphology-2026-10-17.json'), 'utf8'));
+const foundation01MorphologyPatches = new Map(foundation01MorphologyRecord.patches.map(patch => [patch.id, patch]));
+const heldSixRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-held-six-r01.json'), 'utf8'));
+
+const foundationLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module01-language-first10-2026-10-16.json'), 'utf8'));
+const foundationSecondLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module01-language-second10-2026-10-16.json'), 'utf8'));
+const foundationThirdLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module01-language-third10-2026-10-16.json'), 'utf8'));
+const foundationFourthLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json'), 'utf8'));
+const foundationFifthLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json'), 'utf8'));
+const supervisorLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module01-supervisor-language-2026-10-16.json'), 'utf8'));
+const foundation02FirstLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-language-first10-2026-10-16.json'), 'utf8'));
+const attendanceLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module01-attendance-language-2026-10-17.json'), 'utf8'));
+const foundation02SecondLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-language-second10-2026-10-17.json'), 'utf8'));
+const foundation02ThirdLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-language-third10-2026-10-17.json'), 'utf8'));
+const foundation02FourthLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-language-fourth10-2026-10-17.json'), 'utf8'));
+const foundation02FifthLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-language-fifth10-2026-10-17.json'), 'utf8'));
+
+
+const foundationLanguageAcceptedIds = new Set([...foundationLanguageRecord.patches, ...foundationSecondLanguageRecord.patches, ...foundationThirdLanguageRecord.patches, ...foundationFourthLanguageRecord.patches, ...foundationFifthLanguageRecord.patches, ...supervisorLanguageRecord.patches, ...foundation02FirstLanguageRecord.patches, ...attendanceLanguageRecord.patches, ...foundation02SecondLanguageRecord.patches, ...foundation02ThirdLanguageRecord.patches, ...foundation02FourthLanguageRecord.patches, ...foundation02FifthLanguageRecord.patches].map(item => item.id));
+
+const approvedAudioRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-approved-audio-2026-10-16.json'), 'utf8'));
+const approvedAudioPatches = new Map(approvedAudioRecord.patches.map(patch => [patch.sense_id, patch]));
+function beforeApprovedAudio(entry) {
+  const patch = approvedAudioPatches.get(entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry.media.audio, patch.after_audio, entry.id + ': exact later human-approved audio');
+  const historical = structuredClone(entry);
+  historical.media.audio = patch.before_audio;
+  return historical;
+}
+const cartBasketAudioRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-cart-basket-approved-audio-2026-10-16.json'), 'utf8'));
+const palletImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-pallet-image-2026-10-16.json'), 'utf8'));
+const shelfImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-shelf-image-2026-10-16.json'), 'utf8'));
+const palletShelfAudioRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-pallet-shelf-approved-audio-2026-10-16.json'), 'utf8'));
+const bagWrapAudioRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-bag-wrap-approved-audio-2026-10-16.json'), 'utf8'));
+const fifthRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json'), 'utf8'));
+const retail04FirstRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-morphology-first10-2026-10-16.json'), 'utf8'));
+const retail04SecondRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-morphology-second10-2026-10-16.json'), 'utf8'));
+const retail04ThirdRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-morphology-third10-2026-10-16.json'), 'utf8'));
+function beforeRetail04Third10(entry) {
+  const patch = retail04ThirdRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later Retail04 third-ten morphology-only acceptance');
+  return structuredClone(patch.before);
+}
+function beforeRetail04Second10(entry) {
+  entry = beforeRetail04Third10(entry);
+  const patch = retail04SecondRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later Retail04 second-ten morphology-only acceptance');
+  return structuredClone(patch.before);
+}
+function beforeRetail04First10(entry) {
+  entry = beforeRetail04Second10(entry);
+  const patch = retail04FirstRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later Retail04 morphology-only acceptance');
+  return structuredClone(patch.before);
+}
+const shoppingBagImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-shopping-bag-image-2026-10-17.json'), 'utf8'));
+function beforeShoppingBagImage(entry) {
+  const patches = shoppingBagImageRecord.patches.filter(item => item.id === entry.id);
+  if (!patches.length) return entry;
+  assert.equal(patches.length, 1);
+  const patch = patches[0];
+  assert.equal(patch.id, 'shopping-bag.goods-carrier.n');
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later shopping-bag image and three note clauses');
+  return structuredClone(patch.before);
+}
+const shoppingBagHistoryLexemes = () => source.lexemes.map(beforeShoppingBagImage);
+function beforeFifth10(entry) {
+  entry = beforeShoppingBagImage(entry);
+  const patch = fifthRecord.patches.find(item => item.id === entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later fifth-ten graph and note delta');
+  return structuredClone(patch.before);
+}
+const counterImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-counter-image-2026-10-16.json'), 'utf8'));
+const counterCheckoutAudioRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-counter-checkout-approved-audio-2026-10-16.json'), 'utf8'));
+const checkoutImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-checkout-image-2026-10-16.json'), 'utf8'));
+const barcodeImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-barcode-image-2026-10-16.json'), 'utf8'));
+const cashRegisterImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-cash-register-image-2026-10-16.json'), 'utf8'));
+const cardReaderBarcodeAudioRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-card-reader-barcode-approved-audio-2026-10-16.json'), 'utf8'));
+const retail03MediaRecords = [cartBasketAudioRecord, palletImageRecord, shelfImageRecord, palletShelfAudioRecord, bagWrapAudioRecord, counterImageRecord, counterCheckoutAudioRecord, checkoutImageRecord, barcodeImageRecord, cashRegisterImageRecord, cardReaderBarcodeAudioRecord];
+function beforeRetail03Media(entry, keepRecord = null) {
+  let historical = beforeFifth10(beforeRetail04First10(entry));
+  for (const record of [...retail03MediaRecords].reverse()) {
+    if (record === keepRecord) break;
+    const patch = record.patches.find(item => (item.sense_id || item.id) === entry.id);
+    if (!patch) continue;
+    assert.deepEqual(historical, patch.after, entry.id + ': exact later accepted media and note delta');
+    historical = structuredClone(patch.before);
+  }
+  return historical;
+}
+const scopedMorphologyReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/morphology-hold9-review-2026-10-16.json'), 'utf8'));
+const acceptedMorphologyReviews = new Map(scopedMorphologyReview.proposal.patches.map(patch => [patch.target_id, patch.after.morphology.review]));
+const retail03MorphologyReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json'), 'utf8'));
+const retail03NextMorphologyReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module03-morphology-next10-2026-10-16.json'), 'utf8'));
+const retail03ThirdMorphologyReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module03-morphology-third10-2026-10-16.json'), 'utf8'));
+const retail03FourthMorphologyReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module03-morphology-fourth10-2026-10-16.json'), 'utf8'));
+const caseFamilyReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-case-family-review-2026-10-16.json'), 'utf8'));
+const caseFamilyPatches = new Map(caseFamilyReview.patches.map(patch => [patch.id, patch]));
+function beforeCaseFamily(entry) {
+  const patch = caseFamilyPatches.get(entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later case-family correction');
+  return patch.before;
+}
+const retail03MorphologyPatches = new Map([...retail03MorphologyReview.patches, ...retail03NextMorphologyReview.patches, ...caseFamilyReview.patches.filter(patch => patch.kind === 'exact_display_case_graph_review'), ...retail03ThirdMorphologyReview.patches, ...retail03FourthMorphologyReview.patches].map(patch => [patch.id, patch]));
+for (const patch of [...retail03MorphologyPatches.values(), ...fifthRecord.patches, ...retail04FirstRecord.patches, ...retail04SecondRecord.patches, ...retail04ThirdRecord.patches]) acceptedMorphologyReviews.set(patch.id, patch.after.morphology.review);
+for (const patch of heldSixRecord.lexical_patches.filter(patch => patch.before_id !== patch.after_id)) acceptedMorphologyReviews.set(patch.after_id, patch.after.morphology.review);
+for (const patch of foundation01MorphologyRecord.patches) acceptedMorphologyReviews.set(patch.id, patch.installed_morphology.review);
+const foundation02MorphologyRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-morphology-2026-10-17.json'), 'utf8'));
+for (const patch of foundation02MorphologyRecord.patches) acceptedMorphologyReviews.set(patch.lexeme_id, patch.proposed_morphology.review);
+function beforeRetail03Morphology(entry) {
+  const patch = retail03MorphologyPatches.get(entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry.morphology, patch.after.morphology, entry.id + ': exact later independent morphology acceptance');
+  assert.equal(entry.editorial_notes, patch.after.editorial_notes);
+  return {...entry, morphology: structuredClone(patch.before.morphology), editorial_notes: patch.before.editorial_notes};
+}
+const retail05LanguageReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module05-language-review-2026-10-16.json'), 'utf8'));
+const retail05LanguagePatches = new Map(retail05LanguageReview.proposal.patches.map(patch => [patch.id, patch]));
+const retail06LanguageReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module06-language-review-2026-10-16.json'), 'utf8'));
+const retail06LanguagePatches = new Map(retail06LanguageReview.proposal.patches.map(patch => [patch.id, patch]));
+function beforeRetail06Language(entry) {
+  const patch = retail06LanguagePatches.get(entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later language metadata');
+  return patch.before;
+}
+const retail07LanguageReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module07-language-review-2026-10-16.json'), 'utf8'));
+const retail07LanguagePatches = new Map(retail07LanguageReview.proposal.patches.map(patch => [patch.id, patch]));
+function beforeRetail07Language(entry) {
+  entry = beforeCaseFamily(entry);
+  const patch = retail07LanguagePatches.get(entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later independent language metadata');
+  return patch.before;
+}
+const pictureExclusionReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-picture-exclusions-2026-10-16.json'), 'utf8'));
+const pictureExclusionPatches = new Map(pictureExclusionReview.patches.map(patch => [patch.id, patch]));
+function beforePictureExclusions(entry) {
+  entry = beforeRetail04First10(entry);
+  const patch = pictureExclusionPatches.get(entry.id);
+  if (!patch) return entry;
+  assert.deepEqual(entry, patch.after, entry.id + ': exact later picture metadata');
+  return patch.before;
+}
+const draft = () => structuredClone(source);
+const audit = (data, release = false) => auditProfessionalContent({rootDir, data, release});
+const has = (result, code) => result.errors.some(issue => issue.code === code);
+const pilot = (data, course = 'retail') => data.courses.find(item => item.id === course).modules[2];
+
+for(const courseId of ['it_support','education_childcare','hr_recruitment','construction_trades','cleaning_facilities','manufacturing_maintenance','sales_marketing','clinical_medicine','accounting_finance','legal_paralegal']){
+  test(courseId+' preserves complete distinct draft quotas, on-demand origins, and module-local scored routes',()=>{
+    const course=source.courses.find(entry=>entry.id===courseId);
+    assert.equal(new Set(course.modules.flatMap(module=>module.lexeme_ids)).size,500);
+    assert.equal(new Set(course.modules.flatMap(module=>module.expression_ids)).size,100);
+    for(const module of course.modules){
+      assert.equal(module.lexeme_ids.length,50);assert.equal(module.expression_ids.length,10);assert.equal(module.status,'draft');
+      const focused=new Set(module.expression_ids.flatMap(id=>source.expressions.find(entry=>entry.id===id).focus_lexeme_ids));
+      for(const id of module.lexeme_ids){const entry=source.lexemes.find(item=>item.id===id);
+        assert.ok(module.lexeme_files.includes(source.lexemeOrigins[id]),id);
+        assert.ok((entry.practice_modes.includes('word_jelly')&&entry.morphology?.parts.length>1)||(entry.practice_modes.includes('phrase')&&focused.has(id))||(entry.media.image.picture_suitable&&entry.practice_modes.some(mode=>['match','memory','pop','jelly'].includes(mode))),module.id+' '+id);
+      }
+      for(const id of module.expression_ids){const expression=source.expressions.find(entry=>entry.id===id);
+        assert.ok(module.expression_files.includes(source.expressionOrigins[id]));
+        for(const focus of expression.focus_lexeme_ids){assert.ok(module.lexeme_ids.includes(focus));assert.ok(expression.text.toLowerCase().includes(source.lexemes.find(entry=>entry.id===focus).text.toLowerCase()),id+' '+focus);}
+        for(const[index,token]of expression.tokens.entries()){assert.equal(token.index,index);assert.equal([...expression.text].slice(token.start,token.end).join(''),token.text);}
+      }
+    }
+  });
+  test(courseId+' specialist domain review cannot be bypassed outside the safety module',()=>{
+    const fixture=draft(),course=fixture.courses.find(entry=>entry.id===courseId);
+    const lexeme=fixture.lexemes.find(entry=>entry.id===course.modules[2].lexeme_ids[0]);
+    const expression=fixture.expressions.find(entry=>entry.id===course.modules[2].expression_ids[0]);
+    for(const entry of [lexeme,expression])entry.review={status:'reviewed',language:'reviewed',domain:'not_required',reviewer:'fixture',reviewed_at:'2026-10-16'};
+    const result=audit(fixture,true);
+    for(const[type,entry]of [['lexeme',lexeme],['expression',expression]])assert.ok(result.errors.some(issue=>issue.code==='review.pending'&&issue.path===type+'/'+entry.id));
+  });
+}
+
+test('Recent courses keep authored morphology, uncertain analyses, assets, and voice gates honest',()=>{
+  for(const[prefix,count,graphs,atomic,nullCount]of [['it-support-',243,218,10,25],['education-',294,237,20,57],['hr-',296,245,6,51],['construction-',311,223,24,88],['cleaning-',207,185,31,22],['manufacturing-',247,213,8,34],['sales-',281,237,10,44],['clinical-',153,98,6,55],['accounting-',281,246,7,35],['legal-',254,202,6,52]]){
+    const entries=source.lexemes.filter(entry=>source.lexemeOrigins[entry.id].includes('/'+prefix));
+    assert.equal(entries.length,count);assert.equal(entries.filter(entry=>entry.morphology).length,graphs);assert.equal(entries.filter(entry=>entry.morphology?.kind==='atomic').length,atomic);assert.equal(entries.filter(entry=>!entry.morphology).length,nullCount);
+    for(const entry of entries){
+      if(entry.morphology){assert.deepEqual(morphologyErrors(entry.morphology,entry),[]);assert.equal(entry.morphology.review.status,acceptedMorphologyReviews.has(entry.id)?'reviewed':'pending');}
+      assert.equal(entry.review.domain,'pending');assert.equal(entry.review.language,'pending');assert.equal(entry.media.image.picture_suitable,false);
+      for(const media of Object.values(entry.media)){assert.equal(media.status,'pending');assert.equal(media.acquisition_status,'not_started');assert.equal(media.path,null);assert.equal(media.review.status,'pending');}
+      assert.deepEqual(entry.media.audio.voice_settings,{voice:'en-US-AvaNeural',rate:'-15%',pitch:'+8Hz',volume:'+0%',postprocessing:false});
+    }
+  }
+  const find=text=>source.lexemes.find(entry=>entry.text===text);
+  assert.deepEqual(find('dress-up clothes').morphology.parts.map(part=>part.canonical),['dress','up','clothes']);
+  assert.deepEqual(find('preschooler').morphology.parts.map(part=>part.canonical),['pre','school','er']);
+  for(const text of ['phoneme','grapheme','syllable','cognition','firmware','intranet','Bluetooth','passphrase'])assert.equal(find(text).morphology,null,text);
+});
+
+test('Inherited Growth morphology preserves exact source graphs without transferring source approval', () => {
+  const inherited = source.lexemes.map(entry => {
+    entry = beforeRetail04First10(entry);
+    const later = retail03FourthMorphologyReview.patches.find(patch => patch.id === entry.id);
+    if (!later) return entry;
+    assert.deepEqual(entry, later.after, entry.id + ': exact separate fourth-ten review');
+    return later.before;
+  }).filter(entry => entry.morphology?.review.provenance?.corpus === 'Growth');
+  assert.equal(inherited.length, 50);
+  assert.equal(source.lexemes.filter(entry => entry.morphology?.review.provenance?.corpus === 'Growth').length, 48);
+  assert.deepEqual(retail04FirstRecord.patches.filter(patch => patch.before.morphology?.review.provenance?.corpus === 'Growth').map(patch => patch.id), ['material.making-substance.n']);
+  const separateLanguageReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module03-language-review-2026-10-16.json'), 'utf8'));
+  const retail04LanguageReview = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-language-review-2026-10-16.json'), 'utf8'));
+  const separatelyReviewedIds = new Set([...separateLanguageReview.proposal.patches, ...retail04LanguageReview.proposal.patches, ...retail05LanguageReview.proposal.patches, ...retail06LanguageReview.proposal.patches].filter(item => item.kind === 'lexeme').map(item => item.id));
+  const files = new Map();
+  for (const entry of inherited) {
+    const graph = entry.morphology, review = graph.review, provenance = review.provenance;
+    const file = path.resolve(rootDir, provenance.file);
+    assert.ok(file.startsWith(rootDir + path.sep));
+    if (!files.has(file)) files.set(file, JSON.parse(fs.readFileSync(file, 'utf8')));
+    const original = files.get(file).entries.find(item => item.id === provenance.entry_id);
+    assert.ok(original, entry.id);
+    assert.equal(original.text, entry.text);
+    assert.equal(original.part_of_speech, entry.pos);
+    assert.equal(provenance.analysis_id, original.analysis.id);
+    assert.equal(provenance.analysis_sha256, crypto.createHash('sha256').update(JSON.stringify(original.analysis)).digest('hex'));
+    for (const key of ['schema', 'kind', 'parts', 'nodes', 'roots']) assert.deepEqual(graph[key], original.analysis[key], entry.id + ': ' + key);
+    assert.equal(review.status, 'pending');
+    assert.equal(review.reviewer, null);
+    assert.equal(review.reviewed_at, null);
+    assert.equal(review.source_consultation, 'inherited_repository_record_not_newly_consulted_in_this_pass');
+    assert.equal(entry.review.language, separatelyReviewedIds.has(entry.id) ? 'reviewed' : 'pending');
+    assert.ok(review.references.length > 0);
+  }
+});
+
+test('Source-backed morphology keeps explicit families, all source provenance, and unresolved holds separate', () => {
+  const provenance = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/morphology-revised-second-2026-10-16.json'), 'utf8'));
+  assert.equal(provenance.accepted_proposal_sha256, '6b260a8194e879265ebd14eff3a2fccaa44b4b70b51c35af3042fbdf5a320ad6');
+  const proposal = provenance.proposal;
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(proposal)).digest('hex'), provenance.accepted_proposal_sha256);
+  assert.equal(proposal.candidates.length, 11);
+  assert.equal(proposal.held.length, 9);
+  assert.equal(Object.keys(proposal.newly_consulted_sources).length, 32);
+  for (const [id, evidence] of Object.entries(proposal.newly_consulted_sources)) {
+    const record = source.sources.find(item => item.id === id);
+    assert.ok(record, id);
+    assert.equal(record.url, evidence.url);
+    assert.equal(record.consulted_on, evidence.consulted);
+    assert.ok(record.scope.includes(evidence.sections));
+    assert.ok(record.scope.includes(evidence.evidence));
+    assert.equal(record.assets_acquired, false);
+    assert.equal(record.asset_license, null);
+  }
+  for (const candidate of proposal.candidates) {
+    const entry = source.lexemes.find(item => item.id === candidate.target_id);
+    assert.deepEqual(entry.morphology, candidate.proposed_morphology, entry.id);
+    assert.equal(entry.morphology.review.status, 'pending');
+    assert.equal(entry.morphology.review.reviewer, null);
+    assert.equal(entry.morphology.review.reviewed_at, null);
+    assert.equal(entry.review.language, retail05LanguagePatches.has(entry.id) ? 'reviewed' : 'pending');
+    for (const id of entry.morphology.review.source_record_ids) assert.ok(proposal.newly_consulted_sources[id]);
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+  }
+  const reopened = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/morphology-hold9-2026-10-16.json'), 'utf8'));
+  for (const hold of proposal.held) {
+    const entry = source.lexemes.find(item => item.id === hold.target_id);
+    assert.equal(hold.proposed_morphology, null);
+    const later = reopened.proposal.professional.candidates.find(item => item.target_id === hold.target_id);
+    assert.ok(later, hold.target_id + ': a later independent decision is required to supersede the historical null hold');
+    assert.equal(later.before_morphology, null);
+    assert.deepEqual({...entry.morphology, review: later.proposed_morphology.review}, later.proposed_morphology);
+    assert.deepEqual(entry.morphology.review, acceptedMorphologyReviews.get(entry.id));
+  }
+  const parts = text => proposal.candidates.find(item => item.text === text).proposed_morphology.parts;
+  assert.deepEqual(parts('attract').map(part => [part.canonical_id, part.surface]), [['english.affix.ad.toward', 'at'], ['english.root.tract.pull', 'tract']]);
+  assert.deepEqual(parts('connect').map(part => [part.canonical_id, part.surface]), [['english.affix.com.together', 'con'], ['english.root.nect.bind', 'nect']]);
+  assert.deepEqual(parts('receive').map(part => [part.canonical_id, part.surface]), [['english.affix.re.back', 're'], ['english.root.ceive.take', 'ceive']]);
+});
+
+test('Nine reopened analyses retain exact source-backed families and scoped AI review without other approvals', () => {
+  const graphRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/morphology-hold9-2026-10-16.json'), 'utf8'));
+  assert.equal(graphRecord.accepted_proposal_sha256, '0982c8562cb2d6bc70a314516dac4db5babb73f22306f487244a0cf2cbf91d56');
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(graphRecord.proposal)).digest('hex'), graphRecord.accepted_proposal_sha256);
+  assert.equal(scopedMorphologyReview.accepted_proposal_sha256, '50d31c8cdfc16c650cbed26a429f7eec8033b0d4890a7bf0402604775e2a8b72');
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(scopedMorphologyReview.proposal)).digest('hex'), scopedMorphologyReview.accepted_proposal_sha256);
+  assert.equal(scopedMorphologyReview.independent_approval.accepted, true);
+  assert.equal(scopedMorphologyReview.proposal.patches.length, 9);
+  assert.equal(acceptedMorphologyReviews.size, 189);
+  assert.equal(graphRecord.registered_sources.length, 22);
+  for (const expected of graphRecord.registered_sources) assert.deepEqual(source.sources.find(record => record.id === expected.id), expected);
+  for (const patch of scopedMorphologyReview.proposal.patches) {
+    const entry = source.lexemes.find(item => item.id === patch.target_id);
+    const laterLanguage = retail05LanguagePatches.get(entry.id);
+    if (laterLanguage) {
+      assert.equal(entry.id, 'compare.examine-differences.v');
+      const laterEditorial = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module05-editorial-2026-10-16.json'), 'utf8')).proposal.lexeme_patches.find(item => item.id === entry.id);
+      assert.deepEqual(laterEditorial.before, patch.after);
+      assert.deepEqual(laterLanguage.before, laterEditorial.after);
+      assert.deepEqual(entry, laterLanguage.after);
+      assert.deepEqual(entry.morphology, patch.after.morphology);
+    } else assert.deepEqual(entry, patch.after);
+    const protect = value => { const copy = structuredClone(value); delete copy.morphology.review; delete copy.editorial_notes; return copy; };
+    assert.deepEqual(protect(patch.after), protect(patch.before));
+    assert.equal(entry.morphology.review.status, 'reviewed');
+    assert.match(entry.morphology.review.reviewer, /independent AI morphology review; not human or subject-matter approval/);
+    assert.equal(entry.review.language, retail05LanguagePatches.has(entry.id) ? 'reviewed' : 'pending');
+    assert.equal(entry.review.domain, 'pending');
+    assert.equal(entry.media.image.status, 'pending');
+    assert.equal(entry.media.audio.status, 'pending');
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    for (const id of entry.morphology.review.source_record_ids) assert.ok(source.sources.some(record => record.id === id));
+  }
+  const graph = text => source.lexemes.find(entry => acceptedMorphologyReviews.has(entry.id) && entry.text === text).morphology;
+  assert.equal(graph('compare').parts[1].canonical_id, 'english.root.par.equal');
+  assert.equal(graph('separate').parts[1].canonical_id, 'english.root.par.prepare');
+  assert.deepEqual(graph('suggest').parts.map(part => [part.canonical_id, part.surface]), [['english.affix.sub.under', 'sug'], ['english.root.gest.carry', 'gest']]);
+  assert.equal(graph('divide').parts[1].canonical_id, 'english.root.vide.separate');
+  assert.equal(graph('retire').parts[1].canonical_id, 'english.root.tir.draw');
+  assert.deepEqual(graph('multiply').parts.map(part => part.surface), ['multi', 'ply']);
+  assert.equal(graph('explore').kind, 'atomic');
+  assert.equal(graph('explore').parts.length, 1);
+  assert.match(graph('explore').review.notes, /competing cry-out and flow explanations/);
+  assert.ok(source.courses.every(course => course.modules.every(module => module.status === 'draft')));
+});
+
+test('Retail equipment review distinguishes exact senses, sourced forms, and contextual counter routes', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module03-editorial-2026-10-16.json'), 'utf8'));
+  const accepted = record.proposal;
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(accepted, null, 2) + '\n').digest('hex'), record.accepted_proposal_raw_sha256);
+  assert.equal(accepted.lexeme_patches.length, 50);
+  assert.equal(accepted.expression_patches.length, 3);
+  assert.equal(accepted.source_additions.length, 52);
+  const laterBasketPicture = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-shopping-basket-image-2026-10-16.json'), 'utf8'));
+  const entries = new Map(source.lexemes.map(entry => [entry.id, beforeRetail03Media(historicalRetailEntries.get(entry.id) || entry)]));
+  for (const patch of accepted.lexeme_patches) {
+    const entry = entries.get(patch.id);
+    for (const key of ['id', 'text', 'pos', 'definition', 'example', 'accepted_forms', 'practice_modes']) assert.deepEqual(entry[key], patch.after[key], patch.id + ': ' + key);
+    if (entry.id === laterBasketPicture.proposal.sense_id) {
+      assert.equal(laterBasketPicture.image_before.brief, patch.after.media.image.brief);
+      assert.equal(entry.media.image.brief, laterBasketPicture.image_after.brief);
+      assert.equal(laterBasketPicture.independent_approval.accepted, true);
+    } else assert.equal(entry.media.image.brief, patch.after.media.image.brief);
+    assert.equal(entry.media.image.picture_suitable, patch.after.media.image.picture_suitable);
+  }
+  for (const expected of accepted.source_additions) assert.deepEqual(source.sources.find(record => record.id === expected.id), expected);
+  for (const patch of accepted.expression_patches) {
+    const entry = source.expressions.find(item => item.id === patch.id);
+    for (const key of ['text', 'meaning', 'context', 'tokens', 'focus_lexeme_ids']) assert.deepEqual(entry[key], patch.after[key]);
+    for (const id of patch.before.focus_lexeme_ids) assert.ok(entry.focus_lexeme_ids.includes(id));
+  }
+  for (const id of ['customer-service-desk.help-counter.n', 'pickup-counter.collection-point.n', 'returns-counter.return-point.n']) {
+    const entry = entries.get(id);
+    assert.equal(entry.media.image.picture_suitable, false);
+    assert.deepEqual(entry.practice_modes, ['phrase']);
+    for (const course of source.courses) for (const module of course.modules.filter(item => item.lexeme_ids.includes(id))) {
+      assert.ok(module.expression_ids.some(expressionId => source.expressions.find(expression => expression.id === expressionId).focus_lexeme_ids.includes(id)), course.id + '/' + module.id + ': ' + id);
+    }
+  }
+  assert.match(source.expressions.find(entry => entry.id === 'expr.customer_support.module03.07').context, /fictional chatbot.*in-person assistance/);
+  assert.equal(entries.get('weighing-scale.measurement-device.n').definition, 'A device used to measure how heavy someone or something is.');
+  assert.ok(!entries.get('shopping-bag.goods-carrier.n').accepted_forms.includes('carrier bag'));
+  assert.ok(!entries.get('loading-bay.goods-transfer.n').accepted_forms.includes('loading dock'));
+});
+
+test('Completed Retail language review is scoped separately from subject, morphology, media, and readiness', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module03-language-review-2026-10-16.json'), 'utf8'));
+  assert.equal(record.accepted_proposal_raw_sha256, 'b63b8e901ff8caee2516fdbc8e65d05b55afa15e6e3a0f0f726cbf2abf38fec1');
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(record.proposal, null, 2) + '\n').digest('hex'), record.accepted_proposal_raw_sha256);
+  assert.equal(record.proposal.patches.length, 61);
+  assert.equal(record.proposal.patches.reduce((sum, patch) => sum + patch.verified_reference_source_ids.length, 0), 68);
+  assert.equal(record.independent_approval.accepted, true);
+  let reviewedLexemes = 0, reviewedExpressions = 0, pendingDomain = 0;
+  for (const patch of record.proposal.patches) {
+    const current = source[patch.kind === 'lexeme' ? 'lexemes' : 'expressions'].find(item => item.id === patch.id);
+    const historical = patch.kind === 'lexeme' ? historicalRetailEntries.get(patch.id) || current : current;
+    const entry = beforeApprovedAudio(beforeRetail03Morphology(beforeRetail03Media(historical)));
+    assert.deepEqual(entry.review, patch.after.review);
+    assert.equal(entry.review.domain, patch.before.review.domain);
+    assert.equal(entry.review.language, 'reviewed');
+    assert.match(entry.review.reviewer, /independent AI editorial language review; not human or subject-matter approval/);
+    assert.deepEqual(entry.references, patch.after.references);
+    assert.deepEqual(entry.media.audio, patch.before.media.audio);
+    if (entry.review.domain === 'pending') { pendingDomain++; assert.equal(entry.review.status, 'pending'); }
+    if (patch.kind === 'lexeme') {
+      if (entry.review.status === 'reviewed') reviewedLexemes++;
+      assert.deepEqual(entry.morphology, patch.before.morphology);
+      assert.match(entry.editorial_notes, /Independent AI editorial language review was completed/);
+      assert.doesNotMatch(entry.editorial_notes, /Not approved learning content|All CEFR labels, language and required domain reviews/);
+      assert.match(entry.editorial_notes, /CEFR difficulty remains a provisional editorial estimate/);
+      for (let i = 0; i < entry.references.length; i++) {
+        const old = patch.before.references[i];
+        assert.equal(entry.references[i].status, old.source_id.startsWith('retail03-') ? 'verified' : old.status);
+      }
+    } else if (entry.review.status === 'reviewed') reviewedExpressions++;
+  }
+  assert.equal(reviewedLexemes, 23);
+  assert.equal(reviewedExpressions, 10);
+  assert.equal(pendingDomain, 28);
+  assert.ok(source.courses.every(course => course.modules.every(module => module.status === 'draft')));
+  assert.equal(source.lexemes.filter(entry => entry.morphology?.review.status === 'reviewed').length, acceptedMorphologyReviews.size);
+});
+
+test('Retail04 editorial acceptance preserves exact senses, shared uses, and module-local focus coverage', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-editorial-2026-10-16.json'), 'utf8'));
+  const hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const proposal = record.proposal;
+  assert.equal(record.accepted_proposal_json_sha256, '868d42427f905120c20bb286bd54a7168ffae3089c99b4add9228502ad58c4b9');
+  assert.equal(hash(proposal), record.accepted_proposal_json_sha256);
+  assert.equal(record.independent_review.status, 'accepted_exact_editorial_delta_only');
+  assert.equal(proposal.lexeme_patches.length, 50);
+  assert.equal(proposal.expression_patches.length, 10);
+  assert.equal(proposal.shared_expression_dependencies.length, 29);
+  const protectedEntry = entry => { const copy = structuredClone(entry); delete copy.review; delete copy.references; delete copy.editorial_notes; return copy; };
+  for (const [key, patches] of [['lexemes', proposal.lexeme_patches], ['expressions', proposal.expression_patches]]) {
+    for (const patch of patches) {
+      const entry = beforePictureExclusions(source[key].find(item => item.id === patch.id));
+      assert.equal(hash(patch.before), patch.before_sha256);
+      assert.equal(hash(patch.after), patch.after_sha256);
+      assert.deepEqual(protectedEntry(entry), protectedEntry(patch.after), patch.id);
+      assert.deepEqual(patch.after.review, patch.before.review);
+      assert.deepEqual(entry.media.audio, patch.before.media.audio);
+      if (key === 'lexemes') assert.deepEqual(entry.morphology, patch.before.morphology);
+      else for (const id of patch.before.focus_lexeme_ids) assert.ok(entry.focus_lexeme_ids.includes(id));
+    }
+  }
+  const laterEditorial = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module05-editorial-2026-10-16.json'), 'utf8'));
+  for (const dependency of proposal.shared_expression_dependencies) {
+    const later = laterEditorial.proposal.shared_expression_patches.find(patch => patch.id === dependency.id);
+    if (later) assert.equal(hash(later.before), dependency.before_sha256);
+    const laterLanguage = retail05LanguagePatches.get(dependency.id);
+    if (laterLanguage) assert.deepEqual(laterLanguage.before, later.after);
+    assert.equal(hash(source.expressions.find(entry => entry.id === dependency.id)), laterLanguage ? laterLanguage.after_sha256 : later ? later.after_sha256 : dependency.before_sha256, dependency.id);
+  }
+  assert.equal(proposal.lexeme_patches.filter(patch => patch.after.definition !== patch.before.definition).length, 8);
+  assert.equal(proposal.lexeme_patches.filter(patch => patch.after.example !== patch.before.example).length, 1);
+  const zipper = source.lexemes.find(entry => entry.id === 'zipper.sliding-fastener.n');
+  assert.ok(zipper.accepted_forms.includes('zip'));
+  assert.ok(zipper.accepted_forms.includes('zip fastener'));
+  assert.ok(source.expressions.find(entry => entry.id === 'expr.retail.module04.05').focus_lexeme_ids.includes('net-weight.contents-weight.n'));
+  const module = source.courses.find(course => course.id === 'retail').modules[3];
+  assert.equal(module.status, 'draft');
+  for (const id of module.lexeme_ids) {
+    const entry = beforePictureExclusions(source.lexemes.find(item => item.id === id));
+    if (!entry.media.image.picture_suitable && !(entry.practice_modes.includes('word_jelly') && entry.morphology?.parts.length > 1)) {
+      assert.ok(module.expression_ids.some(expressionId => source.expressions.find(expression => expression.id === expressionId).focus_lexeme_ids.includes(id)), id);
+    }
+  }
+  assert.equal(record.remaining_picture_release_work.length, 3);
+  assert.match(record.remaining_picture_release_work.join(' '), /Container\/carton.*Lid\/cap.*Sole\/heel/);
+});
+
+test('Retail04 language metadata retains exact domain holds and separate morphology and media gates', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-language-review-2026-10-16.json'), 'utf8'));
+  const editorial = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-editorial-2026-10-16.json'), 'utf8'));
+  const hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(record.accepted_proposal_json_sha256, '7b19e1017deefb5337ca9a7ba247267eb815b7e500b2eab9300c649862777091');
+  assert.equal(hash(record.proposal), record.accepted_proposal_json_sha256);
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(record.proposal, null, 2) + '\n').digest('hex'), record.accepted_proposal_raw_sha256);
+  assert.equal(record.independent_approval.status, 'accepted_exact_language_metadata_delta');
+  assert.equal(record.proposal.baseline_registry_sha256, editorial.proposal.proposed_registry_json_sha256);
+  const lexicalPatches = record.proposal.patches.filter(patch => patch.kind === 'lexeme');
+  const expressionPatches = record.proposal.patches.filter(patch => patch.kind === 'expression');
+  assert.equal(lexicalPatches.length, 50); assert.equal(expressionPatches.length, 10);
+  for (const patch of record.proposal.patches) {
+    const entry = beforePictureExclusions(source[patch.kind === 'lexeme' ? 'lexemes' : 'expressions'].find(item => item.id === patch.id));
+    const editorialPatch = [...editorial.proposal.lexeme_patches, ...editorial.proposal.expression_patches].find(item => item.id === patch.id);
+    assert.deepEqual(patch.before, editorialPatch.after);
+    assert.equal(hash(patch.before), patch.before_sha256); assert.equal(hash(patch.after), patch.after_sha256);
+    assert.deepEqual(entry, patch.after);
+    assert.equal(entry.review.language, 'reviewed');
+    assert.equal(entry.review.domain, patch.before.review.domain);
+    assert.equal(entry.review.status, entry.review.domain === 'not_required' ? 'reviewed' : 'pending');
+    assert.deepEqual(entry.media, patch.before.media);
+    assert.equal(entry.media.audio.status, 'pending');
+    assert.match(entry.review.reviewer, /independent AI.*not human or subject-matter approval/);
+    if (patch.kind === 'lexeme') {
+      assert.deepEqual(entry.morphology, patch.before.morphology);
+      assert.match(entry.editorial_notes, /Independent AI editorial language review was completed/);
+      assert.doesNotMatch(entry.editorial_notes, /Independent language acceptance remains pending/);
+      assert.equal(entry.media.image.status, 'pending');
+    }
+  }
+  assert.equal(lexicalPatches.filter(patch => patch.after.review.status === 'reviewed').length, 17);
+  assert.equal(lexicalPatches.filter(patch => patch.after.review.domain === 'pending').length, 33);
+  assert.equal(expressionPatches.filter(patch => patch.after.review.status === 'reviewed').length, 9);
+  assert.equal(expressionPatches.find(patch => patch.id === 'expr.retail.module04.09').after.review.domain, 'pending');
+  assert.equal(lexicalPatches.filter(patch => patch.after.morphology).length, 39);
+  for (const patch of lexicalPatches.filter(patch => patch.after.morphology)) assert.equal(patch.after.morphology.review.status, 'pending');
+});
+
+test('Retail04 verified references stop at consulted lexical passages and preserve contextual source bounds', () => {
+  const editorial = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-editorial-2026-10-16.json'), 'utf8'));
+  const language = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-language-review-2026-10-16.json'), 'utf8'));
+  const sources = editorial.proposal.source_additions;
+  assert.equal(sources.length, 54);
+  assert.equal(new Set(sources.map(record => record.id)).size, 54);
+  for (const expected of sources) {
+    assert.deepEqual(source.sources.find(record => record.id === expected.id), expected);
+    assert.equal(expected.assets_acquired, false); assert.equal(expected.asset_license, null);
+  }
+  const eligible = new Set(language.proposal.lexical_source_ids);
+  assert.equal(eligible.size, 51);
+  assert.deepEqual(language.proposal.excluded_context_source_ids, ['retail04-shopify-variants', 'retail04-fda-allergen-label', 'retail04-nist-unit-price']);
+  let verified = 0;
+  for (const patch of language.proposal.patches) {
+    assert.equal(patch.after.references.length, patch.before.references.length);
+    for (let i = 0; i < patch.before.references.length; i++) {
+      const before = patch.before.references[i], after = patch.after.references[i];
+      assert.equal(after.source_id, before.source_id);
+      if (!eligible.has(before.source_id)) { assert.deepEqual(after, before); continue; }
+      verified++; assert.equal(after.status, 'verified');
+      assert.match(after.scope, /exact selected lexical passage/);
+      assert.match(after.scope, /does not approve subject practice, morphology, images, audio, or release/);
+    }
+  }
+  assert.equal(verified, 93);
+  for (const id of language.proposal.excluded_context_source_ids) {
+    assert.equal(eligible.has(id), false);
+    const refs = language.proposal.patches.flatMap(patch => patch.after.references).filter(reference => reference.source_id === id);
+    assert.ok(refs.length > 0); for (const reference of refs) assert.equal(reference.status, 'pending_term_check');
+  }
+  assert.match(sources.find(record => record.id === 'retail04-pack-size').scope, /Terminology passage only.*Software rounding, minimum-order rules.*not adopted.*404.*not counted/);
+});
+
+test('Retail05 accepted action senses preserve protected fields, exact source scope, and separate review gates', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module05-editorial-2026-10-16.json'), 'utf8'));
+  const proposal = record.proposal, hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(record.accepted_proposal_json_sha256, '43ccfb483c6bbe70a0ff1c527d42da6e63996388858e526da962a9464c59b226');
+  assert.equal(hash(proposal), record.accepted_proposal_json_sha256);
+  assert.equal(record.independent_review.independently_checked_live_baseline, 'ab058c057c060c2d162f61937ea59ef021327667d7ad6e46248fd5992654b1f6');
+  assert.equal(record.independent_review.status, 'accepted_exact_editorial_delta_only');
+  assert.equal(proposal.lexeme_patches.length, 50);
+  assert.equal(proposal.source_additions.length, 54);
+  assert.equal(proposal.lexeme_patches.filter(patch => patch.before.definition !== patch.after.definition).length, 8);
+  assert.equal(proposal.lexeme_patches.filter(patch => patch.before.example !== patch.after.example).length, 1);
+  for (const patch of proposal.lexeme_patches) {
+    const entry = beforePictureExclusions(source.lexemes.find(item => item.id === patch.id));
+    assert.equal(hash(patch.before), patch.before_sha256); assert.equal(hash(patch.after), patch.after_sha256);
+    assert.deepEqual(entry, retail05LanguagePatches.get(entry.id).after);
+    const protectedEntry = item => { const copy = structuredClone(item); for (const field of ['definition', 'example', 'references', 'editorial_notes']) delete copy[field]; delete copy.media.image.brief; return copy; };
+    assert.deepEqual(protectedEntry(patch.after), protectedEntry(patch.before));
+    assert.deepEqual(entry.references.slice(0, patch.before.references.length), patch.before.references);
+    assert.equal(entry.review.language, 'reviewed'); assert.equal(entry.media.image.status, 'pending'); assert.equal(entry.media.audio.status, 'pending');
+    assert.deepEqual(entry.morphology, patch.before.morphology);
+  }
+  for (const expected of proposal.source_additions) { assert.deepEqual(source.sources.find(item => item.id === expected.id), expected); assert.equal(expected.assets_acquired, false); assert.equal(expected.asset_license, null); }
+  const find = text => source.lexemes.find(entry => entry.text === text && proposal.lexeme_patches.some(patch => patch.id === entry.id));
+  assert.match(find('scan').definition, /code or capture a digital copy of a document or image/);
+  assert.match(find('recommend').definition, /person, thing, or action/);
+  assert.match(find('select').definition, /people or things/);
+  assert.match(find('reserve').definition, /person or use/);
+  assert.match(find('reconcile').definition, /explain or correct any differences/);
+  assert.match(find('deduct').example, /^If the voucher is accepted/);
+  assert.equal(find('compare').morphology.review.status, 'reviewed');
+  assert.equal(proposal.lexeme_patches.filter(patch => patch.after.morphology).length, 33);
+  for (const id of ['r05-shopify-facing', 'r05-shopify-bundles', 'r05-gs1-barcode', 'r05-acca-reconciliation', 'r05-hmrc-loyalty-language', 'r05-square-void']) assert.ok(proposal.source_additions.find(record => record.id === id).scope.includes('Limits:'));
+  assert.match(proposal.source_additions.find(record => record.id === 'r05-acca-reconciliation').scope, /timing difference rather than an error.*Only the conceptual distinction/);
+});
+
+test('Retail05 total uses a verb in both modules and retains all local and shared focuses', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module05-editorial-2026-10-16.json'), 'utf8'));
+  const proposal = record.proposal, hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(proposal.expression_patches.length, 10);
+  assert.deepEqual(proposal.shared_expression_patches.map(patch => patch.id), ['expr.office_admin.module07.10']);
+  assert.equal(proposal.shared_expression_dependencies.length, 68);
+  for (const patch of [...proposal.expression_patches, ...proposal.shared_expression_patches]) {
+    const entry = beforePictureExclusions(source.expressions.find(item => item.id === patch.id));
+    assert.equal(hash(patch.before), patch.before_sha256); assert.equal(hash(patch.after), patch.after_sha256);
+    assert.deepEqual(entry, retail05LanguagePatches.get(entry.id).after); assert.deepEqual(entry.focus_lexeme_ids, patch.before.focus_lexeme_ids);
+    assert.deepEqual(patch.after.review, patch.before.review); assert.deepEqual(entry.media, patch.before.media);
+    for (const [index, token] of entry.tokens.entries()) { assert.equal(token.index, index); assert.equal([...entry.text].slice(token.start, token.end).join(''), token.text); }
+  }
+  for (const dependency of proposal.shared_expression_dependencies) {
+    const language = retail05LanguagePatches.get(dependency.id);
+    if (language) assert.equal(hash(language.before), dependency.after_sha256);
+    assert.equal(hash(source.expressions.find(entry => entry.id === dependency.id)), language ? language.after_sha256 : dependency.after_sha256, dependency.id);
+  }
+  const retail = source.expressions.find(entry => entry.id === 'expr.retail.module05.07'), office = source.expressions.find(entry => entry.id === 'expr.office_admin.module07.10');
+  assert.match(retail.text, /total them/); assert.match(office.text, /then total the subtotal/);
+  assert.ok(retail.focus_lexeme_ids.includes('total.add-amounts.v')); assert.ok(office.focus_lexeme_ids.includes('total.add-amounts.v')); assert.equal(office.focus_lexeme_ids.length, 6);
+  assert.equal(office.review.domain, 'pending');
+  assert.match(record.remaining_picture_release_work.join(' '), /Pack\/bag.*fasten\/zip.*Label\/tag.*restock\/replenish/);
+});
+
+test('Retail05 language acceptance binds precise lexical references and preserves compare morphology and subject holds', () => {
+  const record = retail05LanguageReview, proposal = record.proposal;
+  const editorial = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module05-editorial-2026-10-16.json'), 'utf8'));
+  const hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(record.accepted_proposal_json_sha256, '97416c0d949aa8afa996e521147fffcf07b66e6af666c00116bd6cbcbee30c5a');
+  assert.equal(hash(proposal), record.accepted_proposal_json_sha256);
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(proposal, null, 2) + '\n').digest('hex'), record.accepted_proposal_raw_sha256);
+  assert.equal(record.independent_approval.status, 'accepted_exact_language_metadata_delta');
+  assert.equal(proposal.patches.length, 61); assert.equal(proposal.lexical_source_ids.length, 52);
+  const sources = new Set(proposal.lexical_source_ids);
+  let verified = 0;
+  for (const patch of proposal.patches) {
+    const entry = beforePictureExclusions(source[patch.kind === 'lexeme' ? 'lexemes' : 'expressions'].find(item => item.id === patch.id));
+    const editorialPatch = [...editorial.proposal.lexeme_patches, ...editorial.proposal.expression_patches, ...editorial.proposal.shared_expression_patches].find(item => item.id === patch.id);
+    assert.deepEqual(patch.before, editorialPatch.after);
+    assert.equal(hash(patch.before), patch.before_sha256); assert.equal(hash(patch.after), patch.after_sha256); assert.deepEqual(entry, patch.after);
+    assert.equal(entry.review.language, 'reviewed'); assert.equal(entry.review.domain, patch.before.review.domain);
+    assert.equal(entry.review.status, entry.review.domain === 'not_required' ? 'reviewed' : 'pending');
+    assert.deepEqual(entry.media, patch.before.media);
+    if (patch.kind === 'lexeme') {
+      assert.deepEqual(entry.morphology, patch.before.morphology);
+      assert.match(entry.editorial_notes, /Independent AI editorial language review was completed/);
+      assert.doesNotMatch(entry.editorial_notes, /No language, subject|Language, required domain review/);
+    }
+    for (let i = 0; i < patch.before.references.length; i++) {
+      const before = patch.before.references[i], after = patch.after.references[i];
+      if (!sources.has(before.source_id)) { assert.deepEqual(after, before); continue; }
+      verified++; assert.equal(after.status, 'verified');
+      assert.match(after.scope, /does not approve subject practice, morphology, images, audio, or release/);
+      if (proposal.precise_terminology_source_limits[before.source_id]) assert.ok(after.scope.endsWith(proposal.precise_terminology_source_limits[before.source_id]));
+    }
+  }
+  assert.equal(verified, 94);
+  assert.deepEqual(proposal.excluded_context_source_ids, ['r05-acca-reconciliation', 'r05-square-void']);
+  for (const id of proposal.excluded_context_source_ids) { assert.equal(sources.has(id), false); const refs = proposal.patches.flatMap(patch => patch.after.references).filter(ref => ref.source_id === id); assert.ok(refs.length); for (const ref of refs) assert.equal(ref.status, 'pending_term_check'); }
+  assert.equal(proposal.patches.filter(patch => patch.kind === 'lexeme' && patch.after.review.domain === 'pending').length, 41);
+  assert.equal(proposal.patches.filter(patch => patch.kind === 'expression' && patch.after.review.domain === 'pending').length, 2);
+  assert.equal(proposal.patches.filter(patch => patch.kind === 'lexeme' && patch.after.review.status === 'reviewed').length, 9);
+  assert.equal(proposal.patches.filter(patch => patch.kind === 'expression' && patch.after.review.status === 'reviewed').length, 9);
+  const compare = source.lexemes.find(entry => entry.id === 'compare.examine-differences.v');
+  assert.deepEqual(compare.morphology.review, acceptedMorphologyReviews.get(compare.id));
+  assert.match(compare.editorial_notes, /separately completed morphology review is preserved/);
+});
+
+test('Retail06 accepted payment senses preserve exact editorial scope and all review gates', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module06-editorial-2026-10-16.json'), 'utf8'));
+  const proposal = record.proposal, hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(record.accepted_proposal_json_sha256, '564008d5a9d87a17d9846941ac9ab7f7719c5bcf24a95909ae9f13b893f8e294');
+  assert.equal(hash(proposal), record.accepted_proposal_json_sha256);
+  assert.equal(record.independent_review.status, 'accepted_exact_editorial_delta_only');
+  assert.equal(record.independent_review.checks, 1469);
+  assert.equal(proposal.lexeme_patches.length, 50); assert.equal(proposal.source_additions.length, 58);
+  assert.equal(proposal.lexeme_patches.filter(patch => patch.before.definition !== patch.after.definition).length, 5);
+  assert.equal(proposal.lexeme_patches.filter(patch => patch.before.example !== patch.after.example).length, 0);
+  for (const patch of proposal.lexeme_patches) {
+    const entry = beforeRetail06Language(source.lexemes.find(item => item.id === patch.id));
+    assert.equal(hash(patch.before), patch.before_sha256); assert.equal(hash(patch.after), patch.after_sha256);
+    assert.deepEqual(entry, patch.after);
+    const protect = value => { const copy = structuredClone(value); for (const key of ['definition', 'example', 'references', 'editorial_notes']) delete copy[key]; delete copy.media.image.brief; return copy; };
+    assert.deepEqual(protect(patch.after), protect(patch.before));
+    assert.deepEqual(entry.review, patch.before.review); assert.deepEqual(entry.morphology, patch.before.morphology);
+    assert.equal(entry.media.image.status, 'pending'); assert.equal(entry.media.audio.status, 'pending');
+    assert.ok(entry.media.image.brief.length > 80);
+  }
+  for (const expected of proposal.source_additions) { assert.deepEqual(source.sources.find(item => item.id === expected.id), expected); assert.equal(expected.assets_acquired, false); assert.equal(expected.asset_license, null); }
+  assert.equal(proposal.lexeme_patches.filter(patch => patch.after.morphology).length, 34);
+  assert.equal(proposal.lexeme_patches.filter(patch => !patch.after.morphology).length, 16);
+  assert.ok(proposal.lexeme_patches.filter(patch => patch.after.morphology).every(patch => patch.after.morphology.review.status === 'pending'));
+});
+
+test('Retail06 separates authorization, split payments, cash-back senses and regional tax wording', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module06-editorial-2026-10-16.json'), 'utf8'));
+  const proposal = record.proposal, hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(proposal.expression_patches.length, 10); assert.deepEqual(proposal.shared_expression_patches, []);
+  for (const patch of proposal.expression_patches) {
+    const entry = beforeRetail06Language(source.expressions.find(item => item.id === patch.id));
+    assert.equal(hash(patch.before), patch.before_sha256); assert.equal(hash(patch.after), patch.after_sha256); assert.deepEqual(entry, patch.after);
+    assert.deepEqual(entry.focus_lexeme_ids, patch.before.focus_lexeme_ids); assert.deepEqual(entry.review, patch.before.review); assert.deepEqual(entry.media, patch.before.media);
+    for (const [index, token] of entry.tokens.entries()) { assert.equal(token.index, index); assert.equal([...entry.text].slice(token.start, token.end).join(''), token.text); }
+  }
+  assert.equal(proposal.shared_expression_dependencies.length, 30);
+  for (const dependency of proposal.shared_expression_dependencies) { assert.equal(dependency.before_sha256, dependency.after_sha256); assert.equal(hash(source.expressions.find(entry => entry.id === dependency.id)), dependency.after_sha256); }
+  const find = id => source.lexemes.find(entry => entry.id === id), expression = n => source.expressions.find(entry => entry.id === 'expr.retail.module06.' + n);
+  assert.match(find('payment.money-transfer.n').definition, /act of paying.*amount paid or due/);
+  assert.match(find('cash-back.cash-with-debit-purchase.n').definition, /eligible debit-card purchase.*added to the card charge/);
+  assert.match(find('approval-code.transaction-approval-reference.n').definition, /associated with authorization/);
+  assert.match(find('split-payment.multiple-method-payment.n').definition, /payment method or payer contribution/);
+  assert.match(expression('02').text, /VAT where applicable.*reflected in the final price/);
+  assert.match(expression('05').text, /before deciding whether another attempt is appropriate/);
+  assert.match(expression('09').text, /whether the deposit is the down payment/);
+  assert.equal(proposal.accepted_dependency_transitions.length, 1);
+  const transition = proposal.accepted_dependency_transitions[0];
+  assert.equal(transition.id, 'expr.office_admin.module07.10');
+  assert.equal(hash(source.expressions.find(entry => entry.id === transition.id)), transition.current_accepted_expression_sha256);
+});
+
+test('Retail06 language metadata binds lexical evidence while financial and consumer-rights holds remain pending', () => {
+  const record = retail06LanguageReview, proposal = record.proposal;
+  const editorial = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module06-editorial-2026-10-16.json'), 'utf8'));
+  const hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(record.accepted_proposal_json_sha256, 'bc06cef00f714f76570a1d1e869d01e5ba8912218fd4d046792b8f2349245954');
+  assert.equal(hash(proposal), record.accepted_proposal_json_sha256);
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(proposal, null, 2) + '\n').digest('hex'), record.accepted_proposal_raw_sha256);
+  assert.equal(record.independent_approval.status, 'accepted_exact_language_metadata_delta');
+  assert.equal(record.independent_approval.checks, 2102);
+  assert.equal(proposal.patches.length, 60); assert.equal(proposal.lexical_source_ids.length, 53);
+  assert.equal(Object.keys(proposal.precise_terminology_source_limits).length, 18);
+  const lexical = new Set(proposal.lexical_source_ids); let references = 0;
+  for (const patch of proposal.patches) {
+    const entry = source[patch.kind === 'lexeme' ? 'lexemes' : 'expressions'].find(item => item.id === patch.id);
+    const prior = [...editorial.proposal.lexeme_patches, ...editorial.proposal.expression_patches].find(item => item.id === patch.id);
+    assert.deepEqual(patch.before, prior.after); assert.deepEqual(entry, patch.after);
+    assert.equal(hash(patch.before), patch.before_sha256); assert.equal(hash(patch.after), patch.after_sha256);
+    const protect = value => { const copy = structuredClone(value); delete copy.review; delete copy.references; if (patch.kind === 'lexeme') delete copy.editorial_notes; return copy; };
+    assert.deepEqual(protect(entry), protect(patch.before));
+    assert.deepEqual(entry.review, {...patch.before.review, language: 'reviewed', status: patch.before.review.domain === 'not_required' ? 'reviewed' : 'pending', reviewer: proposal.reviewer, reviewed_at: proposal.date});
+    assert.equal(entry.references.length, patch.before.references.length);
+    const changed = [];
+    for (let i = 0; i < patch.before.references.length; i++) {
+      const previous = patch.before.references[i], next = entry.references[i];
+      if (!lexical.has(previous.source_id)) { assert.deepEqual(next, previous); continue; }
+      references++; changed.push(previous.source_id);
+      assert.equal(next.status, 'verified'); assert.equal(next.source_id, previous.source_id);
+      assert.match(next.scope, /exact selected lexical passage.*does not approve subject practice, morphology, images, audio, or release/);
+      if (proposal.precise_terminology_source_limits[next.source_id]) assert.ok(next.scope.endsWith(proposal.precise_terminology_source_limits[next.source_id]));
+    }
+    assert.deepEqual(changed, patch.verified_reference_source_ids);
+    if (patch.kind === 'lexeme') {
+      assert.match(entry.editorial_notes, /Independent AI editorial language review was completed/);
+      assert.doesNotMatch(entry.editorial_notes, /No language, subject|Independent language acceptance remains pending/);
+      assert.deepEqual(entry.morphology, patch.before.morphology);
+    }
+  }
+  assert.equal(references, 109);
+  assert.deepEqual(proposal.excluded_context_source_ids, ['retail06-review-vat-display', 'retail06-review-payment-lifecycle', 'retail06-review-consumer-rights', 'retail06-review-subtotal-discounts', 'retail06-review-warranty-ftc']);
+  for (const id of proposal.excluded_context_source_ids) {
+    assert.equal(lexical.has(id), false);
+    const refs = proposal.patches.flatMap(patch => patch.after.references).filter(ref => ref.source_id === id);
+    assert.ok(refs.length); for (const ref of refs) assert.equal(ref.status, 'pending_term_check');
+  }
+  assert.equal(proposal.patches.filter(p => p.kind === 'lexeme' && p.after.review.domain === 'pending').length, 39);
+  assert.equal(proposal.patches.filter(p => p.kind === 'expression' && p.after.review.domain === 'pending').length, 6);
+  assert.equal(proposal.patches.filter(p => p.kind === 'lexeme' && p.after.review.status === 'reviewed').length, 11);
+  assert.equal(proposal.patches.filter(p => p.kind === 'expression' && p.after.review.status === 'reviewed').length, 4);
+});
+
+test('Retail07 editorial provenance preserves all fifty target preimages and 198 course memberships', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module07-editorial-2026-10-16.json'), 'utf8'));
+  const proposal = record.proposal, hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(record.accepted_proposal_json_sha256, 'c9b3f5683d13702b04076cba53d839e7eb9dc3d9c51f4e2f5bc0073c53b168ad');
+  assert.equal(hash(proposal), record.accepted_proposal_json_sha256);
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(proposal, null, 2) + '\n').digest('hex'), record.accepted_proposal_raw_sha256);
+  assert.equal(record.independent_review.status, 'accepted_exact_editorial_delta_only'); assert.equal(record.independent_review.checks, 1522);
+  assert.equal(proposal.lexeme_patches.length, 50);
+  assert.equal(proposal.lexeme_patches.filter(p => p.before.definition !== p.after.definition).length, 5);
+  for (const patch of proposal.lexeme_patches) {
+    const entry = beforeRetail07Language(source.lexemes.find(e => e.id === patch.id));
+    assert.deepEqual(entry, patch.after); assert.equal(hash(patch.before), patch.before_sha256); assert.equal(hash(patch.after), patch.after_sha256);
+    const protect = value => { const copy = structuredClone(value); for (const key of ['definition', 'example', 'references', 'editorial_notes']) delete copy[key]; delete copy.media.image.brief; return copy; };
+    assert.deepEqual(protect(entry), protect(patch.before)); assert.equal(entry.example, patch.before.example);
+    assert.deepEqual(entry.references.slice(0, patch.before.references.length), patch.before.references);
+    assert.equal(entry.media.image.picture_suitable, false); assert.equal(entry.review.language, 'pending');
+  }
+  const memberships = proposal.lexeme_patches.map(p => ({id:p.id, locations:source.courses.flatMap(c => c.modules.filter(m => m.lexeme_ids.includes(p.id)).map(m => ({course_id:c.id,module_id:m.id})))}));
+  assert.deepEqual(memberships, record.selected_memberships); assert.equal(memberships.reduce((sum,e) => sum + e.locations.length, 0),198);
+  assert.equal(proposal.lexeme_patches.filter(p => p.after.morphology).length,30);
+  assert.equal(proposal.lexeme_patches.filter(p => !p.after.morphology).length,20);
+  assert.ok(proposal.lexeme_patches.filter(p => p.after.morphology).every(p => p.after.morphology.review.status === 'pending'));
+});
+
+test('Retail07 sentences distinguish production groups, return charges and available supply while preserving every focus', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir,'data/professional/provenance/retail-module07-editorial-2026-10-16.json'),'utf8'));
+  const proposal = record.proposal, hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(proposal.expression_patches.length,10); assert.equal(proposal.shared_expression_patches.length,1);
+  assert.equal(proposal.expression_patches.filter(p => p.before.text !== p.after.text).length,2);
+  for (const patch of [...proposal.expression_patches,...proposal.shared_expression_patches]) {
+    const entry=beforeRetail07Language(source.expressions.find(e => e.id===patch.id)); assert.deepEqual(entry,patch.after);
+    assert.equal(hash(patch.before),patch.before_sha256);assert.equal(hash(entry),patch.after_sha256);
+    const protect=value=>{const copy=structuredClone(value);for(const key of ['text','meaning','context','tokens','references'])delete copy[key];return copy;};
+    assert.deepEqual(protect(entry),protect(patch.before)); assert.deepEqual(entry.focus_lexeme_ids,patch.before.focus_lexeme_ids);
+    assert.deepEqual(entry.references.slice(0,patch.before.references.length),patch.before.references);
+    for(const[index,token]of entry.tokens.entries()){assert.equal(token.index,index);assert.equal([...entry.text].slice(token.start,token.end).join(''),token.text);}
+  }
+  assert.equal(proposal.shared_expression_dependencies.length,49);
+  assert.equal(proposal.shared_expression_dependencies.filter(d => d.before_sha256===d.after_sha256).length,48);
+  for(const dependency of proposal.shared_expression_dependencies)assert.equal(hash(beforeRetail07Language(source.expressions.find(e=>e.id===dependency.id))),dependency.after_sha256);
+  for(const dependency of proposal.shared_focus_lexeme_dependencies)assert.equal(hash(source.lexemes.find(e=>e.id===dependency.id)),dependency.json_sha256);
+  const expression=n=>source.expressions.find(e=>e.id==='expr.retail.module07.'+n);
+  assert.match(expression('05').text,/identify the batch for each unit and record its lot number and serial number/);
+  assert.match(expression('09').text,/whether store credit is offered.*whether a restocking fee applies/);
+  assert.match(expression('10').context,/UK-style safety-related food date/);
+  const sales=source.expressions.find(e=>e.id==='expr.sales_marketing.module04.05');
+  assert.match(sales.text,/checks the supply of goods available in the region/); assert.equal(sales.focus_lexeme_ids.length,4);
+  assert.match(source.lexemes.find(e=>e.id==='shrinkage.unaccounted-stock-reduction.n').definition,/shortfall between the stock expected in records and the stock actually available/);
+  assert.match(source.lexemes.find(e=>e.id==='use-by-date.food-safety-date.n').definition,/as in UK labeling/);
+});
+
+test('Retail07 consultation records preserve indexed retrieval limits without granting specialty or asset approval', () => {
+  const record=JSON.parse(fs.readFileSync(path.join(rootDir,'data/professional/provenance/retail-module07-editorial-2026-10-16.json'),'utf8'));
+  assert.equal(record.proposal.source_additions.length,49);
+  assert.equal(record.original_consultation_records.filter(s=>s.consultation_method==='selected_page_passage').length,48);
+  const indexed=record.original_consultation_records.filter(s=>s.consultation_method!=='selected_page_passage');
+  assert.deepEqual(indexed.map(s=>s.id),['retail07-review-food-dates-us']); assert.match(indexed[0].limitation,/direct page retrieval failed/);
+  for(const expected of record.proposal.source_additions){assert.deepEqual(source.sources.find(s=>s.id===expected.id),expected);assert.equal(expected.assets_acquired,false);assert.equal(expected.asset_license,null);}
+  for(const patch of [...record.proposal.lexeme_patches,...record.proposal.expression_patches,...record.proposal.shared_expression_patches]) {
+    assert.deepEqual(patch.after.review,patch.before.review);
+    for(const reference of patch.after.references.slice(patch.before.references.length))assert.equal(reference.status,'pending_term_check');
+  }
+  assert.match(record.independent_review.retrieval_limits,/original GOV.UK date subpage failed/);
+});
+
+test('Retail07 language acceptance binds forty-nine nouns and ten expressions to exact metadata changes', () => {
+  const record = retail07LanguageReview, proposal = record.proposal;
+  const hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(record.accepted_proposal_json_sha256, '7b6992773824583be2d29848c26dc8d231bbc5c81311c843d1558bb10c49f111');
+  assert.equal(hash(proposal), record.accepted_proposal_json_sha256);
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(proposal,null,2)+'\n').digest('hex'), record.accepted_proposal_raw_sha256);
+  assert.equal(record.independent_approval.status, 'accepted_exact_language_metadata_delta');
+  assert.match(record.independent_approval.reviewer, /independent AI language reviewer; not human or subject-matter approval/);
+  assert.equal(proposal.patches.length,59);
+  assert.equal(proposal.patches.filter(p=>p.kind==='lexeme').length,49);
+  assert.equal(proposal.patches.filter(p=>p.kind==='expression').length,10);
+  for(const patch of proposal.patches){
+    const entry=beforeCaseFamily(source[patch.kind==='lexeme'?'lexemes':'expressions'].find(e=>e.id===patch.id));
+    assert.deepEqual(entry,patch.after);assert.equal(hash(patch.before),patch.before_sha256);assert.equal(hash(entry),patch.after_sha256);
+    const protectedEntry=structuredClone(entry);
+    protectedEntry.review=patch.before.review;protectedEntry.references=patch.before.references;
+    if(patch.kind==='lexeme')protectedEntry.editorial_notes=patch.before.editorial_notes;
+    assert.deepEqual(protectedEntry,patch.before,'Content, morphology, media and all nonreview fields stay exact');
+    assert.deepEqual(entry.review,{...patch.before.review,language:'reviewed',status:patch.before.review.domain==='not_required'?'reviewed':'pending',reviewer:proposal.reviewer,reviewed_at:'2026-10-16'});
+  }
+  assert.equal(proposal.patches.filter(p=>p.kind==='lexeme'&&p.after.review.domain==='pending').length,47);
+  assert.equal(proposal.patches.filter(p=>p.kind==='expression'&&p.after.review.domain==='pending').length,4);
+  assert.deepEqual(proposal.patches.filter(p=>p.kind==='lexeme'&&p.after.review.status==='reviewed').map(p=>p.id).sort(),['unwanted-item.no-longer-wanted-product.n','wrong-size.unsuitable-dimensions.n']);
+  assert.equal(proposal.patches.filter(p=>p.kind==='expression'&&p.after.review.status==='reviewed').length,6);
+});
+
+test('Retail07 verifies only bounded lexical references and preserves both complete sell-by holds', () => {
+  const proposal=retail07LanguageReview.proposal,selected=new Set(proposal.lexical_source_ids);
+  assert.equal(selected.size,46);assert.equal(proposal.dictionary_source_ids.length,25);
+  assert.equal(Object.keys(proposal.precise_terminology_source_limits).length,21);
+  let verified=0;
+  for(const patch of proposal.patches){
+    const actual=[];
+    assert.equal(patch.after.references.length,patch.before.references.length);
+    patch.before.references.forEach((before,index)=>{
+      const after=patch.after.references[index];assert.equal(after.source_id,before.source_id);
+      if(!selected.has(before.source_id)){assert.deepEqual(after,before);return;}
+      assert.equal(before.status,'pending_term_check');assert.equal(after.status,'verified');
+      assert.ok(after.scope.includes('No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed.'));
+      const limit=proposal.precise_terminology_source_limits[before.source_id];
+      if(limit)assert.ok(after.scope.endsWith('Verified scope: '+limit));
+      if(before.source_id==='retail07-review-food-dates-uk'){
+        assert.match(after.scope,/original GOV.UK subpage failed/);
+        assert.match(after.scope,/official alternate https:\/\/www.gov.uk\/government\/publications\/student-guide-to-food-safety-and-hygiene/);
+        assert.match(after.scope,/This metadata pass claims no fresh retrieval/);
+      }
+      actual.push(before.source_id);verified++;
+    });
+    assert.deepEqual(actual,patch.verified_reference_source_ids);
+  }
+  assert.equal(verified,104);
+  assert.deepEqual(proposal.holds.map(h=>h.id).sort(),['expr.retail.module07.06','sell-by-date.retailer-sale-date.n']);
+  for(const held of proposal.holds){
+    const entry=source[held.kind==='lexeme'?'lexemes':'expressions'].find(e=>e.id===held.id);
+    assert.deepEqual(entry,held.value);assert.equal(entry.review.language,'pending');assert.equal(entry.review.status,'pending');
+    assert.ok(entry.references.every(reference=>reference.status==='pending_term_check'));
+  }
+  assert.deepEqual([...proposal.excluded_context_source_ids].sort(),['retail07-review-delivery-checklist','retail07-review-food-dates-us','retail07-review-returns-uk']);
+});
+
+test('Retail07 language leaves shared dependencies, every membership and nonlanguage release gates intact', () => {
+  const proposal=retail07LanguageReview.proposal,hash=value=>crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(proposal.source_dependencies.length,49);assert.equal(proposal.untouched_shared_expression_dependencies.length,48);
+  assert.equal(proposal.protected_role_lexeme_dependencies.length,3);
+  for(const dependency of proposal.source_dependencies){assert.deepEqual(source.sources.find(e=>e.id===dependency.id),dependency.value);assert.equal(hash(dependency.value),dependency.json_sha256);}
+  for(const dependency of proposal.untouched_shared_expression_dependencies)assert.equal(hash(source.expressions.find(e=>e.id===dependency.id)),dependency.json_sha256);
+  for(const dependency of proposal.protected_role_lexeme_dependencies)assert.equal(hash(source.lexemes.find(e=>e.id===dependency.id)),dependency.json_sha256);
+  const ids=new Set([...proposal.patches.map(p=>p.id),...proposal.holds.map(p=>p.id),...proposal.untouched_shared_expression_dependencies.map(p=>p.id),...proposal.protected_role_lexeme_dependencies.map(p=>p.id)]);
+  const memberships=source.courses.flatMap(course=>course.modules.flatMap(module=>[
+    ...module.lexeme_ids.filter(id=>ids.has(id)).map(id=>({kind:'lexeme',id,course_id:course.id,module_id:module.id})),
+    ...module.expression_ids.filter(id=>ids.has(id)).map(id=>({kind:'expression',id,course_id:course.id,module_id:module.id}))
+  ]));
+  assert.deepEqual(memberships,proposal.selected_memberships);assert.equal(memberships.length,260);
+  const module=source.courses.find(c=>c.id==='retail').modules.find(m=>m.id==='module07');
+  const entries=module.lexeme_ids.map(id=>source.lexemes.find(e=>e.id===id));
+  assert.equal(module.status,'draft');assert.equal(entries.filter(e=>e.morphology).length,30);assert.equal(entries.filter(e=>!e.morphology).length,20);
+  for(const entry of entries){
+    if(entry.morphology)assert.equal(entry.morphology.review.status,'pending');
+    assert.equal(entry.media.image.status,'pending');assert.equal(entry.media.image.picture_suitable,false);
+    assert.equal(entry.media.audio.status,'pending');
+    assert.deepEqual(entry.media.audio.voice_settings,{voice:'en-US-AvaNeural',rate:'-15%',pitch:'+8Hz',volume:'+0%',postprocessing:false});
+  }
+});
+
+test('Accepted picture exclusions bind seven exact metadata-only changes and retain conditional safeguards', () => {
+  const record = pictureExclusionReview, hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(record.accepted_report_json_sha256, 'ecde1246e18dadbbeee10bd41a33dfe64f726df6298c50ff473ae698a5e1fcf9');
+  assert.equal(hash(record.report), record.accepted_report_json_sha256);
+  assert.equal(record.independent_acceptance.status, 'accepted_metadata_only_seven_conservative_pairs');
+  assert.equal(record.patches.length, 7); assert.equal(record.independent_acceptance.exact_entry_preimages_checked, 14);
+  const expectedOwners = ['pack.place-in-container.v', 'fasten.close-securely.v', 'container.holding-object.n', 'lid.container-top.n', 'sole.shoe-bottom.n', 'weigh.measure-weight.v', 'handle.grip-part.n'];
+  assert.deepEqual(record.patches.map(patch => patch.id), expectedOwners);
+  for (const patch of record.patches) {
+    const entry = beforeRetail04Third10(source.lexemes.find(item => item.id === patch.id)), decision = record.independent_acceptance.accepted_pairs.find(item => item.pair[0] === patch.id);
+    assert.deepEqual(entry, patch.after); assert.equal(hash(patch.before), patch.before_sha256); assert.equal(hash(patch.after), patch.after_sha256);
+    const protectedEntry = structuredClone(patch.after); delete protectedEntry.media.image.confusable_with; assert.deepEqual(protectedEntry, patch.before);
+    assert.deepEqual(entry.media.image.confusable_with, [patch.pair[1]]); assert.equal(patch.rationale, decision.rationale);
+    for (const preimage of decision.entry_preimages) assert.equal(hash(beforePictureExclusions(source.lexemes.find(item => item.id === preimage.id))), preimage.json_sha256);
+    assert.equal(source.lexemes.find(item => item.id === patch.pair[1]).media.image.confusable_with, undefined);
+  }
+  for (const id of ['sole.shoe-bottom.n', 'handle.grip-part.n']) assert.match(pictureExclusionPatches.get(id).classification, /^exclude_conservatively/);
+  assert.match(pictureExclusionPatches.get('container.holding-object.n').rationale, /carton remains a valid answer to container/);
+  assert.match(pictureExclusionPatches.get('weigh.measure-weight.v').rationale, /definition covers size, amount or degree/);
+});
+
+test('Accepted shopping-cart picture preserves exact source bytes and all unrelated content gates', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-shopping-cart-image-2026-10-16.json'), 'utf8'));
+  assert.equal(record.accepted_proposal_raw_sha256, '39d356cd9ebdc6fb00eb651cc33618f297693909f7c3505cf3837db9ff25461c');
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(record.proposal, null, 2) + '\n').digest('hex'), record.accepted_proposal_raw_sha256);
+  assert.equal(record.independent_approval.status, 'accepted_exact_cart_image_and_note_integration');
+  const entry = beforeRetail03Morphology(beforeRetail03Media(source.lexemes.find(item => item.id === record.proposal.sense_id)));
+  assert.deepEqual(entry.media.image, record.image_after);
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(entry.media.image)).digest('hex'), record.proposal.image_after_sha256);
+  const bytes = fs.readFileSync(resourcePath(rootDir, entry.media.image.path));
+  assert.equal(bytes.length, record.proposal.candidate.bytes);
+  assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'), record.independent_approval.accepted_png_sha256);
+  assert.equal(entry.media.image.path, 'res://' + record.proposal.target_image);
+  assert.equal(entry.media.image.status, 'integrated');
+  assert.equal(entry.media.image.review.status, 'reviewed');
+  assert.equal(entry.media.image.picture_suitable, true);
+  assert.equal(entry.editorial_notes, record.editorial_note_delta.after);
+  assert.equal(entry.review.language, 'reviewed');
+  assert.equal(entry.review.domain, 'not_required');
+  assert.equal(entry.morphology.review.status, 'pending');
+  assert.equal(entry.media.audio.status, 'pending');
+  assert.equal(entry.media.audio.path, null);
+  assert.deepEqual(entry.media.audio.voice_settings, {voice: 'en-US-AvaNeural', rate: '-15%', pitch: '+8Hz', volume: '+0%', postprocessing: false});
+  for (const course of source.courses) for (const module of course.modules.filter(item => item.lexeme_ids.includes(entry.id))) assert.equal(module.status, 'draft');
+});
+
+test('Accepted shopping-basket picture preserves exact bytes, the separately reviewed empty brief, and pending gates', () => {
+  const record = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-shopping-basket-image-2026-10-16.json'), 'utf8'));
+  assert.equal(record.accepted_proposal_raw_sha256, '75b3e85a0cff12132af26cad6363d02a6418f44cd7643d6f46d59d5a4b772c50');
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(record.proposal, null, 2) + '\n').digest('hex'), record.accepted_proposal_raw_sha256);
+  assert.equal(record.independent_approval.accepted, true);
+  const entry = beforeRetail03Morphology(beforeRetail03Media(source.lexemes.find(item => item.id === record.proposal.sense_id)));
+  assert.deepEqual(entry.media.image, record.image_after);
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(entry.media.image)).digest('hex'), record.independent_approval.image_after_json_sha256);
+  const bytes = fs.readFileSync(resourcePath(rootDir, entry.media.image.path));
+  assert.equal(bytes.length, record.proposal.candidate.bytes);
+  assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'), record.independent_approval.candidate_sha256);
+  assert.equal(entry.media.image.path, 'res://' + record.proposal.target_image);
+  assert.equal(entry.media.image.status, 'integrated');
+  assert.equal(entry.media.image.review.status, 'reviewed');
+  assert.equal(entry.media.image.picture_suitable, record.image_before.picture_suitable);
+  assert.notEqual(entry.media.image.brief, record.image_before.brief);
+  assert.match(entry.media.image.brief, /empty|Empty/);
+  assert.equal(entry.editorial_notes, record.editorial_note_delta.after);
+  assert.equal(entry.review.language, 'reviewed');
+  assert.equal(entry.review.domain, 'not_required');
+  assert.equal(entry.morphology.review.status, 'pending');
+  assert.equal(entry.media.audio.status, 'pending');
+  assert.equal(entry.media.audio.path, null);
+  assert.deepEqual(entry.media.audio.voice_settings, {voice: 'en-US-AvaNeural', rate: '-15%', pitch: '+8Hz', volume: '+0%', postprocessing: false});
+  for (const course of source.courses) for (const module of course.modules.filter(item => item.lexeme_ids.includes(entry.id))) assert.equal(module.status, 'draft');
+});
+
+test('Approved cart and basket audio binds exact listening approval, bytes, and scoped note changes', () => {
+  const record = cartBasketAudioRecord;
+  const sha256 = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+  const approvalBytes = fs.readFileSync(path.join(rootDir, record.approval));
+  assert.equal(sha256(approvalBytes), record.approval_raw_sha256);
+  assert.equal(record.approval_raw_sha256, 'bc679b31df049ef70f9737ab0d381ac4679953eb8faa6063c4589d98f47b12cf');
+  const approval = JSON.parse(approvalBytes);
+  assert.equal(approval.status, 'approved_by_user');
+  assert.deepEqual(record.patches.map(patch => patch.sense_id), ['shopping-cart.store-trolley.n', 'shopping-basket.store-container.n']);
+  assert.deepEqual(approval.outputs.map(output => output.sense_id), record.patches.map(patch => patch.sense_id));
+  assert.deepEqual(approval.profile, {voice: 'en-US-AvaNeural', rate: '-15%', pitch: '+8Hz', volume: '+0%', postprocessing: false});
+  for (const patch of record.patches) {
+    const entry = source.lexemes.find(item => item.id === patch.sense_id);
+    const output = approval.outputs.find(item => item.sense_id === entry.id);
+    assert.deepEqual(entry, patch.after);
+    assert.equal(sha256(JSON.stringify(patch.before)), patch.before_sha256);
+    assert.deepEqual(patch.before_audio, patch.before.media.audio);
+    assert.deepEqual(patch.after_audio, patch.after.media.audio);
+    const expected = structuredClone(patch.before);
+    expected.media.audio = patch.after_audio;
+    expected.editorial_notes = expected.editorial_notes.replace('word audio remains pending.', 'the exact Ava word recording has user listening approval and is integrated.');
+    assert.deepEqual(entry, expected, entry.id + ': only the approved audio and obsolete note clause change');
+    assert.equal(entry.media.audio.status, 'integrated');
+    assert.equal(entry.media.audio.review.status, 'reviewed');
+    assert.equal(entry.media.audio.voice, 'ava-sweet');
+    assert.deepEqual(entry.media.audio.voice_settings, approval.profile);
+    assert.equal(entry.media.audio.path, 'res://' + patch.resource.path);
+    assert.equal(entry.media.audio.sha256, output.wav_sha256);
+    assert.equal(patch.resource.sha256, output.wav_sha256);
+    const bytes = fs.readFileSync(resourcePath(rootDir, entry.media.audio.path));
+    assert.equal(bytes.length, patch.resource.compressed_bytes);
+    assert.equal(sha256(bytes), output.wav_sha256);
+    assert.deepEqual(bytes, fs.readFileSync(path.join(rootDir, output.retained_wav)));
+  }
+});
+
+test('Accepted pallet picture binds exact source bytes while preserving morphology and pending gates', () => {
+  const record = palletImageRecord;
+  const sha256 = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+  assert.equal(record.independent_approval.status, 'accepted_exact_pallet_image_and_obsolete_note_only');
+  assert.equal(record.patches.length, 1);
+  const patch = record.patches[0];
+  assert.equal(patch.id, 'pallet.goods-platform.n');
+  const entry = beforeRetail03Media(source.lexemes.find(item => item.id === patch.id), palletImageRecord);
+  assert.deepEqual(entry, patch.after);
+  assert.equal(sha256(JSON.stringify(patch.before)), patch.before_sha256);
+  const expected = structuredClone(patch.before);
+  expected.media.image = patch.after.media.image;
+  expected.editorial_notes = expected.editorial_notes.replace('Picture suitability and word-media production remain pending.', 'The pallet image has completed scoped physical-sense picture review and integration; word audio remains pending.');
+  assert.deepEqual(entry, expected, entry.id + ': only the accepted image and obsolete note clause change');
+  assert.equal(entry.media.image.path, 'res://' + record.resource.path);
+  assert.equal(entry.media.image.sha256, record.independent_approval.image_sha256);
+  assert.equal(record.resource.sha256, '7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8');
+  const bytes = fs.readFileSync(resourcePath(rootDir, entry.media.image.path));
+  assert.equal(bytes.length, record.resource.compressed_bytes);
+  assert.equal(sha256(bytes), record.resource.sha256);
+  assert.equal(entry.media.image.source, 'https://kenney.nl/assets/mini-skate');
+  assert.equal(entry.media.image.license, 'CC0 1.0');
+  assert.equal(entry.media.image.status, 'integrated');
+  assert.equal(entry.media.image.review.status, 'reviewed');
+  assert.equal(entry.media.image.picture_suitable, true);
+  assert.deepEqual(entry.media.image.available_animations, []);
+  assert.equal(entry.morphology.review.status, 'reviewed');
+  assert.equal(entry.review.domain, 'pending');
+  assert.equal(entry.media.audio.status, 'pending');
+  for (const course of source.courses) for (const module of course.modules.filter(item => item.lexeme_ids.includes(entry.id))) assert.equal(module.status, 'draft');
+});
+
+test('Construction shares exact existing senses and preserves the reviewed specification clarification',()=>{
+  const ids=new Set(source.courses.find(course=>course.id==='construction_trades').modules.flatMap(module=>module.lexeme_ids));
+  for(const id of ['floor-plan.drawing-showing-arrangement-of-spaces-on-building-level.n','apprentice.person-learning-occupation-through-structured-work-and-training.n','handover-meeting.meeting-for-transfer-of-work-information-and-responsibility.n','asset-register.record-of-organizations-tracked-equipment.n','paintbrush.tool-with-bristles-for-applying-paint.n','cut.divide-or-shape-material-with-cutting-tool.v','paint.make-picture-or-apply-color-with-paint.v','daily-report.summary-of-events-during-day.n','dimension.physical-measurement.n','dependency.prerequisite-task-or-condition.n']){assert.ok(ids.has(id),id);assert.ok(!source.lexemeOrigins[id].includes('/construction-'),id);}
+  const specification=source.lexemes.find(entry=>entry.id==='specification.detailed-system-description.n');
+  assert.equal(specification.definition,'A detailed description of required characteristics, performance, or arrangements for a product, system, component, or work.');
+  assert.ok(source.lexemeOrigins[specification.id].includes('/software-data-'));assert.equal(specification.review.domain,'pending');
+  const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/construction-'));
+  assert.equal(find('test certificate').id,'test-certificate.document-certifying-results-of-specified-tests.n');
+  assert.equal(find('test certificate').definition,'A document certifying the results of specified tests within its stated scope.');
+  assert.equal(find('crane operator').id,'crane-operator.person-whose-work-is-operating-crane.n');
+  assert.equal(find('crane operator').definition,'A person whose work is operating a crane.');
+});
+
+test('Construction preserves action meaning, contextual contract wording, and source-access limits',()=>{
+  const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/construction-'));
+  assert.match(find('weld').definition,/heat, pressure, or both/);assert.equal(find('flush').pos,'adjective');assert.match(find('flush').definition,/adjacent surface/);
+  for(const text of ['defects liability period','practical completion','occupancy permit','client acceptance'])assert.match(find(text).definition,/applicable|jurisdictions|agreed/);
+  for(const text of ['repair','plumber','cement','architect','corrosion'])assert.equal(find(text).morphology,null,text);
+  for(const text of ['pliers','carpenter'])assert.equal(find(text).morphology.review.status,'pending',text);
+  const expressions=source.expressions.filter(entry=>entry.id.startsWith('expr.construction_trades.module05.'));
+  assert.equal(expressions.length,10);for(const entry of expressions)assert.ok(entry.text.split(/\s+/).length<=23);
+  assert.ok(expressions.some(entry=>entry.focus_lexeme_ids.includes('pour.make-liquid-flow-from-container.v')&&/pour (?:a|the) liquid/.test(entry.text)));
+  assert.ok(expressions.some(entry=>entry.focus_lexeme_ids.includes('secure.fasten-load-under-required-arrangements.v')&&/handling plan/.test(entry.text)));
+  const sources=source.sources.filter(entry=>entry.id.startsWith('construction-'));assert.equal(sources.length,8);
+  assert.match(sources.find(entry=>entry.id==='construction-hse-health-risks').scope,/index-level consultation only/);
+  for(const entry of sources){assert.equal(entry.status,'consulted');assert.equal(entry.assets_acquired,false);assert.equal(entry.asset_license,null);}
+});
+
+test('HR preserves canonical Education evidence and assessment senses with shared definitions',()=>{
+  const ids=['work-sample.example-of-learner-produced-work.n','assess.evaluate-evidence-of-learning.v','rubric.set-of-criteria-and-descriptions-for-assessment.n','learning-management-system.system-organizing-and-delivering-learning-content.n'];
+  const courses=['hr_recruitment','education_childcare'].map(id=>new Set(source.courses.find(course=>course.id===id).modules.flatMap(module=>module.lexeme_ids)));
+  for(const id of ids){assert.equal(source.lexemes.filter(entry=>entry.id===id).length,1);assert.ok(source.lexemeOrigins[id].includes('/education-'));for(const course of courses)assert.ok(course.has(id),id);}
+  const find=id=>source.lexemes.find(entry=>entry.id===id);
+  assert.equal(find(ids[0]).definition,"An example of a person's work considered as evidence of learning, skill, or performance.");
+  assert.equal(find(ids[1]).definition,'To gather and evaluate evidence of learning, skill, or performance for a stated purpose.');
+  for(const text of ['work sample','assess','scoring rubric','learning platform'])assert.ok(!source.lexemes.some(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/hr-')),text);
+  assert.ok(!courses[0].has('assess.evaluate-care-information.v'));
+  const expression=source.expressions.find(entry=>entry.text.includes('rubric is used to assess the work sample'));
+  assert.ok(expression);assert.ok(expression.focus_lexeme_ids.includes(ids[0]));assert.ok(expression.focus_lexeme_ids.includes(ids[2]));
+});
+
+test('HR retains employment meanings, honest pay and burnout wording, and the negative in allomorph',()=>{
+  const ids=new Set(source.courses.find(course=>course.id==='hr_recruitment').modules.flatMap(module=>module.lexeme_ids));
+  for(const id of ['promote.move-person-to-higher-work-position.v','transfer.move-employee-to-different-role-team-or-location.v','resume.summary-of-persons-work-history-and-qualifications.n','bias.inclination-that-can-unfairly-influence-judgment.n','shortlist.select-candidates-for-next-stage.v','shortlist.list-of-selected-candidates.n'])assert.ok(ids.has(id),id);
+  for(const id of ['promote.encourage-product-interest.v','transfer.move-person-between-places.v','resume.continue-after-pause.v','bias.systematic-estimation-distortion.n'])assert.ok(!ids.has(id),id);
+  const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/hr-'));
+  assert.match(find('final pay').definition,/^Pay due in connection with/);assert.match(find('burnout').definition,/exhaustion.*cynicism.*diminished professional effectiveness/);
+  assert.equal(find('inconsistency').definition,'A lack of uniformity in an approach or treatment across comparable situations.');
+  assert.match(source.expressions.find(entry=>entry.id==='expr.hr_recruitment.module09.06').text,/different parts of the schedule/);
+  const graph=find('impartial').morphology;
+  assert.deepEqual(graph.parts[0],{id:'p1',canonical_id:'affix.in.prefix',type:'prefix',canonical:'in',surface:'im'});
+  assert.equal(graph.nodes[0].rule,'in_to_im_before_p');assert.equal(graph.review.status,'pending');
+  assert.deepEqual(graph.review.references,['hr-mw-impartial','hr-mw-im-prefix','hr-mw-in-prefix']);
+});
+
+test('HR sources preserve introduction-only, landing-page-only, and targeted dictionary consultation limits',()=>{
+  const sources=source.sources.filter(entry=>entry.id.startsWith('hr-'));assert.equal(sources.length,13);
+  const find=id=>sources.find(entry=>entry.id===id);
+  assert.match(find('hr-cipd-recruitment-introduction').scope,/Only the public introduction and contents/);
+  assert.match(find('hr-cipd-recruitment-introduction').scope,/membership-gated and was not read/);
+  assert.match(find('hr-ico-employment-index').scope,/landing page/);assert.match(find('hr-ico-employment-index').scope,/Linked detailed guidance was not read/);
+  assert.match(find('hr-who-burnout').scope,/not classified there as a medical condition/);
+  assert.match(find('hr-opm-work-samples').scope,/editorial inference, not OPM endorsement/);
+  assert.match(find('hr-mw-in-prefix').scope,/im- before b, m, or p/);
+  for(const entry of sources)assert.equal(entry.assets_acquired,false);
+});
+
+test('Education reuses thirteen IT canonical identities without noun, verb, or equipment conflation',()=>{
+  const courses=['it_support','education_childcare'].map(id=>new Set(source.courses.find(course=>course.id===id).modules.flatMap(module=>module.lexeme_ids)));
+  for(const id of ['headphones.personal-audio-listening-device.n','permission-setting.configurable-access-permission.n','access-control.management-of-resource-permissions.n','file-upload.transfer-of-file-to-another-system.n','save.store-current-work.v','shared-folder.folder-available-to-authorized-users.n','secure-message.message-protected-by-specified-controls.n','consent-record.documentation-of-consent-arrangements.n','data-export.transfer-of-data-out-of-system.n','screen-reader.software-presenting-interface-content-accessibly.n','caption.synchronized-text-for-audio-content.n','assistive-technology.technology-supporting-activities-and-access.n','authorized-access.access-permitted-under-applicable-arrangements.n']){
+    assert.equal(source.lexemes.filter(entry=>entry.id===id).length,1);assert.ok(source.lexemeOrigins[id].includes('/it-support-'));for(const course of courses)assert.ok(course.has(id),id);
+  }
+  assert.match(source.lexemes.find(entry=>entry.id==='headphones.personal-audio-listening-device.n').definition,/without implying an attached microphone/);
+  assert.equal(source.lexemes.find(entry=>entry.id==='file-upload.transfer-of-file-to-another-system.n').pos,'noun');
+  assert.equal(source.lexemes.find(entry=>entry.id==='upload.send-data-to-another-system.v').pos,'verb');
+});
+
+test('Education preserves contextual homographs, regional scope, and source-access limitations',()=>{
+  const course=source.courses.find(entry=>entry.id==='education_childcare'),module=id=>course.modules.find(entry=>entry.id===id).lexeme_ids;
+  for(const id of ['balance.ability-to-maintain-stability.n','memory.ability-to-retain-and-recall.n','attachment.enduring-emotional-bond-with-caregiver.n','sequence.ordered-series-of-items-or-events.n'])assert.ok(module('module04').includes(id));
+  for(const id of ['assess.evaluate-evidence-of-learning.v','blend.combine-speech-sounds-into-word.v','estimate.make-informed-approximation.v','sequence.arrange-items-or-events-in-order.v','trace.follow-line-or-shape-with-mark.v','prompt.offer-reminder-or-cue.v'])assert.ok(module('module05').includes(id));
+  assert.ok(module('module07').includes('interpreter.spoken-language-communication-professional.n'));
+  assert.ok(module('module09').includes('attachment.linked-file.n'));assert.ok(module('module09').includes('filter.result-limiting-control.n'));
+  const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/education-'));
+  assert.match(find('grapheme').definition,/In English phonics/);assert.match(find('phonemic awareness').definition,/recognize and work with/);
+  assert.match(find('individualized education program').definition,/written educational plan.*U.S./);assert.deepEqual(find('individualized education program').regions,['US']);
+  assert.deepEqual(find('designated safeguarding lead').regions,['England']);assert.deepEqual(find('special educational needs coordinator').regions,['England']);
+  assert.match(find('developmental milestone').definition,/timing and interpretation require context/);
+  const idea=source.sources.find(entry=>entry.id==='education-idea-iep-definition');assert.match(idea.scope,/search-result excerpts/);assert.match(idea.scope,/HTTP 403/);assert.equal(idea.assets_acquired,false);
+});
+
+test('IT review clarifies technical meanings without changing canonical software identities',()=>{
+  const find=id=>source.lexemes.find(entry=>entry.id===id);
+  assert.equal(find('default-gateway.next-hop-used-for-destinations-without-specific-route.n').definition,'The router or next-hop address used to forward traffic when no more specific route matches the destination.');
+  assert.match(find('device-disposal.approved-removal-of-device-from-organizational-use.n').definition,/relinquishing or discarding/);
+  assert.match(find('data-loss.loss-of-accessible-or-recoverable-data.n').definition,/loss, destruction, or corruption/);
+  assert.match(find('unsupported-software.software-without-applicable-maintenance-or-support.n').definition,/does not supply/);
+  const expression=source.expressions.find(entry=>entry.id==='expr.it_support.module08.03');assert.equal(expression.text,'The report distinguishes a vulnerability from a threat; the actual impact is still being assessed.');
+  const rpo=find('recovery-point-objective.target-data-recovery-window.n');assert.match(rpo.definition,/how recent restored data must be/);assert.match(rpo.definition,/maximum acceptable period of data loss/);assert.match(rpo.media.image.brief,/distinguish.*data loss.*retention/);
+  assert.ok(rpo.references.some(reference=>reference.source_id==='nist-recovery-point-objective'&&reference.status==='pending_term_check'));assert.equal(rpo.review.domain,'pending');
+});
+
+test('Shared sense repairs have local Phrase routes while legitimate clothing and care meanings stay intact',()=>{
+  const button='button.interface-action-control.n',clothing='button.clothing-fastener.n',note='handover-note.care-responsibility-transfer-record.n',meeting='handover-meeting.meeting-for-transfer-of-work-information-and-responsibility.n';
+  const fixes=[];
+  for(const course of ['office_admin','warehouse_logistics','hospitality_tourism'])fixes.push([course,'module09',clothing,button],[course,'module10',note,meeting]);
+  fixes.push(['warehouse_logistics','module04','dimension.analysis-grouping-attribute.n','dimension.physical-measurement.n']);
+  for(const course of ['office_admin','warehouse_logistics','hospitality_tourism'])fixes.push([course,'module10','dependency.required-software-component.n','dependency.prerequisite-task-or-condition.n']);
+  for(const[courseId,moduleId,oldId,newId]of fixes){const module=source.courses.find(course=>course.id===courseId).modules.find(module=>module.id===moduleId);
+    assert.ok(!module.lexeme_ids.includes(oldId));assert.ok(module.lexeme_ids.includes(newId));assert.ok(module.lexeme_files.includes(source.lexemeOrigins[newId]));
+    assert.ok(module.expression_ids.some(id=>source.expressions.find(entry=>entry.id===id).focus_lexeme_ids.includes(newId)));
+  }
+  assert.ok(source.courses.find(course=>course.id==='retail').modules[3].lexeme_ids.includes(clothing));
+  for(const[course,module]of [['nursing',6],['caregiving',8]])assert.ok(source.courses.find(entry=>entry.id===course).modules[module].lexeme_ids.includes(note));
+  const care=source.lexemes.find(entry=>entry.id===note);assert.match(care.definition,/care information/);assert.deepEqual(care.references.map(reference=>reference.source_id),['ahrq-sbar','nhs-care-plans']);
+  const coordination=source.lexemes.find(entry=>entry.id===meeting);assert.equal(coordination.definition,'A meeting held to transfer relevant information and responsibility for ongoing work.');assert.deepEqual(morphologyErrors(coordination.morphology,coordination),[]);assert.equal(coordination.morphology.review.status,'pending');
+});
+
+test('Transport preserves complete draft quotas and on-demand origin links',()=>{
+  const course=source.courses.find(entry=>entry.id==='transport_delivery');
+  assert.equal(new Set(course.modules.flatMap(module=>module.lexeme_ids)).size,500);
+  assert.equal(new Set(course.modules.flatMap(module=>module.expression_ids)).size,100);
+  for(const module of course.modules){
+    assert.equal(module.lexeme_ids.length,50);assert.equal(module.expression_ids.length,10);assert.equal(module.status,'draft');
+    for(const id of module.lexeme_ids)assert.ok(module.lexeme_files.includes(source.lexemeOrigins[id]),id);
+    for(const id of module.expression_ids)assert.ok(module.expression_files.includes(source.expressionOrigins[id]),id);
+  }
+});
+
+test('Transport every specialist sense has a scored route in its own module',()=>{
+  const course=source.courses.find(entry=>entry.id==='transport_delivery');
+  for(const module of course.modules.slice(2)){
+    const focused=new Set(module.expression_ids.flatMap(id=>source.expressions.find(entry=>entry.id===id).focus_lexeme_ids));
+    for(const id of module.lexeme_ids){const entry=source.lexemes.find(item=>item.id===id);
+      assert.ok((entry.practice_modes.includes('word_jelly')&&entry.morphology?.parts.length>1)||(entry.practice_modes.includes('phrase')&&focused.has(id))||(entry.media.image.picture_suitable&&entry.practice_modes.some(mode=>['match','memory','pop','jelly'].includes(mode))),id);
+    }
+    for(const id of module.expression_ids){const expression=source.expressions.find(entry=>entry.id===id);
+      for(const focusId of expression.focus_lexeme_ids){assert.ok(module.lexeme_ids.includes(focusId));assert.ok(expression.text.toLowerCase().includes(source.lexemes.find(entry=>entry.id===focusId).text.toLowerCase()));}
+      for(const token of expression.tokens)assert.equal([...expression.text].slice(token.start,token.end).join(''),token.text);
+    }
+  }
+});
+
+test('Transport preserves pending morphology, assets, and approved voice settings',()=>{
+  const entries=source.lexemes.filter(entry=>source.lexemeOrigins[entry.id].includes('/transport-'));
+  assert.equal(entries.length,134);assert.equal(entries.filter(entry=>entry.morphology).length,109);assert.equal(entries.filter(entry=>!entry.morphology).length,25);
+  for(const entry of entries){
+    if(entry.morphology){assert.deepEqual(morphologyErrors(entry.morphology,entry),[]);assert.equal(entry.morphology.review.status,'pending');}
+    assert.equal(entry.review.domain,'pending');assert.equal(entry.media.image.picture_suitable,false);
+    for(const media of Object.values(entry.media)){assert.equal(media.status,'pending');assert.equal(media.acquisition_status,'not_started');assert.equal(media.path,null);assert.equal(media.review.status,'pending');}
+    assert.deepEqual(entry.media.audio.voice_settings,{voice:'en-US-AvaNeural',rate:'-15%',pitch:'+8Hz',volume:'+0%',postprocessing:false});
+  }
+});
+
+test('Transport specialist domain review cannot be bypassed outside the safety module',()=>{
+  const fixture=draft(),course=fixture.courses.find(entry=>entry.id==='transport_delivery');
+  const entry=fixture.lexemes.find(item=>item.id===course.modules[2].lexeme_ids[0]);
+  const expression=fixture.expressions.find(item=>item.id===course.modules[2].expression_ids[0]);
+  for(const item of [entry,expression])item.review={status:'reviewed',language:'reviewed',domain:'not_required',reviewer:'fixture',reviewed_at:'2026-10-16'};
+  const result=audit(fixture,true);
+  assert.ok(result.errors.some(issue=>issue.code==='review.pending'&&issue.path==='lexeme/'+entry.id));
+  assert.ok(result.errors.some(issue=>issue.code==='review.pending'&&issue.path==='expression/'+expression.id));
+});
+
+test('Physical dimension and task dependency replace four mistaken software memberships',()=>{
+  const physical='dimension.physical-measurement.n',task='dependency.prerequisite-task-or-condition.n';
+  for(const[courseId,moduleId,oldId,newId]of [
+    ['warehouse_logistics','module04','dimension.analysis-grouping-attribute.n',physical],
+    ['office_admin','module10','dependency.required-software-component.n',task],
+    ['warehouse_logistics','module10','dependency.required-software-component.n',task],
+    ['hospitality_tourism','module10','dependency.required-software-component.n',task]
+  ]){const module=source.courses.find(course=>course.id===courseId).modules.find(module=>module.id===moduleId);
+    assert.ok(module.lexeme_ids.includes(newId));assert.ok(!module.lexeme_ids.includes(oldId));assert.equal(module.lexeme_ids.length,50);assert.equal(module.expression_ids.length,10);
+    assert.ok(module.lexeme_files.includes(source.lexemeOrigins[newId]));
+  }
+  const software=source.courses.find(course=>course.id==='software_data');
+  assert.ok(software.modules[3].lexeme_ids.includes('dependency.required-software-component.n'));
+  assert.ok(software.modules[6].lexeme_ids.includes('dimension.analysis-grouping-attribute.n'));
+  for(const id of ['dependency.required-software-component.n','dimension.analysis-grouping-attribute.n']){
+    const focuses=source.expressions.filter(entry=>entry.focus_lexeme_ids.includes(id));assert.ok(focuses.length);assert.ok(focuses.every(entry=>entry.id.startsWith('expr.software_data.')));
+  }
+  assert.match(source.lexemes.find(entry=>entry.id===physical).definition,/object's size/);
+  assert.match(source.lexemes.find(entry=>entry.id===task).definition,/task, event, or condition/);
+});
+
+test('Transport vehicle semantics and delivery evidence keep editorial limits explicit',()=>{
+  const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/transport-'));
+  assert.match(find('trailer').definition,/without its own propulsion/);
+  assert.equal(find('collection receipt').pos,'noun');assert.equal(find('delivery photograph').pos,'noun');
+  assert.match(find('delivery photograph').media.image.brief,/no.*claim.*proves identity or acceptance/);
+  assert.equal(source.lexemes.some(entry=>['recipient unavailable','signature required'].includes(entry.text)),false);
+  assert.equal(source.sources.filter(entry=>entry.id.startsWith('transport-')).length,9);
+  assert.equal(audit(source,true).summary.release_ready,false);
+});
+
+test('draft audit preserves the complete scope and reports actual authored coverage', () => {
+  const result = audit(draft());
+  assert.equal(result.ok, true, JSON.stringify(result.errors));
+  assert.equal(result.summary.release_ready, false);
+  assert.deepEqual(source.catalog.courses.map(course => course.id), COURSE_IDS);
+  assert.equal(result.summary.courses, 20);
+  assert.equal(result.summary.modules, 200);
+  assert.equal(result.summary.themes, 21);
+  assert.equal(result.summary.unique_lexemes, 4939);
+  assert.equal(result.summary.vocabulary_memberships, 10000);
+  assert.equal(result.summary.expressions, 1620);
+  assert.equal(result.summary.expression_memberships, 2000);
+  assert.equal(result.summary.vocabulary_memberships_remaining, 0);
+  assert.equal(result.summary.expression_memberships_remaining, 0);
+  assert.equal(result.summary.reviewed_lexemes, foundation02FifthLanguageRecord.counts.after.reviewed_status);
+  assert.equal(result.summary.integrated_word_images, 10);
+  assert.equal(result.summary.integrated_word_audio, 12);
+  for (const course of ['retail', 'nursing', 'software_data']) {
+    assert.equal(pilot(source, course).lexeme_ids.length, 50);
+    assert.equal(pilot(source, course).expression_ids.length, 10);
+  }
+});
+
+test('Retail has its full draft inventory without padding or bypassing release review', () => {
+  const course = source.courses.find(course => course.id === 'retail');
+  const ids = course.modules.flatMap(module => module.lexeme_ids);
+  const expressionIds = course.modules.flatMap(module => module.expression_ids);
+  assert.equal(ids.length, 500);
+  assert.equal(new Set(ids).size, 500);
+  assert.equal(expressionIds.length, 100);
+  assert.equal(new Set(expressionIds).size, 100);
+  for (const module of course.modules) {
+    assert.equal(module.status, 'draft');
+    assert.equal(module.lexeme_ids.length, 50);
+    assert.equal(module.expression_ids.length, 10);
+  }
+  const release = audit(draft(), true);
+  assert.equal(release.errors.some(issue => issue.code === 'course.incomplete' && issue.path === 'course/retail'), false);
+  assert.ok(release.errors.some(issue => issue.code === 'module.not_ready' && issue.path.startsWith('course/retail/')));
+});
+
+test('Retail digital modules reuse existing canonical software senses and their on-demand file', () => {
+  const module = source.courses.find(course => course.id === 'retail').modules[8];
+  for (const id of ['database.organized-data.n', 'dashboard.information-display.n', 'row.table-record.n', 'column.table-field.n']) {
+    assert.ok(module.lexeme_ids.includes(id));
+    assert.ok(pilot(source, 'software_data').lexeme_ids.includes(id));
+    assert.equal(source.lexemes.filter(entry => entry.id === id).length, 1);
+    assert.ok(module.lexeme_files.includes(source.lexemeOrigins[id]));
+  }
+});
+
+test('Software and Data has 500 distinct senses and 100 expressions with pending safety review', () => {
+  const course = source.courses.find(course => course.id === 'software_data');
+  const ids = course.modules.flatMap(module => module.lexeme_ids);
+  const expressions = course.modules.flatMap(module => module.expression_ids);
+  assert.equal(ids.length, 500);
+  assert.equal(new Set(ids).size, 500);
+  assert.equal(expressions.length, 100);
+  assert.equal(new Set(expressions).size, 100);
+  for (const module of course.modules) {
+    assert.equal(module.status, 'draft');
+    assert.equal(module.lexeme_ids.length, 50);
+    assert.equal(module.expression_ids.length, 10);
+    for (const id of module.lexeme_ids) assert.ok(module.lexeme_files.includes(source.lexemeOrigins[id]));
+  }
+  const safety = course.modules[7];
+  for (const id of safety.lexeme_ids) assert.equal(source.lexemes.find(entry => entry.id === id).review.domain, 'pending');
+  for (const id of safety.expression_ids) assert.equal(source.expressions.find(entry => entry.id === id).review.domain, 'pending');
+  const release = audit(draft(), true);
+  assert.equal(release.errors.some(issue => issue.code === 'course.incomplete' && issue.path === 'course/software_data'), false);
+  assert.ok(release.errors.some(issue => issue.code === 'module.not_ready' && issue.path.startsWith('course/software_data/')));
+});
+
+test('Software reuses canonical Retail meanings but distinguishes different senses of shared spellings', () => {
+  const retail = new Set(source.courses.find(course => course.id === 'retail').modules.slice(3).flatMap(module => module.lexeme_ids));
+  const software = source.courses.find(course => course.id === 'software_data').modules.slice(3);
+  const reused = software.flatMap(module => module.lexeme_ids).filter(id => retail.has(id));
+  assert.equal(reused.length, 35);
+  for (const id of reused) assert.equal(source.lexemes.filter(entry => entry.id === id).length, 1);
+  for (const text of ['sort', 'sample', 'transaction']) {
+    const senses = source.lexemes.filter(entry => entry.text === text);
+    assert.equal(senses.length, 2, text);
+    assert.notEqual(senses[0].definition, senses[1].definition, text);
+  }
+});
+
+test('Software long terms and repeated constituents have explicit ordered pending morphology', () => {
+  for (const text of ['role-based access control', 'cross-site request forgery', 'service-level agreement', 'environment variable', 'end-to-end test']) {
+    const entry = source.lexemes.find(entry => entry.text === text);
+    assert.ok(entry.morphology.parts.length >= 3, text);
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    assert.equal(entry.morphology.review.status, 'pending');
+    assert.equal(entry.media.image.picture_suitable, false);
+  }
+  const repeated = source.lexemes.find(entry => entry.text === 'end-to-end test').morphology.parts;
+  const ends = repeated.filter(part => part.canonical === 'end');
+  assert.equal(ends.length, 2);
+  assert.equal(ends[0].canonical_id, ends[1].canonical_id);
+  assert.notEqual(ends[0].id, ends[1].id);
+  const uncertain = source.lexemes.find(entry => entry.text === 'malware');
+  assert.equal(uncertain.morphology, null);
+});
+
+test('local Home previews enforce provenance, dimensions, size, and scope without releasing the full theme', () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'professional-preview-test-'));
+  try {
+    fs.cpSync(path.join(rootDir, 'data/professional/schemas'), path.join(temporaryRoot, 'data/professional/schemas'), {recursive:true});
+    const data = draft();
+    const theme = data.themes.find(entry => entry.id === 'professional_software_data');
+    assert.ok(theme.preview);
+    assert.equal(theme.status, 'pending');
+    assert.equal(theme.art.home.status, 'pending');
+    const resource = 'res://assets/images/professional-previews/fixture.png';
+    const target = path.join(temporaryRoot, resource.slice(6));
+    fs.mkdirSync(path.dirname(target), {recursive:true});
+    const bytes = fs.readFileSync(resourcePath(rootDir, theme.preview.path));
+    theme.preview.path = resource;
+    const check = buffer => {
+      fs.writeFileSync(target, buffer);
+      theme.preview.sha256 = crypto.createHash('sha256').update(buffer).digest('hex');
+      return auditProfessionalContent({rootDir:temporaryRoot, data});
+    };
+    const valid = check(bytes);
+    assert.equal(valid.errors.some(issue => issue.code.startsWith('theme.preview_')), false);
+    assert.equal(valid.summary.ready_modules, 0);
+    const largeDimensions = Buffer.from(bytes);
+    largeDimensions.writeUInt32BE(513, 16);
+    assert.ok(has(check(largeDimensions), 'theme.preview_dimensions'));
+    assert.ok(has(check(Buffer.concat([bytes,Buffer.alloc(400*1024)])), 'theme.preview_budget'));
+    assert.ok(has(check(Buffer.alloc(40)), 'theme.preview_format'));
+    check(bytes);
+    theme.preview.creator = null;
+    assert.ok(has(auditProfessionalContent({rootDir:temporaryRoot,data}), 'media.provenance'));
+    theme.preview.path = 'res://assets/images/fixture.png';
+    assert.ok(has(auditProfessionalContent({rootDir:temporaryRoot,data}), 'theme.preview_scope'));
+  } finally {
+    fs.rmSync(temporaryRoot, {recursive:true,force:true});
+  }
+});
+
+test('Nursing has 500 distinct senses and 100 expressions with explicit clinical review requirements', () => {
+  const course = source.courses.find(course => course.id === 'nursing');
+  const ids = course.modules.flatMap(module => module.lexeme_ids);
+  const expressionIds = course.modules.flatMap(module => module.expression_ids);
+  assert.equal(ids.length, 500);
+  assert.equal(new Set(ids).size, 500);
+  assert.equal(expressionIds.length, 100);
+  assert.equal(new Set(expressionIds).size, 100);
+  for (const module of course.modules) {
+    assert.equal(module.status, 'draft');
+    assert.equal(module.lexeme_ids.length, 50);
+    assert.equal(module.expression_ids.length, 10);
+    for (const id of module.lexeme_ids) {
+      assert.ok(module.lexeme_files.includes(source.lexemeOrigins[id]));
+      if (!module.foundation) assert.equal(source.lexemes.find(entry => entry.id === id).review.domain, 'pending');
+    }
+    if (!module.foundation) for (const id of module.expression_ids) assert.equal(source.expressions.find(entry => entry.id === id).review.domain, 'pending');
+  }
+  const data = draft();
+  const patient = data.lexemes.find(entry => entry.text === 'patient');
+  patient.review = {status:'reviewed',language:'reviewed',domain:'not_required',reviewer:'fixture',reviewed_at:'2026-10-16'};
+  const release = audit(data, true);
+  assert.equal(release.errors.some(issue => issue.code === 'course.incomplete' && issue.path === 'course/nursing'), false);
+  assert.ok(release.errors.some(issue => issue.code === 'review.pending' && issue.path === 'lexeme/' + patient.id));
+});
+
+test('Nursing reuses genuine shared meanings and keeps synonyms from padding its inventory', () => {
+  const modules = source.courses.find(course => course.id === 'nursing').modules.slice(3);
+  const ids = modules.flatMap(module => module.lexeme_ids);
+  const reused = ids.filter(id => !source.lexemeOrigins[id].includes('nursing-module'));
+  assert.equal(reused.length, 28);
+  for (const id of reused) assert.equal(source.lexemes.filter(entry => entry.id === id).length, 1);
+  assert.ok(ids.includes('measure.find-dimensions.v'));
+  assert.ok(ids.includes('observation.recorded-measurement-or-case.n'));
+  assert.equal(source.lexemes.some(entry => entry.text === 'chief concern'), false);
+  assert.ok(source.lexemes.find(entry => entry.text === 'presenting complaint').accepted_forms.includes('chief concern'));
+  assert.ok(ids.includes('functional-status.daily-activity-ability.n'));
+  assert.deepEqual(source.lexemes.find(entry => entry.text === 'nursing associate').regions, ['England']);
+  assert.deepEqual(source.lexemes.find(entry => entry.text === 'day case').regions, ['UK']);
+  for (const text of ['interpreter','cell','capacity','protocol']) {
+    const senses = source.lexemes.filter(entry => entry.text === text);
+    assert.equal(senses.length, 2, text);
+    assert.notEqual(senses[0].definition, senses[1].definition, text);
+  }
+});
+
+test('Nursing candidate morphology preserves long phrases while uncertain classical analyses stay unauthored', () => {
+  for (const text of ['medication administration record','transmission-based precautions','multidisciplinary team','closed-loop communication','functional status']) {
+    const entry = source.lexemes.find(entry => entry.text === text);
+    assert.ok(entry.morphology.parts.length >= 3, text);
+    assert.deepEqual(morphologyErrors(entry.morphology,entry), []);
+    assert.equal(entry.morphology.review.status, 'pending');
+    assert.equal(entry.media.image.picture_suitable, false);
+  }
+  for (const text of ['anaphylaxis','physiotherapist','auscultate','chronic']) assert.equal(source.lexemes.find(entry => entry.text === text).morphology, null, text);
+  for (const [text,forms] of [['chills',['chill','s']],['soiled',['soil','ed']]]) {
+    assert.deepEqual(source.lexemes.find(entry => entry.text === text).morphology.parts.map(part => part.canonical), forms);
+  }
+});
+
+test('Caregiving has 500 distinct senses and 100 expressions without bypassing required care-domain review', () => {
+  const course = source.courses.find(course => course.id === 'caregiving');
+  const ids = course.modules.flatMap(module => module.lexeme_ids);
+  const expressions = course.modules.flatMap(module => module.expression_ids);
+  assert.equal(ids.length, 500);
+  assert.equal(new Set(ids).size, 500);
+  assert.equal(expressions.length, 100);
+  assert.equal(new Set(expressions).size, 100);
+  for (const module of course.modules) {
+    assert.equal(module.status, 'draft');
+    assert.equal(module.lexeme_ids.length, 50);
+    assert.equal(module.expression_ids.length, 10);
+    for (const id of module.lexeme_ids) {
+      assert.ok(module.lexeme_files.includes(source.lexemeOrigins[id]));
+      if (!module.foundation) assert.equal(source.lexemes.find(entry => entry.id === id).review.domain, 'pending');
+    }
+    for (const id of module.expression_ids) {
+      assert.ok(module.expression_files.includes(source.expressionOrigins[id]));
+      if (!module.foundation) assert.equal(source.expressions.find(entry => entry.id === id).review.domain, 'pending');
+    }
+  }
+  const data = draft();
+  const aide = data.lexemes.find(entry => entry.text === 'personal care aide');
+  const expression = data.expressions.find(entry => entry.id === 'expr.caregiving.module04.02');
+  for (const entry of [aide, expression]) entry.review = {status:'reviewed',language:'reviewed',domain:'not_required',reviewer:'fixture',reviewed_at:'2026-10-16'};
+  const release = audit(data, true);
+  assert.equal(release.errors.some(issue => issue.code === 'course.incomplete' && issue.path === 'course/caregiving'), false);
+  assert.ok(release.errors.some(issue => issue.code === 'review.pending' && issue.path === 'lexeme/' + aide.id));
+  assert.ok(release.errors.some(issue => issue.code === 'review.pending' && issue.path === 'expression/' + expression.id));
+  assert.equal(release.errors.some(issue => issue.code === 'exercise.phrase'), false);
+});
+
+test('Caregiving reuses existing meanings and distinguishes human care vocabulary from software and wound-care senses', () => {
+  const ids = source.courses.find(course => course.id === 'caregiving').modules.slice(2).flatMap(module => module.lexeme_ids);
+  const reused = ids.filter(id => !source.lexemeOrigins[id].includes('caregiving-module'));
+  assert.equal(reused.length, 217);
+  assert.equal(ids.length - reused.length, 183);
+  for (const id of reused) assert.equal(source.lexemes.filter(entry => entry.id === id).length, 1);
+  for (const text of ['refrigerator','fold','hang','portion','ingredient','decline']) assert.equal(source.lexemes.filter(entry => entry.text === text).length, 1, text);
+  for (const text of ['dress','mop','prompt','menu','memory']) {
+    const senses = source.lexemes.filter(entry => entry.text === text);
+    assert.equal(senses.length, 2, text);
+    assert.notEqual(senses[0].definition, senses[1].definition, text);
+  }
+  for (const text of ['personal care aide','home health aide']) assert.deepEqual(source.lexemes.find(entry => entry.text === text).regions, ['US']);
+  assert.deepEqual(source.lexemes.find(entry => entry.text === 'personal assistant').regions, ['UK']);
+  assert.ok(source.lexemes.find(entry => entry.text === 'day center').accepted_forms.includes('day centre'));
+  assert.ok(source.lexemes.find(entry => entry.text === 'person-centered care').accepted_forms.includes('person-centred care'));
+  assert.equal(source.lexemes.some(entry => entry.text === 'grocery'), false);
+  assert.ok(source.lexemes.some(entry => entry.text === 'groceries'));
+});
+
+test('Customer Support has 500 distinct senses and 100 expressions with mandatory domain review outside its safety module', () => {
+  const course = source.courses.find(course => course.id === 'customer_support');
+  const ids = course.modules.flatMap(module => module.lexeme_ids);
+  const expressions = course.modules.flatMap(module => module.expression_ids);
+  assert.equal(ids.length, 500);
+  assert.equal(new Set(ids).size, 500);
+  assert.equal(expressions.length, 100);
+  assert.equal(new Set(expressions).size, 100);
+  const specialistIds = course.modules.slice(2).flatMap(module => module.lexeme_ids);
+  assert.equal(specialistIds.filter(id => source.lexemeOrigins[id].includes('customer-support-module')).length, 148);
+  assert.equal(specialistIds.filter(id => !source.lexemeOrigins[id].includes('customer-support-module')).length, 252);
+  for (const module of course.modules) {
+    assert.equal(module.lexeme_ids.length, 50);
+    assert.equal(module.expression_ids.length, 10);
+    assert.equal(module.status, 'draft');
+    for (const id of module.lexeme_ids) {
+      assert.ok(module.lexeme_files.includes(source.lexemeOrigins[id]));
+      if (!module.foundation) assert.equal(source.lexemes.find(entry => entry.id === id).review.domain, 'pending');
+    }
+    for (const id of module.expression_ids) {
+      assert.ok(module.expression_files.includes(source.expressionOrigins[id]));
+      if (!module.foundation) assert.equal(source.expressions.find(entry => entry.id === id).review.domain, 'pending');
+    }
+  }
+  const data = draft();
+  const target = data.lexemes.find(entry => entry.text === 'public reply');
+  const expression = data.expressions.find(entry => entry.id === 'expr.customer_support.module07.01');
+  for (const entry of [target, expression]) entry.review = {status:'reviewed',language:'reviewed',domain:'not_required',reviewer:'fixture',reviewed_at:'2026-10-16'};
+  const release = audit(data, true);
+  assert.equal(release.errors.some(issue => issue.code === 'course.incomplete' && issue.path === 'course/customer_support'), false);
+  assert.ok(release.errors.some(issue => issue.code === 'review.pending' && issue.path === 'lexeme/' + target.id));
+  assert.ok(release.errors.some(issue => issue.code === 'review.pending' && issue.path === 'expression/' + expression.id));
+});
+
+test('Customer Support preserves genuine senses without counting alternate spellings and status inflections', () => {
+  const entry = text => source.lexemes.find(entry => entry.text === text);
+  for (const text of ['assign', 'pause']) {
+    const senses = source.lexemes.filter(entry => entry.text === text);
+    assert.equal(senses.length, 2, text);
+    assert.notEqual(senses[0].definition, senses[1].definition);
+  }
+  assert.equal(source.lexemes.find(entry => entry.id === 'assign.give-work-or-responsibility-to-person.v').pos, 'verb');
+  assert.equal(source.lexemes.find(entry => entry.id === 'pause.brief-break-in-activity-or-speech.n').pos, 'noun');
+  for (const [text, alternative] of [['contact center','contact centre'],['apologize','apologise'],['acknowledgment','acknowledgement'],['data minimization','data minimisation'],['customer relationship management','CRM']]) {
+    assert.ok(entry(text).accepted_forms.includes(alternative));
+    assert.equal(source.lexemes.some(entry => entry.text === alternative), false);
+  }
+  const created = source.lexemes.filter(entry => source.lexemeOrigins[entry.id].includes('customer-support-module'));
+  for (const text of ['resolved','closed','reopened']) assert.equal(created.some(entry => entry.text === text), false);
+  const ids = source.courses.find(course => course.id === 'customer_support').modules.flatMap(module => module.lexeme_ids);
+  for (const id of ['menu.interface-command-list.n','filter.result-limiting-control.n','cell.single-spreadsheet-space.n','callback.return-phone-call.n']) assert.ok(ids.includes(id));
+});
+
+test('Customer Support candidate graphs preserve spelling changes, constituent identity, and long terms', () => {
+  const entries = source.lexemes.filter(entry => source.lexemeOrigins[entry.id].includes('customer-support-module'));
+  assert.equal(entries.filter(entry => entry.morphology).length, 131);
+  assert.equal(entries.filter(entry => !entry.morphology).length, 17);
+  for (const entry of entries.filter(entry => entry.morphology)) {
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    assert.equal(entry.morphology.review.status, acceptedMorphologyReviews.has(entry.id) ? 'reviewed' : 'pending');
+    const surfaces = new Map(entry.morphology.parts.map(part => [part.id, part.surface]));
+    for (const node of entry.morphology.nodes) {
+      const separator = node.rule === 'word_boundary' ? ' ' : node.rule.startsWith('hyphenated_') ? '-' : '';
+      assert.equal(surfaces.get(node.left) + separator + surfaces.get(node.right), node.surface, entry.text + ': ' + node.rule);
+      surfaces.set(node.id, node.surface);
+    }
+  }
+  const find = text => entries.find(entry => entry.text === text);
+  assert.deepEqual(find('acknowledgment').morphology.parts.map(part => part.surface), ['acknowledg','ment']);
+  assert.deepEqual(find('misunderstanding').morphology.parts.map(part => part.canonical), ['mis','understand','ing']);
+  assert.ok(find('customer relationship management').morphology.parts.length >= 6);
+  for (const text of ['acknowledge','assign','redact','subscription','resume']) assert.equal(find(text).morphology, null);
+});
+
+test('every new Customer Support sense has an authored scored route while media and review remain pending', () => {
+  const entries = source.lexemes.filter(entry => source.lexemeOrigins[entry.id].includes('customer-support-module'));
+  const ids = new Set(entries.map(entry => entry.id));
+  const release = audit(draft(), true);
+  assert.equal(release.errors.some(issue => issue.code === 'exercise.phrase'), false);
+  assert.equal(release.errors.some(issue => issue.code === 'exercise.unreachable' && ids.has(issue.path.replace('lexeme/',''))), false);
+  for (const entry of entries) {
+    assert.equal(entry.review.domain, 'pending');
+    assert.equal(entry.media.image.picture_suitable, false);
+    assert.equal(entry.media.image.status, 'pending');
+    assert.equal(entry.media.image.path, null);
+    assert.equal(entry.media.audio.status, 'pending');
+    assert.equal(entry.media.audio.path, null);
+    assert.ok(entry.references.every(reference => reference.status === 'pending_term_check'));
+  }
+});
+
+test('Customer Support preserves source limitations, security wording, and workflow distinctions', () => {
+  assert.match(source.sources.find(entry => entry.id === 'ico-data-minimization').scope, /under review/);
+  assert.match(source.sources.find(entry => entry.id === 'onet-customer-service').scope, /excludes roles primarily devoted to technical support/);
+  assert.match(source.sources.find(entry => entry.id === 'zendesk-ticket-lifecycle').scope, /not universal/);
+  assert.match(source.sources.find(entry => entry.id === 'zendesk-support-duration-metrics').scope, /different behavior/);
+  assert.match(source.lexemes.find(entry => entry.text === 'public reply').definition, /requester/);
+  assert.match(source.lexemes.find(entry => entry.text === 'delivery estimate').definition, /may change/);
+  assert.match(source.lexemes.find(entry => entry.text === 'deactivate').definition, /without necessarily deleting/);
+  const securityText = source.expressions.find(entry => entry.id === 'expr.customer_support.module08.01').text;
+  assert.match(securityText, /(?:do not|never) post.*password or one-time code.*(?:chat|message)/i);
+  assert.match(securityText, /use the approved route/i);
+});
+
+test('Food Service has 500 distinct senses and 100 expressions with mandatory subject review outside its safety module', () => {
+  const course = source.courses.find(course => course.id === 'food_service');
+  const ids = course.modules.flatMap(module => module.lexeme_ids);
+  const expressions = course.modules.flatMap(module => module.expression_ids);
+  assert.equal(ids.length, 500);
+  assert.equal(new Set(ids).size, 500);
+  assert.equal(expressions.length, 100);
+  assert.equal(new Set(expressions).size, 100);
+  for (const module of course.modules) {
+    assert.equal(module.status, 'draft');
+    assert.equal(module.lexeme_ids.length, 50);
+    assert.equal(module.expression_ids.length, 10);
+    for (const id of module.lexeme_ids) {
+      assert.ok(module.lexeme_files.includes(source.lexemeOrigins[id]));
+      if (!module.foundation) assert.equal(source.lexemes.find(entry => entry.id === id).review.domain, 'pending');
+    }
+    for (const id of module.expression_ids) {
+      assert.ok(module.expression_files.includes(source.expressionOrigins[id]));
+      if (!module.foundation) assert.equal(source.expressions.find(entry => entry.id === id).review.domain, 'pending');
+    }
+  }
+  const data = draft();
+  const bread = data.lexemes.find(entry => entry.text === 'bread');
+  const expression = data.expressions.find(entry => entry.id === 'expr.food_service.module04.01');
+  for (const entry of [bread, expression]) entry.review = {status:'reviewed',language:'reviewed',domain:'not_required',reviewer:'fixture',reviewed_at:'2026-10-16'};
+  const release = audit(data, true);
+  assert.equal(release.errors.some(issue => issue.code === 'course.incomplete' && issue.path === 'course/food_service'), false);
+  assert.ok(release.errors.some(issue => issue.code === 'review.pending' && issue.path === 'lexeme/' + bread.id));
+  assert.ok(release.errors.some(issue => issue.code === 'review.pending' && issue.path === 'expression/' + expression.id));
+});
+
+test('Food Service reuses canonical senses and preserves real role, ingredient, and part-of-speech distinctions', () => {
+  const ids = source.courses.find(course => course.id === 'food_service').modules.slice(2).flatMap(module => module.lexeme_ids);
+  const reused = ids.filter(id => !source.lexemeOrigins[id].includes('food-service-module'));
+  assert.equal(reused.length, 229);
+  assert.equal(ids.length - reused.length, 171);
+  for (const id of reused) assert.equal(source.lexemes.filter(entry => entry.id === id).length, 1);
+  for (const text of ['salt','plate','cook','server','grill','whisk','dishwasher']) {
+    const senses = source.lexemes.filter(entry => entry.text === text);
+    assert.equal(senses.length, 2, text);
+    assert.notEqual(senses[0].definition, senses[1].definition, text);
+  }
+  assert.ok(ids.includes('callback.return-phone-call.n'));
+  assert.equal(ids.includes('callback.supplied-handler-function.n'), false);
+  for (const [text,alternative] of [['takeaway','takeout'],['appetizer','starter'],['chopping board','cutting board'],['yogurt','yoghurt'],['saute','sauté'],['a la carte','à la carte']]) {
+    assert.ok(source.lexemes.find(entry => entry.text === text).accepted_forms.includes(alternative));
+    assert.equal(source.lexemes.some(entry => entry.text === alternative), false);
+  }
+  assert.deepEqual(source.lexemes.find(entry => entry.text === 'busser').regions, ['US']);
+  assert.deepEqual(source.lexemes.find(entry => entry.text === 'kitchen porter').regions, ['UK']);
+});
+
+test('Food Service candidate graphs preserve spelling, possessives, long terms, and explicit initialisms', () => {
+  const entries = source.lexemes.filter(entry => source.lexemeOrigins[entry.id].includes('food-service-module'));
+  assert.equal(entries.filter(entry => entry.morphology).length, 151);
+  assert.equal(entries.filter(entry => entry.morphology === null).length, 20);
+  for (const text of ['ready-to-eat food','allergen cross-contact','critical control point','ingredient declaration','kitchen display system',"chef's knife"]) {
+    const entry = entries.find(entry => entry.text === text);
+    assert.ok(entry.morphology.parts.length >= 3, text);
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    assert.equal(entry.morphology.review.status, 'pending');
+    assert.equal(entry.morphology.nodes.at(-1).surface, text);
+  }
+  const possessive = entries.find(entry => entry.text === "chef's knife").morphology.parts[1];
+  assert.equal(possessive.surface, "'s");
+  assert.equal(possessive.canonical_id, 'affix.possessive-s.suffix');
+  const haccp = entries.find(entry => entry.text === 'HACCP').morphology;
+  assert.equal(haccp.parts.length, 1);
+  assert.equal(haccp.parts[0].type, 'abbreviation');
+  assert.equal(haccp.parts[0].canonical_id, 'abbr.haccp');
+  for (const text of ['saute','a la carte','mise en place','sous chef','sanitize','traceability']) assert.equal(entries.find(entry => entry.text === text).morphology, null, text);
+});
+
+test('Food Service sources and pending media cannot imply a completed safety review or delivered assets', () => {
+  const code = source.sources.find(entry => entry.id === 'fda-food-code-2026');
+  assert.equal(code.status, 'consulted');
+  assert.match(code.scope, /not acquired or copied/);
+  assert.match(source.sources.find(entry => entry.id === 'fda-food-code-overview').scope, /model offered for adoption/);
+  assert.match(source.sources.find(entry => entry.id === 'fsa-allergen-guidance-landing').scope, /not successfully retrieved/);
+  assert.match(source.sources.find(entry => entry.id === 'fda-haccp-principles').scope, /1997/);
+  const entries = source.lexemes.filter(entry => source.lexemeOrigins[entry.id].includes('food-service-module'));
+  for (const entry of entries) {
+    assert.equal(entry.review.domain, 'pending');
+    assert.equal(entry.media.image.picture_suitable, false);
+    assert.equal(entry.media.image.status, 'pending');
+    assert.equal(entry.media.image.path, null);
+    assert.equal(entry.media.audio.status, 'pending');
+    assert.equal(entry.media.audio.path, null);
+    assert.ok(entry.references.every(reference => reference.status === 'pending_term_check'));
+  }
+  const release = audit(draft(), true);
+  assert.equal(release.errors.some(issue => issue.code === 'exercise.phrase'), false);
+});
+
+test('Caregiving transparent morphology remains pending and uncertain clinical or historical analyses stay unauthored', () => {
+  const authored = source.lexemes.filter(entry => source.lexemeOrigins[entry.id].includes('caregiving-module'));
+  assert.equal(authored.filter(entry => entry.morphology).length, 157);
+  assert.equal(authored.filter(entry => entry.morphology === null).length, 26);
+  for (const text of ['personal belongings list','person-centered care','raised toilet seat','caregiver assessment','medication reminder']) {
+    const entry = authored.find(entry => entry.text === text);
+    assert.ok(entry.morphology.parts.length >= 3, text);
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    assert.equal(entry.morphology.review.status, 'pending');
+  }
+  for (const text of ['dementia','delirium','reminiscence','groceries','memory']) assert.equal(authored.find(entry => entry.text === text).morphology, null, text);
+  for (const entry of authored) {
+    assert.equal(entry.media.image.picture_suitable, false);
+    assert.equal(entry.media.image.status, 'pending');
+    assert.equal(entry.media.audio.status, 'pending');
+  }
+  assert.ok(source.lexemes.find(entry => entry.text === 'bed rail').references.some(reference => reference.source_id === 'fda-bed-rail-safety' && reference.status === 'pending_term_check'));
+  assert.ok(source.lexemes.find(entry => entry.text === 'delirium').references.some(reference => reference.source_id === 'nhs-delirium' && reference.status === 'pending_term_check'));
+});
+
+test('both workplace foundation modules retain identical canonical content across all careers', () => {
+  for (const moduleIndex of [0, 1]) {
+    const canonical = source.courses[0].modules[moduleIndex];
+    assert.equal(canonical.lexeme_ids.length, 50);
+    assert.equal(canonical.expression_ids.length, 10);
+    for (const course of source.courses) {
+      const module = course.modules[moduleIndex];
+      assert.equal(module.foundation, true);
+      assert.equal(module.status, 'draft');
+      assert.deepEqual(module.lexeme_ids, canonical.lexeme_ids);
+      assert.deepEqual(module.expression_ids, canonical.expression_ids);
+      assert.deepEqual(module.lexeme_files, canonical.lexeme_files);
+      assert.deepEqual(module.expression_files, canonical.expression_files);
+      for (const id of module.lexeme_ids) assert.ok(module.lexeme_files.includes(source.lexemeOrigins[id]));
+      for (const id of module.expression_ids) {
+        assert.ok(module.expression_files.includes(source.expressionOrigins[id]));
+        const expression = source.expressions.find(entry => entry.id === id);
+        for (const focusId of expression.focus_lexeme_ids) {
+          assert.ok(module.lexeme_ids.includes(focusId));
+          assert.ok(source.lexemes.find(entry => entry.id === focusId).practice_modes.includes('phrase'));
+        }
+      }
+    }
+  }
+  for (const course of source.courses) {
+    const ids = course.modules.flatMap(module => module.lexeme_ids);
+    assert.equal(ids.length, new Set(ids).size, course.id);
+  }
+});
+
+test('shared foundation membership cannot diverge for terms or expressions, including empty drafts', () => {
+  for (const key of ['lexeme_ids', 'expression_ids']) {
+    const data = draft();
+    data.courses.at(-1).modules[0][key].pop();
+    assert.ok(has(audit(data), 'foundation.membership'), key);
+    const empty = draft();
+    empty.courses.at(-1).modules[1][key] = [];
+    assert.ok(has(audit(empty), 'foundation.membership'), 'empty ' + key);
+  }
+  const reordered = draft();
+  reordered.courses.at(-1).modules[0].lexeme_ids.reverse();
+  reordered.courses.at(-1).modules[0].expression_ids.reverse();
+  assert.equal(has(audit(reordered), 'foundation.membership'), false);
+});
+
+test('generic foundation review is reusable across careers while explicit safety review stays required', () => {
+  const data = draft();
+  const generic = data.lexemes.find(entry => entry.id === 'colleague.workmate.n');
+  generic.review = {status: 'reviewed', language: 'reviewed', domain: 'not_required',
+    reviewer: 'test-reviewer', reviewed_at: '2026-10-15'};
+  const result = audit(data, true);
+  assert.equal(result.errors.some(issue => issue.code === 'review.pending' && issue.path === 'lexeme/' + generic.id), false);
+  const safety = data.lexemes.find(entry => entry.review.domain === 'pending' &&
+    data.courses[0].modules[1].lexeme_ids.includes(entry.id));
+  assert.ok(safety);
+  assert.ok(result.errors.some(issue => issue.code === 'review.pending' && issue.path === 'lexeme/' + safety.id));
+});
+
+test('strict release rejects drafts, unreviewed morphology, and missing production assets', () => {
+  const result = audit(draft(), true);
+  assert.equal(result.ok, false);
+  assert.equal(has(result, 'course.incomplete'), false);
+  for (const code of ['module.not_ready', 'review.pending', 'media.pending',
+    'media.provenance', 'morphology.missing', 'morphology.pending', 'theme.pending']) {
+    assert.ok(has(result, code), code);
+  }
+  assert.equal(result.warnings.length, 0);
+});
+
+test('strict release still rejects a removed sense or expression after all course drafts are populated', () => {
+  for (const key of ['lexeme_ids', 'expression_ids']) {
+    const data = draft();
+    data.courses.find(course => course.id === 'legal_paralegal').modules[2][key].pop();
+    const result = audit(data, true);
+    assert.ok(result.errors.some(issue => issue.code === 'course.incomplete' && issue.path === 'course/legal_paralegal'), key);
+    assert.equal(result.summary.release_ready, false);
+  }
+});
+
+test('a ready label cannot make unreviewed pilot entries playable', () => {
+  const data = draft();
+  pilot(data).status = 'ready';
+  assert.equal(data.themes.find(theme => theme.course_id === 'retail').status, 'ready');
+  const result = audit(data);
+  assert.equal(result.ok, false);
+  assert.ok(has(result, 'review.pending'));
+  assert.ok(has(result, 'media.pending'));
+  assert.equal(has(result, 'theme.pending'), false);
+  assert.ok(has(result, 'delivery.pending'));
+});
+
+test('module files support selected-module loading and shared senses retain one identity', () => {
+  for (const course of ['retail', 'nursing', 'software_data']) {
+    const module = pilot(source, course);
+    for (const id of module.lexeme_ids) assert.ok(module.lexeme_files.includes(source.lexemeOrigins[id]));
+    for (const id of module.expression_ids) assert.ok(module.expression_files.includes(source.expressionOrigins[id]));
+  }
+  const shared = 'weighing-scale.measurement-device.n';
+  assert.ok(pilot(source, 'retail').lexeme_ids.includes(shared));
+  assert.ok(pilot(source, 'nursing').lexeme_ids.includes(shared));
+  assert.equal(source.lexemes.filter(entry => entry.id === shared).length, 1);
+});
+
+test('a missing shared file prevents silent incomplete on-demand loads', () => {
+  const data = draft();
+  pilot(data).lexeme_files = pilot(data).lexeme_files.filter(file => !file.includes('shared-pilot'));
+  assert.ok(has(audit(data), 'membership.file'));
+});
+
+test('an unknown module file and unknown sense cannot escape catalog validation', () => {
+  const data = draft();
+  pilot(data).lexeme_files.push('res://data/professional/lexemes/unknown.json');
+  pilot(data).lexeme_ids[0] = 'unknown.sense.n';
+  const result = audit(data);
+  assert.ok(has(result, 'module.file'));
+  assert.ok(has(result, 'membership.missing'));
+});
+
+test('duplicate IDs and repeated course memberships cannot inflate completion counts', () => {
+  const data = draft();
+  data.lexemes.push(structuredClone(data.lexemes[0]));
+  const result = audit(data);
+  assert.ok(has(result, 'identity.duplicate'));
+  const second = draft();
+  second.courses.find(c => c.id === 'retail').modules[3] = {
+    ...structuredClone(pilot(second)), id: 'module04', title: 'Specialist concepts'
+  };
+  assert.ok(has(audit(second), 'membership.duplicate'));
+});
+
+test('a duplicated sense cannot acquire a second identity merely to pad inventories', () => {
+  const data = draft();
+  data.lexemes.push({...structuredClone(data.lexemes[0]), id: 'duplicate.same-sense.n'});
+  assert.ok(has(audit(data), 'sense.duplicate'));
+});
+
+test('a term cannot lose its canonical spelling or refer to an unknown research source', () => {
+  const data = draft();
+  data.lexemes[0].accepted_forms = ['different spelling'];
+  data.lexemes[0].references[0].source_id = 'missing-source';
+  const result = audit(data);
+  assert.ok(has(result, 'forms.canonical'));
+  assert.ok(has(result, 'reference.unknown'));
+});
+
+test('authored morphology graphs preserve exact text, order, and full part coverage', () => {
+  for (const entry of source.lexemes.filter(entry => entry.morphology)) {
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), [], entry.id);
+  }
+  const entry = source.lexemes.find(entry => entry.text === 'barcode scanner');
+  assert.ok(entry.morphology.parts.length >= 4);
+  const scanner = entry.morphology.nodes.find(node => node.id === 'scanner');
+  assert.equal(scanner.surface, 'scanner');
+  assert.equal(scanner.rule, 'authored-double-final-n-in-scan-plus-er');
+  assert.equal(entry.morphology.nodes.at(-1).surface, 'barcode scanner');
+  const longTerm = source.lexemes.find(entry => entry.text === 'average transaction value');
+  assert.equal(longTerm.morphology.parts.length, 4);
+  assert.equal(longTerm.morphology.nodes.at(-1).surface, longTerm.text);
+  const repeated = source.lexemes.find(entry => entry.text === 'first in, first out');
+  const firsts = repeated.morphology.parts.filter(part => part.canonical === 'first');
+  assert.equal(firsts.length, 2);
+  assert.equal(firsts[0].canonical_id, firsts[1].canonical_id);
+  assert.notEqual(firsts[0].id, firsts[1].id);
+  assert.equal(repeated.morphology.nodes.at(-1).surface, 'first in, first out');
+});
+
+test('cyclic, reversed, and incomplete morphology graphs are rejected', () => {
+  const original = source.lexemes.find(entry => entry.text === 'barcode');
+  const cycle = structuredClone(original);
+  cycle.morphology.nodes[0].left = cycle.morphology.nodes[0].id;
+  assert.ok(morphologyErrors(cycle.morphology, cycle).some(error => error.includes('Cyclic')));
+  const reversed = structuredClone(original);
+  [reversed.morphology.nodes[0].left, reversed.morphology.nodes[0].right] =
+    [reversed.morphology.nodes[0].right, reversed.morphology.nodes[0].left];
+  assert.ok(morphologyErrors(reversed.morphology, reversed).some(error => error.includes('reorders')));
+  const incomplete = structuredClone(original);
+  incomplete.morphology.roots = [incomplete.morphology.parts[0].id];
+  assert.ok(morphologyErrors(incomplete.morphology, incomplete).some(error => error.includes('cover all')));
+});
+
+test('morphology cannot hide spelling changes behind a mismatched root or identity', () => {
+  const data = draft();
+  const entry = data.lexemes.find(entry => entry.text === 'scanner');
+  entry.morphology.lexeme_id = 'other.sense.n';
+  entry.morphology.nodes[0].surface = 'scaner';
+  const result = audit(data);
+  assert.ok(has(result, 'morphology.invalid'));
+});
+
+test('every authored expression preserves repeated tokens and punctuation positions', () => {
+  const result = audit(draft());
+  assert.ok(!has(result, 'expression.tokens'));
+  const repeated = source.expressions.find(entry => entry.id === 'expr.software_data.equipment.02');
+  const occurrences = repeated.tokens.filter(token => token.text === 'server');
+  assert.equal(occurrences.length, 3);
+  assert.equal(new Set(occurrences.map(token => token.index)).size, occurrences.length);
+  assert.equal(new Set(occurrences.map(token => token.start)).size, occurrences.length);
+});
+
+test('dropping a repeated phrase token or punctuation is detected', () => {
+  const data = draft();
+  const expression = data.expressions.find(entry => entry.id === 'expr.software_data.equipment.02');
+  const secondServer = expression.tokens.filter(token => token.text === 'server')[1];
+  expression.tokens.splice(secondServer.index, 1);
+  assert.ok(has(audit(data), 'expression.tokens'));
+  const data2 = draft();
+  data2.expressions[0].tokens.pop();
+  assert.ok(has(audit(data2), 'expression.tokens'));
+});
+
+test('expression focus senses must be in the same module and expose the phrase skill', () => {
+  const data = draft();
+  data.expressions[0].focus_lexeme_ids = ['unknown.sense.n'];
+  assert.ok(has(audit(data), 'expression.focus'));
+  const data2 = draft();
+  const focus = data2.expressions[0].focus_lexeme_ids[0];
+  data2.lexemes.find(entry => entry.id === focus).practice_modes = ['word_jelly'];
+  pilot(data2).status = 'ready';
+  assert.ok(has(audit(data2), 'expression.skill'));
+});
+
+test('abstract illustrations never silently qualify for picture-identification exercises', () => {
+  for (const entry of source.lexemes.filter(entry => !entry.media.image.picture_suitable)) {
+    assert.ok(entry.practice_modes.every(mode => !['match', 'memory', 'pop', 'jelly'].includes(mode)));
+  }
+  const data = draft();
+  data.lexemes.find(entry => !entry.media.image.picture_suitable).practice_modes.push('match');
+  assert.ok(has(audit(data, true), 'exercise.picture'));
+});
+
+test('atomic collection alone cannot satisfy the scored-exercise requirement', () => {
+  const data = draft();
+  const entry = data.lexemes.find(entry => entry.text === 'aisle');
+  entry.practice_modes = ['word_jelly'];
+  assert.ok(has(audit(data, true), 'exercise.unreachable'));
+});
+
+test('every course membership has a scored route within its own module', () => {
+  const result = audit(source);
+  assert.deepEqual([...result.errors, ...result.warnings].filter(issue => issue.code === 'exercise.module_unreachable'), []);
+});
+
+test('a scored phrase in another course cannot hide a missing module-local route', () => {
+  const data = draft(), id = 'guest.hospitality-customer.n';
+  const target = data.courses.find(course => course.id === 'food_service').modules.find(module => module.id === 'module06');
+  const other = data.courses.find(course => course.id === 'hospitality_tourism').modules.find(module => module.id === 'module06');
+  const entry = data.lexemes.find(lexeme => lexeme.id === id);
+  assert.ok(target.lexeme_ids.includes(id) && other.lexeme_ids.includes(id));
+  entry.practice_modes = ['phrase'];
+  const otherExpression = data.expressions.find(expression => expression.id === 'expr.hospitality_tourism.module06.06');
+  assert.ok(other.expression_ids.includes(otherExpression.id));
+  assert.match(otherExpression.text, /\bguest\b/i);
+  if (!otherExpression.focus_lexeme_ids.includes(id)) otherExpression.focus_lexeme_ids.push(id);
+  for (const expression of data.expressions.filter(expression => target.expression_ids.includes(expression.id))) {
+    expression.focus_lexeme_ids = expression.focus_lexeme_ids.filter(focus => focus !== id);
+  }
+  const localPath = 'course/food_service/module06/lexeme/' + id;
+  const isLocalGap = issue => issue.code === 'exercise.module_unreachable' && issue.path === localPath;
+  const draftResult = audit(data);
+  assert.ok(draftResult.warnings.some(isLocalGap));
+  assert.equal(draftResult.errors.some(isLocalGap), false);
+  assert.equal([...draftResult.errors, ...draftResult.warnings].some(issue =>
+    ['exercise.phrase', 'exercise.unreachable'].includes(issue.code) && issue.path === 'lexeme/' + id), false);
+  const releaseResult = audit(data, true);
+  assert.ok(releaseResult.errors.some(isLocalGap));
+  assert.equal(releaseResult.warnings.some(isLocalGap), false);
+  target.status = 'ready';
+  const readyResult = audit(data);
+  assert.ok(readyResult.errors.some(isLocalGap));
+  assert.equal(readyResult.warnings.some(isLocalGap), false);
+});
+
+test('claimed integrated artwork requires provenance, visual review, and real matching bytes', () => {
+  const data = draft();
+  const asset = data.lexemes[0].media.image;
+  asset.status = 'integrated';
+  assert.ok(has(audit(data), 'media.provenance'));
+  assert.ok(has(audit(data), 'media.review'));
+  asset.path = 'res://data/professional/catalog.json';
+  asset.sha256 = '0'.repeat(64);
+  assert.ok(has(audit(data), 'media.hash'));
+  asset.path = 'res://assets/professional/does-not-exist.png';
+  assert.ok(has(audit(data), 'media.missing'));
+});
+
+test('resource references cannot escape the repository or use remote paths', () => {
+  for (const input of ['res://../outside.json', 'https://example.com/asset.png',
+    'res://C:/outside.json', 'res://data\\outside.json']) {
+    assert.throws(() => resourcePath(rootDir, input));
+  }
+});
+
+test('delivery references require a real immutable manifest and its hash', () => {
+  const data = draft();
+  pilot(data).media_manifest = {path: 'res://data/professional/media-manifests/missing.json', sha256: '0'.repeat(64)};
+  assert.ok(has(audit(data), 'delivery.missing'));
+  pilot(data).media_manifest.path = 'res://data/professional/../catalog.json';
+  assert.ok(has(audit(data), 'schema.invalid'));
+});
+
+test('module delivery includes theme artwork and exact immutable content paths', () => {
+  const fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'tesis-professional-content-'));
+  try {
+    const schemaDir = path.join(fixtureRoot, 'data/professional/schemas');
+    fs.mkdirSync(schemaDir, {recursive: true});
+    for (const file of fs.readdirSync(path.join(rootDir, 'data/professional/schemas'))) {
+      fs.copyFileSync(path.join(rootDir, 'data/professional/schemas', file), path.join(schemaDir, file));
+    }
+    const data = draft(), module = pilot(data), imageHash = '1'.repeat(64), audioHash = '2'.repeat(64), themeHash = '3'.repeat(64);
+    const setAsset = (asset, hash, format) => Object.assign(asset, {sha256: hash, path: 'res://professional-media/' + hash + '.' + format});
+    for (const entry of data.lexemes.filter(entry => module.lexeme_ids.includes(entry.id))) {
+      setAsset(entry.media.image, imageHash, 'png');
+      setAsset(entry.media.audio, audioHash, 'wav');
+    }
+    for (const entry of data.expressions.filter(entry => module.expression_ids.includes(entry.id))) setAsset(entry.media.audio, audioHash, 'wav');
+    for (const asset of Object.values(data.themes.find(theme => theme.course_id === 'retail').art)) setAsset(asset, themeHash, 'png');
+    for (const clip of data.themes.find(theme => theme.course_id === 'retail').ambient_motion.clips) {
+      if (clip && typeof clip === 'object' && clip.image) setAsset(clip.image, themeHash, 'png');
+    }
+    const imageResource = hash => ({id: 'sha256:' + hash, sha256: hash, path: 'professional-media/' + hash + '.png',
+      kind: 'image', format: 'png', compressed_bytes: 64, decoded_bytes: 8, width: 1, height: 1});
+    const manifest = {schema_version: 1, course_id: 'retail', module_id: 'module03', curriculum_revision: data.courses.find(course => course.id === 'retail').curriculum_revision,
+      resources: [imageResource(imageHash), {id: 'sha256:' + audioHash, sha256: audioHash,
+        path: 'professional-media/' + audioHash + '.wav', kind: 'audio', format: 'wav',
+        compressed_bytes: 64, decoded_bytes: 2, frames: 1, channels: 1, sample_rate: 22050}]};
+    const manifestPath = 'res://data/professional/media-manifests/test-retail.json';
+    const save = () => {
+      const file = resourcePath(fixtureRoot, manifestPath), bytes = Buffer.from(JSON.stringify(manifest));
+      fs.mkdirSync(path.dirname(file), {recursive: true});
+      fs.writeFileSync(file, bytes);
+      module.media_manifest = {path: manifestPath, sha256: crypto.createHash('sha256').update(bytes).digest('hex')};
+    };
+    const inspect = () => auditProfessionalContent({rootDir: fixtureRoot, data});
+    save();
+    const missingTheme = inspect();
+    assert.equal(has(missingTheme, 'delivery.path'), false, 'The fixture must pass manifest identity and shape validation.');
+    assert.ok(has(missingTheme, 'delivery.coverage'), 'Theme images must be included in the inventory.');
+    manifest.resources.push(imageResource(themeHash));
+    save();
+    const completeTheme = inspect();
+    assert.equal(has(completeTheme, 'delivery.path'), false, 'Adding the theme must retain a valid current manifest.');
+    assert.equal(has(completeTheme, 'delivery.coverage'), false);
+    data.lexemes.find(entry => module.lexeme_ids.includes(entry.id)).media.image.path = 'res://assets/wrong-path.png';
+    assert.ok(has(inspect(), 'delivery.coverage'), 'A matching hash cannot hide a mismatched immutable path.');
+  } finally {
+    assert.ok(fixtureRoot.startsWith(path.resolve(os.tmpdir()) + path.sep));
+    fs.rmSync(fixtureRoot, {recursive: true, force: true});
+  }
+});
+
+test('theme mapping and historical sound mappings remain explicit', () => {
+  const nursingAcceptance = JSON.parse(fs.readFileSync(path.join(rootDir,
+    'docs/assets/sources/innerscene-kenney-nursing-theme/theme-acceptance-2026-10-16.json'), 'utf8'));
+  assert.equal(nursingAcceptance.status, 'accepted_full_theme_art_and_native_presentation');
+  assert.equal(nursingAcceptance.no_curriculum_approval, true);
+  assert.deepEqual(source.themes.find(theme => theme.id === 'professional_nursing'), nursingAcceptance.profile);
+  for (const course of source.catalog.courses) {
+    const profile = source.themes.find(theme => theme.id === course.theme_id);
+    assert.equal(profile.course_id, course.id);
+    assert.equal(profile.status, ['retail', 'nursing'].includes(course.id) ? 'ready' : 'pending');
+    assert.ok(fs.existsSync(resourcePath(rootDir, profile.audio.music)));
+    assert.equal(profile.audio.interaction_bank, 'res://scripts/game_audio.gd');
+    assert.equal(profile.rewards.collection_namespace, 'existing');
+  }
+  const data = draft();
+  data.themes.find(theme => theme.course_id === 'retail').course_id = 'nursing';
+  assert.ok(has(audit(data), 'theme.mapping'));
+});
+
+test('schema contracts enforce counts, context shape, voice settings, and unknown fields', () => {
+  assert.deepEqual(schemaErrors({track: 'professional', course_id: 'retail', module_id: 'module03',
+    curriculum_revision: 'professional-v1', mode: 'word_jelly'}, 'learning-context'), []);
+  const data = draft();
+  data.lexemes[0].media.audio.voice_settings.pitch = '+0Hz';
+  data.courses[0].vocabulary_target = 50;
+  data.lexemes[0].min_age = 3;
+  assert.ok(has(audit(data), 'schema.invalid'));
+  const missingVoice = draft();
+  delete missingVoice.lexemes[0].media.audio.voice_settings;
+  assert.ok(has(audit(missingVoice), 'schema.invalid'));
+});
+
+
+{
+const data = source;
+const created = data.lexemes.filter(entry=>data.lexemeOrigins[entry.id].includes('office-admin-module')).map(entry=>entry.id);
+const reused = new Set(data.courses.find(course=>course.id==='office_admin').modules.slice(2).flatMap(module=>module.lexeme_ids).filter(id=>!data.lexemeOrigins[id].includes('office-admin-module')));
+const course = data.courses.find(course=>course.id==='office_admin');
+const entries = created.map(id=>data.lexemes.find(entry=>entry.id===id));
+const find = text=>entries.find(entry=>entry.text===text);
+test('Office Admin has exact distinct inventory and source links',()=>{
+  assert.equal(created.length,178);assert.equal(reused.size,222);
+  const ids=course.modules.flatMap(module=>module.lexeme_ids), expressions=course.modules.flatMap(module=>module.expression_ids);
+  assert.equal(ids.length,500);assert.equal(new Set(ids).size,500);
+  assert.equal(expressions.length,100);assert.equal(new Set(expressions).size,100);
+  for(const module of course.modules){
+    assert.equal(module.lexeme_ids.length,50);assert.equal(module.expression_ids.length,10);
+    assert.equal(module.status,'draft');
+    for(const id of module.lexeme_ids)assert.ok(module.lexeme_files.includes(data.lexemeOrigins[id]));
+    for(const id of module.expression_ids)assert.ok(module.expression_files.includes(data.expressionOrigins[id]));
+  }
+  assert.equal(auditProfessionalContent({data}).errors.length,0);
+});
+test('Office Admin separates noun and verb homographs while preserving regional alternatives',()=>{
+  for(const text of ['document','report']){
+    const senses=data.lexemes.filter(entry=>entry.text===text);
+    assert.equal(senses.length,2);assert.deepEqual(new Set(senses.map(entry=>entry.pos)),new Set(['verb','noun']));
+    assert.notEqual(senses[0].definition,senses[1].definition);
+  }
+  for(const[text,alternate]of [['copier','photocopier'],['memo','memorandum'],['extension lead','extension cord'],['cost center','cost centre'],['organization chart','organisation chart']]){
+    assert.ok(find(text).accepted_forms.includes(alternate));assert.equal(data.lexemes.some(entry=>entry.text===alternate),false);
+  }
+  assert.ok(course.modules[4].lexeme_ids.includes('document.make-care-record.v'));
+  assert.ok(course.modules[3].lexeme_ids.includes(find('document').id));
+  assert.equal(find('minute').pos,'verb');
+});
+test('Office Admin explicit morphology preserves spelling and ordered long terms',()=>{
+  assert.equal(entries.filter(entry=>entry.morphology).length,140);
+  assert.equal(entries.filter(entry=>!entry.morphology).length,38);
+  for(const entry of entries.filter(entry=>entry.morphology)){
+    assert.deepEqual(morphologyErrors(entry.morphology,entry),[]);
+    assert.equal(entry.morphology.review.status,'pending');
+    const surfaces=new Map(entry.morphology.parts.map(part=>[part.id,part.surface]));
+    for(const node of entry.morphology.nodes){
+      const separator=node.rule==='word_boundary'?' ':node.rule.startsWith('hyphenated_')?'-':'';
+      assert.equal(surfaces.get(node.left)+separator+surfaces.get(node.right),node.surface,entry.text+': '+node.rule);
+      surfaces.set(node.id,node.surface);
+    }
+  }
+  assert.deepEqual(find('copier').morphology.parts.map(part=>part.surface),['copi','er']);
+  assert.deepEqual(find('shredder').morphology.parts.map(part=>part.surface),['shredd','er']);
+  assert.deepEqual(find('out-of-office message').morphology.parts.map(part=>part.canonical),['out','of','office','message']);
+  assert.equal(find('photocopy').morphology.parts[0].type,'combining_form');
+  for(const text of ['ergonomics','contract','document','report','formula'])assert.equal(find(text).morphology,null);
+});
+test('Office Admin has authored scored routes without media readiness or domain-review bypass',()=>{
+  const fixture=structuredClone(data);
+  const invoice=fixture.lexemes.find(entry=>entry.text==='invoice');
+  const expression=fixture.expressions.find(entry=>entry.id==='expr.office_admin.module07.01');
+  for(const entry of [invoice,expression])entry.review={status:'reviewed',language:'reviewed',domain:'not_required',reviewer:'fixture',reviewed_at:'2026-10-16'};
+  const release=auditProfessionalContent({data:fixture,release:true}),ids=new Set(created);
+  assert.ok(release.errors.some(issue=>issue.code==='review.pending'&&issue.path==='lexeme/'+invoice.id));
+  assert.ok(release.errors.some(issue=>issue.code==='review.pending'&&issue.path==='expression/'+expression.id));
+  assert.equal(release.errors.some(issue=>issue.code==='exercise.unreachable'&&ids.has(issue.path.replace('lexeme/',''))),false);
+  assert.equal(release.errors.some(issue=>issue.code==='exercise.phrase'),false);
+  for(const entry of entries){assert.equal(entry.media.image.status,'pending');assert.equal(entry.media.image.picture_suitable,false);assert.equal(entry.media.image.path,null);assert.equal(entry.media.audio.status,'pending');assert.equal(entry.review.domain,'pending');}
+});
+test('Office Admin source limitations and authority distinctions remain explicit',()=>{
+  assert.match(data.sources.find(entry=>entry.id==='nara-records-scheduling').scope,/U.S. federal records/);
+  assert.match(data.sources.find(entry=>entry.id==='nara-records-scheduling').scope,/not universal/);
+  assert.match(data.sources.find(entry=>entry.id==='osha-computer-workstations').scope,/do not create new OSHA requirements/);
+  assert.match(data.sources.find(entry=>entry.id==='w3c-accessible-events').scope,/31 August 2022/);
+  assert.match(find('retention schedule').example,/applicable hold/);
+  assert.match(find('purchase approval').example,/does not confirm/);
+  assert.match(find('quorum').definition,/applicable rules/);
+  assert.ok(data.expressions.find(entry=>entry.id==='expr.office_admin.module08.04').text.includes('Do not post a password or one-time code'));
+});
+
+}
+
+{
+const data = source;
+const created = data.lexemes.filter(entry=>data.lexemeOrigins[entry.id].includes('warehouse-module')).map(entry=>entry.id);
+const reused = new Set(data.courses.find(course=>course.id==='warehouse_logistics').modules.slice(2).flatMap(module=>module.lexeme_ids).filter(id=>!data.lexemeOrigins[id].includes('warehouse-module')));
+const course=data.courses.find(course=>course.id==='warehouse_logistics');
+const entries=created.map(id=>data.lexemes.find(entry=>entry.id===id));
+const find=text=>entries.find(entry=>entry.text===text);
+
+test('Warehouse has exact distinct inventory and source links',()=>{
+  assert.equal(created.length,149);assert.equal(reused.size,251);
+  const ids=course.modules.flatMap(module=>module.lexeme_ids),expressions=course.modules.flatMap(module=>module.expression_ids);
+  assert.equal(ids.length,500);assert.equal(new Set(ids).size,500);
+  assert.equal(expressions.length,100);assert.equal(new Set(expressions).size,100);
+  for(const module of course.modules){
+    assert.equal(module.lexeme_ids.length,50);assert.equal(module.expression_ids.length,10);assert.equal(module.status,'draft');
+    for(const id of module.lexeme_ids)assert.ok(module.lexeme_files.includes(data.lexemeOrigins[id]));
+    for(const id of module.expression_ids)assert.ok(module.expression_files.includes(data.expressionOrigins[id]));
+  }
+  assert.equal(auditProfessionalContent({data}).errors.length,0);
+});
+
+test('Warehouse distinguishes physical goods and logistics senses without synonym padding',()=>{
+  const expected={package:['package.distributed-software-unit.n','package.wrapped-or-contained-goods-unit.n'],label:['label.attach-information.v','label.attached-information-marker.n'],seal:['seal.closure-strip.n','seal.close-package-with-specified-seal.v','seal.close-gap-against-passage.v'],release:['release.distributed-software-version.n','release.remove-controlled-hold-under-authority.v']};
+  for(const[text,ids]of Object.entries(expected)){
+    const senses=data.lexemes.filter(entry=>entry.text===text);
+    for(const id of ids)assert.equal(senses.filter(entry=>entry.id===id).length,1,id);
+    assert.equal(new Set(senses.map(entry=>entry.definition)).size,senses.length);
+  }
+  assert.equal(find('package').id,'package.wrapped-or-contained-goods-unit.n');
+  assert.equal(find('label').pos,'noun');assert.equal(find('seal').pos,'verb');assert.equal(find('release').pos,'verb');
+  assert.ok(course.modules[3].lexeme_ids.includes('seal.closure-strip.n'));
+  assert.ok(course.modules[4].lexeme_ids.includes('label.attach-information.v'));
+  assert.match(find('shipment').definition,/movement of goods/);
+  assert.match(find('inbound delivery').definition,/arrival of goods/);
+  assert.match(find('perpetual inventory').definition,/recording stock transactions/);
+  for(const text of ['book stock','reserved stock','count variance','pallet truck'])assert.equal(entries.some(entry=>entry.text===text),false);
+  for(const[text,alternate]of [['dock leveler','dock leveller'],['palletize','palletise'],['order fulfillment','order fulfilment'],['stock aging','stock ageing'],['transport management system','transportation management system']]){
+    assert.ok(find(text).accepted_forms.includes(alternate));assert.equal(data.lexemes.some(entry=>entry.text===alternate),false);
+  }
+});
+
+test('Warehouse morphology preserves genuine ordered constituents and spelling changes',()=>{
+  assert.equal(entries.filter(entry=>entry.morphology).length,137);
+  assert.equal(entries.filter(entry=>!entry.morphology).length,12);
+  for(const entry of entries.filter(entry=>entry.morphology)){
+    assert.deepEqual(morphologyErrors(entry.morphology,entry),[]);assert.equal(entry.morphology.review.status,'pending');
+    const surfaces=new Map(entry.morphology.parts.map(part=>[part.id,part.surface]));
+    for(const node of entry.morphology.nodes){
+      const separator=node.rule==='word_boundary'?' ':node.rule.startsWith('hyphenated_')?'-':'';
+      assert.equal(surfaces.get(node.left)+separator+surfaces.get(node.right),node.surface,entry.text+': '+node.rule);
+      surfaces.set(node.id,node.surface);
+    }
+  }
+  assert.deepEqual(find('carrier').morphology.parts.map(part=>part.surface),['carri','er']);
+  assert.deepEqual(find('depalletize').morphology.parts.map(part=>part.canonical),['de','pallet','ize']);
+  assert.deepEqual(find('cross-docking').morphology.parts.map(part=>part.canonical),['cross','dock','ing']);
+  assert.deepEqual(find('in-transit stock').morphology.parts.map(part=>part.canonical),['in','transit','stock']);
+  assert.deepEqual(find('warehouse management system').morphology.parts.map(part=>part.canonical),['ware','house','manage','ment','system']);
+  for(const text of ['mezzanine','package','release','courier','first expired, first out'])assert.equal(find(text).morphology,null);
+});
+
+test('Warehouse draft exercises have scored routes without claiming reviewed content or media',()=>{
+  const release=auditProfessionalContent({data,release:true}),ids=new Set(created);
+  assert.equal(release.errors.some(issue=>issue.code==='exercise.unreachable'&&ids.has(issue.path.replace('lexeme/',''))),false);
+  assert.equal(release.errors.some(issue=>issue.code==='exercise.phrase'),false);
+  assert.equal(release.summary.ready_modules,0);assert.equal(release.summary.release_ready,false);
+  for(const entry of entries){
+    assert.equal(entry.media.image.status,'pending');assert.equal(entry.media.image.picture_suitable,false);assert.equal(entry.media.image.path,null);
+    assert.equal(entry.media.audio.status,'pending');assert.equal(entry.review.domain,'pending');
+  }
+  for(const module of course.modules.slice(2)){
+    for(const id of module.lexeme_ids)assert.equal(data.lexemes.find(entry=>entry.id===id).review.domain,'pending');
+    for(const id of module.expression_ids)assert.equal(data.expressions.find(entry=>entry.id===id).review.domain,'pending');
+  }
+  const fixture=structuredClone(data);
+  const packageEntry=fixture.lexemes.find(entry=>entry.id==='package.wrapped-or-contained-goods-unit.n');
+  const expression=fixture.expressions.find(entry=>entry.id==='expr.warehouse_logistics.module04.01');
+  for(const entry of [packageEntry,expression])entry.review={status:'reviewed',language:'reviewed',domain:'not_required',reviewer:'fixture',reviewed_at:'2026-10-16'};
+  const bypass=auditProfessionalContent({data:fixture,release:true});
+  assert.ok(bypass.errors.some(issue=>issue.code==='review.pending'&&issue.path==='lexeme/'+packageEntry.id));
+  assert.ok(bypass.errors.some(issue=>issue.code==='review.pending'&&issue.path==='expression/'+expression.id));
+});
+
+test('Warehouse safety, source scope, and document limitations remain explicit',()=>{
+  assert.match(data.sources.find(entry=>entry.id==='bls-material-movers').scope,/occupations outside warehousing/);
+  assert.match(data.sources.find(entry=>entry.id==='osha-warehousing').scope,/31 July 2026/);
+  assert.match(data.sources.find(entry=>entry.id==='osha-warehousing').scope,/Linked standards and detailed hazard pages were not consulted/);
+  assert.match(data.sources.find(entry=>entry.id==='hse-warehousing').scope,/UK guidance context/);
+  assert.match(find('emergency stop').definition,/does not itself establish isolation/);
+  assert.match(find('isolation procedure').definition,/authorized qualified people/);
+  assert.match(find('maximum stock').media.image.brief,/distinguished from an equipment or storage load limit/);
+  assert.match(find('first expired, first out').definition,/eligible goods/);
+  assert.match(find('bill of lading').media.image.brief,/without legal claims/);
+  assert.match(find('proof of delivery').definition,/relevant service or process/);
+  assert.ok(data.expressions.find(entry=>entry.id==='expr.warehouse_logistics.module09.10').text.includes('Do not share a password'));
+});
+
+}
+
+{
+const data = source;
+const created = data.lexemes.filter(entry=>data.lexemeOrigins[entry.id].includes('hospitality-module')).map(entry=>entry.id);
+const reused = new Set(data.courses.find(course=>course.id==='hospitality_tourism').modules.slice(2).flatMap(module=>module.lexeme_ids).filter(id=>!data.lexemeOrigins[id].includes('hospitality-module')));
+const course=data.courses.find(course=>course.id==='hospitality_tourism');
+const entries=created.map(id=>data.lexemes.find(entry=>entry.id===id));
+const find=text=>entries.find(entry=>entry.text===text);
+
+test('Hospitality has exact distinct inventory and canonical source links',()=>{
+  assert.equal(created.length,177);assert.equal(reused.size,223);
+  const ids=course.modules.flatMap(module=>module.lexeme_ids),expressions=course.modules.flatMap(module=>module.expression_ids);
+  assert.equal(ids.length,500);assert.equal(new Set(ids).size,500);
+  assert.equal(expressions.length,100);assert.equal(new Set(expressions).size,100);
+  for(const module of course.modules){
+    assert.equal(module.lexeme_ids.length,50);assert.equal(module.expression_ids.length,10);assert.equal(module.status,'draft');
+    for(const id of module.lexeme_ids)assert.ok(module.lexeme_files.includes(data.lexemeOrigins[id]));
+    for(const id of module.expression_ids)assert.ok(module.expression_files.includes(data.expressionOrigins[id]));
+  }
+  assert.equal(auditProfessionalContent({data}).errors.length,0);
+  const iron=data.lexemes.filter(entry=>entry.text==='iron');
+  assert.equal(iron.length,2);assert.equal(find('iron').pos,'noun');assert.ok(iron.some(entry=>entry.pos==='verb'));
+  for(const text of ['no-show','walk-in','meal plan','kettle','remote control','recommendation']){
+    assert.equal(data.lexemes.filter(entry=>entry.text===text).length,1);
+    assert.ok(ids.includes(data.lexemes.find(entry=>entry.text===text).id));
+  }
+  assert.equal(entries.some(entry=>entry.text==='store luggage'),false);
+  for(const[text,alternate]of [['conference center','conference centre'],['car park','parking lot'],['hair dryer','hairdryer'],['preauthorization','pre-authorisation']]){
+    assert.ok(find(text).accepted_forms.includes(alternate));assert.equal(data.lexemes.some(entry=>entry.text===alternate),false);
+  }
+});
+
+test('Hospitality morphology preserves spelling, hyphens, and ordered constituents',()=>{
+  assert.equal(entries.filter(entry=>entry.morphology).length,148);
+  assert.equal(entries.filter(entry=>!entry.morphology).length,29);
+  for(const entry of entries.filter(entry=>entry.morphology)){
+    assert.deepEqual(morphologyErrors(entry.morphology,entry),[]);assert.equal(entry.morphology.review.status,acceptedMorphologyReviews.has(entry.id)?'reviewed':'pending');
+    if(acceptedMorphologyReviews.has(entry.id))assert.deepEqual(entry.morphology.review,acceptedMorphologyReviews.get(entry.id));
+    else if(entry.morphology.review.provenance)assert.equal(entry.morphology.review.source_consultation,'inherited_repository_record_not_newly_consulted_in_this_pass');
+    else assert.deepEqual(entry.morphology.review.references,[]);
+    const surfaces=new Map(entry.morphology.parts.map(part=>[part.id,part.surface]));
+    for(const node of entry.morphology.nodes){
+      const separator=node.rule==='word_boundary'?' ':node.rule.startsWith('hyphenated_')?'-':'';
+      assert.equal(surfaces.get(node.left)+separator+surfaces.get(node.right),node.surface,entry.text+': '+node.rule);
+      surfaces.set(node.id,node.surface);
+    }
+  }
+  assert.deepEqual(find('preauthorization').morphology.parts.map(part=>part.canonical),['pre','authorize','ation']);
+  assert.deepEqual(find('preauthorization').morphology.parts.map(part=>part.surface),['pre','authoriz','ation']);
+  assert.deepEqual(find('toiletries').morphology.parts.map(part=>part.surface),['toiletri','es']);
+  assert.deepEqual(find('non-smoking room').morphology.parts.map(part=>part.canonical),['non','smoke','ing','room']);
+  assert.deepEqual(find('do-not-disturb sign').morphology.parts.map(part=>part.canonical),['do','not','disturb','sign']);
+  assert.deepEqual(find('front-desk agent').morphology.parts.map(part=>part.canonical),['front','desk','agent']);
+  assert.deepEqual(find('overbooking').morphology.parts.map(part=>part.canonical),['over','book','ing']);
+  for(const text of ['hotel','motel','suite','thermostat','welcome','occupancy','concierge'])assert.equal(find(text).morphology,null);
+  assert.equal(find('passport').morphology.review.status,'pending');
+});
+
+test('Hospitality expressions assess real same-module terms and every new sense has a scored route',()=>{
+  const release=auditProfessionalContent({data,release:true}),ids=new Set(created);
+  assert.equal(release.errors.some(issue=>issue.code==='exercise.unreachable'&&ids.has(issue.path.replace('lexeme/',''))),false);
+  assert.equal(release.errors.some(issue=>issue.code==='exercise.phrase'),false);
+  for(const module of course.modules.slice(2)){
+    for(const id of module.expression_ids){
+      const expression=data.expressions.find(entry=>entry.id===id);
+      for(const focusId of expression.focus_lexeme_ids){
+        assert.ok(module.lexeme_ids.includes(focusId));
+        const entry=data.lexemes.find(entry=>entry.id===focusId);
+        assert.ok(entry.accepted_forms.some(form=>expression.text.toLowerCase().includes(form.toLowerCase())),expression.id+': '+entry.text);
+      }
+      for(const token of expression.tokens)assert.equal([...expression.text].slice(token.start,token.end).join(''),token.text);
+    }
+  }
+});
+
+test('Hospitality specialist reviews and media remain mandatory outside the safety module',()=>{
+  const release=auditProfessionalContent({data,release:true});
+  assert.equal(release.summary.ready_modules,0);assert.equal(release.summary.release_ready,false);
+  for(const entry of entries){
+    assert.equal(entry.media.image.status,'pending');assert.equal(entry.media.image.picture_suitable,false);assert.equal(entry.media.image.path,null);
+    assert.equal(entry.media.audio.status,'pending');assert.equal(entry.review.domain,'pending');
+  }
+  for(const module of course.modules.slice(2)){
+    for(const id of module.lexeme_ids)assert.equal(data.lexemes.find(entry=>entry.id===id).review.domain,'pending');
+    for(const id of module.expression_ids)assert.equal(data.expressions.find(entry=>entry.id===id).review.domain,'pending');
+  }
+  const fixture=structuredClone(data);
+  const hotel=fixture.lexemes.find(entry=>entry.id===find('hotel').id);
+  const expression=fixture.expressions.find(entry=>entry.id==='expr.hospitality_tourism.module03.01');
+  for(const entry of [hotel,expression])entry.review={status:'reviewed',language:'reviewed',domain:'not_required',reviewer:'fixture',reviewed_at:'2026-10-16'};
+  const bypass=auditProfessionalContent({data:fixture,release:true});
+  assert.ok(bypass.errors.some(issue=>issue.code==='review.pending'&&issue.path==='lexeme/'+hotel.id));
+  assert.ok(bypass.errors.some(issue=>issue.code==='review.pending'&&issue.path==='expression/'+expression.id));
+});
+
+test('Hospitality keeps guest-service meanings and research limits explicit',()=>{
+  assert.match(find('accessible room').definition,/individual requirements/);
+  assert.match(find('nonrefundable rate').definition,/applicable law and other relevant rights/);
+  assert.match(find('preauthorization').definition,/temporary authorization hold/);
+  assert.match(find('preauthorization').example,/different from a completed payment/);
+  assert.match(find('security deposit').definition,/held against specified possible costs/);
+  assert.match(find('guest folio').definition,/account record/);
+  assert.match(find('all-inclusive').definition,/defined range/);
+  assert.match(find('assistance dog').definition,/varying by jurisdiction/);
+  assert.match(find('passport').media.image.brief,/without.*entry-permission claims/);
+  assert.match(data.sources.find(entry=>entry.id==='bls-lodging-managers').scope,/not a population estimate for all hospitality workers/);
+  assert.match(data.sources.find(entry=>entry.id==='visitengland-accessible-tourism').scope,/were not acquired or reviewed/);
+  assert.match(data.sources.find(entry=>entry.id==='hse-hospitality-getting-started').scope,/UK context only/);
+  assert.match(data.sources.find(entry=>entry.id==='ada-lodging-low-vision').scope,/24 February 2020/);
+  assert.match(data.sources.find(entry=>entry.id==='ada-lodging-low-vision').scope,/adds no independent enforceable obligations/);
+  assert.ok(data.expressions.find(entry=>entry.id==='expr.hospitality_tourism.module07.09').text.includes('relevant official authority'));
+  assert.ok(data.expressions.find(entry=>entry.id==='expr.hospitality_tourism.module09.10').text.includes('Do not share a password'));
+});
+
+}
+
+
+{
+const foundationIds=new Set(source.courses[0].modules.slice(0,2).flatMap(module=>module.lexeme_ids));
+const foundation=source.lexemes.filter(entry=>foundationIds.has(entry.id));
+const foundationExpressions=source.expressions.filter(entry=>entry.id.startsWith('expr.foundation.'));
+const word=text=>foundation.find(entry=>entry.text===text);
+const expression=id=>foundationExpressions.find(entry=>entry.id==='expr.foundation.'+id);
+const added=['colleague','department','visitor','update','email','extension','permission','responsibility','signature','request','clarification','repeat','explain','confirm','postpone','resolve','approve','reject','broken','urgent','solution','procedure'];
+
+test('Foundation assesses every sense and keeps contextual focus identities and token offsets',()=>{
+  const release=auditProfessionalContent({data:source,release:true});
+  assert.equal(foundation.length,100);assert.equal(foundationExpressions.length,20);
+  assert.equal(release.errors.some(issue=>issue.code==='exercise.unreachable'&&foundationIds.has(issue.path.replace('lexeme/',''))),false);
+  assert.equal(release.errors.some(issue=>issue.code==='exercise.phrase'),false);
+  for(const module of source.courses[0].modules.slice(0,2))for(const id of module.expression_ids){
+    const entry=foundationExpressions.find(item=>item.id===id);
+    for(const focusId of entry.focus_lexeme_ids){
+      assert.ok(module.lexeme_ids.includes(focusId));
+      const focus=foundation.find(item=>item.id===focusId);
+      assert.ok(focus.accepted_forms.some(form=>entry.text.toLowerCase().includes(form.toLowerCase())),entry.id+': '+focus.text);
+    }
+    for(const token of entry.tokens)assert.equal([...entry.text].slice(token.start,token.end).join(''),token.text);
+  }
+  assert.ok(expression('module01.07').focus_lexeme_ids.includes('contact.helpful-person.n'));
+  assert.ok(expression('module02.02').focus_lexeme_ids.includes('contact.communicate-with.v'));
+  assert.match(expression('module01.02').text,/shift includes a break/);
+  assert.match(expression('module02.05').text,/proposed solution/);
+  assert.match(expression('module02.08').text,/collect one form from each team/);
+  assert.match(expression('module02.09').text,/report the unsafe area and ask for a safe route/);
+});
+
+
+test('Foundation allomorphs and classical roots remain explicit instead of syllable cuts',()=>{
+  // Preserve the delivery-era Foundation02 teaching assertions; current full bases have separate coverage.
+  const word = text => foundation02HistoryLexemes.find(entry => foundationIds.has(entry.id) && entry.text === text);
+  const parts=text=>word(text).morphology.parts;
+  assert.deepEqual(parts('email').map(part=>part.type),['abbreviation','stem']);
+  assert.deepEqual(parts('extension').map(part=>part.surface),['extension']);
+  assert.deepEqual(parts('permission').map(part=>part.surface),['permit','ion']);
+  assert.deepEqual(parts('responsibility').map(part=>part.canonical),['responsible','-ity']);
+  assert.deepEqual(parts('signature').map(part=>part.surface),['sign','ate','ure']);
+  assert.deepEqual(parts('clarification').map(part=>part.surface),['clarific','ation']);
+  assert.deepEqual(parts('confirm').map(part=>part.canonical),['com','firm']);
+  assert.deepEqual(parts('ensure').map(part=>part.surface),['en','sure']);
+  assert.deepEqual(parts('broken').map(part=>part.surface),['brok','en']);
+  assert.deepEqual(parts('solution').map(part=>part.surface),['solut','ion']);
+  assert.equal(parts('postpone')[1].type,'root');assert.equal(parts('reject')[1].type,'root');
+  assert.match(word('resolve').morphology.review.notes,/must not be explained as simply solving again/);
+  for(const text of ['colleague','department','request','repeat','explain','inform','approve','urgent','procedure'])assert.equal(word(text).morphology.kind,'atomic');
+});
+
+test('Foundation editorial distinctions and reviewed-media gates survive the route repair',()=>{
+  assert.equal(word('repeat').id,'repeat.say-again.v');assert.equal(word('repeat').definition,'To say something again.');
+  assert.match(word('priority').definition,/compared with other things/);
+  assert.equal(word('complete').definition,'To bring a piece of work or an activity to its end.');
+  assert.doesNotMatch(word('collect').definition,/stated purpose/);
+  assert.match(word('supplier').media.image.brief,/commercial provider relationship/);
+  assert.match(word('attendance').media.image.brief,/concept is being present/);
+  assert.match(word('signature').media.image.brief,/completed name as the focus/);
+  assert.match(word('time zone').media.image.brief,/one explicit date/);
+  for(const entry of foundation){
+    assert.equal(entry.review.status,foundationLanguageAcceptedIds.has(entry.id)?'reviewed':'pending');assert.equal(entry.review.language,'reviewed');assert.equal(entry.media.image.status,'pending');assert.equal(entry.media.image.path,null);
+    assert.equal(entry.media.audio.status,'pending');assert.equal(entry.media.audio.voice,'ava-sweet');
+    assert.deepEqual(entry.media.audio.voice_settings,{voice:'en-US-AvaNeural',rate:'-15%',pitch:'+8Hz',volume:'+0%',postprocessing:false});
+  }
+  const release=auditProfessionalContent({data:source,release:true});
+  assert.equal(release.summary.ready_modules,0);assert.equal(release.summary.morphology_reviewed,acceptedMorphologyReviews.size);assert.equal(release.summary.release_ready,false);
+});
+}
+
+
+test('Cleaning preserves physical actions, fixture senses, soiling, and canonical record sharing',()=>{
+ const selected=new Set(source.courses.find(course=>course.id==='cleaning_facilities').modules.flatMap(module=>module.lexeme_ids));
+ for(const id of ['move.change-physical-position-or-location-of-item.v','push.apply-force-to-move-object-away.v','pull.apply-force-to-draw-object-toward-source.v','urinal.fixed-sanitary-fixture-for-urination.n','drain.opening-or-channel-carrying-away-waste-water.n','dust.remove-dust-from-surface.v','refill.fill-container-again.v','dry.free-from-noticeable-moisture.a','facial-tissue.soft-disposable-paper-for-wiping-face-or-nose.n'])assert.ok(selected.has(id),id);
+ for(const id of ['move.relocate-digital-item.v','push.send-version-control-changes.v','pull.retrieve-and-integrate-changes.v','urinal.toileting-vessel.n','refill.replacement-contents.n','tissue.body-cell-organization.n'])assert.ok(!selected.has(id),id);
+ for(const id of ['data-accuracy.extent-to-which-recorded-data-correctly-represents-facts.n','spare-part.replacement-component.n','service-standard.expected-service-quality.n','estimated-time-of-arrival.predicted-clock-time-of-reaching-destination.n','filter.result-limiting-control.n','capacity.available-work-capability.n','dependency.prerequisite-task-or-condition.n']){assert.ok(selected.has(id),id);assert.ok(!source.lexemeOrigins[id].includes('/cleaning-'),id);}
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/cleaning-'));
+ assert.equal(find('grease').id,'grease.unwanted-oily-or-fatty-soiling-on-surface.n');assert.equal(find('grease').definition,'Unwanted oily or fatty material that soils a surface.');
+ assert.equal(find('accessible').definition,'Able to be reached, entered, or used.');assert.match(find('window').definition,/often fitted with glass/);assert.equal(find('fragrance').example,'The product has a strong fragrance.');
+ assert.match(find('soak').example,/staff may soak the item/);assert.match(find('separate').example,/staff separate these materials/);assert.equal(find('dry').example,'The surface appears dry, but the record still needs review.');
+ assert.ok(!find('record accuracy'));assert.ok(!find('replacement part'));assert.ok(!find('cleaning standard'));
+ assert.match(source.expressions.find(entry=>entry.id==='expr.cleaning_facilities.module09.01').text,/quantity of this consumable in inventory differs from the recorded stock level/);
+ assert.match(source.expressions.find(entry=>entry.id==='expr.cleaning_facilities.module09.09').text,/data accuracy/);
+});
+
+test('Cleaning keeps authored spelling, regional waste scope, and consulted-source limits explicit',()=>{
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/cleaning-'));
+ assert.deepEqual(find('floor scrubber').morphology.parts.map(part=>[part.canonical,part.surface]),[['floor','floor'],['scrub','scrubb'],['er','er']]);
+ assert.equal(find('occupied').morphology.nodes[0].rule,'y_to_i_before_suffix');assert.equal(find('QR code').morphology.parts[0].canonical_id,'abbr.qr');
+ for(const text of ['squeegee','detergent','fragrance','premises','maintenance','dermatitis'])assert.equal(find(text).morphology,null,text);
+ assert.deepEqual(find('waste transfer note').regions,['UK']);assert.match(find('waste transfer note').definition,/non-hazardous business waste/);assert.match(find('recyclable material').definition,/subject to available arrangements/);assert.match(find('spotless').example,/does not prove disinfection/);
+ const sources=new Map(source.sources.filter(entry=>entry.id.startsWith('cleaning-')).map(entry=>[entry.id,entry]));assert.equal(sources.size,8);
+ assert.match(sources.get('cleaning-cdc-home-definitions').scope,/Household context is not a workplace or healthcare standard/);assert.match(sources.get('cleaning-hse-risk-topics').scope,/linked detailed guidance was not read/);assert.match(sources.get('cleaning-osha-hazcom').scope,/Full linked standards/);assert.match(sources.get('cleaning-gov-waste-transfer').scope,/regional legal duties are not taught/);assert.match(sources.get('cleaning-epa-recycling').scope,/local collection programs may accept different materials/);
+ for(const entry of sources.values()){assert.equal(entry.status,'consulted');assert.equal(entry.assets_acquired,false);assert.equal(entry.asset_license,null);}
+});
+
+
+test('Manufacturing preserves shared identities and explicit equipment breakdown clarification',()=>{
+ const ids=new Set(source.courses.find(course=>course.id==='manufacturing_maintenance').modules.flatMap(module=>module.lexeme_ids));
+ for(const id of ['asset-number.identifier-assigned-to-managed-asset.n','service-record.record-of-service-work-performed.n','breakdown.vehicle-failure-preventing-normal-operation.n','escalation-path.route-to-appropriate-further-review.n','owner.task-responsible-person.n','throughput.completed-work-rate.n','maintenance.care-and-work-to-keep-asset-in-required-condition.n','stainless-steel.steel-alloy-formulated-to-resist-corrosion.n','polish.rub-or-treat-surface-to-improve-smoothness-or-shine.v']){assert.ok(ids.has(id),id);assert.ok(!source.lexemeOrigins[id].includes('/manufacturing-'),id);}
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/manufacturing-'));
+ for(const text of ['equipment identifier','service report','equipment breakdown','escalation route','action owner','action deadline','production rate'])assert.ok(!find(text),text);
+ const breakdown=source.lexemes.find(entry=>entry.id==='breakdown.vehicle-failure-preventing-normal-operation.n');assert.equal(breakdown.definition,'A failure that prevents a vehicle or other equipment from operating normally.');assert.equal(breakdown.example,'The breakdown has been reported to the dispatcher.');assert.ok(source.lexemeOrigins[breakdown.id].includes('/transport-'));
+ assert.match(find('line balancing').definition,/allocation of work across production stations/);assert.match(find('standardization').definition,/consistent agreed requirements or methods/);
+ assert.equal(find('grease').id,'grease.semisolid-lubricant.n');assert.ok(!ids.has('grease.unwanted-oily-or-fatty-soiling-on-surface.n'));assert.equal(find('filter').id,'filter.device-removing-unwanted-material-from-fluid.n');assert.ok(!ids.has('filter.result-limiting-control.n'));
+ assert.match(find('industrial robot').definition,/reprogrammable mechanical manipulator/);assert.match(find('casting').definition,/pouring material into a mold/);assert.match(find('forging').definition,/shaping solid metal/);
+ assert.deepEqual(find('imbalance').morphology.parts.map(part=>[part.canonical,part.surface]),[['in','im'],['balance','balance']]);assert.equal(find('imbalance').morphology.nodes[0].rule,'in_to_im_before_b');
+ assert.deepEqual(find('standardization').morphology.parts.map(part=>[part.canonical,part.surface]),[['standardize','standardiz'],['ation','ation']]);
+});
+
+test('Manufacturing retains measurement, investigation, energy-control, and source-scope distinctions',()=>{
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/manufacturing-'));
+ assert.match(find('calibrate').definition,/relationship.*indications.*reference values/);assert.ok(!/adjust/.test(find('calibrate').definition));assert.match(find('control chart').definition,/statistically derived control limits/);assert.match(find('five whys').definition,/number of questions depending/);
+ assert.match(find('tagout').media.image.brief,/do not imply a tag physically restrains/);assert.match(find('emergency stop button').media.image.brief,/avoid implying.*isolates all energy/);assert.match(find('return to service').definition,/required checks and release under applicable arrangements/);
+ const expressions=source.expressions.filter(entry=>entry.id.startsWith('expr.manufacturing_maintenance.module'));for(const expression of expressions)assert.ok(expression.text.split(/\s+/).length<=27,expression.id);
+ assert.match(expressions.find(entry=>entry.id==='expr.manufacturing_maintenance.module06.03').text,/output accepted after rework/);
+ for(const text of ['maintain','service','lubricate','calibrate','bearing','filter','overhaul','kanban','micrometer'])assert.equal(find(text).morphology,null,text);
+ const sources=new Map(source.sources.filter(entry=>entry.id.startsWith('manufacturing-')).map(entry=>[entry.id,entry]));assert.equal(sources.size,8);assert.match(sources.get('manufacturing-osha-hazardous-energy').scope,/Linked standards, fact sheets, and procedures were not reviewed/);assert.match(sources.get('manufacturing-nist-process-improvement').scope,/statistical methods.*were not reviewed/);
+ for(const source of sources.values()){assert.equal(source.status,'consulted');assert.equal(source.assets_acquired,false);assert.equal(source.asset_license,null);}
+});
+
+
+test('Sales preserves canonical sharing and its explicit product-feature and measuring amendments',()=>{
+ const course=source.courses.find(course=>course.id==='sales_marketing'),ids=new Set(course.modules.flatMap(module=>module.lexeme_ids));
+ for(const id of ['feature.software-capability.n','measure.find-dimensions.v','sample-size.number-of-items-or-observations-in-sample.n','lessons-learned.insights-from-experience-for-future-work.n','owner.task-responsible-person.n','dashboard.information-display.n','specification.detailed-system-description.n','complaint.expression-of-dissatisfaction.n','version-history.record-of-document-changes.n','promotional-code.offer-activation-code.n'])assert.ok(ids.has(id),id);
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/sales-'));
+ for(const text of ['campaign owner','sales dashboard','campaign budget','sales quota','status update','turnaround time','customer complaint','promotion code'])assert.ok(!find(text),text);
+ const feature=source.lexemes.find(entry=>entry.id==='feature.software-capability.n'),measure=source.lexemes.find(entry=>entry.id==='measure.find-dimensions.v');
+ assert.equal(feature.definition,'A distinct characteristic or capability of a product, service, or system.');assert.equal(measure.definition,'To determine the size, amount, or degree of something using an appropriate method or instrument.');assert.ok(!source.lexemeOrigins[feature.id].includes('/sales-'));assert.ok(!source.lexemeOrigins[measure.id].includes('/sales-'));
+ for(const [text,id]of Object.entries({benefit:'benefit.helpful-result-for-person-using-offering.n',qualification:'qualification.limitation-or-condition-that-narrows-statement.n',referral:'referral.introduction-of-potential-customer-by-another-person.n',copy:'copy.written-text-prepared-for-publication-or-promotion.n',chart:'chart.visual-display-of-data-or-relationships.n',table:'table.information-arranged-in-rows-and-columns.n'})){assert.equal(find(text).id,id);assert.ok(ids.has(id));}
+ assert.match(find('demand').definition,/willingness and ability/);assert.match(find('impression').definition,/display/);assert.match(find('reach').definition,/distinct people/);assert.match(find('conversion').definition,/defined desired action/);assert.match(find('return on advertising spend').definition,/Revenue attributed/);
+ assert.ok(ids.has('conversion-rate.visitor-purchase-proportion.n'));assert.match(source.expressions.find(entry=>entry.id==='expr.sales_marketing.module07.06').text,/count purchases/);assert.match(source.expressions.find(entry=>entry.id==='expr.sales_marketing.module09.08').text,/does not establish overall profit/);
+});
+
+test('Sales retains scoped research, variant identities, morphology and literal expression focus',()=>{
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/sales-'));
+ for(const [text,form]of [['catalog','catalogue'],['analyze','analyse'],['personalize','personalise'],['image license','image licence'],['business-to-business','B2B'],['key performance indicator','KPI']])assert.ok(find(text).accepted_forms.includes(form));
+ assert.equal(find('A/B test').morphology.parts[0].type,'abbreviation');assert.ok(find('cross-selling').morphology.nodes.some(node=>node.rule==='hyphenated_compound'));assert.ok(find('measurable').morphology.nodes.some(node=>node.rule==='drop_final_e_before_suffix'));assert.equal(find('business-to-business').morphology,null);
+ const course=source.courses.find(course=>course.id==='sales_marketing');for(const module of course.modules.slice(2))for(const id of module.expression_ids){const entry=source.expressions.find(item=>item.id===id);assert.ok(entry.text.split(/\s+/).length<=28,id);for(const focus of entry.focus_lexeme_ids){assert.ok(module.lexeme_ids.includes(focus));assert.ok(entry.text.toLowerCase().includes(source.lexemes.find(item=>item.id===focus).text.toLowerCase()));}}
+ const sources=new Map(source.sources.filter(entry=>entry.id.startsWith('sales-')).map(entry=>[entry.id,entry]));assert.equal(sources.size,8);assert.match(sources.get('sales-ftc-advertising-basics').scope,/Linked detailed guides were not opened/);assert.match(sources.get('sales-asa-misleading-advertising').scope,/not generalized as global law/);assert.match(sources.get('sales-google-impressions').scope,/does not establish all platforms/);for(const entry of sources.values()){assert.equal(entry.status,'consulted');assert.equal(entry.assets_acquired,false);assert.equal(entry.asset_license,null);}
+});
+
+
+test('Clinical reuses care meanings, distinguishes homographs and keeps corrected morphology explicit',()=>{
+ const course=source.courses.find(course=>course.id==='clinical_medicine'),ids=new Set(course.modules.slice(2).flatMap(module=>module.lexeme_ids)),find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/clinical-'));
+ for(const id of ['cell.basic-living-unit.n','joint.bone-meeting-structure.n','assess.evaluate-care-information.v','document.make-care-record.v','symptom.person-experienced-health-change.n','sign.observable-clinical-finding.n','capacity.decision-making-ability.n','protocol.specified-clinical-process.n','interpreter.spoken-language-communication-professional.n','referral.request-for-other-service-assessment.n','care-preference.person-preferred-care-approach.n','outcome.result-of-care-or-condition-course.n','intake.recorded-consumption-or-input.n','acknowledgment.recognition-of-message-or-concern.n','visit-record.account-of-support-visit.n'])assert.ok(ids.has(id),id);
+ for(const id of ['cell.single-spreadsheet-space.n','joint.building-connection.n','assess.evaluate-evidence-of-learning.v','symptom.technical-problem-sign.n','capacity.available-work-capability.n','protocol.communication-rules.n','interpreter.execution-program.n','referral.introduction-of-potential-customer-by-another-person.n','diagnose.identify-technical-cause.v'])assert.ok(!ids.has(id),id);
+ for(const text of ['patient preference','health outcome','alcohol intake','result acknowledgment','encounter record'])assert.ok(!find(text),text);
+ assert.match(find('diagnose').definition,/health condition/);assert.match(find('benign').definition,/does not mean incapable of causing harm/);assert.match(find('stable').definition,/respect and period/);assert.match(find('radiation').definition,/spread of pain/);assert.match(find('culture').definition,/microorganisms/);
+ assert.equal(find('endoscopy').morphology.parts[0].type,'prefix');assert.equal(find('endoscopy').morphology.parts[1].canonical,'scopy');assert.equal(find('endoscopy').morphology.parts[1].type,'suffix');assert.equal(find('X-ray').morphology,null);assert.ok(source.expressions.find(entry=>entry.id==='expr.clinical_medicine.module07.06').focus_lexeme_ids.includes(find('X-ray').id));
+ for(const text of ['otoscope','ophthalmoscope','dermatoscope'])assert.ok(find(text).morphology.review.references.includes('clinical-medline-word-parts'));
+ for(const [text,abbr]of [['ECG machine','ECG'],['CT scan','CT'],['MRI scan','MRI']]){assert.equal(find(text).morphology.parts[0].type,'abbreviation');assert.equal(find(text).morphology.parts[0].surface,abbr);}
+ assert.equal(find('cardiologist').morphology,null);assert.equal(find('electrocardiogram').morphology,null);
+});
+
+test('Clinical preserves consent and test interpretation limits, variants and source boundaries',()=>{
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/clinical-')),expression=id=>source.expressions.find(entry=>entry.id==='expr.clinical_medicine.'+id);
+ assert.match(find('ECG machine').definition,/device/);assert.match(find('electrocardiogram').definition,/recording/);assert.match(find('sensitivity').definition,/with the target condition/);assert.match(find('specificity').definition,/without the target condition/);assert.match(find('false positive').definition,/condition is absent/);assert.match(find('false negative').definition,/condition is present/);assert.match(find('predictive value').definition,/stated population/);
+ assert.match(expression('module08.01').text,/particular decision at a particular time/);assert.match(expression('module09.05').text,/does not by itself establish valid agreement/);assert.match(expression('module07.05').text,/needs clinical context/);assert.match(expression('module09.10').text,/only confirms that the message was received/);
+ for(const [text,form]of [['esophagus','oesophagus'],['hemoglobin','haemoglobin'],['pediatrician','paediatrician'],['gynecologist','gynaecologist'],['anesthesiologist','anaesthesiologist']])assert.ok(find(text).accepted_forms.includes(form));assert.ok(!find('anesthesiologist').accepted_forms.includes('anesthetist'));
+ const sources=new Map(source.sources.filter(entry=>entry.id.startsWith('clinical-')).map(entry=>[entry.id,entry]));assert.equal(sources.size,9);assert.match(sources.get('clinical-nhs-consent-overview').scope,/overdue 2025/);assert.match(sources.get('clinical-gmc-consent-principles').scope,/No universal capacity test/);assert.match(sources.get('clinical-medline-lab-results').scope,/no normal ranges/);for(const entry of sources.values()){assert.equal(entry.assets_acquired,false);assert.equal(entry.asset_license,null);}
+});
+
+
+test('Accounting preserves corrected canonical sharing, financial homographs and shared action meanings',()=>{
+ const course=source.courses.find(course=>course.id==='accounting_finance'),ids=new Set(course.modules.slice(2).flatMap(module=>module.lexeme_ids));
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/accounting-'));
+ for(const id of ['categorize.place-in-defined-group.v','goods-receipt.record-of-goods-received.n','reference-number.record-reference-code.n','sample.selected-observation-subset.n','scope-of-work.defined-work-included-in-project-or-arrangement.n','scanner.document-device.n','invoice.commercial-document-itemizing-amounts-due.n','deposit.advance-part-payment.n','receipt.purchase-record.n','budget.plan-for-available-income-and-spending.n','evidence.information-used-to-consider-whether-claim-is-supported.n','owner.task-responsible-person.n','filter.result-limiting-control.n','vat.value-added-tax.n','installment.scheduled-part-payment.n'])assert.ok(ids.has(id),id);
+ for(const text of ['classify','goods received note','payment reference','document reference','interest charge','annual budget','audit sample','audit scope','payment arrangement','add','document scanner','purchase invoice','sales invoice','advance payment','expense receipt','budget plan','supporting evidence','process owner','status update','report filter','value-added tax','goods and services tax'])assert.ok(!find(text),text);
+ for(const[text,id]of Object.entries({safe:'safe.secure-lockable-container-for-valuables.n',asset:'asset.resource-or-right-with-economic-value.n',check:'check.written-order-directing-bank-to-pay-specified-amount.n',balance:'balance.determine-or-check-accounting-totals-and-difference.v',invoice:'invoice.issue-invoice-to-request-payment.v',transfer:'transfer.move-funds-between-accounts-or-parties.v',deposit:'deposit.put-money-into-account.v',withdraw:'withdraw.take-money-out-of-account.v',budget:'budget.plan-available-funds-and-intended-spending.v'})){assert.equal(find(text).id,id);assert.ok(ids.has(id));}
+ for(const id of ['asset.physical-resource-managed-by-organization.n','balance.ability-to-maintain-stability.n','transaction.database-work-unit.n','monitor.follow-condition-over-time.v','progress-report.summary-of-development-toward-learning-goals.n'])assert.ok(!ids.has(id),id);
+ for(const[id,definition]of Object.entries({'allocate.assign-stock-to-specified-demand.v':'To assign available resources to a specified purpose, order or demand under the relevant arrangements.','receive.take-delivery-of-incoming-goods.v':'To take or accept something that is sent, given or delivered.','retain.keep-person-in-employment-or-organization.v':'To keep someone or something rather than lose, release or give them up.','trace.follow-execution-path.v':'To follow a path or sequence to understand its origin, movement or behavior.'})){const entry=source.lexemes.find(entry=>entry.id===id);assert.ok(ids.has(id));assert.equal(entry.definition,definition);assert.ok(!source.lexemeOrigins[id].includes('/accounting-'));}
+});
+
+test('Accounting keeps financial concepts, uncertain analysis and contextual evidence distinct',()=>{
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/accounting-')),expression=id=>source.expressions.find(entry=>entry.id==='expr.accounting_finance.'+id);
+ for(const term of ['debit','credit'])assert.match(find(term).definition,/effect depends on the type of account/);
+ assert.match(find('profit').definition,/income over expenses/);assert.match(find('cash flow').definition,/cash equivalents/);assert.match(find('amortize').definition,/intangible asset/);assert.doesNotMatch(find('amortize').definition,/debt/);assert.match(find('amortization schedule').definition,/intangible asset/);assert.match(find('loan schedule').definition,/loan balances/);
+ assert.match(find('opportunity cost').definition,/best available alternative/);assert.match(find('overdraft').definition,/available funds are insufficient/);assert.match(find('value date').definition,/reference for account interest/);assert.match(find('input tax').definition,/whether it can be recovered depends/);assert.match(find('faithful representation').definition,/description and preparation/);
+ assert.match(expression('module09.03').text,/does not prove/);assert.match(expression('module10.10').text,/should not be read as the cash balance/);
+ for(const text of ['consolidate','overdraft','solvency','debit','amortize'])assert.equal(find(text).morphology,null);
+ assert.ok(expression('module05.06').focus_lexeme_ids.includes(find('consolidate').id));assert.ok(expression('module06.07').focus_lexeme_ids.includes(find('overdraft').id));assert.ok(expression('module06.03').focus_lexeme_ids.includes('reference-number.record-reference-code.n'));assert.ok(expression('module10.03').focus_lexeme_ids.includes('sample.selected-observation-subset.n'));
+ assert.ok(find('receivable').morphology.nodes.some(node=>node.rule==='drop_final_e_before_suffix'));assert.ok(find('unreconciled').morphology.parts.some(part=>part.canonical==='un'&&part.type==='prefix'));assert.ok(find('statement of changes in equity').morphology.nodes.every(node=>node.rule==='word_boundary'));assert.ok(find('month-end close').morphology.nodes.some(node=>node.rule==='hyphenated_compound'));
+});
+
+test('Accounting retains regional variants and actual source scope without media or framework approval',()=>{
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/accounting-'));
+ for(const[text,form]of [['check','cheque'],['checkbook','chequebook'],['amortize','amortise'],['aging report','ageing report'],['profit center','profit centre'],['enterprise resource planning','ERP']])assert.ok(find(text).accepted_forms.includes(form));
+ const tax=source.lexemes.find(entry=>entry.id==='tax-code.code-used-in-uk-payroll-to-help-determine-tax-treatment.n');assert.deepEqual(tax.regions,['UK']);assert.match(tax.definition,/UK payroll/);
+ const refs=new Map(source.sources.filter(entry=>entry.id.startsWith('accounting-')).map(entry=>[entry.id,entry]));assert.equal(refs.size,15);
+ assert.match(refs.get('accounting-bls-clerks').scope,/must not be copied/);assert.match(refs.get('accounting-ifrs-ias1-overview').scope,/full standard and linked amendments were not read/);assert.match(refs.get('accounting-hmrc-vat-input').scope,/UK rules are not generalized/);assert.match(refs.get('accounting-aasb-information-quality').scope,/historical-compilation/);assert.match(refs.get('accounting-cfpb-overdraft').scope,/U.S. consumer-account context only/);assert.match(refs.get('accounting-openstax-alternatives').scope,/not copied or acquired/);assert.match(refs.get('accounting-ifrs10-overview').scope,/full standard, exceptions and application guidance were not read/);
+ for(const entry of refs.values()){assert.equal(entry.status,'consulted');assert.equal(entry.assets_acquired,false);assert.equal(entry.asset_license,null);}
+ for(const expression of source.expressions.filter(entry=>entry.id.startsWith('expr.accounting_finance.module')&&!entry.id.includes('module01')&&!entry.id.includes('module02'))){assert.equal(expression.review.domain,'pending');assert.ok(expression.text.split(/\s+/).length<=28);assert.equal(expression.media.audio.status,'pending');}
+});
+
+
+test('Legal preserves independent canonical corrections, one consent amendment and distinct homographs',()=>{
+ const course=source.courses.find(entry=>entry.id==='legal_paralegal'),ids=new Set(course.modules.slice(2).flatMap(module=>module.lexeme_ids)),find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/legal-'));
+ for(const id of ['cover-letter.letter-introducing-submitted-material.n','prospect.potential-customer-under-consideration.n','meeting-link.address-for-joining-online-meeting.n','interpreter-request.language-support-request.n','withdrawal-of-consent.ending-previously-given-agreement.n','interview-notes.written-record-of-relevant-interview-information.n','office.space-for-administrative-or-professional-work.n','reference-number.record-reference-code.n','scope-of-work.defined-work-included-in-project-or-arrangement.n','record-correction.change-intended-to-fix-inaccurate-record.n'])assert.ok(ids.has(id),id);
+ for(const text of ['covering letter','prospective client','research scope','hearing link','interpreter booking','consent withdrawal','interview record','transcript correction','exhibit number','law office','case number','court record','original','draft','timeline','contact list'])assert.ok(!find(text),text);
+ for(const id of ['scope-of-work.defined-work-included-in-project-or-arrangement.n','record-correction.change-intended-to-fix-inaccurate-record.n','reference-number.record-reference-code.n'])assert.equal(course.modules.flatMap(module=>module.lexeme_ids).filter(other=>other===id).length,1,id);
+ for(const text of ['respondent','complaint','bill','section','service','hearing','application','disclosure']){const entry=find(text);assert.ok(ids.has(entry.id));assert.ok(source.lexemes.some(other=>other.text===text&&other.id!==entry.id));}
+ const consent=source.lexemes.find(entry=>entry.id==='withdrawal-of-consent.ending-previously-given-agreement.n');assert.equal(consent.definition,'The ending of a previously given agreement to an action or purpose, subject to the applicable context and requirements.');assert.equal(consent.example,'The record documents the withdrawal of consent and the subsequent discussion.');assert.ok(source.lexemeOrigins[consent.id].includes('/clinical-'));assert.equal(consent.media.image.status,'pending');
+ for(const[id,focus]of [['module03.10','prospect.potential-customer-under-consideration.n'],['module08.09',consent.id],['module09.07','interview-notes.written-record-of-relevant-interview-information.n']])assert.ok(source.expressions.find(entry=>entry.id==='expr.legal_paralegal.'+id).focus_lexeme_ids.includes(focus));
+});
+
+test('Legal preserves document meaning, uncertainty and jurisdiction without authorizing legal action',()=>{
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/legal-')),expression=id=>source.expressions.find(entry=>entry.id==='expr.legal_paralegal.'+id);
+ assert.match(find('contract term').definition,/Express or implied.*rights or obligations/);assert.match(find('clause').definition,/unit of text/);assert.match(find('provision').definition,/rule or requirement/);assert.match(find('agreement').definition,/whether or not.*enforceable contract/);assert.match(find('official copy').definition,/issued or recognized/);assert.match(find('case law').definition,/including decisions interpreting legislation/);assert.match(find('factual statement').definition,/accuracy may still need verification/);
+ assert.match(find('credibility').definition,/account or testimony/);assert.doesNotMatch(find('credibility').definition,/source/);assert.match(find('hearsay').definition,/statement-maker's testimony at the current trial or hearing/);assert.match(find('hearsay').definition,/offered as evidence for its asserted truth/);assert.match(find('hearsay').definition,/applicable definitions and exclusions/);assert.deepEqual(find('hearsay').regions,['US']);
+ assert.match(find('headnote').definition,/separate from the judgment/);assert.match(find('leading question').definition,/toward a particular answer/);assert.match(find('circumstantial evidence').definition,/through an inference/);assert.match(find('oath').editorial_notes,/no universal form/);
+ for(const text of ['solicitor','barrister','claim form','defense','legal professional privilege','litigation privilege','examination-in-chief'])assert.deepEqual(find(text).regions,['England and Wales']);for(const text of ['public defender','docket','complaint','attorney-client privilege','deposition','subpoena'])assert.deepEqual(find(text).regions,['US']);
+ for(const[text,form]of [['claimant','plaintiff'],['paralegal','legal assistant'],['defense','defence'],['judgment','judgement'],['license','licence'],['non-disclosure agreement','NDA'],['alternative dispute resolution','ADR']])assert.ok(find(text).accepted_forms.includes(form));assert.ok(!find('application').accepted_forms.includes('motion'));
+ assert.match(expression('module08.06').text,/does not itself establish authority/);assert.match(expression('module08.09').context,/without implying retrospective erasure/);assert.match(expression('module09.04').text,/without assuming the witness's beliefs/);
+});
+
+test('Legal preserves supported prefix analysis, explicit uncertainty and bounded source consultation',()=>{
+ const find=text=>source.lexemes.find(entry=>entry.text===text&&source.lexemeOrigins[entry.id].includes('/legal-'));
+ assert.deepEqual(find('counterpart').morphology.parts.map(part=>[part.canonical,part.type]),[['counter','prefix'],['part','stem']]);assert.equal(find('counterpart').morphology.nodes[0].rule,'prefix_attachment');assert.deepEqual(find('counterpart').morphology.review.references,['legal-dictionary-counterpart','legal-dictionary-counter-prefix']);
+ assert.deepEqual(find('judgment').morphology.parts.map(part=>[part.canonical,part.surface]),[['judge','judg'],['ment','ment']]);assert.deepEqual(find('admissibility').morphology.parts.map(part=>[part.canonical,part.surface]),[['admissible','admissibil'],['ity','ity']]);assert.ok(find('non-disclosure agreement').morphology.nodes.some(node=>node.rule==='hyphenated_prefix'));assert.equal(find('examination-in-chief').morphology.nodes.at(-1).rule,'hyphenated_compound');
+ for(const text of ['ratio decidendi','obiter dictum','force majeure','summons','subpoena','deposition','lawyer','tribunal','solicitor','barrister'])assert.equal(find(text).morphology,null,text);
+ const refs=new Map(source.sources.filter(entry=>entry.id.startsWith('legal-')).map(entry=>[entry.id,entry]));assert.equal(refs.size,15);assert.match(refs.get('legal-cornell-fre801').scope,/U.S. federal scope only/);assert.match(refs.get('legal-cornell-leading-question').scope,/Linked Rule 611.*not opened/);assert.match(refs.get('legal-judiciary-witnesses-oaths').scope,/England and Wales coroner context only/);assert.match(refs.get('legal-dictionary-counter-prefix').scope,/distinct from the physical counter noun/);assert.match(refs.get('legal-ew-cpr-glossary').scope,/does not create legal meaning/);assert.match(refs.get('legal-sra-conflicts').scope,/no exception, consent, or checklist/);
+ for(const entry of refs.values()){assert.equal(entry.status,'consulted');assert.equal(entry.assets_acquired,false);assert.equal(entry.asset_license,null);}
+ const course=source.courses.find(entry=>entry.id==='legal_paralegal');for(const module of course.modules.slice(2))for(const id of module.expression_ids){const entry=source.expressions.find(expression=>expression.id===id);assert.ok(entry.text.split(/\s+/).length<=28,id);assert.equal(entry.review.domain,'pending');assert.equal(entry.media.audio.status,'pending');}
+});
+
+
+test('Foundation module02 first ten install exact accepted candidates with bounded integration metadata', () => {
+  const r=foundation02FirstLanguageRecord, hash=value=>crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  assert.equal(r.patches.length,10); assert.equal(r.sources.length,20);
+  assert.equal(r.root_acceptance.raw_sha256,'ef532122536c440871f4ea81eef48252dd0fa156e011758264520dac318d9db6');
+  const acceptance=JSON.parse(fs.readFileSync(path.join(rootDir,r.root_acceptance.path),'utf8'));
+  const protect=entry=>{const value=structuredClone(entry);for(const key of ['definition','example','difficulty','references','editorial_notes'])delete value[key];for(const key of ['language','status','reviewer','reviewed_at'])delete value.review[key];return value;};
+  let memberships=0,addedReferences=0;
+  for(const p of r.patches){
+    const entry=foundation02HistoryLexemes.find(e=>e.id===p.id),record=JSON.parse(fs.readFileSync(path.join(rootDir,p.candidate_artifact),'utf8'));
+    const candidate=(record.proposals?.find(x=>x.id===p.id)||record.proposal).candidate_entry;
+    const decision=acceptance.accepted_candidates.find(x=>x.id===p.id);
+    assert.equal(hash(candidate),p.reviewed_candidate_entry_json_sha256);assert.equal(hash(candidate),decision.candidate_entry_json_sha256);
+    assert.deepEqual(entry,p.after);assert.equal(hash(p.before),p.before_sha256);assert.equal(hash(entry),p.after_sha256);
+    assert.deepEqual(protect(entry),protect(p.before));assert.equal(hash(protect(entry)),p.protected_fields_sha256);
+    for(const field of Object.keys(candidate).filter(f=>!['review','references','editorial_notes'].includes(f)))assert.deepEqual(entry[field],candidate[field]);
+    assert.deepEqual(entry.review,{...p.before.review,language:'reviewed',status:'reviewed',reviewer:r.reviewer,reviewed_at:'2026-10-16'});
+    assert.deepEqual(entry.references.slice(0,p.before.references.length),p.before.references);
+    const additions=entry.references.slice(p.before.references.length);assert.equal(additions.length,2);addedReferences+=additions.length;
+    assert.deepEqual(additions.map(x=>x.source_id),p.source_record_ids);
+    for(const ref of additions){assert.equal(ref.status,'verified');assert.match(ref.scope,/No human, subject-matter, morphology, media, domain, expression or release approval is claimed/);}
+    assert.equal(p.integration_metadata_delta.author_editorial_notes_sha256,hash(candidate.editorial_notes));assert.equal(p.integration_metadata_delta.integrated_editorial_notes_sha256,hash(entry.editorial_notes));
+    assert.deepEqual(p.integration_metadata_delta.review_after,entry.review);assert.deepEqual(p.integration_metadata_delta.review_before,p.before.review);
+    assert.doesNotMatch(entry.editorial_notes,/independent acceptance remains pending|Meaning, difficulty, imagery, and morphological classification remain editorial drafts/);
+    const current=source.courses.flatMap(c=>c.modules.flatMap(m=>{const index=m.lexeme_ids.indexOf(p.id);return index<0?[]:[{lexeme_id:p.id,course_id:c.id,module_id:m.id,index}];}));
+    assert.deepEqual(current,p.memberships);memberships+=current.length;
+    for(const k of ['morphology','media','accepted_forms','regions','pos','id','text','display_text'])assert.deepEqual(entry[k],p.before[k]);
+  }
+  assert.equal(memberships,200);assert.equal(addedReferences,20);
+  for(const expected of r.sources){assert.deepEqual(source.sources.find(s=>s.id===expected.id),expected);assert.equal(expected.assets_acquired,false);assert.equal(expected.asset_license,null);}
+  for(const artifact of r.evidence_artifacts)assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(rootDir,artifact.path))).digest('hex'),artifact.raw_sha256,artifact.path);
+});
+
+test('Foundation module02 keeps corrected confirm levels, editorial placements and sense limits exact', () => {
+  const r=foundation02FirstLanguageRecord,byText=text=>r.patches.find(p=>p.after.text===text);
+  const expected={request:['B1',{oxford:null,collins:'B1+'}],instruction:['A2',{oxford:null,collins:null}],clarification:['B1',{oxford:null,collins:null}],question:['A2',{oxford:null,collins:'A1'}],answer:['A2',{oxford:null,collins:'A1'}],repeat:['A2',{oxford:null,collins:'A2'}],explain:['A2',{oxford:null,collins:'A2'}],confirm:['B2',{oxford:'B2',collins:'B1+'}],check:['A2',{oxford:null,collins:'A2'}],follow:['A2',{oxford:'A2',collins:'B1'}]};
+  for(const [text,[level,labels]]of Object.entries(expected)){const p=byText(text);assert.equal(p.after.difficulty,level);assert.deepEqual(p.difficulty.observed_selected_source_labels,labels);assert.equal(p.difficulty.dictionary_level_certification,false);for(const[publisher,value]of Object.entries(labels))assert.equal(r.source_observations.find(s=>s.id==='foundation02-language-first10-'+publisher+'-'+text).observed_selected_sense_level,value);}
+  assert.equal(byText('confirm').reviewed_candidate_entry_json_sha256,'72bbbbec8f9abc92e5f931f4b0491a05866ad8937f807fb8c89ef06f806a92b3');
+  assert.equal(r.rejected_confirm_candidate.candidate_entry_json_sha256,'e367633854ed63585c94e7cc11c1d4c9fcff7ef864f27d7bc3dda185ca107bb3');
+  assert.equal(byText('confirm').after.definition,'To state that an arrangement, such as an appointment, is definite.');assert.equal(byText('confirm').after.example,'Please confirm our appointment for Tuesday.');
+  const oxford=r.source_observations.find(s=>s.id==='foundation02-language-first10-oxford-confirm');assert.match(oxford.section,/line164/);assert.equal(oxford.other_sense_labels_not_applied.truth_or_evidence_topic,'B1');
+  assert.equal(byText('instruction').after.example,'Please read each instruction before starting.');assert.equal(byText('answer').after.definition,'Something someone says or writes in response to a question.');
+  assert.deepEqual(r.patches.filter(p=>p.changed_fields.includes('definition')).map(p=>p.after.text),['request','instruction','answer','confirm']);
+  assert.deepEqual(r.patches.filter(p=>p.changed_fields.includes('example')).map(p=>p.after.text),['instruction','confirm']);assert.deepEqual(r.patches.filter(p=>p.changed_fields.includes('difficulty')).map(p=>p.after.text),['request','confirm']);
+});
+
+
+test('Module02 language delivery requires the actual composite baseline and committed guarded journal', () => {
+  const r=foundation02FirstLanguageRecord,raw=relative=>fs.readFileSync(path.join(rootDir,relative)),hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+  assert.equal(r.status,'integrated_language_outputs_require_committed_journal');assert.equal(r.baseline_bound,true);
+  assert.equal(hash(raw(r.lineage.validation.path)),r.lineage.validation.raw_sha256);const validation=JSON.parse(raw(r.lineage.validation.path));assert.equal(validation.ok,true);
+  assert.equal(hash(raw(r.lineage.binding.path)),r.lineage.binding.raw_sha256);const binding=JSON.parse(raw(r.lineage.binding.path));assert.equal(binding.registry_before_sha256,r.lineage.registry_before_sha256);assert.equal(binding.registry_after_sha256,r.lineage.registry_after_sha256);
+  const composite=binding.composite_baseline;assert.equal(composite.ok,true);assert.equal(composite.full_combined_validation_of_current_state,false);assert.equal(composite.historical_full_validation.registry_sha256,validation.registry_after_sha256);assert.equal(composite.current_registry_sha256,r.lineage.registry_before_sha256);assert.deepEqual(composite.current_input_sha256,binding.baseline_inputs);assert.equal(composite.deltas.length,7);for(const item of composite.evidence)assert.equal(hash(raw(item.path)),item.raw_sha256,item.path);
+  const states=fs.readdirSync(path.join(rootDir,r.integration_guards.transaction_path,'states')).filter(n=>/^\d+-.*\.json$/.test(n)).sort();assert.ok(states.length>0);const committed=JSON.parse(raw(r.integration_guards.transaction_path+'/states/'+states.at(-1)));assert.equal(committed.status,'committed');
+  for(const item of r.retained_files)assert.equal(hash(raw(item.path)),item.raw_sha256,item.path);
+});
+
+
+test('Foundation02 second-ten delivery installs eight exact accepted proposals and scoped metadata', () => {
+  const r=foundation02SecondLanguageRecord,hash=value=>crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const acceptance=JSON.parse(fs.readFileSync(path.join(rootDir,r.independent_review.path),'utf8'));
+  assert.equal(r.patches.length,8);assert.equal(r.sources.length,16);assert.equal(r.new_language_approval,false);assert.equal(r.independent_review.accepted,true);assert.equal(r.independent_review.human_or_specialist_approval,false);
+  assert.equal(r.independent_review.raw_sha256,'2d95fb5e1f08ed79a2b9de27ad2e031e36139385acf0d6d0e3e7a13b1a6f865e');
+  for(const p of r.patches){
+    const a=acceptance.accepted.find(x=>x.id===p.id);assert(a);assert.equal(hash(p.before),a.before_entry_json_sha256);assert.equal(hash(p.accepted_content),a.accepted_content_projection_json_sha256);assert.equal(hash(p.accepted_fields),a.accepted_fields_json_sha256);
+    assert.deepEqual(foundation02HistoryLexemes.find(x=>x.id===p.id),p.after);assert.equal(hash(p.after),p.after_sha256);assert.deepEqual(p.accepted_fields,a.accepted_fields);
+    for(const key of ['definition','example','difficulty'])assert.equal(p.after[key],a.accepted_fields[key]);
+    const protectedFields=e=>{const out=structuredClone(e);for(const key of ['definition','example','difficulty','review','references','editorial_notes'])delete out[key];return out;};
+    assert.deepEqual(protectedFields(p.after),protectedFields(p.before));assert.equal(p.after.review.domain,p.before.review.domain);assert.equal(p.after.review.language,'reviewed');assert.equal(p.after.review.status,'reviewed');assert.equal(p.after.review.reviewer,acceptance.reviewer);
+    assert.deepEqual(p.after.references.slice(0,p.before.references.length),p.before.references);assert.equal(p.after.references.length,p.before.references.length+2);assert.deepEqual(p.after.references.slice(-2).map(x=>x.source_id),a.source_ids);assert(p.after.references.slice(-2).every(x=>x.status==='verified'));
+    assert.equal(p.after.morphology.review.status,'pending');assert.equal(p.after.media.image.review.status,'pending');assert.equal(p.after.media.audio.review.status,'pending');
+  }
+  assert.deepEqual(r.sources.map(row=>source.sources.find(item=>item.id===row.id)),r.sources);for(const s of r.sources){assert.equal(s.status,'consulted');assert.equal(s.assets_acquired,false);assert.equal(s.asset_license,null);assert.match(s.scope,/No human, subject-matter/);}
+});
+
+test('Foundation02 second-ten preserves literal levels, corrected deliver and complete image mismatch', () => {
+  const r=foundation02SecondLanguageRecord,p=text=>r.patches.find(x=>x.after.text===text);
+  assert.equal(p('complete').after.definition,'To bring a piece of work or an activity to its end.');assert.equal(p('complete').selected_source_levels.oxford_html.literal,'a1');assert.equal(p('complete').selected_source_levels.collins_rendered,'A2');
+  assert.match(p('complete').after.editorial_notes,/former merged-sense claim is not accepted/);assert.match(p('complete').after.editorial_notes,/form-image brief/);assert.match(p('complete').after.editorial_notes,/mismatch/);assert.doesNotMatch(p('complete').after.editorial_notes,/Finishing a form is an instance of that sense/);
+  for(const text of [p('complete').after.editorial_notes,...r.sources.filter(x=>p('complete').source_ids.includes(x.id)).map(x=>x.scope),...p('complete').after.references.slice(-2).map(x=>x.scope)]){assert.match(text,/former merged-sense editorial note is retained only in the historical preimage and has been replaced by bounded finishing-only provenance/);assert.match(text,/existing form-image brief remains live, unchanged, mismatched, pending and unapproved/);assert.doesNotMatch(text,/preimages only|before any future integration|before future delivery claims/);}
+  const completeAcceptance=JSON.parse(fs.readFileSync(path.join(rootDir,r.independent_review.path),'utf8')).accepted.find(x=>x.id===p('complete').id);assert.equal(p('complete').decision,completeAcceptance.decision);assert.match(p('complete').decision,/preimages only/);
+  assert.deepEqual(p('complete').after.media,p('complete').before.media);assert.equal(p('complete').after.media.image.status,'pending');assert.match(p('complete').after.media.image.brief,/form/);
+  assert.equal(p('deliver').after.definition,'To take physical items to the person or place they are intended for.');assert.equal(p('deliver').accepted_content_json_sha256,'bf7339125c5ec83bd6c1f8170bb68e731fb89d7a8713d36491208677290864ea');assert.equal(p('deliver').after.difficulty,'B1');
+  for(const text of ['arrange','replace','report']){assert.equal(p(text).after.difficulty,'A2');assert.equal(p(text).selected_source_levels.oxford_html.literal,'a2');assert.equal(p(text).selected_source_levels.collins_rendered,'B1');}
+  for(const text of ['return','contact']){assert.equal(p(text).after.difficulty,'A2');assert.equal(p(text).selected_source_levels.oxford_html.literal,'b1');assert.equal(p(text).selected_source_levels.collins_rendered,'A2');}
+  assert.match(p('replace').after.editorial_notes,/B1\+/);assert.equal(p('replace').selected_source_levels.oxford_html.sense_element,'replace_sng_3');assert.match(p('return').after.definition,/borrowed item/);
+  for(const p of r.patches)assert.equal(p.dictionary_or_lesson_level_certification,false);
+});
+
+
+test('Foundation02 second-ten delivery binds explicit composite evidence and committed guarded journal', () => {
+  const r=foundation02SecondLanguageRecord,raw=file=>fs.readFileSync(path.join(rootDir,file)),sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+  assert.equal(r.status,'integrated_language_outputs_require_committed_journal');assert.equal(r.baseline_bound,true);
+  assert.equal(sha(raw(r.lineage.validation.path)),r.lineage.validation.raw_sha256);const b=JSON.parse(raw(r.lineage.validation.path));assert.equal(b.kind,'composite_validation_baseline');assert.equal(b.ok,true);assert.equal(b.full_combined_validation_of_current_state,false);assert.equal(b.current_registry_sha256,r.lineage.registry_before_sha256);
+  assert.equal(sha(raw(r.lineage.validation.verifier.path)),r.lineage.validation.verifier.raw_sha256);for(const row of r.lineage.validation.pinned_files)assert.equal(sha(raw(row.path)),row.raw_sha256);
+  assert.equal(sha(raw(r.lineage.binding.path)),r.lineage.binding.raw_sha256);const binding=JSON.parse(raw(r.lineage.binding.path));assert.equal(binding.registry_before_sha256,r.lineage.registry_before_sha256);assert.equal(binding.registry_after_sha256,r.lineage.registry_after_sha256);
+  const states=fs.readdirSync(path.join(rootDir,r.integration_guards.transaction_path,'states')).filter(x=>/^\d+-.*\.json$/.test(x)).sort();assert(states.length);assert.equal(JSON.parse(raw(r.integration_guards.transaction_path+'/states/'+states.at(-1))).status,'committed');for(const row of r.retained_files)assert.equal(sha(raw(row.path)),row.raw_sha256);
+});
+
+
+test('Foundation02 third-ten installs only eight accepted language projections and proposed delivery metadata', () => {
+  const r=foundation02ThirdLanguageRecord,hash=value=>crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const accepted=JSON.parse(fs.readFileSync(path.join(rootDir,r.independent_review.path),'utf8'));
+  assert.equal(r.independent_review.raw_sha256,'2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d');
+  assert.equal(r.patches.length,8);assert.equal(r.sources.length,16);assert.equal(r.new_language_approval,false);assert.equal(r.independent_review.human_or_specialist_approval,false);
+  assert.deepEqual(r.independent_review.limitations,accepted.limitations);assert.match(r.independent_review.limitations[0],/not reopened/);
+  assert.equal(r.patches.filter(p=>p.before.difficulty!==p.after.difficulty).length,7);
+  for(const p of r.patches){
+    const a=accepted.entries.find(row=>row.id===p.id);assert.equal(a.decision,'accept_exact_bounded_language_fields');
+    assert.equal(hash(p.before),a.before_entry_sha256);assert.equal(hash(p.accepted_content),a.content_projection_sha256);
+    assert.deepEqual(p.accepted_fields,a.accepted_fields);assert.equal(hash(p.after),p.after_sha256);
+    assert.deepEqual(foundation02HistoryLexemes.find(entry=>entry.id===p.id),p.after);
+    assert.equal(p.after.definition,p.before.definition);assert.equal(p.after.example,p.before.example);assert.equal(p.after.difficulty,a.accepted_fields.difficulty);
+    const protect=entry=>{const out=structuredClone(entry);for(const k of ['definition','example','difficulty','references','editorial_notes'])delete out[k];for(const k of ['status','language','reviewer','reviewed_at'])delete out.review[k];return out;};
+    assert.deepEqual(protect(p.after),protect(p.before));assert.equal(p.after.review.status,'reviewed');assert.equal(p.after.review.language,'reviewed');assert.equal(p.after.review.reviewer,accepted.reviewer);assert.equal(p.after.review.reviewed_at,accepted.reviewed_on);
+    assert.deepEqual(p.after.references.slice(0,p.before.references.length),p.before.references);assert.equal(p.after.references.length,p.before.references.length+2);
+    assert.deepEqual(p.after.references.slice(-2).map(row=>row.source_id),p.source_ids);assert(p.after.references.slice(-2).every(row=>row.status==='verified'));
+    assert.deepEqual(p.selected_source_observations,a.selected_source_observations);assert.equal(p.dictionary_or_lesson_level_certification,false);
+    for(const text of [p.after.editorial_notes,...p.after.references.slice(-2).map(row=>row.scope)]){assert.match(text,/did not reopen/);assert.match(text,/cannot be independently rehashed/);assert.match(text,/No human, subject-matter/);}
+  }
+  assert.deepEqual(r.sources.map(row=>source.sources.find(item=>item.id===row.id)),r.sources);for(const row of r.sources){assert.equal(row.status,'consulted');assert.equal(row.assets_acquired,false);assert.equal(row.asset_license,null);assert.match(row.scope,/not psychometric CEFR certification/);}
+});
+
+
+test('Foundation02 third-ten preserves literal source disagreements and selected senses', () => {
+  const r=foundation02ThirdLanguageRecord,p=term=>r.patches.find(row=>row.after.text===term),level=(term,publisher)=>p(term).selected_source_observations.find(row=>row.publisher===publisher);
+  assert.equal(level('correct','Oxford University Press').observed_html_selected_levels[0].cefr,'a1');assert.equal(level('correct','HarperCollins').observed_rendered_selected_level,'B2');assert.equal(p('correct').after.difficulty,'A2');
+  assert.equal(level('reschedule','Oxford University Press').observed_html_selected_levels[0].cefr,null);assert.equal(level('reschedule','HarperCollins').observed_rendered_selected_level,'B2');
+  assert.equal(level('cancel','HarperCollins').observed_rendered_selected_level,'B1+');assert.equal(level('cancel','Oxford University Press').observed_html_selected_levels.length,2);assert(level('cancel','Oxford University Press').observed_html_selected_levels.every(row=>row.cefr==='b2'));
+  assert.equal(level('resolve','HarperCollins').observed_rendered_selected_level,null);
+  for(const term of ['assist','locate']){assert.equal(level(term,'Oxford University Press').observed_html_selected_levels[0].cefr,'b1');assert.equal(level(term,'HarperCollins').observed_rendered_selected_level,'B2');}
+  assert.equal(level('attach','Oxford University Press').observed_html_selected_levels[0].element_id,'attach_sng_6');assert.equal(level('attach','HarperCollins').observed_rendered_selected_level,'B1');
+  assert.match(p('attach').after.editorial_notes,/lack an explicit electronic-message meaning|do not expressly identify email|no new binding/);
+});
+
+
+test('Foundation02 fourth-ten installs ten exact accepted language projections with separately scoped delivery metadata', () => {
+  const r=foundation02FourthLanguageRecord,hash=value=>crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const accepted=JSON.parse(fs.readFileSync(path.join(rootDir,r.independent_review.path),'utf8'));
+  assert.equal(r.independent_review.raw_sha256,'58993d8767ec701e37613fdee70d75e94f22a68d467b94157ea41a211bc9f8bd');
+  assert.equal(r.patches.length,10);assert.equal(r.sources.length,20);assert.equal(r.held.length,0);assert.equal(r.new_language_approval,false);assert.equal(r.independent_review.human_or_specialist_approval,false);
+  assert.deepEqual(r.independent_review.limitations,accepted.limits);
+  assert.deepEqual(['difficulty','definition','example'].map(field=>r.patches.filter(p=>p.before[field]!==p.after[field]).length),[6,1,1]);
+  assert.equal(r.patches.filter(p=>hash(p.before)!==hash(p.accepted_content)).length,6);
+  for(const p of r.patches){
+    const a=accepted.entries.find(row=>row.id===p.id);assert.equal(a.decision,'accept_exact_language_projection');
+    assert.equal(hash(p.before),a.before_entry_sha256);assert.equal(hash(p.accepted_content),a.accepted_content_projection_sha256);
+    assert.deepEqual(p.accepted_fields,a.accepted_fields);assert.equal(hash(p.accepted_fields),a.accepted_fields_sha256);assert.equal(hash(p.after),p.after_sha256);
+    assert.deepEqual(foundation02HistoryLexemes.find(entry=>entry.id===p.id),p.after);
+    for(const field of ['definition','example','difficulty']){assert.equal(p.after[field],a.accepted_fields[field]);assert.deepEqual(p.field_decisions[field],a.field_decisions[field]);assert.equal(p.field_decisions[field].decision,'accept');}
+    const protect=entry=>{const out=structuredClone(entry);for(const k of ['definition','example','difficulty','references','editorial_notes'])delete out[k];for(const k of ['status','language','reviewer','reviewed_at'])delete out.review[k];return out;};
+    assert.deepEqual(protect(p.after),protect(p.before));assert.equal(p.after.review.status,'reviewed');assert.equal(p.after.review.language,'reviewed');assert.equal(p.after.review.reviewer,accepted.reviewer);assert.equal(p.after.review.reviewed_at,accepted.date_local);
+    assert.deepEqual(p.after.references.slice(0,p.before.references.length),p.before.references);assert.equal(p.after.references.length,p.before.references.length+2);
+    assert.deepEqual(p.after.references.slice(-2).map(row=>row.source_id),p.source_ids);assert(p.after.references.slice(-2).every(row=>row.status==='verified'));
+    assert.equal(p.dictionary_or_lesson_level_certification,false);assert.equal(p.historical_research_context_boundary,a.context_boundary);
+    for(const text of [p.after.editorial_notes,...p.after.references.slice(-2).map(row=>row.scope)]){assert.match(text,/freshly consulted all 20 rendered/);assert.match(text,/raw HTML was not independently retrieved/);assert.match(text,/No human, subject-matter/);}
+    for(const s of p.selected_source_observations){assert.equal(s.independent_consultation.fresh_raw_html_retrieval,false);assert.equal(s.independent_consultation.fresh_raw_body_sha256,null);assert.equal(s.source_pages_imported,false);assert.equal(s.source_examples_imported,false);assert.equal(s.media_acquired,false);}
+  }
+  assert.deepEqual(r.sources.map(row=>source.sources.find(item=>item.id===row.id)),r.sources);for(const row of r.sources){assert.equal(row.status,'consulted');assert.equal(row.assets_acquired,false);assert.equal(row.asset_license,null);assert.match(row.scope,/not source consensus or psychometric CEFR certification/);}
+});
+
+
+test('Foundation02 fourth-ten keeps literal dictionary levels and fresh-rendered versus frozen-HTML provenance', () => {
+  const r=foundation02FourthLanguageRecord,p=term=>r.patches.find(row=>row.after.text===term),a=(term,publisher)=>p(term).author_source_observations.find(row=>row.publisher===publisher),s=(term,publisher)=>p(term).selected_source_observations.find(row=>row.publisher===publisher);
+  assert.equal(a('submit','Oxford University Press').observed_html_selected_levels[0].cefr,'b2');assert.equal(s('submit','Oxford University Press').independent_consultation.observed_rendered_selected_level,null);
+  assert.equal(a('approve','Oxford University Press').observed_html_selected_levels[0].element_id,'approve_sng_2');assert.equal(a('approve','HarperCollins').observed_rendered_selected_level,'B1+');
+  assert.equal(a('reject','Oxford University Press').observed_html_selected_levels[0].cefr,'b1');assert.equal(a('reject','HarperCollins').observed_rendered_selected_level,'B2');
+  assert.equal(a('sign','Oxford University Press').observed_html_selected_levels[0].element_id,'sign_sng_7');assert.equal(a('sign','HarperCollins').observed_rendered_selected_level,'B1');
+  assert.equal(a('delay','Oxford University Press').observed_html_selected_levels[0].cefr,'b2');assert.equal(a('delay','HarperCollins').observed_rendered_selected_level,'A2');assert.equal(p('delay').after.difficulty,'A2');
+  for(const [term,level] of [['error','a2'],['shortage','b2']]){const attributes=a(term,'Oxford University Press').observed_html_selected_levels[0];assert.equal(attributes.cefr,null);assert.equal(attributes.fkcefr,level);assert.equal(a(term,'HarperCollins').observed_rendered_selected_level,'B2');}
+  assert.equal(a('fault','Oxford University Press').observed_html_selected_levels[0].cefr,'b2');assert.equal(a('damage','Oxford University Press').observed_html_selected_levels[0].cefr,'b1');assert.equal(a('damage','HarperCollins').observed_rendered_selected_level,'B1+');
+  assert.equal(p('missing').after.difficulty,'A2');assert.equal(a('missing','HarperCollins').observed_rendered_selected_level,'A2 for senses 1 and 2; no level observed for sense 3');assert.equal(s('missing','HarperCollins').independent_consultation.observed_rendered_selected_level,'A2 senses 1 and 2; no level observed on sense 3');
+  for(const patch of r.patches)for(const observed of patch.author_source_observations){const independent=patch.selected_source_observations.find(row=>row.source_id===observed.id);if(observed.publisher==='Oxford University Press'){assert.deepEqual(independent.frozen_author_metadata.literal_selected_attributes,observed.observed_html_selected_levels);assert.equal(independent.frozen_author_metadata.author_raw_body_sha256,observed.raw_body_sha256);assert.match(independent.frozen_author_metadata.provenance,/not independently refetched/);}}
+});
+
+
+test('Foundation02 fifth-ten installs eight exact accepted pairs and sixteen bounded sources', () => {
+  const r=foundation02FifthLanguageRecord,h=value=>crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const bytes=fs.readFileSync(path.join(rootDir,r.accepted_contract.path));
+  assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),'e930b6e65c44daa4ab27b44523241edc41e10942d92b25f2254f47073acd2235');
+  const accepted=JSON.parse(bytes);assert.equal(accepted.acceptance.delivery_metadata_technical_acceptance,true);assert.equal(accepted.acceptance.new_language_acceptance,false);
+  assert.deepEqual(r.patches,accepted.patches);assert.deepEqual(r.sources,accepted.sources);assert.deepEqual(r.held,accepted.whole_entry_holds);
+  assert.deepEqual(r.patches.map(p=>p.id),['broken.not-working.adj','urgent.needing-prompt-attention.adj','unclear.not-understandable.adj','safe.free-from-unacceptable-danger.adj','incident.workplace-event.n','concern.worrying-matter.n','solution.problem-answer.n','procedure.agreed-method.n']);
+  const delta={definition:0,example:0,difficulty:0};
+  for(const p of r.patches){
+    const live=foundation02HistoryLexemes.find(entry=>entry.id===p.id);assert.deepEqual(live,p.after);assert.equal(h(p.before),p.before_entry_json_sha256);assert.equal(h(live),p.after_entry_json_sha256);
+    const protect=e=>{const c=structuredClone(e);for(const k of ['definition','example','difficulty','references','editorial_notes'])delete c[k];for(const k of ['status','language','reviewer','reviewed_at'])delete c.review[k];return c;};
+    assert.deepEqual(protect(live),protect(p.before));assert.equal(h(protect(live)),p.protected_fields_json_sha256);
+    for(const key of Object.keys(delta)){assert.deepEqual(live[key],p.accepted_fields[key]);if(live[key]!==p.before[key])delta[key]++;}
+    assert.deepEqual(live.references.slice(0,p.before.references.length),p.before.references);assert.equal(live.references.length-p.before.references.length,2);
+    assert.deepEqual(live.references.slice(p.before.references.length).map(row=>row.source_id),p.source_ids);
+    assert.equal(live.morphology.review.status,'pending');assert.deepEqual(live.media,p.before.media);assert.equal(live.review.domain,p.before.review.domain);
+  }
+  assert.deepEqual(delta,{definition:4,example:1,difficulty:5});assert.deepEqual(r.content_delta,delta);
+  assert.deepEqual(r.sources.map(row=>source.sources.find(item=>item.id===row.id)),r.sources);assert.equal(new Set(r.sources.map(row=>row.id)).size,16);
+  for(const row of r.sources){assert.equal(row.status,'consulted');assert.equal(row.assets_acquired,false);assert.equal(row.asset_license,null);}
+  for(const id of r.excluded_source_ids)assert.equal(source.sources.some(row=>row.id===id),false);
+  assert.deepEqual(r.source_observations,accepted.source_review);
+  const observation=id=>r.source_observations.sources.find(row=>row.id===id);
+  assert.equal(observation('foundation02-language-fifth10-collins-broken').author_rendered_level,null);
+  assert.equal(observation('foundation02-language-fifth10-collins-urgent').author_rendered_level,'B1+');
+  assert.equal(observation('foundation02-language-fifth10-collins-solution').author_rendered_level,'B1+');
+  assert.equal(observation('foundation02-language-fifth10-collins-unclear').author_rendered_level,'B2');
+});
+
+
+test('Foundation02 fifth-ten retains exact accepted evidence and actual predecessor receipts', () => {
+  const r=foundation02FifthLanguageRecord,read=file=>JSON.parse(fs.readFileSync(path.join(rootDir,file),'utf8'));
+  for(const row of r.retained_files){const bytes=fs.readFileSync(path.join(rootDir,row.target));assert.equal(bytes.length,row.bytes);assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),row.raw_sha256);}
+  for(const prior of Object.values(r.lineage.predecessors)){assert.equal(read(prior.committed_receipt.path).status,'committed');assert.equal(read(prior.committed_journal.path).status,'committed');const receipt=read(prior.persisted_receipt.path);assert.equal(receipt.ok,true);assert.equal(receipt.error,null);assert(receipt.commands.every(command=>command.exit_code===0&&command.error===null&&command.signal===null));}
+  for(const flag of ['new_language_acceptance','new_morphology_acceptance','new_expression_acceptance','new_media_acceptance','ready_module_or_course'])assert.equal(r.audit[flag],false);
+});
+
+test('current Foundation acceptance preserves exact six outputs, unchanged pending boundaries and separate release gates', () => {
+  const hash = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const record = heldSixRecord;
+  assert.equal(record.namespace, 'professional-v2-foundation02-held-six-r01');
+  assert.equal(record.lexical_patches.length, 6);
+  assert.equal(record.expression_patches.length, 3);
+  assert.deepEqual(record.lexical_patches.map(patch => patch.after_id), ['collect.bring-together.v', 'inform.give-information.v', 'ensure.make-certain.v', 'postpone.delay-until-later.v', 'unsafe.presenting-danger.adj', 'hazard.possible-harm.n']);
+  for (const patch of record.lexical_patches) {
+    const entry = foundation02HistoryLexemes.find(entry => entry.id === patch.after_id);
+    assert.deepEqual(entry, patch.after);
+    assert.equal(hash(entry), patch.after_json_sha256);
+    assert.equal(entry.review.language, 'reviewed');
+    assert.equal(entry.review.status, 'pending');
+    assert.equal(entry.review.domain, patch.before.review.domain);
+    if (patch.before_id !== patch.after_id) assert.equal(foundation02HistoryLexemes.some(entry => entry.id === patch.before_id), false);
+    else {
+      assert.deepEqual(entry.morphology, patch.before.morphology);
+      assert.deepEqual(entry.media, patch.before.media);
+      assert.deepEqual(entry.accepted_forms, patch.before.accepted_forms);
+    }
+  }
+  for (const patch of record.expression_patches) {
+    const entry = source.expressions.find(entry => entry.id === patch.id);
+    assert.deepEqual(entry, patch.after);
+    assert.equal(hash(entry), patch.after_json_sha256);
+    assert.equal(entry.media.audio.status, 'pending');
+    assert.equal(entry.review.status, 'pending');
+  }
+  const changedExpressions = new Set(record.expression_patches.map(patch => patch.id));
+  const changedLexemes = new Set([...record.lexical_patches.map(patch => patch.before_id), ...foundation02FifthLanguageRecord.patches.map(patch => patch.id), ...foundation01MorphologyPatches.keys()]);
+  const context = foundation02FifthLanguageRecord.context;
+  for (const group of ['containing_module_expressions', 'expression_uses', 'derivative_expression_uses', 'focus_expressions', 'inherited_expression_holds', 'additional_foundation02_preservation']) {
+    for (const row of context.groups[group]) if (!changedExpressions.has(row.id)) {
+      assert.deepEqual(source.expressions.find(entry => entry.id === row.id), row.before_entry);
+      assert.equal(hash(row.before_entry), row.entry_json_sha256 || row.before_entry_json_sha256);
+    }
+  }
+  for (const row of context.groups.related_entry_boundaries) if (!changedLexemes.has(row.id)) {
+    assert.deepEqual(foundation02HistoryLexemes.find(entry => entry.id === row.id), row.before_entry);
+    assert.equal(hash(row.before_entry), row.entry_json_sha256);
+  }
+  const replacements = new Map(record.lexical_patches.filter(patch => patch.before_id !== patch.after_id).map(patch => [patch.before_id, patch.after_id]));
+  const expectedModule = previous => ({...previous, requirements_revision:record.namespace,
+    lexeme_ids:previous.lexeme_ids.map(id => replacements.get(id) || id)});
+  const independentlyCheckedLexemes = new Set([...foundationLanguageAcceptedIds,
+    ...record.lexical_patches.flatMap(patch => [patch.before_id, patch.after_id])]);
+  for (const previous of [foundationLanguageRecord, foundationSecondLanguageRecord, foundationThirdLanguageRecord, foundationFourthLanguageRecord, foundationFifthLanguageRecord]) {
+    const preserved = previous.protected_context;
+    for (const row of preserved.expressions) if (!changedExpressions.has(row.entry.id)) {
+      assert.deepEqual(source.expressions.find(entry => entry.id === row.entry.id), row.entry);
+      assert.equal(hash(row.entry), row.json_sha256);
+    }
+    for (const row of [...preserved.lexemes, ...(preserved.held_entries || [])]) if (!independentlyCheckedLexemes.has(row.entry.id)) {
+      assert.deepEqual(foundation02HistoryLexemes.find(entry => entry.id === row.entry.id), row.entry);
+      assert.equal(hash(row.entry), row.json_sha256);
+    }
+    for (const row of preserved.modules) {
+      const module = source.courses.find(course => course.id === row.course_id).modules.find(module => module.id === row.module_id);
+      assert.deepEqual(module, expectedModule(row.module));
+    }
+    for (const row of preserved.sources) {
+      assert.deepEqual(source.sources.find(entry => entry.id === row.source.id), row.source);
+      assert.equal(hash(row.source), row.json_sha256);
+    }
+    for (const row of preserved.selected_memberships) {
+      const memberships = source.courses.flatMap(course => course.modules.filter(module => module.lexeme_ids.includes(row.id)).map(module => ({course_id:course.id, module_id:module.id})));
+      assert.deepEqual(memberships, row.memberships);
+    }
+    for (const [file, sha] of Object.entries({...preserved.growth_raw_sha256, ...preserved.prior_artifacts_raw_sha256})) {
+      assert.equal(historicalGrowthRaw(file), sha, file);
+    }
+  }
+  for (const previous of [foundation02FirstLanguageRecord, foundation02SecondLanguageRecord, foundation02ThirdLanguageRecord, foundation02FourthLanguageRecord]) {
+    const preserved = previous.protected_context;
+    for (const group of ['expressions', 'derivative_expressions', 'focus_expressions', 'containing_module_expressions', 'additional_foundation02_preservation', 'inherited_expression_holds', 'prior_expression_holds']) {
+      for (const row of preserved[group] || []) if (!changedExpressions.has(row.id)) {
+        const entry = source.expressions.find(entry => entry.id === row.id);
+        assert.equal(hash(entry), row.json_sha256 || row.expression_json_sha256 || row.entry_json_sha256 || row.before_entry_json_sha256);
+        if (row.before_entry) assert.deepEqual(entry, row.before_entry);
+      }
+    }
+    for (const row of preserved.related_entries) if (!independentlyCheckedLexemes.has(row.id)) {
+      const entry = foundation02HistoryLexemes.find(entry => entry.id === row.id);
+      assert.equal(hash(entry), row.json_sha256 || row.entry_json_sha256);
+      if (row.before_entry) assert.deepEqual(entry, row.before_entry);
+    }
+    for (const row of preserved.memberships || []) {
+      const module = source.courses.find(course => course.id === row.course_id).modules.find(module => module.id === row.module_id);
+      assert.equal(module.lexeme_ids[row.index], replacements.get(row.lexeme_id) || row.lexeme_id);
+    }
+    for (const id of previous.excluded_source_ids || []) assert.equal(source.sources.some(row => row.id === id), false);
+  }
+  for (const row of supervisorLanguageRecord.protected_context.expressions) if (!changedExpressions.has(row.id)) {
+    assert.deepEqual(source.expressions.find(entry => entry.id === row.id), row.entry);
+    assert.equal(hash(row.entry), row.json_sha256);
+  }
+  assert.deepEqual(foundation02HistoryLexemes.find(entry => entry.id === context.complete_existing_form_scope_mismatch.id), context.complete_existing_form_scope_mismatch.before_entry);
+  for (const row of context.groups.containing_modules) {
+    const module = source.courses.find(course => course.id === row.course_id).modules.find(module => module.id === row.module_id);
+    assert.deepEqual(module, {...row.before_entry, requirements_revision:record.namespace,
+      lexeme_ids:row.before_entry.lexeme_ids.map(id => replacements.get(id) || id)});
+  }
+  assert.equal(record.source_registration.decisions.length, 27);
+  for (const decision of record.source_registration.decisions) {
+    const registered = source.sources.find(row => row.id === decision.id);
+    assert.deepEqual(registered, decision.proposed_row);
+    assert.equal(registered.status, 'consulted');
+    assert.equal(registered.assets_acquired, false);
+    assert.equal(registered.asset_license, null);
+  }
+  for (const module of source.courses[0].modules.slice(0, 2)) for (const id of module.lexeme_ids) {
+    const entry = foundation02HistoryLexemes.find(entry => entry.id === id);
+    assert.equal(entry.review.language, 'reviewed');
+    for (const kind of ['image', 'audio']) assert.equal(entry.media[kind].status, 'pending');
+  }
+  for (const id of ['unsafe.presenting-danger.adj', 'hazard.possible-harm.n']) assert.equal(foundation02HistoryLexemes.find(entry => entry.id === id).review.domain, 'pending');
+  for (const id of ['expr.foundation.module02.09', 'expr.foundation.module02.10']) assert.equal(source.expressions.find(entry => entry.id === id).review.domain, 'pending');
+  const current = auditProfessionalContent({rootDir, data:source});
+  assert.equal(current.errors.length, 0, JSON.stringify(current.errors));
+  assert.equal(current.summary.reviewed_lexemes, 156);
+  assert.equal(current.summary.morphology_reviewed, 189);
+  assert.equal(current.summary.ready_modules, 0);
+  assert.equal(current.summary.release_ready, false);
+});
+
+test('Foundation01 current morphology binds all fifty accepted graphs and every protected non-morphology field', () => {
+  const record = foundation01MorphologyRecord;
+  const digest = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const raw = file => crypto.createHash('sha256').update(fs.readFileSync(path.join(rootDir, file))).digest('hex');
+  assert.equal(raw('data/professional/provenance/foundation-module01-morphology-2026-10-17.json'), '00b813411c7b96e1c7b949c0af3544acaf1c0a4fd58e6997b6fa59bd58736e86');
+  const module = JSON.parse(fs.readFileSync(path.join(rootDir, record.module), 'utf8'));
+  assert.equal(raw(record.module), record.proposed_module_raw_sha256);
+  assert.equal(record.patches.length, 50);
+  assert.equal(new Set(record.patches.map(patch => patch.id)).size, 50);
+  assert.deepEqual([...module.lexemes.map(entry => entry.id)].sort(), [...record.patches.map(patch => patch.id)].sort());
+  assert.deepEqual(module.lexemes.reduce((counts, entry) => {
+    counts[entry.morphology.kind] = (counts[entry.morphology.kind] || 0) + 1; return counts;
+  }, {}), {atomic:16, morphological:30, compound:2, phrase:2});
+  for (const patch of record.patches) {
+    const entry = source.lexemes.find(item => item.id === patch.id);
+    assert.equal(digest(entry), patch.after_entry_json_sha256, patch.id + ': exact current entry');
+    const nonMorphology = {...entry}; delete nonMorphology.morphology;
+    assert.equal(digest(nonMorphology), patch.protected_non_morphology_json_sha256, patch.id + ': language, media, forms and review gates');
+    assert.equal(digest(entry.morphology), patch.installed_morphology_json_sha256);
+    assert.deepEqual(entry.morphology, patch.installed_morphology);
+    assert.deepEqual(morphologyErrors(entry.morphology, entry), []);
+    assert.equal(entry.morphology.review.status, 'reviewed');
+    assert.match(entry.morphology.review.reviewer, /independent.*AI.*not human or specialist approval/);
+    assert.equal(entry.review.language, 'reviewed');
+    assert.equal(entry.media.image.status, 'pending');
+    assert.equal(entry.media.audio.status, 'pending');
+    const memberships = source.courses.flatMap(course => course.modules.filter(item => item.lexeme_ids.includes(entry.id)).map(item => [course.id, item.id]));
+    assert.equal(memberships.length, 20);
+    assert.ok(memberships.every(([, id]) => id === 'module01'));
+  }
+  for (const review of record.independent_reviews) assert.equal(raw(review.path), review.sha256);
+  const priorSources = JSON.parse(fs.readFileSync(path.join(rootDir, record.source_registry_basis.path), 'utf8'));
+  assert.equal(raw(record.source_registry_basis.path), record.source_registry_basis.sha256);
+  assert.equal(priorSources.sources.length, 992);
+  assert.equal(record.appended_sources.length, 76);
+  assert.deepEqual(source.sources.slice(0, 992), priorSources.sources);
+  assert.deepEqual(source.sources.slice(992, 1068), record.appended_sources);
+  assert.equal(new Set(source.sources.map(row => row.id)).size, 1129);
+  assert.equal(record.source_url_bindings.length, 158);
+  for (const row of record.appended_sources) {
+    assert.equal(row.status, 'consulted'); assert.equal(row.assets_acquired, false); assert.equal(row.asset_license, null);
+  }
+  for (const binding of record.source_url_bindings) {
+    const ids = [...binding.existing_consulted_source_ids, ...(binding.appended_source_id ? [binding.appended_source_id] : [])];
+    assert.ok(ids.length > 0, binding.url);
+    for (const id of ids) {
+      const row = source.sources.find(item => item.id === id);
+      assert.ok(row, id); assert.equal(row.url, binding.url); assert.equal(row.status, 'consulted');
+    }
+  }
+});
+
+test('Foundation01 current language, variants and literal source qualifications survive morphology promotion', () => {
+  const records = [foundationLanguageRecord, foundationSecondLanguageRecord, foundationThirdLanguageRecord,
+    foundationFourthLanguageRecord, foundationFifthLanguageRecord, supervisorLanguageRecord, attendanceLanguageRecord];
+  const nonMorphology = entry => Object.fromEntries(Object.entries(entry).filter(([key]) => key !== 'morphology'));
+  let count = 0;
+  for (const record of records) {
+    for (const patch of record.patches) {
+      const entry = source.lexemes.find(item => item.id === patch.id);
+      assert.deepEqual(nonMorphology(entry), nonMorphology(patch.after), patch.id);
+      count++;
+    }
+    for (const row of record.sources) assert.deepEqual(source.sources.find(item => item.id === row.id), row);
+  }
+  assert.equal(count, 50);
+  const word = text => source.lexemes.find(item => foundation01MorphologyPatches.has(item.id) && item.text === text);
+  assert.deepEqual(word('coordinator').accepted_forms, ['coordinator', 'co-ordinator']);
+  assert.equal(word('coordinator').morphology.text, 'coordinator');
+  assert.deepEqual(word('coordinator').regions, ['general']);
+  assert.equal(word('supervisor').difficulty, 'B2');
+  assert.equal(word('attendance').difficulty, 'B2');
+  assert.deepEqual(attendanceLanguageRecord.patches[0].difficulty.source_observations,
+    {cefrj_v1_5_headword_pos:'B2', oxford_selected_presence_topics:'C1', collins_selected_presence_level:null, english_flows_whole_lesson:'B1 / B2'});
+  for (const text of ['colleague', 'department', 'deadline', 'extension']) {
+    const graph = word(text).morphology;
+    assert.equal(graph.kind, 'atomic'); assert.equal(graph.parts.length, 1);
+    assert.match(graph.review.notes, /(?:not.*monomorphemicity|not a denial of compound morphology)/);
+  }
+  assert.match(word('signature').morphology.review.notes, /bound intermediate/);
+  assert.match(word('signature').morphology.review.notes, /neither a new vocabulary item/);
+  const voicemail = word('voicemail');
+  for (const publisher of ['oxford', 'collins']) {
+    const ref = voicemail.references.find(item => item.source_id === 'foundation01-language-fourth10-' + publisher + '-voicemail');
+    assert.match(ref.scope, /contrast-only recording-system consultation/);
+    assert.match(ref.scope, /does not independently support the selected countable-message definition/);
+  }
+  assert.equal(source.lexemes.some(entry => entry.text === 'signate'), false);
+});
+
+test('Foundation01 graph mutations still fail structural validation and cannot bypass release gates', () => {
+  const signature = source.lexemes.find(entry => entry.id === 'signature.written-name.n');
+  const mutations = [
+    graph => {graph.lexeme_id = 'sign.observable-clinical-finding.n';},
+    graph => {graph.nodes[0].left = 'p2'; graph.nodes[0].right = 'p1';},
+    graph => {graph.nodes[1].left = 'p1';},
+    graph => {graph.nodes[1].surface = 'signateure';},
+    graph => {graph.nodes[0].break_offsets = [7];},
+    graph => {graph.nodes[1].right = 'n2';}
+  ];
+  for (const mutate of mutations) {
+    const graph = structuredClone(signature.morphology); mutate(graph);
+    assert.ok(morphologyErrors(graph, signature).length > 0);
+  }
+  const current = auditProfessionalContent({rootDir, data:source});
+  assert.equal(current.errors.length, 0, JSON.stringify(current.errors));
+  assert.equal(current.summary.morphology_reviewed, 189);
+  assert.equal(current.summary.ready_modules, 0); assert.equal(current.summary.release_ready, false);
+  const release = auditProfessionalContent({rootDir, data:source, release:true});
+  assert.ok(release.errors.length > 0);
+  assert.equal(release.summary.ready_modules, 0); assert.equal(release.summary.release_ready, false);
+});

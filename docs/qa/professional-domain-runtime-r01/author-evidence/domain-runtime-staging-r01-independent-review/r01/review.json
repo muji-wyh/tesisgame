@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "status": "independent_static_review_complete_runtime_acceptance_withheld",
+  "reviewer": "Codex recover_delivery independent static reviewer; not the staged runtime author",
+  "review_date_local": "2026-10-17",
+  "timezone": "Asia/Shanghai",
+  "staging_inventory": {
+    "path": "build/professional-english/domain-runtime-staging-r01/artifact-inventory.json",
+    "sha256": "7d92f574c83025dae64bf28a3b80766d0fbd009afa0247fae2769c20ae5341a5"
+  },
+  "input_bindings_sha256": "9f438c964fc5ae27da2ebbcabdbdcb316ad0b2fbec646ee1793fe12d72246b47",
+  "scope": "Static review of frozen owner, private adapter and catalog helper extraction against bound production compiler/contract, manifest/resolver/context and integration plan. Production lifecycle seams inspected for outstanding integration blockers.",
+  "methods": ["source_reading", "textual_diff", "raw_file_hashing"],
+  "new_staged_code_defects": [],
+  "conclusion": "No concrete staged-code defect identified by this bounded static review. This is not runtime acceptance or approval by renaming the earlier fixture owner.",
+  "static_boundaries_considered": [
+    "fixed optional application pin and exact seven constants",
+    "descriptor length and full digest before native decode",
+    "compiler contract, declared inventory and 20-course/200-module closure",
+    "50/10 ordered membership, complete domain rows, null exceptions and coarse review gates",
+    "generated manifest raw hash, original source identity and requested context",
+    "unchanged resolver/theme/motion/dependency tail",
+    "owner-created adapter snapshot and no loose-record fallback",
+    "deferred success/error, request/epoch cancellation, registered tokens and terminal retirement",
+    "single-module immutable release cache and fresh mode/seed/revision resolution"
+  ],
+  "integration_blockers": [
+    {"id":"loader_owner_join","classification":"required_integration_not_staged_code_defect","path":"scripts/professional_round_loader.gd","line":33,"problem":"Live request still resolves the ordinary catalog and claim has no owner token. Installing the staged bundle alone does not activate its authority boundary.","required":"Bind owner/request/token/context/media-generation/pending-scope and recheck after synchronous callbacks, before acquire/prepared and at claim."},
+    {"id":"retirement_during_storage","classification":"required_integration_not_staged_code_defect","path":"scripts/professional_play.gd","line":171,"problem":"A pending session.open_round is outside the owner's cancellation. The retired signal is not connected to coordinated Play/session open-job invalidation.","required":"Obsolete pending open jobs on retirement while preserving accepted durable event/wallet/ack work."},
+    {"id":"claim_after_teardown","classification":"required_integration_not_staged_code_defect","path":"scripts/game_ui.gd","line":1659,"problem":"Final claim follows old view/audio/card teardown, so a newly enforced stale-token rejection can leave the old presentation cleared.","required":"Preflight claim eligibility immediately before teardown and define the reentrant-invalidation outcome without violating media lease ordering."},
+    {"id":"combined_disposal","classification":"unverified_integration_requirement_no_new_bug_claim","path":"scripts/professional_store.gd","line":45,"problem":"Owner retirement does not prove whole-scene cleanup of host callbacks, timers, pending storage opens, view references or claimed leases.","required":"Implement or establish the combined disposal contract and observe actual late-callback/resource behavior while retaining recoverable progress."}
+  ],
+  "native_editor": {
+    "owner_path": "build/professional-english/domain-runtime-staging-r01/scripts/professional_domain_owner.gd",
+    "line": 254,
+    "policy": "deferred_policy_unavailable_before_pin_or_json_read",
+    "assessment": "Consistent with the plan's fail-closed alternative; native/editor and ordinary native export cannot exercise successful Professional content in this candidate.",
+    "fresh_source_bound_launcher_implemented": false,
+    "native_fixture_success_transfers": false
+  },
+  "unexecuted_verification": [
+    "GDScript syntax and typing",
+    "actual Godot JSON decoder parity",
+    "exported Web owner-adapter-loader-media-Play-session-store-view behavior",
+    "cancellation and lease/disposal regressions",
+    "all-unavailable and separate audited ready paths",
+    "eligible fixtures for the other five modes",
+    "latency, main-thread slice and memory targets"
+  ],
+  "mutations": {"staged_files":0,"production_files":0,"shared_tests":0,"checkpoint":0,"content_review":0},
+  "dispatch": {"native":false,"build":false,"tests":false,"godot_syntax":false,"candidate_runtime":false},
+  "runtime_acceptance": false,
+  "production_integration_acceptance": false,
+  "media_or_content_acceptance": false,
+  "fourth10_language_package": "Separate author research remains pending independent acceptance."
+}

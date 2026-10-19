@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "status": "committed",
+  "registry_after_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "binding_raw_sha256": "2710e773bf4744b782a3801a687726c4a14c547084e8217311e886189b31f15c",
+  "provenance_raw_sha256": "7b2c674a5249ef8c59afc2ab9e620cd2ed8d4e6a55704a231ca53f00005cd4fc",
+  "result": {
+    "status": "committed",
+    "committed": true,
+    "planSha256": "670c5ba51d2e7e72baa95435893dd59017a46fe2786342eaeffe08fc81a9b480",
+    "preparedSha256": "97a5791f559a3d9cdcd15f24013685f9c63c6aa923dc8c3da19a9ff9ff6d4eef",
+    "transactionDir": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\transactions\\foundation02-second10-language-r02",
+    "state": {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\transactions\\foundation02-second10-language-r02\\states\\000054-committed.json",
+      "sha256": "60b7080e9fd46f23a0bb5b12788aade62ca557c0f342bcb992856084ee76e6f8",
+      "status": "committed"
+    }
+  }
+}

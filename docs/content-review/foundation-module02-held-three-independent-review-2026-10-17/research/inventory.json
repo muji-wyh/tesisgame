@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "status": "research_only_unaccepted",
+  "hash_algorithm": "SHA256",
+  "note": "This inventory excludes itself.",
+  "files": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 4676,
+      "sha256": "4ad789ff3ee4f69f115b6e52a307da9c7089609032d2c93a4c0521af265a14f8"
+    },
+    {
+      "path": "PROPOSALS.md",
+      "bytes": 8331,
+      "sha256": "78795d371d0fa363f24aa5777720bd41855797e0b48b846287ebfe292a21d652"
+    },
+    {
+      "path": "SOURCE-LEDGER.md",
+      "bytes": 12555,
+      "sha256": "f9b30b87e2a2e3f4760cb5ca996ae9e7b2a77dd113f555a77c1982ff34fdb862"
+    },
+    {
+      "path": "capture-context.cjs",
+      "bytes": 5479,
+      "sha256": "369e3f02c123509b7acd6ed660ba9867b268186b6164a3dce771fbf9284c7046"
+    },
+    {
+      "path": "context.json",
+      "bytes": 188846,
+      "sha256": "ae77d3ec5e9c4a40af8877d718e3dae001ed15bc9d82d7c283f7560f8254a1cd"
+    },
+    {
+      "path": "fetch-source-metadata.cjs",
+      "bytes": 3288,
+      "sha256": "a991cf4b3bffae17c8018351239013c110a6cedcad7f8a971c715582d82d82e1"
+    },
+    {
+      "path": "foundation-module02.before.json",
+      "bytes": 267505,
+      "sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad"
+    },
+    {
+      "path": "fresh-http-retrieval.json",
+      "bytes": 10498,
+      "sha256": "7b2ddb198f91624655fd23c361734bd025ef8bd72e3454dcbf2ec88a900c5219"
+    },
+    {
+      "path": "input-pins.json",
+      "bytes": 66462,
+      "sha256": "145f828566461bae0dbe0d10e4c579163c6e315fefc03361fc452284365b4762"
+    },
+    {
+      "path": "integrity-summary.json",
+      "bytes": 2264,
+      "sha256": "c62f5a26d85f5a4c1f3ab61f0031a347c9884816c06ab59d8752a621142ff541"
+    },
+    {
+      "path": "proposal-fields.json",
+      "bytes": 8907,
+      "sha256": "68d601c7d6cbb05177aa4a4667d474fc4a7b542d1fd41d003c94fa8b853ed3fc"
+    },
+    {
+      "path": "retained-reviews/1.json",
+      "bytes": 23927,
+      "sha256": "2d95fb5e1f08ed79a2b9de27ad2e031e36139385acf0d6d0e3e7a13b1a6f865e"
+    },
+    {
+      "path": "retained-reviews/2.json",
+      "bytes": 43281,
+      "sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d"
+    },
+    {
+      "path": "retained-reviews/3.json",
+      "bytes": 80788,
+      "sha256": "92c5b326565f95d9dacb8c11f8ca6684b5c39200b4ebcae57f3108a3c7a720b1"
+    },
+    {
+      "path": "seal-inventory.cjs",
+      "bytes": 3067,
+      "sha256": "d41a53ed9d0ade04f1cc2a95c4d06ebe88975d12ca126fb983a2751c66a80b40"
+    }
+  ]
+}

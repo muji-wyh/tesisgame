@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "status": "approved_by_user",
+  "approved_at": "2026-10-16T01:26:44.000Z",
+  "recovered_on": "2026-10-16",
+  "reviewer": "User",
+  "evidence": {
+    "thread_id": "01a13e0b-71f5-7d33-af50-cb1aa9959fd0",
+    "thread_title": "tesis-iter-2",
+    "host": "local",
+    "turn_id": "01a14251-9030-7100-9193-546803f3dd97",
+    "user_message_id": "01a14251-9251-79c2-b726-5bf3e383d0bf",
+    "question_item_id": ["request_user_input_async", "call_zXnfvgSMgGM4EROYazqGHQcT", 0],
+    "original_language": "zh-CN",
+    "question_english_translation": "Please listen to aisle and cash register above: do the pronunciation, speech rate, and voice quality match your approved Ava Sweet?",
+    "answer_english_translation": "Both match; you can continue using them.",
+    "processing_note": "The human reply is present in the original chat. Its assistant turn failed with an API decoding error, leaving the acquisition document and checkpoint incorrectly marked as awaiting feedback. The failure did not retract the user's approval."
+  },
+  "scope": {
+    "accepted": ["Pronunciation of these two exact samples", "Speech rate and voice quality of these two exact samples", "Continued use of the approved Ava Sweet profile"],
+    "not_claimed": ["Per-term pronunciation approval of future recordings", "An agent listening review", "In-game acoustic mix or physical-device playback review", "Complete module readiness"]
+  },
+  "profile": {"voice": "en-US-AvaNeural", "rate": "-15%", "pitch": "+8Hz", "volume": "+0%", "postprocessing": false},
+  "client": {"name": "edge-tts", "version": "7.3.1"},
+  "historical_acquisition": "docs/assets/sources/professional-retail-ava/acquisition.json",
+  "outputs": [
+    {
+      "id": "aisle",
+      "sense_id": "aisle.passage.n",
+      "submitted_text": "aisle.",
+      "presented_path": "build/professional-english/retail-audio-review/retry-7.3.1/aisle.wav",
+      "source_path": "docs/assets/sources/professional-retail-ava/aisle.wav",
+      "wav_sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+      "source_mp3_sha256": "260382813015cc9331c9315f536b47ff6d83cb77c42b6d6690f6fad4256060ed"
+    },
+    {
+      "id": "cash-register",
+      "sense_id": "cash-register.sales-device.n",
+      "submitted_text": "cash register.",
+      "presented_path": "build/professional-english/retail-audio-review/retry-7.3.1/cash-register.wav",
+      "source_path": "docs/assets/sources/professional-retail-ava/cash-register.wav",
+      "wav_sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763",
+      "source_mp3_sha256": "ac5bb50014c661a23a40921337d8845f7a9a83104850901eb7f01f8289de8542"
+    }
+  ]
+}

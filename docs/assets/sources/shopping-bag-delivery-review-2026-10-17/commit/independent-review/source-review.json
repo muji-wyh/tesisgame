@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "status": "accepted_shopping_bag_commit_source_only",
+  "reviewer": "Codex runtime_recovery",
+  "author": "Codex morph_review",
+  "source_accepted": true,
+  "memory_probe_source_accepted": true,
+  "exact_commit_contract_accepted": false,
+  "final_bundle_approved": false,
+  "contract_sha256": null,
+  "commit_source": {
+    "path": "build/professional-english/shopping-bag-commit-proposal-r01/commit.cjs",
+    "bytes": 27037,
+    "sha256": "b522c987354d2e526cc9194b0dd5239b2592b07aa30f4ddd7bd16261e2c3c087"
+  },
+  "probe_source": {
+    "path": "build/professional-english/shopping-bag-commit-proposal-r01/guard-probe.cjs",
+    "bytes": 13318,
+    "sha256": "606b14e55469c212d39e24e16a0bcbdf51e3c46330bc8ecf5bb23b732a11bdf7"
+  },
+  "inspection": {
+    "path": "build/professional-english/shopping-bag-commit-independent-review-r01/inspection.json",
+    "bytes": 18142,
+    "sha256": "7946b3eafb4874256ec8bc7c08fc560ba88b9a74e042ac7d185905801d7e4024"
+  },
+  "blocking_findings": [],
+  "findings": [
+    {
+      "area": "Source and path confinement",
+      "anchors": [
+        "commit.cjs:37-67",
+        "commit.cjs:155-196",
+        "commit.cjs:238-250"
+      ],
+      "assessment": "Normalized Windows-safe relative paths, case/ancestor overlap guards, exact Q worktree, required rehashed source witnesses, and real adapter symlink/junction/non-file rejection confine the reviewed operation."
+    },
+    {
+      "area": "Targets and dependency closure",
+      "anchors": [
+        "commit.cjs:69-107",
+        "commit.cjs:128-153",
+        "commit.cjs:189-196"
+      ],
+      "assessment": "The pinned preparation fixes 34 targets and four replacements. Exactly two metadata sources are independently finalized, additions remain under the final-evidence prefix, every source/target commitment is exact, and only the four replacements may differ in the complete candidate dependency union."
+    },
+    {
+      "area": "Successful candidate and independent review",
+      "anchors": [
+        "commit.cjs:109-126",
+        "commit.cjs:156-188"
+      ],
+      "assessment": "A nonauthor/non-dispatcher review must bind the encoded exact contract. A fresh candidate revision, reviewed runner, actual successful receipt, explicit callback count, suite coverage, audit counts, protected observed reads, and root command receipt witness are required. These gates do not convert the current unbound template into authorization."
+    },
+    {
+      "area": "One-shot commit and recovery",
+      "anchors": [
+        "commit.cjs:244-271",
+        "guarded-transaction.cjs:264-331"
+      ],
+      "assessment": "Read-only preflight precedes attempt consumption. Existing attempts, journal or lock reject replay. Immutable inputs and protected preimages are rechecked before the guarded helper, after writes, and after commit. The helper records stages/backups and exact ownership for conservative rollback. Explicit recovery remains a separately reviewed action."
+    },
+    {
+      "area": "Receipt and trusted journal",
+      "anchors": [
+        "commit.cjs:198-236",
+        "commit.cjs:267-271"
+      ],
+      "assessment": "The verifier ties exact prepared bytes and plan to trusted hashes, validates all stage/backup/live bytes and the complete state sequence, and finally checks the independently trusted final state path/hash. Committed receipts keep persisted validation false/null and are never rewritten to claim later checks."
+    },
+    {
+      "area": "Optional probe source",
+      "anchors": [
+        "guard-probe.cjs:8-88",
+        "guard-probe.cjs:90-119"
+      ],
+      "assessment": "The probe begins with actual reviewed validation and then uses memory-only review/file overlays and a synthetic journal. Disk access is limited to the supplied read-only adapter. It never invokes run, the transaction helper, project modules, native or browser execution. The static flow contains 62 planned cases; no case has been executed by this reviewer."
+    }
+  ],
+  "limitations": [
+    "This source-only acceptance has a different status from accepted_exact_shopping_bag_commit_contract and cannot satisfy commit validation.",
+    "Root must first retain an actual successful candidate receipt and its command witness, finalize documentary meaning and evidence descriptors, and obtain a separate exact-contract review.",
+    "Root must pin both probe and commit sources before imports and retain its own fresh one-shot probe wrapper plus after-failure protected-file witnesses.",
+    "Memory probe results do not establish filesystem rename/recovery behavior, Windows link handling, loaded-registry audit, tests, native checks, or persisted validation.",
+    "The exclusive token and reviewer strings are workflow witnesses; the root-owned exclusive writer window remains required.",
+    "A failure after the helper has committed can leave a committed journal without a success receipt. Preserve the failure/journal and review recovery or persisted completion; never replay the consumed attempt."
+  ],
+  "execution": {
+    "source_imported": false,
+    "syntax_checked": false,
+    "probe_executed": false,
+    "project_module_executed": false,
+    "tests_executed": false,
+    "native_executed": false,
+    "browser_executed": false,
+    "transaction_executed": false,
+    "production_mutated": false
+  }
+}

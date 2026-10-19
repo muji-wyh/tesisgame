@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "status": "exact_copy_of_frozen_independent_AI_language_review",
+  "recorded_at_utc": "2026-10-16T19:04:49.4006543Z",
+  "source_directory": "build/professional-english/foundation-module02-language-review/third10-independent-review-r01",
+  "destination_directory": "docs/content-review/foundation-module02-language-third10-independent-review-2026-10-17",
+  "source_inventory_sha256": "02b1b7e1c7c31d24a8a0bd401c6ef8bbceee14a1c2b673fd68d06b92a297b8b6",
+  "review_sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d",
+  "artifact_count": 6,
+  "all_exact": true,
+  "artifacts": [
+    {
+      "path": "review.json",
+      "bytes": 43281,
+      "source_sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d",
+      "source_after_sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d",
+      "copy_sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d",
+      "exact": true
+    },
+    {
+      "path": "REVIEW.md",
+      "bytes": 3894,
+      "source_sha256": "9b4600fe4affc0a75df108abe7d57484d07358f7ba7fefc65b03443d2335ce6f",
+      "source_after_sha256": "9b4600fe4affc0a75df108abe7d57484d07358f7ba7fefc65b03443d2335ce6f",
+      "copy_sha256": "9b4600fe4affc0a75df108abe7d57484d07358f7ba7fefc65b03443d2335ce6f",
+      "exact": true
+    },
+    {
+      "path": "static-bindings.json",
+      "bytes": 132368,
+      "source_sha256": "62f41b3f8a66ce54270086cb25a3b6d3272fe8d7846fec39993f5dfd85dcc349",
+      "source_after_sha256": "62f41b3f8a66ce54270086cb25a3b6d3272fe8d7846fec39993f5dfd85dcc349",
+      "copy_sha256": "62f41b3f8a66ce54270086cb25a3b6d3272fe8d7846fec39993f5dfd85dcc349",
+      "exact": true
+    },
+    {
+      "path": "static-hashes.cjs",
+      "bytes": 5538,
+      "source_sha256": "7b6a8e332229ce6916e4a16041e10cdea9849ee1666da1eb90778f32757fb6fa",
+      "source_after_sha256": "7b6a8e332229ce6916e4a16041e10cdea9849ee1666da1eb90778f32757fb6fa",
+      "copy_sha256": "7b6a8e332229ce6916e4a16041e10cdea9849ee1666da1eb90778f32757fb6fa",
+      "exact": true
+    },
+    {
+      "path": "static-hashes.json",
+      "bytes": 19293,
+      "source_sha256": "b7ce3d5e689e6b979f57262abb68d47f66c7f09fc4a65592ec4ca94c740f6aad",
+      "source_after_sha256": "b7ce3d5e689e6b979f57262abb68d47f66c7f09fc4a65592ec4ca94c740f6aad",
+      "copy_sha256": "b7ce3d5e689e6b979f57262abb68d47f66c7f09fc4a65592ec4ca94c740f6aad",
+      "exact": true
+    },
+    {
+      "path": "inventory.json",
+      "bytes": 989,
+      "source_sha256": "02b1b7e1c7c31d24a8a0bd401c6ef8bbceee14a1c2b673fd68d06b92a297b8b6",
+      "source_after_sha256": "02b1b7e1c7c31d24a8a0bd401c6ef8bbceee14a1c2b673fd68d06b92a297b8b6",
+      "copy_sha256": "02b1b7e1c7c31d24a8a0bd401c6ef8bbceee14a1c2b673fd68d06b92a297b8b6",
+      "exact": true
+    }
+  ],
+  "decisions_changed": false,
+  "author_research_changed": false,
+  "production_integration": false,
+  "fresh_source_retrieval": false,
+  "scope": "Independent AI language judgment on frozen author-recorded publisher observations; no human, specialist, expression, morphology, media, domain, module or release acceptance."
+}

@@ -1,0 +1,1651 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.customer_support.module09.01",
+      "text": "Each field in this form contributes to the customer profile or contact record; include only information relevant to this service.",
+      "meaning": "Describe the purpose and limits of customer-record fields.",
+      "context": "An agent enters relevant information in a support form.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Each",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "field",
+          "start": 5,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "in",
+          "start": 11,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "this",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "form",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "contributes",
+          "start": 24,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 36,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "customer",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "profile",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "contact",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "record",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "include",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "only",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "information",
+          "start": 92,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": "relevant",
+          "start": 104,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": "to",
+          "start": 113,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": "this",
+          "start": 116,
+          "end": 120
+        },
+        {
+          "index": 20,
+          "text": "service",
+          "start": 121,
+          "end": 128
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 128,
+          "end": 129
+        }
+      ],
+      "focus_lexeme_ids": [
+        "customer-profile.organized-customer-service-information.n",
+        "contact-record.stored-contact-identification-and-reachability-details.n",
+        "field.data-entry-space.n",
+        "form.structured-information-document.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module09.02",
+      "text": "Please review the notification, interaction history, and timestamp before asking the customer to repeat information.",
+      "meaning": "Review existing updates before requesting details again.",
+      "context": "An agent checks the latest recorded interaction.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "review",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "notification",
+          "start": 18,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "interaction",
+          "start": 32,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "history",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "timestamp",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "asking",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "customer",
+          "start": 85,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "to",
+          "start": 94,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "repeat",
+          "start": 97,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "information",
+          "start": 104,
+          "end": 115
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 115,
+          "end": 116
+        }
+      ],
+      "focus_lexeme_ids": [
+        "interaction-history.record-of-prior-customer-communications.n",
+        "timestamp.recorded-event-time.n",
+        "notification.system-alert-message.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module09.03",
+      "text": "An internal note and a public reply have different audiences; check the recipients before sending.",
+      "meaning": "Prevent an audience-selection error.",
+      "context": "An agent reviews a fictional draft message.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "An",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "internal",
+          "start": 3,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "note",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "public",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "reply",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "have",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "different",
+          "start": 41,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "audiences",
+          "start": 51,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "check",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "recipients",
+          "start": 72,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "before",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "sending",
+          "start": 90,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "internal-note.record-entry-for-authorized-internal-readers.n",
+        "public-reply.customer-visible-support-response.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module09.04",
+      "text": "Please adapt the saved reply template to the actual request and verify the knowledge article's review date.",
+      "meaning": "Use a reusable reply while checking its relevance and source.",
+      "context": "An agent prepares a response to a specific request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "adapt",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "saved",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "reply",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "template",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 38,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "actual",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "request",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "verify",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "knowledge",
+          "start": 75,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "article's",
+          "start": 85,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "review",
+          "start": 95,
+          "end": 101
+        },
+        {
+          "index": 16,
+          "text": "date",
+          "start": 102,
+          "end": 106
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 106,
+          "end": 107
+        }
+      ],
+      "focus_lexeme_ids": [
+        "saved-reply.reusable-prepared-response-text.n",
+        "knowledge-article.single-reference-information-entry.n",
+        "template.reusable-document-pattern.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module09.05",
+      "text": "In the ticket tab, use the menu and filter to review the ticket tag and custom field against current classification guidance.",
+      "meaning": "Locate and review case-classification information.",
+      "context": "An agent checks the support interface.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "In",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "ticket",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "tab",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 5,
+          "text": "use",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 7,
+          "text": "menu",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 9,
+          "text": "filter",
+          "start": 36,
+          "end": 42
+        },
+        {
+          "index": 10,
+          "text": "to",
+          "start": 43,
+          "end": 45
+        },
+        {
+          "index": 11,
+          "text": "review",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 13,
+          "text": "ticket",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 14,
+          "text": "tag",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 16,
+          "text": "custom",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 17,
+          "text": "field",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 18,
+          "text": "against",
+          "start": 85,
+          "end": 92
+        },
+        {
+          "index": 19,
+          "text": "current",
+          "start": 93,
+          "end": 100
+        },
+        {
+          "index": 20,
+          "text": "classification",
+          "start": 101,
+          "end": 115
+        },
+        {
+          "index": 21,
+          "text": "guidance",
+          "start": 116,
+          "end": 124
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "ticket-tag.label-attached-to-support-record.n",
+        "custom-field.configured-additional-information-field.n",
+        "tab.interface-page-selector.n",
+        "menu.interface-command-list.n",
+        "filter.result-limiting-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module09.06",
+      "text": "The customer relationship management dashboard organizes information, but each user account still needs authorization for access to customer data.",
+      "meaning": "Distinguish organized records from permission to access them.",
+      "context": "An agent reviews account access in the customer-record system.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "customer",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "relationship",
+          "start": 13,
+          "end": 25
+        },
+        {
+          "index": 3,
+          "text": "management",
+          "start": 26,
+          "end": 36
+        },
+        {
+          "index": 4,
+          "text": "dashboard",
+          "start": 37,
+          "end": 46
+        },
+        {
+          "index": 5,
+          "text": "organizes",
+          "start": 47,
+          "end": 56
+        },
+        {
+          "index": 6,
+          "text": "information",
+          "start": 57,
+          "end": 68
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 8,
+          "text": "but",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 9,
+          "text": "each",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 10,
+          "text": "user",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 11,
+          "text": "account",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 12,
+          "text": "still",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 13,
+          "text": "needs",
+          "start": 98,
+          "end": 103
+        },
+        {
+          "index": 14,
+          "text": "authorization",
+          "start": 104,
+          "end": 117
+        },
+        {
+          "index": 15,
+          "text": "for",
+          "start": 118,
+          "end": 121
+        },
+        {
+          "index": 16,
+          "text": "access",
+          "start": 122,
+          "end": 128
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 129,
+          "end": 131
+        },
+        {
+          "index": 18,
+          "text": "customer",
+          "start": 132,
+          "end": 140
+        },
+        {
+          "index": 19,
+          "text": "data",
+          "start": 141,
+          "end": 145
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 145,
+          "end": 146
+        }
+      ],
+      "focus_lexeme_ids": [
+        "customer-relationship-management.management-of-customer-relationship-information.n",
+        "user-account.personal-system-profile.n",
+        "dashboard.information-display.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module09.07",
+      "text": "The mandatory field and free-text field have different input requirements.",
+      "meaning": "Distinguish form elements.",
+      "context": "An agent learns a fictional record form.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "mandatory",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "field",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "free-text",
+          "start": 24,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "field",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "have",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "different",
+          "start": 45,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "input",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "requirements",
+          "start": 61,
+          "end": 73
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mandatory-field.required-input-item.n",
+        "free-text-field.unstructured-text-input.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module09.08",
+      "text": "Please retain the audit trail and version history when using the correction entry process.",
+      "meaning": "Make a traceable record correction.",
+      "context": "A supervisor reviews a factual error.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "retain",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "audit",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "trail",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "version",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "history",
+          "start": 42,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "when",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "using",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "correction",
+          "start": 65,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "entry",
+          "start": 76,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "process",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "audit-trail.recorded-change-history.n",
+        "version-history.record-of-document-changes.n",
+        "correction-entry.record-amendment-entry.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module09.09",
+      "text": "The spreadsheet uses one row for each record; check the cell in the reference number column before linking the request.",
+      "meaning": "Check the reference stored in a spreadsheet record.",
+      "context": "An agent verifies a record link.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "spreadsheet",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "uses",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "one",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "row",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "for",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "each",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "record",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "check",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "cell",
+          "start": 56,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 61,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": "reference",
+          "start": 68,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "number",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "column",
+          "start": 85,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": "before",
+          "start": 92,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": "linking",
+          "start": 99,
+          "end": 106
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 107,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": "request",
+          "start": 111,
+          "end": 118
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 118,
+          "end": 119
+        }
+      ],
+      "focus_lexeme_ids": [
+        "spreadsheet.tabular-calculation-document.n",
+        "row.table-record.n",
+        "record.stored-information-entry.n",
+        "column.table-field.n",
+        "reference-number.record-reference-code.n",
+        "cell.single-spreadsheet-space.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module09.10",
+      "text": "The URL and HTTPS indicator in your browser do not alone establish that a page is the approved destination.",
+      "meaning": "Check a destination beyond its visible address and connection indicator.",
+      "context": "An agent verifies the approved page before using it.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "URL",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "HTTPS",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "indicator",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "in",
+          "start": 28,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "your",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "browser",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "do",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "not",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "alone",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "establish",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "that",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "a",
+          "start": 72,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "page",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "is",
+          "start": 79,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 17,
+          "text": "approved",
+          "start": 86,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "destination",
+          "start": 95,
+          "end": 106
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 106,
+          "end": 107
+        }
+      ],
+      "focus_lexeme_ids": [
+        "url.resource-address.n",
+        "https.tls-protected-http.n",
+        "browser.web-access-program.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1573 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.clinical_medicine.module09.01",
+      "text": "Please check that the prescription, protocol and policy are current and apply to this setting.",
+      "meaning": "Request verification of the scope and currency of records.",
+      "context": "Reviewing clinical documents with the responsible professional.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "that",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "prescription",
+          "start": 22,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "protocol",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "policy",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "are",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "current",
+          "start": 60,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "apply",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "to",
+          "start": 78,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "this",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "setting",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "prescription.authorized-treatment-order.n",
+        "protocol.specified-clinical-process.n",
+        "policy.organizational-rule-or-position.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.02",
+      "text": "The patient identifier and medical record number must refer to the intended person.",
+      "meaning": "State the purpose of checking identifying values.",
+      "context": "Reviewing a fictional electronic record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "identifier",
+          "start": 12,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "medical",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "record",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "number",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "must",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "refer",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "to",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "intended",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "person",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "patient-identifier.person-linking-healthcare-value.n",
+        "medical-record-number.health-record-identifying-number.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.03",
+      "text": "Please confirm the date of birth, preferred name and contact details with the appropriate source.",
+      "meaning": "Request accurate personal information.",
+      "context": "Checking a fictional patient record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "date",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "of",
+          "start": 24,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "birth",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "preferred",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "name",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "contact",
+          "start": 53,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "details",
+          "start": 61,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "with",
+          "start": 69,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "appropriate",
+          "start": 78,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "source",
+          "start": 90,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "date-of-birth.birth-calendar-date.n",
+        "preferred-name.person-chosen-address-name.n",
+        "contact-details.communication-contact-information.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.04",
+      "text": "The medication list and allergy alert need review against the available history.",
+      "meaning": "Request verification of clinical record information.",
+      "context": "Preparing the responsible clinician's record review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "medication",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "list",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "allergy",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "alert",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "need",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "review",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "against",
+          "start": 50,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "available",
+          "start": 62,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "history",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "medication-list.recorded-medicine-inventory.n",
+        "allergy-alert.recorded-allergy-warning.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.05",
+      "text": "The consent form records part of the discussion; it does not by itself establish valid agreement.",
+      "meaning": "Clarify the role and limits of a form.",
+      "context": "Reviewing consent documentation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "consent",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "form",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "records",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "part",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "discussion",
+          "start": 37,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "it",
+          "start": 49,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "does",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "not",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "by",
+          "start": 61,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "itself",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "establish",
+          "start": 71,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "valid",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "agreement",
+          "start": 87,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "consent-form.agreement-documentation-form.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.06",
+      "text": "Please preserve the timestamp, electronic signature and correction entry according to the documentation standard.",
+      "meaning": "Request traceable recording under the relevant system.",
+      "context": "Correcting a fictional record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "preserve",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "timestamp",
+          "start": 20,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "electronic",
+          "start": 31,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "signature",
+          "start": 42,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "correction",
+          "start": 56,
+          "end": 66
+        },
+        {
+          "index": 9,
+          "text": "entry",
+          "start": 67,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "according",
+          "start": 73,
+          "end": 82
+        },
+        {
+          "index": 11,
+          "text": "to",
+          "start": 83,
+          "end": 85
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": "documentation",
+          "start": 90,
+          "end": 103
+        },
+        {
+          "index": 14,
+          "text": "standard",
+          "start": 104,
+          "end": 112
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "timestamp.recorded-event-time.n",
+        "electronic-signature.digital-signing-information.n",
+        "correction-entry.record-amendment-entry.n",
+        "documentation-standard.recording-quality-requirement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.07",
+      "text": "The audit trail and access log serve different recording purposes in the system.",
+      "meaning": "Distinguish change history from access records.",
+      "context": "Discussing record security.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "audit",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "trail",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "access",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "log",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "serve",
+          "start": 31,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "different",
+          "start": 37,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "recording",
+          "start": 47,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "purposes",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "in",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "system",
+          "start": 73,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "audit-trail.recorded-change-history.n",
+        "access-log.system-entry-record.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.08",
+      "text": "The discharge summary and referral letter contain information for continuing care.",
+      "meaning": "Explain the purpose of two clinical documents.",
+      "context": "Preparing a transition between services.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "discharge",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "summary",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "referral",
+          "start": 26,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "letter",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "contain",
+          "start": 42,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "information",
+          "start": 50,
+          "end": 61
+        },
+        {
+          "index": 8,
+          "text": "for",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "continuing",
+          "start": 66,
+          "end": 76
+        },
+        {
+          "index": 10,
+          "text": "care",
+          "start": 77,
+          "end": 81
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "discharge-summary.care-episode-summary.n",
+        "referral-letter.written-professional-referral.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.09",
+      "text": "Please review the problem list, diagnostic code and visit record for consistency with the documented assessment.",
+      "meaning": "Request consistency across related records.",
+      "context": "Reviewing a fictional healthcare visit.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "review",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "problem",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "list",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "diagnostic",
+          "start": 32,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "code",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "visit",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "record",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "for",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "consistency",
+          "start": 69,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "with",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "documented",
+          "start": 90,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "assessment",
+          "start": 101,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "problem-list.maintained-list-of-relevant-health-problems.n",
+        "diagnostic-code.classification-code-representing-health-condition-or-related-concept.n",
+        "visit-record.account-of-support-visit.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module09.10",
+      "text": "The clinical decision support alert requires professional review, and the acknowledgment only confirms that the message was received.",
+      "meaning": "Distinguish support information from clinical judgment and receipt.",
+      "context": "Discussing a digital clinical message.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "clinical",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "decision",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "support",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "alert",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "requires",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "professional",
+          "start": 45,
+          "end": 57
+        },
+        {
+          "index": 7,
+          "text": "review",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "acknowledgment",
+          "start": 74,
+          "end": 88
+        },
+        {
+          "index": 12,
+          "text": "only",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 13,
+          "text": "confirms",
+          "start": 94,
+          "end": 102
+        },
+        {
+          "index": 14,
+          "text": "that",
+          "start": 103,
+          "end": 107
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 16,
+          "text": "message",
+          "start": 112,
+          "end": 119
+        },
+        {
+          "index": 17,
+          "text": "was",
+          "start": 120,
+          "end": 123
+        },
+        {
+          "index": 18,
+          "text": "received",
+          "start": 124,
+          "end": 132
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 132,
+          "end": 133
+        }
+      ],
+      "focus_lexeme_ids": [
+        "clinical-decision-support.information-or-tools-supporting-clinical-decisions.n",
+        "acknowledgment.recognition-of-message-or-concern.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

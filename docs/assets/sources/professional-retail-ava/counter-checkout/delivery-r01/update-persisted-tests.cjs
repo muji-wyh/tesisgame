@@ -1,0 +1,32 @@
+'use strict';
+// Root-owned four-file test update. Default dry run never executes tests.
+const lib=require('./delivery-lib.cjs'),{testPaths,transformTests}=require('./persisted-test-transforms.cjs');
+const {describePlan,commitTransaction,recoverTransaction}=require('./guarded-transaction.cjs');
+const {fs,path,root,C,plan,read,raw,hash,inRoot,serialized}=lib;
+const required=['--preimages-sha256','--integration-receipt-sha256'];if(process.argv.includes('--recover'))required.push('--transaction-plan-sha256');
+const options=lib.args(required,['--apply','--recover']);lib.assert.ok(!(options['--apply']&&options['--recover']));
+const check=lib.checks(),{same}=check,preFile=path.join(__dirname,'preimages.json'),integrationFile=path.join(__dirname,'integration-receipt.json');
+same(raw(preFile),options['--preimages-sha256']);same(raw(integrationFile),options['--integration-receipt-sha256']);
+const pre=read(preFile),integration=read(integrationFile);
+same(integration.integrated,true);same(integration.preimages_raw_sha256,raw(preFile));same(integration.after_registry_sha256,pre.proposed_registry_sha256);
+same(hash(lib.loadProfessionalContent(root)),integration.after_registry_sha256);same(raw(inRoot(C.provenance)),integration.provenance_raw_sha256);same(raw(inRoot(C.target)),integration.target_after_raw_sha256);
+for(const[file,sha]of Object.entries(pre.delivery_files))same(raw(path.join(__dirname,file)),sha);
+const statesDir=path.join(inRoot(C.transaction),'states'),states=fs.readdirSync(statesDir).filter(file=>/^\d{6}-[a-z-]+\.json$/.test(file)).sort();same(states.length>0,true);
+const committed=read(path.join(statesDir,states.at(-1))),preparedPath=path.join(inRoot(C.transaction),'prepared.json');same(committed.status,'committed');same(committed.prepared_sha256,raw(preparedPath));
+const prepared=read(preparedPath);for(const file of prepared.entries)same(raw(inRoot(file.path)),file.after.sha256,'Committed audio output');
+const receiptPath=path.join(__dirname,'persisted-tests-update-receipt.json'),allowedPaths=[...testPaths.map(inRoot),receiptPath],transactionDir=inRoot(C.testTransaction);
+if(options['--recover']){
+  const result=recoverTransaction({repositoryRoot:root,transactionDir,allowedPaths,expectedPlanSha256:options['--transaction-plan-sha256']});
+  if(result.status!=='committed'){same(['rolled-back','not-prepared'].includes(result.status),true);for(const file of testPaths)same(raw(inRoot(file)),pre.validated_measured_inputs[file]);same(fs.existsSync(receiptPath),false);}
+  else same(result.targetFilesMutated,false);
+  same(hash(lib.loadProfessionalContent(root)),integration.after_registry_sha256);console.log(JSON.stringify({recovery:result,registry_sha256:integration.after_registry_sha256,checks:check.count()}));process.exit(0);
+}
+const inputs={};for(const file of testPaths){same(raw(inRoot(file)),pre.validated_measured_inputs[file],'Exact validated test before audio');inputs[file]=fs.readFileSync(inRoot(file),'utf8');}
+const outputs=transformTests(inputs),changes=testPaths.map(file=>({path:inRoot(file),before:Buffer.from(inputs[file]),after:Buffer.from(outputs[file])}));
+same(fs.existsSync(receiptPath),false);
+const summary={schema:1,status:'counter_checkout_audio_persisted_tests_updated_pending_execution',preimages_raw_sha256:raw(preFile),integration_receipt_raw_sha256:raw(integrationFile),registry_sha256:integration.after_registry_sha256,files:changes.map(change=>({path:lib.relative(change.path),before_sha256:plan.sha256(change.before),after_sha256:plan.sha256(change.after)})),scope:'Exact audio reversal precedes counter image reversal in historical snapshots; new approval/protection checks and ten-recording native delivery coverage preserve all prior assertions. Tests have not been executed by this updater.'};
+changes.push({path:receiptPath,before:null,after:Buffer.from(serialized(summary))});
+const helperOptions={repositoryRoot:root,transactionDir,allowedPaths,changes},described=describePlan(helperOptions);
+if(!options['--apply']){console.log(JSON.stringify({...summary,dry_run:true,checks:check.count(),transaction_plan_sha256:described.planSha256}));process.exit(0);}
+const transaction=commitTransaction({...helperOptions,verify(){for(const change of changes)same(fs.readFileSync(change.path),change.after);same(hash(lib.loadProfessionalContent(root)),integration.after_registry_sha256);for(const file of prepared.entries)same(raw(inRoot(file.path)),file.after.sha256);lib.verifySources(same);}});
+console.log(JSON.stringify({...summary,dry_run:false,checks:check.count(),transaction_plan_sha256:described.planSha256,transaction}));

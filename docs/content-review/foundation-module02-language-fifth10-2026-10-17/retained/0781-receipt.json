@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "ok": false,
+  "started_at": "2026-10-16T22:56:17.614Z",
+  "finished_at": "2026-10-16T23:00:44.590Z",
+  "source_sha256": "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f",
+  "input_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f",
+  "commands": [
+    {
+      "args": [
+        "tools/validate-professional-content.cjs",
+        "--json"
+      ],
+      "started_at": "2026-10-16T22:56:47.195Z",
+      "finished_at": "2026-10-16T22:56:50.881Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-1.log",
+      "log_sha256": "0020b63f47249956e1122188f101d26390511a6b02ec16e52377033dd6504ae6"
+    },
+    {
+      "args": [
+        "--test",
+        "tests/professional-content.test.cjs",
+        "tests/professional-retail-morphology.test.cjs",
+        "tests/professional-retail-media.test.cjs"
+      ],
+      "started_at": "2026-10-16T22:57:18.990Z",
+      "finished_at": "2026-10-16T23:00:08.045Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-2.log",
+      "log_sha256": "5c51c6b4a8a8b4016fab7fee1126473f50ebb799dfc70df7df953f54e291fc23"
+    }
+  ],
+  "audit": {
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 148,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 9,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "errors": 0,
+    "warnings": 29395
+  },
+  "tests": {
+    "tests": null,
+    "pass": null,
+    "fail": null,
+    "cancelled": null,
+    "skipped": null
+  },
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nNaN !== 255\n\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\shopping-bag-persisted-validation-r01\\invoke.cjs:74:14)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)\n    at Module.load (node:internal/modules/cjs/loader:1525:32)\n    at Module._load (node:internal/modules/cjs/loader:1327:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47",
+  "postcheck_error": null,
+  "scope": "Fresh actual persisted audit and affected Node suites, committed journal targets and protected input hashes. No native/browser/listening/release claim."
+}

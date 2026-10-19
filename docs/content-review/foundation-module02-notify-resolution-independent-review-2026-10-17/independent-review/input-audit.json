@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "status": "frozen_evidence_integrity_and_qualified_precommit_observations_not_final_live_binding",
+  "recorded_at": "2026-10-16T21:57:26.8354024Z",
+  "author_directory": "build/professional-english/foundation02-notify-resolution-research-r01",
+  "author_inventory_sha256": "6a07be9bca42e4972208889afc7bb3da91e214bc651ddaf4bb8c3a6f8e41e010",
+  "author_members": 27,
+  "author_inventory_mismatches": [],
+  "author_actual_files": 28,
+  "prior_precommit_input_pin_observation": {
+    "input_pin_rows": 347,
+    "ancillary_rows": 18,
+    "distinct_paths": 365,
+    "drift": [],
+    "timing": "Measured before root requested that current-state capture yield for the fourth10 production commit. This observation is historical and not replaced with later values."
+  },
+  "aborted_current_scan": {
+    "session_id": 93283,
+    "result": "Interrupted on root request with no output; excluded as review evidence."
+  },
+  "immutable_corpus_comparison": "immutable-corpus-comparison.json; independently compares author headword/context/membership snapshots to the immutable fourth10 candidate, with its known single lexical-envelope overlay",
+  "neighbor_lexical_basis": {
+    "precommit_current": "Current contact and confirm language fields were inspected and are the same as the frozen fourth candidate. Current delay review gates were pending at that earlier observation.",
+    "candidate": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/foundation-module02.json.after",
+    "candidate_sha256": "9f698ae9b2572d279709b521e6b7d490ffe3d05b1a8ed362add36e07fd4accbc",
+    "interpretation": "Accepted fourth10 delay candidate language was inspected; no assertion of actual installation is made in this review."
+  },
+  "root_source_observations_sha256": "b39bb2bd04c6df009fc820e2b3db14dcec77c28213921e1265c1d3ab2f1da4dd",
+  "new_project_execution": false,
+  "live_save_inspection": false,
+  "current_content_rebase_after_commit": false,
+  "final_binding": "UNBOUND"
+}

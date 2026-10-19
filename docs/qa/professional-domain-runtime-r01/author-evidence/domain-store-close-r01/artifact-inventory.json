@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "prepared_not_executed",
+  "recorded_at": "2026-10-16T19:35:03.453Z",
+  "artifacts": [
+    {
+      "path": "preimages/scripts/professional_store.gd",
+      "sha256": "aa91a6caeb97c9145d7b991f556139705a4cb97760a6f99c598f5183e6a045bf",
+      "bytes": 11941
+    },
+    {
+      "path": "preimages.json",
+      "sha256": "e533f45eb8cfe4773c5807ca5251cbfcef64f03cb6285d3bbcdf04c85c7c6b1e",
+      "bytes": 892
+    },
+    {
+      "path": "prepared/scripts/professional_store.gd",
+      "sha256": "671fe81e308241e976d2307d1dc3ed7544226314b5d12f5e4215754f90197c2f",
+      "bytes": 13762
+    },
+    {
+      "path": "prepared/tests/godot/professional_store_tests.gd",
+      "sha256": "40a896ea2e1862dee9a050ddb80e88ae6c2bc9a2906ea85fcdd7ee242056b4d2",
+      "bytes": 10336
+    },
+    {
+      "path": "prepared-evidence.json",
+      "sha256": "d7c6de2da08ed41dec8cee7e429a0564e6cdfd3b12ddf24f9a9479701ce407a4",
+      "bytes": 2735
+    },
+    {
+      "path": "README.md",
+      "sha256": "b1fa01501784f05aebd555ba5491b9e9b067e814db1139b53577c493b596dd97",
+      "bytes": 1720
+    }
+  ],
+  "self_excluded": true
+}

@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-16",
+  "status": "accepted_pixels_and_provenance_copied_metadata_serialization_and_delivery_check_follow",
+  "accepted_proposal_sha256": "39d356cd9ebdc6fb00eb651cc33618f297693909f7c3505cf3837db9ff25461c",
+  "copies": [
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/candidate/shopping-cart.png",
+      "target": "professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+      "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+      "bytes": 93422
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/integration-proposal/proposal.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/proposal.json",
+      "sha256": "39d356cd9ebdc6fb00eb651cc33618f297693909f7c3505cf3837db9ff25461c",
+      "bytes": 3248
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/integration-proposal/independent-acceptance.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/independent-acceptance.json",
+      "sha256": "952575a3ae5c023440a0582224abb7e3c2c094ed333c61d03a067dc579b3a7a6",
+      "bytes": 848
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/integration-proposal/asset-provenance.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/asset-provenance.json",
+      "sha256": "85f09bf5ce91c7610455c708f58261fdcda097511feb60bb1d227796b6810252",
+      "bytes": 3592
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/integration-proposal/media-resource.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/media-resource.json",
+      "sha256": "66b36a1a6a34d486c5941419a65a0bd002548b8b128c42b7f94195464070680c",
+      "bytes": 395
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/integration-proposal/entry-image.before.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/entry-image.before.json",
+      "sha256": "f403b800dce93a86d9dc586e69794bacc5b285f426c88ec584f5a907d5aad82e",
+      "bytes": 615
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/integration-proposal/entry-image.after.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/entry-image.after.json",
+      "sha256": "d7b055213f3f3f40a961f3e74fc7b064ae1b184f34d41513cda473d4d1075926",
+      "bytes": 1945
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/integration-proposal/editorial-note.delta.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/editorial-note.delta.json",
+      "sha256": "98d96634bcac6c74b3208c8d29e9dee0a654551870f315b2cf21f51e6f0e4031",
+      "bytes": 2021
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/source-record.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/source-record.json",
+      "sha256": "3b5c965fe5807584bc9f4b9aadd02649bb4dd663655d7bbf6ee5ed2d0757dd1c",
+      "bytes": 4209
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/review-receipt.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/candidate-review-receipt.json",
+      "sha256": "8184775b0fa33ba022f697aaf9ba78720f5a8ba60520154dc439bb2740f2ef2f",
+      "bytes": 16040
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/candidate/report.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/candidate-native-card-report.json",
+      "sha256": "8dc5d11b796d6c495720912bcd3981933d1a37f4d14b8677a559c06de2eefaca",
+      "bytes": 4222
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/candidate/actual-word-card-contact.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/candidate-native-card-contact.png",
+      "sha256": "ab0875ea1e938c89f8c62de1cea70ab99e7ae900dbfebbb17bb132afac5c985e",
+      "bytes": 50684
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/candidate/render.log",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/candidate-native-card-render.log",
+      "sha256": "651ee2dff2804ea2eedd411c46d784606f50b34a8e7aeb68c608b3185a00eb81",
+      "bytes": 370
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r3/diagonal-eye-level.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/selected-source-view.png",
+      "sha256": "7aa361046d741d1b87231b153534e4864e3aa60204b3b1a5f85d1b7ab67f9aea",
+      "bytes": 29422
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r2/underside-wheel-evidence.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/source-four-wheel-evidence.png",
+      "sha256": "aaf1084f25119a92d87db1b851598e4ad67a8e52f7b8f6feaaabf80bf602bfc4",
+      "bytes": 29031
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/render-shopping-cart-candidate.gd",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-cart/render-shopping-cart-candidate.gd",
+      "sha256": "b5405daebd5ab5c47c55fe27f85d262b088702ad3b46873132619f693743ee65",
+      "bytes": 8228
+    }
+  ],
+  "protected_production_data_sha256": {
+    "data/professional/lexemes/retail-pilot.json": "5cd62af3a22cdec038afb58391a1ce496669bd5e1e163093417ed9d83a4561fb",
+    "data/professional/courses/retail.json": "7124ef1d09da0c47f1d5fb2945bfebbe49e5f180f5fbdcd66fe73991ea7d4c61",
+    "data/professional/themes.json": "718bae2956226505281d5e8f62406d0b225b12834b00977f401cb517f068f9fd"
+  },
+  "protected_data_unchanged_by_copy": true,
+  "scope": "Only accepted immutable image bytes and durable provenance were copied. The content owner serializes the independently approved image/note delta; no other content gate is promoted."
+}

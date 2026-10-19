@@ -2,9 +2,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { brotliDecompressSync } = require('node:zlib');
+const { verifyDomainEvidence } = require('./professional-domain-web.cjs');
 
 const INPUTS = [
-  'assets', 'scenes', 'scripts', 'web', 'project.godot', 'export_presets.cfg',
+  'assets', 'scenes', 'scripts', 'web', 'professional-media', 'project.godot', 'export_presets.cfg',
   'package.json', 'package-lock.json', 'words.json', 'phrases.json', 'curriculum.json', 'data', 'voice-prompts.json',
   'docs/assets/voice-pop-reference-audio.json', 'docs/assets/pair-feedback-audio.json',
   'docs/assets/ui-click-audio.json', 'docs/assets/chest-reference-audio.json',
@@ -14,7 +15,10 @@ const INPUTS = [
   'docs/assets/lv3-word-motion.json',
   'docs/assets/word-library.json', 'tools/word-library-art.cjs',
   'docs/assets/word-library-motion.json', 'tools/word-library-motion.cjs', 'tools/vocabulary-art/library-motion-map.json',
-  'tests/godot/verify_web_pack.gd', 'tools/pack-vocabulary.gd',
+  'tests/godot/verify_web_pack.gd', 'tests/godot/professional_domain_pack_verifier.gd', 'tools/pack-vocabulary.gd',
+  'tools/professional-domain', 'tools/professional-domain-web.cjs',
+  'tools/package-professional-media.cjs', 'tools/validate-professional-content.cjs',
+  'tools/validate-growth-morphology.cjs', 'tools/author-growth-morphology.cjs', 'tools/growth-morphology',
   ...['build-web', 'package-web', 'serve-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'chest-kenney-audio', 'prepare-jelly-reward-art', 'prepare-chest-milestone-art', 'prepare-coin-art', 'web-build-receipt', 'vocabulary-packs']
     .map(name => `tools/${name}.cjs`)
 ];
@@ -56,7 +60,7 @@ function invalidateBuildReceipt(root) {
   fs.rmSync(receiptPath(root), { force: true });
 }
 
-function exportInventory(root) {
+function exportInventory(root, professionalDomain) {
   const directory = path.join(root, 'build', 'web');
   for (const name of ['index.html', 'staticwebapp.config.json']) {
     if (!fs.existsSync(path.join(directory, name))) throw new Error(`Missing Web export file: ${name}`);
@@ -95,6 +99,7 @@ function exportInventory(root) {
       `game-${digest(decoded.buffer).slice(0, 16)}.pck.br` !== config.mainPack) {
     throw new Error('The Web game pack does not match its decoded size and content hash.');
   }
+  verifyDomainEvidence(root, professionalDomain, decoded.buffer);
   const vocabulary = config.vocabularyPacks;
   if (!vocabulary || typeof vocabulary !== 'object' || Array.isArray(vocabulary) ||
       Object.keys(vocabulary).sort((a, b) => Number(a) - Number(b)).join(',') !== '3,4,5,6,7,8,9,10,11,12') {
@@ -155,12 +160,18 @@ function exportInventory(root) {
   return inventory(directory, fs.readdirSync(directory));
 }
 
-function writeBuildReceipt(root, beforeExport) {
+function writeBuildReceipt(root, beforeExport, { professionalDomain } = {}) {
   const sources = snapshotInputs(root), changed = changedFiles(beforeExport, sources);
   if (changed.length) {
     throw new Error(`Web build inputs changed during export: ${changed.slice(0, 5).join(', ')}. Rebuild before deploying.`);
   }
-  const receipt = { version: 1, createdAt: new Date().toISOString(), sources, output: exportInventory(root) };
+  const output = exportInventory(root, professionalDomain);
+  const changedDuringAudit = changedFiles(sources, snapshotInputs(root));
+  if (changedDuringAudit.length) {
+    throw new Error(`Web build inputs changed during output audit: ${changedDuringAudit.slice(0, 5).join(', ')}. Rebuild before deploying.`);
+  }
+  const receipt = { version: 1, createdAt: new Date().toISOString(), sources, output,
+    ...(professionalDomain ? { professional_domain: professionalDomain } : {}) };
   const filename = receiptPath(root), temporary = `${filename}.tmp`;
   fs.writeFileSync(temporary, `${JSON.stringify(receipt, null, 2)}\n`);
   fs.renameSync(temporary, filename);
@@ -180,8 +191,10 @@ function verifyBuildReceipt(root) {
   }
   const sources = changedFiles(receipt.sources, snapshotInputs(root));
   if (sources.length) throw new Error(`Stale Web build: source files changed (${sources.slice(0, 5).join(', ')}). Run npm run build:web.`);
-  const output = changedFiles(receipt.output, exportInventory(root));
+  const output = changedFiles(receipt.output, exportInventory(root, receipt.professional_domain));
   if (output.length) throw new Error(`Web export changed after its successful build (${output.slice(0, 5).join(', ')}). Run npm run build:web.`);
+  const changedDuringAudit = changedFiles(receipt.sources, snapshotInputs(root));
+  if (changedDuringAudit.length) throw new Error(`Stale Web build: source files changed during output audit (${changedDuringAudit.slice(0, 5).join(', ')}). Run npm run build:web.`);
   return receipt;
 }
 

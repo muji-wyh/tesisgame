@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "kind": "native",
+  "dispatcher": "/root",
+  "observed_at": "2026-10-17T00:22:48.515Z",
+  "session_id": 88976,
+  "command": [
+    "node",
+    "build/professional-english/foundation02-fifth10-native-candidate-proposal-r03/run.cjs",
+    "--root-input",
+    "build/professional-english/foundation02-fifth10-root-native-r03/input.json",
+    "--root-input-sha256",
+    "bf5dfde98504d1a87d92cccad41c9c9b6e698db57c66bc9b9bd718386d40b46b"
+  ],
+  "cwd": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "source": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r03/run.cjs",
+    "bytes": 35436,
+    "raw_sha256": "64a924fc9ae48122f51aa36a2c7a986f2e7ff7d93e1989345cde1e2be1be1d15"
+  },
+  "input": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-r03/input.json",
+    "bytes": 4580,
+    "raw_sha256": "bf5dfde98504d1a87d92cccad41c9c9b6e698db57c66bc9b9bd718386d40b46b"
+  },
+  "start": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r03/execution-r01/start.json",
+    "bytes": 4418,
+    "raw_sha256": "568fe2e8b60cedf54487370fd804bcd6419a1798be30107437afeabe44e06e63"
+  },
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "receipt": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r03/execution-r01/receipt.json",
+    "bytes": 9661,
+    "raw_sha256": "8d361e700adf1808d1aa5543816ca983b36d984ed92bdb5921b6d3e475ab6d01"
+  },
+  "observation_basis": "Root observed actual tools.write_stdin completion exit_code 0; no signal or tool error was reported. Candidate receipt independently reports both commands and postchecks passed.",
+  "final_tool_result": {
+    "chunk_id": "ee51da",
+    "wall_time_seconds": 0.0000123,
+    "exit_code": 0,
+    "original_token_count": 78,
+    "output": "{\"ok\":true,\"status\":\"isolated_native_candidate_passed\",\"receipt\":{\"path\":\"build/professional-english/foundation02-fifth10-native-candidate-proposal-r03/execution-r01/receipt.json\",\"bytes\":9661,\"raw_sha256\":\"8d361e700adf1808d1aa5543816ca983b36d984ed92bdb5921b6d3e475ab6d01\"},\"error\":null,\"postcheck_error\":null}\n"
+  },
+  "receipt_summary": {
+    "check_only_passed": true,
+    "native_checks": 3922,
+    "native_failures": 0
+  },
+  "actual_installation": false,
+  "persisted_validation": false,
+  "replay_allowed": false
+}

@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "kind": "projected",
+  "dispatcher": "/root",
+  "observed_at": "2026-10-16T23:49:24.163Z",
+  "session_id": 28374,
+  "command": [
+    "node",
+    "build/professional-english/foundation02-fifth10-projected-validation-r02/run.cjs",
+    "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80",
+    "ec33c157b371d368d0551a50fc768be5bc76eb4cff632158b16dc09212dd78a6"
+  ],
+  "cwd": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "source": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/run.cjs",
+    "bytes": 11683,
+    "raw_sha256": "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80"
+  },
+  "input": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/input.json",
+    "bytes": 2283626,
+    "raw_sha256": "ec33c157b371d368d0551a50fc768be5bc76eb4cff632158b16dc09212dd78a6"
+  },
+  "start": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/attempt-001/start.json",
+    "bytes": 235,
+    "raw_sha256": "d04f3314f0c75477c9dd53518c50bc3b86cff396d1658b1dd8b33a62c038bebd"
+  },
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "receipt": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/attempt-001/receipt.json",
+    "bytes": 472109,
+    "raw_sha256": "0064bfd6a74c4158ccc834c852fd308168d6eabdbf98f2b9386ee6f804afc49d"
+  },
+  "observation_basis": "Root observed functions tools.write_stdin return terminal completion with exit_code 0 for existing session 28374. No signal or process error was reported. Receipt success was inspected separately; it is not the source of the exit status.",
+  "final_tool_result": {
+    "chunk_id": "6016a8",
+    "wall_time_seconds": 0.0000113,
+    "exit_code": 0,
+    "original_token_count": 37,
+    "output": "{\"ok\":true,\"receipt_sha256\":\"0064bfd6a74c4158ccc834c852fd308168d6eabdbf98f2b9386ee6f804afc49d\",\"callbacks\":263,\"error\":null,\"postcheck_error\":null}\n"
+  },
+  "receipt_summary": {
+    "callbacks": 263,
+    "audit_errors": 0,
+    "audit_warnings": 29382
+  },
+  "actual_installation": false,
+  "persisted_validation": false
+}

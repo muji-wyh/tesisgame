@@ -1,0 +1,419 @@
+diff --git a/build/professional-english/professional-play-reentrancy-r01/preimages/scripts/professional_play.gd b/scripts/professional_play.gd
+index 7239576c..416a0237 100644
+--- a/build/professional-english/professional-play-reentrancy-r01/preimages/scripts/professional_play.gd
++++ b/scripts/professional_play.gd
+@@ -19,6 +19,7 @@ var pending: Dictionary = {}
+ var error: String = ""
+ var phase: String = "idle"
+ var _configured := false
++var _request_epoch: int = 0
+ 
+ 
+ func configure(host: Object, wallet_credit: Callable, save_path: String = Store.DEFAULT_PATH) -> bool:
+@@ -51,27 +52,42 @@ func request(context: Dictionary, seed_value: int = -1) -> int:
+ 		phase = "failed"
+ 		_notify()
+ 		return -1
++	_request_epoch += 1
++	var request_epoch: int = _request_epoch
++	var captured: Dictionary = Context.freeze(context)
+ 	# Cancelling preparation does not release the active round's claimed lease.
+ 	session.leave_round()
+-	pending = {"context": context.duplicate(true), "seed": seed_value,
++	if request_epoch != _request_epoch:
++		return -1
++	pending = {"context": captured, "seed": seed_value,
+ 		"source": "professional:%d:%d" % [OS.get_process_id(), Time.get_ticks_usec()]}
+ 	phase = "media"
+ 	error = ""
+-	pending.selection = loader.request(context, seed_value)
++	var selection: int = loader.request(captured, seed_value)
++	# Both session and loader callbacks may synchronously replace this request.
++	if request_epoch != _request_epoch:
++		return selection
++	pending.selection = selection
+ 	_notify()
+-	return pending.selection
++	return selection
+ 
+ 
+ func cancel() -> void:
++	_request_epoch += 1
++	var request_epoch: int = _request_epoch
+ 	loader.cancel()
+ 	pending.clear()
+ 	error = ""
+ 	if active.is_empty():
+ 		session.leave_round()
++		if request_epoch != _request_epoch:
++			return
+ 		phase = "idle"
+ 	else:
+ 		phase = "restoring"
+ 		var result: Dictionary = session.open_round(active.context, active.requirements, active.source)
++		if request_epoch != _request_epoch:
++			return
+ 		if not result.ok:
+ 			error = result.error
+ 			phase = "failed"
+@@ -99,6 +115,8 @@ func claim(selection: int) -> Dictionary:
+ 
+ func leave() -> void:
+ 	# Call only after the old round's views/audio have dropped their resources.
++	_request_epoch += 1
++	var request_epoch: int = _request_epoch
+ 	loader.cancel()
+ 	Media.release(str(active.get("media_scope", "")))
+ 	loader.media.cache.deactivate()
+@@ -106,6 +124,8 @@ func leave() -> void:
+ 	active.clear()
+ 	pending.clear()
+ 	session.leave_round()
++	if request_epoch != _request_epoch:
++		return
+ 	phase = "idle"
+ 	error = ""
+ 	_notify()
+@@ -113,14 +133,20 @@ func leave() -> void:
+ 
+ func retry() -> void:
+ 	if session.snapshot().blocked:
++		var request_epoch: int = _request_epoch
+ 		session.retry()
++		if request_epoch != _request_epoch:
++			return
+ 		error = ""
+ 		phase = "storage" if not pending.is_empty() else "restoring"
+ 		_notify()
+ 	elif not pending.is_empty():
+ 		request(pending.context, int(pending.seed))
+ 	else:
++		var request_epoch: int = _request_epoch
+ 		cancel()
++		if _request_epoch != request_epoch + 1:
++			return
+ 		session.recover()
+ 
+ 
+@@ -138,11 +164,17 @@ func snapshot() -> Dictionary:
+ func _media_prepared(selection: int, content: Dictionary) -> void:
+ 	if pending.get("selection", -1) != selection:
+ 		return
++	var request_epoch: int = _request_epoch
++	var source: String = pending.source
+ 	pending.content = content
+ 	phase = "storage"
+-	var result: Dictionary = session.open_round(content.context, content.requirements, pending.source)
++	var result: Dictionary = session.open_round(content.context, content.requirements, source)
++	if request_epoch != _request_epoch or pending.get("selection", -1) != selection \
++		or pending.get("source", "") != source:
++		return
+ 	if not result.ok:
+-		_storage_failed(pending.source, "", result)
++		_storage_failed(source, "", result)
++		return
+ 	_notify()
+ 
+ 
+@@ -158,10 +190,16 @@ func _round_opened(source: String, _generation: int, result: Dictionary) -> void
+ 	if not result.get("ok", false):
+ 		return
+ 	if pending.get("source", "") == source:
++		var request_epoch: int = _request_epoch
++		var selection: int = pending.selection
++		var content: Dictionary = pending.content.duplicate(true)
+ 		phase = "ready"
+ 		error = ""
+ 		_notify()
+-		round_prepared.emit(pending.selection, pending.content.duplicate(true), source)
++		if request_epoch != _request_epoch or phase != "ready" \
++			or pending.get("selection", -1) != selection or pending.get("source", "") != source:
++			return
++		round_prepared.emit(selection, content, source)
+ 	elif active.get("source", "") == source and pending.is_empty():
+ 		phase = "idle"
+ 		error = ""
+diff --git a/build/professional-english/professional-play-reentrancy-r01/preimages/tests/godot/professional_play_tests.gd b/tests/godot/professional_play_tests.gd
+index 77563285..f566b7ef 100644
+--- a/build/professional-english/professional-play-reentrancy-r01/preimages/tests/godot/professional_play_tests.gd
++++ b/tests/godot/professional_play_tests.gd
+@@ -1,6 +1,85 @@
+ extends SceneTree
+ 
+ const Play = preload("res://scripts/professional_play.gd")
++const Context = preload("res://scripts/learning_context.gd")
++const Access = preload("res://scripts/professional_media_access.gd")
++
++# These doubles emit lifecycle callbacks only. They do not resolve curriculum,
++# grant domain reviews, load media, or claim that a professional module is ready.
++class CallbackCache extends RefCounted:
++	var leases: Dictionary = {}
++	var releases: int = 0
++	var texture := PlaceholderTexture2D.new()
++	func pin_round(ids: Array) -> Dictionary:
++		leases[1] = ids.duplicate()
++		return {"ok": true, "lease": 1}
++	func get_resource(id: String, lease: int) -> Resource:
++		return texture if leases.get(lease, []).has(id) else null
++	func release_round(lease: int) -> void:
++		releases += 1
++		leases.erase(lease)
++	func deactivate() -> void:
++		pass
++	func trim_inactive() -> void:
++		pass
++
++class CallbackMedia extends RefCounted:
++	var cache := CallbackCache.new()
++
++class CallbackLoader extends Node:
++	signal prepared(selection: int, content: Dictionary)
++	signal failed(selection: int, result: Dictionary)
++	signal theme_selected(selection: int, profile: Dictionary)
++	var media := CallbackMedia.new()
++	var requests: Array = []
++	var selection: int = 0
++	func configure(_host: Object = null) -> bool:
++		return true
++	func cancel() -> void:
++		selection += 1
++	func request(context: Dictionary, _seed: int = -1) -> int:
++		cancel()
++		var requested: int = selection
++		requests.append(context.duplicate(true))
++		theme_selected.emit(requested, {})
++		return requested
++
++class CallbackStore extends Node:
++	func configure(_requirements: Array, _path: String, _host: Object) -> bool:
++		return true
++
++class CallbackSession extends Node:
++	signal round_opened(source: String, generation: int, result: Dictionary)
++	signal changed(state: Dictionary)
++	signal blocked(source: String, id: String, result: Dictionary)
++	signal event_completed(id: String, source: String, result: Dictionary)
++	var callback_stage: String = ""
++	var fail_open: bool = false
++	var open_pending: bool = true
++	var is_blocked: bool = false
++	var recover_calls: int = 0
++	func configure(_store: Node, _credit: Callable) -> bool:
++		return true
++	func recover() -> void:
++		recover_calls += 1
++	func retry() -> void:
++		is_blocked = false
++		callback_stage = "retry"
++		changed.emit(snapshot())
++		callback_stage = ""
++	func leave_round() -> void:
++		callback_stage = "leave"
++		changed.emit(snapshot())
++		callback_stage = ""
++	func open_round(_context: Dictionary, _requirements: Dictionary, _source: String) -> Dictionary:
++		var result: Dictionary = {"ok": not fail_open, "pending": open_pending, "error": "Injected opening failure."}
++		callback_stage = "open"
++		changed.emit(snapshot())
++		callback_stage = ""
++		return result
++	func snapshot() -> Dictionary:
++		return {"blocked": is_blocked, "progress_loaded": true, "pending_count": 0, "ready": false, "source_id": ""}
++
+ var checks: int = 0
+ var failures: int = 0
+ 
+@@ -25,6 +104,185 @@ func _settle(play) -> void:
+ 	check(false, "Professional recovery settles within a bounded number of frames")
+ 
+ 
++func _controller(play_script: Script) -> Node:
++	var play: Node = play_script.new()
++	play.loader.media.free()
++	play.loader.free()
++	play.store.free()
++	play.session.free()
++	play.loader = CallbackLoader.new()
++	play.store = CallbackStore.new()
++	play.session = CallbackSession.new()
++	root.add_child(play)
++	play.configure(null, func(_id: String, _tier: int) -> Dictionary: return {"ok": true})
++	return play
++
++
++func _probe(rows: Array, condition: bool, label: String) -> void:
++	rows.append({"check": label, "passed": condition})
++
++
++func _reentrancy_probes(play_script: Script, safe_original: bool = false) -> Array:
++	var rows: Array = []
++	var a: Dictionary = Context.professional("retail", "module03", "professional-v1", "phrase")
++	var b: Dictionary = Context.professional("retail", "module04", "professional-v1", "phrase")
++	for action: String in ["request", "cancel", "leave"]:
++		var play: Node = _controller(play_script)
++		var called: Array = [false, -1]
++		play.changed.connect(func(_state: Dictionary) -> void:
++			if not called[0] and play.session.callback_stage == "leave":
++				called[0] = true
++				if action == "request":
++					called[1] = play.request(b)
++				else:
++					play.call(action))
++		var outer: int = play.request(a)
++		var expected: bool = outer == -1
++		if action == "request":
++			expected = expected and play.pending.get("context") == b and play.pending.get("selection") == called[1] \
++				and play.phase == "media" and play.loader.requests.size() == 1
++		else:
++			expected = expected and play.pending.is_empty() and play.phase == "idle" and play.loader.requests.is_empty()
++		_probe(rows, expected, "Request respects " + action + " from the earliest session notification")
++		play.free()
++	var mutation_play: Node = _controller(play_script)
++	var caller_context: Dictionary = a.duplicate(true)
++	mutation_play.changed.connect(func(_state: Dictionary) -> void:
++		if mutation_play.session.callback_stage == "leave":
++			caller_context.module_id = "module04"
++			caller_context["injected"] = "ignored")
++	mutation_play.request(caller_context)
++	_probe(rows, mutation_play.pending.get("context") == a and mutation_play.loader.requests == [a],
++		"Request freezes only supported context fields before the first callback")
++	mutation_play.free()
++	for action: String in ["request", "cancel", "leave"]:
++		var play: Node = _controller(play_script)
++		var called: Array = [false, -1]
++		play.loader.theme_selected.connect(func(_selection: int, _profile: Dictionary) -> void:
++			if not called[0]:
++				called[0] = true
++				if action == "request":
++					called[1] = play.request(b)
++				else:
++					play.call(action))
++		var outer: int = play.request(a)
++		var expected: bool = outer > 0
++		if action == "request":
++			expected = expected and play.pending.get("context") == b and play.pending.get("selection") == called[1] \
++				and outer != called[1] and play.phase == "media"
++		else:
++			expected = expected and play.pending.is_empty() and play.phase == "idle"
++		_probe(rows, expected, "Loader callback " + action + " cannot be overwritten by the outer request return")
++		play.free()
++	for action: String in ["cancel", "leave"]:
++		var play: Node = _controller(play_script)
++		var called: Array = [false]
++		play.changed.connect(func(_state: Dictionary) -> void:
++			if not called[0] and play.session.callback_stage == "leave":
++				called[0] = true
++				play.request(b))
++		play.call(action)
++		_probe(rows, play.pending.get("context") == b and play.phase == "media",
++			"Nested request keeps its state after " + action + " session notification")
++		play.free()
++	var restore_play: Node = _controller(play_script)
++	var cache: RefCounted = restore_play.loader.media.cache
++	var digest: String = "a".repeat(64)
++	var scope: String = Access.acquire(cache, ["sha256:" + digest]).scope
++	var resource_path: String = Access.path(scope, digest)
++	restore_play.active = {"context": a, "requirements": {}, "source": "active-source", "media_scope": scope}
++	restore_play.session.open_pending = false
++	var restoring: Array = [false]
++	restore_play.changed.connect(func(_state: Dictionary) -> void:
++		if not restoring[0] and restore_play.session.callback_stage == "open":
++			restoring[0] = true
++			restore_play.request(b))
++	restore_play.cancel()
++	_probe(rows, restore_play.pending.get("context") == b and restore_play.phase == "media",
++		"Restoring an active round cannot overwrite a nested newer request")
++	_probe(rows, cache.releases == 0 and Access.resource(resource_path) == cache.texture,
++		"Pending cancellation preserves the active claimed Access lease")
++	restore_play.free()
++	_probe(rows, cache.releases == 1 and Access.resource(resource_path) == null,
++		"Controller teardown releases that active Access lease exactly once")
++	for action: String in ["request", "cancel", "leave"]:
++		# Historical replay skips empty-pending reads that would abort the old
++		# script. Current-code tests include them and must produce no engine error.
++		if safe_original and action != "request":
++			continue
++		var play: Node = _controller(play_script)
++		var selection: int = play.request(a)
++		var source: String = play.pending.source
++		play.pending.content = {"context": a, "requirements": {}}
++		var events: Array = []
++		var called: Array = [false]
++		play.round_prepared.connect(func(id: int, content: Dictionary, value: String) -> void: events.append([id, content, value]))
++		play.changed.connect(func(_state: Dictionary) -> void:
++			if not called[0] and play.phase == "ready":
++				called[0] = true
++				if action == "request":
++					play.request(b)
++					play.pending.content = {"context": b, "requirements": {}}
++				else:
++					play.call(action))
++		play._round_opened(source, 1, {"ok": true})
++		var expected: bool = events.is_empty()
++		if action == "request":
++			expected = expected and play.pending.get("context") == b and play.pending.get("selection") != selection and play.phase == "media"
++		else:
++			expected = expected and play.pending.is_empty() and play.phase == "idle"
++		_probe(rows, expected, "Ready notification " + action + " suppresses the obsolete round_prepared event")
++		play.free()
++	for action: String in ["request", "cancel", "leave"]:
++		if safe_original and action != "request":
++			continue
++		var play: Node = _controller(play_script)
++		var selection: int = play.request(a)
++		play.session.fail_open = true
++		var called: Array = [false]
++		play.changed.connect(func(_state: Dictionary) -> void:
++			if not called[0] and play.session.callback_stage == "open":
++				called[0] = true
++				if action == "request":
++					play.request(b)
++				else:
++					play.call(action))
++		play._media_prepared(selection, {"context": a, "requirements": {}})
++		var expected: bool = play.error.is_empty()
++		if action == "request":
++			expected = expected and play.pending.get("context") == b and play.phase == "media"
++		else:
++			expected = expected and play.pending.is_empty() and play.phase == "idle"
++		_probe(rows, expected, "Opening callback " + action + " discards the obsolete storage result")
++		play.free()
++	for stage: String in ["retry", "leave"]:
++		var play: Node = _controller(play_script)
++		play.session.is_blocked = stage == "retry"
++		var recoveries: int = play.session.recover_calls
++		var called: Array = [false]
++		play.changed.connect(func(_state: Dictionary) -> void:
++			if not called[0] and play.session.callback_stage == stage:
++				called[0] = true
++				play.request(b))
++		play.retry()
++		_probe(rows, play.pending.get("context") == b and play.phase == "media" \
++			and play.session.recover_calls == recoveries,
++			"Retry preserves a nested selection from the " + stage + " notification")
++		play.free()
++	var ready_play: Node = _controller(play_script)
++	var ready_selection: int = ready_play.request(a)
++	var ready_source: String = ready_play.pending.source
++	ready_play.pending.content = {"context": a, "requirements": {}}
++	var prepared: Array = []
++	ready_play.round_prepared.connect(func(id: int, content: Dictionary, source: String) -> void:
++		prepared.append([id, content.context, source]))
++	ready_play._round_opened(ready_source, 1, {"ok": true})
++	_probe(rows, prepared == [[ready_selection, a, ready_source]] and ready_play.phase == "ready",
++		"An unchanged current opening still publishes its original selection and source")
++	ready_play.free()
++	return rows
++
++
+ func _run() -> void:
+ 	var directory: String = "user://professional-play-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+ 	var unavailable: String = directory.path_join("unavailable")
+@@ -51,5 +309,7 @@ func _run() -> void:
+ 	await process_frame
+ 	check(DirAccess.remove_absolute(unavailable) == OK and DirAccess.remove_absolute(directory) == OK,
+ 		"Remove the isolated recovery fixture")
++	for result: Dictionary in _reentrancy_probes(Play):
++		check(result.passed, result.check)
+ 	print("Professional play: %d checks, %d failures" % [checks, failures])
+ 	quit(1 if failures else 0)

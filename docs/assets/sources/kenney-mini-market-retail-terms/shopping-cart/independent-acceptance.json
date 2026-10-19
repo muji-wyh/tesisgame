@@ -1,0 +1,9 @@
+{
+  "status": "accepted_exact_cart_image_and_note_integration",
+  "proposal_raw_sha256": "39d356cd9ebdc6fb00eb651cc33618f297693909f7c3505cf3837db9ff25461c",
+  "image_after_json_sha256": "bdebd007958c4b8472c5a792d4313131205ee023a2827450afb4dc2e1d046ec7",
+  "accepted_png_sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+  "source_and_native_visual_review": "Root independently inspected complete source cart and minimum WordCard captures, checked the source/license hashes, and accepted partial fourth-wheel occlusion. See the prior source review receipt.",
+  "protected_entry_fields": "Only media.image and the exact note substitution authorized; all other fields unchanged.",
+  "production_delivery_checks": "Required next through actual descriptor/raw loader/cache/card/release path; do not claim module readiness."
+}

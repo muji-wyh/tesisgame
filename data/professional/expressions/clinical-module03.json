@@ -1,0 +1,1530 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.clinical_medicine.module03.01",
+      "text": "Is the laboratory in this hospital or at the clinic, and which ward sent the request?",
+      "meaning": "Clarify locations associated with a clinical request.",
+      "context": "Checking a fictional referral route.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Is",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "laboratory",
+          "start": 7,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "in",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "this",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "hospital",
+          "start": 26,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "or",
+          "start": 35,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "at",
+          "start": 38,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "clinic",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "which",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "ward",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": "sent",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 16,
+          "text": "request",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": "?",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "laboratory.place-equipped-for-scientific-testing.n",
+        "hospital.facility-providing-organized-medical-care.n",
+        "clinic.facility-or-service-for-consultation-and-treatment.n",
+        "ward.hospital-section.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module03.02",
+      "text": "The stethoscope, thermometer, blood pressure cuff and pulse oximeter are listed in the equipment record.",
+      "meaning": "Identify recorded examination equipment.",
+      "context": "Checking an equipment inventory, without use instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "stethoscope",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 15,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "thermometer",
+          "start": 17,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "blood",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "pressure",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "cuff",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "pulse",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "oximeter",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "are",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "listed",
+          "start": 73,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "in",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "equipment",
+          "start": 87,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "record",
+          "start": 97,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "stethoscope.listening-device.n",
+        "thermometer.temperature-device.n",
+        "blood-pressure-cuff.measurement-device.n",
+        "pulse-oximeter.measurement-device.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module03.03",
+      "text": "Please identify the specimen container, syringe, needle and sharps container on the equipment list.",
+      "meaning": "Request clear identification of different clinical items.",
+      "context": "Discussing a labeled equipment inventory.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "identify",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "specimen",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "container",
+          "start": 29,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "syringe",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "needle",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "sharps",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "container",
+          "start": 67,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "on",
+          "start": 77,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "equipment",
+          "start": 84,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "list",
+          "start": 94,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "specimen-container.sample-vessel.n",
+        "syringe.injection-device.n",
+        "needle.medical-needle.n",
+        "sharps-container.disposal-container.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module03.04",
+      "text": "The supply record lists a disposable glove, hand sanitizer and surgical mask separately.",
+      "meaning": "Distinguish separate supply categories.",
+      "context": "Reviewing a clinical supply record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "supply",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "lists",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "disposable",
+          "start": 26,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "glove",
+          "start": 37,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "hand",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "sanitizer",
+          "start": 49,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "surgical",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "mask",
+          "start": 72,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "separately",
+          "start": 77,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "disposable-glove.protective-covering.n",
+        "hand-sanitizer.cleaning-product.n",
+        "surgical-mask.face-covering.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module03.05",
+      "text": "The protective gown, oxygen mask and nasal cannula are different items with different purposes.",
+      "meaning": "Clarify that these items are not interchangeable.",
+      "context": "Discussing equipment names with a qualified colleague.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "protective",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "gown",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 19,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "oxygen",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "mask",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "nasal",
+          "start": 37,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "cannula",
+          "start": 43,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "are",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "different",
+          "start": 55,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "items",
+          "start": 65,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "with",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "different",
+          "start": 76,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "purposes",
+          "start": 86,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "protective-gown.clinical-clothing.n",
+        "oxygen-mask.delivery-mask.n",
+        "nasal-cannula.delivery-tube.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module03.06",
+      "text": "The infusion pump, suction machine and nebulizer each have a separate equipment record.",
+      "meaning": "Distinguish three devices and their records.",
+      "context": "Locating current equipment documentation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "infusion",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "pump",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "suction",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "machine",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "nebulizer",
+          "start": 39,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "each",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "have",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "separate",
+          "start": 61,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "equipment",
+          "start": 70,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "record",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "infusion-pump.delivery-device.n",
+        "suction-machine.fluid-removal-device.n",
+        "nebulizer.mist-device.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module03.07",
+      "text": "Does the treatment room have an examination table or a hospital bed?",
+      "meaning": "Ask about the room's furniture.",
+      "context": "Confirming a consultation space.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Does",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 5,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "treatment",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "room",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "have",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "an",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "examination",
+          "start": 32,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "table",
+          "start": 44,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "or",
+          "start": 50,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "hospital",
+          "start": 55,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "bed",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "?",
+          "start": 67,
+          "end": 68
+        }
+      ],
+      "focus_lexeme_ids": [
+        "treatment-room.care-room.n",
+        "examination-table.clinical-surface.n",
+        "hospital-bed.patient-bed.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module03.08",
+      "text": "Please confirm which spirometer produced this report and who will interpret it.",
+      "meaning": "Clarify the test equipment and responsible reviewer.",
+      "context": "Following up a lung-function report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "which",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "spirometer",
+          "start": 21,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "produced",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 5,
+          "text": "this",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "report",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "who",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "will",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "interpret",
+          "start": 66,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": "it",
+          "start": 76,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 78,
+          "end": 79
+        }
+      ],
+      "focus_lexeme_ids": [
+        "spirometer.instrument-measuring-breathing-volumes-or-flows.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module03.09",
+      "text": "The clinician explained the otoscope and ophthalmoscope before discussing the planned examination.",
+      "meaning": "Describe communication about two different instruments.",
+      "context": "Recounting an examination discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "clinician",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "explained",
+          "start": 14,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "otoscope",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "ophthalmoscope",
+          "start": 41,
+          "end": 55
+        },
+        {
+          "index": 7,
+          "text": "before",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 8,
+          "text": "discussing",
+          "start": 63,
+          "end": 73
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 10,
+          "text": "planned",
+          "start": 78,
+          "end": 85
+        },
+        {
+          "index": 11,
+          "text": "examination",
+          "start": 86,
+          "end": 97
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "otoscope.instrument-for-viewing-ear-canal-and-eardrum.n",
+        "ophthalmoscope.instrument-for-viewing-interior-of-eye.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module03.10",
+      "text": "The ECG machine and ultrasound scanner are recorded under different equipment identifiers.",
+      "meaning": "Distinguish devices in the inventory.",
+      "context": "Checking equipment records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "ECG",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "machine",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "ultrasound",
+          "start": 20,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "scanner",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "recorded",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "under",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "different",
+          "start": 58,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "equipment",
+          "start": 68,
+          "end": 77
+        },
+        {
+          "index": 11,
+          "text": "identifiers",
+          "start": 78,
+          "end": 89
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "ecg-machine.device-recording-electrical-activity-of-heart.n",
+        "ultrasound-scanner.device-producing-images-using-high-frequency-sound.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

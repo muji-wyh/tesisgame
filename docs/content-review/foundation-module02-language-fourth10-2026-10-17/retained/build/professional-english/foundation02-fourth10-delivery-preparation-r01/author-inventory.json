@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "unexecuted_author_delivery_proposal_ready_for_root_review",
+  "recorded_at": "2026-10-16T20:53:28.1829549Z",
+  "author": "Codex runtime_recovery delivery proposal author",
+  "directory": "build/professional-english/foundation02-fourth10-delivery-preparation-r01",
+  "repository_root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "input_files_pinned": 800,
+  "third10_validated_inputs_exact": 686,
+  "registry_before_sha256": "fb45e1d9c7cbf479bf06ac0c00b39ec28de473c96c86cc1b071c72a572f8d437",
+  "historical_research_registry_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "independent_language_review_sha256": "58993d8767ec701e37613fdee70d75e94f22a68d467b94157ea41a211bc9f8bd",
+  "accepted_language_projections": 10,
+  "actual_content_changed_entries": 6,
+  "content_field_edits": {
+    "difficulty": 6,
+    "definition": 1,
+    "example": 1
+  },
+  "proposed_source_additions": 20,
+  "new_lexical_holds": 0,
+  "preserved_lexical_holds": 4,
+  "preserved_expression_holds": 17,
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "implementation_imported_or_executed": false,
+  "syntax_checked": false,
+  "projected_afterimages_generated": false,
+  "tests_or_native_dispatched": false,
+  "historical_scripts_replayed": false,
+  "new_language_approval": false,
+  "technical_review_pending": true,
+  "artifacts": [
+    {
+      "path": "HANDOFF.md",
+      "raw_sha256": "4b0e0f9b4a020e33c580ec5082daf83dc8752dcd4dad98f31e429b6abefedba6",
+      "bytes": 5161
+    },
+    {
+      "path": "TRANSACTION.md",
+      "raw_sha256": "2a68f99c9198418f6cdd41aad76b3df583be1ec6716d7d33c70b5d20e734b9c4",
+      "bytes": 6089
+    },
+    {
+      "path": "input-pins.json",
+      "raw_sha256": "d58ea126241c8585d7b8887fa7698520fde2d0134de5f60d9599a19bb92adaa5",
+      "bytes": 224601
+    },
+    {
+      "path": "input-freeze-receipt.json",
+      "raw_sha256": "11199e3c062e250f654bdd9daead9803565afe075fd1e96b457bd7fcdf71c9ed",
+      "bytes": 1549
+    },
+    {
+      "path": "projection.cjs",
+      "raw_sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9",
+      "bytes": 23650
+    },
+    {
+      "path": "test-transforms.cjs",
+      "raw_sha256": "f28949a1cdb0dfceb1875ec7abfd6478aa2502dfecb3b6e8e37d1bd113c58d5e",
+      "bytes": 22440
+    },
+    {
+      "path": "prepare.cjs",
+      "raw_sha256": "6fa9ddd5547673b797c302a4b1c78d8b3be64a9b90f07cfe2771a3f2236b9c11",
+      "bytes": 9039
+    }
+  ],
+  "self_excluded": true
+}

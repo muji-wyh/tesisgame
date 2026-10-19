@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "ok": false,
+  "duration_ms": 5096,
+  "checks": 214,
+  "failures": 1,
+  "error": "Godot failed (exit 1):\nGodot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org\r\n\r\nNEGATIVE OWNER CHECKS 214 FAILURES 1\r\nFAIL: unavailable-mode: failed replacement cannot return predecessor success\r\n",
+  "input_count": 147,
+  "absent_input_count": 5,
+  "inputs_unchanged": true,
+  "changed_paths": [],
+  "package_negative_cases": 22,
+  "report_sha256": "73ea73e87278b6a90ca991cb8cdc0b32160790c32a094b74a354805fa02ec93a",
+  "log_sha256": "619e1ccd85c3094461dfb5cb7efe61a65fd3c60e558a60aea34d15ded86cc484",
+  "authority": "none",
+  "production_changes": false,
+  "candidate_logic_unchanged": true,
+  "app_trust_verified": false,
+  "pck_browser_memory_latency_acceptance": false,
+  "real_media_fetch_decode": false,
+  "scope": "Fixed synthetic package rejection, exact previous async owner logic, current production catalog/resolver, and invalid replacement requests. No production policy installed."
+}

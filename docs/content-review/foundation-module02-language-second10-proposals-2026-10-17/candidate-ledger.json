@@ -1,0 +1,2324 @@
+{
+  "schema": 1,
+  "status": "frozen_author_proposals_independent_acceptance_pending",
+  "author_role": "Codex attendance_review language candidate author; not human, specialist, or independent reviewer",
+  "created_on": "2026-10-17",
+  "scope": "Scratch substantive language review only. No production, checkpoint, shared-test, source-registry, reference, review-status or expression writes. The content projections preserve all fields except explicitly listed definition/example/difficulty proposals and must not be deployed as full entries. Proposed editorial notes are separate review material; integration and exact provenance require a later independent decision.",
+  "input": {
+    "path": "data/professional/lexemes/foundation-module02.json",
+    "sha256": "25d9847a7156f3c654d4592b8393660b7032f4e3f20eec63801e73369696be69",
+    "hash_basis": "Raw file bytes; entry hashes are SHA256 of UTF-8 JSON.stringify(entry) preserving parsed key order."
+  },
+  "selection": {
+    "method": "Next ten language-pending entries after the accepted first ten in Foundation Module02 file order.",
+    "count": 10,
+    "proposals": 8,
+    "holds": 2,
+    "actual_content_changes": 5
+  },
+  "source_artifacts": [
+    {
+      "path": "sources-a.json",
+      "sha256": "9bb428882426366203c57f9846f270790f603de8510fe2807759250a1e3aaf66"
+    },
+    {
+      "path": "sources-b.json",
+      "sha256": "91f8e84c9e6254d6fb32bad84de62b1a99d87c2375b06bc03ebc93b942dac2c9"
+    }
+  ],
+  "global_limits": [
+    "All ten projected entries retain pending overall/language review, original domain status, pending morphology and media. There is no change in reviewed counts or release readiness.",
+    "Canonical identities, accepted forms, regions, practice modes, historical references, editorial notes and all course/expression bytes remain exact preimages. Separate proposed editorial notes do not modify those fields.",
+    "Dictionary levels are literal selected-sense findings, not lesson certification. Oxford rendered labels, public HTML metadata, and unrelated footer labels remain distinct. Collins B1+ is preserved literally and is not rounded into a CEFR equivalence.",
+    "Source consultations include only original authored summaries and minimal identifiers/metadata; no dictionary pages, examples, media or exercises are imported.",
+    "No new whole-expression acceptance, sense binding, subject-matter approval or human sign-off is claimed."
+  ],
+  "entries": [
+    {
+      "id": "complete.finish.v",
+      "term": "complete",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "complete.finish.v",
+        "text": "complete",
+        "display_text": "complete",
+        "pos": "verb",
+        "definition": "To finish an activity or make something finished by providing everything required.",
+        "example": "Please complete the form by filling in the required information.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "complete"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An original fictional form progressing from clearly missing required information to a finished form, with no private data or claim of official approval.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "complete.finish.v.analysis.v1",
+          "lexeme_id": "complete.finish.v",
+          "text": "complete",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "complete",
+              "surface": "complete",
+              "canonical_id": "morph.complete"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The shared pedagogical sense is bringing something to a finished state. Finishing a form is an instance of that sense, not a separate counted fill-in sense; language review must confirm this scope."
+      },
+      "before_entry_sha256": "35ae1ddb757d7ace5e0694d5d93f65cde9f7a4bbbe6c4dc20780cb2a9b9a89fe",
+      "proposed_fields": {
+        "definition": "To bring a piece of work or an activity to its end.",
+        "example": "Please complete the task before the meeting.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "complete.finish.v",
+        "text": "complete",
+        "display_text": "complete",
+        "pos": "verb",
+        "definition": "To bring a piece of work or an activity to its end.",
+        "example": "Please complete the task before the meeting.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "complete"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An original fictional form progressing from clearly missing required information to a finished form, with no private data or claim of official approval.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "complete.finish.v.analysis.v1",
+          "lexeme_id": "complete.finish.v",
+          "text": "complete",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "complete",
+              "surface": "complete",
+              "canonical_id": "morph.complete"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The shared pedagogical sense is bringing something to a finished state. Finishing a form is an instance of that sense, not a separate counted fill-in sense; language review must confirm this scope."
+      },
+      "content_projection_sha256": "7c4e606480488dcf91d7a01838437e26e9767dff6993573ef425b77749970e0d",
+      "changed_fields": [
+        "definition",
+        "example"
+      ],
+      "source_ids": [
+        "foundation02-language-second10-oxford-complete",
+        "foundation02-language-second10-collins-complete"
+      ],
+      "selected_sense": "Finishing work or an activity; selected Oxford verb sense 1 and Collins COBUILD verb senses 8/9.",
+      "editorial_difficulty_rationale": "Retain editorial A2: Collins prints A2 for the selected finishing senses; Oxford selected sense HTML records A1. A2 is a course placement above the Oxford level, not a claim that Oxford labels this sense A2.",
+      "hold_reason": null,
+      "excluded_scope": "Form filling and making a whole set are separately numbered dictionary meanings; adjective complete is also separate. Do not silently accept those uses under the preserved finish ID.",
+      "media_issue": "The unchanged pending image brief depicts form filling. It does not represent the narrowed finishing-activity proposal. Image acquisition/review remains pending and picture readiness cannot be claimed. The existing editorial note conflating finish and fill-in is preserved in the preimage but must be replaced by bounded language provenance before any future integration.",
+      "expression_context_issue": "Screen every completed/complete surface use. Form/questionnaire uses and adjective or participial uses receive no acceptance from this proposal.",
+      "proposed_editorial_note_for_future_review": "Proposed ordinary finishing-work/activity sense only. Form filling, making a set whole and adjective uses are separate and remain outside this proposal. The existing form-image brief is still pending and mismatched. No expression, morphology, media, domain or release acceptance is granted."
+    },
+    {
+      "id": "prepare.make-ready.v",
+      "term": "prepare",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "prepare.make-ready.v",
+        "text": "prepare",
+        "display_text": "prepare",
+        "pos": "verb",
+        "definition": "To make something ready for an activity or use.",
+        "example": "We need to prepare the room for the visitors.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "prepare"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A room being arranged before a scheduled visit.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "prepare.make-ready.v.analysis.v1",
+          "lexeme_id": "prepare.make-ready.v",
+          "text": "prepare",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "prepare",
+              "surface": "prepare",
+              "canonical_id": "morph.prepare"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "516945ceda25b90a71b84dc28c7b3a5878edf614a131c2c9e4eb5aa3abd4b56c",
+      "proposed_fields": {
+        "definition": "To make something ready for an activity or use.",
+        "example": "We need to prepare the room for the visitors.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "prepare.make-ready.v",
+        "text": "prepare",
+        "display_text": "prepare",
+        "pos": "verb",
+        "definition": "To make something ready for an activity or use.",
+        "example": "We need to prepare the room for the visitors.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "prepare"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A room being arranged before a scheduled visit.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "prepare.make-ready.v.analysis.v1",
+          "lexeme_id": "prepare.make-ready.v",
+          "text": "prepare",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "prepare",
+              "surface": "prepare",
+              "canonical_id": "morph.prepare"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "516945ceda25b90a71b84dc28c7b3a5878edf614a131c2c9e4eb5aa3abd4b56c",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-second10-oxford-prepare",
+        "foundation02-language-second10-collins-prepare"
+      ],
+      "selected_sense": "Transitive making an object or place ready for an intended event/use; Oxford sense 1 and Collins sense 1.",
+      "editorial_difficulty_rationale": "Retain editorial A2 supported by Collins selected sense A2; Oxford selected sense metadata is A1. The different food and self-preparation entries supply no level for this decision.",
+      "hold_reason": null,
+      "excluded_scope": "No food preparation, chemical/medicine manufacture, self-preparation construction, or procedure acceptance.",
+      "media_issue": null,
+      "expression_context_issue": null,
+      "proposed_editorial_note_for_future_review": "Proposed ordinary transitive readying sense with the unchanged room example. Oxford A1 metadata and Collins A2 are separately recorded. All other review gates remain unchanged."
+    },
+    {
+      "id": "arrange.organize.v",
+      "term": "arrange",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "arrange.organize.v",
+        "text": "arrange",
+        "display_text": "arrange",
+        "pos": "verb",
+        "definition": "To organize the details needed for something to happen.",
+        "example": "I will arrange a meeting with the supplier.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "arrange"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A colleague coordinating a meeting time and participants.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "arrange.organize.v.analysis.v1",
+          "lexeme_id": "arrange.organize.v",
+          "text": "arrange",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "arrange",
+              "surface": "arrange",
+              "canonical_id": "morph.arrange"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "fcf4a671365ff2dd2690d4fdc5eefd4e86067a69b81b94183901b1691a383e7a",
+      "proposed_fields": {
+        "definition": "To organize the details needed for something to happen.",
+        "example": "I will arrange a meeting with the supplier.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "arrange.organize.v",
+        "text": "arrange",
+        "display_text": "arrange",
+        "pos": "verb",
+        "definition": "To organize the details needed for something to happen.",
+        "example": "I will arrange a meeting with the supplier.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "arrange"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A colleague coordinating a meeting time and participants.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "arrange.organize.v.analysis.v1",
+          "lexeme_id": "arrange.organize.v",
+          "text": "arrange",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "arrange",
+              "surface": "arrange",
+              "canonical_id": "morph.arrange"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "fcf4a671365ff2dd2690d4fdc5eefd4e86067a69b81b94183901b1691a383e7a",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-second10-oxford-arrange",
+        "foundation02-language-second10-collins-arrange"
+      ],
+      "selected_sense": "Advance planning/organizing of an event; Oxford sense 1 and Collins sense 1.",
+      "editorial_difficulty_rationale": "Retain editorial A2 for the bounded meeting-planning example because Oxford selected sense metadata is A2. Collins prints B1 for the same event/meeting meaning, retained as a source disagreement rather than averaged or treated as unanimous.",
+      "hold_reason": null,
+      "excluded_scope": "Exclude physical positioning of objects and music adaptation. Other arrange-for or arrange-to constructions require their own expression review.",
+      "media_issue": null,
+      "expression_context_issue": null,
+      "proposed_editorial_note_for_future_review": "Proposed event/meeting-planning sense only. Editorial A2 uses Oxford selected A2 metadata while preserving the Collins B1 disagreement. No phrase or procedure approval is implied."
+    },
+    {
+      "id": "collect.gather.v",
+      "term": "collect",
+      "disposition": "held_unchanged",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "collect.gather.v",
+        "text": "collect",
+        "display_text": "collect",
+        "pos": "verb",
+        "definition": "To gather items together or pick them up from a place.",
+        "example": "Please collect the documents from reception.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "collect"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A friendly worker picking up an agreed set of fictional documents from reception; show the pickup context clearly, with no money collection or private information.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "collect.gather.v.analysis.v1",
+          "lexeme_id": "collect.gather.v",
+          "text": "collect",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "collect",
+              "surface": "collect",
+              "canonical_id": "morph.collect"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The assessment explicitly uses picking up items from a place. The general gathering identity is retained; collection of money is outside this example."
+      },
+      "before_entry_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "proposed_fields": null,
+      "content_projection": {
+        "id": "collect.gather.v",
+        "text": "collect",
+        "display_text": "collect",
+        "pos": "verb",
+        "definition": "To gather items together or pick them up from a place.",
+        "example": "Please collect the documents from reception.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "collect"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A friendly worker picking up an agreed set of fictional documents from reception; show the pickup context clearly, with no money collection or private information.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "collect.gather.v.analysis.v1",
+          "lexeme_id": "collect.gather.v",
+          "text": "collect",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "collect",
+              "surface": "collect",
+              "canonical_id": "morph.collect"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The assessment explicitly uses picking up items from a place. The general gathering identity is retained; collection of money is outside this example."
+      },
+      "content_projection_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-second10-oxford-collect",
+        "foundation02-language-second10-collins-collect"
+      ],
+      "selected_sense": null,
+      "editorial_difficulty_rationale": null,
+      "hold_reason": "The definition combines gathering and pickup; the example, pending image brief and assessed Foundation02 context select pickup while the stable ID says gather. Oxford pickup sense 4 is B1 in HTML, unlike gathering sense 1 A2. Collins pickup sense 3 is A2 and explicitly British; Oxford labels person-pickup examples British but does not individually mark the selected object/reception examples. Independent scope/region decision is required.",
+      "excluded_scope": "Preserve the entire live entry including general regions, wording, identity, forms, media, morphology, references, review, and assessment contexts. Do not narrow, relabel regions, or merge meanings in this package.",
+      "media_issue": null,
+      "expression_context_issue": null,
+      "proposed_editorial_note_for_future_review": null
+    },
+    {
+      "id": "deliver.take-to-recipient.v",
+      "term": "deliver",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "deliver.take-to-recipient.v",
+        "text": "deliver",
+        "display_text": "deliver",
+        "pos": "verb",
+        "definition": "To take goods or information to the person or place they are intended for.",
+        "example": "The courier will deliver the parcel this afternoon.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "deliver"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A parcel being handed to its intended recipient.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "deliver.take-to-recipient.v.analysis.v1",
+          "lexeme_id": "deliver.take-to-recipient.v",
+          "text": "deliver",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "deliver",
+              "surface": "deliver",
+              "canonical_id": "morph.deliver"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "050062d35201cd6982446a987dbd3d4e7929fcc75dedfa5044f0ed23602634d0",
+      "proposed_fields": {
+        "definition": "To take a parcel, goods, or a letter to the person or place it is meant for.",
+        "example": "The courier will deliver the parcel this afternoon.",
+        "difficulty": "B1"
+      },
+      "content_projection": {
+        "id": "deliver.take-to-recipient.v",
+        "text": "deliver",
+        "display_text": "deliver",
+        "pos": "verb",
+        "definition": "To take a parcel, goods, or a letter to the person or place it is meant for.",
+        "example": "The courier will deliver the parcel this afternoon.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "deliver"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A parcel being handed to its intended recipient.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "deliver.take-to-recipient.v.analysis.v1",
+          "lexeme_id": "deliver.take-to-recipient.v",
+          "text": "deliver",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "deliver",
+              "surface": "deliver",
+              "canonical_id": "morph.deliver"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "642cbae48b421f56383d5aa08f557f987249d6c61ca41e4db907e4259eea85e4",
+      "changed_fields": [
+        "definition",
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-second10-oxford-deliver",
+        "foundation02-language-second10-collins-deliver"
+      ],
+      "selected_sense": "Physical transport of goods/letters to an intended recipient or destination; Oxford sense 1 and Collins sense 1.",
+      "editorial_difficulty_rationale": "Propose A2 to B1: Oxford selected physical sense metadata and Shopping topic show B1, and Collins selected physical sense prints B1.",
+      "hold_reason": null,
+      "excluded_scope": "Exclude sending information, speeches/performances, delivering promised results, and childbirth. A shared B1 label on information transfer does not merge it with physical transport.",
+      "media_issue": null,
+      "expression_context_issue": null,
+      "proposed_editorial_note_for_future_review": "Proposed physical-item delivery only; remove information transmission from the draft definition. Retain the parcel example and propose editorial B1 from both selected sources. All morphology, media, expression and domain gates stay unchanged."
+    },
+    {
+      "id": "replace.put-instead.v",
+      "term": "replace",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "replace.put-instead.v",
+        "text": "replace",
+        "display_text": "replace",
+        "pos": "verb",
+        "definition": "To put a new or different item in the place of another.",
+        "example": "We need to replace the damaged folder.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "replace"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A damaged folder being exchanged for an undamaged one.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "replace.put-instead.v.analysis.v1",
+          "lexeme_id": "replace.put-instead.v",
+          "text": "replace",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "prefix",
+              "canonical": "re-",
+              "surface": "re",
+              "canonical_id": "affix.re.prefix"
+            },
+            {
+              "id": "p2",
+              "type": "stem",
+              "canonical": "place",
+              "surface": "place",
+              "canonical_id": "morph.place"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "replace",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "e4cd47027e21baa6443d7a46072970981098201015e7bb23bef87d1af7b955d0",
+      "proposed_fields": {
+        "definition": "To put a new item in the place of one that is damaged or worn out.",
+        "example": "We need to replace the damaged folder with a new one.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "replace.put-instead.v",
+        "text": "replace",
+        "display_text": "replace",
+        "pos": "verb",
+        "definition": "To put a new item in the place of one that is damaged or worn out.",
+        "example": "We need to replace the damaged folder with a new one.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "replace"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A damaged folder being exchanged for an undamaged one.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "replace.put-instead.v.analysis.v1",
+          "lexeme_id": "replace.put-instead.v",
+          "text": "replace",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "prefix",
+              "canonical": "re-",
+              "surface": "re",
+              "canonical_id": "affix.re.prefix"
+            },
+            {
+              "id": "p2",
+              "type": "stem",
+              "canonical": "place",
+              "surface": "place",
+              "canonical_id": "morph.place"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "replace",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "5cfff40d0004e0d6ae3b25112f2b1d0996305e53b5258c9d33020cf7afb4f276",
+      "changed_fields": [
+        "definition",
+        "example"
+      ],
+      "source_ids": [
+        "foundation02-language-second10-oxford-replace",
+        "foundation02-language-second10-collins-replace"
+      ],
+      "selected_sense": "Replacement of a damaged or worn item with a new item; primary Oxford sense 3 and Collins sense 3.",
+      "editorial_difficulty_rationale": "Retain editorial A2 based on Oxford selected damaged-item sense 3 metadata A2; Collins selected damaged-item sense 3 prints B1. General substitution sense 2 is separately Oxford A2 and Collins B1+; those labels are not collapsed into the primary sense.",
+      "hold_reason": null,
+      "excluded_scope": "Narrow the broader draft to the existing damaged-folder context. The preserved stable ID remains put-instead. Exclude generic service/entity substitution, abstract replacement and putting the same item back. Broader replace contexts remain separately pending, with no rebinding.",
+      "media_issue": null,
+      "expression_context_issue": "Foundation02 broken-handle context matches the damaged-item theme but conveys authorized action and stays pending. Three other replace surface expressions must not inherit this narrowed lexical acceptance.",
+      "proposed_editorial_note_for_future_review": "Proposed damaged/worn-item replacement only, with an explicit new-item example. Oxford selected A2 and Collins selected B1 remain distinct. General substitution has separate Oxford/Collins entries including literal Collins B1+; same-item putting back is excluded. No repair authority or expression approval is implied."
+    },
+    {
+      "id": "return.send-back.v",
+      "term": "return",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "return.send-back.v",
+        "text": "return",
+        "display_text": "return",
+        "pos": "verb",
+        "definition": "To take or send something back to an earlier place or person.",
+        "example": "Please return the key to reception.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "return"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A person taking a borrowed key back to its owner.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "return.send-back.v.analysis.v1",
+          "lexeme_id": "return.send-back.v",
+          "text": "return",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "return",
+              "surface": "return",
+              "canonical_id": "morph.return"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "e35430fe10bfd7d25ab18afdc95b701bdb1c45e95666e307ec2556620fd91616",
+      "proposed_fields": {
+        "definition": "To give or send a borrowed item back to its owner or the place it came from.",
+        "example": "Please return the borrowed key to reception.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "return.send-back.v",
+        "text": "return",
+        "display_text": "return",
+        "pos": "verb",
+        "definition": "To give or send a borrowed item back to its owner or the place it came from.",
+        "example": "Please return the borrowed key to reception.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "return"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A person taking a borrowed key back to its owner.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "return.send-back.v.analysis.v1",
+          "lexeme_id": "return.send-back.v",
+          "text": "return",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "return",
+              "surface": "return",
+              "canonical_id": "morph.return"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "cff52e793003127f161b79cd7b1ce407044c396cc9f904363b2003c151464c19",
+      "changed_fields": [
+        "definition",
+        "example"
+      ],
+      "source_ids": [
+        "foundation02-language-second10-oxford-return",
+        "foundation02-language-second10-collins-return"
+      ],
+      "selected_sense": "Transitive giving/sending a borrowed item back; bounded instance of Oxford bring/give-back sense 2 and Collins borrowed/taken-object sense 3.",
+      "editorial_difficulty_rationale": "Retain editorial A2 for this explicit borrowed-key instance because Collins selected borrowed-object sense prints A2. Oxford selected transitive sense metadata and Shopping topic are B1. Oxford intransitive travel A1 is excluded.",
+      "hold_reason": null,
+      "excluded_scope": "Narrow to the borrowed-item context already depicted in the pending image brief. Purchased-goods returns are separately listed by Collins without a selected printed level; software return and return-value identities, noun returns, travel-back and resuming a topic are separate.",
+      "media_issue": null,
+      "expression_context_issue": "Foundation02 return the key remains an unchanged pending expression; the new lexeme example does not add borrowed to that expression or certify its context. Retail/warehouse return uses and software contexts receive no new acceptance.",
+      "proposed_editorial_note_for_future_review": "Proposed borrowed-item give/send-back sense only, with borrowed made explicit in the key example. Preserve Collins A2 versus Oxford B1 and exclude travel-back A1, purchased-goods sense expansion, noun returns and software return. All expression and specialist gates remain unchanged."
+    },
+    {
+      "id": "report.give-information.v",
+      "term": "report",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "report.give-information.v",
+        "text": "report",
+        "display_text": "report",
+        "pos": "verb",
+        "definition": "To give information about an event, result, or problem to someone responsible.",
+        "example": "Please report the equipment problem to the supervisor.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "report"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A worker describing an equipment issue to a supervisor.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "report.give-information.v.analysis.v1",
+          "lexeme_id": "report.give-information.v",
+          "text": "report",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "report",
+              "surface": "report",
+              "canonical_id": "morph.report"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "e424d69fc0cf62df68c01ca3e630eb0fc993949bbf6061b540c118df5e6891aa",
+      "proposed_fields": {
+        "definition": "To tell someone about an event, result, or problem.",
+        "example": "Please report the equipment problem to the supervisor.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "report.give-information.v",
+        "text": "report",
+        "display_text": "report",
+        "pos": "verb",
+        "definition": "To tell someone about an event, result, or problem.",
+        "example": "Please report the equipment problem to the supervisor.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "report"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A worker describing an equipment issue to a supervisor.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "report.give-information.v.analysis.v1",
+          "lexeme_id": "report.give-information.v",
+          "text": "report",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "report",
+              "surface": "report",
+              "canonical_id": "morph.report"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "564942cf9a8d43f454bf322ae466501331d86099ced2cb221eda3e5d8e3c767d",
+      "changed_fields": [
+        "definition"
+      ],
+      "source_ids": [
+        "foundation02-language-second10-oxford-report",
+        "foundation02-language-second10-collins-report"
+      ],
+      "selected_sense": "General communication of information about an occurrence, result or problem; Oxford give-information sense 1 and Collins sense 1.",
+      "editorial_difficulty_rationale": "Retain editorial A2 using Oxford selected sense 1 metadata A2; Collins selected sense 1 prints B1. The noun page, news context, job/duty B1+, reported-statement B1 and arrival-for-duty B2 do not supply a level for this bounded proposal.",
+      "hold_reason": null,
+      "excluded_scope": "Remove the unnecessary responsible-recipient restriction from the draft general definition. The supervisor example supplies a workplace recipient without approving an authority-facing process. Oxford separately lists crime/accident reporting; those expressions retain domain/language holds.",
+      "media_issue": null,
+      "expression_context_issue": "Many report hits are report nouns or noun compounds. Hazard, incident, unsafe-area, clinical and specialist contexts are not accepted through this general verb proposal.",
+      "proposed_editorial_note_for_future_review": "Proposed general give-information verb only. Preserve the equipment-problem example, Oxford selected A2 metadata and Collins selected B1 disagreement. Report nouns, formal processes, news/reporting duties and arrival-for-duty uses are separate. No hazard response or specialist procedure is certified."
+    },
+    {
+      "id": "notify.inform.v",
+      "term": "notify",
+      "disposition": "held_unchanged",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "notify.inform.v",
+        "text": "notify",
+        "display_text": "notify",
+        "pos": "verb",
+        "definition": "To formally tell someone information they need to know.",
+        "example": "Please notify the team if the meeting time changes.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "notify"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A meeting change notification reaching all affected colleagues.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "notify.inform.v.analysis.v1",
+          "lexeme_id": "notify.inform.v",
+          "text": "notify",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The history concerns making known from Latin notus. Splitting modern not + ify without a carefully explained Latin root would misleadingly present the English negative not. Keep the headword intact pending that decision. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/notify"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.notify",
+              "type": "atomic",
+              "canonical": "notify",
+              "surface": "notify"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-notify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "proposed_fields": null,
+      "content_projection": {
+        "id": "notify.inform.v",
+        "text": "notify",
+        "display_text": "notify",
+        "pos": "verb",
+        "definition": "To formally tell someone information they need to know.",
+        "example": "Please notify the team if the meeting time changes.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "notify"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A meeting change notification reaching all affected colleagues.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "notify.inform.v.analysis.v1",
+          "lexeme_id": "notify.inform.v",
+          "text": "notify",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The history concerns making known from Latin notus. Splitting modern not + ify without a carefully explained Latin root would misleadingly present the English negative not. Keep the headword intact pending that decision. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/notify"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.notify",
+              "type": "atomic",
+              "canonical": "notify",
+              "surface": "notify"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-notify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-second10-oxford-notify",
+        "foundation02-language-second10-collins-notify"
+      ],
+      "selected_sense": null,
+      "editorial_difficulty_rationale": null,
+      "hold_reason": "Oxford selected single-sense HTML explicitly records fkcefr=c1 with Oxford 5000 C1 icon/list metadata. Collins prints formal register but no selected CEFR level. Existing A2 lacks selected-source support; the unrelated Word of the Day B2 cannot justify B2 and C1 must not be clamped to the curriculum maximum.",
+      "excluded_scope": "Preserve the entire current entry including A2 as an unresolved draft, exact wording, ID, forms, regions, image/audio, morphology, references and pending gates. Wording suggestions in sources-b are research only, not proposals here. Foundation02 notify and inherited confirm expression holds persist.",
+      "media_issue": null,
+      "expression_context_issue": null,
+      "proposed_editorial_note_for_future_review": null
+    },
+    {
+      "id": "contact.communicate-with.v",
+      "term": "contact",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "contact.communicate-with.v",
+        "text": "contact",
+        "display_text": "contact",
+        "pos": "verb",
+        "definition": "To communicate with a person or organization.",
+        "example": "I will contact the supplier about the missing box.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "contact"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A worker calling a supplier about a delivery.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "contact.communicate-with.v.analysis.v1",
+          "lexeme_id": "contact.communicate-with.v",
+          "text": "contact",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "contact",
+              "surface": "contact",
+              "canonical_id": "morph.contact"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "9ef44563d213719aaf23232130e745969c0851deacd2c99a552d80b5aa21ffda",
+      "proposed_fields": {
+        "definition": "To communicate with a person or organization.",
+        "example": "I will contact the supplier about the missing box.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "contact.communicate-with.v",
+        "text": "contact",
+        "display_text": "contact",
+        "pos": "verb",
+        "definition": "To communicate with a person or organization.",
+        "example": "I will contact the supplier about the missing box.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "contact"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A worker calling a supplier about a delivery.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "contact.communicate-with.v.analysis.v1",
+          "lexeme_id": "contact.communicate-with.v",
+          "text": "contact",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "contact",
+              "surface": "contact",
+              "canonical_id": "morph.contact"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "9ef44563d213719aaf23232130e745969c0851deacd2c99a552d80b5aa21ffda",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-second10-oxford-contact",
+        "foundation02-language-second10-collins-contact"
+      ],
+      "selected_sense": "Getting in touch with a person or organization; Oxford verb contact_2 and Collins verb sense 3.",
+      "editorial_difficulty_rationale": "Retain editorial A2 supported by Collins selected verb sense A2. Oxford selected verb fkcefr metadata and Phones/email/internet topic are B1. Collins noun B1 and unrelated Oxford footer B2 are not the verb level.",
+      "hold_reason": null,
+      "excluded_scope": "Preserve the direct-object construction contact the supplier. Exclude contact person/nouns, contact details, physical contact and specialist contact precautions/time; other expression gates remain unchanged.",
+      "media_issue": null,
+      "expression_context_issue": null,
+      "proposed_editorial_note_for_future_review": "Proposed communication verb with unchanged definition/example and direct object. Editorial A2 records Collins selected A2 while preserving Oxford selected B1 disagreement. Noun/compound/specialist senses and expression approvals remain separate."
+    }
+  ]
+}

@@ -1,0 +1,1476 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hospitality_tourism.module10.01",
+      "text": "The front-desk agent will review the pending arrival decision with the reservation agent.",
+      "meaning": "Review an arrival matter awaiting a decision.",
+      "context": "Two service roles coordinate an unresolved booking matter.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "front-desk",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "agent",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "will",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "review",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "pending",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "arrival",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "decision",
+          "start": 53,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "with",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "reservation",
+          "start": 71,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "agent",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "front-desk-agent.worker-handling-accommodation-arrival-and-service-queries.n",
+        "reservation-agent.worker-handling-booking-requests-and-records.n",
+        "pending.awaiting-decision-or-action.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module10.02",
+      "text": "Ask the concierge about current local information and whether the guest would like assistance from a porter.",
+      "meaning": "Offer the relevant services without assuming help is wanted.",
+      "context": "Welcoming a guest with luggage.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "concierge",
+          "start": 8,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "about",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "current",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "local",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "information",
+          "start": 38,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "whether",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "guest",
+          "start": 66,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "would",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "like",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "assistance",
+          "start": 83,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "from",
+          "start": 94,
+          "end": 98
+        },
+        {
+          "index": 15,
+          "text": "a",
+          "start": 99,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "porter",
+          "start": 101,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "concierge.worker-coordinating-guest-information-and-arrangements.n",
+        "porter.hospitality-worker-helping-with-luggage-and-arrival-services.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ada-lodging-low-vision",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module10.03",
+      "text": "The room attendant has referred the room-status question to the housekeeping supervisor.",
+      "meaning": "Describe the assigned housekeeping reporting route.",
+      "context": "Coordinating room preparation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "room",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "attendant",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "has",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "referred",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "room-status",
+          "start": 36,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "question",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "housekeeping",
+          "start": 64,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "supervisor",
+          "start": 77,
+          "end": 87
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "room-attendant.worker-performing-assigned-guest-room-housekeeping.n",
+        "housekeeping-supervisor.worker-supervising-assigned-housekeeping-activities.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module10.04",
+      "text": "The guest relations officer will discuss service recovery with the duty manager and check the applicable service standard.",
+      "meaning": "Review a response to a service problem against the expected service level.",
+      "context": "A worker follows up with the responsible manager.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "guest",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "relations",
+          "start": 10,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "officer",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "will",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "discuss",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "service",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "recovery",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "with",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "duty",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "manager",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "check",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "applicable",
+          "start": 94,
+          "end": 104
+        },
+        {
+          "index": 16,
+          "text": "service",
+          "start": 105,
+          "end": 112
+        },
+        {
+          "index": 17,
+          "text": "standard",
+          "start": 113,
+          "end": 121
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 121,
+          "end": 122
+        }
+      ],
+      "focus_lexeme_ids": [
+        "guest-relations-officer.worker-coordinating-guest-experience-requests-and-concerns.n",
+        "duty-manager.manager-responsible-for-operations-during-assigned-period.n",
+        "service-recovery.response-to-service-failure.n",
+        "service-standard.expected-service-quality.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module10.05",
+      "text": "The night auditor has asked the responsible contact about the unmatched record.",
+      "meaning": "Refer an accounting-record query to its assigned reviewer.",
+      "context": "Reviewing a period-end question.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "night",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "auditor",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "has",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "asked",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "responsible",
+          "start": 32,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "contact",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "about",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "unmatched",
+          "start": 62,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "record",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 78,
+          "end": 79
+        }
+      ],
+      "focus_lexeme_ids": [
+        "night-auditor.worker-performing-assigned-period-end-hotel-record-checks.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module10.06",
+      "text": "The maintenance technician will assess the reported issue within the authorized scope of work.",
+      "meaning": "Describe a qualified role without giving repair instructions.",
+      "context": "Updating a guest on a maintenance request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "maintenance",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "technician",
+          "start": 16,
+          "end": 26
+        },
+        {
+          "index": 3,
+          "text": "will",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "assess",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "reported",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "issue",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "within",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "authorized",
+          "start": 69,
+          "end": 79
+        },
+        {
+          "index": 11,
+          "text": "scope",
+          "start": 80,
+          "end": 85
+        },
+        {
+          "index": 12,
+          "text": "of",
+          "start": 86,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": "work",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "maintenance-technician.trained-worker-performing-authorized-maintenance-work.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module10.07",
+      "text": "The revenue manager will review the proposed rate arrangements with the events coordinator before the next planning milestone.",
+      "meaning": "Coordinate pricing review before an important planned project point.",
+      "context": "The event-planning team checks a scheduled milestone.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "revenue",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "manager",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "will",
+          "start": 20,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "review",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "proposed",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "rate",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "arrangements",
+          "start": 50,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "with",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "events",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "coordinator",
+          "start": 79,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": "before",
+          "start": 91,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 98,
+          "end": 101
+        },
+        {
+          "index": 15,
+          "text": "next",
+          "start": 102,
+          "end": 106
+        },
+        {
+          "index": 16,
+          "text": "planning",
+          "start": 107,
+          "end": 115
+        },
+        {
+          "index": 17,
+          "text": "milestone",
+          "start": 116,
+          "end": 125
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 125,
+          "end": 126
+        }
+      ],
+      "focus_lexeme_ids": [
+        "revenue-manager.worker-coordinating-accommodation-pricing-and-revenue-planning.n",
+        "events-coordinator.worker-coordinating-event-arrangements.n",
+        "milestone.significant-project-point.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module10.08",
+      "text": "Confirm how guest satisfaction was measured before comparing the reports.",
+      "meaning": "Request comparable feedback information.",
+      "context": "Reviewing guest-experience results.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "how",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "guest",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "satisfaction",
+          "start": 18,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "was",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "measured",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "before",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "comparing",
+          "start": 51,
+          "end": 60
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": "reports",
+          "start": 65,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 72,
+          "end": 73
+        }
+      ],
+      "focus_lexeme_ids": [
+        "guest-satisfaction.extent-to-which-guest-experience-meets-expectations.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module10.09",
+      "text": "At the handover meeting, review room turnaround progress, each dependency, and the owner of every outstanding task.",
+      "meaning": "Review progress, prerequisites, and responsibility for unfinished work.",
+      "context": "A team transfers the information needed to complete room preparation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "At",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "handover",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "meeting",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "review",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "room",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "turnaround",
+          "start": 37,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "progress",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "each",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "dependency",
+          "start": 63,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "owner",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "of",
+          "start": 89,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": "every",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "outstanding",
+          "start": 98,
+          "end": 109
+        },
+        {
+          "index": 19,
+          "text": "task",
+          "start": 110,
+          "end": 114
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "room-turnaround.process-or-time-of-preparing-room-for-next-use.n",
+        "handover-meeting.meeting-for-transfer-of-work-information-and-responsibility.n",
+        "dependency.prerequisite-task-or-condition.n",
+        "progress.movement-toward-completion.n",
+        "owner.task-responsible-person.n",
+        "outstanding.not-yet-completed.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module10.10",
+      "text": "Offer the guest feedback form in an accessible format and explain its purpose.",
+      "meaning": "Invite feedback through a usable and transparent process.",
+      "context": "Following up a guest's experience.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Offer",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "guest",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "feedback",
+          "start": 16,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "form",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "in",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "an",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "accessible",
+          "start": 36,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "format",
+          "start": 47,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "explain",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "its",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "purpose",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 77,
+          "end": 78
+        }
+      ],
+      "focus_lexeme_ids": [
+        "guest-feedback-form.form-collecting-guest-comments-about-experience.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ada-lodging-low-vision",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "status": "root_commit_dispatch_recorded",
+  "started_at": "2026-10-16T21:54:51.129Z",
+  "root_commit_input": {
+    "path": "build/professional-english/foundation02-fourth10-root-commit-r01/input.json",
+    "sha256": "550c629c92c5da133348b6eca82b016dfa8426c3ac501fef2de265782c5faee0"
+  },
+  "root_commit_input_sha256": "550c629c92c5da133348b6eca82b016dfa8426c3ac501fef2de265782c5faee0",
+  "source_files": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/commit.cjs",
+      "sha256": "d9df7689e7e958036e6f328d91db9a090527fcfea0e00055ba50546b0caf7b61"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-contract.cjs",
+      "sha256": "85dbf8515a67b479fb6b904ac65b8c6ca1a6477983fa14b17beb06e34b8b2efd"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/committed-evidence.test.cjs",
+      "sha256": "85a70750e79b4c0fe1511a5289cb6b232c4a8511f7478368c7a3c41df26acc9f"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/INPUTS.md",
+      "sha256": "dd11e83f7996cac0b339121a6cd1fe57a9b56b26d46e5e321f664228770072b9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/root-commit-input.example.json",
+      "sha256": "f6ce26aa9d18382c70791eb21706a59eb2a6eaa9df18773047f84386da2736c5"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-inputs.json",
+      "sha256": "391c9292b5b9cd1cb30a0a47c968565a41750d4c49e2b30556d61d6bdff83654"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json",
+      "sha256": "f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7"
+    }
+  ],
+  "raw_token_retained": false
+}

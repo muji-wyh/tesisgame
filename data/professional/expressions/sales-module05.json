@@ -1,0 +1,1732 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.sales_marketing.module05.01",
+      "text": "We can advertise and promote the offer while staying consistent and transparent about its limits.",
+      "meaning": "Describe how promotional claims should be presented clearly.",
+      "context": "Reviewing campaign wording.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "advertise",
+          "start": 7,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "promote",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "offer",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "while",
+          "start": 39,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "staying",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "consistent",
+          "start": 53,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "transparent",
+          "start": 68,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "about",
+          "start": 80,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": "its",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "limits",
+          "start": 90,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "advertise.publicize-offer.v",
+        "promote.encourage-product-interest.v",
+        "consistent.following-same-approach-in-comparable-situations.a",
+        "transparent.clear-about-relevant-process-or-basis.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module05.02",
+      "text": "Please demonstrate the product, compare the options, and recommend a competitive package for the customer's needs.",
+      "meaning": "Ask for a useful comparison and recommendation.",
+      "context": "Preparing a sales discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "demonstrate",
+          "start": 7,
+          "end": 18
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "product",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "compare",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "options",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "recommend",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "a",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "competitive",
+          "start": 69,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "package",
+          "start": 81,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "for",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "customer's",
+          "start": 97,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "needs",
+          "start": 108,
+          "end": 113
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 113,
+          "end": 114
+        }
+      ],
+      "focus_lexeme_ids": [
+        "demonstrate.show-how-it-works.v",
+        "compare.examine-differences.v",
+        "recommend.suggest-suitable-choice.v",
+        "competitive.able-to-compete-effectively-with-alternatives.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module05.03",
+      "text": "Before we purchase or order anything, please quote the full price so we can negotiate the terms.",
+      "meaning": "Request a scoped price before a purchase decision.",
+      "context": "Discussing a prospective order.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Before",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "we",
+          "start": 7,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "purchase",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "or",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "order",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "anything",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "please",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "quote",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "full",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "price",
+          "start": 60,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "so",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "we",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "can",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "negotiate",
+          "start": 76,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "terms",
+          "start": 90,
+          "end": 95
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "purchase.buy-item.v",
+        "order.request-goods-or-services-to-be-supplied.v",
+        "quote.state-proposed-price-for-specified-work-or-goods.v",
+        "negotiate.discuss-terms-to-seek-agreement.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module05.04",
+      "text": "Please consult the team, estimate costs, measure results, and revise the plan after the pilot.",
+      "meaning": "Request a coordinated review based on observed results.",
+      "context": "Planning a limited campaign trial.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "consult",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "team",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "estimate",
+          "start": 25,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "costs",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "measure",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "results",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "revise",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "plan",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "after",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "pilot",
+          "start": 88,
+          "end": 93
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "consult.seek-information-or-views-from-person.v",
+        "estimate.make-informed-approximation.v",
+        "measure.find-dimensions.v",
+        "revise.change-work-after-reconsideration.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module05.05",
+      "text": "Could you present a relevant, credible and persuasive explanation of why we sell this service?",
+      "meaning": "Request a supported explanation suitable for the audience.",
+      "context": "Preparing a customer presentation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "present",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "relevant",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "credible",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "persuasive",
+          "start": 43,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "explanation",
+          "start": 54,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "of",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "why",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "we",
+          "start": 73,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "sell",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "this",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "service",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "?",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "present.show-or-explain-information-to-audience.v",
+        "relevant.connected-to-matter-being-considered.a",
+        "credible.reasonably-believable-or-trustworthy.a",
+        "persuasive.effective-at-encouraging-agreement-through-reasons.a",
+        "sell.provide-something-in-exchange-for-payment.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module05.06",
+      "text": "We will survey customers, segment the results, and analyze which group the next campaign should target.",
+      "meaning": "Describe a research and audience-selection task.",
+      "context": "Planning work from customer responses.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 3,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "survey",
+          "start": 8,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "customers",
+          "start": 15,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "segment",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "results",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "analyze",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "which",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "group",
+          "start": 65,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "next",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "campaign",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "should",
+          "start": 89,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "target",
+          "start": 96,
+          "end": 102
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "survey.collect-responses-from-people-through-questions.v",
+        "segment.divide-market-or-audience-into-relevant-groups.v",
+        "analyze.examine-information-to-understand-patterns-or-meaning.v",
+        "target.direct-activity-toward-defined-group-or-outcome.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module05.07",
+      "text": "Please launch the campaign, publish the approved announcement, and distribute the current leaflet after sign-off.",
+      "meaning": "Coordinate the release of approved material.",
+      "context": "Preparing an agreed campaign launch.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "launch",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "campaign",
+          "start": 18,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "publish",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "approved",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "announcement",
+          "start": 49,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "distribute",
+          "start": 67,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "current",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "leaflet",
+          "start": 90,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": "after",
+          "start": 98,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "sign-off",
+          "start": 104,
+          "end": 112
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "launch.introduce-offering-or-campaign-to-intended-public.v",
+        "publish.make-content-available-to-intended-audience.v",
+        "distribute.give-material-to-intended-recipients.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module05.08",
+      "text": "We will monitor and track the results, test the revised version, and optimize against the agreed measure.",
+      "meaning": "Describe measured improvement work without promising an outcome.",
+      "context": "Reviewing a digital campaign.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 3,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "monitor",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "track",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "results",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "test",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "revised",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "version",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "optimize",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "against",
+          "start": 78,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "agreed",
+          "start": 90,
+          "end": 96
+        },
+        {
+          "index": 18,
+          "text": "measure",
+          "start": 97,
+          "end": 104
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 104,
+          "end": 105
+        }
+      ],
+      "focus_lexeme_ids": [
+        "monitor.follow-condition-over-time.v",
+        "track.record-and-follow-progress-or-changes.v",
+        "test.check-behavior-under-defined-conditions.v",
+        "optimize.improve-resource-or-performance-use.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module05.09",
+      "text": "We hope to attract and engage visitors, then persuade interested customers to subscribe by explaining the service clearly.",
+      "meaning": "Describe the purpose of a clear customer explanation.",
+      "context": "Planning a customer demonstration.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "hope",
+          "start": 3,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "to",
+          "start": 8,
+          "end": 10
+        },
+        {
+          "index": 3,
+          "text": "attract",
+          "start": 11,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "engage",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "visitors",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "then",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "persuade",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "interested",
+          "start": 54,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "customers",
+          "start": 65,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 75,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "subscribe",
+          "start": 78,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "by",
+          "start": 88,
+          "end": 90
+        },
+        {
+          "index": 15,
+          "text": "explaining",
+          "start": 91,
+          "end": 101
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 102,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": "service",
+          "start": 106,
+          "end": 113
+        },
+        {
+          "index": 18,
+          "text": "clearly",
+          "start": 114,
+          "end": 121
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 121,
+          "end": 122
+        }
+      ],
+      "focus_lexeme_ids": [
+        "attract.draw-interest-or-attention.v",
+        "engage.encourage-attentive-involvement.v",
+        "persuade.encourage-agreement-through-reasons.v",
+        "subscribe.arrange-to-receive-ongoing-service-or-content.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.sales_marketing.module05.10",
+      "text": "Customers may decline the commercial offer; interest does not always convert into a purchase.",
+      "meaning": "Recognize that customer interest is not an agreement.",
+      "context": "Reviewing sales communication.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Customers",
+          "start": 0,
+          "end": 9
+        },
+        {
+          "index": 1,
+          "text": "may",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "decline",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "commercial",
+          "start": 26,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "offer",
+          "start": 37,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "interest",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "does",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "not",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "always",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "convert",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "into",
+          "start": 77,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "a",
+          "start": 82,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "purchase",
+          "start": 84,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 92,
+          "end": 93
+        }
+      ],
+      "focus_lexeme_ids": [
+        "decline.refuse-transaction.v",
+        "commercial.connected-with-buying-selling-or-business.a",
+        "convert.bring-about-defined-desired-customer-action.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

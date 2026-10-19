@@ -1,0 +1,213 @@
+{
+  "schema": 1,
+  "status": "immutable_evidence_refs_only_not_current_registry_freeze",
+  "evidence": [
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/HANDOFF.md",
+      "bytes": 3557,
+      "raw_sha256": "316e153be9ed3e3185af29d0a2aee319457fc745f232c283e18699b18c7a5963"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assemble-evidence.cjs",
+      "bytes": 50063,
+      "raw_sha256": "9c512a2a8dbceb32d5436f33b9e2181a5de81dec1d8b11a7f2ff0efa108c1730"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assembly-result.json",
+      "bytes": 2064,
+      "raw_sha256": "4aedc1440ebc4620dfe4def1a4c168fe353fb176c01c85432b165d0ca2639487"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assembly-start.json",
+      "bytes": 278,
+      "raw_sha256": "972506ece89a4dcdd6d25ae7bc32227b0038120a58e76382dc6813f6a8732651"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/baseline.json",
+      "bytes": 1608311,
+      "raw_sha256": "59c33da6c2a31ac2ea3f67bed20966e32f174030c07b16600d13b6f46e3f73e5"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/candidate-ledger.json",
+      "bytes": 98840,
+      "raw_sha256": "171ce3798449f6915be6079f713e2e4c9211cf12d9e98e6945aad249efe9a5e1"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-completion.json",
+      "bytes": 730,
+      "raw_sha256": "6dcae1e10f4e8b4699e0835d6df45baff4b3f9c0f7c9f894889d2cfd1db42907"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-observations.cjs",
+      "bytes": 8821,
+      "raw_sha256": "7a7b227efc5f648ec3d59ea9f846fa48023ea1529cfd2eb079e61d05268811ff"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-start.json",
+      "bytes": 218,
+      "raw_sha256": "058ae44664a558b94e56b5514202b5985b07ad8d759ed6b0e3f90b98ac8f7c61"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/collect-html-metadata.cjs",
+      "bytes": 2980,
+      "raw_sha256": "1d7a1ae71d3defd14b34fb9c772fd918a0ee22ef14ac488b41bf561ab6d39b4b"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/collection-start.json",
+      "bytes": 946,
+      "raw_sha256": "19c12838fd74a5a5d062c4a2bdcc14f92a2c8ddbb42247fb64b4c9d17665a047"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/context-screen.json",
+      "bytes": 1737430,
+      "raw_sha256": "b0be816fd3836b7ee321a715286aae0459c7b775ac69993b4a0d5ba6dfab2c52"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/original-foundation-module02.json",
+      "bytes": 220456,
+      "raw_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/oxford-html-metadata.json",
+      "bytes": 22094,
+      "raw_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/research-notes.json",
+      "bytes": 32413,
+      "raw_sha256": "7bd12efb9568d6d50b68a1ddf62c86b149cc29c65321b1c959150fcddcb8d639"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/source-index.json",
+      "bytes": 33947,
+      "raw_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/inventory.json",
+      "bytes": 2903,
+      "raw_sha256": "d605cd61042c2f7532090a4aa838b791ad822f800165afe2ad7081624ea4300b"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/root-copy-receipt.json",
+      "bytes": 3023,
+      "raw_sha256": "7d327fd3a8c4f50d37a31e39894951d69e801045d688bb7054c20ec36334b226"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/README.md",
+      "bytes": 4211,
+      "raw_sha256": "c6b4562629e7964032fe61fe269c85b6a85e688373e9a83e30adf8285babf923"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assemble-independent-review.cjs",
+      "bytes": 45810,
+      "raw_sha256": "8ca8d1dd88f9833272d66d4d69879a4ba54ca85903baaff3309ec96a477e4ae1"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assembly-result.json",
+      "bytes": 1202,
+      "raw_sha256": "fb94a6c37a89dc3b793b3c166b17d395f317884969d93295fecaaa4b23b0cd36"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assembly-start.json",
+      "bytes": 296,
+      "raw_sha256": "29808ea081c4ec7171e42fd30139f469d07b945331b10cbec8cf85b300fba03d"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/context-review.json",
+      "bytes": 465569,
+      "raw_sha256": "44e3d928da7a4fc06db061c9090480d9182ae2f24698d3d4de7caab4e9549037"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/input-audit.json",
+      "bytes": 197057,
+      "raw_sha256": "5033253372dc4cb1834355d7d94e372ac70740b94a949d044171db575be59200"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/review-ledger.json",
+      "bytes": 80788,
+      "raw_sha256": "92c5b326565f95d9dacb8c11f8ca6684b5c39200b4ebcae57f3108a3c7a720b1"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/source-observations.json",
+      "bytes": 40272,
+      "raw_sha256": "db1c2b165a7696e7ae9e5292ceb51de0de8db6e57b85fe63b424a499504b6562"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/inventory.json",
+      "bytes": 1572,
+      "raw_sha256": "34cf5ea6b3406f6618b298c432f9e9c47d2c01fe9b2eabdb6a5e3566f28263f0"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/root-copy-receipt.json",
+      "bytes": 1755,
+      "raw_sha256": "c7527db2f3cb893a5fbaa3156b1d679122d56637134c2734750d61b79621302b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/foundation-module02.json.after",
+      "bytes": 372196,
+      "raw_sha256": "9f698ae9b2572d279709b521e6b7d490ffe3d05b1a8ed362add36e07fd4accbc"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/sources.json.after",
+      "bytes": 869470,
+      "raw_sha256": "310be48d81d29917146db162b26d9927007b68ed12380df4a113458d2de7b330"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/accepted-language.json",
+      "bytes": 2337675,
+      "raw_sha256": "51d6569514875bc8bceeaa149cef44f7863d28d0e523e4557472909607efeece"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+      "bytes": 226840,
+      "raw_sha256": "b6f797200a9c856b189dfcc3bf1dc20e65a8b9aac361b62bd3959ae460311f4d"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/binding.json",
+      "bytes": 235896,
+      "raw_sha256": "dbacf79ca796410664a1a6af9a577172c93234109b3c33c326ba669a5394dc21"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/review.json",
+      "bytes": 3355,
+      "raw_sha256": "38806f472694084563690f5218ff6af70c3338b3837d79d63c0a9bf3d04d0276"
+    }
+  ],
+  "history_files": [
+    {
+      "path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "bytes": 3197142,
+      "raw_sha256": "c6c6083fe03324ac5ea5d1e7c5ec7cf2bad92559616d8437ce32d572fe1b3d92"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "bytes": 2755242,
+      "raw_sha256": "528267cabf4ef12daa9977da23267131c3b69d223f76d1a4a83fcac9ba9973e7"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "bytes": 2367179,
+      "raw_sha256": "d821f85146ef5e5e14ee5b4cee9ce129d0c6652f683090bc44fb7af14d6d14f1"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "bytes": 2216910,
+      "raw_sha256": "8ab99dbd7a7ea692401c594259986328d43e04e676557c51d15aa675fc7bf83b"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "bytes": 3209077,
+      "raw_sha256": "ccd4ab160b89efbc21289c51fd576933d7da19734567ee986656b4462ad06083"
+    }
+  ],
+  "baseline": {
+    "bound": false,
+    "registry_before_sha256": null,
+    "registry_after_sha256": null,
+    "measurement_manifest": null,
+    "fourth10_committed_receipt": null,
+    "shopping_bag_delivery_receipt": null,
+    "persisted_validation_receipt": null,
+    "reason": "Final whole-registry freeze is deferred until actual fourth10 delivery and queued shopping-bag integration are complete and root selects their actual evidence. Frozen afterimages here are planning evidence only."
+  }
+}

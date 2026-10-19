@@ -1,0 +1,1735 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.accounting_finance.module07.01",
+      "text": "Please identify which budget is the master budget before comparing it with the flexible budget.",
+      "meaning": "Request the intended planning documents and comparison basis.",
+      "context": "Preparing a budget discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "identify",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "which",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "budget",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "is",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "master",
+          "start": 36,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "budget",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "before",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "comparing",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "it",
+          "start": 67,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "with",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "flexible",
+          "start": 79,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "budget",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "budget.plan-for-available-income-and-spending.n",
+        "master-budget.coordinated-overall-budget-combining-component-plans.n",
+        "flexible-budget.budget-adjusted-for-different-levels-of-activity.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module07.02",
+      "text": "The rolling forecast uses a revised forecast assumption, so please keep the original baseline visible.",
+      "meaning": "Ask for a forecast change to remain traceable to its original comparison.",
+      "context": "Reviewing a planning update.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "rolling",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "forecast",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "uses",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "revised",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "forecast",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "assumption",
+          "start": 45,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "so",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "please",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "keep",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "original",
+          "start": 76,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "baseline",
+          "start": 85,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "visible",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "rolling-forecast.forecast-regularly-updated-and-extended-by-new-period.n",
+        "forecast-assumption.condition-or-estimate-used-as-basis-for-forecast.n",
+        "baseline.usual-or-initial-comparison-state.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module07.03",
+      "text": "The budget variance compares actual expenditure with the same work and period in the plan.",
+      "meaning": "Clarify the scope of an actual-versus-budget comparison.",
+      "context": "Reviewing a fictional spending report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "budget",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "variance",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "compares",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "actual",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "expenditure",
+          "start": 36,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "with",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "same",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "work",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "period",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 78,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "plan",
+          "start": 85,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "budget-variance.difference-between-actual-and-budgeted-amount.n",
+        "actual-expenditure.amount-actually-spent-during-stated-period.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module07.04",
+      "text": "This overhead is an indirect cost for the selected product; the material used only for that order is a direct cost.",
+      "meaning": "Distinguish shared support costs from costs traceable to a particular output.",
+      "context": "Explaining the chosen costing scope.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "overhead",
+          "start": 5,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "an",
+          "start": 17,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "indirect",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "cost",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "selected",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "product",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "material",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "used",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "only",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "for",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "that",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": "order",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "is",
+          "start": 98,
+          "end": 100
+        },
+        {
+          "index": 19,
+          "text": "a",
+          "start": 101,
+          "end": 102
+        },
+        {
+          "index": 20,
+          "text": "direct",
+          "start": 103,
+          "end": 109
+        },
+        {
+          "index": 21,
+          "text": "cost",
+          "start": 110,
+          "end": 114
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "overhead.indirect-costs-supporting-business-activities.n",
+        "indirect-cost.cost-not-directly-traceable-to-selected-cost-object.n",
+        "direct-cost.cost-traceable-to-specific-product-service-or-activity.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module07.05",
+      "text": "Please state the activity range before classifying a fixed cost or variable cost and calculating the unit cost.",
+      "meaning": "Request the assumptions needed to interpret cost behavior.",
+      "context": "Discussing a fictional production estimate.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "state",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "activity",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "range",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "classifying",
+          "start": 39,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "fixed",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "cost",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 64,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "variable",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "cost",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "calculating",
+          "start": 85,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 97,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "unit",
+          "start": 101,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": "cost",
+          "start": 106,
+          "end": 110
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 110,
+          "end": 111
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fixed-cost.cost-whose-total-stays-unchanged-with-activity-within-stated-range.n",
+        "variable-cost.cost-whose-total-changes-with-level-of-activity.n",
+        "unit-cost.cost-attributed-to-one-unit-of-output.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module07.06",
+      "text": "The break-even point depends on the contribution margin and the other assumptions in this model.",
+      "meaning": "Explain that a model result depends on its inputs and scope.",
+      "context": "Reviewing a planning example.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "break-even",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "point",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "depends",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "on",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "contribution",
+          "start": 36,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "margin",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "other",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "assumptions",
+          "start": 70,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 82,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "this",
+          "start": 85,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "model",
+          "start": 90,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "break-even-point.activity-level-at-which-total-revenue-equals-total-cost.n",
+        "contribution-margin.revenue-remaining-after-variable-costs.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module07.07",
+      "text": "Please distinguish gross profit, operating profit and net profit before describing the profit margin.",
+      "meaning": "Request a clearly identified profit measure.",
+      "context": "Explaining a financial summary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "distinguish",
+          "start": 7,
+          "end": 18
+        },
+        {
+          "index": 2,
+          "text": "gross",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "profit",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "operating",
+          "start": 33,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "profit",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "net",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "profit",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "describing",
+          "start": 72,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "profit",
+          "start": 87,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "margin",
+          "start": 94,
+          "end": 100
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "gross-profit.revenue-less-related-cost-of-sales.n",
+        "operating-profit.profit-from-operating-activities-under-stated-reporting-basis.n",
+        "net-profit.profit-remaining-after-recognized-expenses-for-period.n",
+        "profit-margin.profit-as-proportion-of-related-revenue.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module07.08",
+      "text": "The balance sheet shows a position at a date; the income statement covers a period.",
+      "meaning": "Distinguish two financial reports and their time basis.",
+      "context": "Introducing a fictional set of accounts.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "balance",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "sheet",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "shows",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "position",
+          "start": 26,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "at",
+          "start": 35,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "date",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": ";",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 11,
+          "text": "income",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "statement",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "covers",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "a",
+          "start": 74,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "period",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "balance-sheet.statement-of-assets-liabilities-and-equity-at-specific-date.n",
+        "income-statement.statement-of-income-expenses-and-profit-or-loss-for-period.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module07.09",
+      "text": "The cash flow statement explains each cash inflow and cash outflow within its reporting scope.",
+      "meaning": "Describe the cash-movement focus of the statement.",
+      "context": "Discussing a fictional cash-flow report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "cash",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "flow",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "statement",
+          "start": 14,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "explains",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "each",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "cash",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "inflow",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "cash",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "outflow",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "within",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "its",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "reporting",
+          "start": 78,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "scope",
+          "start": 88,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "cash-flow-statement.statement-of-changes-in-cash-and-cash-equivalents-for-period.n",
+        "cash-inflow.movement-of-cash-into-business-or-account.n",
+        "cash-outflow.movement-of-cash-out-of-business-or-account.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module07.10",
+      "text": "Please define the financial ratio and comparative period, then check the notes to the accounts before drawing a conclusion.",
+      "meaning": "Request definitions and context for a financial comparison.",
+      "context": "Reviewing a draft report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "define",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "financial",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "ratio",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "comparative",
+          "start": 38,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "period",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "then",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "check",
+          "start": 63,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "notes",
+          "start": 73,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "to",
+          "start": 79,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "accounts",
+          "start": 86,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": "before",
+          "start": 95,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": "drawing",
+          "start": 102,
+          "end": 109
+        },
+        {
+          "index": 18,
+          "text": "a",
+          "start": 110,
+          "end": 111
+        },
+        {
+          "index": 19,
+          "text": "conclusion",
+          "start": 112,
+          "end": 122
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 122,
+          "end": 123
+        }
+      ],
+      "focus_lexeme_ids": [
+        "financial-ratio.comparison-of-financial-amounts-by-division.n",
+        "comparative-period.earlier-period-used-for-financial-comparison.n",
+        "notes-to-the-accounts.explanatory-information-accompanying-financial-statements.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

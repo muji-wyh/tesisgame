@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "status": "actual_committed_journal_independently_inspected",
+  "receipt": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/execution-r01/receipt.json",
+    "sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+  },
+  "plan_sha256": "28c763178d2247e7e1fdce7290fa11799d8cce05709d3da696e2f7aeec9dfeb6",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "state": {
+    "path": "build/professional-english/transactions/shopping-bag-image-r01/states/000308-committed.json",
+    "sha256": "6734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150"
+  },
+  "states": 308,
+  "targets": 153,
+  "stages": 153,
+  "backups": 4,
+  "active_lock_absent": true,
+  "persisted_validation_not_yet_dispatched": true
+}

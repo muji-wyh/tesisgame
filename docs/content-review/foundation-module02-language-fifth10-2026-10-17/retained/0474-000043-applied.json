@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 43,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "a229b3058a1d0882756582ebc28d56e0fdb128c7100e561ce7ed23540c9e3ced",
+  "recorded_at": "2026-10-16T22:48:03.828Z",
+  "index": 20,
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/evidence-lock.json"
+}

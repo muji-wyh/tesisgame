@@ -1,0 +1,34 @@
+{
+  "sequence": 2,
+  "kind": "native_suite",
+  "executable": {
+    "path": "C:/Users/yaohuiwang/AppData/Local/Microsoft/WinGet/Packages/GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe/Godot_v4.7-stable_win64.exe",
+    "bytes": 178485256,
+    "raw_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8"
+  },
+  "args": [
+    "--headless",
+    "--path",
+    "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\execution-r01\\project",
+    "--script",
+    "res://tests/godot/professional_retail_morphology_tests.gd"
+  ],
+  "cwd": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\execution-r01\\project",
+  "started_at": "2026-10-16T23:50:51.506Z",
+  "finished_at": "2026-10-16T23:51:03.581Z",
+  "exit_code": 1,
+  "signal": null,
+  "error": "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org\r\n\r\nProfessional Retail morphology: 3922 checks, 1 failures\r\n\nFAIL: Related broad Professional graph remains its exact pending preimage: safe.free-from-unacceptable-danger.adj\r\n\n\n1 !== 0\n",
+  "stdout": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-2.stdout.log",
+    "bytes": 130,
+    "raw_sha256": "3efb6675fdebb1306b33370d6ee539ca3f8f5e40ef8182fbaa7b8dd8b7bea4ef"
+  },
+  "stderr": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-2.stderr.log",
+    "bytes": 115,
+    "raw_sha256": "cb474a4aa927cd7fb03edc7509c15ba381384618101b59412bcd75e954060549"
+  },
+  "summary": null,
+  "postcheck_ok": true
+}

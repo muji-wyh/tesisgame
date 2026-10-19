@@ -183,7 +183,8 @@ test('required bundled audio includes both new worlds and rejects missing or inv
     'assets/audio/fragments/appear.wav',
     'assets/audio/fragments/arrive.wav',
     'assets/audio/jelly-finish/ready.ogg',
-    ...['clear', 'land', 'danger'].map(id => `assets/audio/jelly-match/${id}.wav`),
+    ...['collect-do', 'collect-re', 'collect-mi', 'collect-fa', 'collect-sol', 'collect-la', 'collect-ti',
+      'land', 'danger'].map(id => `assets/audio/jelly-match/${id}.wav`),
     ...['contact', 'merge-together-v3'].map(id => `assets/imported-audio/jelly-interaction/${id}.wav`),
     ...themes.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),
@@ -232,6 +233,14 @@ test('required bundled audio includes both new worlds and rejects missing or inv
   assert.ok(audio.some(file => file.source.endsWith('/chest-reference/step-roll.wav')));
   assert.equal(audio.filter(file => file.source.includes('/audio/coins/')).length, 2,
     'Coin release and wallet arrival both ship in the startup bundle');
+  for (const note of ['do', 're', 'mi', 'fa', 'sol', 'la', 'ti']) {
+    const collectionImport = path.join(directory, `assets/audio/jelly-match/collect-${note}.wav.import`);
+    const collectionMetadata = fs.readFileSync(collectionImport);
+    fs.unlinkSync(collectionImport);
+    assert.throws(() => collectRequiredAudio(directory), new RegExp(`collect-${note}\\.wav\\.import`),
+      `The ${note} collection note cannot silently disappear from the startup bundle`);
+    fs.writeFileSync(collectionImport, collectionMetadata);
+  }
   const phraseCatalog = path.join(directory, 'phrases.json');
   for (const invalid of [[], {}, null]) {
     fs.writeFileSync(phraseCatalog, JSON.stringify(invalid));

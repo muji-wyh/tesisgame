@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "ok": true,
+  "started_at": "2026-10-16T20:56:11.940Z",
+  "finished_at": "2026-10-16T20:56:12.488Z",
+  "stage": "static_proposal_assembly_only",
+  "inherited_files_checked": 48,
+  "source_refs_checked": 43,
+  "shell_changed_bytes": 1,
+  "unchanged_web_outputs": 14,
+  "existing_browser_assertions_unchanged": true,
+  "fixture_prepared": false,
+  "web_exported": false,
+  "native_proof_run": false,
+  "browser_run": false,
+  "tests_run": false
+}

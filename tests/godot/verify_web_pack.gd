@@ -8,6 +8,11 @@ func _initialize() -> void:
 func _verify() -> void:
 	var failures := 0
 	var required := OS.get_cmdline_user_args()
+	# Verify the initial raw pack before any deferred pack can supply or replace
+	# a missing domain resource. The report is created only for an exact closure.
+	if _verify_professional_domain(required) != 0:
+		quit(1)
+		return
 	var words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	if not words is Array or words.size() < 5:
 		printerr("The startup pack must contain a playable vocabulary index.")
@@ -80,6 +85,7 @@ func _verify() -> void:
 			failures += 1
 	failures += _verify_phrases(words)
 	failures += _verify_growth()
+	failures += _verify_growth_morphology(words)
 	failures += _verify_word_motion(catalog.words)
 	if required.has("--audio-manifest"):
 		var manifest_index: int = required.find("--audio-manifest")
@@ -219,6 +225,39 @@ func _verify() -> void:
 			failures += 1
 	print("Web packs: %d word pronunciations, %d game effects, %d required audio paths checked, %d failures." % [words.size(), effects.size(), required.size(), failures])
 	quit(1 if failures else 0)
+
+
+func _verify_professional_domain(required: PackedStringArray) -> int:
+	var paths: Dictionary = {}
+	for flag: String in ["--professional-domain-manifest", "--professional-domain-proof"]:
+		var index: int = required.find(flag)
+		if index < 0 or index + 1 >= required.size() or required.count(flag) != 1:
+			printerr("Pass a fresh Professional domain manifest and proof path.")
+			return 1
+		paths[flag] = required[index + 1]
+		required.remove_at(index + 1)
+		required.remove_at(index)
+	if FileAccess.file_exists(paths["--professional-domain-proof"]):
+		printerr("Professional domain pack proof already exists; refuse to reuse it.")
+		return 1
+	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(paths["--professional-domain-manifest"]))
+	var helper_path: String = get_script().resource_path.get_base_dir().path_join("professional_domain_pack_verifier.gd")
+	var helper: Variant = load(helper_path)
+	if helper == null:
+		printerr("Professional domain pack verifier could not be loaded.")
+		return 1
+	var result: Dictionary = helper.verify(manifest)
+	if result.get("ok") != true:
+		printerr(str(result.get("error", "Professional domain pack verification failed.")))
+		return 1
+	var output := FileAccess.open(paths["--professional-domain-proof"], FileAccess.WRITE)
+	if output == null:
+		printerr("Professional domain pack proof could not be created.")
+		return 1
+	output.store_string(JSON.stringify(result))
+	output.close()
+	print("Professional domain: %d exact generated resources and embedded descriptor pin verified." % result.generated_inventory.size())
+	return 0
 
 
 func _verify_vocabulary_packs(path: String, words: Array) -> int:
@@ -542,4 +581,42 @@ func _verify_growth() -> int:
 	if ages != [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
 		printerr("Pip artwork must follow the complete independent age sequence.")
 		failures += 1
+	return failures
+
+
+func _verify_growth_morphology(words: Array) -> int:
+	var metadata: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/vocabulary/morphology/index.json"))
+	if not metadata is Dictionary or not metadata.get("ages") is Dictionary or metadata.get("total") != words.size():
+		printerr("The startup pack needs the complete Growth morphology index.")
+		return 1
+	var overlay: Script = load("res://scripts/growth_morphology.gd")
+	var counts: Dictionary = {}
+	var failures := 0
+	var reviewed := 0
+	for word: Dictionary in words:
+		var age: String = str(int(word.min_age))
+		if not counts.has(age):
+			counts[age] = {"total": 0, "reviewed": 0, "pending": 0}
+		counts[age].total += 1
+		var decorated: Dictionary = overlay.decorate(word)
+		var status: String = str(decorated.get("morphology_status", "invalid"))
+		if status not in ["reviewed", "pending"]:
+			printerr("Invalid or missing Growth word analysis in the startup pack: " + str(word.id))
+			failures += 1
+			continue
+		counts[age][status] += 1
+		if status == "reviewed":
+			reviewed += 1
+	for age: String in counts:
+		var expected: Variant = metadata.ages.get(age, {})
+		var matches: bool = expected is Dictionary and expected.size() == 3
+		for field: String in ["total", "reviewed", "pending"]:
+			var value: Variant = expected.get(field) if expected is Dictionary else null
+			# JSON numbers are floats. Compare numeric values explicitly rather
+			# than using type-sensitive Dictionary equality with native counts.
+			matches = matches and (value is int or value is float) and value == counts[age][field]
+		if not matches:
+			printerr("Packed Growth review totals disagree for age %s: %s vs %s" % [age, counts[age], expected])
+			failures += 1
+	print("Growth morphology: %d reviewed and %d pending identities checked in startup metadata." % [reviewed, words.size() - reviewed])
 	return failures

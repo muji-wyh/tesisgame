@@ -1,0 +1,84 @@
+{
+  "sense_id": "shopping-cart.store-trolley.n",
+  "source": "https://kenney.nl/assets/mini-market",
+  "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+  "license": "CC0 1.0",
+  "acquired_source_files": [
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shopping-cart.glb",
+      "sha256": "8933fdece5c43b619ea6902fa03a5fea9f490486048ae7543cc8b03ee98c98dd",
+      "bytes": 34832
+    },
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/Textures/colormap.png",
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+      "bytes": 8706
+    },
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/License.txt",
+      "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+      "bytes": 767
+    }
+  ],
+  "available_animations": [],
+  "accepted_png": {
+    "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/shopping-cart.png",
+    "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+    "bytes": 93422
+  },
+  "acceptance": {
+    "date": "2026-10-16",
+    "reviewer": "Independent root agent",
+    "scope": "Shopping-cart physical-sense image candidate at actual minimum Match/Memory picture sizes; no module release or broader course approval.",
+    "accepted_sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+    "evidence": [
+      "shopping-cart/candidate/shopping-cart.png",
+      "shopping-cart/candidate/actual-word-card-contact.png",
+      "shopping-cart/source-inspection-r2/underside-wheel-evidence.png",
+      "shopping-cart/source-record.json",
+      "shopping-cart/candidate/report.json"
+    ],
+    "decision": "The cart meaning is readable at minimum sizes. Partial fourth-wheel occlusion is acceptable perspective and must remain documented."
+  },
+  "suitability": {
+    "picture_suitable": true,
+    "definition": "A wheeled basket used to carry goods around a store.",
+    "forms": [
+      "shopping cart",
+      "shopping trolley"
+    ],
+    "intended_sense": "Physical wheeled basket used to carry goods around a store",
+    "visual_cues": [
+      "Empty basket",
+      "Orange push handle",
+      "Lower supporting frame",
+      "Four source wheel silhouettes"
+    ],
+    "limitations": [
+      "One rear wheel is partially occluded by the lower frame.",
+      "The isolated stylized model has no human/store scale reference.",
+      "The actual minimum art footprints are approximately 64.15 x 52 and 66.62 x 54 pixels.",
+      "This review does not approve audio, speech recognition, morphology, language, another sense, or the module."
+    ]
+  },
+  "original_candidate_receipt": {
+    "path": "build/professional-english/retail-term-art-review/review-receipt.json",
+    "sha256": "8184775b0fa33ba022f697aaf9ba78720f5a8ba60520154dc439bb2740f2ef2f",
+    "bytes": 16040
+  },
+  "native_qa": {
+    "checks": 21,
+    "failures": 0,
+    "report": {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/report.json",
+      "sha256": "8dc5d11b796d6c495720912bcd3981933d1a37f4d14b8677a559c06de2eefaca",
+      "bytes": 4222
+    },
+    "contact": {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/actual-word-card-contact.png",
+      "sha256": "ab0875ea1e938c89f8c62de1cea70ab99e7ae900dbfebbb17bb132afac5c985e",
+      "bytes": 50684
+    }
+  },
+  "production_delivery_verification": "Pending after exact descriptor review and serialized image-only integration."
+}

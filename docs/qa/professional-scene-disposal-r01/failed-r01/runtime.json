@@ -1,0 +1,19 @@
+{
+  "label": "runtime",
+  "command": [
+    "C:\\nvm4w\\nodejs\\node.exe",
+    "tools/run-godot.cjs",
+    "--headless",
+    "--path",
+    ".",
+    "--script",
+    "res://tests/godot/professional_scene_disposal_tests.gd"
+  ],
+  "started_at": "2026-10-16T19:46:14.962Z",
+  "finished_at": "2026-10-16T19:46:37.952Z",
+  "exit_code": 1,
+  "signal": null,
+  "error": null,
+  "log_sha256": "7dd451e10460ab09938987ed6e9217048c79e8bdfc0130b1641fa330c9c182bb",
+  "ok": false
+}

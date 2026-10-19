@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 10,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "c2e483a016c6e08740213022371db0a105bf03175e0c0a2c8beeff08320e2d8b",
+  "recorded_at": "2026-10-16T22:48:02.092Z",
+  "path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+  "work": "work/e09f4ae1-49aa-4b13-afb4-9804f14ebe26.bin"
+}

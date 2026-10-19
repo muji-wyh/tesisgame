@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "status": "research_assembly_dispatch_recorded",
+  "entrypoint": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/assemble.cjs",
+  "recorded_at": "2026-10-16T19:15:36.5897050Z",
+  "source_files": [
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/snapshot.cjs",
+      "raw_sha256": "e976e176cc3bb7df80bb966e7dcf62d1bc7ec66162a0e57a3e5f66749a0b4084"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/collect-html-metadata.cjs",
+      "raw_sha256": "89a69381b876d3d59a142d5b50f906a901c341d298e332ae94b36973877250b2"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/collection-start.json",
+      "raw_sha256": "c83d070d5b76b5f6e7fa8e9d983b08b2d0034d5dfb55a6a309ac1d2230f6ed72"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/baseline.json",
+      "raw_sha256": "60114b8f8b053c86b8268e3af09b8e20167a0775df218e4f9cd4ae54be713279"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/oxford-html-metadata.json",
+      "raw_sha256": "23aea9059c824d39d95146ee5de2c7b2351c4ad8d5376e5d56106a6dd91c2ce6"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/research-notes.json",
+      "raw_sha256": "c9b56671be5acaf01eabe3da37077541fb2ffa27857bd7034199fcd18c198f89"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/assemble.cjs",
+      "raw_sha256": "db540287d9333ba9ef68c7ec362b670f03ea077369d798fbd8e2ec2fa2f6a68a"
+    }
+  ]
+}

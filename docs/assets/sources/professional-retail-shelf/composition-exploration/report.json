@@ -1,0 +1,226 @@
+{
+	"captures": [
+		{
+			"camera": [
+				1.79999995231628,
+				1.89999997615814,
+				4.0
+			],
+			"file": "sparse-full-front.png",
+			"orthographic_size": 1.18,
+			"target": [
+				0.0,
+				0.430000007152557,
+				0.0
+			]
+		},
+		{
+			"camera": [
+				0.600000023841858,
+				1.0,
+				4.0
+			],
+			"file": "sparse-full-level.png",
+			"orthographic_size": 1.1,
+			"target": [
+				0.0,
+				0.430000007152557,
+				0.0
+			]
+		},
+		{
+			"camera": [
+				-1.5,
+				2.59999990463257,
+				4.0
+			],
+			"file": "sparse-full-high.png",
+			"orthographic_size": 1.18,
+			"target": [
+				0.0,
+				0.430000007152557,
+				0.0
+			]
+		},
+		{
+			"camera": [
+				0.899999976158142,
+				1.79999995231628,
+				4.0
+			],
+			"file": "sparse-top-focus.png",
+			"orthographic_size": 0.98,
+			"target": [
+				0.0,
+				0.660000026226044,
+				0.0
+			]
+		}
+	],
+	"models": [
+		{
+			"bounds": [
+				-0.400000005960464,
+				0.0,
+				-0.350000023841858,
+				0.800000011920929,
+				0.850000023841858,
+				0.700000047683716
+			],
+			"model": "shelf-boxes",
+			"nodes": [
+				{
+					"name": "shelf-boxes",
+					"path": "shelf-boxes",
+					"position": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"type": "MeshInstance3D"
+				},
+				{
+					"name": "carton",
+					"path": "shelf-boxes/carton",
+					"position": [
+						0.203938975930214,
+						0.175000011920929,
+						0.150000005960464
+					],
+					"type": "MeshInstance3D"
+				},
+				{
+					"name": "carton2",
+					"path": "shelf-boxes/carton2",
+					"position": [
+						-0.00000000793650656305545,
+						0.175000011920929,
+						0.150000005960464
+					],
+					"type": "MeshInstance3D"
+				},
+				{
+					"name": "carton3",
+					"path": "shelf-boxes/carton3",
+					"position": [
+						-0.203939005732536,
+						0.175000011920929,
+						0.150000005960464
+					],
+					"type": "MeshInstance3D"
+				},
+				{
+					"name": "carton4",
+					"path": "shelf-boxes/carton4",
+					"position": [
+						0.203938975930214,
+						0.175000011920929,
+						-0.150000005960464
+					],
+					"type": "MeshInstance3D"
+				},
+				{
+					"name": "carton5",
+					"path": "shelf-boxes/carton5",
+					"position": [
+						-0.00000000793636889540039,
+						0.175000011920929,
+						-0.150000005960464
+					],
+					"type": "MeshInstance3D"
+				},
+				{
+					"name": "carton6",
+					"path": "shelf-boxes/carton6",
+					"position": [
+						-0.203939005732536,
+						0.175000011920929,
+						-0.150000005960464
+					],
+					"type": "MeshInstance3D"
+				},
+				{
+					"name": "box",
+					"path": "shelf-boxes/box",
+					"position": [
+						-0.175500005483627,
+						0.550000011920929,
+						0.150000005960464
+					],
+					"type": "MeshInstance3D"
+				},
+				{
+					"name": "box2",
+					"path": "shelf-boxes/box2",
+					"position": [
+						0.175499990582466,
+						0.550000011920929,
+						0.150000005960464
+					],
+					"type": "MeshInstance3D"
+				},
+				{
+					"name": "box3",
+					"path": "shelf-boxes/box3",
+					"position": [
+						-0.175500005483627,
+						0.550000011920929,
+						-0.150000005960464
+					],
+					"type": "MeshInstance3D"
+				},
+				{
+					"name": "box4",
+					"path": "shelf-boxes/box4",
+					"position": [
+						0.175499990582466,
+						0.550000011920929,
+						-0.150000005960464
+					],
+					"type": "MeshInstance3D"
+				}
+			],
+			"omitted_source_product_nodes": [
+				{
+					"native_path": "shelf-boxes/carton",
+					"source_node_name": "carton"
+				},
+				{
+					"native_path": "shelf-boxes/carton2",
+					"source_node_name": "carton2"
+				},
+				{
+					"native_path": "shelf-boxes/carton3",
+					"source_node_name": "carton3"
+				},
+				{
+					"native_path": "shelf-boxes/carton4",
+					"source_node_name": "carton4"
+				},
+				{
+					"native_path": "shelf-boxes/carton5",
+					"source_node_name": "carton5"
+				},
+				{
+					"native_path": "shelf-boxes/carton6",
+					"source_node_name": "carton6"
+				},
+				{
+					"native_path": "shelf-boxes/box3",
+					"source_node_name": "box3"
+				},
+				{
+					"native_path": "shelf-boxes/box4",
+					"source_node_name": "box4"
+				}
+			],
+			"retained_source_nodes": [
+				0,
+				7,
+				8
+			],
+			"sha256": "3f340fe9207a4b85739d8d11104cf5b4cad3a130afcbfc1fadb47c17d6a9e210"
+		}
+	],
+	"scope": "Scratch composition exploration only; source mesh0 frame and nodes7/8 boxes remain. Source product nodes1-6 and9-10 hidden at scene level. Geometry/materials/textures/visible-node transforms unchanged. No candidate acceptance or production integration."
+}

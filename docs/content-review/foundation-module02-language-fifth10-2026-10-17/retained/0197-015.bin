@@ -1,0 +1,22 @@
+{
+  "status": "integrated",
+  "path": "res://professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+  "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+  "source": "res://docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-record.json",
+  "creator": "Vijay Verma (@realvjy)",
+  "license": "CC0 1.0",
+  "acquisition_status": "integrated",
+  "review": {
+    "status": "reviewed",
+    "reviewer": "Codex root independent AI scoped carrier picture and brief review; see docs/assets/sources/shopping-bag-candidate-review-2026-10-17/visual-review.json",
+    "reviewed_at": "2026-10-17"
+  },
+  "brief": "Show a plain open retail shopping bag upright in a three-quarter view, with a tall solid-sided body, two separate loop handles and a visible opening. Preserve the inspected 3dicons dynamic color source. Keep the tall solid body and paired loops visually distinct from the accepted squat slotted shopping basket. Exclude wheels, backpack straps, a closed top, a bow, a gift tag, tissue paper and gift-specific decoration. The illustration does not narrow the definition to a particular material or require visible contents.",
+  "picture_suitable": true,
+  "available_animations": [],
+  "adaptations": [
+    "Original acquired 3dicons v1 Bag dynamic-angle color PNG; no redraw, recolor, added contents or changed material.",
+    "Alpha-bounds crop with a 16-source-pixel margin, followed by a Lanczos resize to a maximum of 512 pixels.",
+    "Exact accepted 414 by 512 transparent PNG retained without further conversion; no source model or animation was acquired."
+  ]
+}

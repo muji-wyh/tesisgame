@@ -1,0 +1,1811 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.cleaning_facilities.module08.01",
+      "text": "The risk assessment mentions manual handling, lone working, and fatigue; the assigned controls need qualified review.",
+      "meaning": "Identify risk information without teaching a handling method.",
+      "context": "Reviewing task information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "risk",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "assessment",
+          "start": 9,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "mentions",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "manual",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "handling",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "lone",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "working",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "fatigue",
+          "start": 64,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": ";",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "assigned",
+          "start": 77,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "controls",
+          "start": 86,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": "need",
+          "start": 95,
+          "end": 99
+        },
+        {
+          "index": 17,
+          "text": "qualified",
+          "start": 100,
+          "end": 109
+        },
+        {
+          "index": 18,
+          "text": "review",
+          "start": 110,
+          "end": 116
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 116,
+          "end": 117
+        }
+      ],
+      "focus_lexeme_ids": [
+        "risk-assessment.hazard-evaluation.n",
+        "manual-handling.human-load-movement.n",
+        "lone-working.working-without-nearby-colleague.n",
+        "fatigue.marked-tiredness.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.02",
+      "text": "The spill and obstruction are reported separately from the trip hazard and possible slip hazard.",
+      "meaning": "Describe observed conditions accurately.",
+      "context": "Reporting a workplace concern.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "spill",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "obstruction",
+          "start": 14,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "are",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "reported",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "separately",
+          "start": 39,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "from",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "trip",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "hazard",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "possible",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "slip",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "hazard",
+          "start": 89,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "spill.escaped-liquid-or-material.n",
+        "obstruction.blocked-route-object.n",
+        "trip-hazard.obstacle-likely-to-cause-tripping.n",
+        "slip-hazard.condition-increasing-likelihood-of-slipping.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.03",
+      "text": "The safety data sheet, chemical label, hazard pictogram, and signal word must be read in their proper context.",
+      "meaning": "Identify sources of hazard information.",
+      "context": "Discussing a damaged label.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "safety",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "data",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "sheet",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "chemical",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "label",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "hazard",
+          "start": 39,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "pictogram",
+          "start": 46,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "signal",
+          "start": 61,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "word",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "must",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "be",
+          "start": 78,
+          "end": 80
+        },
+        {
+          "index": 16,
+          "text": "read",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 17,
+          "text": "in",
+          "start": 86,
+          "end": 88
+        },
+        {
+          "index": 18,
+          "text": "their",
+          "start": 89,
+          "end": 94
+        },
+        {
+          "index": 19,
+          "text": "proper",
+          "start": 95,
+          "end": 101
+        },
+        {
+          "index": 20,
+          "text": "context",
+          "start": 102,
+          "end": 109
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "safety-data-sheet.chemical-hazard-document.n",
+        "chemical-label.label-providing-identification-and-hazard-information-for-chemical.n",
+        "hazard-pictogram.standardized-graphic-identifying-hazard-category.n",
+        "signal-word.word-indicating-hazard-severity-on-label.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.04",
+      "text": "The exposure report describes skin irritation; it does not establish the cause or a diagnosis of dermatitis.",
+      "meaning": "Distinguish a reported symptom from a diagnosis.",
+      "context": "Recording a workplace health concern.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "exposure",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "report",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "describes",
+          "start": 20,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "skin",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "irritation",
+          "start": 35,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "it",
+          "start": 47,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "does",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "not",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "establish",
+          "start": 59,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "cause",
+          "start": 73,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "or",
+          "start": 79,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "a",
+          "start": 82,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "diagnosis",
+          "start": 84,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "of",
+          "start": 94,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": "dermatitis",
+          "start": 97,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "exposure.contact-with-potential-health-hazard.n",
+        "skin-irritation.inflammatory-or-uncomfortable-reaction-of-skin.n",
+        "dermatitis.inflammation-of-skin.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.05",
+      "text": "The PPE requirements specify protective clothing, eye protection, a protective glove, and safety footwear for review.",
+      "meaning": "Identify protective-equipment categories without selecting equipment.",
+      "context": "Checking a task's stated requirements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "PPE",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "requirements",
+          "start": 8,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "specify",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "protective",
+          "start": 29,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "clothing",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "eye",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "protection",
+          "start": 54,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "protective",
+          "start": 68,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "glove",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "safety",
+          "start": 90,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "footwear",
+          "start": 97,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": "for",
+          "start": 106,
+          "end": 109
+        },
+        {
+          "index": 18,
+          "text": "review",
+          "start": 110,
+          "end": 116
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 116,
+          "end": 117
+        }
+      ],
+      "focus_lexeme_ids": [
+        "ppe.personal-protective-equipment.n",
+        "protective-clothing.clothing-designed-to-reduce-specified-exposure-or-injury.n",
+        "eye-protection.equipment-designed-to-protect-eyes-against-specified-hazards.n",
+        "protective-glove.hand-protection.n",
+        "safety-footwear.protective-work-shoes.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.06",
+      "text": "The report notes suspected sharps, broken glass, and a bodily fluid concern; contaminated waste needs the appropriate review.",
+      "meaning": "Report potentially harmful materials without handling instructions.",
+      "context": "Preparing a factual concern report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "notes",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "suspected",
+          "start": 17,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "sharps",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "broken",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "glass",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "bodily",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "fluid",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "concern",
+          "start": 68,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": ";",
+          "start": 75,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "contaminated",
+          "start": 77,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": "waste",
+          "start": 90,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "needs",
+          "start": 96,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 102,
+          "end": 105
+        },
+        {
+          "index": 19,
+          "text": "appropriate",
+          "start": 106,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "review",
+          "start": 118,
+          "end": 124
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "sharps.objects-capable-of-puncturing-or-cutting-skin.n",
+        "broken-glass.glass-fragments.n",
+        "bodily-fluid.fluid-produced-by-human-body.n",
+        "contaminated-waste.waste-containing-unwanted-or-potentially-harmful-material.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.07",
+      "text": "Please confirm the recorded emergency exit, assembly point, fire extinguisher, first-aid kit, and emergency contact for this site.",
+      "meaning": "Locate site-specific emergency information.",
+      "context": "Reviewing an induction record without response instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "recorded",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "emergency",
+          "start": 28,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "exit",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "assembly",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "point",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "fire",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "extinguisher",
+          "start": 65,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "first-aid",
+          "start": 79,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "kit",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 92,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 17,
+          "text": "emergency",
+          "start": 98,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": "contact",
+          "start": 108,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": "for",
+          "start": 116,
+          "end": 119
+        },
+        {
+          "index": 20,
+          "text": "this",
+          "start": 120,
+          "end": 124
+        },
+        {
+          "index": 21,
+          "text": "site",
+          "start": 125,
+          "end": 129
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 129,
+          "end": 130
+        }
+      ],
+      "focus_lexeme_ids": [
+        "emergency-exit.emergency-way-out.n",
+        "assembly-point.designated-meeting-place.n",
+        "fire-extinguisher.portable-fire-control-device.n",
+        "first-aid-kit.basic-care-supplies.n",
+        "emergency-contact.person-to-contact-in-emergency.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.08",
+      "text": "The noise, vibration, and suspected asbestos require specialist attention alongside the working at height and electrical hazard concerns.",
+      "meaning": "Identify issues needing qualified assessment.",
+      "context": "Passing on a task review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "noise",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 9,
+          "end": 10
+        },
+        {
+          "index": 3,
+          "text": "vibration",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 6,
+          "text": "suspected",
+          "start": 26,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "asbestos",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "require",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "specialist",
+          "start": 53,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "attention",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "alongside",
+          "start": 74,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "working",
+          "start": 88,
+          "end": 95
+        },
+        {
+          "index": 14,
+          "text": "at",
+          "start": 96,
+          "end": 98
+        },
+        {
+          "index": 15,
+          "text": "height",
+          "start": 99,
+          "end": 105
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 106,
+          "end": 109
+        },
+        {
+          "index": 17,
+          "text": "electrical",
+          "start": 110,
+          "end": 120
+        },
+        {
+          "index": 18,
+          "text": "hazard",
+          "start": 121,
+          "end": 127
+        },
+        {
+          "index": 19,
+          "text": "concerns",
+          "start": 128,
+          "end": 136
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 136,
+          "end": 137
+        }
+      ],
+      "focus_lexeme_ids": [
+        "noise.unwanted-or-potentially-harmful-sound.n",
+        "vibration.repeated-oscillating-movement.n",
+        "asbestos.group-of-fibrous-minerals-used-in-some-older-products.n",
+        "working-at-height.work-where-fall-could-cause-injury.n",
+        "electrical-hazard.condition-presenting-risk-from-electrical-energy.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.09",
+      "text": "This near miss belongs on the incident form, and the sharp edge and weight limit questions remain unresolved.",
+      "meaning": "Record an event and outstanding equipment questions.",
+      "context": "Reviewing an observation report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "near",
+          "start": 5,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "miss",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "belongs",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "on",
+          "start": 23,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "incident",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "form",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "sharp",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "edge",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": "weight",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": "limit",
+          "start": 75,
+          "end": 80
+        },
+        {
+          "index": 16,
+          "text": "questions",
+          "start": 81,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "remain",
+          "start": 91,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "unresolved",
+          "start": 98,
+          "end": 108
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "near-miss.narrowly-avoided-incident.n",
+        "incident-form.event-report-document.n",
+        "sharp-edge.cutting-boundary.n",
+        "weight-limit.maximum-permitted-load.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.10",
+      "text": "The restricted area needs authorized access; the security concern and suspicious item have been reported to the designated contact.",
+      "meaning": "Clarify access and reporting without confrontation or handling.",
+      "context": "Discussing site communication.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "restricted",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "area",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "needs",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "authorized",
+          "start": 26,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "access",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "security",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "concern",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "suspicious",
+          "start": 70,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "item",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": "have",
+          "start": 86,
+          "end": 90
+        },
+        {
+          "index": 14,
+          "text": "been",
+          "start": 91,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "reported",
+          "start": 96,
+          "end": 104
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 105,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 18,
+          "text": "designated",
+          "start": 112,
+          "end": 122
+        },
+        {
+          "index": 19,
+          "text": "contact",
+          "start": 123,
+          "end": 130
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 130,
+          "end": 131
+        }
+      ],
+      "focus_lexeme_ids": [
+        "restricted-area.area-with-access-limited-by-stated-arrangements.n",
+        "authorized-access.access-permitted-under-applicable-arrangements.n",
+        "security-concern.reported-issue-that-may-affect-protection-or-authorized-access.n",
+        "suspicious-item.item-raising-concern-in-its-context.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

@@ -20,6 +20,16 @@ class DelayedReleaseAudio extends "res://scripts/game_audio.gd":
 		return await super._stream(path, loop)
 
 
+class DelayedCollectionAudio extends "res://scripts/game_audio.gd":
+	signal collection_loaded
+	var delay_collection: bool = false
+
+	func _stream(path: String, loop: bool = false) -> AudioStream:
+		if delay_collection and path in JELLY_COLLECTION_PATHS:
+			await collection_loaded
+		return await super._stream(path, loop)
+
+
 class DelayedFragmentAudio extends "res://scripts/game_audio.gd":
 	signal fragment_loaded
 	var delay_fragment: bool = false
@@ -45,10 +55,18 @@ func check(condition: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 
+func _matches_jelly_cue(player: AudioStreamPlayer, cue: String) -> bool:
+	if player.stream == null:
+		return false
+	return player.stream.resource_path in Audio.JELLY_COLLECTION_PATHS if cue == "pop" \
+		else player.stream.resource_path == Audio.JELLY_PATHS[cue]
+
+
 func _run() -> void:
 	await _exercise()
 	await _check_pending_warnings()
 	await _check_pending_release()
+	await _check_pending_collection()
 	await _check_fragment_channels()
 	await _check_pending_fragments()
 	await create_timer(0.15).timeout
@@ -59,11 +77,12 @@ func _run() -> void:
 func _exercise() -> void:
 	var audio := Audio.new()
 	root.add_child(audio)
+	check(audio._jelly_collection_next_note == 0, "A new audio session starts the collection cycle at Do")
 	audio.interact("spring")
 	for cue in ["pick", "release", "land", "contact", "merge", "pop", "danger", "reward", "finish_ready"]:
 		audio.play_jelly_cue(cue)
 		var player: AudioStreamPlayer = audio._jelly_players[posmod(audio._jelly_next_player - 1, 3)]
-		check(player.stream != null and player.stream.resource_path == Audio.JELLY_PATHS[cue], "The %s cue uses its production recording" % cue)
+		check(_matches_jelly_cue(player, cue), "The %s cue uses its production recording" % cue)
 		check(player.playing, "The %s recording starts on its timeline event" % cue)
 		audio.stop_jelly_sounds()
 	check(audio._jelly_players.size() == 3, "Frequent effects reuse a bounded voice pool")
@@ -76,8 +95,9 @@ func _exercise() -> void:
 			"The %s cue retains its selected duration without a scheduling delay" % recording.cue)
 		check(stream is AudioStreamWAV and stream.format == AudioStreamWAV.FORMAT_16_BITS,
 			"The approved %s recording imports as PCM without lossy compression" % recording.cue)
-	check(FileAccess.get_sha256(Audio.JELLY_PATHS.pop) == selected.preserved_disappearance.sha256
-		and is_equal_approx(Audio.JELLY_GAINS.pop, 0.90), "The disappearance recording and gain remain unchanged")
+	check(FileAccess.get_sha256("res://" + str(selected.preserved_disappearance.path)) == selected.preserved_disappearance.sha256
+		and is_equal_approx(Audio.JELLY_GAINS.pop, 0.90), "The original collection source and shared runtime gain remain preserved")
+	_check_collection_notes(audio)
 	_check_interaction_audio(audio)
 	_check_warning_cancellation(audio)
 	_check_landing_audio(audio)
@@ -115,6 +135,71 @@ func _exercise() -> void:
 	await create_timer(0.15).timeout
 
 
+func _check_collection_notes(audio) -> void:
+	check(Audio.JELLY_COLLECTION_PATHS.size() == 7, "Collections have seven scale-note recordings")
+	var cached_streams: Array[AudioStream] = []
+	for path: String in Audio.JELLY_COLLECTION_PATHS:
+		var stream: AudioStream = audio.cache.get(path)
+		check(stream is AudioStreamWAV and stream.format == AudioStreamWAV.FORMAT_16_BITS
+			and not stream.stereo and stream.mix_rate == 44100 and stream.loop_mode == AudioStreamWAV.LOOP_DISABLED
+			and is_equal_approx(stream.get_length(), 0.24),
+			"The %s note is cached before collection with the same short PCM envelope" % path.get_file())
+		check(not cached_streams.has(stream), "Every scale note owns a separate recording")
+		cached_streams.append(stream)
+	audio.stop_jelly_sounds()
+	audio._jelly_collection_next_note = 0
+	var other_sound_rng: int = audio._pop_slice_rng.state
+	for index in range(21):
+		audio.play_jelly_cue("pop")
+		var player: AudioStreamPlayer = audio._jelly_players[posmod(audio._jelly_next_player - 1, 3)]
+		check(player.playing and _matches_jelly_cue(player, "pop") and cached_streams.has(player.stream),
+			"Collection %d starts one cached scale note immediately" % (index + 1))
+		var path: String = player.stream.resource_path if player.stream != null else ""
+		check(path == Audio.JELLY_COLLECTION_PATHS[index % 7],
+			"Collection %d follows Do through Ti and wraps back to Do" % (index + 1))
+	check(audio._jelly_collection_next_note == 0, "Three complete scales return to the first note")
+	check(audio._jelly_players.size() == 3 and audio._pop_slice_rng.state == other_sound_rng,
+		"Rapid collections keep the three-channel pool and leave other random sound sequences untouched")
+	var state_after_collection: int = audio._jelly_collection_next_note
+	audio._process(0.01)
+	check(audio._jelly_collection_next_note == state_after_collection,
+		"Audio updates never advance the collection-note cycle")
+	audio.stop_jelly_sounds()
+	audio.say("res://assets/audio/voice/word-cat.wav")
+	var word_stream: AudioStream = audio.voice.stream
+	audio.play_jelly_cue("pop")
+	var collection: AudioStreamPlayer = audio._jelly_players[0]
+	check(collection.playing and is_equal_approx(collection.volume_db, linear_to_db(Audio.JELLY_GAINS.pop) - 6.0)
+		and audio.voice.playing and audio.voice.stream == word_stream,
+		"Collection notes duck beneath pronunciation without replacing the spoken word")
+	audio.stop_voice()
+	audio._process(0.01)
+	check(is_equal_approx(collection.volume_db, linear_to_db(Audio.JELLY_GAINS.pop)),
+		"Collection notes return to the normal mix after pronunciation")
+	state_after_collection = audio._jelly_collection_next_note
+	audio.play_jelly_cue("merge")
+	check(audio._jelly_collection_next_note == state_after_collection,
+		"Merging does not advance the cycle before the collection event")
+	for suppression: String in ["muted", "inactive", "unavailable"]:
+		audio.stop_jelly_sounds()
+		match suppression:
+			"muted": audio.set_muted(true)
+			"inactive": audio.halt()
+			"unavailable": audio.available = false
+		audio.play_jelly_cue("pop")
+		check(audio._jelly_collection_next_note == state_after_collection and audio._jelly_cues.is_empty(),
+			"A %s collection neither queues playback nor advances the note cycle" % suppression)
+		for player: AudioStreamPlayer in audio._jelly_players:
+			check(not player.playing and player.stream == null, "Suppressed collection tails stay silent")
+		audio.set_muted(false)
+		audio.available = true
+		audio.interact("spring", false)
+	audio.play_jelly_cue("pop")
+	var resumed: AudioStreamPlayer = audio._jelly_players[0]
+	check(resumed.playing and resumed.stream.resource_path == Audio.JELLY_COLLECTION_PATHS[state_after_collection],
+		"The next collection resumes the cycle after mute and leaving the mode")
+
+
 func _check_interaction_audio(audio) -> void:
 	audio.stop_jelly_sounds()
 	audio.say("res://assets/audio/voice/word-cat.wav")
@@ -142,7 +227,7 @@ func _check_interaction_audio(audio) -> void:
 		check(audio._jelly_cues == occupied,
 			"Rapid %s input cannot replace warning, clear or reward audio" % cue)
 	for player: AudioStreamPlayer in audio._jelly_players:
-		check(player.playing and player.stream.resource_path == Audio.JELLY_PATHS[occupied[player]],
+		check(player.playing and _matches_jelly_cue(player, occupied[player]),
 			"Foreground audio survives input when all three channels are occupied")
 	audio.halt()
 	for cue: String in ["pick", "release", "land", "contact"]:
@@ -160,7 +245,7 @@ func _check_landing_audio(audio) -> void:
 	check(audio._jelly_cues == occupied and audio._jelly_players.size() == 3,
 		"Landing feedback cannot steal a warning, answer or reward channel when the pool is busy")
 	for player: AudioStreamPlayer in audio._jelly_players:
-		check(player.playing and player.stream.resource_path == Audio.JELLY_PATHS[occupied[player]],
+		check(player.playing and _matches_jelly_cue(player, occupied[player]),
 			"The original foreground cue remains audible when an impact is skipped")
 	audio.stop_jelly_sounds()
 	audio.play_jelly_cue("danger")
@@ -196,7 +281,7 @@ func _check_warning_cancellation(audio) -> void:
 	audio.stop_jelly_danger()
 	check(not warning.playing and warning.stream == null,
 		"Completing a rescue stops the previous warning tail")
-	check(clear.playing and clear.stream.resource_path == Audio.JELLY_PATHS.pop
+	check(clear.playing and _matches_jelly_cue(clear, "pop")
 		and merge.playing and merge.stream.resource_path == Audio.JELLY_PATHS.merge,
 		"Selective warning cancellation preserves unrelated clear audio and the new merge")
 	audio.stop_jelly_sounds()
@@ -282,6 +367,39 @@ func _check_pending_release() -> void:
 		check(audio._jelly_players[0].playing
 			and audio._jelly_players[0].stream.resource_path == Audio.JELLY_PATHS.pick,
 			"A new selection responds immediately after %s without replaying old input" % interruption)
+		audio.halt()
+		audio.queue_free()
+		await process_frame
+
+
+func _check_pending_collection() -> void:
+	for interruption: String in ["pause", "mute", "halt"]:
+		var audio := DelayedCollectionAudio.new()
+		root.add_child(audio)
+		audio.interact("spring", false)
+		audio.delay_collection = true
+		audio.play_jelly_cue("pop")
+		var collection: AudioStreamPlayer = audio._jelly_players[0]
+		var selected_state: int = audio._jelly_collection_next_note
+		check(not collection.playing and collection.stream == null,
+			"The %s fixture delays the selected collection note before playback" % interruption)
+		match interruption:
+			"pause": audio.stop_jelly_sounds()
+			"mute":
+				audio.set_muted(true)
+				audio.set_muted(false)
+			"halt": audio.halt()
+		audio.interact("spring", false)
+		audio.delay_collection = false
+		audio.collection_loaded.emit()
+		await process_frame
+		check(not collection.playing and collection.stream == null and audio._jelly_cues.is_empty()
+			and audio._jelly_collection_next_note == selected_state,
+			"A delayed collection cannot replay or advance the cycle after %s" % interruption)
+		audio.play_jelly_cue("pop")
+		check(collection.playing and _matches_jelly_cue(collection, "pop")
+			and collection.stream.resource_path == Audio.JELLY_COLLECTION_PATHS[selected_state],
+			"Only a fresh collection starts the next note after %s" % interruption)
 		audio.halt()
 		audio.queue_free()
 		await process_frame

@@ -1,0 +1,111 @@
+{
+  "id": "collect.gather.v",
+  "text": "collect",
+  "display_text": "collect",
+  "pos": "verb",
+  "definition": "To bring items from several people or places into one group.",
+  "example": "Please collect one completed form from each team.",
+  "difficulty": "B1",
+  "accepted_forms": [
+    "collect"
+  ],
+  "regions": [
+    "general"
+  ],
+  "practice_modes": [
+    "match",
+    "memory",
+    "pop",
+    "jelly",
+    "word_jelly",
+    "phrase"
+  ],
+  "media": {
+    "image": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "brief": "Show a friendly worker gathering fictional completed forms from three separate teams into one folder. Keep the separate sources and the one growing set clear: one colleague hands over a form while forms from the other teams are already together. Use ordinary workplace characters, a folder and full-size form props from suitable sourced assets. Exclude a reception pickup of a preassembled bundle, money, hobby collections and private information. Do not depend on tiny labels or arrows to explain the action. This is a pending art brief; source selection and actual-size picture suitability still require review.",
+      "picture_suitable": true,
+      "available_animations": [],
+      "adaptations": []
+    },
+    "audio": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "morphology": {
+    "schema": 1,
+    "id": "collect.gather.v.analysis.v1",
+    "lexeme_id": "collect.gather.v",
+    "text": "collect",
+    "kind": "atomic",
+    "review": {
+      "status": "pending",
+      "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+      "references": []
+    },
+    "parts": [
+      {
+        "id": "p1",
+        "type": "atomic",
+        "canonical": "collect",
+        "surface": "collect",
+        "canonical_id": "morph.collect"
+      }
+    ],
+    "nodes": [],
+    "roots": [
+      "p1"
+    ]
+  },
+  "review": {
+    "status": "pending",
+    "language": "pending",
+    "domain": "not_required",
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "references": [
+    {
+      "source_id": "british-council-requests",
+      "status": "pending_term_check",
+      "scope": "Workplace communication context only; this original definition and example await term-level review."
+    },
+    {
+      "source_id": "foundation02-collect-repair-oxford-collect",
+      "status": "pending_term_check",
+      "scope": "Consulted selected gathering sense and source-specific level evidence for this unaccepted coordinated repair. B1 is proposed editorial placement; source consultation does not release the historical whole-entry hold or approve the new example, image brief or dependent expression."
+    },
+    {
+      "source_id": "foundation02-collect-repair-collins-collect",
+      "status": "pending_term_check",
+      "scope": "Consulted selected gathering sense and source-specific level evidence for this unaccepted coordinated repair. B1 is proposed editorial placement; source consultation does not release the historical whole-entry hold or approve the new example, image brief or dependent expression."
+    }
+  ],
+  "editorial_notes": "Shared workplace foundation. This unaccepted coordinated repair retains collect.gather.v for intentionally gathering items from several people or places into one group. The example uses one completed form from each team, replacing the former reception-pickup example. Proposed editorial difficulty is B1: Oxford gathering A2 and Collins gathering B1 are kept distinct, with no level borrowed from pickup, hobby collecting or a page footer. The general region is retained for the gathering use; pickup regional guidance does not restrict this sense. The revised pending image brief must show multiple sources becoming one set. The exact whole-entry hold remains historical; independent language/context, picture-suitability, morphology and audio decisions remain pending. Retaining declared practice modes is not release or visual acceptance. Source consultation does not approve the dependent expression, a complete module or any professional procedure."
+}

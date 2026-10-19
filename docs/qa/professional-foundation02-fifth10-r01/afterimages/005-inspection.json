@@ -1,0 +1,174 @@
+{
+  "schema": 1,
+  "status": "independent_afterimage_raw_checks_passed",
+  "reviewer": "/root/morph_review",
+  "started_at": "2026-10-16T23:34:00.647Z",
+  "finished_at": "2026-10-16T23:34:47.357Z",
+  "checks_passed": 55005,
+  "checks_failed": 0,
+  "failures": [],
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "preparation": {
+    "receipt": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/preparation-receipt.json",
+      "bytes": 137807,
+      "raw_sha256": "44074a72a3bed006177725c5d6a0303d80fa3c4cf792a425b08924dce8abdc8d"
+    },
+    "execution_end": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/execution-end.json",
+      "bytes": 145,
+      "raw_sha256": "e4e00da38bd380589bd77ddfb73afd780b08a34faf73d25ba72d16db0fdfa407"
+    },
+    "target_plan": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/target-plan.json",
+      "bytes": 376416,
+      "raw_sha256": "cd58e001bfdafac503a8bb9903d2a556afe592d2771244e779d3024b802ab9ac"
+    },
+    "projection_observation": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/projection-observation.json",
+      "bytes": 997,
+      "raw_sha256": "8a17f3c1ed0844c749b5b52387a5e5c56ff1e4c9bdfb01f8b170d415d9c17423"
+    },
+    "root_input": {
+      "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+      "bytes": 1191,
+      "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+    }
+  },
+  "preparation_source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/source-inventory.json",
+    "bytes": 3279,
+    "raw_sha256": "2f4033d3edfeb6eacc78657e9c215ef8718bd3ceb275c94f4c6168e68d2c6ee3"
+  },
+  "actual_binding_acceptance": {
+    "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+    "bytes": 8270,
+    "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+  },
+  "root_guard_evidence": {
+    "path": "docs/qa/professional-foundation02-fifth10-r01/preparation-guard/inspection-and-copy-receipt.json",
+    "bytes": 27125,
+    "raw_sha256": "055071a24019f7fc8f7c5caad44b0e857345ccc81248131f38f88b0182913a96"
+  },
+  "measured": {
+    "baseline_inputs": 12443,
+    "receipt_artifacts": 833,
+    "physical_preparation_files": 835,
+    "targets": 823,
+    "replacements": 6,
+    "retained": 815,
+    "additions": 817,
+    "accepted_entries": 8,
+    "held_entries": 6,
+    "donor_rows": 50,
+    "counts": {
+      "before": {
+        "reviewed_status": 148,
+        "reviewed_language": 335,
+        "foundation02_language": 36,
+        "sources": 949,
+        "lexemes": 4939,
+        "expressions": 1620,
+        "images": 9,
+        "audio": 12,
+        "ready_modules": 0
+      },
+      "after": {
+        "reviewed_status": 156,
+        "reviewed_language": 343,
+        "foundation02_language": 44,
+        "sources": 965,
+        "lexemes": 4939,
+        "expressions": 1620,
+        "images": 9,
+        "audio": 12,
+        "ready_modules": 0
+      }
+    },
+    "content_delta": {
+      "definition": 4,
+      "example": 1,
+      "difficulty": 5
+    },
+    "registry_before_sha256": "dcfe28d7c7c6048206b740459a65ce9b482ba2768d388b0b29d7ab31174ed1a0",
+    "registry_after_sha256": "709b2621940b4698af615ed9c4b9a679006bfc83a877cc6f7d0f29517a3b2fd3",
+    "transformations": [
+      {
+        "path": "tests/professional-content.test.cjs",
+        "edits": 11,
+        "appended_tests": 5,
+        "afterimage": {
+          "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional-content.test.cjs.after",
+          "bytes": 361493,
+          "raw_sha256": "a580a471118252ed764e86f3f1fceea457859b604c350ad2feaefe681584f2e2"
+        }
+      },
+      {
+        "path": "tests/professional-retail-morphology.test.cjs",
+        "edits": 2,
+        "appended_tests": 2,
+        "afterimage": {
+          "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional-retail-morphology.test.cjs.after",
+          "bytes": 93105,
+          "raw_sha256": "997e15f9f0df2baac33813cb91ab3fba5bb694029afa9fdbdb094617ab9fc0cf"
+        }
+      },
+      {
+        "path": "tests/professional-retail-media.test.cjs",
+        "edits": 3,
+        "appended_tests": 1,
+        "afterimage": {
+          "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional-retail-media.test.cjs.after",
+          "bytes": 55641,
+          "raw_sha256": "92e002fb593c5429842cc7b66491652f32c97d21824f4c0a0dea4ec035b5ecbb"
+        }
+      },
+      {
+        "path": "tests/godot/professional_retail_morphology_tests.gd",
+        "edits": 2,
+        "appended_tests": 1,
+        "afterimage": {
+          "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional_retail_morphology_tests.gd.after",
+          "bytes": 119226,
+          "raw_sha256": "1c290891fcfa4ad132d128e18f318fbe477888c976554b5830c279f0bbe06c43"
+        }
+      }
+    ],
+    "expected_projected_callbacks": 263,
+    "expected_audit_summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 156,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 9,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "expected_audit_errors": 0,
+    "actual_audit_executed": false,
+    "actual_callback_execution": false
+  },
+  "inputs_rehashed_at_end": 13422,
+  "scope": {
+    "raw_json_hash_source_only": true,
+    "preparation_or_transformer_or_project_imported": false,
+    "syntax_or_project_or_native_or_transaction_executed": false,
+    "production_mutated": false,
+    "new_language_morphology_expression_media_specialist_readiness_acceptance": false
+  }
+}

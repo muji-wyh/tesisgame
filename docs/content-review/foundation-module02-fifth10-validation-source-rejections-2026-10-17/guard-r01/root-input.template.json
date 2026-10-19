@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "status": "UNBOUND_DO_NOT_EXECUTE",
+  "dispatcher": "/root",
+  "guard_author": "/root/runtime_recovery",
+  "entrypoint": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r01/guard.cjs",
+  "output": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r01/attempt-001",
+  "root_confirms_guard_source_reviewed": false,
+  "production_writers_yielded": false,
+  "execute_preparation_or_project_code": false,
+  "guard_source_inventory": null,
+  "preparation_root_input": null,
+  "actual_capture": {
+    "source_inventory": {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/source-inventory.json",
+      "bytes": 1826,
+      "raw_sha256": "b52fea9c2181064d024d35a05f599ad3b24897e2402927031f13e449e5a10993"
+    },
+    "independent_source_review": null,
+    "root_input": null,
+    "receipt": null
+  },
+  "required_status_after_actual_binding": "root_authorized_one_shot_fifth10_memory_guard",
+  "note": "Root must supply real completed helper capture, real independently accepted preparation binding and root preparation input. This template has no actual baseline or acceptance and cannot dispatch."
+}

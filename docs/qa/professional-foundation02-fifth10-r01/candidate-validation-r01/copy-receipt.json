@@ -1,0 +1,264 @@
+{
+  "schema": 1,
+  "status": "retained_actual_candidate_success_and_failure",
+  "recorded_at": "2026-10-16T23:54:31.345Z",
+  "projected": {
+    "outer_exit_code": 0,
+    "callbacks": 263,
+    "audit_errors": 0,
+    "audit_warnings": 29382
+  },
+  "native": {
+    "outer_exit_code": 1,
+    "checks": 3922,
+    "failures": 1,
+    "failure": "Historical broad-donor equality compares accepted safe language afterimage with exact pre-language snapshot.",
+    "postchecks_passed": true
+  },
+  "copies": [
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/attempt-001/start.json",
+        "bytes": 235,
+        "raw_sha256": "d04f3314f0c75477c9dd53518c50bc3b86cff396d1658b1dd8b33a62c038bebd"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/projected/start.json",
+        "bytes": 235,
+        "raw_sha256": "d04f3314f0c75477c9dd53518c50bc3b86cff396d1658b1dd8b33a62c038bebd"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/attempt-001/receipt.json",
+        "bytes": 472109,
+        "raw_sha256": "0064bfd6a74c4158ccc834c852fd308168d6eabdbf98f2b9386ee6f804afc49d"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/projected/receipt.json",
+        "bytes": 472109,
+        "raw_sha256": "0064bfd6a74c4158ccc834c852fd308168d6eabdbf98f2b9386ee6f804afc49d"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/input.json",
+        "bytes": 2283626,
+        "raw_sha256": "ec33c157b371d368d0551a50fc768be5bc76eb4cff632158b16dc09212dd78a6"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/projected/input.json",
+        "bytes": 2283626,
+        "raw_sha256": "ec33c157b371d368d0551a50fc768be5bc76eb4cff632158b16dc09212dd78a6"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-1.json",
+        "bytes": 1515,
+        "raw_sha256": "d00c1151a0830db3610ad3e297ba7b76af488c1967dbbd6cd14485dff173da6e"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/command-1.json",
+        "bytes": 1515,
+        "raw_sha256": "d00c1151a0830db3610ad3e297ba7b76af488c1967dbbd6cd14485dff173da6e"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-1.stderr.log",
+        "bytes": 0,
+        "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/command-1.stderr.log",
+        "bytes": 0,
+        "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-1.stdout.log",
+        "bytes": 73,
+        "raw_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/command-1.stdout.log",
+        "bytes": 73,
+        "raw_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-2.json",
+        "bytes": 1766,
+        "raw_sha256": "ccb77479ab01257564e7b7e356f2429a257768cf567f95c871122809ed1d5e2c"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/command-2.json",
+        "bytes": 1766,
+        "raw_sha256": "ccb77479ab01257564e7b7e356f2429a257768cf567f95c871122809ed1d5e2c"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-2.stderr.log",
+        "bytes": 115,
+        "raw_sha256": "cb474a4aa927cd7fb03edc7509c15ba381384618101b59412bcd75e954060549"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/command-2.stderr.log",
+        "bytes": 115,
+        "raw_sha256": "cb474a4aa927cd7fb03edc7509c15ba381384618101b59412bcd75e954060549"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-2.stdout.log",
+        "bytes": 130,
+        "raw_sha256": "3efb6675fdebb1306b33370d6ee539ca3f8f5e40ef8182fbaa7b8dd8b7bea4ef"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/command-2.stdout.log",
+        "bytes": 130,
+        "raw_sha256": "3efb6675fdebb1306b33370d6ee539ca3f8f5e40ef8182fbaa7b8dd8b7bea4ef"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/completed-copies.json",
+        "bytes": 205274,
+        "raw_sha256": "f16e6ea4fbb14acd478cb66b8e317722e20895b3aaf63d363b34f9221fc969fc"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/completed-copies.json",
+        "bytes": 205274,
+        "raw_sha256": "f16e6ea4fbb14acd478cb66b8e317722e20895b3aaf63d363b34f9221fc969fc"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/copied-inputs.json",
+        "bytes": 205254,
+        "raw_sha256": "d2d61dbec9ee994f8857e05809a91e1fb6982f170c59cb9dfcde69e128e8f58f"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/copied-inputs.json",
+        "bytes": 205254,
+        "raw_sha256": "d2d61dbec9ee994f8857e05809a91e1fb6982f170c59cb9dfcde69e128e8f58f"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/planned-copies.json",
+        "bytes": 150995,
+        "raw_sha256": "e5503123622316ad584d2e30d16854e75456ae62653f6dcc3584b3c5e6d50f2a"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/planned-copies.json",
+        "bytes": 150995,
+        "raw_sha256": "e5503123622316ad584d2e30d16854e75456ae62653f6dcc3584b3c5e6d50f2a"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/postchecks/01-before-native.json",
+        "bytes": 257,
+        "raw_sha256": "f480b74c198f555bca844d1dd13e3aa61c03b0c3f4233360db06762addcd872e"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/postchecks/01-before-native.json",
+        "bytes": 257,
+        "raw_sha256": "f480b74c198f555bca844d1dd13e3aa61c03b0c3f4233360db06762addcd872e"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/postchecks/02-after-command-1.json",
+        "bytes": 259,
+        "raw_sha256": "7a7ebb9fd03920987f335913b2d4e0f81e444edaf754ce85e4403b5394b9db51"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/postchecks/02-after-command-1.json",
+        "bytes": 259,
+        "raw_sha256": "7a7ebb9fd03920987f335913b2d4e0f81e444edaf754ce85e4403b5394b9db51"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/postchecks/03-after-command-2.json",
+        "bytes": 259,
+        "raw_sha256": "6c71c878da40a6303aa2926d8069798dff639478027d8acdf45f4354517e0e8b"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/postchecks/03-after-command-2.json",
+        "bytes": 259,
+        "raw_sha256": "6c71c878da40a6303aa2926d8069798dff639478027d8acdf45f4354517e0e8b"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/postchecks/04-final.json",
+        "bytes": 249,
+        "raw_sha256": "11ae1b60f56c37d648d02095d6e80d3fec68d33c88314f9a35c6f3637d5f6ea9"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/postchecks/04-final.json",
+        "bytes": 249,
+        "raw_sha256": "11ae1b60f56c37d648d02095d6e80d3fec68d33c88314f9a35c6f3637d5f6ea9"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/receipt.json",
+        "bytes": 10577,
+        "raw_sha256": "878a6ec5298b553831454c250900c6c552e2d0005a1c97cd5df6a1e9ac9584fb"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/receipt.json",
+        "bytes": 10577,
+        "raw_sha256": "878a6ec5298b553831454c250900c6c552e2d0005a1c97cd5df6a1e9ac9584fb"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/source-inputs.json",
+        "bytes": 2809928,
+        "raw_sha256": "ae8ad84601bb88bf24845aa4bf3339f4e3b130d5d2cc45cd9e83129f6fc6ed66"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/source-inputs.json",
+        "bytes": 2809928,
+        "raw_sha256": "ae8ad84601bb88bf24845aa4bf3339f4e3b130d5d2cc45cd9e83129f6fc6ed66"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/start.json",
+        "bytes": 3056,
+        "raw_sha256": "c3f2940fe679c62d563526fd24aab08e0f0c0bed10bf8c86dc1a64648289336a"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/start.json",
+        "bytes": 3056,
+        "raw_sha256": "c3f2940fe679c62d563526fd24aab08e0f0c0bed10bf8c86dc1a64648289336a"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/foundation02-fifth10-root-native-r01/input.json",
+        "bytes": 3218,
+        "raw_sha256": "58a00ee875f524d7a1561aebe46d2e6d3d6bb0a46a9a4cbe6b9c31dc51e44117"
+      },
+      "destination": {
+        "path": "docs/qa/professional-foundation02-fifth10-r01/candidate-validation-r01/native/input.json",
+        "bytes": 3218,
+        "raw_sha256": "58a00ee875f524d7a1561aebe46d2e6d3d6bb0a46a9a4cbe6b9c31dc51e44117"
+      }
+    }
+  ],
+  "isolated_native_project": "Retained unchanged in original execution-r01/project; copy manifests are preserved here.",
+  "production_mutated": false,
+  "actual_installation": false,
+  "replay_allowed": false
+}

@@ -156,7 +156,7 @@ func _coin_seed_between(minimum: float, maximum: float) -> int:
 
 func _tile(id: int, text: String, mass: int = 1, fragments: int = 0, word: Dictionary = {}) -> Dictionary:
 	return {"id": id, "text": text, "mass": mass, "parts_count": mass, "fragments": fragments,
-		"chest": fragments > 0, "word": word.duplicate(true), "kind": "word" if not word.is_empty() else "root",
+		"chest": fragments > 0, "word": word.duplicate(true), "kind": "word" if not word.is_empty() else "chunk",
 		"column": id % Model.COLUMNS, "row": Model.ROWS - 1, "width": 1, "height": 1,
 		"age": Model.SETTLE_SECONDS, "settling": false, "arrival": false, "falling_rows": 0}
 
@@ -453,9 +453,9 @@ func _test_powerup_price_progression() -> void:
 			and model.snapshot().powerup_uses == {"auto_merge": 0, "fragments": 0},
 			"only a new round resets both powerup prices to their first-use tier")
 		model.purchase_powerup = Callable()
-	check(Model.coins_for_tile({"mass": 2}) == 50 and Model.coins_for_tile({"mass": 3}) == 100
-		and Model.coins_for_tile({"mass": 40}) == 100,
-		"rare word bonuses reward larger words but cannot exceed one hundred coins")
+	check(Model.coins_for_tile({"mass": 2}) == 50 and Model.coins_for_tile({"mass": 3}) == 50
+		and Model.coins_for_tile({"mass": 40}) == 50,
+		"rare word bonuses retain the fixed legacy two-part category regardless of size")
 
 
 func _test_powerup_auto_timeline() -> void:
@@ -676,8 +676,8 @@ func _test_powerup_auto_chain() -> void:
 		and payments.size() == 1, "a completed exhausted chain cannot charge again without a new valid pair")
 	check(model.collect(int(words.cater.id)), "the automatically built word still needs an ordinary collection")
 	model.step(Model.COLLECT_SECONDS)
-	check(model.collected_coins == 100 and model.fragment_count == 6,
-		"manual collection of the automatic result retains normal size-based coins and its carried fragments")
+	check(model.collected_coins == 50 and model.fragment_count == 6,
+		"manual collection of the automatic result retains fixed bonus coins and its carried fragments")
 	model.purchase_powerup = Callable()
 
 
@@ -1488,10 +1488,10 @@ func _test_rare_coin_drop_boundary() -> void:
 			model.cells.assign([_placed_tile(1000, "cat", 0, Model.ROWS - ceili(float(mass) / Model.COLUMNS), mass, 2, _word("cat"))])
 			model._coin_rng.seed = seed_value
 			var board_rng_state: int = model._rng.state
-			var expected_coins: int = (50 if mass == 2 else 100) if roll < 0.01 else 0
+			var expected_coins: int = 50 if roll < 0.01 else 0
 			check(model.collect(1000), "each probability boundary uses a real accepted collection")
 			check(int(model.fusions[0].coins) == expected_coins,
-				"only a roll below one percent grants the size-based bonus, including immediately adjacent outcomes")
+				"only a roll below one percent grants the fixed legacy two-part bonus, including immediately adjacent outcomes")
 			var coin_rng_state: int = model._coin_rng.state
 			check(not model.collect(1000) and model._coin_rng.state == coin_rng_state,
 				"repeated taps during collection never roll an additional chance")
@@ -1645,15 +1645,15 @@ func _test_rare_coin_drop_frequency_and_independence() -> void:
 			if model == large:
 				model._rng.randi()
 			check(model.collect(1000 + sample), "the frequency sample is an actual accepted word collection")
-			check(int(model.fusions[0].coins) == ((50 if mass == 2 else 100) if expected_win else 0),
+			check(int(model.fusions[0].coins) == (50 if expected_win else 0),
 				"every collection draws exactly once with mass-independent odds and an independent board RNG")
 			# Commit the normal transaction directly; probability checks do not need animation frames.
 			model._complete_operation(str(model.fusions[0].attempt_id))
 	check(wins >= 120 and wins <= 280,
 		"twenty thousand deterministic collection chances keep the long-run rate near one percent")
-	check(small.collected_coins == wins * 50 and large.collected_coins == wins * 100
+	check(small.collected_coins == wins * 50 and large.collected_coins == wins * 50
 		and small.cleared_pairs == SAMPLES and large.cleared_pairs == SAMPLES,
-		"rare bonuses distinguish two-piece and larger words while staying capped and leaving most collections coin-free")
+		"rare bonuses are identical for two-piece and larger words and leaving most collections coin-free")
 	check(small._coin_rng.state == probe.state and large._coin_rng.state == probe.state
 		and small._collection_coin_rewards.is_empty() and large._collection_coin_rewards.is_empty(),
 		"all coin decisions consume one independent draw and retain no completed-outcome cache")
@@ -1775,11 +1775,11 @@ func _test_repeated_merge_and_fragments() -> void:
 	var third: Dictionary = _merge(model, int(second.id), 1003)
 	check(third.text == "caterpillar" and third.word.id == "caterpillar", "repeated exact forward words can build a larger compound")
 	check(third.mass == 4 and third.fragments == 4, "every root and fragment survives repeated merges")
-	check(Model.coins_for_tile(third) > Model.coins_for_tile(first), "larger jellies earn more coins")
+	check(Model.coins_for_tile(third) == Model.coins_for_tile(first), "larger jellies keep the fixed bonus category")
 	model.step(Model.SETTLE_SECONDS)
 	model.collect(int(third.id))
 	model.step(Model.COLLECT_SECONDS)
-	check(model.collected_coins == 100 and model.fragment_count == 4, "larger word collects the entire accumulated reward")
+	check(model.collected_coins == 50 and model.fragment_count == 4, "larger word collects the entire accumulated reward")
 	check(model.chest_tier == 1 and model.chest_count == 1, "four fragments unlock a chest")
 
 
@@ -1827,7 +1827,7 @@ func _test_nested_merge_collection_receipts() -> void:
 	check(model.collect(int(final_word.id)), "the nested result collects only its own final reward")
 	model.step(Model.COLLECT_SECONDS)
 	check(model._collection_event_ids.is_empty() and model._collection_coin_rewards.is_empty()
-		and model.collected_coins == 150 and model.fragment_count == 9 and model.cleared_pairs == 2,
+		and model.collected_coins == 100 and model.fragment_count == 9 and model.cleared_pairs == 2,
 		"terminal collection leaves no consumed retry data and pays only the two collected words")
 	model.credit_collection = Callable()
 
@@ -2739,7 +2739,7 @@ func _test_packing_and_growth() -> void:
 	var large: Dictionary = model.cell(current_id)
 	check(int(large.width) == 6 and int(large.height) >= 2 and int(large.mass) == 10, "large jelly occupies multiple rows within the six-column well")
 	check(str(large.text).length() == 10, "wrapping never truncates accumulated text")
-	check(Model.coins_for_tile(large) == 100, "large jelly bonuses are capped at one hundred coins")
+	check(Model.coins_for_tile(large) == 50, "large jelly bonuses retain the fixed fifty-coin category")
 
 
 func _test_target_placement() -> void:
@@ -3107,7 +3107,7 @@ func _test_deferred_growth() -> void:
 	var merged_id: int = int(merged.id)
 	check(merged.mass == 8 and merged.width == 4 and merged.height == 1,
 		"a crowded merge preserves a legal smaller footprint when its preferred size cannot fit")
-	check(merged.fragments == 5 and merged.text == "cat" and Model.coins_for_tile(merged) == 100,
+	check(merged.fragments == 5 and merged.text == "cat" and Model.coins_for_tile(merged) == 50,
 		"temporary compression preserves word content, all fragments, and full coin value")
 	_assert_board(model, "compressed growth")
 	model.step(Model.SETTLE_SECONDS)
@@ -3133,7 +3133,7 @@ func _test_deferred_growth() -> void:
 	model.step(Model.SETTLE_SECONDS)
 	check(model.collect(merged_id), "the expanded word remains collectible")
 	model.step(Model.COLLECT_SECONDS)
-	check(model.collected_coins == 200 and model.fragment_count == 7,
+	check(model.collected_coins == 150 and model.fragment_count == 7,
 		"compression and restored growth preserve the exact final coin and fragment payout")
 	model = _model([_word("cat")])
 	model.cells.clear()
@@ -3175,7 +3175,7 @@ func _test_growth_after_settlement() -> void:
 		merged = model.cell(id)
 		check(merged.width == 4 and merged.height == 1 and merged.column == 0 and merged.row == 7,
 			"settlement completion lets the deferred merged body fall into the newly cleared lower row")
-		check(not model.is_settled(merged) and merged.fragments == 5 and Model.coins_for_tile(merged) == 100,
+		check(not model.is_settled(merged) and merged.fragments == 5 and Model.coins_for_tile(merged) == 50,
 			"deferred falling reserves fresh settlement and preserves the full compressed reward")
 		_assert_board(model, "deferred falling after settlement")
 		final_states.append({"rect": _footprint(merged), "age": float(merged.age), "coins": model.collected_coins,
@@ -3399,7 +3399,7 @@ func _assert_supply_conservation(roots: Array, words: Array, label: String, allo
 			continue
 		check(str(root.text) == str(expected_parts[part_index]), label + ": every part retains its exact curated spelling")
 		check(int(root.mass) == 1 and int(root.parts_count) == 1 and int(root.width) == 1 and int(root.height) == 1
-			and str(root.kind) == "root" and root.word.is_empty(), label + ": mixing preserves one-cell unmerged roots")
+			and str(root.kind) == "chunk" and root.word.is_empty(), label + ": mixing preserves one-cell unmerged roots")
 		check(int(root.fragments) in [0, 1] and bool(root.chest) == (int(root.fragments) == 1),
 			label + ": source fragments remain attached to their original roots")
 		if not groups.has(group_id):

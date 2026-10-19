@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 134,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "14878c17274fd7726ef70c81fb476c118ed146ada4a5a5d80786c6a6b2d23f46",
+  "recorded_at": "2026-10-16T22:48:16.969Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/006.bin",
+  "work": "work/f237ba3f-8a71-4a13-945b-dbea7ffb4ee5.bin"
+}

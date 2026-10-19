@@ -1,0 +1,12 @@
+{
+  "source": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r03/run.cjs",
+    "bytes": 35436,
+    "raw_sha256": "64a924fc9ae48122f51aa36a2c7a986f2e7ff7d93e1989345cde1e2be1be1d15"
+  },
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "stdout": "",
+  "stderr": ""
+}

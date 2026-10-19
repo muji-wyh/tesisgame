@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_language_review",
+  "recorded_at": "2026-10-16T19:31:05.393Z",
+  "reviewer": "Codex runtime_recovery independent AI language reviewer; separate from recover_delivery author; not human or subject-matter approval",
+  "accepted": 10,
+  "held": 0,
+  "production_mutated": false,
+  "source_files_unchanged": 355,
+  "research_artifacts_unchanged": 18,
+  "registry_json_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "production_counts": {
+    "scope": "Catalog lexical entries only; expression flags are excluded from lexical totals.",
+    "lexemes": 4939,
+    "raw_lexeme_language_reviewed": 317,
+    "overall_lexeme_status_reviewed": 130,
+    "foundation02_language_reviewed": 18,
+    "foundation02_total": 50,
+    "ready_modules": 0
+  },
+  "artifacts": [
+    {
+      "path": "README.md",
+      "raw_sha256": "9d3656cdd862723ff6d458b64c898801407b4266e86023ce5f2bc5dac4c81a83",
+      "bytes": 2741
+    },
+    {
+      "path": "assemble-independent-review.cjs",
+      "raw_sha256": "c9eface68037be128cffa0eb289e862459f4516864271faee9a446487a981ecd",
+      "bytes": 31601
+    },
+    {
+      "path": "context-review.json",
+      "raw_sha256": "bef29c0afea07230244ac548cbed90438a92cb119dbfe40aae1034dac23af865",
+      "bytes": 301387
+    },
+    {
+      "path": "input-audit.json",
+      "raw_sha256": "1f45b0c637f1b82345c49aa75fd43ff388397f262d94b9eb5a4a281e44a9eee7",
+      "bytes": 117490
+    },
+    {
+      "path": "review-ledger.json",
+      "raw_sha256": "58993d8767ec701e37613fdee70d75e94f22a68d467b94157ea41a211bc9f8bd",
+      "bytes": 31692
+    },
+    {
+      "path": "source-observations.json",
+      "raw_sha256": "6d8d8004e60392bec464e080403a230b738d87a167363636c2e6e93bb3e460a6",
+      "bytes": 37123
+    }
+  ],
+  "self_excluded": true
+}

@@ -1,0 +1,1527 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.legal_paralegal.module06.01",
+      "text": "The allegation describes one side's position in the dispute; it is not an established finding.",
+      "meaning": "Keep an allegation distinct from a proved fact.",
+      "context": "Preparing a neutral fictional case summary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "allegation",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "describes",
+          "start": 15,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "one",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "side's",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "position",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "in",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "dispute",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": ";",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "it",
+          "start": 61,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "is",
+          "start": 64,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "not",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "an",
+          "start": 71,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "established",
+          "start": 74,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "finding",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "allegation.claim-of-wrongdoing-not-established-as-fact.n",
+        "dispute.disagreement-between-parties-over-issue-or-entitlement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module06.02",
+      "text": "The record describes service, but the proof of service still needs qualified review.",
+      "meaning": "Distinguish a recorded delivery claim from verified procedural status.",
+      "context": "Checking fictional case paperwork without approving a method of service.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "record",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "describes",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "service",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "but",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "proof",
+          "start": 38,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "of",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "service",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "still",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "needs",
+          "start": 61,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "qualified",
+          "start": 67,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "review",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "service.formal-delivery-of-legal-document-under-applicable-rules.n",
+        "proof-of-service.record-or-evidence-of-legal-document-service.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module06.03",
+      "text": "The lawyer will explain whether the injunction or stay affects the planned trial.",
+      "meaning": "Refer questions about orders and proceedings to the responsible professional.",
+      "context": "Discussing the stated status of a fictional case.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "lawyer",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "explain",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "whether",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "injunction",
+          "start": 36,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "or",
+          "start": 47,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "stay",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "affects",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "planned",
+          "start": 67,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "trial",
+          "start": 75,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "injunction.court-order-requiring-or-restraining-specified-conduct.n",
+        "stay.temporary-suspension-of-proceedings-or-enforcement.n",
+        "trial.proceeding-for-determining-disputed-case-issues.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module06.04",
+      "text": "The application concerns joinder; the lawyer will explain how the separate consent order relates to this case.",
+      "meaning": "Identify distinct documents requiring contextual review.",
+      "context": "Organizing fictional procedural documents without advising on joinder.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "application",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "concerns",
+          "start": 16,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "joinder",
+          "start": 25,
+          "end": 32
+        },
+        {
+          "index": 4,
+          "text": ";",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "lawyer",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "will",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "explain",
+          "start": 50,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "how",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "separate",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "consent",
+          "start": 75,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "order",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "relates",
+          "start": 89,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "to",
+          "start": 97,
+          "end": 99
+        },
+        {
+          "index": 16,
+          "text": "this",
+          "start": 100,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "case",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "application.formal-request-for-decision-or-order-in-legal-process.n",
+        "joinder.combining-parties-or-claims-in-legal-proceedings.n",
+        "consent-order.court-order-reflecting-agreement-of-parties.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module06.05",
+      "text": "The proposed remedy and any appeal need separate legal review.",
+      "meaning": "Keep the requested outcome distinct from review of a decision.",
+      "context": "Recording unresolved legal questions without recommending an action.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "proposed",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "remedy",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "any",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "appeal",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "need",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "separate",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "legal",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "review",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 61,
+          "end": 62
+        }
+      ],
+      "focus_lexeme_ids": [
+        "remedy.legal-means-of-addressing-established-wrong-or-claim.n",
+        "appeal.request-for-decision-to-be-reconsidered.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module06.06",
+      "text": "Please compare the hearing notice with the recorded court date and the stated hearing format.",
+      "meaning": "Check consistency between scheduled-event information and its source.",
+      "context": "Reviewing a fictional notice, not calculating a deadline.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "compare",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "hearing",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "notice",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "with",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "recorded",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "court",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "date",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "stated",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "hearing",
+          "start": 78,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "format",
+          "start": 86,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 92,
+          "end": 93
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hearing-notice.notice-giving-information-about-scheduled-hearing.n",
+        "court-date.date-assigned-for-specified-court-event.n",
+        "hearing.proceeding-in-which-court-or-body-considers-matter.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module06.07",
+      "text": "The note distinguishes default judgment from summary judgment without assuming either applies to this case.",
+      "meaning": "Recognize two different decision categories.",
+      "context": "Reviewing legal vocabulary without applying a procedural test.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "note",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "distinguishes",
+          "start": 9,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "default",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "judgment",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "from",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "summary",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "judgment",
+          "start": 53,
+          "end": 61
+        },
+        {
+          "index": 8,
+          "text": "without",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 9,
+          "text": "assuming",
+          "start": 70,
+          "end": 78
+        },
+        {
+          "index": 10,
+          "text": "either",
+          "start": 79,
+          "end": 85
+        },
+        {
+          "index": 11,
+          "text": "applies",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 94,
+          "end": 96
+        },
+        {
+          "index": 13,
+          "text": "this",
+          "start": 97,
+          "end": 101
+        },
+        {
+          "index": 14,
+          "text": "case",
+          "start": 102,
+          "end": 106
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 106,
+          "end": 107
+        }
+      ],
+      "focus_lexeme_ids": [
+        "default-judgment.judgment-based-on-specified-procedural-default.n",
+        "summary-judgment.judgment-without-full-trial-under-applicable-test.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module06.08",
+      "text": "The settlement offer discusses damages, but no settlement has been agreed.",
+      "meaning": "Distinguish a proposed resolution from an accepted agreement.",
+      "context": "Describing fictional negotiation status without suggesting a valuation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "settlement",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "offer",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "discusses",
+          "start": 21,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "damages",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "but",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "no",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "settlement",
+          "start": 47,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "has",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "been",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "agreed",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "settlement-offer.proposal-to-resolve-all-or-part-of-dispute.n",
+        "damages.money-awarded-as-legal-remedy-for-recognized-loss-or-wrong.n",
+        "settlement.agreement-resolving-all-or-part-of-dispute.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module06.09",
+      "text": "The letter lists mediation and arbitration as different forms of alternative dispute resolution.",
+      "meaning": "Recognize that facilitated discussion and third-party decision are different processes.",
+      "context": "Reading a fictional information letter without recommending a route.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "letter",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "lists",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "mediation",
+          "start": 17,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "arbitration",
+          "start": 31,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "as",
+          "start": 43,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "different",
+          "start": 46,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "forms",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "of",
+          "start": 62,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "alternative",
+          "start": 65,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "dispute",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 12,
+          "text": "resolution",
+          "start": 85,
+          "end": 95
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mediation.supported-discussion-to-help-parties-address-disagreement.n",
+        "arbitration.dispute-resolution-through-decision-by-appointed-arbitrator.n",
+        "alternative-dispute-resolution.methods-of-resolving-disputes-outside-ordinary-court-trial.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module06.10",
+      "text": "The lawyer will review legal standing and the limitation period for the proposed civil claim.",
+      "meaning": "Refer eligibility and timing questions for qualified assessment.",
+      "context": "Recording questions without providing a deadline or a legal conclusion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "lawyer",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "review",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "legal",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "standing",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "limitation",
+          "start": 46,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "period",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "for",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "proposed",
+          "start": 72,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "civil",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "claim",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 92,
+          "end": 93
+        }
+      ],
+      "focus_lexeme_ids": [
+        "legal-standing.eligibility-to-bring-or-participate-in-specified-proceedings.n",
+        "limitation-period.legally-defined-period-relevant-to-bringing-claim.n",
+        "civil-claim.claim-seeking-civil-legal-remedy.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

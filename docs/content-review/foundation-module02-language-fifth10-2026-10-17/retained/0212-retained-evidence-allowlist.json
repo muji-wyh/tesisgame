@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "status": "explicit_individual_absent_copy_targets",
+  "files": [
+    {
+      "source": "build/professional-english/shopping-bag-delivery-preparation-r02/actual-baseline-binding.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/actual-baseline-binding.json"
+    },
+    {
+      "source": "build/professional-english/transactions/foundation02-fourth10-language-r01/states/000268-committed.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-committed-state.json"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-1.log",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-1.log"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-2.log",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-2.log"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-3.log",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-3.log"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-4.log",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-4.log"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/receipt.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/receipt.json"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/start.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/start.json"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/invoke.cjs",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/invoke.cjs"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-proposal-review-r01/review.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/independent-proposal-review/review.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/author-proposal.cjs",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/author-proposal.cjs"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/entry-afterimage.proposed.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/entry-afterimage.proposed.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/entry-preimage.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/entry-preimage.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/evidence-lock.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/evidence-lock.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/generation-observation.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/generation-observation.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/image-descriptor.proposed.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/image-descriptor.proposed.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/integration-plan.md",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/integration-plan.md"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/inventory.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/inventory.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/patch.proposed.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/patch.proposed.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/production-document-template.md",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/production-document-template.md"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/production-provenance-template.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/production-provenance-template.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/protected-media-observation.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/protected-media-observation.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/README.md",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/README.md"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/rebase-contract.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/rebase-contract.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/resource.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/resource.json"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-delivery-proposal-r01/test-delta-plan.md",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/test-delta-plan.md"
+    }
+  ],
+  "hash_binding": "Exact source bytes are separately pinned in retained-evidence-pins.json after the self-contained baseline binding is written. Root source inventory pins both files. No directory wildcard or production write is authorized by this authorship."
+}

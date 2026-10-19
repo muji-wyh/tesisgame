@@ -1,0 +1,24 @@
+{
+  "status": "proposed_future_action_not_applied",
+  "retained_live_hold": true,
+  "current_object_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+  "exact_archival_object": "lexeme-before.json",
+  "current_source": "data/professional/lexemes/foundation-module02.json",
+  "current_index": 27,
+  "rationale": "Once all 20 memberships move, retaining verify in any active catalog-listed lexeme file creates membership.orphan under the current validator. There is no retired-entry schema switch in the inspected contract.",
+  "proposal": [
+    "Before an accepted implementation removes the old active object, preserve its exact object, original source location, object hash, twenty memberships, all old hold/review references and retirement reason in durable content-review evidence outside catalog.lexeme_files.",
+    "Replace the old active object at its source array position with the separately reviewed ensure object and substitute exactly the 20 memberships. Never change the old object ID or text in place and describe that as a rename.",
+    "Keep historical verify sources and research/hold snapshots immutable. Do not remove shared morphology parts or references solely because this one active entry retires.",
+    "Do not add a dummy membership just to evade orphan detection or inflate the 500-term quota.",
+    "A future course genuinely teaching verify would require explicit scope/level review, the original canonical evidence-checking identity if semantically unchanged, and its own membership/revision decision. This packet does not reserve or approve such a course."
+  ],
+  "runtime_archive_path": null,
+  "archive_location_rule": "Choose and freeze a durable docs/content-review retirement snapshot during the future coordinated delivery. It must not be named in catalog.lexeme_files. This research folder is evidence, not a runtime retirement system.",
+  "unresolved": [
+    "Independent curriculum approval to replace a foundation learning objective.",
+    "Independent language/expression and regional-form decision.",
+    "Complete morphology/media review and actual source/registry rebase after fourth-ten delivery.",
+    "Focused compatibility verification before activating the new revision."
+  ]
+}

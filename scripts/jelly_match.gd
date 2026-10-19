@@ -39,6 +39,7 @@ var drop_button: Button
 var _configured: bool = false
 var _generation: int = 0
 var _paused: bool = false
+var _learning_backdrop_active: bool = false
 var _theme: Dictionary = {}
 var _manifest: Dictionary = {}
 var _surfaces: Array[Texture2D] = []
@@ -184,6 +185,12 @@ func configure(words: Array, level: int, theme: Dictionary, chests: Dictionary, 
 	_refresh_hud()
 	_publish()
 	return _configured
+
+func set_learning_backdrop(active: bool) -> void:
+	if _learning_backdrop_active == active:
+		return
+	_learning_backdrop_active = active
+	queue_redraw()
 
 func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 	_theme = theme.duplicate(true)
@@ -350,6 +357,7 @@ func settle() -> void:
 
 func stop() -> void:
 	_generation += 1
+	set_learning_backdrop(false)
 	_reward_presentation.clear()
 	_configured = false
 	game.paused = true
@@ -357,6 +365,7 @@ func stop() -> void:
 	_clear_fusion_visuals()
 	for ghost: Tile in _ghosts.values():
 		ghost.hide()
+		ghost._picture.texture = null
 		ghost.queue_free()
 	_ghosts.clear()
 	for preview: Tile in _preview_tiles:
@@ -365,6 +374,7 @@ func stop() -> void:
 		preview.tile_id = -1
 	for tile in _tiles.values():
 		tile.hide()
+		tile._picture.texture = null
 		tile.queue_free()
 	_tiles.clear()
 	# WordArt keeps weak references; this round cache must not retain every
@@ -483,6 +493,12 @@ func _input(event: InputEvent) -> void:
 	if handled:
 		get_viewport().set_input_as_handled()
 
+func _preview_identity() -> int:
+	for item: Dictionary in game.upcoming:
+		if item.has("id"):
+			return int(item.id)
+	return -1
+
 func _press(pointer: int, global_point: Vector2) -> bool:
 	if _pointer != NO_POINTER or not _can_play() or _finish_is_pulling():
 		return false
@@ -492,7 +508,7 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 			return false
 		_pointer = pointer
 		_gesture_serial += 1
-		_preview_first_id = int(game.upcoming[0].id)
+		_preview_first_id = _preview_identity()
 		_preview_canceled = false
 		_press_point = point
 		_set_preview_pressed(true)
@@ -531,7 +547,7 @@ func _move(global_point: Vector2) -> void:
 		var point: Vector2 = get_global_transform().affine_inverse() * global_point
 		_preview_canceled = _preview_canceled or not _preview_rect.has_point(point) \
 			or point.distance_to(_press_point) * Style.ui_scale(self) > 12.0
-		_set_preview_pressed(not _preview_canceled and game.can_drop_now() and int(game.upcoming[0].id) == _preview_first_id)
+		_set_preview_pressed(not _preview_canceled and game.can_drop_now() and _preview_identity() == _preview_first_id)
 		return
 	if _source < 0 or not _tiles.has(_source):
 		cancel_input()
@@ -740,6 +756,7 @@ func _sync_tiles() -> void:
 	for id in _tiles.keys():
 		if not live.has(id):
 			_tiles[id].hide()
+			_tiles[id]._picture.texture = null
 			_tiles[id].queue_free()
 			_tiles.erase(id)
 			_snapbacks.erase(id)
@@ -802,6 +819,7 @@ func _sync_positions() -> void:
 	for id in _ghosts.keys():
 		if not airborne_ids.has(id):
 			_ghosts[id].hide()
+			_ghosts[id]._picture.texture = null
 			_ghosts[id].queue_free()
 			_ghosts.erase(id)
 	if _dragging:
@@ -1016,6 +1034,7 @@ func _ensure_fusion_visual(fusion: Dictionary) -> Dictionary:
 
 func _remove_fusion_visual(id: String) -> void:
 	var visual: Dictionary = _fusion_visuals[id]
+	visual.merged._picture.texture = null
 	for node: Control in [visual.art, visual.merged]:
 		node.hide()
 		node.queue_free()
@@ -1442,7 +1461,10 @@ func _draw() -> void:
 	if not _configured:
 		return
 	var s: float = Style.ui_scale(self)
-	var well := Style.box(Color("#fafdfb", 0.92), Color("#9db8be", 0.66), ceili(18.0 / s), maxi(1, roundi(1.0 / s)))
+	# A quiet translucent play surface keeps the acquired workplace visible.
+	# Legacy Growth presentation remains opaque when no career art is active.
+	var well_alpha: float = 0.64 if _learning_backdrop_active else 0.92
+	var well := Style.box(Color("#fafdfb", well_alpha), Color("#9db8be", 0.66), ceili(18.0 / s), maxi(1, roundi(1.0 / s)))
 	well.shadow_color = Color("#3b546d", 0.13)
 	well.shadow_size = ceili(12.0 / s)
 	well.shadow_offset = Vector2(0, 5.0 / s)
@@ -1460,6 +1482,7 @@ func _draw() -> void:
 
 func snapshot() -> Dictionary:
 	var result: Dictionary = game.snapshot()
+	result["learning_backdrop_active"] = _learning_backdrop_active
 	result["visible"] = is_visible_in_tree() and _configured
 	result["paused"] = _paused
 	result["board_rect"] = _rect(_global_rect(_board))

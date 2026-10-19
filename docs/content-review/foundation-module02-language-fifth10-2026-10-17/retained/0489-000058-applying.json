@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 58,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "b4fec6c2be7b3c150804f43adf30bbe86ee9d5ee3b4049b78d3589f435fbee91",
+  "recorded_at": "2026-10-16T22:48:05.021Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/production-provenance-template.json",
+  "work": "work/2ac299f7-ff96-4b5b-a039-64c701a1c237.bin"
+}

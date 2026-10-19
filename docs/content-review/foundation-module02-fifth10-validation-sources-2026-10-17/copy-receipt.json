@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "status": "exact_validation_source_and_source_review_copies",
+  "dispatcher": "/root",
+  "projected_or_native_execution_claimed": false,
+  "files": [
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/CONTRACT.md",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/001-CONTRACT.md",
+      "bytes": 5934,
+      "raw_sha256": "390c8307a6b8325dad7a62ae692447bc454079c503797897fd1ff900ef444c3e"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/README.md",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/002-README.md",
+      "bytes": 3416,
+      "raw_sha256": "e2b987db3e6f3519bf4eed2377f9d74cc1b351ffbd38782c73c4390f8235bf5c"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/afterimage-review.template.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/003-afterimage-review.template.json",
+      "bytes": 636,
+      "raw_sha256": "559722de4a9eef958fde81988ff1e4fe94e1aa2034743149f06298e4ff48bdbb"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/author-observations.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/004-author-observations.json",
+      "bytes": 1542,
+      "raw_sha256": "eaa76f4219d0a9edbdc0d9de8b95df67105d5d9951dc769102e85a0e50ead58a"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/closure.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/005-closure.json",
+      "bytes": 98715,
+      "raw_sha256": "7b2bbf2303149370150dfa8df8125c4d2bb0d1769de485069514d76a5302c236"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/guard-cases.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/006-guard-cases.json",
+      "bytes": 4328,
+      "raw_sha256": "eb4c66f765351cbcc41c508cd51dd06761c88b1b101970e6302c0d26183dc08b"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/root-input.template.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/007-root-input.template.json",
+      "bytes": 1110,
+      "raw_sha256": "979edbbc066b50bf21ef24bdbf6aeae0537cfca2634d7addfc257884b4ab1fe5"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/run.cjs",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/008-run.cjs",
+      "bytes": 23431,
+      "raw_sha256": "0359ced35e82254e9e09f95bd5ca8b10748e8d4a6c482ed9d992c5e3fb6ed33d"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/source-inventory.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/009-source-inventory.json",
+      "bytes": 1874,
+      "raw_sha256": "7ee9da67778fe717537c9ae35331a49f334660307a3bef5b330a1e9096387f18"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/source-review.template.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/010-source-review.template.json",
+      "bytes": 141,
+      "raw_sha256": "0f5e7b05ea98ece9f452738b4b521aaa8d0752b52e2503989a2d7edcafae93ac"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-native-source-root-review-r01/review.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/011-review.json",
+      "bytes": 2435,
+      "raw_sha256": "3e4f9e449568df0daa3aabafa051813291fa9e18083b04b2204a0b9a3ad99384"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validation-r02/README.md",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/012-README.md",
+      "bytes": 2487,
+      "raw_sha256": "62a47b4c5b689ce413d565b39522d178f8246a5ef86cd9086f36c4836821e53a"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validation-r02/input.template.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/013-input.template.json",
+      "bytes": 595,
+      "raw_sha256": "d7ab762c3cad3fe2f0e734610f3a56a88f694ec3f022cef16a0b208f2e2af2ec"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validation-r02/revision-lineage.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/014-revision-lineage.json",
+      "bytes": 2795,
+      "raw_sha256": "cab73e0d6473a36fbd06918ec6cd542948625348d28b5db3cdd0c3d6b9f4b52a"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validation-r02/run.cjs",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/015-run.cjs",
+      "bytes": 11683,
+      "raw_sha256": "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validation-r02/source-inventory.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/016-source-inventory.json",
+      "bytes": 807,
+      "raw_sha256": "a7a14add7f19e7240c2561cec604212cd00718c5b986b24614502fc20401c374"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r02/README.md",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/017-README.md",
+      "bytes": 1959,
+      "raw_sha256": "357c7e888d81e47b9e08ae2adc3759154e982e884ed8afc0c386cc3f40b4b01a"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r02/inputs.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/018-inputs.json",
+      "bytes": 7379,
+      "raw_sha256": "540a929179dc8ec2084dde912e684e962b7fcaf85a68184869d6d1b2a6a251ad"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r02/inspection.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/019-inspection.json",
+      "bytes": 3549,
+      "raw_sha256": "13d901d0d16c23dcc6c0d3d02459c3717d01b5604b8785fc768e5d1c5781392d"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r02/inventory.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/020-inventory.json",
+      "bytes": 1181,
+      "raw_sha256": "9938b04a7c38b900d1c7d858b666163230cb881eadd5c885541734ee313af72c"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r02/review.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/021-review.json",
+      "bytes": 6595,
+      "raw_sha256": "5a40193f3f81ad1f2a4e80067703543d030df608ac1fa74197be936fa54d7603"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-validation-syntax-r01/command-0.log",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/022-command-0.log",
+      "bytes": 0,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-validation-syntax-r01/command-1.log",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/023-command-1.log",
+      "bytes": 0,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-validation-syntax-r01/receipt.json",
+      "target": "docs/content-review/foundation-module02-fifth10-validation-sources-2026-10-17/024-receipt.json",
+      "bytes": 1069,
+      "raw_sha256": "2a94b047da52706e908d8b6be8e76d8860947ea1950ceaa85be192922ba2ab82"
+    }
+  ]
+}

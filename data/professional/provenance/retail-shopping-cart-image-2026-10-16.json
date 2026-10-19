@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "status": "accepted_picture_descriptor_persisted_separate_delivery_verification_required",
+  "accepted_proposal_raw_sha256": "39d356cd9ebdc6fb00eb651cc33618f297693909f7c3505cf3837db9ff25461c",
+  "independent_approval": {
+    "status": "accepted_exact_cart_image_and_note_integration",
+    "proposal_raw_sha256": "39d356cd9ebdc6fb00eb651cc33618f297693909f7c3505cf3837db9ff25461c",
+    "image_after_json_sha256": "bdebd007958c4b8472c5a792d4313131205ee023a2827450afb4dc2e1d046ec7",
+    "accepted_png_sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+    "source_and_native_visual_review": "Root independently inspected complete source cart and minimum WordCard captures, checked the source/license hashes, and accepted partial fourth-wheel occlusion. See the prior source review receipt.",
+    "protected_entry_fields": "Only media.image and the exact note substitution authorized; all other fields unchanged.",
+    "production_delivery_checks": "Required next through actual descriptor/raw loader/cache/card/release path; do not claim module readiness."
+  },
+  "proposal": {
+    "status": "exact_image_only_integration_proposal_pending_descriptor_acceptance",
+    "sense_id": "shopping-cart.store-trolley.n",
+    "file": "data/professional/lexemes/retail-pilot.json",
+    "protected_scope": "Only this entry media.image and the exact one-sentence editorial_notes replacement may change. All other entry fields, note content, other entries, course/module statuses, audio, morphology and theme metadata remain outside this delta.",
+    "preimage_hash_method": "SHA-256 over UTF-8 JSON.stringify(value), with native property order and no trailing newline",
+    "current_full_file_sha256": "5cd62af3a22cdec038afb58391a1ce496669bd5e1e163093417ed9d83a4561fb",
+    "current_entry_sha256": "3c731cf0d0f87d8425d6fea164ba90309d32f2840eb388176c779b8fb7e9c257",
+    "image_preimage_sha256": "041b1e2740f080c842aaf835a0a82ac76f77cd281a5025f868adc95d50e4e98e",
+    "image_after_sha256": "bdebd007958c4b8472c5a792d4313131205ee023a2827450afb4dc2e1d046ec7",
+    "editorial_notes_preimage_sha256": "a22ce6b4942c493e4c188c4f9a0f43f6296be42c68a01f505306eaaa5221c805",
+    "editorial_notes_after_sha256": "6e45cc8fc228a18ed374c81965cdb81f9347c220aa5a51cf68c9dfd004a0d1fe",
+    "original_candidate_receipt_sha256": "8184775b0fa33ba022f697aaf9ba78720f5a8ba60520154dc439bb2740f2ef2f",
+    "candidate": {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/shopping-cart.png",
+      "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+      "bytes": 93422
+    },
+    "target_image": "professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+    "resource": {
+      "id": "sha256:b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+      "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+      "kind": "image",
+      "format": "png",
+      "path": "professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+      "compressed_bytes": 93422,
+      "decoded_bytes": 1699840,
+      "width": 512,
+      "height": 415
+    },
+    "exact_image_delta": "entry-image.after.json",
+    "exact_note_delta": "editorial-note.delta.json",
+    "suitability_proposal": "asset-provenance.json",
+    "validation": {
+      "schema_errors": [],
+      "entry_fields_outside_image_and_exact_note_identical": true,
+      "source_hashes_verified": 3
+    },
+    "plan": [
+      "Root reviews this exact immutable resource and image metadata delta before production mutation.",
+      "The art owner copies only the accepted bytes to the content-addressed raw media path and retains permanent source/review evidence; no regeneration.",
+      "The content owner applies the image and exact note delta after checking their preimage hashes, so concurrent authorized language review is preserved.",
+      "Using the serialized native slot, verify the persisted image descriptor, real native raw loader, cache lease, actual WordCard lookup through scoped media URLs and cache teardown.",
+      "The content owner runs the final content suite after all serialized deltas. Every incomplete course/module and unrelated gate remains pending."
+    ],
+    "verification_manifest_scope": "The image-only inspection inventory is not a production module manifest. It cannot make a pending module playable."
+  },
+  "image_before": {
+    "status": "pending",
+    "path": null,
+    "sha256": null,
+    "source": null,
+    "creator": null,
+    "license": null,
+    "acquisition_status": "not_started",
+    "review": {
+      "status": "pending"
+    },
+    "brief": "Show a full-size retail trolley in a three-quarter side view with basket, push handle, lower frame, and four wheels legible. Keep it mostly empty so its structure is visible. Exclude a hand-carried basket, flat warehouse trolley, wheelchair, or online cart icon. Inspect the Mini Market shopping-cart lead before rendering.",
+    "picture_suitable": true,
+    "available_animations": [],
+    "adaptations": []
+  },
+  "image_after": {
+    "status": "integrated",
+    "path": "res://professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+    "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+    "source": "https://kenney.nl/assets/mini-market",
+    "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+    "license": "CC0 1.0",
+    "acquisition_status": "integrated",
+    "review": {
+      "status": "reviewed",
+      "reviewer": "Codex source inspection and independent root physical-sense picture review at actual minimum Match and Memory card sizes",
+      "reviewed_at": "2026-10-16"
+    },
+    "brief": "Show a full-size retail trolley in a three-quarter side view with basket, push handle, lower frame, and four wheels legible. Keep it mostly empty so its structure is visible. Exclude a hand-carried basket, flat warehouse trolley, wheelchair, or online cart icon. Inspect the Mini Market shopping-cart lead before rendering.",
+    "picture_suitable": true,
+    "available_animations": [],
+    "adaptations": [
+      "Rendered the acquired Mini Market shopping-cart mesh with its original geometry, materials and external colormap; no model parts or textures were invented.",
+      "Near-eye-level three-quarter side camera preserves the empty basket, orange push handle, lower frame and four wheel silhouettes. One rear wheel is partly occluded by the frame; this perspective limitation was explicitly accepted during independent root review.",
+      "768 by 768 transparent source render, alpha-bounds crop with a 16-pixel margin, and Lanczos reduction to 512 by 415. The exact accepted PNG is retained without further conversion.",
+      "Independently inspected in actual native WordCard at Match 126 by 72 and Memory 144 by 74, both unmatched and matched with the real badge and alpha tint. This is picture suitability review only; see docs/assets/professional-retail-shopping-cart.md for provenance and separate delivery verification."
+    ]
+  },
+  "editorial_note_delta": {
+    "before": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the physical wheeled store basket, excluding an online cart interface. Add shopping trolley as the British alternative to North American shopping cart. Both refer to this physical sense; no extra inventory entry is created. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready.",
+    "after": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the physical wheeled store basket, excluding an online cart interface. Add shopping trolley as the British alternative to North American shopping cart. Both refer to this physical sense; no extra inventory entry is created. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. The authored morphology graph remains pending review. The shopping-cart image has completed scoped physical-sense picture review and integration; word audio remains pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready.",
+    "replacement_before": "Picture suitability and word-media production remain pending.",
+    "replacement_after": "The shopping-cart image has completed scoped physical-sense picture review and integration; word audio remains pending."
+  },
+  "asset_provenance": {
+    "sense_id": "shopping-cart.store-trolley.n",
+    "source": "https://kenney.nl/assets/mini-market",
+    "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+    "license": "CC0 1.0",
+    "acquired_source_files": [
+      {
+        "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shopping-cart.glb",
+        "sha256": "8933fdece5c43b619ea6902fa03a5fea9f490486048ae7543cc8b03ee98c98dd",
+        "bytes": 34832
+      },
+      {
+        "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/Textures/colormap.png",
+        "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+        "bytes": 8706
+      },
+      {
+        "path": "docs/assets/sources/kenney-mini-market-retail-theme/License.txt",
+        "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+        "bytes": 767
+      }
+    ],
+    "available_animations": [],
+    "accepted_png": {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/shopping-cart.png",
+      "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+      "bytes": 93422
+    },
+    "acceptance": {
+      "date": "2026-10-16",
+      "reviewer": "Independent root agent",
+      "scope": "Shopping-cart physical-sense image candidate at actual minimum Match/Memory picture sizes; no module release or broader course approval.",
+      "accepted_sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+      "evidence": [
+        "shopping-cart/candidate/shopping-cart.png",
+        "shopping-cart/candidate/actual-word-card-contact.png",
+        "shopping-cart/source-inspection-r2/underside-wheel-evidence.png",
+        "shopping-cart/source-record.json",
+        "shopping-cart/candidate/report.json"
+      ],
+      "decision": "The cart meaning is readable at minimum sizes. Partial fourth-wheel occlusion is acceptable perspective and must remain documented."
+    },
+    "suitability": {
+      "picture_suitable": true,
+      "definition": "A wheeled basket used to carry goods around a store.",
+      "forms": [
+        "shopping cart",
+        "shopping trolley"
+      ],
+      "intended_sense": "Physical wheeled basket used to carry goods around a store",
+      "visual_cues": [
+        "Empty basket",
+        "Orange push handle",
+        "Lower supporting frame",
+        "Four source wheel silhouettes"
+      ],
+      "limitations": [
+        "One rear wheel is partially occluded by the lower frame.",
+        "The isolated stylized model has no human/store scale reference.",
+        "The actual minimum art footprints are approximately 64.15 x 52 and 66.62 x 54 pixels.",
+        "This review does not approve audio, speech recognition, morphology, language, another sense, or the module."
+      ]
+    },
+    "original_candidate_receipt": {
+      "path": "build/professional-english/retail-term-art-review/review-receipt.json",
+      "sha256": "8184775b0fa33ba022f697aaf9ba78720f5a8ba60520154dc439bb2740f2ef2f",
+      "bytes": 16040
+    },
+    "native_qa": {
+      "checks": 21,
+      "failures": 0,
+      "report": {
+        "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/report.json",
+        "sha256": "8dc5d11b796d6c495720912bcd3981933d1a37f4d14b8677a559c06de2eefaca",
+        "bytes": 4222
+      },
+      "contact": {
+        "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/actual-word-card-contact.png",
+        "sha256": "ab0875ea1e938c89f8c62de1cea70ab99e7ae900dbfebbb17bb132afac5c985e",
+        "bytes": 50684
+      }
+    },
+    "production_delivery_verification": "Pending after exact descriptor review and serialized image-only integration."
+  },
+  "protected_fields": "All lexeme fields outside media.image and the exact editorial-note sentence are unchanged. Course/module, language, domain, morphology and audio gates are preserved."
+}

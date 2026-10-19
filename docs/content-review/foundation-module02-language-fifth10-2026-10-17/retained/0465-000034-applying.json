@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 34,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "b2ac1914ad3f74ea94bc6dc54c60956781a19bd4fa61c5790ea11eb77b8e20ea",
+  "recorded_at": "2026-10-16T22:48:03.142Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/independent-proposal-review/review.json",
+  "work": "work/88cdbec5-1124-4a84-bd45-cc3ffc2d590d.bin"
+}

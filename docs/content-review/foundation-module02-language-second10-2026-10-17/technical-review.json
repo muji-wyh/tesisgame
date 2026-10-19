@@ -1,0 +1,232 @@
+{
+  "schema": 1,
+  "status": "accepted_independent_guarded_delivery_technical_review",
+  "accepted": true,
+  "review_kind": "technical_only",
+  "reviewer": "Codex recover_delivery independent technical reviewer",
+  "reviewed_at": "2026-10-16T18:38:14.054Z",
+  "package": {
+    "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02",
+    "preparation_receipt_raw_sha256": "9523482f6e7c511ba093fb52ba19f17de4e32d37306e6cd503b96951456557ef",
+    "binding_raw_sha256": "2710e773bf4744b782a3801a687726c4a14c547084e8217311e886189b31f15c"
+  },
+  "scope": "Independent technical acceptance of the frozen r02 guarded delivery, proposed metadata and references, exact shared-test transformations, baseline and execution witnesses. The prior eight-entry independent language acceptance is authoritative; this review grants no new language, human, specialist, morphology, media, domain, expression, module or release approval.",
+  "reviewed_files": [
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/delivery-lib.cjs",
+      "raw_sha256": "a094e1b7f81f8259f1a00b2e37b3b5daae589ba7a7c6ac1970040ab7d6e54fbb"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/test-transforms.cjs",
+      "raw_sha256": "65e236565b29148ab220a4ce7ac7ff3894f06e2f8ef20c64c8855713a593450b"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/prepare.cjs",
+      "raw_sha256": "b81f3f19fae42219cac0e5e00aade2bb1af56e37ddb5d0edf4b2800307f9218f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/deliver.cjs",
+      "raw_sha256": "4f6a713d84c65650e17fa82161a718e238ef1cf001903e7f43f9deaf7f24f483"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/baseline-config.json",
+      "raw_sha256": "d3eb180e31c07370640cc1ac3b60f7fe5d7a71aa17b66219bb3637d9efb8d665"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/HANDOFF.md",
+      "raw_sha256": "f18ef9ef4e3a5ce106c34cecc625327a2e985933b8a6c21d3ac7bd9c7647888f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/execution-start.json",
+      "raw_sha256": "19da19b632871145fc09609bacb5b0339b6aad0bc51d4a4172b5eef44e490b0e"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/accepted-language.json",
+      "raw_sha256": "56e569369ac8b9f3b7f3c7e789c61302e62777b774950f89f5b971f277ea145b"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional-content.test.cjs.before",
+      "raw_sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional-content.test.cjs.after",
+      "raw_sha256": "64d754533e5b7aa329ab4c044bce454e7c641fa6afe0257e7f76134586c67fa7"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional-retail-morphology.test.cjs.before",
+      "raw_sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional-retail-morphology.test.cjs.after",
+      "raw_sha256": "c7bc3e1448ee006c6441c9cf1eb0fb3be875efc9c762f1a78d9c0c478a62135f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional_retail_morphology_tests.gd.before",
+      "raw_sha256": "f0bd041c0c50413b9f0b399df1abb89aea7d66062c5f4ad5fcbc30290e4208f1"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional_retail_morphology_tests.gd.after",
+      "raw_sha256": "7cd10db267b373fea44ac287924ef67de0d47fa13d4a5c4e2c299afaeea6008c"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/test-patches.json",
+      "raw_sha256": "ee5fb84bdecfec9ed39d74e58261a86f6267ae3c4f6b6ddd032b73a7b769ec58"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/scratch-validation.json",
+      "raw_sha256": "68de87e2247416021574954de26a32ce7f42d1fe336eeadb7b816bbf7ba768e6"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/binding.json",
+      "raw_sha256": "2710e773bf4744b782a3801a687726c4a14c547084e8217311e886189b31f15c"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/preparation-receipt.json",
+      "raw_sha256": "9523482f6e7c511ba093fb52ba19f17de4e32d37306e6cd503b96951456557ef"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/preparation-attempt-001.json",
+      "raw_sha256": "98c87b5b983f88c6c51db921feda73069ceb4b147212aaabd22cea7421e8351c"
+    }
+  ],
+  "inherited_language_acceptance": {
+    "path": "docs/content-review/foundation-module02-language-second10-proposals-2026-10-17/review.json",
+    "raw_sha256": "2d95fb5e1f08ed79a2b9de27ad2e031e36139385acf0d6d0e3e7a13b1a6f865e",
+    "accepted_fields": [
+      "definition",
+      "example",
+      "difficulty"
+    ],
+    "accepted_entries": 8,
+    "held_entries": 2,
+    "corrected_deliver_projection_json_sha256": "bf7339125c5ec83bd6c1f8170bb68e731fb89d7a8713d36491208677290864ea"
+  },
+  "baseline": {
+    "path": "build/professional-english/continuation-baseline-r32-composite-r02/baseline.json",
+    "raw_sha256": "8d1092228ca051afab40af995d1e1e24da8f0c0af8defbaea18019042d09e54e",
+    "kind": "composite_validation_baseline",
+    "independent_review": {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r02-independent-review-r01/review.json",
+      "raw_sha256": "c908c393dfc88398f45c957d02cd9602ea94b917455b7015559c9a6502d968ee"
+    },
+    "full_combined_validation_of_current_state": false,
+    "new_test_execution": false,
+    "historical_r32_remains_failed": true,
+    "current_input_count": 679,
+    "current_registry_sha256": "8574160412f2cdbb0e3891421f995ded387f108fd2727d66eb13fd83d2959a67"
+  },
+  "executed_source_equality": {
+    "verified": true,
+    "manifest": {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/execution-start.json",
+      "raw_sha256": "19da19b632871145fc09609bacb5b0339b6aad0bc51d4a4172b5eef44e490b0e"
+    },
+    "attempt": {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/preparation-attempt-001.json",
+      "raw_sha256": "98c87b5b983f88c6c51db921feda73069ceb4b147212aaabd22cea7421e8351c"
+    },
+    "source_count": 6
+  },
+  "findings": [],
+  "resolved_before_acceptance": [
+    {
+      "package": "build/professional-english/foundation-module02-language-review/second10-delivery-r01",
+      "issue": "Proposed complete metadata retained acceptance-era future-integration wording and described the retained live image brief as preimage-only.",
+      "resolution": "Fresh frozen r02 source scopes, new references and live editorial note state that the former merged-sense note is retained only in historical preimages and replaced by bounded finishing-only provenance. The existing image brief remains live, unchanged, mismatched, pending and unapproved. The original acceptance decision remains verbatim in provenance. The r01 preparation remains retained historical evidence and is not accepted for delivery."
+    }
+  ],
+  "verification": {
+    "package_hashes": "All 17 frozen inventory artifacts, preparation receipt and completion witness match exact raw hashes.",
+    "source_execution": "The ordered six-file pre-dispatch manifest equals the executed and frozen code/configuration/HANDOFF inventory. Completion status is zero with no signal, error, stderr or witness-verification error. Preparation and delivery both enforce this binding.",
+    "language_and_metadata": "All eight definitions, examples and editorial difficulties match exact prior accepted fields. The corrected deliver projection is used. Only scoped review metadata, two verified lexical references per accepted entry and bounded notes are added. All sixteen publisher records retain literal selected source levels and explicit editorial placement limits; replace sense3 stays distinct from contrast-only sense2 B1+.",
+    "holds": "Collect and notify remain exact whole entries with no source/reference/note additions and no review changes.",
+    "context": "All 200 memberships, 20 containing modules, 245 related expressions, six focus expressions, 66 related entries and 17 inherited expression holds retain their accepted preimages. All other lexemes, all expressions/courses/themes, origins, source prefix, forms, regions, practice modes, morphology, media and domain gates are unchanged.",
+    "reconstruction": "All three saved test preimages equal the current files. Exact recorded replacements plus appended tests reconstruct the proposed afterimages. All existing content is preserved except the reviewed seven content-test anchors, one morphology-test anchor and two native-test anchors. The prior native attendance correction remains byte-exact.",
+    "author_projected_execution": {
+      "callbacks": 217,
+      "passed": 217,
+      "failed": 0,
+      "excluded_persisted_callbacks": 1,
+      "registered_callback_titles_independently_matched": true
+    },
+    "independent_projected_execution": {
+      "callbacks": 41,
+      "passed": 41,
+      "failed": 0,
+      "scope": "Focused Foundation, attendance, historical donor, registry and newly added language tests; the author full projected run was not repeated wholesale."
+    },
+    "independent_reversals": {
+      "accepted_exact_states": 272,
+      "rejected_field_mutations": 3808,
+      "deep_nested_clone_independence": true,
+      "whole_entry_comparisons": true,
+      "oldest_history_chain_preserved": true
+    },
+    "independent_delivery_guard_probes": {
+      "cases": 9,
+      "passed": 9,
+      "transaction_reached": false,
+      "writes_reached": false,
+      "scope": "In-memory invalid root window, wrong binding, replay/overwrite, rejected review, missing native or witness review, failed completion and changed execution-source witness."
+    },
+    "transaction_safety": "The existing hash-pinned helper and its twenty-case fault-injection receipt remain authoritative. Reviewed delivery checks root exclusivity, fresh transaction/docs/provenance paths, exact baseline and package hashes, technical review coverage, target preimages, regenerated accepted projection and candidate audit before constructing the explicit artifact allowlist. The helper checks all bytes before and after replacements, keeps recovery history and refuses replay; unrelated baseline inputs are checked again after commit.",
+    "projected_audit": {
+      "summary": {
+        "courses": 20,
+        "modules": 200,
+        "themes": 21,
+        "unique_lexemes": 4939,
+        "vocabulary_memberships": 10000,
+        "vocabulary_memberships_target": 10000,
+        "vocabulary_memberships_remaining": 0,
+        "expressions": 1620,
+        "expression_memberships": 2000,
+        "expression_memberships_target": 2000,
+        "expression_memberships_remaining": 0,
+        "ready_modules": 0,
+        "reviewed_lexemes": 130,
+        "morphology_authored": 4045,
+        "morphology_reviewed": 89,
+        "integrated_word_images": 8,
+        "integrated_word_audio": 12,
+        "release_ready": false
+      },
+      "errors": 0
+    },
+    "final_registry_before_sha256": "8574160412f2cdbb0e3891421f995ded387f108fd2727d66eb13fd83d2959a67",
+    "projected_registry_after_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+    "all679_inputs_unchanged": true
+  },
+  "limitations": [
+    "No production, shared-test or checkpoint file was edited by this review.",
+    "No native process or persisted suite was dispatched. Native afterimage syntax and behavior still require the root-owned post-integration R33 run.",
+    "The new committed-journal callback is intentionally deferred until a real committed transaction exists.",
+    "This acceptance applies only to the exact frozen r02 package and reviewed hashes; root must rerun its guards in the exclusive delivery window.",
+    "The composite baseline does not relabel failed R32 or claim a fresh full combined run."
+  ],
+  "required_post_delivery": [
+    "A committed guarded transaction with its preserved journal and durable evidence.",
+    "One fresh root-owned combined R33 validation against the integrated files, including the committed-journal callback, updated native morphology checks and native audio suite."
+  ],
+  "reviewer_evidence": [
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02-independent-technical-r01/inspect.cjs",
+      "raw_sha256": "93e0fce61f2ae924eb5414a8d0441082dfaad72eb1ca701d152f9562dbbc049a"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02-independent-technical-r01/checks.json",
+      "raw_sha256": "6ee20a29da7cc7b152c0ab1a71d61c69744705a72ef3e86557a09cdfb975d2a7"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02-independent-technical-r01/guard-probes.cjs",
+      "raw_sha256": "fe5e0b9af450166e3484aa5e7d2e371e861ea9e01e378ee56d0e391ce2862ef3"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02-independent-technical-r01/guard-probes.json",
+      "raw_sha256": "da463ae330aaaf3c58e1be5beba7545d6a6e2127f9d091d40e94621d84afa866"
+    }
+  ],
+  "production_mutated": false,
+  "native_dispatched": false,
+  "new_language_approval": false
+}

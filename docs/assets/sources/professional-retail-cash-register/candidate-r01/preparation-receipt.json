@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "status": "candidate_harness_prepared_pending_root_native_execution",
+  "recorded_at": "2026-10-16T11:41:57.817Z",
+  "frozen_inputs_raw_sha256": "776de6c40196f895ff85907aca0d711f827805f4232a1996fa93ac7436088998",
+  "source_review_raw_sha256": "5f80ae93194889c53514c6840c87e54dbc920f2505c3d563637ef688042bc74d",
+  "entry_preimage_raw_sha256": "8399da42142941b27cdb7b869d316fbdb504c47454f01ff630d05dfa13b99515",
+  "harness_raw_sha256": "f67176238f8a6d0d70650c45a88fa78702af92eabe6ddd7b8e536b3cf31c3e71",
+  "runner_raw_sha256": "31b06c45046f5018beeb7b6193f60220f91be517902389d63b50849d49aee6ca",
+  "guarded_production_files": 1086,
+  "guarded_input_files": 40,
+  "node_syntax_passed": true,
+  "python_syntax_and_pillow_import_passed": true,
+  "native_execution": "not_run",
+  "production_changes": false,
+  "accepted_readiness": false
+}

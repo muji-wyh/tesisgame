@@ -1,0 +1,551 @@
+{
+  "schema": 1,
+  "status": "independently_accepted_language_projections_not_integrated",
+  "reviewer": "Codex runtime_recovery independent AI language reviewer; separate from recover_delivery author; not human or subject-matter approval",
+  "recorded_at": "2026-10-16T19:31:01.524Z",
+  "date_local": "2026-10-17",
+  "research_directory": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17",
+  "candidate_ledger_raw_sha256": "590e97f018a3fdf2f1190d1405153ba7a144e0230cb6f5195aea182bfcaa3b6f",
+  "research_artifacts": [
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/HANDOFF.md",
+      "raw_sha256": "4e9c0a9bf057be2dc612dc7c0de2253dcd03058af337162bcf0fa25c6011ac0e",
+      "bytes": 2953
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/README.md",
+      "raw_sha256": "2125d64e0e9425f6bd626f6c084e1840cf445f84606e2b332b1577c980bcad9f",
+      "bytes": 1065
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/assemble.cjs",
+      "raw_sha256": "db540287d9333ba9ef68c7ec362b670f03ea077369d798fbd8e2ec2fa2f6a68a",
+      "bytes": 22822
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/assembly-completion.json",
+      "raw_sha256": "d3e7fd39b4a5f2fcdda8210c87a156d40c1231331b651a1ef4e394a12a7fea76",
+      "bytes": 663
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/assembly-start.json",
+      "raw_sha256": "0ff0d82b3104bf15065ee8f9df6ff5d3f86ef49ca446ec03031f7e3e4d94d165",
+      "bytes": 1842
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/baseline.json",
+      "raw_sha256": "60114b8f8b053c86b8268e3af09b8e20167a0775df218e4f9cd4ae54be713279",
+      "bytes": 1683820
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/candidate-ledger.json",
+      "raw_sha256": "590e97f018a3fdf2f1190d1405153ba7a144e0230cb6f5195aea182bfcaa3b6f",
+      "bytes": 92687
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/collect-html-metadata.cjs",
+      "raw_sha256": "89a69381b876d3d59a142d5b50f906a901c341d298e332ae94b36973877250b2",
+      "bytes": 2478
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/collection-completion.json",
+      "raw_sha256": "7b3123e8135e755f71843b13caec22a49b847c31ed87be0bb2dc8bced4d1c08e",
+      "bytes": 1230
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/collection-start.json",
+      "raw_sha256": "c83d070d5b76b5f6e7fa8e9d983b08b2d0034d5dfb55a6a309ac1d2230f6ed72",
+      "bytes": 601
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/context-screen.json",
+      "raw_sha256": "b971a66810c04151370c4885e8892dd9503f9d5f2fe84b261be552872314afe0",
+      "bytes": 1796486
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/copy-receipt.json",
+      "raw_sha256": "d69d3c6b748c48d6a8c3a961b425f25d5649ca5b9594645e8ee7e57cfc912a43",
+      "bytes": 3167
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/inventory.json",
+      "raw_sha256": "28e1e4735987eab710fb97e5a818954fec0219025403e9828951af3d14ec5d1a",
+      "bytes": 2780
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/mechanical-checks.json",
+      "raw_sha256": "380b9094e22756422aec2c3e2fbeec70106b6a571933e0a9c80d0f0815d71e6a",
+      "bytes": 1679
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/oxford-html-metadata.json",
+      "raw_sha256": "23aea9059c824d39d95146ee5de2c7b2351c4ad8d5376e5d56106a6dd91c2ce6",
+      "bytes": 21289
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/research-notes.json",
+      "raw_sha256": "c9b56671be5acaf01eabe3da37077541fb2ffa27857bd7034199fcd18c198f89",
+      "bytes": 32267
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/snapshot.cjs",
+      "raw_sha256": "e976e176cc3bb7df80bb966e7dcf62d1bc7ec66162a0e57a3e5f66749a0b4084",
+      "bytes": 7880
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/source-index.json",
+      "raw_sha256": "792888bd66618075f88f8b0651ef14d11a4ad9fb23d2bb2444f3ec550dd8b0b4",
+      "bytes": 29473
+    }
+  ],
+  "input_registry_json_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "hash_convention": "SHA256 of raw bytes for files; SHA256 of UTF-8 JSON.stringify(value), preserving parsed key order, for JSON values.",
+  "accepted": 10,
+  "held": 0,
+  "accepted_field_decisions": 30,
+  "limits": [
+    "Acceptance applies only to each exact definition, example and editorial difficulty projection bound below. It does not accept the entire entry or change a production flag.",
+    "No human, specialist, professional-procedure, expression, morphology, media, module, readiness or release approval transfers.",
+    "No new focus binding, reference registration, source-registry record, editorial note or review-gate change is made.",
+    "The four earlier lexical holds, all 17 inherited expression holds and the additional Foundation02.04/.05/.07/.08 preservation remain exact.",
+    "Third10 proposals remain unintegrated. Complete retains its live mismatched form-image brief, pending and unapproved.",
+    "Difficulty is an editorial placement for a bounded meaning, not source consensus or lesson certification. B1+ and cefr/fkcefr remain literal observations.",
+    "Fresh source consultation used rendered original-publisher pages through the web connector. Oxford HTML metadata and body hashes were inspected only as frozen author evidence; raw HTML was not independently retrieved."
+  ],
+  "entries": [
+    {
+      "id": "submit.send-for-consideration.v",
+      "term": "submit",
+      "decision": "accept_exact_language_projection",
+      "candidate_record_json_sha256": "df291862c2e3e52a246f0e66f15e98eb48ed990123963f15659aba21bddb44a8",
+      "before_entry_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+      "accepted_content_projection_sha256": "eccda96896deabdc4ff91031bf806b1a5631bd86d2cb2de3c7e9858619ba71d4",
+      "accepted_fields_sha256": "ec0ff527ce43e501730e6d6428240ff34ec77ddb8ea514ecae8c4b771ea412a9",
+      "before_fields": {
+        "definition": "To send or present something for review, decision, or processing.",
+        "example": "Please submit the request before Friday.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "To send a document, request, or proposal for someone to review or decide on.",
+        "example": "Please submit the request before Friday.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "definition",
+        "difficulty"
+      ],
+      "field_decisions": {
+        "definition": {
+          "decision": "accept",
+          "rationale": "The narrowed object and purpose distinguish sending material for consideration from surrender, a legal assertion, or an arbitrary computer operation. The exact wording is accurate for the preserved sense ID."
+        },
+        "example": {
+          "decision": "accept",
+          "rationale": "The request has a deadline and is sent for consideration. The sentence is grammatical and gives the selected action without inventing a filing procedure."
+        },
+        "difficulty": {
+          "decision": "accept",
+          "rationale": "Accept editorial B2. Fresh Collins sense 2 explicitly displays B2; frozen Oxford sense-1 cefr=b2 corroborates it. The selected rendered Oxford sense did not display a level."
+        }
+      },
+      "context_boundary": "The Foundation02 form submission is compatible with consideration, but the expression remains pending with held verify and unintegrated correct. Care-system submission is unscored; submit-button is a separate noun.",
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-submit",
+        "foundation02-language-fourth10-collins-submit"
+      ],
+      "research_note_json_sha256": "a56dfc805527846387527ba923ecfdf7d8ff75ddc1c5146846b2bb8a0701dff8",
+      "scope": "Only the exact three language fields are accepted. The full projection hash identifies the candidate context; it does not approve its preserved media, morphology, references or review flags.",
+      "production_mutated": false
+    },
+    {
+      "id": "approve.authorize.v",
+      "term": "approve",
+      "decision": "accept_exact_language_projection",
+      "candidate_record_json_sha256": "55148cb1ca568a5fa1b009c3bd015be23729db937a0bd3189f36988d5cadf6b6",
+      "before_entry_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+      "accepted_content_projection_sha256": "1f06c720f3c7909d792267f528dd521443f07daf399e1440c0bed78c608a1007",
+      "accepted_fields_sha256": "22e8f9fba88dea0941f0320dd38e28dfcbbb0a5bb0e2f7ce13b86044244a58b1",
+      "before_fields": {
+        "definition": "To officially agree to or accept something.",
+        "example": "The manager will approve the revised schedule.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "To officially agree to or accept something.",
+        "example": "The manager will approve the revised schedule.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "field_decisions": {
+        "definition": {
+          "decision": "accept",
+          "rationale": "Official agreement or acceptance is appropriate for the transitive plan/request decision. Read the broad object through that selected meaning; it does not merge approve of or certification."
+        },
+        "example": {
+          "decision": "accept",
+          "rationale": "A manager deciding on a revised schedule is a clear instance of official agreement. The example asserts no legal effect or product standard."
+        },
+        "difficulty": {
+          "decision": "accept",
+          "rationale": "Accept editorial B2 using Oxford selected sense 2 and its rendered B2 topic. Fresh Collins gives B1+ for this sense, not B2; B1+ is preserved rather than rounded."
+        }
+      },
+      "context_boundary": "Foundation02.03 has ordinary request decisions. Most other hits are approved modifiers or passive statuses whose authorization/suitability distinction is unresolved. Rights clearance remains specialist and unapproved.",
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-approve",
+        "foundation02-language-fourth10-collins-approve"
+      ],
+      "research_note_json_sha256": "7e1dacb9330199e0ab151b1d9d5e0a1d118d70f3d4936fd42b373f976c4d15a2",
+      "scope": "Only the exact three language fields are accepted. The full projection hash identifies the candidate context; it does not approve its preserved media, morphology, references or review flags.",
+      "production_mutated": false
+    },
+    {
+      "id": "reject.decline-acceptance.v",
+      "term": "reject",
+      "decision": "accept_exact_language_projection",
+      "candidate_record_json_sha256": "13cfda3e37edb081e9d454378d3f9e6e662da5cdae7b15141d4bd4fbf83109c0",
+      "before_entry_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+      "accepted_content_projection_sha256": "60872815faebf6462fec599f520d3e1da587f963935da7d90d302ae43537905d",
+      "accepted_fields_sha256": "8aafda2ade082e75c46b4e02dcf52587abbcf375374ea790ccf2c1ba103d0596",
+      "before_fields": {
+        "definition": "To decide not to accept a proposal, request, or item.",
+        "example": "The team may reject a proposal that misses the requirements.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "To decide not to accept a proposal, request, or item.",
+        "example": "The team may reject a proposal that does not meet the requirements.",
+        "difficulty": "B1"
+      },
+      "changed_fields": [
+        "example",
+        "difficulty"
+      ],
+      "field_decisions": {
+        "definition": {
+          "decision": "accept",
+          "rationale": "Deciding against acceptance captures ordinary refusal. Proposal, request and item are possible objects, but this acceptance does not define quality-control criteria or biological rejection."
+        },
+        "example": {
+          "decision": "accept",
+          "rationale": "Does not meet the requirements is the idiomatic construction. The team may decline the proposal, and no requirement or professional procedure is prescribed."
+        },
+        "difficulty": {
+          "decision": "accept",
+          "rationale": "Accept editorial B1 for ordinary proposal/request refusal, supported by the fresh Oxford Business B1 topic and frozen cefr=b1. Collins explicitly displays B2, so source disagreement remains."
+        }
+      },
+      "context_boundary": "The only surface use is the ordinary request decision in Foundation02.03. Its pending expression gate remains. Reject-rate and employment/medical meanings receive no acceptance.",
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-reject",
+        "foundation02-language-fourth10-collins-reject"
+      ],
+      "research_note_json_sha256": "8dfaa45188748d5ecf8c37652a5675e6eff2b7a768a01a9cd815bf272c688768",
+      "scope": "Only the exact three language fields are accepted. The full projection hash identifies the candidate context; it does not approve its preserved media, morphology, references or review flags.",
+      "production_mutated": false
+    },
+    {
+      "id": "sign.write-name.v",
+      "term": "sign",
+      "decision": "accept_exact_language_projection",
+      "candidate_record_json_sha256": "3fbe23dd8e9af8c46d07db3b878c09af5fabe23a13f949ae8408041bf539960f",
+      "before_entry_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+      "accepted_content_projection_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+      "accepted_fields_sha256": "2bad7410b2382c5f1fcfab4f1d11dc317fc1fac9796a4bcfd480b7a4a84b4372",
+      "before_fields": {
+        "definition": "To write one's name on a document as a form of identification or agreement.",
+        "example": "Please sign the attendance sheet.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "To write one's name on a document as a form of identification or agreement.",
+        "example": "Please sign the attendance sheet.",
+        "difficulty": "A2"
+      },
+      "changed_fields": [],
+      "field_decisions": {
+        "definition": {
+          "decision": "accept",
+          "rationale": "Writing a name for identification or agreement accurately isolates the document action. It does not promise that a mark establishes legal validity."
+        },
+        "example": {
+          "decision": "accept",
+          "rationale": "The attendance sheet gives a concrete name-writing purpose. It is an ordinary and natural request."
+        },
+        "difficulty": {
+          "decision": "accept",
+          "rationale": "Accept editorial A2 for this concrete document action, supported by the fresh Oxford selected A2 topics and frozen cefr=a2. Collins labels its corresponding verb B1; the A2 sign-board noun is not used as support."
+        }
+      },
+      "context_boundary": "All nine surface uses belong to other nouns, compounds or sign-in. Clinical signs, sign-off, electronic-signature rules and signature stamps remain distinct.",
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-sign",
+        "foundation02-language-fourth10-collins-sign"
+      ],
+      "research_note_json_sha256": "ac9fc716ca58fd0b80bcdc925c289590016359d4877a092f16f90ad512dd9b90",
+      "scope": "Only the exact three language fields are accepted. The full projection hash identifies the candidate context; it does not approve its preserved media, morphology, references or review flags.",
+      "production_mutated": false
+    },
+    {
+      "id": "delay.late-occurrence.n",
+      "term": "delay",
+      "decision": "accept_exact_language_projection",
+      "candidate_record_json_sha256": "bf40f7e0516b972d1ebd1d5b6c6112481e729ad5c2a29e1844947f1d1c0ff188",
+      "before_entry_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+      "accepted_content_projection_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+      "accepted_fields_sha256": "7962865ce3899587cfb8d7d96b4df9715018503724a0729827d10dea7d663380",
+      "before_fields": {
+        "definition": "A period of waiting caused by something happening later than expected.",
+        "example": "There is a short delay with the delivery.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "A period of waiting caused by something happening later than expected.",
+        "example": "There is a short delay with the delivery.",
+        "difficulty": "A2"
+      },
+      "changed_fields": [],
+      "field_decisions": {
+        "definition": {
+          "decision": "accept",
+          "rationale": "A wait caused by a late event is the selected countable/uncountable noun meaning. It does not describe deliberately putting off action or the causative verb."
+        },
+        "example": {
+          "decision": "accept",
+          "rationale": "A short delay with the delivery is natural ordinary workplace wording. It supplies no delivery guarantee or cause."
+        },
+        "difficulty": {
+          "decision": "accept",
+          "rationale": "Accept editorial A2 for this simple late-delivery noun using the freshly observed Collins sense-4 A2 label. Frozen Oxford sense-1 cefr=b2 is a material disagreement, not absent evidence. A2 is a bounded editorial choice."
+        }
+      },
+      "context_boundary": "Foundation02.02 remains held for the confirm/notify context. The transport expression uses a separately identified causative delay verb; production and delivery compounds remain separate.",
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-delay",
+        "foundation02-language-fourth10-collins-delay"
+      ],
+      "research_note_json_sha256": "10860464a332c9a77ac38b2f5ff89d62e7fdd6e4f2fb11d0677948d60182a70a",
+      "scope": "Only the exact three language fields are accepted. The full projection hash identifies the candidate context; it does not approve its preserved media, morphology, references or review flags.",
+      "production_mutated": false
+    },
+    {
+      "id": "error.mistake.n",
+      "term": "error",
+      "decision": "accept_exact_language_projection",
+      "candidate_record_json_sha256": "f5532a688e006124a407a9c9feafaddca11ac9b70bbc347d7e0c263f01290384",
+      "before_entry_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+      "accepted_content_projection_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+      "accepted_fields_sha256": "1c57accbdb40e4be07fc4498cb070b687a1b4e831bd14ceda3d41caee1bd1d68",
+      "before_fields": {
+        "definition": "Something incorrect in information, work, or a system's operation.",
+        "example": "There is an error in the telephone number.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "Something incorrect in information, work, or a system's operation.",
+        "example": "There is an error in the telephone number.",
+        "difficulty": "A2"
+      },
+      "changed_fields": [],
+      "field_decisions": {
+        "definition": {
+          "decision": "accept",
+          "rationale": "Incorrect information, work or operation fits ordinary mistake usage. The wording does not establish a technical error taxonomy, responsibility test or statistical quantity."
+        },
+        "example": {
+          "decision": "accept",
+          "rationale": "An incorrect telephone number is a clear, concrete instance of this noun. The in-complement is idiomatic."
+        },
+        "difficulty": {
+          "decision": "accept",
+          "rationale": "Accept editorial A2 for the concrete information-error sense. Frozen Oxford records fkcefr=a2 with no cefr attribute; this is retained literally, not described as freshly observed CEFR markup. Fresh Collins gives B2. The simple example and bounded meaning support the editorial choice despite that disagreement."
+        }
+      },
+      "context_boundary": "Foundation02.04 remains pending with held verify. Error budget, clinical errors, cutoff/payroll errors and system codes retain separate identities and domain gates. Oxford describes error as more formal than mistake.",
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-error",
+        "foundation02-language-fourth10-collins-error"
+      ],
+      "research_note_json_sha256": "51c30f3899ad6485775548218d6bea0ef24749b9e1b11396a35e8a610825a2e6",
+      "scope": "Only the exact three language fields are accepted. The full projection hash identifies the candidate context; it does not approve its preserved media, morphology, references or review flags.",
+      "production_mutated": false
+    },
+    {
+      "id": "fault.equipment-defect.n",
+      "term": "fault",
+      "decision": "accept_exact_language_projection",
+      "candidate_record_json_sha256": "c31af6622c17599e10183778a433640ac6eff20c6ef9bd230fc56026877f39f7",
+      "before_entry_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+      "accepted_content_projection_sha256": "68123447fc55051834f06dc430669acf30a997b7fba515f4a5609d662e7fecec",
+      "accepted_fields_sha256": "b42d7edcaf9cbffeadeb641fd59321a374fb2c6cd92473ef80b4cb12e5066765",
+      "before_fields": {
+        "definition": "A defect that prevents equipment or a system from working properly.",
+        "example": "The printer has developed a fault.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "A defect that prevents equipment or a system from working properly.",
+        "example": "The printer has developed a fault.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "field_decisions": {
+        "definition": {
+          "decision": "accept",
+          "rationale": "The equipment/system restriction clearly selects an operational defect rather than blame. Preventing proper operation does not require complete equipment failure."
+        },
+        "example": {
+          "decision": "accept",
+          "rationale": "Developed a fault is a natural equipment collocation, and a printer is a concrete example. No diagnostic method or repair instruction is asserted."
+        },
+        "difficulty": {
+          "decision": "accept",
+          "rationale": "Accept editorial B2. Fresh Collins sense 3 includes technical faults and displays B2; frozen Oxford equipment sense 3 records cefr=b2. Collins responsibility-sense B1 is excluded."
+        }
+      },
+      "context_boundary": "Foundation02.06 names a reported defect and an authorized team; it remains pending. Diagnostic, repair and machine-safety contexts and fault compounds receive no specialist acceptance.",
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-fault",
+        "foundation02-language-fourth10-collins-fault"
+      ],
+      "research_note_json_sha256": "165413dae43d2077961ec8848a99032eb442539246fc471a7398f62522cdf21b",
+      "scope": "Only the exact three language fields are accepted. The full projection hash identifies the candidate context; it does not approve its preserved media, morphology, references or review flags.",
+      "production_mutated": false
+    },
+    {
+      "id": "damage.physical-harm.n",
+      "term": "damage",
+      "decision": "accept_exact_language_projection",
+      "candidate_record_json_sha256": "b45fd1605144e7934823690c5363bc211a7e474d9788e6de92dc6d5b3aa27fa3",
+      "before_entry_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+      "accepted_content_projection_sha256": "18369bf2b6d66b159cabef4141846eb57e4d02eb8bdc413f7ec917f389245404",
+      "accepted_fields_sha256": "cb0aee85ec7a4fb2b2f43986cf8c0cedfd6aae659ebc6de3f9c05cddaf3b3dd4",
+      "before_fields": {
+        "definition": "Physical harm that makes something less useful or less sound.",
+        "example": "The box arrived with visible damage.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "Physical harm that makes something less useful or less sound.",
+        "example": "The box arrived with visible damage.",
+        "difficulty": "B1"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "field_decisions": {
+        "definition": {
+          "decision": "accept",
+          "rationale": "Physical harm reducing usefulness or sound condition is accurate for the selected mass noun. The definition does not encompass every abstract harmful effect."
+        },
+        "example": {
+          "decision": "accept",
+          "rationale": "Visible damage to an arriving box is a natural mass-noun use. The sentence does not infer cause or determine compensation."
+        },
+        "difficulty": {
+          "decision": "accept",
+          "rationale": "Accept editorial B1 for physical object harm using frozen Oxford sense-1 cefr=b1. Fresh Collins physical noun is B1+, retained literally. The rendered Oxford B2 abstract-harm topic and C1 legal sense are not this evidence."
+        }
+      },
+      "context_boundary": "Physical-harm uses and damage-report/surface-damage compounds stay unscored for this ID. Legal plural damages is a separate noun, not this noun pluralized; damaged and damaging are not accepted automatically.",
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-damage",
+        "foundation02-language-fourth10-collins-damage"
+      ],
+      "research_note_json_sha256": "4daa8abd8ac18377f18325aa7fb6af3df2a8602325abf526a1d3bf537c95e01c",
+      "scope": "Only the exact three language fields are accepted. The full projection hash identifies the candidate context; it does not approve its preserved media, morphology, references or review flags.",
+      "production_mutated": false
+    },
+    {
+      "id": "shortage.insufficient-supply.n",
+      "term": "shortage",
+      "decision": "accept_exact_language_projection",
+      "candidate_record_json_sha256": "fcfb90d0fd57d26abd0791587a67bccec30ab166056a59fe3853a96fc368bf1e",
+      "before_entry_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+      "accepted_content_projection_sha256": "4dca09e5ff7f7489a7d0f5c9be49f3b8473c40d1aeaf58a6997e063bde4fcaa4",
+      "accepted_fields_sha256": "a44fe39fd163ddc445a661c6122f0ea684db29ac70b12a8224f736170df2cd14",
+      "before_fields": {
+        "definition": "A situation in which there is not enough of something needed.",
+        "example": "A shortage of packaging has slowed the dispatch.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "A situation in which there is not enough of something needed.",
+        "example": "A shortage of packaging has slowed the dispatch.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "field_decisions": {
+        "definition": {
+          "decision": "accept",
+          "rationale": "Insufficiency relative to a needed amount accurately defines the selected supply meaning. It does not identify the cause of the shortfall."
+        },
+        "example": {
+          "decision": "accept",
+          "rationale": "Packaging can denote needed supplies; a shortage of it can slow dispatch. The sentence is idiomatic and gives no inventory rule or allocation instruction."
+        },
+        "difficulty": {
+          "decision": "accept",
+          "rationale": "Accept editorial B2. Fresh Collins gives B2 and frozen Oxford records fkcefr=b2 with no cefr attribute. The Word-of-the-Day footer is unrelated and excluded."
+        }
+      },
+      "context_boundary": "Material and stock shortage compounds remain separately scored. Cash shortage is a discrepancy between counted and recorded cash and must not inherit the needed-supply definition. Short message is unrelated.",
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-shortage",
+        "foundation02-language-fourth10-collins-shortage"
+      ],
+      "research_note_json_sha256": "197c598a589c9041e46d12b8a2b8b51f8f3177761d4bdf9a31bf0b5c050abf89",
+      "scope": "Only the exact three language fields are accepted. The full projection hash identifies the candidate context; it does not approve its preserved media, morphology, references or review flags.",
+      "production_mutated": false
+    },
+    {
+      "id": "missing.not-present.adj",
+      "term": "missing",
+      "decision": "accept_exact_language_projection",
+      "candidate_record_json_sha256": "88fb8b1ff477e704d01578da2ab1faa5db951985a54d6a4835177d3a071f16c4",
+      "before_entry_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+      "accepted_content_projection_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+      "accepted_fields_sha256": "47d67d9bd4d9c613afb753008592100a7a9c995a68f518abf1d9b390bb84ccbf",
+      "before_fields": {
+        "definition": "Not present where expected or needed.",
+        "example": "One page is missing from the document.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "Not present where expected or needed.",
+        "example": "One page is missing from the document.",
+        "difficulty": "A2"
+      },
+      "changed_fields": [],
+      "field_decisions": {
+        "definition": {
+          "decision": "accept",
+          "rationale": "Absence from an expected or needed place is accurate and deliberately cause-neutral. It does not claim whether something was lost, removed or omitted."
+        },
+        "example": {
+          "decision": "accept",
+          "rationale": "A page can be missing from a document through absence or omission; the wording leaves that cause open and is idiomatic."
+        },
+        "difficulty": {
+          "decision": "accept",
+          "rationale": "Accept editorial A2. Frozen Oxford senses 1 and 4 each record cefr=a2. Fresh Collins senses 1 and 2 display A2, while omission sense 3 has no displayed level; no Collins omission label is invented."
+        }
+      },
+      "context_boundary": "Object and reference absences fit the ordinary adjective but remain unscored. Missing-value/invoice identities, missing-person status and miss/missed/near-miss constructions remain separate.",
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-missing",
+        "foundation02-language-fourth10-collins-missing"
+      ],
+      "research_note_json_sha256": "a78dbac62ddb556aa9b164c221f32268ca775e62ba9d5f42090b440e023eaa60",
+      "scope": "Only the exact three language fields are accepted. The full projection hash identifies the candidate context; it does not approve its preserved media, morphology, references or review flags.",
+      "production_mutated": false
+    }
+  ]
+}

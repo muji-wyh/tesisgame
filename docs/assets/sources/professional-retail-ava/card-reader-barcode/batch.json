@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "course_id": "retail",
+  "module_id": "module03",
+  "status": "acquired_candidates_only",
+  "retained": [],
+  "terms": [
+    {
+      "sense_id": "card-reader.payment-device.n",
+      "text": "card reader",
+      "key": "19828e080da31bb83699bf4d3edbdae62d22b224cd63e11f8e78da2325ee544f",
+      "identity": {
+        "schema": 1,
+        "provider": "Microsoft Edge TTS",
+        "client": {
+          "name": "edge-tts",
+          "version": "7.3.1"
+        },
+        "profile": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%"
+        },
+        "synthesis_text": "card reader.",
+        "format": "22050-hz-pcm16-mono-no-effects"
+      },
+      "source": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-audio-review\\card-reader-barcode-acquired-r01\\source-mp3\\19828e080da31bb83699bf4d3edbdae62d22b224cd63e11f8e78da2325ee544f.mp3",
+      "wave": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-audio-review\\card-reader-barcode-acquired-r01\\19828e080da31bb83699bf4d3edbdae62d22b224cd63e11f8e78da2325ee544f.wav",
+      "receipt": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-audio-review\\card-reader-barcode-acquired-r01\\19828e080da31bb83699bf4d3edbdae62d22b224cd63e11f8e78da2325ee544f.json",
+      "cached": true
+    },
+    {
+      "sense_id": "barcode.product-code.n",
+      "text": "barcode",
+      "key": "ccf9e3b96b5eacbf116bc7c1c3441c295760ec0a6249009f76bc59e6c32fbb23",
+      "identity": {
+        "schema": 1,
+        "provider": "Microsoft Edge TTS",
+        "client": {
+          "name": "edge-tts",
+          "version": "7.3.1"
+        },
+        "profile": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%"
+        },
+        "synthesis_text": "barcode.",
+        "format": "22050-hz-pcm16-mono-no-effects"
+      },
+      "source": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-audio-review\\card-reader-barcode-acquired-r01\\source-mp3\\ccf9e3b96b5eacbf116bc7c1c3441c295760ec0a6249009f76bc59e6c32fbb23.mp3",
+      "wave": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-audio-review\\card-reader-barcode-acquired-r01\\ccf9e3b96b5eacbf116bc7c1c3441c295760ec0a6249009f76bc59e6c32fbb23.wav",
+      "receipt": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-audio-review\\card-reader-barcode-acquired-r01\\ccf9e3b96b5eacbf116bc7c1c3441c295760ec0a6249009f76bc59e6c32fbb23.json",
+      "cached": true
+    }
+  ],
+  "manifest_path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-audio-review\\card-reader-barcode-acquired-r01\\manifest.json",
+  "missing_recordings": 0,
+  "listening_review": "pending"
+}

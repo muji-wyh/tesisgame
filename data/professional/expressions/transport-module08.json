@@ -1,0 +1,1566 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.transport_delivery.module08.01",
+      "text": "The risk assessment covers manual handling, and the briefing identifies the assembly point.",
+      "meaning": "Locate relevant safety information without teaching a procedure.",
+      "context": "Reviewing site information with the responsible team.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "risk",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "assessment",
+          "start": 9,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "covers",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "manual",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "handling",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "briefing",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "identifies",
+          "start": 61,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "assembly",
+          "start": 76,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "point",
+          "start": 85,
+          "end": 90
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "risk-assessment.hazard-evaluation.n",
+        "manual-handling.human-load-movement.n",
+        "assembly-point.designated-meeting-place.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module08.02",
+      "text": "The incident form records a leak; the temperature log is attached for review.",
+      "meaning": "Describe the recorded observation and supporting information.",
+      "context": "Referring a transport incident report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "incident",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "form",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "records",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "leak",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": "temperature",
+          "start": 38,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "log",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "is",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "attached",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "for",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "review",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "incident-form.event-report-document.n",
+        "leak.unintended-escape.n",
+        "temperature-log.temperature-record.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module08.03",
+      "text": "Please ask which PPE, safety footwear, and protective glove are required for the assigned task.",
+      "meaning": "Request task-specific protective-equipment requirements.",
+      "context": "Clarifying the actual workplace safety arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "ask",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "which",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "PPE",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "safety",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "footwear",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "protective",
+          "start": 43,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "glove",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "are",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "required",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "for",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "assigned",
+          "start": 81,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": "task",
+          "start": 90,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "ppe.personal-protective-equipment.n",
+        "safety-footwear.protective-work-shoes.n",
+        "protective-glove.hand-protection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module08.04",
+      "text": "Report fatigue and suspicious activity through the appropriate channels while respecting privacy.",
+      "meaning": "Communicate two concerns and protect personal information.",
+      "context": "Discussing reporting responsibilities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Report",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "fatigue",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "suspicious",
+          "start": 19,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "activity",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": "through",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "appropriate",
+          "start": 51,
+          "end": 62
+        },
+        {
+          "index": 8,
+          "text": "channels",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 9,
+          "text": "while",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 10,
+          "text": "respecting",
+          "start": 78,
+          "end": 88
+        },
+        {
+          "index": 11,
+          "text": "privacy",
+          "start": 89,
+          "end": 96
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fatigue.marked-tiredness.n",
+        "suspicious-activity.concerning-behavior.n",
+        "privacy.personal-space-and-information-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module08.05",
+      "text": "The quality check found a defect in the faulty item; traceability information may support the product recall review.",
+      "meaning": "Describe a product concern and the records needed for the responsible review.",
+      "context": "Coordinating a quality issue.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "quality",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "found",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "defect",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "in",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "faulty",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "item",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "traceability",
+          "start": 53,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "information",
+          "start": 66,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "may",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "support",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "product",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": "recall",
+          "start": 102,
+          "end": 108
+        },
+        {
+          "index": 18,
+          "text": "review",
+          "start": 109,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 115,
+          "end": 116
+        }
+      ],
+      "focus_lexeme_ids": [
+        "quality-check.standard-conformity-check.n",
+        "defect.product-flaw.n",
+        "faulty-item.nonworking-product.n",
+        "traceability.ability-to-follow-product-history.n",
+        "product-recall.product-withdrawal-request.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module08.06",
+      "text": "The customer raised an accessibility need and asked about a reasonable adjustment.",
+      "meaning": "Record the individual's access needs without assuming a solution.",
+      "context": "Referring an access request to the responsible team.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "customer",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "raised",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "an",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "accessibility",
+          "start": 23,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "need",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "asked",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "about",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "reasonable",
+          "start": 60,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "adjustment",
+          "start": 71,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "accessibility.inclusive-usability.n",
+        "reasonable-adjustment.access-support-change.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module08.07",
+      "text": "The breakdown and collision are separate events in the report; roadside assistance has been contacted.",
+      "meaning": "Keep incident descriptions accurate and identify the assistance contact.",
+      "context": "Reviewing a disrupted journey report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "breakdown",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "collision",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "are",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "separate",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "events",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "in",
+          "start": 48,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "report",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "roadside",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "assistance",
+          "start": 72,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "has",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "been",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "contacted",
+          "start": 92,
+          "end": 101
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "breakdown.vehicle-failure-preventing-normal-operation.n",
+        "collision.incident-in-which-moving-objects-hit.n",
+        "roadside-assistance.help-for-vehicle-that-fails-during-journey.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module08.08",
+      "text": "The entrance is slippery, and poor visibility is affecting the driver's assessment.",
+      "meaning": "Describe observed conditions without prescribing a maneuver.",
+      "context": "Reporting route or site conditions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "entrance",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 13,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "slippery",
+          "start": 16,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "poor",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "visibility",
+          "start": 35,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "is",
+          "start": 46,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "affecting",
+          "start": 49,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "driver's",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "assessment",
+          "start": 72,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "slippery.having-surface-with-little-grip.a",
+        "poor-visibility.condition-making-surroundings-hard-to-see.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module08.09",
+      "text": "The training discussion covers the vehicle's blind spot and its specific load restraint arrangements.",
+      "meaning": "Refer visibility and load-security questions to the actual training and vehicle information.",
+      "context": "Clarifying transport safety topics.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "training",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "discussion",
+          "start": 13,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "covers",
+          "start": 24,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "vehicle's",
+          "start": 35,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "blind",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "spot",
+          "start": 51,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "its",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "specific",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "load",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "restraint",
+          "start": 78,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "arrangements",
+          "start": 88,
+          "end": 100
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "blind-spot.area-not-visible-from-drivers-position.n",
+        "load-restraint.equipment-or-system-holding-transported-load-in-place.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module08.10",
+      "text": "The damage report describes broken glass and a sharp edge without assuming how the damage happened.",
+      "meaning": "Record what was observed without inventing a cause.",
+      "context": "Passing an item-damage report for review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "damage",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "report",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "describes",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "broken",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "glass",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "sharp",
+          "start": 47,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "edge",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "without",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "assuming",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "how",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "damage",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "happened",
+          "start": 90,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "damage-report.record-describing-observed-harm-to-item-or-vehicle.n",
+        "broken-glass.glass-fragments.n",
+        "sharp-edge.cutting-boundary.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

@@ -1,25 +1,29 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, worldControl, enterGame, rendered } = require('./game-ui.cjs');
+const { metrics, libraryControl, activateLibraryControl, enterGame, rendered } = require('./game-ui.cjs');
 
 async function savedState(page) {
   return page.evaluate(() => ({ status: document.getElementById('game-status').textContent,
     growth: localStorage.getItem('growWithPip.growth.v1'), medals: localStorage.getItem('wordBuddies.medalProgress'),
     presentation: localStorage.getItem('pipAndWords.presentation.v1'),
+    learning: JSON.parse(document.getElementById('game-status').dataset.library).learning,
     theme: document.querySelector('meta[name="theme-color"]').content }));
 }
 
-async function themeDragOrigin(page) {
-  const rect = await worldControl(page, 5), bounds = await metrics(page);
-  return { bounds, point: { x: bounds.x + (rect.x + rect.width / 2) * bounds.scale,
-    y: bounds.y + (rect.y + rect.height / 2) * bounds.scale } };
+async function careerDragOrigin(page) {
+  await activateLibraryControl(page, 'ProfessionalPath');
+  await expect.poll(async () => (await metrics(page)).library.learning.screen).toBe('courses');
+  const control = await libraryControl(page, 'Career_caregiving'), bounds = await metrics(page);
+  const [x, y, width, height] = control.rect;
+  return { bounds, point: { x: bounds.x + (x + width / 2) * bounds.scale,
+    y: bounds.y + (y + height / 2) * bounds.scale } };
 }
 
-for (const ratio of [1, 2, 3]) test.describe(`Home theme scrolling at DPR ${ratio}`, () => {
+for (const ratio of [1, 2, 3]) test.describe(`Home career scrolling at DPR ${ratio}`, () => {
   test.use({ viewport: { width: 390, height: 650 }, deviceScaleFactor: ratio, hasTouch: true, reducedMotion: 'reduce' });
-  test('dragging a theme follows the finger without choosing it or moving the page', async ({ page, browserName }, testInfo) => {
+  test('dragging a career follows the finger without choosing it or moving the page', async ({ page, browserName }, testInfo) => {
     test.skip(browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
     await page.goto('/'); await enterGame(page, { home: true });
-    const { bounds, point } = await themeDragOrigin(page);
+    const { bounds, point } = await careerDragOrigin(page);
     const saved = await savedState(page), client = await page.context().newCDPSession(page), measurements = [];
     try {
       await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...point }] });
@@ -38,17 +42,17 @@ for (const ratio of [1, 2, 3]) test.describe(`Home theme scrolling at DPR ${rati
     expect(await savedState(page)).toEqual(saved);
     expect((await metrics(page)).library.visible).toBe(true);
     expect(await page.evaluate(() => [scrollX, scrollY])).toEqual([0, 0]);
-    await testInfo.attach('home-theme-touch-displacement', { body: JSON.stringify({ ratio, measurements }, null, 2), contentType: 'application/json' });
-    await page.screenshot({ path: testInfo.outputPath('home-after-theme-swipe.png'), scale: 'css' });
+    await testInfo.attach('home-career-touch-displacement', { body: JSON.stringify({ ratio, measurements }, null, 2), contentType: 'application/json' });
+    await page.screenshot({ path: testInfo.outputPath('home-after-career-swipe.png'), scale: 'css' });
   });
 });
 
 for (const input of ['mouse', 'touch']) {
-  test(`${input} swiping a Home theme leaves the header fixed without activation`, async ({ page, browserName }, testInfo) => {
+  test(`${input} swiping a Home career leaves the header fixed without activation`, async ({ page, browserName }, testInfo) => {
     test.skip(input === 'touch' && browserName !== 'chromium', 'Trusted touch motion uses Chromium CDP.');
     await page.setViewportSize({ width: 390, height: 650 }); await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/'); await enterGame(page, { home: true });
-    const { bounds, point } = await themeDragOrigin(page), saved = await savedState(page);
+    const { bounds, point } = await careerDragOrigin(page), saved = await savedState(page);
     const [, top] = bounds.library.viewport_rect;
     const headerClip = { x: bounds.x, y: bounds.y, width: bounds.width * bounds.scale, height: top * bounds.scale };
     const client = input === 'touch' ? await page.context().newCDPSession(page) : null;
@@ -72,6 +76,6 @@ for (const input of ['mouse', 'touch']) {
     }
     expect(await savedState(page)).toEqual(saved);
     expect((await metrics(page)).library.visible).toBe(true);
-    await page.screenshot({ path: testInfo.outputPath(`home-theme-${input}-swipe.png`), scale: 'css' });
+    await page.screenshot({ path: testInfo.outputPath(`home-career-${input}-swipe.png`), scale: 'css' });
   });
 }

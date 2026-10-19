@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "accepted_read_only_r33_evidence_review",
+  "accepted": true,
+  "review_kind": "technical_only",
+  "reviewed_at": "2026-10-16T18:46:15.069Z",
+  "receipt": {
+    "path": "build/professional-english/continuation-validation-r33.json",
+    "raw_sha256": "ff6360732e3b4fe90a919670ffa6c796470fdc91d13f8e1717df959b990ead4d"
+  },
+  "logs": [
+    {
+      "path": "build/professional-english/continuation-node-r33.log",
+      "raw_sha256": "ec9ca0c24023ea0ed93414bea5b82f0763c92424cab75cf0b0db1ed9bd773a64",
+      "status": 0,
+      "name": "node"
+    },
+    {
+      "path": "build/professional-english/continuation-native-r33.log",
+      "raw_sha256": "8124d5f953fa561bb76db3d0b177a20b19b33832f00763ebc51c0bf3c91daa4d",
+      "status": 0,
+      "name": "native"
+    },
+    {
+      "path": "build/professional-english/continuation-native-audio-r33.log",
+      "raw_sha256": "334e8ab10b0870d68f4df789af320c1402efb89517f2666ad72f730c7c3c49a6",
+      "status": 0,
+      "name": "native-audio"
+    }
+  ],
+  "verified_counts": {
+    "node": {
+      "tests": 256,
+      "pass": 256,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "native_morphology": {
+      "checks": 3074,
+      "failures": 0
+    },
+    "native_audio": {
+      "checks": 141,
+      "failures": 0
+    }
+  },
+  "measured_inputs": 680,
+  "before_after_maps_exact": true,
+  "current_original_inputs_exact": true,
+  "current_registry_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "committed_delivery": {
+    "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/commit-receipt.json",
+    "raw_sha256": "4673aa680e00725996db86e377c4bbdf8df928ccad0ec9713c2373233e2af903",
+    "provenance": {
+      "path": "data/professional/provenance/foundation-module02-language-second10-2026-10-17.json",
+      "raw_sha256": "7b2c674a5249ef8c59afc2ab9e620cd2ed8d4e6a55704a231ca53f00005cd4fc"
+    },
+    "committed_state_sha256": "60b7080e9fd46f23a0bb5b12788aade62ca557c0f342bcb992856084ee76e6f8"
+  },
+  "post_run_unmeasured_tree_additions": [],
+  "failed_r32_retained": true,
+  "findings": [],
+  "limitations": [
+    "Read-only evidence verification; no test, native, build or export was run.",
+    "R33 covers its recorded suites and exact measured input set. It does not accept browser/full-game/device/audio listening, runtime-domain integration or module readiness.",
+    "Any later production changes or new files require fresh validation; they are not retroactively covered by R33."
+  ],
+  "production_mutated": false,
+  "native_dispatched": false
+}

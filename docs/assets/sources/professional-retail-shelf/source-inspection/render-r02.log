@@ -1,0 +1,21 @@
+Error: Could not run Godot: spawnSync godot ETIMEDOUT
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Microsoft) - ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)
+
+WARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE.
+   at: DisplayServerWindows (platform/windows/display_server_windows.cpp:8059)
+SCRIPT ERROR: Trying to cast a freed object.
+   at: _run (res://build/professional-english/retail-term-art-review/shelf-r01/inspect-source.gd:59)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://build/professional-english/retail-term-art-review/shelf-r01/inspect-source.gd:59)
+
+    at runGodot (Q:\.codex\worktrees\current-age-vocabulary\tesisgame\tools\run-godot.cjs:17:11)
+    at [stdin]:1:611
+    at runScriptInThisContext (node:internal/vm:219:10)
+    at node:internal/process/execution:451:12
+    at [stdin]-wrapper:6:24
+    at runScriptInContext (node:internal/process/execution:449:60)
+    at evalFunction (node:internal/process/execution:283:30)
+    at evalTypeScript (node:internal/process/execution:295:3)
+    at node:internal/main/eval_stdin:51:5
+    at Socket.<anonymous> (node:internal/process/execution:205:5)

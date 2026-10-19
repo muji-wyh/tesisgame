@@ -1,0 +1,1213 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hr_recruitment.module03.01",
+      "text": "The office entrance is beside reception, and the exit is on the other side.",
+      "meaning": "Explain where someone can enter and leave the office.",
+      "context": "Giving an arriving candidate directions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "office",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "entrance",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "beside",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "reception",
+          "start": 30,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "exit",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "is",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "on",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "other",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "side",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 74,
+          "end": 75
+        }
+      ],
+      "focus_lexeme_ids": [
+        "office.space-for-administrative-or-professional-work.n",
+        "entrance.way-in.n",
+        "exit.way-out.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module03.02",
+      "text": "Please place the folder and envelope on the desk.",
+      "meaning": "Identify where paper items belong.",
+      "context": "Organizing non-sensitive interview materials.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "place",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "folder",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "envelope",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "on",
+          "start": 37,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "desk",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": ".",
+          "start": 48,
+          "end": 49
+        }
+      ],
+      "focus_lexeme_ids": [
+        "folder.folded-cover-for-holding-paper-documents.n",
+        "envelope.paper-cover-for-mailed-document.n",
+        "desk.work-table-with-writing-surface.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module03.03",
+      "text": "The stationery is on the shelf beside the copier.",
+      "meaning": "Locate everyday office supplies.",
+      "context": "Helping a colleague find materials.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "stationery",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 15,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "on",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "shelf",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "beside",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "copier",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": ".",
+          "start": 48,
+          "end": 49
+        }
+      ],
+      "focus_lexeme_ids": [
+        "stationery.materials-used-for-writing-and-office-paperwork.n",
+        "shelf.storage-surface.n",
+        "copier.machine-for-duplicating-documents.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module03.04",
+      "text": "The chair and mouse are ready at the workstation.",
+      "meaning": "Confirm that basic equipment is in place.",
+      "context": "Preparing an agreed work area.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "chair",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "mouse",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "are",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "ready",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "at",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 8,
+          "text": "workstation",
+          "start": 37,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": ".",
+          "start": 48,
+          "end": 49
+        }
+      ],
+      "focus_lexeme_ids": [
+        "chair.single-person-seat-with-back.n",
+        "mouse.computer-input.n",
+        "workstation.computer-setup.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module03.05",
+      "text": "Could you check the projector and projection screen?",
+      "meaning": "Ask someone to check presentation equipment.",
+      "context": "Preparing a training presentation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "projector",
+          "start": 20,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "projection",
+          "start": 34,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "screen",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "?",
+          "start": 51,
+          "end": 52
+        }
+      ],
+      "focus_lexeme_ids": [
+        "projector.display-device.n",
+        "projection-screen.surface-for-displaying-projected-images.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module03.06",
+      "text": "Your name badge is at the reception desk.",
+      "meaning": "Explain where an identifying badge is available.",
+      "context": "Welcoming a new participant.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Your",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "name",
+          "start": 5,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "badge",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 16,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "at",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 6,
+          "text": "reception",
+          "start": 26,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "desk",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": ".",
+          "start": 40,
+          "end": 41
+        }
+      ],
+      "focus_lexeme_ids": [
+        "name-badge.badge-displaying-persons-name.n",
+        "reception-desk.visitor-welcome-workstation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module03.07",
+      "text": "The interview room is beside the waiting area.",
+      "meaning": "Locate a conversation room for a visitor.",
+      "context": "Guiding a candidate before an interview.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "interview",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "room",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "beside",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "waiting",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "area",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ".",
+          "start": 45,
+          "end": 46
+        }
+      ],
+      "focus_lexeme_ids": [
+        "interview-room.room-for-interview-conversations.n",
+        "waiting-area.space-for-people-awaiting-service-or-appointment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module03.08",
+      "text": "Please check the appointment book before arranging the conference call.",
+      "meaning": "Ask a colleague to check recorded appointments.",
+      "context": "Coordinating a group audio discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "appointment",
+          "start": 17,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "book",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "arranging",
+          "start": 41,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "conference",
+          "start": 55,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "call",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "appointment-book.book-used-to-record-arranged-meetings.n",
+        "conference-call.audio-call-involving-several-participants.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module03.09",
+      "text": "The floor plan shows the accessible entrance and training room.",
+      "meaning": "Refer someone to building access information.",
+      "context": "Explaining the venue information supplied.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "floor",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "plan",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "shows",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "accessible",
+          "start": 25,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "entrance",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "training",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "room",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 62,
+          "end": 63
+        }
+      ],
+      "focus_lexeme_ids": [
+        "floor-plan.drawing-showing-arrangement-of-spaces-on-building-level.n",
+        "accessible-entrance.entrance-designed-to-support-people-with-varied-access-needs.n",
+        "training-room.room-for-organized-learning-activities.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module03.10",
+      "text": "The privacy screen separates the meeting table from the reception area.",
+      "meaning": "Describe the arrangement of a conversation space.",
+      "context": "Checking a visitor meeting location.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "privacy",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "screen",
+          "start": 12,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "separates",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "meeting",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "table",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "from",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "reception",
+          "start": 56,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "area",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "privacy-screen.physical-divider-limiting-visibility-between-spaces.n",
+        "meeting-table.table-around-which-people-meet.n",
+        "reception-area.space-for-welcoming-and-directing-visitors.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

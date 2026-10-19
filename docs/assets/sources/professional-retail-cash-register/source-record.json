@@ -1,0 +1,223 @@
+{
+  "recorded_at": "2026-10-16T11:32:26.487619+00:00",
+  "status": "acquired_for_scratch_source_inspection_only",
+  "sense_id": "cash-register.sales-device.n",
+  "source": "https://tinytreats.itch.io/bakery-interior",
+  "creator": "Isa Lousberg",
+  "publisher": "Tiny Treats",
+  "version": "Bakery Interior 1.1 FREE; archive license dated 2025-10-28",
+  "license": "CC0 1.0",
+  "license_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "license_basis": "Official source page and original archive License.txt explicitly permit personal, educational and commercial projects; credit is optional.",
+  "acquisition": {
+    "method": "Official itch.io page: Download Now, No thanks just take me to the downloads, Free v1.1 Download",
+    "login": false,
+    "payment": false,
+    "archive_original_download": "C:/Users/yaohuiwang/Downloads/Tiny_Treats_Bakery_Interior_1.1_FREE.zip",
+    "archive_path": "source/Tiny_Treats_Bakery_Interior_1.1_FREE.zip",
+    "archive_bytes": 7734063,
+    "archive_sha256": "1754373c399dd9b7eb074cc12367ea8f31ffc2cf7d1a9f8027b9661a0aafb562"
+  },
+  "source_preview": {
+    "url": "https://img.itch.zone/aW1hZ2UvMzYyOTI0MC8yMTYwMTA0Ni5wbmc=/original/dZZBdw.png",
+    "inspection": "Full-size official lineup preview inspected through the Edge source-page lightbox. Bottom-right standalone lavender register visibly has a raised physical keypad, dark display face, integrated drawer base with handle, and secondary receipt. Model suitability at actual WordCard scale remains untested.",
+    "reused_as_production_art": false
+  },
+  "files": [
+    {
+      "archive_path": "Tiny_Treats_Bakery_Interior_1.1_FREE/License.txt",
+      "path": "source/original/License.txt",
+      "bytes": 907,
+      "sha256": "af97867b174afc18500d5c79c3d49b9e8d97e3aefe10ca748cdfa0cadaa0121a"
+    },
+    {
+      "archive_path": "Tiny_Treats_Bakery_Interior_1.1_FREE/overview.png",
+      "path": "source/original/overview.png",
+      "bytes": 829765,
+      "sha256": "347f10426c787e2d2ada39ec7eb12a60756d072126096c43a17efe598506272f"
+    },
+    {
+      "archive_path": "Tiny_Treats_Bakery_Interior_1.1_FREE/overview_1.1.png",
+      "path": "source/original/overview_1.1.png",
+      "bytes": 919409,
+      "sha256": "32c4f2d00d2ce29537692c56992f1b7868f5cdd9f5e3339fef7be6bd7e510687"
+    },
+    {
+      "archive_path": "Tiny_Treats_Bakery_Interior_1.1_FREE/sample.png",
+      "path": "source/original/sample.png",
+      "bytes": 1268549,
+      "sha256": "2a2e2e18888658cde9c594ceb362d507157317455c658325ba0e1679584ee85c"
+    },
+    {
+      "archive_path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/cash_register.gltf",
+      "path": "source/original/Assets/gltf/cash_register.gltf",
+      "bytes": 6340,
+      "sha256": "43aed74637cf10432d996a18f03ed580f6cbc346b5f91d9592473370ed8ea1cc"
+    },
+    {
+      "archive_path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/cash_register.bin",
+      "path": "source/original/Assets/gltf/cash_register.bin",
+      "bytes": 75392,
+      "sha256": "137696f23abff07b2feb2342663174594a3cec7a6dadf691b7c365fcb6edca5e"
+    },
+    {
+      "archive_path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tiny_treats_texture_1.png",
+      "path": "source/original/Assets/gltf/tiny_treats_texture_1.png",
+      "bytes": 20974,
+      "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5"
+    }
+  ],
+  "model_structure": {
+    "generator": "Khronos glTF Blender I/O v3.4.50",
+    "scene": 0,
+    "scenes": [
+      {
+        "name": "Scene",
+        "nodes": [
+          1
+        ]
+      }
+    ],
+    "nodes": [
+      {
+        "mesh": 0,
+        "name": "cash_register_handle.001",
+        "translation": [
+          0.4448251724243164,
+          0.7095841765403748,
+          -0.195001482963562
+        ]
+      },
+      {
+        "children": [
+          0
+        ],
+        "mesh": 1,
+        "name": "cash_register"
+      }
+    ],
+    "meshes": [
+      {
+        "name": "cash_register_handle.001",
+        "primitives": [
+          {
+            "vertices": 65,
+            "triangles": 88,
+            "min": [
+              -0.03488994389772415,
+              -0.04728447645902634,
+              0.05958341062068939
+            ],
+            "max": [
+              0.06063511222600937,
+              0.047281477600336075,
+              0.3111708164215088
+            ],
+            "material_index": 0,
+            "attributes": {
+              "POSITION": 0,
+              "TEXCOORD_0": 1,
+              "TEXCOORD_1": 2,
+              "NORMAL": 3
+            }
+          }
+        ]
+      },
+      {
+        "name": "cash_register",
+        "primitives": [
+          {
+            "vertices": 1578,
+            "triangles": 1524,
+            "min": [
+              -0.44429928064346313,
+              0,
+              -0.38378435373306274
+            ],
+            "max": [
+              0.49239882826805115,
+              1.2046494483947754,
+              0.48564350605010986
+            ],
+            "material_index": 0,
+            "attributes": {
+              "POSITION": 5,
+              "TEXCOORD_0": 6,
+              "TEXCOORD_1": 7,
+              "NORMAL": 8
+            }
+          }
+        ]
+      }
+    ],
+    "materials": [
+      {
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularColorFactor": [
+              0.711407312601205,
+              0.711407312601205,
+              0.711407312601205
+            ]
+          },
+          "KHR_materials_ior": {
+            "ior": 1.4500000476837158
+          }
+        },
+        "name": "tiny_treats_1",
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0
+          },
+          "metallicFactor": 0,
+          "roughnessFactor": 0.5
+        }
+      }
+    ],
+    "images": [
+      {
+        "mimeType": "image/png",
+        "name": "tiny_treats_texture_1",
+        "uri": "tiny_treats_texture_1.png"
+      }
+    ],
+    "buffers": [
+      {
+        "byteLength": 75392,
+        "uri": "cash_register.bin"
+      }
+    ],
+    "textures": [
+      {
+        "sampler": 0,
+        "source": 0
+      }
+    ],
+    "samplers": [
+      {
+        "magFilter": 9729,
+        "minFilter": 9987
+      }
+    ],
+    "extensions_used": [
+      "KHR_materials_specular",
+      "KHR_materials_ior"
+    ]
+  },
+  "available_animations": [],
+  "skins": [],
+  "animation_evidence": "Original cash_register.gltf has no animations or skins arrays. The handle is an original child mesh; its transform is preserved. No animation has been invented or claimed.",
+  "totals": {
+    "meshes": 2,
+    "nodes": 2,
+    "triangles": 1612,
+    "vertices": 1643,
+    "archive_files": 719
+  },
+  "scope": [
+    "Only original source bytes retained; no geometry, material, texture or transform edits.",
+    "Source previews and acquired model are separate evidence states.",
+    "Native source inspection, term candidate, actual WordCard visual review, root acceptance, and production integration remain pending.",
+    "No production files, shared tests, readiness gates, or media decisions changed."
+  ]
+}

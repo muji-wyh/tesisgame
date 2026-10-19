@@ -1,0 +1,216 @@
+{
+  "schema": 1,
+  "status": "accepted_static_metadata_context_and_history_only_final_baseline_unbound",
+  "reviewer": "/root/fifth_review, independent of the frozen delivery-proposal author and historical language-review participants; AI technical review only",
+  "recorded_at": "2026-10-16T21:48:50.836Z",
+  "proposal_inventory_sha256": "0e806ef501bbd9e90b1a026857292f13c40e96a5a53906a2ec476800f8b71db9",
+  "proposal_raw_sha256": "b72ae6d5f52531e828c5ef819cc4ae34e6a940010a6bebf58d502968d04d6067",
+  "frozen_language_review_raw_sha256": "92c5b326565f95d9dacb8c11f8ca6684b5c39200b4ebcae57f3108a3c7a720b1",
+  "delivery_metadata_technical_acceptance": true,
+  "new_language_acceptance": false,
+  "accepted_delivery_entries": [
+    {
+      "id": "broken.not-working.adj",
+      "before_entry_json_sha256": "f9e5f9250c482ef9388469ba1b739399cfda2962a641a66f7831623d7f8b9986",
+      "accepted_projection_sha256": "f9e5f9250c482ef9388469ba1b739399cfda2962a641a66f7831623d7f8b9986",
+      "accepted_delivery_entry_json_sha256": "b35475c90f7be4d2b0e8f49de0eae0cd1164bce6cecff89a48c50f7450bcfe89",
+      "accepted_note_sha256": "233a6a16bd7fa1b15f26608974da1fa52ed94e812ecb013659a430a23567acf4",
+      "changed_fields": [
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-broken",
+        "foundation02-language-fifth10-collins-broken"
+      ]
+    },
+    {
+      "id": "urgent.needing-prompt-attention.adj",
+      "before_entry_json_sha256": "224451d9af880d4f070afd9a2ddec80b781f9d7f44ad0848bbcd43c778e5df5c",
+      "accepted_projection_sha256": "ec872df8144d94192858a9b6a5fe2e2421f9cefafa6d1615305c153080b1404d",
+      "accepted_delivery_entry_json_sha256": "ee1f4ce537363f3cce4826e6e486e6430e9568a6f562b15769f26666f63a52b2",
+      "accepted_note_sha256": "4055f3cb49bef8f66774539cb56d24f8e78f1dde40c46c1e34c9923a372c5ac5",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-urgent",
+        "foundation02-language-fifth10-collins-urgent"
+      ]
+    },
+    {
+      "id": "unclear.not-understandable.adj",
+      "before_entry_json_sha256": "60cbc8e036efc6d9e6594c5db7fc776d7938c9e8ca33c62ed6bc750896e8c128",
+      "accepted_projection_sha256": "550f07a4b6439b034b43001ab8a919ad618fc119e36ed79b6121641a684f1f2b",
+      "accepted_delivery_entry_json_sha256": "e316d214bba50b0c157e72bfb44a1cf2f9988ff0794241edbd89665526d67524",
+      "accepted_note_sha256": "ed650e03280864c7148114d0cbeb33ad393da49048de13d64babfb9943ca012c",
+      "changed_fields": [
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-unclear",
+        "foundation02-language-fifth10-collins-unclear"
+      ]
+    },
+    {
+      "id": "safe.free-from-unacceptable-danger.adj",
+      "before_entry_json_sha256": "d08c7c55e002c8245b036bf41865244ae72db6a68b1812d3b4f3ecdb8a414ea3",
+      "accepted_projection_sha256": "c248cbecf5c6549063e3943a50f1a3a7041453cd17c3454e8f0de8c4437b472d",
+      "accepted_delivery_entry_json_sha256": "3df1fece94d42e4e66c77b52a1a15d3c7c75bdbc58043d5c76e559e7407fdfd4",
+      "accepted_note_sha256": "e59acc584c80bb2b86e9dd231e4d848f3589cb6ed7b543c9fa723f46bb546a7c",
+      "changed_fields": [
+        "definition",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-safe",
+        "foundation02-language-fifth10-collins-safe"
+      ]
+    },
+    {
+      "id": "incident.workplace-event.n",
+      "before_entry_json_sha256": "6c63b7770526030dc8c2ae8035edbd1a9c5768647dd5d312fa399eaa1e116949",
+      "accepted_projection_sha256": "a6df62c7b0855666eeb8301ab266e1e651fef5927fa072220564d62dc558b37b",
+      "accepted_delivery_entry_json_sha256": "c9d18250d869e02efd50709c3dc9360115077fe61e417616d424f43283b9c52a",
+      "accepted_note_sha256": "bc4a1ac0a3f07906bfff373070ff4ce67171fc8f169ef1f785d09d66e46a8151",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-incident",
+        "foundation02-language-fifth10-collins-incident"
+      ]
+    },
+    {
+      "id": "concern.worrying-matter.n",
+      "before_entry_json_sha256": "a781ce74aadd87e2f50293006d46399ccb72281750715e28dddde6f6c34a012d",
+      "accepted_projection_sha256": "9d8994bc3f52e9e9d6fe4214ccd9a46da827c0803f332999ef77d9df7c193cb9",
+      "accepted_delivery_entry_json_sha256": "d74a9b95ca657ae186c0a5ff22c99fff9efdbcb0a2ae338562ea066db5492abc",
+      "accepted_note_sha256": "6678bcdd4d1551860966c558306e558c5a345735e16aa3399c5613a04120774a",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-concern",
+        "foundation02-language-fifth10-collins-concern"
+      ]
+    },
+    {
+      "id": "solution.problem-answer.n",
+      "before_entry_json_sha256": "c929e36a4083c63e63a875c24a25c8904b467e1a0030956e7bfb573457e4fb11",
+      "accepted_projection_sha256": "c929e36a4083c63e63a875c24a25c8904b467e1a0030956e7bfb573457e4fb11",
+      "accepted_delivery_entry_json_sha256": "0aaa7e9b1cf4bc45bdf35f2f9689a62d966604b50c2727d9f950c82fa9a9886c",
+      "accepted_note_sha256": "1514fa9cd73d82d7289b6d5383891fc53e46a7714a143687e5f626346ca83c5a",
+      "changed_fields": [
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-solution",
+        "foundation02-language-fifth10-collins-solution"
+      ]
+    },
+    {
+      "id": "procedure.agreed-method.n",
+      "before_entry_json_sha256": "3a0b38b04fb19c2a554c3725a3775719b656d9dacaa4bcc1f9114d0f6806e48f",
+      "accepted_projection_sha256": "a1dcaa663d61b2b1baa311cc07478d00b61b3a0dedcd3d3030405d43e215b2d4",
+      "accepted_delivery_entry_json_sha256": "6b898e70e6bd1cf2a767e731f77d13d5b905ad8138040cf161ba24d55e8bc4d7",
+      "accepted_note_sha256": "b6d03ff61b868008ab02ce7235c4b1aa4b9c198081711bfbba3f25b2dc902323",
+      "changed_fields": [
+        "example",
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-procedure",
+        "foundation02-language-fifth10-collins-procedure"
+      ]
+    }
+  ],
+  "source_count": 16,
+  "content_changes": {
+    "definition": 4,
+    "example": 1,
+    "difficulty": 5
+  },
+  "held_entry_ids": [
+    "collect.gather.v",
+    "notify.inform.v",
+    "postpone.delay-until-later.v",
+    "verify.establish-accuracy.v",
+    "unsafe.presenting-danger.adj",
+    "hazard.possible-harm.n"
+  ],
+  "context": {
+    "memberships": 200,
+    "containing_modules": 20,
+    "containing_expressions": 10,
+    "surface_expressions": 90,
+    "surface_term_pairs": 100,
+    "derivative_expressions": 81,
+    "focus_expressions": 4,
+    "related_identities": 46,
+    "inherited_expression_holds": 17,
+    "additional_exact_foundation02_expressions": 4,
+    "pending_domain_expressions": 2
+  },
+  "historical_donor_groups": 50,
+  "complete_historical_donor_rows": 50,
+  "observed_fourth10_source_prefix_rows": 949,
+  "inspected_input_count": 391,
+  "static_comparison_count": 2261,
+  "failed_static_comparisons": [],
+  "baseline": {
+    "bound": false,
+    "registry_before_sha256": null,
+    "registry_after_sha256": null,
+    "current_shared_test_binding": null,
+    "actual_fourth10_commit_receipt": null,
+    "shopping_bag_delivery_receipt": null,
+    "persisted_validation_receipt": null,
+    "global_reviewed_counts": null
+  },
+  "blockers_to_delivery": [
+    "Actual fourth10 delivery and persisted validation must be selected by root.",
+    "Actual shopping-bag delivery and persisted validation must complete before the fifth10 final freeze.",
+    "Capture and independently review fresh complete source/test/current-registry inputs; preserve the complete actual source prefix and append exactly these sixteen records without duplicates.",
+    "Rebase all eight full preimages, six whole-entry holds, complete contexts and donor rows without weakening historical hashes.",
+    "Fresh preparation, projected checks, independent output/native evidence, guarded commit and persisted checks remain required."
+  ],
+  "limitations": [
+    "This review reads frozen source evidence and does not claim a fresh web consultation or independent HTML-body download.",
+    "The earlier independent language review supplies the exact accepted three-field projections. This review accepts only their proposed metadata/reference/source packaging and static preservation.",
+    "Source consultation is not an image/audio license, acquisition, specialist review, expression approval, morphology acceptance, ready module or release acceptance.",
+    "Measured current files support bounded object comparisons only. No complete current registry or shared-test baseline is bound, and no actual reviewed/global-count change is claimed.",
+    "Historical failed accesses, wrong-page followups and held decisions remain immutable in the pinned evidence."
+  ],
+  "execution": {
+    "project_or_proposal_modules_imported": false,
+    "syntax_checks_run": false,
+    "project_tests_run": false,
+    "native_or_build_or_probe_dispatched": false,
+    "production_or_shared_tests_written": false,
+    "output_directory_only": "build/professional-english/foundation02-fifth10-proposal-review-r01"
+  }
+}

@@ -1,0 +1,1678 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.retail.module08.01",
+      "text": "Please report the spill of cleaning solution, wet floor, obstruction, and any injury to the supervisor.",
+      "meaning": "Report observed hazards and any physical harm.",
+      "context": "A worker raises a workplace concern through the assigned process.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "spill",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "of",
+          "start": 24,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "cleaning",
+          "start": 27,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "solution",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "wet",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "floor",
+          "start": 50,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "obstruction",
+          "start": 57,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "any",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "injury",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 85,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 18,
+          "text": "supervisor",
+          "start": 92,
+          "end": 102
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "spill.escaped-liquid-or-material.n",
+        "wet-floor.damp-walking-surface.n",
+        "obstruction.blocked-route-object.n",
+        "cleaning-solution.surface-cleaning-liquid.n",
+        "injury.physical-harm.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hse-retail",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module08.02",
+      "text": "Where are the emergency exit, assembly point, and first-aid kit?",
+      "meaning": "Ask where designated emergency resources are located.",
+      "context": "A new colleague asks for workplace orientation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Where",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "are",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "emergency",
+          "start": 14,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "exit",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "assembly",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "point",
+          "start": 39,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "first-aid",
+          "start": 50,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "kit",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "?",
+          "start": 63,
+          "end": 64
+        }
+      ],
+      "focus_lexeme_ids": [
+        "emergency-exit.emergency-way-out.n",
+        "assembly-point.designated-meeting-place.n",
+        "first-aid-kit.basic-care-supplies.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hse-retail",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module08.03",
+      "text": "The colleague reported a slip, a trip, and a near miss; suspicious activity was reported separately through the loss prevention process.",
+      "meaning": "Keep safety and loss-prevention reports distinct.",
+      "context": "A shift summary records separate concerns without inferring wrongdoing.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "colleague",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "reported",
+          "start": 14,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "slip",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "trip",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 11,
+          "text": "near",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 12,
+          "text": "miss",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 14,
+          "text": "suspicious",
+          "start": 56,
+          "end": 66
+        },
+        {
+          "index": 15,
+          "text": "activity",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "was",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 17,
+          "text": "reported",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 18,
+          "text": "separately",
+          "start": 89,
+          "end": 99
+        },
+        {
+          "index": 19,
+          "text": "through",
+          "start": 100,
+          "end": 107
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 21,
+          "text": "loss",
+          "start": 112,
+          "end": 116
+        },
+        {
+          "index": 22,
+          "text": "prevention",
+          "start": 117,
+          "end": 127
+        },
+        {
+          "index": 23,
+          "text": "process",
+          "start": 128,
+          "end": 135
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 135,
+          "end": 136
+        }
+      ],
+      "focus_lexeme_ids": [
+        "slip.loss-of-footing.n",
+        "trip.stumble-on-obstacle.n",
+        "near-miss.narrowly-avoided-incident.n",
+        "suspicious-activity.concerning-behavior.n",
+        "loss-prevention.stock-and-money-protection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hse-retail",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module08.04",
+      "text": "Please ask about the risk assessment and manual handling training before dealing with the heavy load.",
+      "meaning": "Request the applicable risk review and training.",
+      "context": "A worker seeks qualified guidance before a handling task.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "ask",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "about",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "risk",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "assessment",
+          "start": 26,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "manual",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "handling",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "training",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "dealing",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "with",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "heavy",
+          "start": 90,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "load",
+          "start": 96,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "manual-handling.human-load-movement.n",
+        "heavy-load.high-weight-load.n",
+        "risk-assessment.hazard-evaluation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hse-retail",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module08.05",
+      "text": "Who can confirm the weight limit, required clearance, suitable safety footwear, and whether a protective glove is needed?",
+      "meaning": "Ask the responsible person about protective arrangements.",
+      "context": "A worker seeks task-specific guidance without selecting equipment from a generic rule.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Who",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "confirm",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "weight",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "limit",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "required",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "clearance",
+          "start": 43,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "suitable",
+          "start": 54,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "safety",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "footwear",
+          "start": 70,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 78,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "whether",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "a",
+          "start": 92,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "protective",
+          "start": 94,
+          "end": 104
+        },
+        {
+          "index": 18,
+          "text": "glove",
+          "start": 105,
+          "end": 110
+        },
+        {
+          "index": 19,
+          "text": "is",
+          "start": 111,
+          "end": 113
+        },
+        {
+          "index": 20,
+          "text": "needed",
+          "start": 114,
+          "end": 120
+        },
+        {
+          "index": 21,
+          "text": "?",
+          "start": 120,
+          "end": 121
+        }
+      ],
+      "focus_lexeme_ids": [
+        "weight-limit.maximum-permitted-load.n",
+        "clearance.unobstructed-space.n",
+        "safety-footwear.protective-work-shoes.n",
+        "protective-glove.hand-protection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hse-retail",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module08.06",
+      "text": "The worker reported a leak, possible contamination, and a cold chain concern; please refer the temperature log for a food hygiene review.",
+      "meaning": "Refer recorded temperatures and food-handling concerns for review.",
+      "context": "A worker reports conditions without deciding that food is safe or unsafe.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "worker",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "reported",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "leak",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "possible",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "contamination",
+          "start": 37,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "cold",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "chain",
+          "start": 63,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "concern",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": ";",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "please",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "refer",
+          "start": 85,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "temperature",
+          "start": 95,
+          "end": 106
+        },
+        {
+          "index": 19,
+          "text": "log",
+          "start": 107,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": "for",
+          "start": 111,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": "a",
+          "start": 115,
+          "end": 116
+        },
+        {
+          "index": 22,
+          "text": "food",
+          "start": 117,
+          "end": 121
+        },
+        {
+          "index": 23,
+          "text": "hygiene",
+          "start": 122,
+          "end": 129
+        },
+        {
+          "index": 24,
+          "text": "review",
+          "start": 130,
+          "end": 136
+        },
+        {
+          "index": 25,
+          "text": ".",
+          "start": 136,
+          "end": 137
+        }
+      ],
+      "focus_lexeme_ids": [
+        "leak.unintended-escape.n",
+        "contamination.unwanted-substance-presence.n",
+        "cold-chain.temperature-controlled-distribution.n",
+        "temperature-log.temperature-record.n",
+        "food-hygiene.food-cleanliness-practices.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hse-retail",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module08.07",
+      "text": "Please check where the safety data sheet for the disinfectant is stored.",
+      "meaning": "Ask where to find the product's safety information.",
+      "context": "A colleague seeks the relevant documentation before work.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "where",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "safety",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "data",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "sheet",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "for",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "disinfectant",
+          "start": 49,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "is",
+          "start": 62,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "stored",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 71,
+          "end": 72
+        }
+      ],
+      "focus_lexeme_ids": [
+        "safety-data-sheet.chemical-hazard-document.n",
+        "disinfectant.microbe-reducing-product.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hse-retail",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module08.08",
+      "text": "The quality check raised a concern about the defect and tamper-evident seal described in the product recall notice.",
+      "meaning": "Connect an inspection concern with the relevant product notice.",
+      "context": "A worker refers the actual notice and observed condition for review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "quality",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "raised",
+          "start": 18,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "concern",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "about",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "defect",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "tamper-evident",
+          "start": 56,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "seal",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "described",
+          "start": 76,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": "in",
+          "start": 86,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "product",
+          "start": 93,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "recall",
+          "start": 101,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "notice",
+          "start": 108,
+          "end": 114
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "product-recall.product-withdrawal-request.n",
+        "defect.product-flaw.n",
+        "tamper-evident-seal.interference-indicating-closure.n",
+        "quality-check.standard-conformity-check.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hse-retail",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module08.09",
+      "text": "Please ask the supervisor about the age restriction and identity check, and separately report the suspected counterfeit note through the approved process.",
+      "meaning": "Refer eligibility questions and a separate payment concern.",
+      "context": "A worker follows the assigned reporting route without accusing the customer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "ask",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "supervisor",
+          "start": 15,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "about",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "age",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "restriction",
+          "start": 40,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "identity",
+          "start": 56,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "check",
+          "start": 65,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "separately",
+          "start": 76,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "report",
+          "start": 87,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "suspected",
+          "start": 98,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "counterfeit",
+          "start": 108,
+          "end": 119
+        },
+        {
+          "index": 18,
+          "text": "note",
+          "start": 120,
+          "end": 124
+        },
+        {
+          "index": 19,
+          "text": "through",
+          "start": 125,
+          "end": 132
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 133,
+          "end": 136
+        },
+        {
+          "index": 21,
+          "text": "approved",
+          "start": 137,
+          "end": 145
+        },
+        {
+          "index": 22,
+          "text": "process",
+          "start": 146,
+          "end": 153
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 153,
+          "end": 154
+        }
+      ],
+      "focus_lexeme_ids": [
+        "age-restriction.minimum-age-rule.n",
+        "identity-check.identity-verification.n",
+        "counterfeit-note.fake-banknote.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hse-retail",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module08.10",
+      "text": "The customer asked about consent, data privacy, and accessibility.",
+      "meaning": "Report topics requiring an informed response.",
+      "context": "A colleague passes a customer's questions to the relevant staff member.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "customer",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "asked",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "about",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "consent",
+          "start": 25,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "data",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "privacy",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "accessibility",
+          "start": 52,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 65,
+          "end": 66
+        }
+      ],
+      "focus_lexeme_ids": [
+        "consent.informed-agreement.n",
+        "data-privacy.personal-information-protection.n",
+        "accessibility.inclusive-usability.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hse-retail",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        }
+      ]
+    }
+  ]
+}

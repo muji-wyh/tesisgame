@@ -46,6 +46,12 @@ func configure(id: String) -> void:
 	queue_redraw()
 
 
+func _ready() -> void:
+	# Entering the tree enables scripted processing after construction. A
+	# preview can enter beneath an already-hidden parent with motion disabled.
+	_sync_activity()
+
+
 func set_reduced_motion(value: bool) -> void:
 	if reduced_motion == value:
 		return
@@ -283,22 +289,17 @@ func _draw_jelly_match(moving: bool) -> void:
 
 
 func _draw_jelly_words(moving: bool) -> void:
-	var approach: float = smoothstep(0.5, 1.15, _elapsed) if moving else 1.0
-	var fusion: float = smoothstep(1.05, 1.5, _elapsed) if moving else 1.0
+	# Cat is an atomic word: the demonstration must never teach ca + t as roots.
+	var arrival: float = smoothstep(0.5, 1.5, _elapsed) if moving else 1.0
 	var collect: float = smoothstep(2.55, 2.9, _elapsed) if moving else 0.0
 	var opening: float = smoothstep(3.25, 3.85, _elapsed) if moving else 1.0
-	var center := Vector2(56, 66)
-	if fusion < 1.0:
-		var gap: float = lerpf(26, 14, approach) * (1.0 - fusion)
-		var dimensions := Vector2(60 + approach * 5, 68 - approach * 4)
-		_gel(Rect2(center - Vector2(gap, 0) - dimensions * 0.5, dimensions), LILAC, "ca", null, 1.0 - fusion)
-		_gel(Rect2(center + Vector2(gap, 0) - dimensions * 0.5, dimensions), LILAC, "t", null, 1.0 - fusion)
-	if fusion > 0.0:
+	var center := Vector2(56, 66 - 12 * (1.0 - arrival))
+	if arrival > 0.0:
 		var recoil: float = _recoil(1.5) if moving else 0.0
 		var press: float = _hop(2.35, 0.35, 0.12) if moving else 0.0
 		var dimensions := Vector2(96, 90) * Vector2(1.0 + recoil * 0.12 + press, 1.0 - recoil * 0.10 - press)
-		_gel(Rect2(center - dimensions * 0.5 - Vector2(0, collect * 10), dimensions), LILAC, "", null, fusion * (1.0 - collect))
-		var content_alpha: float = smoothstep(0.35, 0.85, fusion)
+		_gel(Rect2(center - dimensions * 0.5 - Vector2(0, collect * 10), dimensions), LILAC, "", null, arrival * (1.0 - collect))
+		var content_alpha: float = arrival
 		var picture_side: float = lerpf(36, 44, collect)
 		var picture_center: Vector2 = center - Vector2(0, 11 + collect * 8)
 		_art(CAT, Rect2(picture_center - Vector2.ONE * picture_side * 0.5, Vector2.ONE * picture_side), content_alpha)

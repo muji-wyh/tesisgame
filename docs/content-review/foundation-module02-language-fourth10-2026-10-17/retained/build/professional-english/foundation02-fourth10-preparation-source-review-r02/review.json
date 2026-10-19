@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "status": "accepted_narrow_r02_source_for_root_scratch_dispatch_only",
+  "reviewer": "Codex recover_delivery independent source reviewer",
+  "recorded_at": "2026-10-16T21:16:56.962Z",
+  "repository_root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "author_inventory": {
+    "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/author-inventory.json",
+    "bytes": 3550,
+    "raw_sha256": "aece2564d2a9f0d6261ba57f8613fc862b5541f5fba01e80bb3f8c8651384ff6"
+  },
+  "inherited_unchanged_source_review": {
+    "path": "build/professional-english/foundation02-fourth10-preparation-source-review-r01/inventory.json",
+    "bytes": 1207,
+    "raw_sha256": "c97cd34b74ccb28d642832dfce3990406140db1b2b9767f946c3da36a8ded0f8"
+  },
+  "corrected_failure_diagnosis": {
+    "path": "build/professional-english/foundation02-fourth10-preparation-failure-review-r01/inventory.json",
+    "bytes": 1720,
+    "raw_sha256": "01936ecbb484020da8d50155d4955d42a4312834ec4ca8bae475c5a85fb9e92f"
+  },
+  "scope": "Full r01-to-final-r02 text diff, exact derivation records, source witness list, new authoring/freeze sources, metadata and frozen input expansion. Unchanged implementation remains bound to its original static review.",
+  "accepted_changes": [
+    "Explicit exact ten-patch-ID coverage before the morphology callback loop.",
+    "Exactly five immutable histories in their original order; sign counts [1,1,1,1,2], other nine counts [1,1,1,1,1].",
+    "Every one of 51 complete donor rows must equal the expected resource/json_sha256/before-entry object, and every donor entry must equal the reversed live entry.",
+    "Explicit live resource-origin equality; all previous morphology/media/domain and deliberate-drift checks retained.",
+    "prepare.cjs only expands source witnesses to include author derivation, supplement and freeze source; output isolation and callback mechanics are unchanged.",
+    "Frozen input set contains the exact original 803 paths plus 61 preserved failure/source/diagnosis records."
+  ],
+  "unchanged_projection_sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9",
+  "corrected_transform_sha256": "7886b3c0d03766f2f0a3f460e6e2cbf391384338fe747f8defa2ce308d1d4dc9",
+  "preparation_source_sha256": "612d9b98fd62b62492f7140a034ccb29a8c75fb07fc2937fa6b7787e35c98621",
+  "blockers_to_fresh_root_scratch_dispatch": [],
+  "remaining": [
+    "Root must bind current source/input bytes and run a fresh single scratch preparation under a new witness.",
+    "Actual successful output afterimages require independent review; proposed output semantics and native/production/persisted acceptance remain pending."
+  ],
+  "original_failure_and_source_review_preserved": true,
+  "new_language_approval": false,
+  "preparation_accepted": false,
+  "actual_outputs_reviewed": false,
+  "native_accepted": false,
+  "production_or_commit_accepted": false,
+  "candidate_code_imported": false,
+  "syntax_or_project_tests_dispatched": false,
+  "preparation_dispatched": false,
+  "native_dispatched": false,
+  "production_modified": false
+}

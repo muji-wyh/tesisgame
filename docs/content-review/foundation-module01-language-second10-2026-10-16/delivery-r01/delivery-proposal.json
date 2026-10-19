@@ -1,0 +1,3521 @@
+{
+  "schema": 1,
+  "status": "exact_ten_language_delivery_proposal_unbound",
+  "independent_review_raw_sha256": "849fb6af65055e74802af8ad24ade1740dc4a9e75f7cfce38d205d2e06911202",
+  "root_acceptance_raw_sha256": "18b4e6af0afafc1f156184f309030dad3cde38370923addeb43c82d64603b922",
+  "coordinator_variant_raw_sha256": "4bb9d2f31a6711f5d3a1c7f8fb4eff2b50f54fbc67cb4333d7ea266f711a2be2",
+  "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+  "patches": [
+    {
+      "id": "contractor.contracted-worker.n",
+      "before": {
+        "id": "contractor.contracted-worker.n",
+        "text": "contractor",
+        "display_text": "contractor",
+        "pos": "noun",
+        "definition": "A person or business engaged to carry out work under a contract.",
+        "example": "The contractor will repair the office lighting.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "contractor"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An outside contractor arriving with tools and a work order.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "contractor.contracted-worker.n.analysis.v1",
+          "lexeme_id": "contractor.contracted-worker.n",
+          "text": "contractor",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "contract",
+              "surface": "contract",
+              "canonical_id": "morph.contract"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-or",
+              "surface": "or",
+              "canonical_id": "affix.or.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "contractor",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "after": {
+        "id": "contractor.contracted-worker.n",
+        "text": "contractor",
+        "display_text": "contractor",
+        "pos": "noun",
+        "definition": "A person or business engaged to carry out work under a contract.",
+        "example": "The contractor will repair the office lighting.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "contractor"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An outside contractor arriving with tools and a work order.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "contractor.contracted-worker.n.analysis.v1",
+          "lexeme_id": "contractor.contracted-worker.n",
+          "text": "contractor",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "contract",
+              "surface": "contract",
+              "canonical_id": "morph.contract"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-or",
+              "surface": "or",
+              "canonical_id": "affix.or.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "contractor",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-second10-oxford-contractor",
+            "status": "verified",
+            "scope": "Selected ordinary contractor noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: not observed. Editorial difficulty basis: Independent A2 placement for this narrowly illustrated practical role: a concrete repair task and simple future sentence introduce who will do agreed work. No selected source CEFR was observed, and contract law is not part of this learning item. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary noun definition, original example and editorial difficulty have scoped root and independent AI language acceptance. Independent A2 placement for this narrowly illustrated practical role: a concrete repair task and simple future sentence introduce who will do agreed work. No selected source CEFR was observed, and contract law is not part of this learning item. Accepted forms and region remain unchanged. Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. Morphological classification, imagery and word audio remain pending under their separate gates. Existing reference scopes retain their historical consultation states; only the newly added bounded language references are verified. No whole expression, specialist procedure, authority, module or release approval is implied."
+      },
+      "before_sha256": "30c8999675e112be33556d6cd37156957d77b0a0cd583517a842ab21a8680c67",
+      "after_sha256": "98376f8f062c334f2af75ebfba2ad678f54327befe3b08849f5672f89e33708b",
+      "reviewed_candidate_entry_json_sha256": "4f6ec0efd0ca9b8f2ca9f1970ac6b567492a4809a28986b4d236d1437cd58653",
+      "independent_candidate_entry_json_sha256": "4f6ec0efd0ca9b8f2ca9f1970ac6b567492a4809a28986b4d236d1437cd58653",
+      "protected_fields_sha256": "0583a2d44bbadcbca5acb8c71b01b1b0c442a2ed61c78e108b0fa750fca10b55",
+      "changed_fields": [
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_record_ids": [
+        "foundation01-language-second10-oxford-contractor"
+      ],
+      "difficulty": {
+        "stored": "A2",
+        "author_candidate": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": null
+        },
+        "independent_editorial_basis": "Independent A2 placement for this narrowly illustrated practical role: a concrete repair task and simple future sentence introduce who will do agreed work. No selected source CEFR was observed, and contract law is not part of this learning item.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance.",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "spelling_variant": null
+    },
+    {
+      "id": "trainee.learner-worker.n",
+      "before": {
+        "id": "trainee.learner-worker.n",
+        "text": "trainee",
+        "display_text": "trainee",
+        "pos": "noun",
+        "definition": "A person learning the skills needed for a job.",
+        "example": "The trainee is working alongside an experienced colleague.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "trainee"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An experienced worker showing a trainee how a workplace task is organized.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "trainee.learner-worker.n.analysis.v1",
+          "lexeme_id": "trainee.learner-worker.n",
+          "text": "trainee",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "train",
+              "surface": "train",
+              "canonical_id": "morph.train"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ee",
+              "surface": "ee",
+              "canonical_id": "affix.ee.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "trainee",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "after": {
+        "id": "trainee.learner-worker.n",
+        "text": "trainee",
+        "display_text": "trainee",
+        "pos": "noun",
+        "definition": "A person who is being trained for a particular job.",
+        "example": "The trainee is working alongside an experienced colleague.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "trainee"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An experienced worker showing a trainee how a workplace task is organized.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "trainee.learner-worker.n.analysis.v1",
+          "lexeme_id": "trainee.learner-worker.n",
+          "text": "trainee",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "train",
+              "surface": "train",
+              "canonical_id": "morph.train"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ee",
+              "surface": "ee",
+              "canonical_id": "affix.ee.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "trainee",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-second10-oxford-trainee",
+            "status": "verified",
+            "scope": "Selected ordinary trainee noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: B2. Editorial difficulty basis: Accept B2 for the role-specific learning item, supported by the selected Oxford Education and Jobs B2 observations. This is editorial placement rather than certification of every example word. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary noun definition, original example and editorial difficulty have scoped root and independent AI language acceptance. Accept B2 for the role-specific learning item, supported by the selected Oxford Education and Jobs B2 observations. This is editorial placement rather than certification of every example word. Accepted forms and region remain unchanged. Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. Morphological classification, imagery and word audio remain pending under their separate gates. Existing reference scopes retain their historical consultation states; only the newly added bounded language references are verified. No whole expression, specialist procedure, authority, module or release approval is implied."
+      },
+      "before_sha256": "9c1fdb8b56d76a64b4ab5a95422ebb94175a6e0029523e369d83be3514a954ba",
+      "after_sha256": "996236d5a24135a0bbccf03ba89e007e7eac3a5f33de4f488f265a9286008dda",
+      "reviewed_candidate_entry_json_sha256": "90604b7f38911cb12f5608e9713d52333cd3d299cfa4bf4e3d0296bbfcf6cbad",
+      "independent_candidate_entry_json_sha256": "90604b7f38911cb12f5608e9713d52333cd3d299cfa4bf4e3d0296bbfcf6cbad",
+      "protected_fields_sha256": "b5f84fde9c046107339cc473623060a66d57c636e202ae473935255ec6e11ed4",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_record_ids": [
+        "foundation01-language-second10-oxford-trainee"
+      ],
+      "difficulty": {
+        "stored": "A2",
+        "author_candidate": "B2",
+        "reviewed_candidate": "B2",
+        "observed_selected_source_labels": {
+          "oxford": "B2"
+        },
+        "independent_editorial_basis": "Accept B2 for the role-specific learning item, supported by the selected Oxford Education and Jobs B2 observations. This is editorial placement rather than certification of every example word.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance.",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "spelling_variant": null
+    },
+    {
+      "id": "receptionist.front-desk-worker.n",
+      "before": {
+        "id": "receptionist.front-desk-worker.n",
+        "text": "receptionist",
+        "display_text": "receptionist",
+        "pos": "noun",
+        "definition": "A person who welcomes visitors and handles inquiries at a front desk.",
+        "example": "The receptionist called the meeting organizer.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "receptionist"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A receptionist welcoming a visitor at a front desk.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "receptionist.front-desk-worker.n.analysis.v1",
+          "lexeme_id": "receptionist.front-desk-worker.n",
+          "text": "receptionist",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "reception",
+              "surface": "reception",
+              "canonical_id": "morph.reception"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ist",
+              "surface": "ist",
+              "canonical_id": "affix.ist.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "receptionist",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "after": {
+        "id": "receptionist.front-desk-worker.n",
+        "text": "receptionist",
+        "display_text": "receptionist",
+        "pos": "noun",
+        "definition": "A person who welcomes visitors and handles inquiries at a front desk.",
+        "example": "The receptionist called the meeting organizer.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "receptionist"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A receptionist welcoming a visitor at a front desk.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "receptionist.front-desk-worker.n.analysis.v1",
+          "lexeme_id": "receptionist.front-desk-worker.n",
+          "text": "receptionist",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "reception",
+              "surface": "reception",
+              "canonical_id": "morph.reception"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ist",
+              "surface": "ist",
+              "canonical_id": "affix.ist.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "receptionist",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-second10-oxford-receptionist",
+            "status": "verified",
+            "scope": "Selected ordinary receptionist noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: A2. Editorial difficulty basis: Accept A2 for the familiar reception role, supported by the selected Oxford Holidays and Jobs A2 labels and a short concrete example. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary noun definition, original example and editorial difficulty have scoped root and independent AI language acceptance. Accept A2 for the familiar reception role, supported by the selected Oxford Holidays and Jobs A2 labels and a short concrete example. Accepted forms and region remain unchanged. Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. Morphological classification, imagery and word audio remain pending under their separate gates. Existing reference scopes retain their historical consultation states; only the newly added bounded language references are verified. No whole expression, specialist procedure, authority, module or release approval is implied."
+      },
+      "before_sha256": "72bc47f042e7aa3c8edadcd1f4ecbfcd84f993ebde8b1a62c3a66c893dad9de9",
+      "after_sha256": "beef904577347a72abde91038374af1589415336be553f855c514431d4fe3618",
+      "reviewed_candidate_entry_json_sha256": "1eb80dd9c38f3e64f69562011adef87b1718dfff52371b7084332ec1deff3cb8",
+      "independent_candidate_entry_json_sha256": "1eb80dd9c38f3e64f69562011adef87b1718dfff52371b7084332ec1deff3cb8",
+      "protected_fields_sha256": "76cd23489bef08a04771a8def97240f12d39c0124e10d6baac65b8a32e940a87",
+      "changed_fields": [
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_record_ids": [
+        "foundation01-language-second10-oxford-receptionist"
+      ],
+      "difficulty": {
+        "stored": "A2",
+        "author_candidate": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": "A2"
+        },
+        "independent_editorial_basis": "Accept A2 for the familiar reception role, supported by the selected Oxford Holidays and Jobs A2 labels and a short concrete example.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance.",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "spelling_variant": null
+    },
+    {
+      "id": "coordinator.organizer.n",
+      "before": {
+        "id": "coordinator.organizer.n",
+        "text": "coordinator",
+        "display_text": "coordinator",
+        "pos": "noun",
+        "definition": "A person who organizes activities so that people and tasks work together.",
+        "example": "The coordinator confirmed the training times.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "coordinator"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A coordinator aligning several teams on one shared schedule.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "coordinator.organizer.n.analysis.v1",
+          "lexeme_id": "coordinator.organizer.n",
+          "text": "coordinator",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "coordinate",
+              "surface": "coordinate",
+              "canonical_id": "morph.coordinate"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-or",
+              "surface": "or",
+              "canonical_id": "affix.or.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "coordinator",
+              "rule": "drop_final_e_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "after": {
+        "id": "coordinator.organizer.n",
+        "text": "coordinator",
+        "display_text": "coordinator",
+        "pos": "noun",
+        "definition": "A person who organizes activities so that people and tasks work together.",
+        "example": "The coordinator confirmed the training times.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "coordinator",
+          "co-ordinator"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A coordinator aligning several teams on one shared schedule.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "coordinator.organizer.n.analysis.v1",
+          "lexeme_id": "coordinator.organizer.n",
+          "text": "coordinator",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "coordinate",
+              "surface": "coordinate",
+              "canonical_id": "morph.coordinate"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-or",
+              "surface": "or",
+              "canonical_id": "affix.or.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "coordinator",
+              "rule": "drop_final_e_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-second10-oxford-coordinator",
+            "status": "verified",
+            "scope": "Selected ordinary coordinator noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: not observed. Editorial difficulty basis: Resolve the level question at B1 by independent editorial judgment: coordinating several people or tasks is a less concrete relationship than a front-desk role, but the training-times example makes it accessible. No Oxford CEFR certification is claimed. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary noun definition, original example and editorial difficulty have scoped root and independent AI language acceptance. Resolve the level question at B1 by independent editorial judgment: coordinating several people or tasks is a less concrete relationship than a front-desk role, but the training-times example makes it accessible. No Oxford CEFR certification is claimed. The previously held British co-ordinator spelling is now accepted through the separately root-reviewed variant; coordinator remains the canonical display, audio and morphology surface. General region is retained. Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. Morphological classification, imagery and word audio remain pending under their separate gates. Existing reference scopes retain their historical consultation states; only the newly added bounded language references are verified. No whole expression, specialist procedure, authority, module or release approval is implied."
+      },
+      "before_sha256": "10f79aed11be722ea98f2ee2153386ea1ea46df695559a990e3d69d216f3916b",
+      "after_sha256": "ce05d5d6fd09666a2c6d29a5f6d2f9cb9fd5cfebc5eaee08bd7dc5777c7a11bd",
+      "reviewed_candidate_entry_json_sha256": "4418216d47c4ddf15bd3b253d8951ff1fabf3ee0e491c6a3d9fe3cb66b0e1047",
+      "independent_candidate_entry_json_sha256": "ce3e79bd65b8ee12bb0c8a11e2b5878af4776431a6177951c6a178a513e32c40",
+      "protected_fields_sha256": "e1ccc3e0194b34d4c9254e7c4c90fd939be264a6c5164924faef8b57dc919b56",
+      "changed_fields": [
+        "accepted_forms",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_record_ids": [
+        "foundation01-language-second10-oxford-coordinator"
+      ],
+      "difficulty": {
+        "stored": "B1",
+        "author_candidate": "B1",
+        "reviewed_candidate": "B1",
+        "observed_selected_source_labels": {
+          "oxford": null
+        },
+        "independent_editorial_basis": "Resolve the level question at B1 by independent editorial judgment: coordinating several people or tasks is a less concrete relationship than a front-desk role, but the training-times example makes it accessible. No Oxford CEFR certification is claimed.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance.",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "spelling_variant": {
+        "proposal_raw_sha256": "4bb9d2f31a6711f5d3a1c7f8fb4eff2b50f54fbc67cb4333d7ea266f711a2be2",
+        "candidate_entry_json_sha256": "4418216d47c4ddf15bd3b253d8951ff1fabf3ee0e491c6a3d9fe3cb66b0e1047",
+        "before": [
+          "coordinator"
+        ],
+        "after": [
+          "coordinator",
+          "co-ordinator"
+        ],
+        "region_label": "British English",
+        "canonical_surface_preserved": true
+      }
+    },
+    {
+      "id": "contact.helpful-person.n",
+      "before": {
+        "id": "contact.helpful-person.n",
+        "text": "contact",
+        "display_text": "contact",
+        "pos": "noun",
+        "definition": "A person who can provide information, help, or a connection to an organization.",
+        "example": "Our main contact is the project coordinator.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "contact"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A named contact person linked to a simple business contact card.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "contact.helpful-person.n.analysis.v1",
+          "lexeme_id": "contact.helpful-person.n",
+          "text": "contact",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "contact",
+              "surface": "contact",
+              "canonical_id": "morph.contact"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "after": {
+        "id": "contact.helpful-person.n",
+        "text": "contact",
+        "display_text": "contact",
+        "pos": "noun",
+        "definition": "A person who can provide information, help, or a connection to an organization.",
+        "example": "Our main contact is the project coordinator.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "contact"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A named contact person linked to a simple business contact card.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "contact.helpful-person.n.analysis.v1",
+          "lexeme_id": "contact.helpful-person.n",
+          "text": "contact",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "contact",
+              "surface": "contact",
+              "canonical_id": "morph.contact"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-second10-oxford-contact",
+            "status": "verified",
+            "scope": "Selected ordinary contact noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: not observed. Editorial difficulty basis: Choose editorial B2 for this professional-relationship sense: learners must distinguish a useful person from the very common communication verb, information and physical-contact meanings. The explicit-person example supports this bounded upper course placement. Collins remains B1+ literally; B2 is a curriculum decision, not a claimed conversion of B1+ or a new source label. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          },
+          {
+            "source_id": "foundation01-language-second10-collins-contact",
+            "status": "verified",
+            "scope": "Selected ordinary contact noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: B1+. Editorial difficulty basis: Choose editorial B2 for this professional-relationship sense: learners must distinguish a useful person from the very common communication verb, information and physical-contact meanings. The explicit-person example supports this bounded upper course placement. Collins remains B1+ literally; B2 is a curriculum decision, not a claimed conversion of B1+ or a new source label. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary noun definition, original example and editorial difficulty have scoped root and independent AI language acceptance. Choose editorial B2 for this professional-relationship sense: learners must distinguish a useful person from the very common communication verb, information and physical-contact meanings. The explicit-person example supports this bounded upper course placement. Collins remains B1+ literally; B2 is a curriculum decision, not a claimed conversion of B1+ or a new source label. Accepted forms and region remain unchanged. Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. Morphological classification, imagery and word audio remain pending under their separate gates. Existing reference scopes retain their historical consultation states; only the newly added bounded language references are verified. No whole expression, specialist procedure, authority, module or release approval is implied."
+      },
+      "before_sha256": "42c97a5f266c42358c413be48c7aa9adf6b0bdd4c3fd80b22107a6b97f8ad480",
+      "after_sha256": "8008c043909f2fb047180819570a8b24f482c23170ed69e5374fd846a9b69216",
+      "reviewed_candidate_entry_json_sha256": "e67647e2e5aa5eb1cdee63d2ebe32c566e5829a42dd0129569700d3add77e41e",
+      "independent_candidate_entry_json_sha256": "e67647e2e5aa5eb1cdee63d2ebe32c566e5829a42dd0129569700d3add77e41e",
+      "protected_fields_sha256": "8bc6f4b0c24a61a62751fd9955eefd22ccd1bcfef53494017155001b408cf15e",
+      "changed_fields": [
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_record_ids": [
+        "foundation01-language-second10-oxford-contact",
+        "foundation01-language-second10-collins-contact"
+      ],
+      "difficulty": {
+        "stored": "A2",
+        "author_candidate": "A2",
+        "reviewed_candidate": "B2",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": "B1+"
+        },
+        "independent_editorial_basis": "Choose editorial B2 for this professional-relationship sense: learners must distinguish a useful person from the very common communication verb, information and physical-contact meanings. The explicit-person example supports this bounded upper course placement. Collins remains B1+ literally; B2 is a curriculum decision, not a claimed conversion of B1+ or a new source label.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance.",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "spelling_variant": null
+    },
+    {
+      "id": "supplier.goods-provider.n",
+      "before": {
+        "id": "supplier.goods-provider.n",
+        "text": "supplier",
+        "display_text": "supplier",
+        "pos": "noun",
+        "definition": "A person or organization that provides goods or materials to another organization.",
+        "example": "The supplier confirmed that the order had been sent.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "supplier"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A friendly representative of a fictional business that provides ordered goods, beside an original product order and supplied items. Establish the commercial provider relationship; a courier merely carrying a parcel is insufficient.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "supplier.goods-provider.n.analysis.v1",
+          "lexeme_id": "supplier.goods-provider.n",
+          "text": "supplier",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "supply",
+              "surface": "supply",
+              "canonical_id": "morph.supply"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-er",
+              "surface": "er",
+              "canonical_id": "affix.er.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "supplier",
+              "rule": "replace_final_y_with_i_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "after": {
+        "id": "supplier.goods-provider.n",
+        "text": "supplier",
+        "display_text": "supplier",
+        "pos": "noun",
+        "definition": "A person or organization that provides goods or materials.",
+        "example": "The supplier confirmed that the order had been sent.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "supplier"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A friendly representative of a fictional business that provides ordered goods, beside an original product order and supplied items. Establish the commercial provider relationship; a courier merely carrying a parcel is insufficient.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "supplier.goods-provider.n.analysis.v1",
+          "lexeme_id": "supplier.goods-provider.n",
+          "text": "supplier",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "supply",
+              "surface": "supply",
+              "canonical_id": "morph.supply"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-er",
+              "surface": "er",
+              "canonical_id": "affix.er.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "supplier",
+              "rule": "replace_final_y_with_i_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-second10-oxford-supplier",
+            "status": "verified",
+            "scope": "Selected ordinary supplier noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: not observed. Editorial difficulty basis: Independent A2 placement for the concrete goods-provider role in routine ordering. No selected source CEFR was observed. The example uses a richer reported past-passive construction, but the editorial field places the selected noun, not a formal CEFR rating of the entire sentence. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary noun definition, original example and editorial difficulty have scoped root and independent AI language acceptance. Independent A2 placement for the concrete goods-provider role in routine ordering. No selected source CEFR was observed. The example uses a richer reported past-passive construction, but the editorial field places the selected noun, not a formal CEFR rating of the entire sentence. Accepted forms and region remain unchanged. Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. Morphological classification, imagery and word audio remain pending under their separate gates. Existing reference scopes retain their historical consultation states; only the newly added bounded language references are verified. No whole expression, specialist procedure, authority, module or release approval is implied."
+      },
+      "before_sha256": "3e0afde5f495b0563c53af35ecd7c38ab4640af5f821e9f9cf551cc0a89099a4",
+      "after_sha256": "469805c5dc93219e42e7e57b8ac9ecaf4e759ca9752701242acaf65fb3ef292a",
+      "reviewed_candidate_entry_json_sha256": "ae508d67fa10c89e4f2ea38ecb809e6e950353dc0e52ffe2dc44933cb32f9977",
+      "independent_candidate_entry_json_sha256": "ae508d67fa10c89e4f2ea38ecb809e6e950353dc0e52ffe2dc44933cb32f9977",
+      "protected_fields_sha256": "5a23c3e15ac85544687dd70416fcf618e6b6b3ff5df147efbf7895c1dbe53504",
+      "changed_fields": [
+        "definition",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_record_ids": [
+        "foundation01-language-second10-oxford-supplier"
+      ],
+      "difficulty": {
+        "stored": "A2",
+        "author_candidate": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": null
+        },
+        "independent_editorial_basis": "Independent A2 placement for the concrete goods-provider role in routine ordering. No selected source CEFR was observed. The example uses a richer reported past-passive construction, but the editorial field places the selected noun, not a formal CEFR rating of the entire sentence.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance.",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "spelling_variant": null
+    },
+    {
+      "id": "schedule.time-plan.n",
+      "before": {
+        "id": "schedule.time-plan.n",
+        "text": "schedule",
+        "display_text": "schedule",
+        "pos": "noun",
+        "definition": "A plan showing when activities are expected to happen.",
+        "example": "The schedule includes a short team meeting.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "schedule"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A work timetable showing several activities in time slots.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "schedule.time-plan.n.analysis.v1",
+          "lexeme_id": "schedule.time-plan.n",
+          "text": "schedule",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "schedule",
+              "surface": "schedule",
+              "canonical_id": "morph.schedule"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "after": {
+        "id": "schedule.time-plan.n",
+        "text": "schedule",
+        "display_text": "schedule",
+        "pos": "noun",
+        "definition": "A plan showing when activities are expected to happen.",
+        "example": "The schedule includes a short team meeting.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "schedule"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A work timetable showing several activities in time slots.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "schedule.time-plan.n.analysis.v1",
+          "lexeme_id": "schedule.time-plan.n",
+          "text": "schedule",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "schedule",
+              "surface": "schedule",
+              "canonical_id": "morph.schedule"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-second10-oxford-schedule",
+            "status": "verified",
+            "scope": "Selected ordinary schedule noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: A2. Editorial difficulty basis: Accept A2, supported by Oxford selected Working life A2 and the ordinary activity-and-time meaning. Preserve general region because the selected sense has no North-American-only restriction. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary noun definition, original example and editorial difficulty have scoped root and independent AI language acceptance. Accept A2, supported by Oxford selected Working life A2 and the ordinary activity-and-time meaning. Preserve general region because the selected sense has no North-American-only restriction. Accepted forms and region remain unchanged. Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. Morphological classification, imagery and word audio remain pending under their separate gates. Existing reference scopes retain their historical consultation states; only the newly added bounded language references are verified. No whole expression, specialist procedure, authority, module or release approval is implied."
+      },
+      "before_sha256": "e29cf45b0ad062d40b43b174977c3c639140b9ba6fd9b6465a15d2261924ece6",
+      "after_sha256": "f31d76fb9e60fc033b74c421590d7bca11e7aa0a2406673d444c4130e8866f40",
+      "reviewed_candidate_entry_json_sha256": "fb97ddd2f62349a22376bc6e48cb437e8fe6da6d2c395645843435d479a59f9b",
+      "independent_candidate_entry_json_sha256": "fb97ddd2f62349a22376bc6e48cb437e8fe6da6d2c395645843435d479a59f9b",
+      "protected_fields_sha256": "974a6ef820675971477d0e5fd1d56d68dc8edeb83829f7f03af8f18b0a2eb51a",
+      "changed_fields": [
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_record_ids": [
+        "foundation01-language-second10-oxford-schedule"
+      ],
+      "difficulty": {
+        "stored": "A2",
+        "author_candidate": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": "A2"
+        },
+        "independent_editorial_basis": "Accept A2, supported by Oxford selected Working life A2 and the ordinary activity-and-time meaning. Preserve general region because the selected sense has no North-American-only restriction.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance.",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "spelling_variant": null
+    },
+    {
+      "id": "shift.work-period.n",
+      "before": {
+        "id": "shift.work-period.n",
+        "text": "shift",
+        "display_text": "shift",
+        "pos": "noun",
+        "definition": "A scheduled period during which someone is at work.",
+        "example": "My shift starts at seven tomorrow morning.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "shift"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A staff schedule highlighting one person's work period.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "shift.work-period.n.analysis.v1",
+          "lexeme_id": "shift.work-period.n",
+          "text": "shift",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "shift",
+              "surface": "shift",
+              "canonical_id": "morph.shift"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "after": {
+        "id": "shift.work-period.n",
+        "text": "shift",
+        "display_text": "shift",
+        "pos": "noun",
+        "definition": "A period of time when a person or group is scheduled to work.",
+        "example": "My shift starts at seven tomorrow morning.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "shift"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A staff schedule highlighting one person's work period.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "shift.work-period.n.analysis.v1",
+          "lexeme_id": "shift.work-period.n",
+          "text": "shift",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "shift",
+              "surface": "shift",
+              "canonical_id": "morph.shift"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-second10-oxford-shift",
+            "status": "verified",
+            "scope": "Selected ordinary shift noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: B1. Editorial difficulty basis: Choose editorial B1 for the bounded work-period noun with a simple start-time example. Oxford directly attaches B1 to this period, while Collins B2 covers the period and worker group together; retain that disagreement. The selected teaching task omits the group metonym and figurative changes, which makes B1 defensible. This is not averaging source labels. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          },
+          {
+            "source_id": "foundation01-language-second10-merriam-shift",
+            "status": "verified",
+            "scope": "Selected ordinary shift noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: not observed. Editorial difficulty basis: Choose editorial B1 for the bounded work-period noun with a simple start-time example. Oxford directly attaches B1 to this period, while Collins B2 covers the period and worker group together; retain that disagreement. The selected teaching task omits the group metonym and figurative changes, which makes B1 defensible. This is not averaging source labels. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          },
+          {
+            "source_id": "foundation01-language-second10-collins-shift",
+            "status": "verified",
+            "scope": "Selected ordinary shift noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: B2. Editorial difficulty basis: Choose editorial B1 for the bounded work-period noun with a simple start-time example. Oxford directly attaches B1 to this period, while Collins B2 covers the period and worker group together; retain that disagreement. The selected teaching task omits the group metonym and figurative changes, which makes B1 defensible. This is not averaging source labels. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary noun definition, original example and editorial difficulty have scoped root and independent AI language acceptance. Choose editorial B1 for the bounded work-period noun with a simple start-time example. Oxford directly attaches B1 to this period, while Collins B2 covers the period and worker group together; retain that disagreement. The selected teaching task omits the group metonym and figurative changes, which makes B1 defensible. This is not averaging source labels. Accepted forms and region remain unchanged. Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. Morphological classification, imagery and word audio remain pending under their separate gates. Existing reference scopes retain their historical consultation states; only the newly added bounded language references are verified. No whole expression, specialist procedure, authority, module or release approval is implied."
+      },
+      "before_sha256": "0336c927124ee0918da2142c174fa22b31335529f281112db3f48d85472f5430",
+      "after_sha256": "2e478e75cdfa92009e86fdb9b344e4d29f51319621423223d107845263849840",
+      "reviewed_candidate_entry_json_sha256": "5fbd3e81f008cf8427a80df6bba64fbde588bfc247cdf257c063a03a5a9c7bc7",
+      "independent_candidate_entry_json_sha256": "5fbd3e81f008cf8427a80df6bba64fbde588bfc247cdf257c063a03a5a9c7bc7",
+      "protected_fields_sha256": "a1b5a7badba3f8bd752b8214a118cbcd47261c9acf33b80a6fe0504e771cfe4f",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_record_ids": [
+        "foundation01-language-second10-oxford-shift",
+        "foundation01-language-second10-merriam-shift",
+        "foundation01-language-second10-collins-shift"
+      ],
+      "difficulty": {
+        "stored": "A2",
+        "author_candidate": "A2",
+        "reviewed_candidate": "B1",
+        "observed_selected_source_labels": {
+          "oxford": "B1",
+          "merriam": null,
+          "collins": "B2"
+        },
+        "independent_editorial_basis": "Choose editorial B1 for the bounded work-period noun with a simple start-time example. Oxford directly attaches B1 to this period, while Collins B2 covers the period and worker group together; retain that disagreement. The selected teaching task omits the group metonym and figurative changes, which makes B1 defensible. This is not averaging source labels.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance.",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "spelling_variant": null
+    },
+    {
+      "id": "appointment.arranged-meeting.n",
+      "before": {
+        "id": "appointment.arranged-meeting.n",
+        "text": "appointment",
+        "display_text": "appointment",
+        "pos": "noun",
+        "definition": "An arrangement to meet someone or receive a service at a particular time.",
+        "example": "The appointment is booked for Thursday afternoon.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "appointment"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A calendar with one meeting time confirmed for two people.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "appointment.arranged-meeting.n.analysis.v1",
+          "lexeme_id": "appointment.arranged-meeting.n",
+          "text": "appointment",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "appoint",
+              "surface": "appoint",
+              "canonical_id": "morph.appoint"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ment",
+              "surface": "ment",
+              "canonical_id": "affix.ment.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "appointment",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "after": {
+        "id": "appointment.arranged-meeting.n",
+        "text": "appointment",
+        "display_text": "appointment",
+        "pos": "noun",
+        "definition": "An arrangement to meet someone or receive a service at a particular time.",
+        "example": "The appointment is booked for Thursday afternoon.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "appointment"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A calendar with one meeting time confirmed for two people.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "appointment.arranged-meeting.n.analysis.v1",
+          "lexeme_id": "appointment.arranged-meeting.n",
+          "text": "appointment",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "appoint",
+              "surface": "appoint",
+              "canonical_id": "morph.appoint"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ment",
+              "surface": "ment",
+              "canonical_id": "affix.ment.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "appointment",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-second10-oxford-appointment",
+            "status": "verified",
+            "scope": "Selected ordinary appointment noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: B1. Editorial difficulty basis: Accept B1, supported by Oxford selected Healthcare and Working life B1. Clinical service outcomes and the separate job-appointment sense remain outside the selected language decision. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary noun definition, original example and editorial difficulty have scoped root and independent AI language acceptance. Accept B1, supported by Oxford selected Healthcare and Working life B1. Clinical service outcomes and the separate job-appointment sense remain outside the selected language decision. Accepted forms and region remain unchanged. Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. Morphological classification, imagery and word audio remain pending under their separate gates. Existing reference scopes retain their historical consultation states; only the newly added bounded language references are verified. No whole expression, specialist procedure, authority, module or release approval is implied."
+      },
+      "before_sha256": "c9ac1ad0bf7088ce3c958c8eda1eb09b863e3d9388adb9c6ae40f2b3b4826390",
+      "after_sha256": "a5c25916faa9766c5dbb60943d62251a8e0be05f3b77fa3e52b69ddc03040b5f",
+      "reviewed_candidate_entry_json_sha256": "0bfd474d1d6a522c988e86e9b24fd96bd3fa657f4e9a47c46a2a57016b0c4295",
+      "independent_candidate_entry_json_sha256": "0bfd474d1d6a522c988e86e9b24fd96bd3fa657f4e9a47c46a2a57016b0c4295",
+      "protected_fields_sha256": "61e814bb46ec235cb59ee8b18eed47a9da9386a362788651740954f0e01beb07",
+      "changed_fields": [
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_record_ids": [
+        "foundation01-language-second10-oxford-appointment"
+      ],
+      "difficulty": {
+        "stored": "A2",
+        "author_candidate": "B1",
+        "reviewed_candidate": "B1",
+        "observed_selected_source_labels": {
+          "oxford": "B1"
+        },
+        "independent_editorial_basis": "Accept B1, supported by Oxford selected Healthcare and Working life B1. Clinical service outcomes and the separate job-appointment sense remain outside the selected language decision.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance.",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "spelling_variant": null
+    },
+    {
+      "id": "meeting.work-discussion.n",
+      "before": {
+        "id": "meeting.work-discussion.n",
+        "text": "meeting",
+        "display_text": "meeting",
+        "pos": "noun",
+        "definition": "An arranged gathering where people discuss matters or make decisions.",
+        "example": "The meeting will last twenty minutes.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "meeting"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Colleagues seated around a table discussing a shared topic.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "meeting.work-discussion.n.analysis.v1",
+          "lexeme_id": "meeting.work-discussion.n",
+          "text": "meeting",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "meet",
+              "surface": "meet",
+              "canonical_id": "morph.meet"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ing",
+              "surface": "ing",
+              "canonical_id": "affix.ing.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "meeting",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "after": {
+        "id": "meeting.work-discussion.n",
+        "text": "meeting",
+        "display_text": "meeting",
+        "pos": "noun",
+        "definition": "An arranged gathering where people discuss matters or make decisions.",
+        "example": "The meeting will last twenty minutes.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "meeting"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Colleagues seated around a table discussing a shared topic.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "meeting.work-discussion.n.analysis.v1",
+          "lexeme_id": "meeting.work-discussion.n",
+          "text": "meeting",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "meet",
+              "surface": "meet",
+              "canonical_id": "morph.meet"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ing",
+              "surface": "ing",
+              "canonical_id": "affix.ing.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "meeting",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-second10-oxford-meeting",
+            "status": "verified",
+            "scope": "Selected ordinary meeting noun meaning, exact original example and bounded spelling evidence accepted by root and independent AI language review. Observed selected source level: A1. Editorial difficulty basis: Accept the A2 course floor for this foundational event word. The observed Oxford label stays A1, and an A1 word can be included in an A2 curriculum. This does not relabel the source or claim the noun intrinsically requires A2. Limits: Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary noun definition, original example and editorial difficulty have scoped root and independent AI language acceptance. Accept the A2 course floor for this foundational event word. The observed Oxford label stays A1, and an A1 word can be included in an A2 curriculum. This does not relabel the source or claim the noun intrinsically requires A2. Accepted forms and region remain unchanged. Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance. Morphological classification, imagery and word audio remain pending under their separate gates. Existing reference scopes retain their historical consultation states; only the newly added bounded language references are verified. No whole expression, specialist procedure, authority, module or release approval is implied."
+      },
+      "before_sha256": "e713c3546deede1987727ba2bf9d973167cc8a1e06473948200d027839678db8",
+      "after_sha256": "e7ed016b8eb989c765f44554ea1c5d35a42430a36d65fb6bfd57a66f4b1df9e1",
+      "reviewed_candidate_entry_json_sha256": "c32fc272ee904d2399be0b27fdfd41b94d07182804682134ad41d80c50d44684",
+      "independent_candidate_entry_json_sha256": "c32fc272ee904d2399be0b27fdfd41b94d07182804682134ad41d80c50d44684",
+      "protected_fields_sha256": "35497fc700d359f1d251151d7a072aeabfb840f10d7bd6352bc38ee55341e30d",
+      "changed_fields": [
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "source_record_ids": [
+        "foundation01-language-second10-oxford-meeting"
+      ],
+      "difficulty": {
+        "stored": "A2",
+        "author_candidate": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": "A1"
+        },
+        "independent_editorial_basis": "Accept the A2 course floor for this foundational event word. The observed Oxford label stays A1, and an A1 word can be included in an A2 curriculum. This does not relabel the source or claim the noun intrinsically requires A2.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Ordinary language evidence only. No employment status, legal duties, clinical procedure, safety competence, specialist compound, morphology, media, entire expression, module or release acceptance.",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "spelling_variant": null
+    }
+  ],
+  "sources": [
+    {
+      "id": "foundation01-language-second10-oxford-contractor",
+      "title": "Oxford Advanced Learner's Dictionary: contractor",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contractor",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-trainee",
+      "title": "Oxford Advanced Learner's Dictionary: trainee",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/trainee",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-receptionist",
+      "title": "Oxford Advanced Learner's Dictionary: receptionist",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/receptionist",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-coordinator",
+      "title": "Oxford Advanced Learner's Dictionary: coordinator",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/coordinator",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-contact",
+      "title": "Oxford Advanced Learner's Dictionary: contact",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contact_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-supplier",
+      "title": "Oxford Advanced Learner's Dictionary: supplier",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/supplier",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-schedule",
+      "title": "Oxford Advanced Learner's Dictionary: schedule",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/schedule_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-shift",
+      "title": "Oxford Advanced Learner's Dictionary: shift",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/shift_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-appointment",
+      "title": "Oxford Advanced Learner's Dictionary: appointment",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/appointment",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-meeting",
+      "title": "Oxford Advanced Learner's Dictionary: meeting",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/meeting",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-collins-contact",
+      "title": "Collins COBUILD Advanced Learner's Dictionary: contact",
+      "publisher": "Collins COBUILD Advanced Learner's Dictionary",
+      "url": "https://www.collinsdictionary.com/dictionary/english/contact",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-merriam-shift",
+      "title": "Merriam-Webster.com Dictionary: shift",
+      "publisher": "Merriam-Webster.com Dictionary",
+      "url": "https://www.merriam-webster.com/dictionary/shift",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-collins-shift",
+      "title": "Collins COBUILD Advanced Learner's Dictionary: shift",
+      "publisher": "Collins COBUILD Advanced Learner's Dictionary",
+      "url": "https://www.collinsdictionary.com/dictionary/english/shift",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    }
+  ],
+  "held": [],
+  "historical_hold_resolution": {
+    "id": "coordinator.organizer.n",
+    "parent_review_held": true,
+    "parent_review_preserved": true,
+    "resolution": "Root accepted the exact separate British spelling variant; no author or independent review evidence is rewritten."
+  },
+  "accepted_memberships": 200,
+  "preserved_selected_memberships": 200,
+  "scope": "Ten ordinary noun language records and thirteen exact added references. Only coordinator receives the exact reviewed accepted_forms addition; canonical surfaces and regions remain exact. All expressions, morphology, media, domain and release gates remain unchanged."
+}

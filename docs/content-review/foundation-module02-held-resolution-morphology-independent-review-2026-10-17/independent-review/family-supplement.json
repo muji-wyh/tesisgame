@@ -1,0 +1,1135 @@
+{
+  "status": "independent_frozen_surface_and_canonical_spelling_supplement_not_family_unification",
+  "recorded_at": "2026-10-16T22:12:19.699Z",
+  "input_count": 163,
+  "selection": [
+    "en",
+    "en-",
+    "sure",
+    "sure-",
+    "inform",
+    "collect",
+    "assure",
+    "assurance"
+  ],
+  "summaries": [
+    {
+      "id": "empathy.understanding-another-experience.n",
+      "definition": "An effort to understand another person's feelings and perspective.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "AI-authored candidate, not human linguistic approval. Newly consulted term-specific evidence: Retain the source two-part graph en- with em surface plus the feeling combining form -pathy. The new dictionary reading corroborates the Greek em- and pathos family. The whole meaning remains understanding another person; the feeling identity is distinct from the medical disease use of -pathy. This remains a pending inherited-classical analysis, not human approval. Historical family structure, current whole-word meaning, and learner-level depth are distinguished. Exact graph reconstruction is not linguistic approval.",
+        "references": [
+          "https://www.merriam-webster.com/dictionary/empathy",
+          "https://socialsci.libretexts.org/Bookshelves/Linguistics/Essentials_of_Linguistics_2e_(Anderson_et_al.)/05:_Morphology/5.02:_Roots_bases_and_affixes"
+        ],
+        "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+        "source_consultation": "newly_consulted_page_bodies_with_individual_scope_notes",
+        "source_record_ids": [
+          "mw-empathy-new",
+          "anderson-2e-roots-new"
+        ],
+        "supersedes_scratch_proposal_sha256": "a6c4f521edbec2b6f0adf27e85f3e6a5e736b37fc0445e91b47a348880f9652f",
+        "inherited_growth_graph_status": "retained_with_new_term_specific_evidence"
+      },
+      "parts": [
+        {
+          "id": "part1",
+          "canonical_id": "english.affix.en.in",
+          "canonical": "en-",
+          "surface": "em",
+          "type": "prefix",
+          "break_offsets": []
+        }
+      ],
+      "previous_selected_family_capture": true
+    },
+    {
+      "id": "waste-collection.organized-pickup-of-waste-for-transport.n",
+      "definition": "The organized pickup of waste for transport to further handling.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.collect",
+          "type": "stem",
+          "canonical": "collect",
+          "surface": "collect"
+        }
+      ],
+      "previous_selected_family_capture": true
+    },
+    {
+      "id": "waste-collection-point.designated-place-where-waste-is-picked-up.n",
+      "definition": "A designated place where waste is picked up for transport.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.collect",
+          "type": "stem",
+          "canonical": "collect",
+          "surface": "collect"
+        }
+      ],
+      "previous_selected_family_capture": true
+    },
+    {
+      "id": "tighten.make-fastening-or-connection-firmer.v",
+      "definition": "To make a fastening or connection firmer or less loose.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p2",
+          "canonical_id": "affix.en.suffix",
+          "type": "suffix",
+          "canonical": "en",
+          "surface": "en"
+        }
+      ],
+      "previous_selected_family_capture": false
+    },
+    {
+      "id": "loosen.make-fastening-or-connection-less-tight.v",
+      "definition": "To make a fastening or connection less tight.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p2",
+          "canonical_id": "affix.en.suffix",
+          "type": "suffix",
+          "canonical": "en",
+          "surface": "en"
+        }
+      ],
+      "previous_selected_family_capture": false
+    },
+    {
+      "id": "quality-assurance.planned-work-to-support-consistent-quality.n",
+      "definition": "Planned activities intended to provide confidence that work meets defined quality requirements.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.assurance",
+          "type": "stem",
+          "canonical": "assurance",
+          "surface": "assurance"
+        }
+      ],
+      "previous_selected_family_capture": false
+    },
+    {
+      "id": "collect.gather.v",
+      "definition": "To gather items together or pick them up from a place.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p1",
+          "type": "atomic",
+          "canonical": "collect",
+          "surface": "collect",
+          "canonical_id": "morph.collect"
+        }
+      ],
+      "previous_selected_family_capture": true
+    },
+    {
+      "id": "broken.not-working.adj",
+      "definition": "Damaged or unable to work as intended.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "The dictionary identifies the participial relationship to break. The authored brok + en surfaces preserve the irregular vowel alternation and participial ending; do not apply this spelling transformation to unrelated verbs. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+        "references": [
+          "https://www.merriam-webster.com/dictionary/broken"
+        ]
+      },
+      "parts": [
+        {
+          "id": "p2",
+          "canonical_id": "affix.en.suffix",
+          "type": "suffix",
+          "canonical": "en",
+          "surface": "en"
+        }
+      ],
+      "previous_selected_family_capture": false
+    },
+    {
+      "id": "enable.make-feature-available-for-use.v",
+      "definition": "To make a feature or function available for use through its settings or configuration.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p1",
+          "canonical_id": "affix.en.prefix",
+          "type": "prefix",
+          "canonical": "en",
+          "surface": "en"
+        }
+      ],
+      "previous_selected_family_capture": true
+    },
+    {
+      "id": "reassure.support-with-honest-communication.v",
+      "definition": "To help reduce worry through calm, truthful support and explanation.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "notes": "Explicit draft based on modern lexical constituents. Clinical and linguistic review must verify meaning, classical roots, allomorphs, and the suitability of intact stems before release. No pronunciation syllables or character-length cuts are inferred.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.assure",
+          "type": "stem",
+          "canonical": "assure",
+          "surface": "assure"
+        }
+      ],
+      "previous_selected_family_capture": false
+    },
+    {
+      "id": "informed-consent.informed-voluntary-care-agreement.n",
+      "definition": "A person's voluntary agreement to a proposed intervention after relevant information and an opportunity for understanding, subject to applicable requirements.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "notes": "Explicit draft based on modern lexical constituents. Clinical and linguistic review must verify meaning, classical roots, allomorphs, and the suitability of intact stems before release. No pronunciation syllables or character-length cuts are inferred.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.inform",
+          "type": "stem",
+          "canonical": "inform",
+          "surface": "inform"
+        }
+      ],
+      "previous_selected_family_capture": true
+    },
+    {
+      "id": "encode.represent-by-code.v",
+      "definition": "To represent information using a specified format or coding scheme.",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "morphology_review": {
+        "status": "pending",
+        "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+        "references": []
+      },
+      "parts": [
+        {
+          "id": "p1",
+          "canonical_id": "affix.en.prefix",
+          "type": "prefix",
+          "canonical": "en",
+          "surface": "en"
+        }
+      ],
+      "previous_selected_family_capture": true
+    }
+  ],
+  "additional_complete_objects": [
+    {
+      "resource": "res://data/professional/lexemes/construction-module05.json",
+      "entry": {
+        "id": "tighten.make-fastening-or-connection-firmer.v",
+        "text": "tighten",
+        "display_text": "tighten",
+        "pos": "verb",
+        "definition": "To make a fastening or connection firmer or less loose.",
+        "example": "The connection record identifies who is authorized to tighten the fasteners.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "tighten"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A close comparison of the same fastening with visible slack and with that slack reduced, with a recognizable wrench nearby and no torque values or assertion of safe completion.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "tighten.make-fastening-or-connection-firmer.v.analysis.v1",
+          "lexeme_id": "tighten.make-fastening-or-connection-firmer.v",
+          "text": "tighten",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.tight",
+              "type": "stem",
+              "canonical": "tight",
+              "surface": "tight"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.en.suffix",
+              "type": "suffix",
+              "canonical": "en",
+              "surface": "en"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "tighten",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "construction-bls-laborers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-carpenters",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-electricians",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-plumbers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-machinists",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-quality",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-hse-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+      }
+    },
+    {
+      "resource": "res://data/professional/lexemes/construction-module05.json",
+      "entry": {
+        "id": "loosen.make-fastening-or-connection-less-tight.v",
+        "text": "loosen",
+        "display_text": "loosen",
+        "pos": "verb",
+        "definition": "To make a fastening or connection less tight.",
+        "example": "The request to loosen the connection needs review before work begins.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "loosen"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A close comparison of the same fastening before and after added slack is visible, with a recognizable wrench nearby and no removal instructions or authorization implication.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "loosen.make-fastening-or-connection-less-tight.v.analysis.v1",
+          "lexeme_id": "loosen.make-fastening-or-connection-less-tight.v",
+          "text": "loosen",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.loose",
+              "type": "stem",
+              "canonical": "loose",
+              "surface": "loos"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.en.suffix",
+              "type": "suffix",
+              "canonical": "en",
+              "surface": "en"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "loosen",
+              "rule": "drop_final_e_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "construction-bls-laborers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-carpenters",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-electricians",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-plumbers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-machinists",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-quality",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-hse-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+      }
+    },
+    {
+      "resource": "res://data/professional/lexemes/customer-support-module10.json",
+      "entry": {
+        "id": "quality-assurance.planned-work-to-support-consistent-quality.n",
+        "text": "quality assurance",
+        "display_text": "quality assurance",
+        "pos": "noun",
+        "definition": "Planned activities intended to provide confidence that work meets defined quality requirements.",
+        "example": "The team reviewed the quality assurance criteria.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "quality assurance"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A fictional review checklist focused on accuracy and customer understanding.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "quality-assurance.planned-work-to-support-consistent-quality.n.analysis.v1",
+          "lexeme_id": "quality-assurance.planned-work-to-support-consistent-quality.n",
+          "text": "quality assurance",
+          "kind": "phrase",
+          "review": {
+            "status": "pending",
+            "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.quality",
+              "type": "stem",
+              "canonical": "quality",
+              "surface": "quality"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.assurance",
+              "type": "stem",
+              "canonical": "assurance",
+              "surface": "assurance"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "quality assurance",
+              "rule": "word_boundary"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "zendesk-support-duration-metrics",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "bls-office-admin",
+            "status": "pending_term_check",
+            "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "bls-material-recording-clerks",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "bls-lodging-managers",
+            "status": "pending_term_check",
+            "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "transport-bls-delivery-drivers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "education-bls-preschool",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "education-bls-childcare",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "education-bls-assistants",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "education-bls-elementary",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-quality",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-hse-inspection",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-osha-hazardous-energy",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "sales-ftc-advertising-basics",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "sales-asa-misleading-advertising",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+      }
+    },
+    {
+      "resource": "res://data/professional/lexemes/foundation-module02.json",
+      "entry": {
+        "id": "broken.not-working.adj",
+        "text": "broken",
+        "display_text": "broken",
+        "pos": "adjective",
+        "definition": "Damaged or unable to work as intended.",
+        "example": "The handle on this case is broken.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "broken"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A case with a visibly detached handle.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "broken.not-working.adj.analysis.v1",
+          "lexeme_id": "broken.not-working.adj",
+          "text": "broken",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The dictionary identifies the participial relationship to break. The authored brok + en surfaces preserve the irregular vowel alternation and participial ending; do not apply this spelling transformation to unrelated verbs. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/broken"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.break",
+              "type": "stem",
+              "canonical": "break",
+              "surface": "brok"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.en.suffix",
+              "type": "suffix",
+              "canonical": "en",
+              "surface": "en"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "broken",
+              "rule": "irregular_participle_break_to_brok_before_en"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-broken",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    },
+    {
+      "resource": "res://data/professional/lexemes/nursing-module05.json",
+      "entry": {
+        "id": "reassure.support-with-honest-communication.v",
+        "text": "reassure",
+        "display_text": "reassure",
+        "pos": "verb",
+        "definition": "To help reduce worry through calm, truthful support and explanation.",
+        "example": "The nurse tried to reassure the patient without promising an outcome.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "reassure"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A nurse offering calm support without dismissing concerns.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "reassure.support-with-honest-communication.v.analysis.v1",
+          "lexeme_id": "reassure.support-with-honest-communication.v",
+          "text": "reassure",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Explicit draft based on modern lexical constituents. Clinical and linguistic review must verify meaning, classical roots, allomorphs, and the suitability of intact stems before release. No pronunciation syllables or character-length cuts are inferred.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "affix.re.prefix",
+              "type": "prefix",
+              "canonical": "re",
+              "surface": "re"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.assure",
+              "type": "stem",
+              "canonical": "assure",
+              "surface": "assure"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "reassure",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "nmc-code",
+            "status": "pending_term_check",
+            "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+          },
+          {
+            "source_id": "bls-home-personal-care",
+            "status": "pending_term_check",
+            "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-concierges",
+            "status": "pending_term_check",
+            "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "education-bls-elementary",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "education-naeyc-assessment",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "education-ufli-glossary",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-bls-physicians",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-ahrq-diagnosis-education",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-medline-word-parts",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original communication-focused draft; not clinical guidance or approved learning content. Clinical meaning, scope, regional alternatives, morphology, and image suitability require specialist review. No diagnostic thresholds, treatment steps, or medicine doses are supplied."
+      }
+    }
+  ],
+  "source_sha256": "edb6c1c925e7198bec2647f264ab9fbcf5d690d9b762dda3db5b12e823bad365",
+  "all_inputs_exact": true,
+  "live_registry_read": false,
+  "project_execution": false
+}

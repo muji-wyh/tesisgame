@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "scratch_test_previews_syntax_checked_not_executed",
+  "transforms": {
+    "tests/professional-content.test.cjs": {
+      "before_raw_sha256": "a821e520197fb3771b00b8be4c1bb965e0649941d97928758f5c7b870929269e",
+      "after_raw_sha256": "fa09083e7759c279a1d02a0c39e8eb7706f84a9d153ac2574a2cc9f489d82960",
+      "preview": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/preview/tests/professional-content.test.cjs"
+    },
+    "tests/professional-retail-morphology.test.cjs": {
+      "before_raw_sha256": "dc66ffcdaa76bf2142270d914070b99e70533e0bb0f98e6fa755375aaaa3d071",
+      "after_raw_sha256": "4ad35b84a3a18661b467a697389965f5a55055d82e8bd72df2d13685b48b5a7b",
+      "preview": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/preview/tests/professional-retail-morphology.test.cjs"
+    },
+    "tests/professional-retail-media.test.cjs": {
+      "before_raw_sha256": "d1efb69ec5aa075dc150fb2883507ca652f5243276ab50c955cca289e68ec26f",
+      "after_raw_sha256": "ab5bbbcef1b920df0cef35d71c6e144a44c16117195f588b350565d94c777bd8",
+      "preview": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/preview/tests/professional-retail-media.test.cjs"
+    }
+  },
+  "syntax": [
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/delivery-lib.cjs",
+      "raw_sha256": "153008e6c1b4923bf2765571e989cdcd0938154472121f1ca1c87a93683d3c13",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/bind-current-baseline.cjs",
+      "raw_sha256": "898291a673b9eba75db8647d2a988f8aac019b14b5f2f51c9b99930a65be8dbe",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/integrate-reviewed.cjs",
+      "raw_sha256": "bb6ba2fe9a657b25e615b779dfd139d7b46ff656710800107cd343f00b898a15",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/transaction-plan.cjs",
+      "raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/guarded-transaction.cjs",
+      "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/persisted-test-transforms.cjs",
+      "raw_sha256": "674987dc2b98e3ca330d58bcb2ddfc9d7d019f292bd274310df656b473667df9",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/update-persisted-tests.cjs",
+      "raw_sha256": "5cfd18be68f6e2c81d41f7fc2fcbe534b846e46cd65731cd6137244298f794a5",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/prepare-delivery.cjs",
+      "raw_sha256": "4e15e45c5b2cd54a7b1c75a0f8e1399e83bb6b7ca4ffe5308916de5b74d7541f",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/preview/tests/professional-content.test.cjs",
+      "raw_sha256": "fa09083e7759c279a1d02a0c39e8eb7706f84a9d153ac2574a2cc9f489d82960",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/preview/tests/professional-retail-morphology.test.cjs",
+      "raw_sha256": "4ad35b84a3a18661b467a697389965f5a55055d82e8bd72df2d13685b48b5a7b",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/barcode-source-acquisition-r01/delivery-r01/preview/tests/professional-retail-media.test.cjs",
+      "raw_sha256": "ab5bbbcef1b920df0cef35d71c6e144a44c16117195f588b350565d94c777bd8",
+      "status": 0
+    }
+  ],
+  "production_files_written": false,
+  "tests_executed": false,
+  "native_executed": false
+}

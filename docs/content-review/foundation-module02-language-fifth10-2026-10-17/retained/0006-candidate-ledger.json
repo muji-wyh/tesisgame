@@ -1,0 +1,2527 @@
+{
+  "schema": 1,
+  "status": "draft_language_proposals_pending_independent_acceptance",
+  "author_role": "Codex recover_delivery research author; not an independent language approver",
+  "created_on": "2026-10-17",
+  "scope": "Foundation02 positions 41-50. Nine exact definition/example/difficulty proposals and one whole-entry hold. No notes, references, gates, morphology or media are projected changes.",
+  "input": {
+    "path": "data/professional/lexemes/foundation-module02.json",
+    "raw_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41",
+    "baseline_raw_sha256": "59c33da6c2a31ac2ea3f67bed20966e32f174030c07b16600d13b6f46e3f73e5",
+    "hash_basis": "Raw files use SHA256 bytes; entry hashes use SHA256 of UTF-8 JSON.stringify(entry), retaining parsed key order."
+  },
+  "selection": {
+    "method": "Actual parsed source positions 41-50, pinned by exact lexical identities and original entry hashes.",
+    "count": 10,
+    "proposals": 9,
+    "new_holds": 1,
+    "earlier_whole_entry_holds_preserved": [
+      "collect.gather.v",
+      "notify.inform.v",
+      "postpone.delay-until-later.v",
+      "verify.establish-accuracy.v"
+    ],
+    "actual_content_changes": 7
+  },
+  "source_artifacts": [
+    "baseline.json",
+    "source-index.json",
+    "research-notes.json",
+    "oxford-html-metadata.json",
+    "context-screen.json"
+  ],
+  "global_limits": [
+    "Evidence only. No production content, review gate, reference, note, expression, source registry or runtime is changed.",
+    "All proposals require a separate independent decision. No human, specialist, expression, morphology, media, module or release acceptance is claimed.",
+    "Difficulty is an editorial teaching proposal. Literal Oxford cefr and fkcefr attributes, missing labels, Collins B1+ values and disagreements remain explicit.",
+    "Whole-entry hazard, collect, notify, postpone and verify holds remain exact. All 17 inherited expression holds and every containing Foundation02 expression remain exact.",
+    "Source consultation is not an asset license or acquisition. No publisher definitions, examples, exercises, illustrations, audio or page bodies are imported.",
+    "Third10 and fourth10 proposals remain unintegrated. Complete retains its existing pending, unapproved form-image brief mismatch."
+  ],
+  "entries": [
+    {
+      "id": "broken.not-working.adj",
+      "term": "broken",
+      "position": 41,
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "broken.not-working.adj",
+        "text": "broken",
+        "display_text": "broken",
+        "pos": "adjective",
+        "definition": "Damaged or unable to work as intended.",
+        "example": "The handle on this case is broken.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "broken"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A case with a visibly detached handle.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "broken.not-working.adj.analysis.v1",
+          "lexeme_id": "broken.not-working.adj",
+          "text": "broken",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The dictionary identifies the participial relationship to break. The authored brok + en surfaces preserve the irregular vowel alternation and participial ending; do not apply this spelling transformation to unrelated verbs. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/broken"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.break",
+              "type": "stem",
+              "canonical": "break",
+              "surface": "brok"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.en.suffix",
+              "type": "suffix",
+              "canonical": "en",
+              "surface": "en"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "broken",
+              "rule": "irregular_participle_break_to_brok_before_en"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-broken",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "f9e5f9250c482ef9388469ba1b739399cfda2962a641a66f7831623d7f8b9986",
+      "proposed_fields": {
+        "definition": "Damaged or unable to work as intended.",
+        "example": "The handle on this case is broken.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "broken.not-working.adj",
+        "text": "broken",
+        "display_text": "broken",
+        "pos": "adjective",
+        "definition": "Damaged or unable to work as intended.",
+        "example": "The handle on this case is broken.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "broken"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A case with a visibly detached handle.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "broken.not-working.adj.analysis.v1",
+          "lexeme_id": "broken.not-working.adj",
+          "text": "broken",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The dictionary identifies the participial relationship to break. The authored brok + en surfaces preserve the irregular vowel alternation and participial ending; do not apply this spelling transformation to unrelated verbs. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/broken"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.break",
+              "type": "stem",
+              "canonical": "break",
+              "surface": "brok"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.en.suffix",
+              "type": "suffix",
+              "canonical": "en",
+              "surface": "en"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "broken",
+              "rule": "irregular_participle_break_to_brok_before_en"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-broken",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "f9e5f9250c482ef9388469ba1b739399cfda2962a641a66f7831623d7f8b9986",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-broken",
+        "foundation02-language-fifth10-collins-broken"
+      ],
+      "selected_sense": "The adjective for a damaged or nonfunctioning object, illustrated by a case handle.",
+      "language_rationale": "Retain the original concise definition and concrete handle example. They fit the selected object sense without importing promise, relationship or emotional meanings.",
+      "editorial_difficulty_rationale": "Retain editorial A2 on Oxford selected adjective sense 1 cefr a2. Collins A2 belongs to its past-participle cross-reference, not to a separately graded adjective; the relevant British adjective senses show no level.",
+      "hold_reason": null,
+      "excluded_scope": "Broken promises, relationships, interrupted sleep or lines, limited language proficiency and a demoralized person are separate. Break as a verb and its other inflections are not accepted through this adjective.",
+      "expression_context_issue": "Foundation02.06 retains report/fault/replace and its exact pending expression. Broken seals, glass and a broken link are distinct context uses; this research creates no bindings or content approval for them.",
+      "proposed_editorial_note_for_future_review": "Retain the original object adjective and editorial A2. No expression, morphology or asset gate is accepted.",
+      "media_issue": "All existing media records, briefs, suitability, voice settings and review flags remain exact and pending. This package grants no imagery, asset, morphology, pronunciation or voice approval."
+    },
+    {
+      "id": "urgent.needing-prompt-attention.adj",
+      "term": "urgent",
+      "position": 42,
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "urgent.needing-prompt-attention.adj",
+        "text": "urgent",
+        "display_text": "urgent",
+        "pos": "adjective",
+        "definition": "Needing attention or action very soon.",
+        "example": "This message is urgent because the delivery leaves shortly.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "urgent"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An important message linked to a rapidly approaching departure time.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "urgent.needing-prompt-attention.adj.analysis.v1",
+          "lexeme_id": "urgent.needing-prompt-attention.adj",
+          "text": "urgent",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The word is borrowed from a Latin participial form. A modern urge + ent split is not established by that origin alone and could misrepresent the prompt-attention meaning. Keep an intact candidate while urgency-family morphology is reviewed. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/urgent"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.urgent",
+              "type": "atomic",
+              "canonical": "urgent",
+              "surface": "urgent"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-urgent",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "224451d9af880d4f070afd9a2ddec80b781f9d7f44ad0848bbcd43c778e5df5c",
+      "proposed_fields": {
+        "definition": "Needing attention or action without delay.",
+        "example": "This message is urgent because the delivery leaves shortly.",
+        "difficulty": "B2"
+      },
+      "content_projection": {
+        "id": "urgent.needing-prompt-attention.adj",
+        "text": "urgent",
+        "display_text": "urgent",
+        "pos": "adjective",
+        "definition": "Needing attention or action without delay.",
+        "example": "This message is urgent because the delivery leaves shortly.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "urgent"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An important message linked to a rapidly approaching departure time.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "urgent.needing-prompt-attention.adj.analysis.v1",
+          "lexeme_id": "urgent.needing-prompt-attention.adj",
+          "text": "urgent",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The word is borrowed from a Latin participial form. A modern urge + ent split is not established by that origin alone and could misrepresent the prompt-attention meaning. Keep an intact candidate while urgency-family morphology is reviewed. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/urgent"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.urgent",
+              "type": "atomic",
+              "canonical": "urgent",
+              "surface": "urgent"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-urgent",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "ec872df8144d94192858a9b6a5fe2e2421f9cefafa6d1615305c153080b1404d",
+      "changed_fields": [
+        "definition",
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-urgent",
+        "foundation02-language-fifth10-collins-urgent"
+      ],
+      "selected_sense": "A matter needing prompt attention or action, in an ordinary delivery-message context.",
+      "language_rationale": "The original revision replaces very soon with without delay to express the selected need for prompt action. Retain the original delivery-message example.",
+      "editorial_difficulty_rationale": "Propose editorial B2 from Oxford selected sense 1 cefr b2. Collins labels its selected sense B1+ literally. The difference remains explicit; this is not a consensus claim or a conversion of B1+.",
+      "hold_reason": null,
+      "excluded_scope": "An insistent voice or expression is a separate sense. Clinical urgency, triage thresholds and response-time duties are not established by this ordinary message example.",
+      "expression_context_issue": "Foundation02.05 remains exact and pending with concern, solution and unintegrated resolve. Caregiving07.04 concerns urgent medical assessment; lexical consultation does not approve that clinical claim or bind this lexeme there.",
+      "proposed_editorial_note_for_future_review": "Proposed original wording and editorial B2 for prompt attention. Collins B1+ is preserved as a distinct observed label.",
+      "media_issue": "All existing media records, briefs, suitability, voice settings and review flags remain exact and pending. This package grants no imagery, asset, morphology, pronunciation or voice approval."
+    },
+    {
+      "id": "unclear.not-understandable.adj",
+      "term": "unclear",
+      "position": 43,
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "unclear.not-understandable.adj",
+        "text": "unclear",
+        "display_text": "unclear",
+        "pos": "adjective",
+        "definition": "Difficult to understand or not stated precisely.",
+        "example": "The instructions are unclear about the start time.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "unclear"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An ambiguous instruction alongside a person's request for explanation.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "unclear.not-understandable.adj.analysis.v1",
+          "lexeme_id": "unclear.not-understandable.adj",
+          "text": "unclear",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "prefix",
+              "canonical": "un-",
+              "surface": "un",
+              "canonical_id": "affix.un.prefix"
+            },
+            {
+              "id": "p2",
+              "type": "stem",
+              "canonical": "clear",
+              "surface": "clear",
+              "canonical_id": "morph.clear"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "unclear",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "60cbc8e036efc6d9e6594c5db7fc776d7938c9e8ca33c62ed6bc750896e8c128",
+      "proposed_fields": {
+        "definition": "Difficult to understand or not stated precisely.",
+        "example": "The instructions are unclear about the start time.",
+        "difficulty": "B1"
+      },
+      "content_projection": {
+        "id": "unclear.not-understandable.adj",
+        "text": "unclear",
+        "display_text": "unclear",
+        "pos": "adjective",
+        "definition": "Difficult to understand or not stated precisely.",
+        "example": "The instructions are unclear about the start time.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "unclear"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An ambiguous instruction alongside a person's request for explanation.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "unclear.not-understandable.adj.analysis.v1",
+          "lexeme_id": "unclear.not-understandable.adj",
+          "text": "unclear",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "prefix",
+              "canonical": "un-",
+              "surface": "un",
+              "canonical_id": "affix.un.prefix"
+            },
+            {
+              "id": "p2",
+              "type": "stem",
+              "canonical": "clear",
+              "surface": "clear",
+              "canonical_id": "morph.clear"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "unclear",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "550f07a4b6439b034b43001ab8a919ad618fc119e36ed79b6121641a684f1f2b",
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-unclear",
+        "foundation02-language-fifth10-collins-unclear"
+      ],
+      "selected_sense": "Wording or information that is not expressed clearly enough to understand precisely.",
+      "language_rationale": "Retain the original wording and start-time example. They describe unclear information rather than declaring that a person lacks understanding.",
+      "editorial_difficulty_rationale": "Propose editorial B1 on Oxford selected sense 1 cefr b1 and its selected B1 topic. Collins COBUILD unknown-or-uncertain sense 1 is B2 and its broader British ambiguous/not-definite definition is ungraded. Their scopes and labels are not collapsed.",
+      "hold_reason": null,
+      "excluded_scope": "A person unsure about something is a separate sense. Clear, clearly, clarify and clarification remain distinct forms and identities; no inference about morphology or language teaching is accepted.",
+      "expression_context_issue": "No selected focus expression currently binds this entry. OfficeAdmin05.07 is an inherited whole-expression hold; retail use-by-date and commercial-relationship contexts remain unscored and pending.",
+      "proposed_editorial_note_for_future_review": "Retain the original information adjective with editorial B1; preserve Collins B2 and the separate person-uncertainty sense.",
+      "media_issue": "All existing media records, briefs, suitability, voice settings and review flags remain exact and pending. This package grants no imagery, asset, morphology, pronunciation or voice approval."
+    },
+    {
+      "id": "safe.free-from-unacceptable-danger.adj",
+      "term": "safe",
+      "position": 44,
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "safe.free-from-unacceptable-danger.adj",
+        "text": "safe",
+        "display_text": "safe",
+        "pos": "adjective",
+        "definition": "Protected from danger or not presenting an unacceptable risk in the situation.",
+        "example": "The team asked whether the route was safe to use.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "safe"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A clearly unobstructed workplace walkway; avoid guarantees about unseen risks.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "safe.free-from-unacceptable-danger.adj.analysis.v1",
+          "lexeme_id": "safe.free-from-unacceptable-danger.adj",
+          "text": "safe",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "safe",
+              "surface": "safe",
+              "canonical_id": "morph.safe"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "d08c7c55e002c8245b036bf41865244ae72db6a68b1812d3b4f3ecdb8a414ea3",
+      "proposed_fields": {
+        "definition": "Unlikely to cause harm or put someone in danger.",
+        "example": "The team asked whether the route was safe to use.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "safe.free-from-unacceptable-danger.adj",
+        "text": "safe",
+        "display_text": "safe",
+        "pos": "adjective",
+        "definition": "Unlikely to cause harm or put someone in danger.",
+        "example": "The team asked whether the route was safe to use.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "safe"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A clearly unobstructed workplace walkway; avoid guarantees about unseen risks.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "safe.free-from-unacceptable-danger.adj.analysis.v1",
+          "lexeme_id": "safe.free-from-unacceptable-danger.adj",
+          "text": "safe",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "safe",
+              "surface": "safe",
+              "canonical_id": "morph.safe"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "c248cbecf5c6549063e3943a50f1a3a7041453cd17c3454e8f0de8c4437b472d",
+      "changed_fields": [
+        "definition"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-safe",
+        "foundation02-language-fifth10-collins-safe"
+      ],
+      "selected_sense": "A thing, route or activity unlikely to cause harm, as a question about using a route.",
+      "language_rationale": "The authored definition selects the route-not-causing-harm sense and removes the unestablished unacceptable-risk criterion and the separate protected-person sense. The original question example does not guarantee a route is safe.",
+      "editorial_difficulty_rationale": "Retain editorial A2 on Oxford selected sense 2 cefr a2 and Collins physical-danger sense 1 A2. The lexical label does not establish a professional safety threshold.",
+      "hold_reason": null,
+      "excluded_scope": "Protected or unharmed people, secure possessions, reliable predictions, lack of controversy and the safe container noun are distinct. This is not a risk-acceptance standard, route assessment or guarantee.",
+      "expression_context_issue": "Foundation02.09 remains exact with its domain gate pending. Hospitality room safe and accounting safe are container nouns, not instances of this adjective. Safely, safety and safeguards remain separate.",
+      "proposed_editorial_note_for_future_review": "Proposed original route/object adjective definition with editorial A2; all safety-domain judgments remain pending.",
+      "media_issue": "All existing media records, briefs, suitability, voice settings and review flags remain exact and pending. This package grants no imagery, asset, morphology, pronunciation or voice approval."
+    },
+    {
+      "id": "unsafe.presenting-danger.adj",
+      "term": "unsafe",
+      "position": 45,
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "unsafe.presenting-danger.adj",
+        "text": "unsafe",
+        "display_text": "unsafe",
+        "pos": "adjective",
+        "definition": "Presenting a risk of harm in the situation.",
+        "example": "The worker reported an unsafe storage area.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "unsafe"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An unstable stack behind a barrier while a worker reports the concern.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "unsafe.presenting-danger.adj.analysis.v1",
+          "lexeme_id": "unsafe.presenting-danger.adj",
+          "text": "unsafe",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "prefix",
+              "canonical": "un-",
+              "surface": "un",
+              "canonical_id": "affix.un.prefix"
+            },
+            {
+              "id": "p2",
+              "type": "stem",
+              "canonical": "safe",
+              "surface": "safe",
+              "canonical_id": "morph.safe"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "unsafe",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "b03ac8acf04932b9dfc3d44775939399ad37f73a1149faf72b708f244fc23286",
+      "proposed_fields": {
+        "definition": "Presenting a risk of harm in the situation.",
+        "example": "The worker reported an unsafe storage area.",
+        "difficulty": "B1"
+      },
+      "content_projection": {
+        "id": "unsafe.presenting-danger.adj",
+        "text": "unsafe",
+        "display_text": "unsafe",
+        "pos": "adjective",
+        "definition": "Presenting a risk of harm in the situation.",
+        "example": "The worker reported an unsafe storage area.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "unsafe"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An unstable stack behind a barrier while a worker reports the concern.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "unsafe.presenting-danger.adj.analysis.v1",
+          "lexeme_id": "unsafe.presenting-danger.adj",
+          "text": "unsafe",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "prefix",
+              "canonical": "un-",
+              "surface": "un",
+              "canonical_id": "affix.un.prefix"
+            },
+            {
+              "id": "p2",
+              "type": "stem",
+              "canonical": "safe",
+              "surface": "safe",
+              "canonical_id": "morph.safe"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "unsafe",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "28409058fcacab87afe5a940d8b084427d441ebf7a8af8079aee2f1a8b9c44bc",
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-unsafe",
+        "foundation02-language-fifth10-collins-unsafe"
+      ],
+      "selected_sense": "A thing, place or activity that may cause harm, illustrated by a reported storage area.",
+      "language_rationale": "Retain the original definition and reported-area example. They fit the dangerous-place sense without approving an inspection or defining the conditions that make an area unsafe.",
+      "editorial_difficulty_rationale": "Propose B1 only as an editorial teaching judgment for the concrete dangerous-place adjective in a simple report. Oxford selected sense 1 has neither cefr nor fkcefr, and Collins displays no selected level. Cambridge was inaccessible. There is no observed publisher certification for B1; the independent reviewer may hold this proposal if a direct level source is required.",
+      "hold_reason": null,
+      "excluded_scope": "A person exposed to danger and the British legal meaning of an unsafe conviction are separate. No threshold, hazard evaluation, work instruction or morphology approval follows from the proposal.",
+      "expression_context_issue": "Foundation02.09 remains exact and domain pending with safe and procedure. This is the sole selected surface/focus expression. No additional scored binding is proposed.",
+      "proposed_editorial_note_for_future_review": "Retain the original dangerous-place wording and propose editorial B1 without a publisher-level claim. Domain review remains pending.",
+      "media_issue": "All existing media records, briefs, suitability, voice settings and review flags remain exact and pending. This package grants no imagery, asset, morphology, pronunciation or voice approval."
+    },
+    {
+      "id": "hazard.possible-harm.n",
+      "term": "hazard",
+      "position": 46,
+      "disposition": "hold",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "hazard.possible-harm.n",
+        "text": "hazard",
+        "display_text": "hazard",
+        "pos": "noun",
+        "definition": "Something with the potential to cause harm.",
+        "example": "The loose cable was reported as a trip hazard.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "hazard"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A loose cable crossing a walkway, noticed and reported without anyone falling.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "hazard.possible-harm.n.analysis.v1",
+          "lexeme_id": "hazard.possible-harm.n",
+          "text": "hazard",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "hazard",
+              "surface": "hazard",
+              "canonical_id": "morph.hazard"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+      "proposed_fields": null,
+      "content_projection": {
+        "id": "hazard.possible-harm.n",
+        "text": "hazard",
+        "display_text": "hazard",
+        "pos": "noun",
+        "definition": "Something with the potential to cause harm.",
+        "example": "The loose cable was reported as a trip hazard.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "hazard"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A loose cable crossing a walkway, noticed and reported without anyone falling.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "hazard.possible-harm.n.analysis.v1",
+          "lexeme_id": "hazard.possible-harm.n",
+          "text": "hazard",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "hazard",
+              "surface": "hazard",
+              "canonical_id": "morph.hazard"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-hazard",
+        "foundation02-language-fifth10-collins-hazard"
+      ],
+      "selected_sense": "A dangerous thing or situation with potential to cause harm, currently illustrated by a trip hazard.",
+      "language_rationale": "The existing meaning and trip-hazard example have ordinary lexical support, but the entire entry remains on hold. No content or review field is projected for acceptance.",
+      "editorial_difficulty_rationale": "Oxford selected noun has no cefr attribute and literal fkcefr c1, with a rendered Danger C1 topic. Collins selected noun has no observed level. The current A2 draft is not accepted, and the C1 evidence is not clamped to B2 or treated as lower-level support.",
+      "hold_reason": "Whole-entry hold: the consulted selected-sense level evidence is C1, so there is no supported lower-level Foundation projection. The entire current A2 entry stays exact as an unapproved draft pending a separate decision on scope and level.",
+      "excluded_scope": "Hazard as a verb, hazard a guess, gambling or golf meanings, occupational classifications and actual risk controls are not accepted.",
+      "expression_context_issue": "Foundation02.10 remains exact, pending and unapproved with incident and report. All trip, slip, choking, electrical and pictogram compounds remain separate specialist contexts with no new bindings or procedures approved.",
+      "proposed_editorial_note_for_future_review": "Whole-entry hold; preserve the original entry unchanged. Record literal Oxford fkcefr c1 and C1 topic without lowering them.",
+      "media_issue": "All existing media records, briefs, suitability, voice settings and review flags remain exact and pending. This package grants no imagery, asset, morphology, pronunciation or voice approval."
+    },
+    {
+      "id": "incident.workplace-event.n",
+      "term": "incident",
+      "position": 47,
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "incident.workplace-event.n",
+        "text": "incident",
+        "display_text": "incident",
+        "pos": "noun",
+        "definition": "An event at work that needs attention or recording, often because something went wrong.",
+        "example": "The supervisor recorded the incident after speaking with the team.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "incident"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A supervisor recording an event, with no injury imagery.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "incident.workplace-event.n.analysis.v1",
+          "lexeme_id": "incident.workplace-event.n",
+          "text": "incident",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "incident",
+              "surface": "incident",
+              "canonical_id": "morph.incident"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "6c63b7770526030dc8c2ae8035edbd1a9c5768647dd5d312fa399eaa1e116949",
+      "proposed_fields": {
+        "definition": "An event at work, especially one that is unusual or causes a problem.",
+        "example": "The supervisor recorded the incident after speaking with the team.",
+        "difficulty": "B2"
+      },
+      "content_projection": {
+        "id": "incident.workplace-event.n",
+        "text": "incident",
+        "display_text": "incident",
+        "pos": "noun",
+        "definition": "An event at work, especially one that is unusual or causes a problem.",
+        "example": "The supervisor recorded the incident after speaking with the team.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "incident"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A supervisor recording an event, with no injury imagery.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "incident.workplace-event.n.analysis.v1",
+          "lexeme_id": "incident.workplace-event.n",
+          "text": "incident",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "incident",
+              "surface": "incident",
+              "canonical_id": "morph.incident"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "a6df62c7b0855666eeb8301ab266e1e651fef5927fa072220564d62dc558b37b",
+      "changed_fields": [
+        "definition",
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-incident",
+        "foundation02-language-fifth10-collins-incident"
+      ],
+      "selected_sense": "An individual event, narrowed by this lexeme to the workplace and often unusual or problematic.",
+      "language_rationale": "The authored definition removes the unsupported universal requirement for attention or recording. The original example reports a supervisor recording one event; it does not define a recording duty.",
+      "editorial_difficulty_rationale": "Propose editorial B2 on Oxford ordinary-event sense 1 cefr b2 and Collins selected noun B2. Collins formal register is preserved.",
+      "hold_reason": null,
+      "excluded_scope": "A violent event and a diplomatic clash are separately described senses. Incident forms, IT incident response and domain-specific reporting classifications or duties are not approved by the ordinary event meaning.",
+      "expression_context_issue": "Foundation02.10 remains exact with the hazard whole-entry hold and its domain gate pending. Eleven external incident uses include form compounds and IT/service response contexts; none gains a selected binding or reporting approval.",
+      "proposed_editorial_note_for_future_review": "Propose original workplace-event definition and editorial B2; retain the narrative recording example without creating a duty.",
+      "media_issue": "All existing media records, briefs, suitability, voice settings and review flags remain exact and pending. This package grants no imagery, asset, morphology, pronunciation or voice approval."
+    },
+    {
+      "id": "concern.worrying-matter.n",
+      "term": "concern",
+      "position": 48,
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "concern.worrying-matter.n",
+        "text": "concern",
+        "display_text": "concern",
+        "pos": "noun",
+        "definition": "A matter that causes worry or needs attention.",
+        "example": "I have a concern about the delivery address.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "concern"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A worker raising a specific concern about conflicting address details.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "concern.worrying-matter.n.analysis.v1",
+          "lexeme_id": "concern.worrying-matter.n",
+          "text": "concern",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "concern",
+              "surface": "concern",
+              "canonical_id": "morph.concern"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "a781ce74aadd87e2f50293006d46399ccb72281750715e28dddde6f6c34a012d",
+      "proposed_fields": {
+        "definition": "A matter that worries someone.",
+        "example": "I have a concern about the delivery address.",
+        "difficulty": "B2"
+      },
+      "content_projection": {
+        "id": "concern.worrying-matter.n",
+        "text": "concern",
+        "display_text": "concern",
+        "pos": "noun",
+        "definition": "A matter that worries someone.",
+        "example": "I have a concern about the delivery address.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "concern"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A worker raising a specific concern about conflicting address details.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "concern.worrying-matter.n.analysis.v1",
+          "lexeme_id": "concern.worrying-matter.n",
+          "text": "concern",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "concern",
+              "surface": "concern",
+              "canonical_id": "morph.concern"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "9d8994bc3f52e9e9d6fe4214ccd9a46da827c0803f332999ef77d9df7c193cb9",
+      "changed_fields": [
+        "definition",
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-concern",
+        "foundation02-language-fifth10-collins-concern"
+      ],
+      "selected_sense": "A countable matter or situation that causes worry.",
+      "language_rationale": "The original revision removes the separate needs-attention/priority meaning and selects a worrying matter. Retain the original delivery-address example.",
+      "editorial_difficulty_rationale": "Propose editorial B2 on Collins exact countable worrying-fact/situation sense 3 B2. Oxford worry sense 1 cefr b2 is related noun evidence; its important-matter sense 3 is separate and is not silently substituted for the exact countable sense.",
+      "hold_reason": null,
+      "excluded_scope": "The verb meaning is about, concern for another person, a responsibility or priority, a company and going concern are separate. Safeguarding, security and clinical compounds need their own context decisions.",
+      "expression_context_issue": "Foundation02.05 remains exact and pending. Many surface concerns are verbs meaning is about; the other external uses span ordinary worries and specialist concerns. No selected noun binding, specialist meaning or reporting practice is added.",
+      "proposed_editorial_note_for_future_review": "Proposed original countable worrying-matter definition and editorial B2. Oxford related emotional noun evidence and Collins exact countable evidence remain distinguishable.",
+      "media_issue": "All existing media records, briefs, suitability, voice settings and review flags remain exact and pending. This package grants no imagery, asset, morphology, pronunciation or voice approval."
+    },
+    {
+      "id": "solution.problem-answer.n",
+      "term": "solution",
+      "position": 49,
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "solution.problem-answer.n",
+        "text": "solution",
+        "display_text": "solution",
+        "pos": "noun",
+        "definition": "A way to deal with a problem successfully.",
+        "example": "The team agreed on a practical solution.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "solution"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A team choosing a workable response to a clearly shown problem.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "solution.problem-answer.n.analysis.v1",
+          "lexeme_id": "solution.problem-answer.n",
+          "text": "solution",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The source records the solut- noun stem related to solve. The selected successful-response sense differs from the chemical-mixture sense. Use the named Latinate allomorph rather than treating solu or tion as arbitrary chunks. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/solution",
+              "https://www.dictionary.com/browse/solution"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.solve",
+              "type": "stem",
+              "canonical": "solve",
+              "surface": "solut"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.ion.suffix",
+              "type": "suffix",
+              "canonical": "ion",
+              "surface": "ion"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "solution",
+              "rule": "latinate_stem_solve_to_solut_before_ion"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-solution",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-solution",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "c929e36a4083c63e63a875c24a25c8904b467e1a0030956e7bfb573457e4fb11",
+      "proposed_fields": {
+        "definition": "A way to deal with a problem successfully.",
+        "example": "The team agreed on a practical solution.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "solution.problem-answer.n",
+        "text": "solution",
+        "display_text": "solution",
+        "pos": "noun",
+        "definition": "A way to deal with a problem successfully.",
+        "example": "The team agreed on a practical solution.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "solution"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A team choosing a workable response to a clearly shown problem.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "solution.problem-answer.n.analysis.v1",
+          "lexeme_id": "solution.problem-answer.n",
+          "text": "solution",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The source records the solut- noun stem related to solve. The selected successful-response sense differs from the chemical-mixture sense. Use the named Latinate allomorph rather than treating solu or tion as arbitrary chunks. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/solution",
+              "https://www.dictionary.com/browse/solution"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.solve",
+              "type": "stem",
+              "canonical": "solve",
+              "surface": "solut"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.ion.suffix",
+              "type": "suffix",
+              "canonical": "ion",
+              "surface": "ion"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "solution",
+              "rule": "latinate_stem_solve_to_solut_before_ion"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-solution",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-solution",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "c929e36a4083c63e63a875c24a25c8904b467e1a0030956e7bfb573457e4fb11",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-solution",
+        "foundation02-language-fifth10-collins-solution"
+      ],
+      "selected_sense": "A successful way of dealing with a problem.",
+      "language_rationale": "Retain the original definition and practical-team-response example. They select a response to a problem and avoid the chemical mixture sense.",
+      "editorial_difficulty_rationale": "Retain editorial A2 on Oxford selected problem-response sense 1 cefr a2. Collins selected sense 1 is B1+ literally. The different publisher labels remain explicit.",
+      "hold_reason": null,
+      "excluded_scope": "A puzzle or mathematical answer is separately listed, and a dissolved chemical mixture is a different sense. Solving derivatives and cleaning-solution compounds are not accepted through this entry.",
+      "expression_context_issue": "Foundation02.05 stays exact and pending. Retail08.01, FoodService08.05 and CleaningFacilities06.06 use cleaning solution in the mixture sense. EducationChildcare05.06 is a related problem-solving use but remains unscored for this selected entry.",
+      "proposed_editorial_note_for_future_review": "Retain original problem-response wording and editorial A2 while preserving Collins B1+. No chemical solution or expression gate is accepted.",
+      "media_issue": "All existing media records, briefs, suitability, voice settings and review flags remain exact and pending. This package grants no imagery, asset, morphology, pronunciation or voice approval."
+    },
+    {
+      "id": "procedure.agreed-method.n",
+      "term": "procedure",
+      "position": 50,
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "procedure.agreed-method.n",
+        "text": "procedure",
+        "display_text": "procedure",
+        "pos": "noun",
+        "definition": "An established way of carrying out an activity.",
+        "example": "The procedure explains how to request replacement equipment.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "procedure"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A clear ordered workplace procedure for requesting replacement equipment.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "procedure.agreed-method.n.analysis.v1",
+          "lexeme_id": "procedure.agreed-method.n",
+          "text": "procedure",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The method noun is borrowed through French from the proceeding family. A direct modern proceed + ure derivation and its spelling changes need stronger linguistic justification for this sense; keep the word intact instead of guessing pro + cedure. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/procedure"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.procedure",
+              "type": "atomic",
+              "canonical": "procedure",
+              "surface": "procedure"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          },
+          {
+            "source_id": "foundation-mw-procedure",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "3a0b38b04fb19c2a554c3725a3775719b656d9dacaa4bcc1f9114d0f6806e48f",
+      "proposed_fields": {
+        "definition": "An established way of carrying out an activity.",
+        "example": "We followed the procedure for requesting replacement equipment.",
+        "difficulty": "B2"
+      },
+      "content_projection": {
+        "id": "procedure.agreed-method.n",
+        "text": "procedure",
+        "display_text": "procedure",
+        "pos": "noun",
+        "definition": "An established way of carrying out an activity.",
+        "example": "We followed the procedure for requesting replacement equipment.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "procedure"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A clear ordered workplace procedure for requesting replacement equipment.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "procedure.agreed-method.n.analysis.v1",
+          "lexeme_id": "procedure.agreed-method.n",
+          "text": "procedure",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The method noun is borrowed through French from the proceeding family. A direct modern proceed + ure derivation and its spelling changes need stronger linguistic justification for this sense; keep the word intact instead of guessing pro + cedure. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/procedure"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.procedure",
+              "type": "atomic",
+              "canonical": "procedure",
+              "surface": "procedure"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          },
+          {
+            "source_id": "foundation-mw-procedure",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "a1dcaa663d61b2b1baa311cc07478d00b61b3a0dedcd3d3030405d43e215b2d4",
+      "changed_fields": [
+        "example",
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fifth10-oxford-procedure",
+        "foundation02-language-fifth10-collins-procedure"
+      ],
+      "selected_sense": "An established method for doing something, illustrated by requesting equipment.",
+      "language_rationale": "Retain the original definition. The authored example uses follow a procedure directly instead of making procedure mean a document that explains a method.",
+      "editorial_difficulty_rationale": "Propose editorial B2 on Oxford selected established-method sense 1 cefr b2 with its B2 Scientific research topic, and Collins general-method B2.",
+      "hold_reason": null,
+      "excluded_scope": "A formal law or business process, medical operation, computing procedure and particular occupational methods are not accepted as the same reviewed teaching scope.",
+      "expression_context_issue": "Foundation02.09 remains exact and domain pending. Isolation, lockout/tagout, housekeeping methods and treatment procedure remain specialist contexts. No actual method, safety arrangement or medical action is approved.",
+      "proposed_editorial_note_for_future_review": "Retain established-method definition, propose original follow-the-procedure example and editorial B2. Specialist methods and all domain gates remain pending.",
+      "media_issue": "All existing media records, briefs, suitability, voice settings and review flags remain exact and pending. This package grants no imagery, asset, morphology, pronunciation or voice approval."
+    }
+  ]
+}

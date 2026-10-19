@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "copied_at": "2026-10-16T19:29:26.121Z",
+  "files": [
+    {
+      "path": "r01/receipt.json",
+      "bytes": 1129,
+      "sha256": "b5955cd9c6863fa0d7c8585bed87c5798280906671e03727262f0cbe8a8b1234"
+    },
+    {
+      "path": "r01/browser.log",
+      "bytes": 354,
+      "sha256": "917f9ec80c4cf96081784b73f9157d215b6d0a51894642f502b15466eeca8c4c"
+    },
+    {
+      "path": "r01/inputs-before.json",
+      "bytes": 1034,
+      "sha256": "d633f8132d4cf839c1d0ff01bb9536241151b385c864cc07a850bef6dee3ebee"
+    },
+    {
+      "path": "r01/inputs-after.json",
+      "bytes": 1034,
+      "sha256": "d633f8132d4cf839c1d0ff01bb9536241151b385c864cc07a850bef6dee3ebee"
+    },
+    {
+      "path": "r02/receipt.json",
+      "bytes": 1126,
+      "sha256": "89f1824a6f8a6126239d079a2e1a000e52c7d71b120af3f4bd5dad9d8dbff658"
+    },
+    {
+      "path": "r02/browser.log",
+      "bytes": 572,
+      "sha256": "cc62b6c213bb90304a26ccfe097a942c1aa8b938c8b900964566c3dca90ab8b5"
+    },
+    {
+      "path": "r02/inputs-before.json",
+      "bytes": 1034,
+      "sha256": "d633f8132d4cf839c1d0ff01bb9536241151b385c864cc07a850bef6dee3ebee"
+    },
+    {
+      "path": "r02/inputs-after.json",
+      "bytes": 1034,
+      "sha256": "d633f8132d4cf839c1d0ff01bb9536241151b385c864cc07a850bef6dee3ebee"
+    },
+    {
+      "path": "r02/screenshots/paths-1280x800.png",
+      "bytes": 69466,
+      "sha256": "a358803fc7d955f017f5bff664b7090e692e7f823710f97de8896cc07b32aeb4"
+    },
+    {
+      "path": "r02/screenshots/paths-320x568.png",
+      "bytes": 57777,
+      "sha256": "70c74f7cb46365d6ccafe9b910dd8d6b3cfe57a88bdab280a65d397f1422bbe1"
+    },
+    {
+      "path": "r02/screenshots/paths-390x844.png",
+      "bytes": 60986,
+      "sha256": "4f639793d4da376725788e63bf56d6e04049b452b2e097d8dad69173790ae959"
+    },
+    {
+      "path": "r02/screenshots/paths-844x390.png",
+      "bytes": 62169,
+      "sha256": "8a48d13d52efd231a86cd161b4f104c54109c6df6d3f40a57796d0804f78d600"
+    },
+    {
+      "path": "run-browser-home-r01.cjs",
+      "bytes": 2882,
+      "sha256": "15f23aba939afd794f25aa05262ae5175c909b0f62d68c004edb614c8705a44b"
+    },
+    {
+      "path": "run-browser-home-r02.cjs",
+      "bytes": 2880,
+      "sha256": "607dd75907d0625af0a5b8cc34efce332bb12b65db90222d187d7b4d998805c4"
+    }
+  ]
+}

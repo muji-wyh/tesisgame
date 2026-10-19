@@ -1,0 +1,556 @@
+{
+	"candidate_rgba_pixel_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+	"captures": [
+		{
+			"badge_visible": false,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"cue_visibility": {
+				"complete_machine": "pending_root_visual_review",
+				"drawer_front_and_handle": "pending_root_visual_review",
+				"physical_key_bank": "pending_root_visual_review",
+				"sale_display_face": "pending_root_visual_review",
+				"secondary_receipt": "pending_root_visual_review"
+			},
+			"file": "match-unmatched.png",
+			"image_render_size": [
+				43.2910569105691,
+				52.0
+			],
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"raw_sha256": "dbe7d62c3a1a2060f261fe8bd57ade724da013a66158db6ef0c7c540b0de61cb",
+			"rgba_pixel_sha256": "afc659ec2a36fddf8e606340f7ec39e870f2b5c57b70ef8f027a48457d4c81db",
+			"state": "match-unmatched"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"cue_visibility": {
+				"complete_machine": "pending_root_visual_review",
+				"drawer_front_and_handle": "pending_root_visual_review",
+				"physical_key_bank": "pending_root_visual_review",
+				"sale_display_face": "pending_root_visual_review",
+				"secondary_receipt": "pending_root_visual_review"
+			},
+			"file": "match-matched.png",
+			"image_render_size": [
+				43.2910569105691,
+				52.0
+			],
+			"picture_alpha": 0.680000007152557,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"raw_sha256": "620e636eafd3138e50d22fb8f415ec13e4d136dfa5645222db1bad9ee7708f5a",
+			"rgba_pixel_sha256": "4df22479113adb02dda600889c3638203bd5a9dc03c8b9d41234184e62c79d32",
+			"state": "match-matched"
+		},
+		{
+			"badge_visible": false,
+			"card_size": [
+				144.0,
+				74.0
+			],
+			"cue_visibility": {
+				"complete_machine": "pending_root_visual_review",
+				"drawer_front_and_handle": "pending_root_visual_review",
+				"physical_key_bank": "pending_root_visual_review",
+				"sale_display_face": "pending_root_visual_review",
+				"secondary_receipt": "pending_root_visual_review"
+			},
+			"file": "memory-unmatched.png",
+			"image_render_size": [
+				44.9560975609756,
+				54.0
+			],
+			"picture_alpha": 1.0,
+			"picture_size": [
+				120.0,
+				54.0
+			],
+			"raw_sha256": "061f44ac132a8fb5b9b7cfc5c1bd3cef35c0521dac7f382ea4d77ce9530d147a",
+			"rgba_pixel_sha256": "375afee4028a8a96bd7498ce8670be3a20a3b493b6257a2f92523bc864f923ff",
+			"state": "memory-unmatched"
+		},
+		{
+			"badge_visible": true,
+			"card_size": [
+				144.0,
+				74.0
+			],
+			"cue_visibility": {
+				"complete_machine": "pending_root_visual_review",
+				"drawer_front_and_handle": "pending_root_visual_review",
+				"physical_key_bank": "pending_root_visual_review",
+				"sale_display_face": "pending_root_visual_review",
+				"secondary_receipt": "pending_root_visual_review"
+			},
+			"file": "memory-matched.png",
+			"image_render_size": [
+				44.9560975609756,
+				54.0
+			],
+			"picture_alpha": 0.680000007152557,
+			"picture_size": [
+				120.0,
+				54.0
+			],
+			"raw_sha256": "15f257e70cc015128b8f94d98288bd075a26ea5a93d1c6a7b25f0ab7b79886e3",
+			"rgba_pixel_sha256": "cd0a9999610025779f93797f7ebff315cfe11b1b1e31fa398b9e8f669a9ac50d",
+			"state": "memory-matched"
+		}
+	],
+	"checks": [
+		{
+			"check": "Exact authored lexeme checkpoint is unchanged",
+			"passed": true
+		},
+		{
+			"check": "Original acquired glTF identity is frozen",
+			"passed": true
+		},
+		{
+			"check": "Exact full cash-register entry matches frozen preimage",
+			"passed": true
+		},
+		{
+			"check": "Image integration and image review remain pending",
+			"passed": true
+		},
+		{
+			"check": "Previously approved Ava recording remains intact without playback",
+			"passed": true
+		},
+		{
+			"check": "Independent domain and overall review gates remain pending",
+			"passed": true
+		},
+		{
+			"check": "Root-selected original low-right source view is frozen",
+			"passed": true
+		},
+		{
+			"check": "Complete original machine and original handle mesh are retained",
+			"passed": true
+		},
+		{
+			"check": "Original source remains static; no animation invented",
+			"passed": true
+		},
+		{
+			"check": "Scratch original render is exactly 768 x 768",
+			"passed": true
+		},
+		{
+			"check": "Render has transparent corner pixels",
+			"passed": true
+		},
+		{
+			"check": "Original source produces a nonempty image",
+			"passed": true
+		},
+		{
+			"check": "Full source silhouette is inside render bounds with crop padding available",
+			"passed": true
+		},
+		{
+			"check": "Tight candidate keeps transparent corner padding",
+			"passed": true
+		},
+		{
+			"check": "Candidate has valid immutable delivery metadata",
+			"passed": true
+		},
+		{
+			"check": "Scratch sidecar bytes equal original candidate PNG",
+			"passed": true
+		},
+		{
+			"check": "Real current catalog loads without readiness overrides",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module01",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module02",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module03",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module04",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module05",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module06",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module07",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module08",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module09",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module10",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable for match",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable for memory",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable for pop",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable for jelly",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable for word_jelly",
+			"passed": true
+		},
+		{
+			"check": "Actual module03 remains unavailable for phrase",
+			"passed": true
+		},
+		{
+			"check": "Image-only scratch inventory fits immutable media schema and budgets",
+			"passed": true
+		},
+		{
+			"check": "Actual raw loader uses no injected fetch callback",
+			"passed": true
+		},
+		{
+			"check": "Real loader reads, hashes and decodes the scratch content-addressed sidecar",
+			"passed": true
+		},
+		{
+			"check": "Actual decoded image acquires a scoped cache lease",
+			"passed": true
+		},
+		{
+			"check": "Scoped decoded image has exact rendered dimensions",
+			"passed": true
+		},
+		{
+			"check": "Real decoded image pixels exactly equal source-rendered candidate pixels",
+			"passed": true
+		},
+		{
+			"check": "Actual WordArt resolves the leased cache resource",
+			"passed": true
+		},
+		{
+			"check": "Real cache accounts for exactly one candidate image and lease",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard resolves the source through WordArt without texture substitution: 0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard resolves the source through WordArt without texture substitution: 1",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard resolves the source through WordArt without texture substitution: 2",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard resolves the source through WordArt without texture substitution: 3",
+			"passed": true
+		},
+		{
+			"check": "Actual native card contact is saved",
+			"passed": true
+		},
+		{
+			"check": "Exact minimum card size: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture inset size: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Real badge visibility: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Real matched picture alpha: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Visible picture face: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual minimum crop is saved: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact minimum card size: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture inset size: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Real badge visibility: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Real matched picture alpha: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Visible picture face: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual minimum crop is saved: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Exact minimum card size: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture inset size: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Real badge visibility: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Real matched picture alpha: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Visible picture face: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Actual minimum crop is saved: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Exact minimum card size: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Exact picture inset size: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Real badge visibility: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Real matched picture alpha: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Visible picture face: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Actual minimum crop is saved: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Nearest-neighbor enlarged review aid is saved",
+			"passed": true
+		},
+		{
+			"check": "Cache teardown releases all resources, bytes, reservations, leases and active identities",
+			"passed": true
+		},
+		{
+			"check": "Released scope cannot revive the candidate image",
+			"passed": true
+		},
+		{
+			"check": "No strong reference retains decoded candidate after teardown",
+			"passed": true
+		},
+		{
+			"check": "Full persisted lexeme bytes remain unchanged",
+			"passed": true
+		}
+	],
+	"conversion": {
+		"adaptations": [
+			"Original full source model and atlas, unchanged materials and child transforms",
+			"Root centering, root-reviewed camera and original inspection studio lighting",
+			"Transparent background, 16-pixel alpha-bound padding, 512-pixel-wide Lanczos resize"
+		],
+		"alpha_bounds": [
+			141,
+			99,
+			490,
+			595
+		],
+		"camera": {
+			"look_at": [
+				0,
+				0,
+				0
+			],
+			"orthographic_size": 1.78342950344086,
+			"position": [
+				4.68190717697144,
+				2.77446365356445,
+				6.93615913391113
+			]
+		},
+		"candidate_rgba_pixel_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+		"candidate_sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+		"candidate_size": [
+			512,
+			615
+		],
+		"crop": [
+			125,
+			83,
+			522,
+			627
+		],
+		"lighting": {
+			"ambient_energy": 0.45,
+			"directional_energy": 0.65,
+			"directional_rotation": [
+				-50.0,
+				-35.0,
+				0.0
+			]
+		},
+		"model_sha256": "43aed74637cf10432d996a18f03ed580f6cbc346b5f91d9592473370ed8ea1cc",
+		"picture_review": "pending_root_visual_review",
+		"raw_size": [
+			768,
+			768
+		],
+		"source_root_centering": [
+			-0.0305804908275604,
+			-0.602324724197388,
+			-0.0509295761585236
+		],
+		"source_view": {
+			"camera": [
+				4.68190717697144,
+				2.77446365356445,
+				6.93615913391113
+			],
+			"file": "positive-z-right-low.png",
+			"look_at": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"orthographic_size": 1.78342950344086,
+			"pixels": [
+				768.0,
+				768.0
+			],
+			"sha256": "7b90fe5375e245c81c4297e246febbff42a8f85f231d56d9f60315d263fd34f8"
+		}
+	},
+	"cue_visibility_acceptance": false,
+	"failed": 0,
+	"loaded_cache": {
+		"active_ids": [
+			"sha256:f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+		],
+		"leases": 1,
+		"limit_bytes": 134217728,
+		"pinned_bytes": 2519040,
+		"reserved_bytes": 0,
+		"resident_bytes": 2519040,
+		"resources": 1
+	},
+	"loaded_image_rgba_pixel_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+	"manifest": {
+		"course_id": "retail",
+		"curriculum_revision": "candidate-r02",
+		"module_id": "cash-register-scratch-image-review",
+		"resources": [
+			{
+				"compressed_bytes": 172442,
+				"decoded_bytes": 2519040,
+				"format": "png",
+				"height": 615,
+				"id": "sha256:f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+				"kind": "image",
+				"path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+				"sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+				"width": 512
+			}
+		],
+		"schema_version": 1
+	},
+	"production_acceptance": false,
+	"production_scripts": {
+		"access": "ad4350579562aec2d49c72c0ccfd72c54df162992fe8e30604504b52aef30025",
+		"loader": "d9d348d665b443300009f7490dbcb613a73eff58f9e91d6e70e364c9c76e7390",
+		"word_art": "edcb6c1cd41375df4d91d195bddd8bebf31d9a7e10116c10bdd7c8797ad11845",
+		"word_card": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+	},
+	"released_cache": {
+		"active_ids": [],
+		"leases": 0,
+		"limit_bytes": 134217728,
+		"pinned_bytes": 0,
+		"reserved_bytes": 0,
+		"resident_bytes": 0,
+		"resources": 0
+	},
+	"released_scoped_url": true,
+	"released_texture_reference": true,
+	"resource": {
+		"compressed_bytes": 172442,
+		"decoded_bytes": 2519040,
+		"format": "png",
+		"height": 615,
+		"id": "sha256:f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+		"kind": "image",
+		"path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+		"sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+		"width": 512
+	},
+	"scope": "One scratch candidate from unchanged acquired Tiny Treats source, through real raw Loader, scoped cache lease, Access, WordArt and minimum WordCard. No texture substitution, fetch override, audio playback, readiness override or production writes. This image-only fixture is not an accepted media inventory or playable module.",
+	"status": "candidate_probe_passed_pending_visual_review"
+}

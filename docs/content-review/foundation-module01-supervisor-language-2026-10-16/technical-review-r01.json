@@ -1,0 +1,168 @@
+{
+  "schema": 1,
+  "accepted": true,
+  "review_kind": "technical_only",
+  "reviewer": "Codex approved_audio subagent",
+  "recorded_at": "2026-10-16T14:05:49.552Z",
+  "original_research_authorship": true,
+  "independent_language_acceptance": false,
+  "language_acceptance_owner": "Codex root independent AI language review; not human or subject-matter approval",
+  "scope": "Exact supervisor reconsideration candidate, provenance boundaries, prepared test transformations, and guarded delivery script only.",
+  "findings": [],
+  "blocking_findings": 0,
+  "reviewed_files": [
+    {
+      "path": "build/professional-english/foundation-module01-language-review/supervisor-reconsideration-r01/accepted-language.json",
+      "raw_sha256": "0eab2b7ec5f16ead8cbf32b09aa5a5fb1be4e5e68b6ac4e8a4e0f9b2daad02cd",
+      "inspection": "Exact candidate, technical scope, source labels and protected-context comparisons; language judgment belongs to root."
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/supervisor-reconsideration-r01/binding.json",
+      "raw_sha256": "0b64efc3103b95f80f884e1759a5fe323cb49e8d499fa4d4e26b60fd8bad71fd",
+      "inspection": "Complete hash binding and R30 preimage comparison."
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/supervisor-reconsideration-r01/prepare.cjs",
+      "raw_sha256": "8f2817283b338c19856eff1e79f6abe667c2acf46f1f8ba49d5714335a1f5a3e",
+      "inspection": "Full static review; not rerun."
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/supervisor-reconsideration-r01/prepare-tests.cjs",
+      "raw_sha256": "008601ac64ad878c9fb97b806b9f23394442494cea4386cc822d4423af928c18",
+      "inspection": "Full static review; not rerun."
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/supervisor-reconsideration-r01/deliver.cjs",
+      "raw_sha256": "a48720963ed6cb9ca6e36d9717c5ffebf2f6f4be0a5296f22ecaf07eb2cab818",
+      "inspection": "Full static review and JavaScript syntax check; not executed or fault-injected."
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/supervisor-reconsideration-r01/test-patches.json",
+      "raw_sha256": "7f17ac94b07cbf81adffa1924cebd3f7a6602f26b0fecd3646298ed89fa4a8fb",
+      "inspection": "Full ledger review and exact transformation verification."
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/supervisor-reconsideration-r01/professional-content.test.cjs.before",
+      "raw_sha256": "34a1ad2c48df656b665e522ee5dc1046fe1beb88a3e76e3d3aba88102eed6c54",
+      "inspection": "Byte identity with live test and R30; changed regions reviewed against after file."
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/supervisor-reconsideration-r01/professional-content.test.cjs.after",
+      "raw_sha256": "83ccbe17e57bcd9ee8216f1416de68abcaae8ca79c54e493eaf0007d6e74440e",
+      "inspection": "Complete diff, helper chain, appended tests and syntax reviewed; extracted reversal helpers executed."
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/supervisor-reconsideration-r01/professional-retail-morphology.test.cjs.before",
+      "raw_sha256": "86773940915510679915fc173ae4c377d397b28fc8bb2f93d600d9a3bd77b73e",
+      "inspection": "Byte identity with live test and R30; changed regions reviewed against after file."
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/supervisor-reconsideration-r01/professional-retail-morphology.test.cjs.after",
+      "raw_sha256": "445ace67e25d2be472f58e41eb507cc2e96ca15a61f815d8a4583fe80c28650f",
+      "inspection": "Complete diff, helper chain, appended test and syntax reviewed; extracted reversal helpers executed."
+    },
+    {
+      "path": "build/professional-english/continuation-validation-r30.json",
+      "raw_sha256": "59db6d773240cd58ab8873472050515894f2586557921551434f7b4c5451bc55",
+      "inspection": "Parsed status, registry hash, and every after-input SHA256 verified."
+    },
+    {
+      "path": "data/professional/lexemes/foundation-module01.json",
+      "raw_sha256": "718a853ccc94ddcc145f36de5181ae98685190c84c122747aadece7b08d1dfcd",
+      "inspection": "Parsed supervisor preimage and protected Foundation entries compared; raw preimage verified."
+    },
+    {
+      "path": "data/professional/sources.json",
+      "raw_sha256": "77c995308c9beb28435a09a561cf699913f7c53fb0ad4afb60d370f7c77f19c7",
+      "inspection": "Parsed source registry preservation and additive source-ID uniqueness checked; raw preimage verified."
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "raw_sha256": "34a1ad2c48df656b665e522ee5dc1046fe1beb88a3e76e3d3aba88102eed6c54",
+      "inspection": "Exact current test preimage checked against R30 and prepared before file."
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "raw_sha256": "86773940915510679915fc173ae4c377d397b28fc8bb2f93d600d9a3bd77b73e",
+      "inspection": "Exact current test preimage checked against R30 and prepared before file."
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/held-terms-research-r01/source-receipt.json",
+      "raw_sha256": "f2c31654059c371c51af3e3a214047b9a27b2dda654cd4b7764392aa39720ae4",
+      "inspection": "Research provenance hash and first three source observations compared; authored earlier by this reviewer, so no independent language acceptance claimed."
+    }
+  ],
+  "checks": {
+    "r30_input_preimages_verified": 676,
+    "baseline_raw_sha256": "59db6d773240cd58ab8873472050515894f2586557921551434f7b4c5451bc55",
+    "registry_before_sha256": "4ad48ae53f0fb028b95d063611c2ad95409e8e20716b65b0227b17d2f61b717f",
+    "candidate_registry_sha256": "9030a86673b18539cab08848d1f1d893be5247b446fa4d615e729b1245d2404c",
+    "before_entry_sha256": "4a2ae571f902632d58bb7d81ea7c5151c1132cd21a52885921eb30071d217583",
+    "after_entry_sha256": "655ec68c6462fef490f00f5abd9bf4c39738fc670655ce08cc4e6362be656cb0",
+    "candidate_entry_count": 1,
+    "additive_source_count": 3,
+    "allowed_changed_top_level_fields": [
+      "definition",
+      "difficulty",
+      "review",
+      "references",
+      "editorial_notes"
+    ],
+    "protected_fields_exact": true,
+    "original_references_retained": true,
+    "attendance_exact": true,
+    "context_expression_snapshots_verified": 21,
+    "all_expressions_courses_themes_and_other_lexemes_hashes_verified": true,
+    "previous_source_registry_hash_verified": true,
+    "module01_memberships_verified": 20,
+    "historical_sources_and_holds_preserved": true,
+    "test_preimages_exact": true,
+    "test_transformations_rebuilt_and_checked": true,
+    "appended_tests": {
+      "professional_content": 3,
+      "professional_retail_morphology": 1
+    },
+    "existing_tests_removed": 0,
+    "extracted_reversal_chain_positive_checks": "Exact current and exact historical supervisor passed every inspected Foundation reversal stage in each test file.",
+    "extracted_reversal_negative_probes": 40,
+    "clone_isolation_verified": true,
+    "script_and_test_syntax_checks_passed": true,
+    "candidate_audit": {
+      "errors": 0,
+      "warnings": 29470,
+      "reviewed_lexemes": 111,
+      "ready_modules": 0
+    },
+    "full_test_suites_run": false,
+    "native_or_browser_processes_started": false,
+    "production_or_shared_tests_mutated": false
+  },
+  "delivery_review": {
+    "allowlisted_production_paths": [
+      "data/professional/lexemes/foundation-module01.json",
+      "data/professional/sources.json",
+      "data/professional/provenance/foundation-module01-supervisor-language-2026-10-16.json",
+      "tests/professional-content.test.cjs",
+      "tests/professional-retail-morphology.test.cjs"
+    ],
+    "fresh_evidence_directory": "docs/content-review/foundation-module01-supervisor-language-2026-10-16",
+    "one_shot_prepared_marker": true,
+    "technical_review_and_current_file_hash_gates": true,
+    "all_676_baseline_input_guards": true,
+    "whole_registry_guard": true,
+    "new_source_id_guards": true,
+    "exact_post_write_registry_and_file_hash_checks": true,
+    "unwritten_baseline_input_preservation_guards": true,
+    "preimages_saved_before_mutation": true,
+    "rollback_of_owned_written_paths_on_caught_failure": true,
+    "immutable_existing_receipts_not_rewritten": true,
+    "retained_artifacts_include_review_and_test_preimages": true
+  },
+  "limits": [
+    "This is a technical review by the author of the research note. It is not independent linguistic, human, specialist, morphology, media, expression, or module-readiness approval.",
+    "The independent language decision and source crosscheck are attributed to root; this review checks the recorded distinctions and technical binding without reapproving editorial B2.",
+    "Read-only verification included in-memory candidate audit, exact hash comparisons, syntax parsing, and extracted helper probes. The complete test suites and native/browser validation were not run by this reviewer.",
+    "Delivery was statically reviewed and not executed or fault-injected here. Renames are per-file, not a cross-file crash-atomic transaction. Caught failures restore unchanged owned writes; concurrent drift aborts rollback. Fresh evidence and failure/preparation receipts can remain for inspection.",
+    "Acceptance binds only the listed file bytes. Any edit to the candidate, ledger, delivery code, prepared tests, or live preimages requires a fresh review or revalidation."
+  ]
+}

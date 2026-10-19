@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "status": "independent_static_source_review_accepts_root_owned_scratch_preparation_only",
+  "reviewer": "Codex recover_delivery; independent technical reviewer of runtime_recovery delivery preparation sources",
+  "review_date_local": "2026-10-17",
+  "reviewed_proposal": "build/professional-english/foundation02-fourth10-delivery-preparation-r01",
+  "author_inventory_sha256": "b4e418aaaec0c4748b32264438c66e0ba6f65944e97f3f31988a430f570e0f04",
+  "reviewed_sources": {
+    "projection.cjs": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9",
+    "test-transforms.cjs": "f28949a1cdb0dfceb1875ec7abfd6478aa2502dfecb3b6e8e37d1bd113c58d5e",
+    "prepare.cjs": "6fa9ddd5547673b797c302a4b1c78d8b3be64a9b90f07cfe2771a3f2236b9c11",
+    "input-pins.json": "d58ea126241c8585d7b8887fa7698520fde2d0134de5f60d9599a19bb92adaa5",
+    "input-freeze-receipt.json": "11199e3c062e250f654bdd9daead9803565afe075fd1e96b457bd7fcdf71c9ed",
+    "HANDOFF.md": "4b0e0f9b4a020e33c580ec5082daf83dc8752dcd4dad98f31e429b6abefedba6",
+    "TRANSACTION.md": "2a68f99c9198418f6cdd41aad76b3df583be1ec6716d7d33c70b5d20e734b9c4"
+  },
+  "static_evidence": {
+    "raw_measurements_file": "static-measurements.json",
+    "raw_measurements_sha256": "d1df61937309599f0538a13933ae13afb697d5b4afdaf3d9c93d311666e590a0",
+    "evidence_summary_file": "evidence-summary.json",
+    "evidence_summary_sha256": "502015bac4c0be20a077bea6b8e893111e49ab09898c0dc562869fd61bf0b51e",
+    "author_artifacts_measured": 7,
+    "pinned_inputs_measured": 800,
+    "source_mismatches": 0,
+    "pinned_input_mismatches": 0,
+    "original_context_files": 355,
+    "additional_context_files_outside_pin_union_measured": 3,
+    "historical_raw_byte_difference_paths": [
+      "data/professional/lexemes/foundation-module02.json",
+      "data/professional/sources.json"
+    ],
+    "all_three_future_durable_destinations_absent": true,
+    "method": "Read-only source inspection, JSON evidence inspection and PowerShell raw SHA256/length measurements. No implementation import, projection construction, syntax parser, test callback or native execution."
+  },
+  "baseline": {
+    "third10_committed_receipt_sha256": "e247462f7d41a03b2b00b1dee17314987954d26df82f4b6949ddc2982fbbea35",
+    "third10_persisted_receipt_sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8",
+    "persisted_registry_sha256": "fb45e1d9c7cbf479bf06ac0c00b39ec28de473c96c86cc1b071c72a572f8d437",
+    "historical_research_registry_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+    "observed_existing_log_results": {
+      "draft_audit_errors": 0,
+      "draft_audit_ready_modules": 0,
+      "draft_audit_reviewed_lexemes": 138,
+      "affected_node_tests_passed": 224,
+      "native_morphology_checks": 3319,
+      "native_morphology_failures": 0,
+      "committed_evidence_tests_passed": 1
+    },
+    "scope": "The exact existing third-ten committed and persisted state. Existing logs were read and hashed, not rerun. No result is transferred to fourth-ten outputs."
+  },
+  "facets": [
+    {
+      "topic": "Exact rebase",
+      "verdict": "accepted_by_static_inspection",
+      "locations": ["projection.cjs:53", "projection.cjs:69", "projection.cjs:109", "projection.cjs:121"],
+      "finding": "Current third-ten full afterimages and sixteen-source suffix must match before reversal. The reconstructed full registry and the original target/source file serializations must match frozen research identities. Only the two named historical file differences are allowed; all other original context hashes remain exact."
+    },
+    {
+      "topic": "Accepted language content",
+      "verdict": "accepted_by_static_inspection",
+      "locations": ["projection.cjs:139", "projection.cjs:147", "projection.cjs:198"],
+      "finding": "All ten ordered IDs, exact original entries, accepted definition/example/difficulty values, per-field decisions and their hashes are tied to the frozen independent review. There are six difficulty changes, one submit definition change and one reject example change across six entries. No new language decision is introduced."
+    },
+    {
+      "topic": "Metadata and literal source evidence",
+      "verdict": "suitable_for_projected_output_review",
+      "locations": ["projection.cjs:155", "projection.cjs:159", "projection.cjs:184", "test-transforms.cjs:69"],
+      "finding": "New review metadata, twenty consulted source records, two verified lexical references per entry and rewritten notes are explicitly separate technical-delivery scope. Historical reference prefixes remain exact. Fresh rendered-page observations are distinguished from frozen author HTML metadata and non-retained bodies. B1+, source disagreements, cefr/fkcefr differences and missing selected labels are preserved. Full produced afterimages still require independent review."
+    },
+    {
+      "topic": "Protected fields and held context",
+      "verdict": "accepted_by_static_inspection",
+      "locations": ["projection.cjs:32", "projection.cjs:187", "projection.cjs:201", "projection.cjs:226"],
+      "finding": "Only definition, example, difficulty, four named review properties, references and editorial notes are outside the protected entry projection. Exact morphology, media, domain review, identity, accepted forms, regions and practice modes remain checked. Four whole-entry holds, 200 memberships, twenty containing modules, 130 surface-expression entries/139 pairs, 42 derivative expressions, four focus expressions, ten containing-module expressions, four additional Foundation expressions, 63 related entries and seventeen inherited expression holds remain bound. Complete's pending form-image mismatch is preserved."
+    },
+    {
+      "topic": "Prepared test afterimages",
+      "verdict": "suitable_for_root_preparation_not_runtime_approval",
+      "locations": ["test-transforms.cjs:7", "test-transforms.cjs:82", "test-transforms.cjs:156"],
+      "finding": "Anchors require exactly one occurrence. Fourth-ten reversal precedes third-ten and all earlier chronology; it accepts only the exact before/after entry and rejects partial drift. Fourth-ten source suffix removal precedes the old sixteen-source suffix. Old third-ten counts and isolation hashes are evaluated on the reversed projection rather than weakened. New count, language, source, hold and gate checks are appended. Native call and helper insertions preserve the existing chain, but no generated afterimage, parser or execution result exists yet."
+    },
+    {
+      "topic": "Scratch preparation and one-shot evidence",
+      "verdict": "accepted_for_root_owned_dispatch",
+      "locations": ["prepare.cjs:16", "prepare.cjs:28", "prepare.cjs:52", "prepare.cjs:102", "prepare.cjs:118"],
+      "finding": "The dispatcher requires the Q worktree and root token, exclusively creates execution-r01, uses exclusive file writes, records start/source hashes, creates virtual target/source/provenance reads, audits projected data, retains exact source/test before/after bytes, rechecks production inputs and source identities, and records failure/end evidence. It has no production replacement or native process call. Root's external source/command witness remains required because the token is coordination and the source imports occur before the token check."
+    }
+  ],
+  "operational_observations": [
+    "The 800-path pin/measurement list is not the entire distinct dependency union: three original third-ten research/review files are separately bound through the 355 context hashes. All three were independently measured here and match. Preserve source_baseline.source_pins as well as measured_input_sha256 in later evidence.",
+    "Projected callbacks execute existing test code. Two current callbacks create and delete generated os.tmpdir fixtures for preview/media-manifest checks; the fs proxy only replaces readFileSync. These are bounded existing scratch side effects, not production writes or persisted-suite evidence.",
+    "The receipt's artifacts list predates execution-end.json. Root must independently compare execution-start source hashes, execution-end source hashes, actual final source bytes and its outer command witness. Do not treat the receipt alone as proof of final source equality.",
+    "No subagent slot was available for another reviewer; this packet is the assigned independent static technical review, not a parallel or human review."
+  ],
+  "blockers_to_scratch_preparation": [],
+  "reviewed_dispatch_scope": {
+    "owner": "root",
+    "commands": [
+      ["node", "--check", "build/professional-english/foundation02-fourth10-delivery-preparation-r01/projection.cjs"],
+      ["node", "--check", "build/professional-english/foundation02-fourth10-delivery-preparation-r01/test-transforms.cjs"],
+      ["node", "--check", "build/professional-english/foundation02-fourth10-delivery-preparation-r01/prepare.cjs"],
+      ["node", "build/professional-english/foundation02-fourth10-delivery-preparation-r01/prepare.cjs", "--root-dispatch", "confirmed-by-root"]
+    ],
+    "conditions": [
+      "Bind the exact reviewed author inventory and source bytes in a fresh root command witness before dispatch; verify they remain exact afterward.",
+      "Keep all pinned/current-context inputs exact and execution-r01 absent before the single preparation dispatch.",
+      "Preserve every failed attempt and executed source. Any correction uses a fresh revision/output directory.",
+      "Independently review the resulting afterimages, sources, projected callbacks and evidence before authoring a guarded commit."
+    ],
+    "native_dispatch_accepted": false,
+    "production_commit_accepted": false,
+    "prepared_afterimages_accepted": false,
+    "new_language_approval": false
+  },
+  "work_performed_by_this_reviewer": {
+    "proposal_or_production_files_modified": false,
+    "implementation_imported": false,
+    "syntax_checks_executed": false,
+    "tests_or_projected_callbacks_executed": false,
+    "preparation_dispatched": false,
+    "native_dispatched": false,
+    "writes_confined_to": "build/professional-english/foundation02-fourth10-preparation-source-review-r01"
+  }
+}

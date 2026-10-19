@@ -1,0 +1,1606 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.transport_delivery.module07.01",
+      "text": "The purchase order, delivery note, and packing list refer to the same order number.",
+      "meaning": "Cross-check the identities of three goods documents.",
+      "context": "Reviewing delivery paperwork.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "purchase",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "order",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "delivery",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "note",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "packing",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "list",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "refer",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "to",
+          "start": 58,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "same",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "order",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "number",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "purchase-order.buyer-order-document.n",
+        "delivery-note.delivered-goods-document.n",
+        "packing-list.package-contents-list.n",
+        "order-number.purchase-order-identifier.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module07.02",
+      "text": "Please check the order status and tracking number before explaining the delivery estimate.",
+      "meaning": "Use the recorded shipment information when answering an inquiry.",
+      "context": "Responding to a delivery timing question.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "order",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "status",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "tracking",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "number",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "before",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "explaining",
+          "start": 57,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "delivery",
+          "start": 72,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "estimate",
+          "start": 81,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "order-status.order-progress-state.n",
+        "tracking-number.shipment-tracking-code.n",
+        "delivery-estimate.predicted-delivery-time-or-date.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module07.03",
+      "text": "The return authorization and return label are linked to this return reason.",
+      "meaning": "Connect the return approval and label with the stated reason.",
+      "context": "Reviewing a proposed return shipment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "return",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "authorization",
+          "start": 11,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "return",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "label",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "linked",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 56,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "return",
+          "start": 61,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "reason",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 74,
+          "end": 75
+        }
+      ],
+      "focus_lexeme_ids": [
+        "return-authorization.return-approval-reference.n",
+        "return-label.return-shipping-label.n",
+        "return-reason.explanation-for-return.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module07.04",
+      "text": "Confirm the identity check requirements for the authorized representative before the handover.",
+      "meaning": "Request the applicable verification process without inventing it.",
+      "context": "Clarifying a delivery requiring authorization.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "identity",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "check",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "requirements",
+          "start": 27,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "for",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "authorized",
+          "start": 48,
+          "end": 58
+        },
+        {
+          "index": 8,
+          "text": "representative",
+          "start": 59,
+          "end": 73
+        },
+        {
+          "index": 9,
+          "text": "before",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 11,
+          "text": "handover",
+          "start": 85,
+          "end": 93
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "identity-check.identity-verification.n",
+        "authorized-representative.person-permitted-to-act-for-another.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module07.05",
+      "text": "The collection point and delivery point are different; please confirm both locations.",
+      "meaning": "Distinguish the pickup location from the agreed destination handover point.",
+      "context": "Checking collection and delivery arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "collection",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "point",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "delivery",
+          "start": 25,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "point",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "different",
+          "start": 44,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "please",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "confirm",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "both",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "locations",
+          "start": 75,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "collection-point.agreed-place-for-goods-to-be-picked-up.n",
+        "delivery-point.agreed-place-for-goods-handover-at-destination.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module07.06",
+      "text": "The delivery instruction refers to a parcel locker, so confirm that this option is available for the shipment.",
+      "meaning": "Check the actual service option before relying on it.",
+      "context": "Reviewing a locker delivery request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "delivery",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "instruction",
+          "start": 13,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "refers",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "parcel",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "locker",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "so",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "confirm",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "that",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "this",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "option",
+          "start": 73,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "is",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "available",
+          "start": 83,
+          "end": 92
+        },
+        {
+          "index": 16,
+          "text": "for",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 97,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": "shipment",
+          "start": 101,
+          "end": 109
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "delivery-instruction.direction-about-how-arranged-delivery-should-be-handled.n",
+        "parcel-locker.secure-compartment-for-parcel-collection-or-delivery.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module07.07",
+      "text": "The collection receipt records the goods picked up at the agreed collection point.",
+      "meaning": "Identify the record of collection and the place where it happened.",
+      "context": "Reviewing collection paperwork.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "collection",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "receipt",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "records",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "goods",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "picked",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "up",
+          "start": 48,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "at",
+          "start": 51,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "agreed",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "collection",
+          "start": 65,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "point",
+          "start": 76,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "collection-receipt.record-acknowledging-goods-pickup.n",
+        "collection-point.agreed-place-for-goods-to-be-picked-up.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module07.08",
+      "text": "The refused delivery is recorded separately from the failed delivery; ask about any approved redelivery options.",
+      "meaning": "Distinguish recorded outcomes and request a supported next step.",
+      "context": "Clarifying delivery outcome records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "refused",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "delivery",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 21,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "recorded",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "separately",
+          "start": 33,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "from",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "failed",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "delivery",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "ask",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "about",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "any",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "approved",
+          "start": 84,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "redelivery",
+          "start": 93,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "options",
+          "start": 104,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "refused-delivery.delivery-that-recipient-declines-to-accept.n",
+        "failed-delivery.delivery-attempt-not-completed.n",
+        "redelivery.another-delivery-attempt-after-earlier-attempt.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module07.09",
+      "text": "Review the delivery photograph and delivery notice through the approved system without sharing the recipient's personal details.",
+      "meaning": "Use delivery evidence and notices within the applicable information controls.",
+      "context": "Following up delivery records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Review",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "delivery",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "photograph",
+          "start": 20,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "delivery",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "notice",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "through",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "approved",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 10,
+          "text": "system",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 11,
+          "text": "without",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 12,
+          "text": "sharing",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 14,
+          "text": "recipient's",
+          "start": 99,
+          "end": 110
+        },
+        {
+          "index": 15,
+          "text": "personal",
+          "start": 111,
+          "end": 119
+        },
+        {
+          "index": 16,
+          "text": "details",
+          "start": 120,
+          "end": 127
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 127,
+          "end": 128
+        }
+      ],
+      "focus_lexeme_ids": [
+        "delivery-photograph.image-recording-delivery-event.n",
+        "delivery-notice.message-recording-delivery-attempt-or-next-step.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.transport_delivery.module07.10",
+      "text": "Ask whether contactless delivery is available and what proof of delivery the service records.",
+      "meaning": "Check an optional delivery arrangement and its evidence.",
+      "context": "Responding to a customer request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "whether",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "contactless",
+          "start": 12,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "delivery",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 4,
+          "text": "is",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "available",
+          "start": 36,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "what",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "proof",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "of",
+          "start": 61,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "delivery",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "service",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "records",
+          "start": 85,
+          "end": 92
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 92,
+          "end": 93
+        }
+      ],
+      "focus_lexeme_ids": [
+        "contactless-delivery.delivery-arrangement-without-close-personal-contact.n",
+        "proof-of-delivery.record-used-as-evidence-of-delivery.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

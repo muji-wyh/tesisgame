@@ -1,0 +1,9 @@
+# Fifth-ten projected validator source proposal
+
+Root-authored, unexecuted source. No actual preparation or afterimage review is selected. The template is intentionally unusable. The independent actual-binding review, root guard checks, one real preparation and separate afterimage review must precede a concrete input and dispatch.
+
+The runner follows the earlier shopping-bag r03 projected validator with explicit changes for the fifth-ten preparation schema, six replacements and all bound additions. It verifies every preparation artifact, exact target/absence sets and accepted registry/audit summary. The same filesystem overlay reaches all locally imported validator modules. New files and parent directories support read, existence, realpath, stat and directory enumeration. Unexpected filesystem operations reject. Test fixture writes are restricted to the two established prefixes created by the runner under the operating-system temporary directory; deletion is limited to those exact generated roots or their descendants.
+
+The expected 263 synchronous callbacks (197 content, 40 morphology, 26 media) come from the existing 255 plus five, two and one authored callbacks. Actual afterimages must confirm these counts. Final source/input/protected-file checks run after success or failure. No test or native result is claimed by authoring. One-shot evidence goes to attempt-001; preserve any failure and use a new reviewed revision for changes.
+
+Root must build a conflict-checked expected-input map from the actual binding plus all actual preparation artifacts, independent afterimage acceptance and explicitly selected source/review/guard evidence. Root must supply the independently reviewed source hash and exact concrete input hash. Historical source-only approvals and construction-stage null commit/persisted fields remain literal. This validator cannot install content or accept native, browser, audio or ready-module outcomes.

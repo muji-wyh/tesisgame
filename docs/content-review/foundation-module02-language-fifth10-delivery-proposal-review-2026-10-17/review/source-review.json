@@ -1,0 +1,324 @@
+{
+  "schema": 1,
+  "scope": "Frozen author and earlier independent evidence inspected, no new consultation",
+  "sources": [
+    {
+      "id": "foundation02-language-fifth10-oxford-broken",
+      "proposed_record_json_sha256": "83dc47ac4f77b6b86fd4d6aa37d0f8ab555f63b65095e2ef901223c8bbdfdc63",
+      "author_record_json_sha256": "5ebd23aa99932f6a515106e524a2728cbadf318c2ddc2bbb847d104c8981b7ba",
+      "prior_independent_record_json_sha256": "5b5d09f77660455cdac3e184ce35ef9faec14b5f99d7ce6ffeab266abebef589",
+      "author_rendered_level": "A2",
+      "author_html_levels": [
+        {
+          "element_id": "broken_sng_1",
+          "sense_number": "1",
+          "cefr": "a2",
+          "fkcefr": null,
+          "html_offset": 53621
+        }
+      ],
+      "prior_independent_rendered_level": "A2",
+      "label_scope": "Health problems topic attached to selected adjective sense 1",
+      "boundary": "Promises, interrupted activity/language and emotional uses remain separate.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-collins-broken",
+      "proposed_record_json_sha256": "72d2ba6ce3e212912a71361ed288aa8e43815947209d2dca97087f517fce37ce",
+      "author_record_json_sha256": "c61b098da979fa1883ffd8a1047deb6f48c2c74edecec354b7bf83a84e673e75",
+      "prior_independent_record_json_sha256": "698b265da5f257ba90d84ce9bd5978de04b329b950b73ecc2104c4ea3b67719a",
+      "author_rendered_level": null,
+      "author_html_levels": [],
+      "prior_independent_rendered_level": null,
+      "label_scope": null,
+      "boundary": "Do not use the participle cross-reference level as an adjective-sense level.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-oxford-urgent",
+      "proposed_record_json_sha256": "7af3169ed70cbd6cba369511195fc1a9f10e1ed3717bc69606f4c7ea538b01ef",
+      "author_record_json_sha256": "060fc65efd12d265ea37746abb256996973b4ec39d0397603dbaa73d16086c34",
+      "prior_independent_record_json_sha256": "a2b1c19b2c1bb37920c112a426687314c17149d0897e66339eb8c15a3f3e45c6",
+      "author_rendered_level": null,
+      "author_html_levels": [
+        {
+          "element_id": "urgent_sng_1",
+          "sense_number": "1",
+          "cefr": "b2",
+          "fkcefr": null,
+          "html_offset": 53179
+        }
+      ],
+      "prior_independent_rendered_level": null,
+      "label_scope": null,
+      "boundary": "No medical triage, legal deadline or obligatory response threshold accepted.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-collins-urgent",
+      "proposed_record_json_sha256": "259f1190d9458e97ed5ac62d5a018fcfe919b510095b428692621edb60a9f3fd",
+      "author_record_json_sha256": "22f8680c7d034662ba5e5ca47834342c49c575a0c50e58b9cacc5a231770836c",
+      "prior_independent_record_json_sha256": "1728082f3bc63f1ce194a9768631f62bb2073f4e422f14c47bcc31207e608fc8",
+      "author_rendered_level": "B1+",
+      "author_html_levels": [],
+      "prior_independent_rendered_level": "B1+",
+      "label_scope": "Selected needing-prompt-action adjective sense",
+      "boundary": "B1+ remains literal and differs from Oxford selected b2 metadata.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-oxford-unclear",
+      "proposed_record_json_sha256": "e34374f10a3fe2babde0a46ea91cb65711a2ec43be14da3ed15caea0a48e4d47",
+      "author_record_json_sha256": "47a62fcb76141a203e28c18c880541dd5a4335e9fe4f913666c678fc2873188f",
+      "prior_independent_record_json_sha256": "81b8887bfca156915355d45a1515606d8a12f8e9b588d4b5ab315bd2971d1d48",
+      "author_rendered_level": "B1",
+      "author_html_levels": [
+        {
+          "element_id": "unclear_sng_1",
+          "sense_number": "1",
+          "cefr": "b1",
+          "fkcefr": null,
+          "html_offset": 54101
+        }
+      ],
+      "prior_independent_rendered_level": "B1",
+      "label_scope": "Topic attached to selected information/wording sense",
+      "boundary": "A person who does not understand is a distinct use.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-collins-unclear",
+      "proposed_record_json_sha256": "016c67d2068b8d9a91effcf3feba1abe3d2370a4f8163c7bfa2d0e4af7c522e7",
+      "author_record_json_sha256": "d49d85d578bceb60c5cecf56fdd2d8c88829760d0804999c3ab6c462c9400587",
+      "prior_independent_record_json_sha256": "c76523df8f6e3f20a0e21b2ea4711be0d36920cad0875e21dfc8d60f01f83089",
+      "author_rendered_level": "B2",
+      "author_html_levels": [],
+      "prior_independent_rendered_level": "B2",
+      "label_scope": "Related unknown/uncertain situation sense; not an exact separate wording level",
+      "boundary": "The B2 person-not-understanding sense is also separate; no averaging of sense labels.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-oxford-safe",
+      "proposed_record_json_sha256": "7f2dd6b3e76194b83d055881e6cd06c06194b7602eed5bb9567149eb26079472",
+      "author_record_json_sha256": "034447f9380e1ca65edca26cc9b792a9a45bd7fd1b6ac4dec8df13df12d3c6c7",
+      "prior_independent_record_json_sha256": "0460a4afc3a1679d686b08f195712e2a1a940e2d5044bf8641b22da1613c281e",
+      "author_rendered_level": null,
+      "author_html_levels": [
+        {
+          "element_id": "safe_sng_2",
+          "sense_number": "2",
+          "cefr": "a2",
+          "fkcefr": null,
+          "html_offset": 58937
+        }
+      ],
+      "prior_independent_rendered_level": null,
+      "label_scope": null,
+      "boundary": "Protected person/property sense 1 and secure-container noun are distinct.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-collins-safe",
+      "proposed_record_json_sha256": "ec4a5efd8260bb03421a8ccf84b8d9f4be7e1278181b97885f2221418aa53bd4",
+      "author_record_json_sha256": "de63097652d0149538825f2fde5382078eebe9d51e32ae20c57cede3ea14178e",
+      "prior_independent_record_json_sha256": "ee006cf4e840850932e5d52b9002aab94b6be97e13e690e554cc0e776a2f6133",
+      "author_rendered_level": "A2",
+      "author_html_levels": [],
+      "prior_independent_rendered_level": "A2",
+      "label_scope": "Selected physical-danger thing/activity adjective",
+      "boundary": "No technical unacceptable-risk threshold or safety certification follows.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-oxford-incident",
+      "proposed_record_json_sha256": "5a67c3ee7bb26555822abc051bbe37a57ef458b04b53eed4e555bc7fa0079590",
+      "author_record_json_sha256": "2ce1703b7b9394eb509cd67fc635219fe820a19e394e0825c8b42ea901d5133f",
+      "prior_independent_record_json_sha256": "c6c44800ccf68d1f40b3e00f480c757a2cab4c85e6d1624005f06b7ca85e3cf5",
+      "author_rendered_level": null,
+      "author_html_levels": [
+        {
+          "element_id": "incident_sng_1",
+          "sense_number": "1",
+          "cefr": "b2",
+          "fkcefr": null,
+          "html_offset": 53298
+        }
+      ],
+      "prior_independent_rendered_level": null,
+      "label_scope": null,
+      "boundary": "Violent and diplomatic senses remain separate.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-collins-incident",
+      "proposed_record_json_sha256": "6a8ea72a4a7d5ec7e288563268e532387fd0075ab3282352b4f52f7c8d250076",
+      "author_record_json_sha256": "524274d2f55ed433a7a74bd2ee0dd63b8093062979d32e809b3b0aca6521594a",
+      "prior_independent_record_json_sha256": "ed3c82cda5bfed7a52dc8145a78d24af566dc81843b33ea03642155bbad9acfd",
+      "author_rendered_level": "B2",
+      "author_html_levels": [],
+      "prior_independent_rendered_level": "B2",
+      "label_scope": "Selected event noun",
+      "boundary": "No reporting duty or specialist incident definition is approved.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-oxford-concern",
+      "proposed_record_json_sha256": "71791745b6c12af7e9294a2af635c060f47c07413b216f5145b05ce6e0d33492",
+      "author_record_json_sha256": "293cf24ccb3b3749d92ac17aa2a0320dab83c33f0e813861915484b1adfe1437",
+      "prior_independent_record_json_sha256": "aefe904f51a45c8d1fe1941f5aabcc4a5b056855bf2b48b9f0776c12e56a9912",
+      "author_rendered_level": null,
+      "author_html_levels": [
+        {
+          "element_id": "concern_sng_6",
+          "sense_number": "1",
+          "cefr": "b2",
+          "fkcefr": null,
+          "html_offset": 53831
+        }
+      ],
+      "prior_independent_rendered_level": null,
+      "label_scope": null,
+      "boundary": "Important-matter sense 3 and the verb page cannot substitute for the selected countable noun.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-collins-concern",
+      "proposed_record_json_sha256": "19ada2570a5f080b90163da7dffb5a60284236ed31570e8406ecb36932032383",
+      "author_record_json_sha256": "be71e618a2ad0c88c9c687fd8cee56db1706a6abf38bdc8e2e49e77704d517df",
+      "prior_independent_record_json_sha256": "11dc713f0c64852deb604215c1715c3df6794a55d4a30051212e80985fd57508",
+      "author_rendered_level": "B2",
+      "author_html_levels": [],
+      "prior_independent_rendered_level": "B2",
+      "label_scope": "Exact countable worrying-fact/situation noun",
+      "boundary": "Verb, company, priority and protective-interest uses remain separate.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-oxford-solution",
+      "proposed_record_json_sha256": "61a7283c468950b5b5e4cb27e704459eb8a235be89a43032772301d8c5d86588",
+      "author_record_json_sha256": "f15f33110bcfeabed201269845561f85b1f5171947af98952064a911484a280e",
+      "prior_independent_record_json_sha256": "74085c374da37d43b87394d57439501afdcd624c6cba76df733c401339967d5c",
+      "author_rendered_level": null,
+      "author_html_levels": [
+        {
+          "element_id": "solution_sng_1",
+          "sense_number": "1",
+          "cefr": "a2",
+          "fkcefr": null,
+          "html_offset": 53694
+        }
+      ],
+      "prior_independent_rendered_level": null,
+      "label_scope": null,
+      "boundary": "Puzzle answers and chemical mixtures are distinct senses.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-collins-solution",
+      "proposed_record_json_sha256": "da22d7e5beda69b1ef57d7ab14dcf3146dc5e661b430e9371f1641869a868975",
+      "author_record_json_sha256": "50c31be8f2523d9fd4b6c2d25cead06723820f569374c653b62e077ad1bbe169",
+      "prior_independent_record_json_sha256": "7900dcff14695603bd9cbf02698fe2fdfd234805f47e9e94702854af4e93d36f",
+      "author_rendered_level": "B1+",
+      "author_html_levels": [],
+      "prior_independent_rendered_level": "B1+",
+      "label_scope": "Selected way-to-deal-with-a-problem sense",
+      "boundary": "Preserve disagreement with Oxford selected a2; do not convert B1+.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-oxford-procedure",
+      "proposed_record_json_sha256": "b425e5645809b39f4a29f50fdea60595029e738f8ca76a1e1ff4a83f995c160a",
+      "author_record_json_sha256": "11fb5cbaf9fe7b0ad8a747fab377e987318b27e18ffb282dfb551b1081bd50da",
+      "prior_independent_record_json_sha256": "788438f80890cbb0ad6671985a49155e66893bb48b945ad4790ca2b1482f4ee5",
+      "author_rendered_level": "B2",
+      "author_html_levels": [
+        {
+          "element_id": "procedure_sng_1",
+          "sense_number": "1",
+          "cefr": "b2",
+          "fkcefr": null,
+          "html_offset": 53735
+        }
+      ],
+      "prior_independent_rendered_level": "B2",
+      "label_scope": "Scientific research topic attached to selected method sense",
+      "boundary": "A medical operation and specialist procedures are separate.",
+      "acquired": false,
+      "asset_license": null
+    },
+    {
+      "id": "foundation02-language-fifth10-collins-procedure",
+      "proposed_record_json_sha256": "1deea02da16008bf1992358dc3c45e3b2aafbf4f432d7bcc9ca9570597c0b07a",
+      "author_record_json_sha256": "22147d160305a9a4b6cb4cacb0dcc70aa8a50bec6135131d26c6a0d26795c3e4",
+      "prior_independent_record_json_sha256": "a7935466e452cc4d790a0be46c46e00b3abfa59233c851652b04ebae845109c2",
+      "author_rendered_level": "B2",
+      "author_html_levels": [],
+      "prior_independent_rendered_level": "B2",
+      "label_scope": "Selected general-method noun",
+      "boundary": "No clinical, legal, isolation or lockout method is approved.",
+      "acquired": false,
+      "asset_license": null
+    }
+  ],
+  "preserved_historical_access_limits": {
+    "author_failed_accesses": [
+      {
+        "url": "https://dictionary.cambridge.org/dictionary/english/unsafe",
+        "result": "Web connector internal error; no usable selected-sense evidence.",
+        "http_status": null,
+        "raw_body_sha256": null,
+        "supports_proposal": false
+      },
+      {
+        "url": "https://dictionary.cambridge.org/dictionary/english/hazard",
+        "result": "Web connector internal error; no usable selected-sense evidence.",
+        "http_status": null,
+        "raw_body_sha256": null,
+        "supports_proposal": false
+      },
+      {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/incident",
+        "result": "Initial web connector internal error. The corrected incident_1 URL was separately consulted successfully.",
+        "http_status": null,
+        "raw_body_sha256": null,
+        "supports_proposal": false
+      }
+    ],
+    "author_excluded_consultations": [
+      {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/concern_1",
+        "result": "The opened page was the verb. It was excluded from noun support; concern_2 was subsequently consulted.",
+        "selected_sense_support": false,
+        "http_status": null,
+        "raw_body_sha256": null
+      }
+    ],
+    "independent_failed_additional_access": {
+      "url": "https://dictionary.cambridge.org/dictionary/english/unsafe",
+      "result": "Internal Error",
+      "evidence_used": false,
+      "http_status": null,
+      "body_hash": null
+    },
+    "independent_followup_limitations": [
+      "Three followups using prior connector references resolved to incident, procedure and solution rather than the intended broken, safe and unclear pages. Those responses were excluded for the intended targets; fresh canonical-URL followups recovered and inspected the intended sections.",
+      "One other procedure followup correctly displayed the selected Scientific research B2 topic.",
+      "Rendered line numbers describe the consulted snapshots and may change when publisher pages change. Canonical URLs are authoritative identifiers."
+    ]
+  }
+}

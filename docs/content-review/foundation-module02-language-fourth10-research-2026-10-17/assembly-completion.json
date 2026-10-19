@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "status": "successful_author_research_assembly",
+  "recorded_at": "2026-10-16T19:15:43.342Z",
+  "entrypoint": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/assemble.cjs",
+  "entrypoint_raw_sha256": "db540287d9333ba9ef68c7ec362b670f03ea077369d798fbd8e2ec2fa2f6a68a",
+  "dispatch_manifest_raw_sha256": "0ff0d82b3104bf15065ee8f9df6ff5d3f86ef49ca446ec03031f7e3e4d94d165",
+  "executed_source_equality_verified": true,
+  "input_registry_json_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "production_writes": 0,
+  "native_execution": false,
+  "independent_acceptance": false
+}

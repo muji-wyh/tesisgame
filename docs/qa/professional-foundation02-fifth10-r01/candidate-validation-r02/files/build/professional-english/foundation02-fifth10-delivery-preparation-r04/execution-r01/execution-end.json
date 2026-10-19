@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "status": "prepared_pending_independent_review",
+  "finished_at": "2026-10-17T00:05:38.779Z",
+  "operation": "bounded_native_historical_route_correction",
+  "production_mutated": false,
+  "project_or_test_execution": false
+}

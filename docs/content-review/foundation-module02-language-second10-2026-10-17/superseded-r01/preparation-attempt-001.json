@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T18:23:27.606Z",
+  "completed_at": "2026-10-16T18:27:01.279Z",
+  "entrypoint": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/prepare.cjs",
+  "source_sha256": {
+    "baseline-config.json": "d3eb180e31c07370640cc1ac3b60f7fe5d7a71aa17b66219bb3637d9efb8d665",
+    "deliver.cjs": "696ba8cecfaeb57d73c0f124a417d286fa34b9e9df7e3a53b4cb66e3c51e151d",
+    "delivery-lib.cjs": "1bf53b6cb9aa31e46716fd382faa104069712e89e5495290c10306f9fc00dc0c",
+    "HANDOFF.md": "8b2259ca15f2f835689d17a75ac8e1157b625655ed77db69183027368cd48838",
+    "prepare.cjs": "c3e902078d34033a89be5af6aa4b43afe817d63b9096e017aa166ccf76ef0729",
+    "test-transforms.cjs": "dd85a6a26fd0f21cdfb3447e5fb1c03060cb702728a2ae82d951f74335f9202d"
+  },
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": "{\"status\":\"prepared_pending_technical_review\",\"receipt\":\"build/professional-english/foundation-module02-language-review/second10-delivery-r01/preparation-receipt.json\",\"receipt_sha256\":\"e3a132e1c161993428689d8d6c946aee3449d1014bec0c0319e35b27c5dca812\",\"binding_sha256\":\"e87f376881431fb88ebd8356c3d963e899803eedca5da9733ca33d0317dd3fc2\",\"projected_callbacks\":217,\"errors\":0,\"reviewed_lexemes\":130,\"ready_modules\":0,\"native_execution_pending\":true,\"production_mutated\":false}\n",
+  "stderr": ""
+}

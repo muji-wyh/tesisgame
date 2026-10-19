@@ -1,0 +1,1669 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.legal_paralegal.module07.01",
+      "text": "The contract identifies each party, but the signatory's authority still needs review.",
+      "meaning": "Distinguish named participants from authority to sign.",
+      "context": "Checking a fictional agreement before qualified review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "contract",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "identifies",
+          "start": 13,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "each",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "party",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "but",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "signatory's",
+          "start": 44,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "authority",
+          "start": 56,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "still",
+          "start": 66,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "needs",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "review",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "contract.agreement-with-legally-enforceable-obligations.n",
+        "party.person-or-entity-participating-in-legal-arrangement-or-proceeding.n",
+        "signatory.person-or-entity-signing-document.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counterpart",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counter-prefix",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module07.02",
+      "text": "Please check the warranty's scope and expiration date against the actual product terms.",
+      "meaning": "Request the relevant assurance and validity information.",
+      "context": "Reviewing a fictional product agreement without promising a remedy.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "warranty's",
+          "start": 17,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "scope",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "expiration",
+          "start": 38,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "date",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "against",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "actual",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "product",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "terms",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "warranty.product-assurance.n",
+        "expiration-date.stated-validity-end.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counterpart",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counter-prefix",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module07.03",
+      "text": "The indemnity and force majeure wording require separate review under the applicable law.",
+      "meaning": "Flag two provisions whose effects need contextual assessment.",
+      "context": "Preparing a fictional contract review list.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "indemnity",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "force",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "majeure",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "wording",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "require",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "separate",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "review",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "under",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "applicable",
+          "start": 74,
+          "end": 84
+        },
+        {
+          "index": 12,
+          "text": "law",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "indemnity.undertaking-to-compensate-for-defined-loss-or-liability.n",
+        "force-majeure.contractual-treatment-of-specified-events-beyond-partys-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counterpart",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counter-prefix",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module07.04",
+      "text": "The license describes permitted use; please confirm whether any separate consent is also required.",
+      "meaning": "Distinguish permission to use intellectual property from other consent questions.",
+      "context": "Reviewing fictional use permissions without approving the use.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "license",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "describes",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "permitted",
+          "start": 22,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "use",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": ";",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "please",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "confirm",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "whether",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "any",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "separate",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "consent",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "is",
+          "start": 81,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "also",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "required",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "license.permission-to-use-defined-intellectual-property-under-stated-terms.n",
+        "consent.informed-agreement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counterpart",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counter-prefix",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module07.05",
+      "text": "The deed refers to an agency relationship, but its formal status and scope remain under review.",
+      "meaning": "Identify an instrument and a representative relationship without assuming validity.",
+      "context": "Discussing fictional documents with the responsible lawyer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "deed",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "refers",
+          "start": 9,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 16,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "an",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "agency",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "relationship",
+          "start": 29,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "but",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "its",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "formal",
+          "start": 51,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "status",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "scope",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "remain",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "under",
+          "start": 82,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": "review",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "deed.legal-instrument-requiring-particular-formalities.n",
+        "agency.relationship-in-which-one-party-acts-for-another.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counterpart",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counter-prefix",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module07.06",
+      "text": "The lease identifies the tenant and the premises; the lawyer will review the disputed wording.",
+      "meaning": "Describe the participants and location in a tenancy document.",
+      "context": "Checking a fictional lease without giving housing advice.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "lease",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "identifies",
+          "start": 10,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "tenant",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "premises",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "lawyer",
+          "start": 54,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "will",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "review",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "disputed",
+          "start": 77,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "wording",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "lease.agreement-granting-use-or-possession-for-period-under-terms.n",
+        "tenant.person-or-entity-holding-property-under-tenancy.n",
+        "premises.building-and-associated-land-used-by-organization.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counterpart",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counter-prefix",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module07.07",
+      "text": "The property record mentions title and a covenant, but neither has been verified by this team.",
+      "meaning": "Keep recorded ownership and obligation information distinct from verification.",
+      "context": "Reviewing fictional property information with legal questions unresolved.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "property",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "mentions",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "title",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "covenant",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "but",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "neither",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "has",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "been",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "verified",
+          "start": 72,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "by",
+          "start": 81,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "this",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "team",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "property.thing-or-right-capable-of-legal-ownership.n",
+        "title.legal-basis-or-right-of-ownership-in-property.n",
+        "covenant.formal-promise-or-obligation-in-legal-instrument.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counterpart",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counter-prefix",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module07.08",
+      "text": "The agreement contains a possible condition precedent affecting a contractual obligation.",
+      "meaning": "Identify a draft prerequisite for qualified interpretation.",
+      "context": "Describing fictional wording without determining its effect.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "agreement",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "contains",
+          "start": 14,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "possible",
+          "start": 25,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "condition",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "precedent",
+          "start": 44,
+          "end": 53
+        },
+        {
+          "index": 7,
+          "text": "affecting",
+          "start": 54,
+          "end": 63
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "contractual",
+          "start": 66,
+          "end": 77
+        },
+        {
+          "index": 10,
+          "text": "obligation",
+          "start": 78,
+          "end": 88
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "agreement.mutual-understanding-or-accepted-arrangement.n",
+        "condition-precedent.event-or-condition-required-before-specified-right-or-obligation-arises.n",
+        "contractual-obligation.duty-arising-under-contract.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counterpart",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counter-prefix",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module07.09",
+      "text": "The representation and exclusion clause need review in the context of each relevant contract term.",
+      "meaning": "Ask for a contextual review of statements and proposed exclusions.",
+      "context": "Preparing a fictional agreement discussion without drafting advice.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "representation",
+          "start": 4,
+          "end": 18
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "exclusion",
+          "start": 23,
+          "end": 32
+        },
+        {
+          "index": 4,
+          "text": "clause",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "need",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "review",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "in",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "context",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "of",
+          "start": 67,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "each",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "relevant",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "contract",
+          "start": 84,
+          "end": 92
+        },
+        {
+          "index": 14,
+          "text": "term",
+          "start": 93,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "representation.statement-of-fact-made-for-other-partys-consideration.n",
+        "exclusion-clause.contract-provision-seeking-to-exclude-defined-liability-or-duty.n",
+        "contract-term.express-or-implied-contractual-content-defining-rights-or-obligations.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counterpart",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counter-prefix",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module07.10",
+      "text": "The proposed contract amendment changes the scope of work and payment terms, subject to the required review.",
+      "meaning": "Describe the subject of a proposed change without implying approval.",
+      "context": "Coordinating a fictional commercial agreement review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "proposed",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "contract",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "amendment",
+          "start": 22,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "changes",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "scope",
+          "start": 44,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "of",
+          "start": 50,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "work",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "payment",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "terms",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 75,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "subject",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "to",
+          "start": 85,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "required",
+          "start": 92,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "review",
+          "start": 101,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "contract-amendment.change-to-existing-contract.n",
+        "scope-of-work.defined-work-included-in-project-or-arrangement.n",
+        "payment-terms.conditions-describing-when-and-how-payment-is-due.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counterpart",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-dictionary-counter-prefix",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

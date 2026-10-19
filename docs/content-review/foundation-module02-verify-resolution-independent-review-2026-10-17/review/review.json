@@ -1,0 +1,269 @@
+{
+  "schema": 1,
+  "status": "accepted_reviewer_language_and_curriculum_projection_pending_final_rebase",
+  "reviewer": "Codex root independent AI language and curriculum reviewer; not human or subject-matter approval",
+  "recorded_at": "2026-10-16T21:32:43.365Z",
+  "research_inventory": {
+    "path": "build/professional-english/foundation02-verify-resolution-research-r01/inventory.json",
+    "bytes": 3144,
+    "raw_sha256": "f98bb9a53ddc26382c3ed9aa0df1af03991e26223077389a569dd9896beee1b9"
+  },
+  "author_new_entry_sha256": "55863911bc60ebf5368d660615a8fce964e224194a8bfd436fdde55d9c914aad",
+  "author_expression_sha256": "c578dec25399c372607843812c30e063865e77174836e9005ecf04f5f9f78ff5",
+  "accepted_new_lexical_fields": {
+    "id": "ensure.make-certain.v",
+    "text": "ensure",
+    "display_text": "ensure",
+    "pos": "verb",
+    "definition": "To make certain that a required result happens or a required condition is met.",
+    "example": "Please ensure that the form includes the reference number.",
+    "difficulty": "B2",
+    "regions": [
+      "general"
+    ],
+    "accepted_forms": [
+      "ensure",
+      "insure"
+    ]
+  },
+  "accepted_new_lexical_fields_json_sha256": "307ce133221cead97334ad25bbf4db6c18af5e503475da81e0a2d73ba7adacf2",
+  "accepted_expression_fields": {
+    "text": "Please check the form, correct any error, and ensure that the reference number is included before you submit it.",
+    "meaning": "Ask someone to examine a form, remove mistakes, and make certain it contains a reference number before sending it for processing.",
+    "context": "A worker prepares a fictional workshop registration form. Its reference number must be entered before the form is sent for routine processing.",
+    "tokens": [
+      {
+        "index": 0,
+        "text": "Please",
+        "start": 0,
+        "end": 6
+      },
+      {
+        "index": 1,
+        "text": "check",
+        "start": 7,
+        "end": 12
+      },
+      {
+        "index": 2,
+        "text": "the",
+        "start": 13,
+        "end": 16
+      },
+      {
+        "index": 3,
+        "text": "form",
+        "start": 17,
+        "end": 21
+      },
+      {
+        "index": 4,
+        "text": ",",
+        "start": 21,
+        "end": 22
+      },
+      {
+        "index": 5,
+        "text": "correct",
+        "start": 23,
+        "end": 30
+      },
+      {
+        "index": 6,
+        "text": "any",
+        "start": 31,
+        "end": 34
+      },
+      {
+        "index": 7,
+        "text": "error",
+        "start": 35,
+        "end": 40
+      },
+      {
+        "index": 8,
+        "text": ",",
+        "start": 40,
+        "end": 41
+      },
+      {
+        "index": 9,
+        "text": "and",
+        "start": 42,
+        "end": 45
+      },
+      {
+        "index": 10,
+        "text": "ensure",
+        "start": 46,
+        "end": 52
+      },
+      {
+        "index": 11,
+        "text": "that",
+        "start": 53,
+        "end": 57
+      },
+      {
+        "index": 12,
+        "text": "the",
+        "start": 58,
+        "end": 61
+      },
+      {
+        "index": 13,
+        "text": "reference",
+        "start": 62,
+        "end": 71
+      },
+      {
+        "index": 14,
+        "text": "number",
+        "start": 72,
+        "end": 78
+      },
+      {
+        "index": 15,
+        "text": "is",
+        "start": 79,
+        "end": 81
+      },
+      {
+        "index": 16,
+        "text": "included",
+        "start": 82,
+        "end": 90
+      },
+      {
+        "index": 17,
+        "text": "before",
+        "start": 91,
+        "end": 97
+      },
+      {
+        "index": 18,
+        "text": "you",
+        "start": 98,
+        "end": 101
+      },
+      {
+        "index": 19,
+        "text": "submit",
+        "start": 102,
+        "end": 108
+      },
+      {
+        "index": 20,
+        "text": "it",
+        "start": 109,
+        "end": 111
+      },
+      {
+        "index": 21,
+        "text": ".",
+        "start": 111,
+        "end": 112
+      }
+    ],
+    "focus_lexeme_ids": [
+      "ensure.make-certain.v",
+      "correct.put-right.v",
+      "error.mistake.n",
+      "check.examine.v",
+      "submit.send-for-consideration.v"
+    ]
+  },
+  "accepted_expression_fields_json_sha256": "fcfed25349c2a6ad850b946b243bd6088a5b953e14fbce5779f67dbaf12d46ba",
+  "variant_decision": {
+    "author_ensure_only_forms_accepted": false,
+    "accepted_forms": [
+      "ensure",
+      "insure"
+    ],
+    "preferred_display": "ensure",
+    "regional_note": "Insure is an accepted alternative especially in North American English for this outcome sense. Financial insurance is a separate sense.",
+    "reason": "Both freshly consulted Oxford and Collins entries attest this regional alternative; the approved curriculum requires relevant accepted forms. Do not mark it incorrect solely because the display uses ensure.",
+    "implementation_note": "This is an exact reviewer-side field projection, not the original full candidate hash. Later final metadata must replace the author pending-variant clause and retain the regional note. Pronunciation, morphology and exercise handling need separate acceptance."
+  },
+  "decisions": [
+    "Keep verify.establish-accuracy.v on hold. Fresh Oxford selected C1 supports the existing concern; no unsupported lower verify level is accepted.",
+    "Accept the new outcome-oriented definition, reference-number example and editorial B2 placement. Fresh selected Collins B2 and Oxford certainty-topic B2 support this bounded formal workplace item. The author CEFR-J B1 headword/POS row remains B1 and was not freshly retrieved by this reviewer.",
+    "Accept a distinct ensure.make-certain.v learning objective in the shared instructions/problem-reporting foundation. Ensuring a required condition is met is different from establishing truth or accuracy. No synonym alias or verify skill transfer is permitted.",
+    "Accept the exact twenty one-for-one membership substitutions as a curriculum proposal. Each module remains fifty distinct terms and each course five hundred; no extra quota credit follows.",
+    "Accept the exact twenty-two-token phrase and five focus bindings against the independently reviewed fourth10 candidate error/submit meanings and unchanged reviewed check/correct meanings. Actual production rebase is still required after fourth10 delivery; pending research neighbor snapshots are not promoted.",
+    "Accept durable retirement of the exact old verify object and decisions outside active catalog files before removing that active entry. Preserve old holds, morphology/source records and saved evidence; do not create dummy membership or relabel the old identity.",
+    "Require a coordinated fresh curriculum/requirements revision before activation. New ensure skill evidence starts under its new identity; old verify evidence and old expression completion remain intact and are never copied or inferred into the new requirements.",
+    "The pending three-stage brief is semantically aligned with achieving inclusion, but it has no sourced-image or recognition acceptance. Keep morphology null/unauthored and all media/exercise/module gates pending."
+  ],
+  "source_observations": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/ensure",
+      "tool_reference": "turn785082view0",
+      "observation": "The selected outcome sense supports ensure that. Its certainty topic is rendered B2. Insure is explicitly admitted especially in North American English. The author-recorded fkcefr=b2 attribute was not independently fetched by this reviewer."
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/ensure",
+      "tool_reference": "turn785082view1",
+      "observation": "The selected COBUILD outcome sense is B2 and formal. The separate Collins English Dictionary heading admits especially US insure. Insurance/protection meanings remain separate from this selected outcome sense."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/verify",
+      "tool_reference": "turn785082view2",
+      "observation": "The selected checking sense has a rendered Scientific research C1 topic. The second showing/stating sense is separate. Unrelated footer B2 is not evidence for the target. Both author-recorded cefr=c1 attributes remain author evidence."
+    }
+  ],
+  "source_limits": "Fresh rendered Oxford ensure/verify and Collins ensure consultations. No independent raw HTML retrieval or full publisher body archive; author fkcefr/cefr tags and CEFR-J row are explicitly historical author evidence. No source definition, example or media is imported.",
+  "checks": {
+    "research_payload_files": 19,
+    "lexemes": 4939,
+    "expressions": 1620,
+    "membership_substitutions": 20,
+    "preserved_terms_per_module": 50,
+    "preserved_terms_per_course": 500,
+    "preserved_expressions_per_course": 100,
+    "exact_tokens": 22,
+    "exact_focus_ids": 5,
+    "current_form_id_collisions": 0,
+    "unchanged_other_verify_expression_snapshots": 26,
+    "related_identity_snapshots": 20
+  },
+  "actual_neighbor_state": [
+    {
+      "id": "correct.put-right.v",
+      "current_entry_json_sha256": "0b5e199a41bbf929b3d37bdf6da56603fbb09e03a9bb796f968c5a6899c2b557",
+      "accepted_fourth10_candidate_entry_json_sha256": "0b5e199a41bbf929b3d37bdf6da56603fbb09e03a9bb796f968c5a6899c2b557",
+      "production_afterimage_delivered": false
+    },
+    {
+      "id": "error.mistake.n",
+      "current_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+      "accepted_fourth10_candidate_entry_json_sha256": "2c1cbcaa24070b47a87ed999f4a1e0be7b7be35e8c7fc7a227258baaee869a7f",
+      "production_afterimage_delivered": false
+    },
+    {
+      "id": "check.examine.v",
+      "current_entry_json_sha256": "122fd00272a5a183226db9c9c07f0b2ab13cef997aec6ce8670bfcbb10b8be3e",
+      "accepted_fourth10_candidate_entry_json_sha256": "122fd00272a5a183226db9c9c07f0b2ab13cef997aec6ce8670bfcbb10b8be3e",
+      "production_afterimage_delivered": false
+    },
+    {
+      "id": "submit.send-for-consideration.v",
+      "current_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+      "accepted_fourth10_candidate_entry_json_sha256": "ace5663b8895222522e0d5276fc64da7396461034db402912527e4ede18f81c0",
+      "production_afterimage_delivered": false
+    }
+  ],
+  "unresolved": [
+    "Fresh settled production rebase after fourth10, including exact submit/error entries.",
+    "Final accepted-variant note and reference/reviewer metadata.",
+    "Coordinated new revision, retirement implementation and non-transfer checks.",
+    "Other verify surface uses remain a separate readability/domain review queue.",
+    "Morphology, still image, pronunciation, phrase audio, layout/reachability and full-module acceptance."
+  ],
+  "full_author_entry_accepted": false,
+  "production_modified": false,
+  "old_hold_released": false,
+  "saved_data_inspected_or_migrated": false,
+  "project_test_native_or_build_dispatched": false,
+  "release_accepted": false
+}

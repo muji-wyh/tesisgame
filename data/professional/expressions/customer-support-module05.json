@@ -1,0 +1,1942 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.customer_support.module05.01",
+      "text": "I will listen, acknowledge your message, record the concern, apologize for the delay, and respond through the agreed channel.",
+      "meaning": "Listen to a concern and explain the response process.",
+      "context": "An agent acknowledges a delayed reply.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "listen",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 13,
+          "end": 14
+        },
+        {
+          "index": 4,
+          "text": "acknowledge",
+          "start": 15,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "your",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "message",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "record",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "concern",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "apologize",
+          "start": 61,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "for",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "delay",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 18,
+          "text": "respond",
+          "start": 90,
+          "end": 97
+        },
+        {
+          "index": 19,
+          "text": "through",
+          "start": 98,
+          "end": 105
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 106,
+          "end": 109
+        },
+        {
+          "index": 21,
+          "text": "agreed",
+          "start": 110,
+          "end": 116
+        },
+        {
+          "index": 22,
+          "text": "channel",
+          "start": 117,
+          "end": 124
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "acknowledge.recognize-receipt-or-stated-concern.v",
+        "apologize.express-regret.v",
+        "respond.give-reply-or-reaction.v",
+        "listen.attend-to-spoken-information.v",
+        "record.store-observed-information.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.02",
+      "text": "Please describe and clarify the request, paraphrase what you understood, identify any missing detail, and summarize the agreed next step.",
+      "meaning": "Check understanding and identify missing information.",
+      "context": "An agent practices a clear request summary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "describe",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "clarify",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "request",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "paraphrase",
+          "start": 41,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "what",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "you",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "understood",
+          "start": 61,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "identify",
+          "start": 73,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "any",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "missing",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "detail",
+          "start": 94,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 100,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 102,
+          "end": 105
+        },
+        {
+          "index": 18,
+          "text": "summarize",
+          "start": 106,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 116,
+          "end": 119
+        },
+        {
+          "index": 20,
+          "text": "agreed",
+          "start": 120,
+          "end": 126
+        },
+        {
+          "index": 21,
+          "text": "next",
+          "start": 127,
+          "end": 131
+        },
+        {
+          "index": 22,
+          "text": "step",
+          "start": 132,
+          "end": 136
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 136,
+          "end": 137
+        }
+      ],
+      "focus_lexeme_ids": [
+        "clarify.make-meaning-or-detail-clearer.v",
+        "paraphrase.restate-meaning-in-different-words.v",
+        "summarize.state-main-points-briefly.v",
+        "describe.give-details-in-words.v",
+        "identify.establish-identity-or-nature.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.03",
+      "text": "We will inspect the reported screen, compare the results, investigate the issue, try to reproduce it, and review the guide before we troubleshoot.",
+      "meaning": "Explain how a reported issue will be investigated.",
+      "context": "An agent follows approved diagnostic guidance.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 3,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "inspect",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "reported",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "screen",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "compare",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "results",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "investigate",
+          "start": 58,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "issue",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "try",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 85,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "reproduce",
+          "start": 88,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "it",
+          "start": 98,
+          "end": 100
+        },
+        {
+          "index": 19,
+          "text": ",",
+          "start": 100,
+          "end": 101
+        },
+        {
+          "index": 20,
+          "text": "and",
+          "start": 102,
+          "end": 105
+        },
+        {
+          "index": 21,
+          "text": "review",
+          "start": 106,
+          "end": 112
+        },
+        {
+          "index": 22,
+          "text": "the",
+          "start": 113,
+          "end": 116
+        },
+        {
+          "index": 23,
+          "text": "guide",
+          "start": 117,
+          "end": 122
+        },
+        {
+          "index": 24,
+          "text": "before",
+          "start": 123,
+          "end": 129
+        },
+        {
+          "index": 25,
+          "text": "we",
+          "start": 130,
+          "end": 132
+        },
+        {
+          "index": 26,
+          "text": "troubleshoot",
+          "start": 133,
+          "end": 145
+        },
+        {
+          "index": 27,
+          "text": ".",
+          "start": 145,
+          "end": 146
+        }
+      ],
+      "focus_lexeme_ids": [
+        "investigate.examine-information-to-understand-issue.v",
+        "reproduce.make-reported-behavior-occur-again.v",
+        "troubleshoot.systematically-examine-problem.v",
+        "inspect.examine-visually.v",
+        "compare.examine-differences.v",
+        "review.reconsider-care-information.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.04",
+      "text": "The supervisor will evaluate the workload and explain how to categorize, prioritize, and assign requests, then select the next case.",
+      "meaning": "Review workload before assigning and selecting requests.",
+      "context": "A supervisor coordinates the support queue.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "supervisor",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "evaluate",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "workload",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "explain",
+          "start": 46,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "how",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "to",
+          "start": 58,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "categorize",
+          "start": 61,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "prioritize",
+          "start": 73,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 83,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "assign",
+          "start": 89,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "requests",
+          "start": 96,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 104,
+          "end": 105
+        },
+        {
+          "index": 18,
+          "text": "then",
+          "start": 106,
+          "end": 110
+        },
+        {
+          "index": 19,
+          "text": "select",
+          "start": 111,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 118,
+          "end": 121
+        },
+        {
+          "index": 21,
+          "text": "next",
+          "start": 122,
+          "end": 126
+        },
+        {
+          "index": 22,
+          "text": "case",
+          "start": 127,
+          "end": 131
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 131,
+          "end": 132
+        }
+      ],
+      "focus_lexeme_ids": [
+        "categorize.place-in-defined-group.v",
+        "prioritize.arrange-work-by-relative-importance.v",
+        "assign.give-work-or-responsibility-to-person.v",
+        "evaluate.judge-care-information.v",
+        "select.choose-option.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.05",
+      "text": "Please confirm who may authorize, decline, or process the request before you route, reassign, or escalate the case.",
+      "meaning": "Clarify decision-making authority and case routing.",
+      "context": "An agent checks who may handle a request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "who",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "may",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "authorize",
+          "start": 23,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "decline",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "or",
+          "start": 43,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "process",
+          "start": 46,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "request",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "before",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "you",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "route",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 82,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "reassign",
+          "start": 84,
+          "end": 92
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 92,
+          "end": 93
+        },
+        {
+          "index": 18,
+          "text": "or",
+          "start": 94,
+          "end": 96
+        },
+        {
+          "index": 19,
+          "text": "escalate",
+          "start": 97,
+          "end": 105
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 106,
+          "end": 109
+        },
+        {
+          "index": 21,
+          "text": "case",
+          "start": 110,
+          "end": 114
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "route.direct-request-to-destination.v",
+        "reassign.change-work-or-responsibility-assignment.v",
+        "escalate.refer-for-higher-or-specialist-attention.v",
+        "authorize.give-transaction-permission.v",
+        "decline.refuse-transaction.v",
+        "process.handle-through-steps.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.06",
+      "text": "Please calculate the balance, reconcile the records, and document the reason before deciding whether to reopen or close the ticket.",
+      "meaning": "Check billing records before changing a case status.",
+      "context": "An agent reviews an authorized billing case.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "calculate",
+          "start": 7,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "balance",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "reconcile",
+          "start": 30,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "records",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "document",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "reason",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "before",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "deciding",
+          "start": 84,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "whether",
+          "start": 93,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 101,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": "reopen",
+          "start": 104,
+          "end": 110
+        },
+        {
+          "index": 18,
+          "text": "or",
+          "start": 111,
+          "end": 113
+        },
+        {
+          "index": 19,
+          "text": "close",
+          "start": 114,
+          "end": 119
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 120,
+          "end": 123
+        },
+        {
+          "index": 21,
+          "text": "ticket",
+          "start": 124,
+          "end": 130
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 130,
+          "end": 131
+        }
+      ],
+      "focus_lexeme_ids": [
+        "reopen.return-finished-case-to-active-handling.v",
+        "close.bring-interaction-or-case-to-finished-state.v",
+        "document.make-care-record.v",
+        "calculate.work-out-number.v",
+        "reconcile.match-financial-records.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.07",
+      "text": "The approved process says who may authenticate the user, redact an attachment, and forward it.",
+      "meaning": "Clarify authorized identity and information-handling actions.",
+      "context": "An agent checks who may verify a user and share a redacted attachment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "approved",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "process",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "says",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "who",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "may",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "authenticate",
+          "start": 34,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "user",
+          "start": 51,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "redact",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "an",
+          "start": 64,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "attachment",
+          "start": 67,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "forward",
+          "start": 83,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "it",
+          "start": 91,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "authenticate.verify-claimed-user-or-system-identity.v",
+        "redact.remove-or-obscure-sensitive-content.v",
+        "forward.send-received-message-onward.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.08",
+      "text": "Please demonstrate how to mute or unmute, explain why you need to hold the caller, and agree when to resume the conversation.",
+      "meaning": "Explain call controls and temporary waiting arrangements.",
+      "context": "An agent practices describing a call interruption.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "demonstrate",
+          "start": 7,
+          "end": 18
+        },
+        {
+          "index": 2,
+          "text": "how",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 23,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "mute",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "or",
+          "start": 31,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "unmute",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "explain",
+          "start": 42,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "why",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "you",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "need",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "hold",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": "caller",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 18,
+          "text": "agree",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 19,
+          "text": "when",
+          "start": 93,
+          "end": 97
+        },
+        {
+          "index": 20,
+          "text": "to",
+          "start": 98,
+          "end": 100
+        },
+        {
+          "index": 21,
+          "text": "resume",
+          "start": 101,
+          "end": 107
+        },
+        {
+          "index": 22,
+          "text": "the",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 23,
+          "text": "conversation",
+          "start": 112,
+          "end": 124
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mute.temporarily-stop-audio-transmission-or-output.v",
+        "unmute.restore-audio-transmission-or-output.v",
+        "hold.temporarily-pause-call-connection-for-waiting.v",
+        "resume.continue-after-pause.v",
+        "demonstrate.show-how-it-works.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.09",
+      "text": "If we disconnect while discussing how to exchange the item or what we may charge, I will use the agreed route to reconnect.",
+      "meaning": "Explain how contact will resume during a return discussion.",
+      "context": "An agent confirms the agreed reconnection route.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "If",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "we",
+          "start": 3,
+          "end": 5
+        },
+        {
+          "index": 2,
+          "text": "disconnect",
+          "start": 6,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "while",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "discussing",
+          "start": 23,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "how",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 38,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "exchange",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "item",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 59,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "what",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "we",
+          "start": 67,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "may",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "charge",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 80,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "I",
+          "start": 82,
+          "end": 83
+        },
+        {
+          "index": 17,
+          "text": "will",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 18,
+          "text": "use",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 20,
+          "text": "agreed",
+          "start": 97,
+          "end": 103
+        },
+        {
+          "index": 21,
+          "text": "route",
+          "start": 104,
+          "end": 109
+        },
+        {
+          "index": 22,
+          "text": "to",
+          "start": 110,
+          "end": 112
+        },
+        {
+          "index": 23,
+          "text": "reconnect",
+          "start": 113,
+          "end": 122
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 122,
+          "end": 123
+        }
+      ],
+      "focus_lexeme_ids": [
+        "disconnect.end-or-lose-communication-connection.v",
+        "reconnect.establish-connection-again.v",
+        "exchange.swap-bought-item.v",
+        "charge.ask-payment.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module05.10",
+      "text": "I need authorized guidance before I recommend that you reset, restart, refresh, or deactivate anything.",
+      "meaning": "Seek authorized guidance before suggesting a system action.",
+      "context": "An agent avoids recommending unverified changes.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "need",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "authorized",
+          "start": 7,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "guidance",
+          "start": 18,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "before",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "I",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "recommend",
+          "start": 36,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "that",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "you",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "reset",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "restart",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "refresh",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 78,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "or",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": "deactivate",
+          "start": 83,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "anything",
+          "start": 94,
+          "end": 102
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "reset.return-setting-or-state-to-starting-condition.v",
+        "restart.stop-and-start-system-again.v",
+        "refresh.reload-current-displayed-information.v",
+        "deactivate.make-account-or-function-inactive.v",
+        "recommend.suggest-suitable-choice.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

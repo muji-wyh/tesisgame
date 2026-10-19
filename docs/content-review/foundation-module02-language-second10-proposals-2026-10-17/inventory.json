@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "status": "frozen_scratch_handoff",
+  "frozen_at_utc": "2026-10-16T18:08:42.299Z",
+  "scope": "Substantive language proposals and context only. Root owns any future production integration; independent review must bind this inventory and the exact effective proposal composition.",
+  "hash_basis": "SHA256 of raw artifact bytes; inventory excludes its own bytes.",
+  "effective_proposal_composition": "candidate-ledger.json plus deliver-correction-r01.json overriding only deliver definition; all other ledger entries and both full-entry holds are unchanged.",
+  "artifacts": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 4745,
+      "sha256": "34e857eb835b261e6c1eb8c4965327130a52e665275ff93bafaa025dc189b9d3"
+    },
+    {
+      "path": "candidate-ledger.json",
+      "bytes": 85848,
+      "sha256": "2e1e09b0d3c602b1da4d163159a8482154df0ce819ba361d2d04a699e44a19ed"
+    },
+    {
+      "path": "context-screen.json",
+      "bytes": 741020,
+      "sha256": "592b2a4f7c7bc37127763a9ebd7b1852e453a89227a8e4f27817e875260ab86e"
+    },
+    {
+      "path": "deliver-correction-r01.json",
+      "bytes": 4478,
+      "sha256": "5b5d09430ef76b504616c1510a6c44ec4ab8b311be5c24d24a9233cca73d38e4"
+    },
+    {
+      "path": "source-index.json",
+      "bytes": 16893,
+      "sha256": "b6b1c07dc6d4d013a002a5a8b1eb63caf3ea8b46a19d7173f65470da558736e5"
+    },
+    {
+      "path": "sources-a.json",
+      "bytes": 12255,
+      "sha256": "9bb428882426366203c57f9846f270790f603de8510fe2807759250a1e3aaf66"
+    },
+    {
+      "path": "sources-b.json",
+      "bytes": 25987,
+      "sha256": "91f8e84c9e6254d6fb32bad84de62b1a99d87c2375b06bc03ebc93b942dac2c9"
+    },
+    {
+      "path": "validation.json",
+      "bytes": 1866,
+      "sha256": "39b23618141950f5cd69bd001f19799befcaf85ee9f0728aab2c5bd4df0ce5a5"
+    }
+  ]
+}

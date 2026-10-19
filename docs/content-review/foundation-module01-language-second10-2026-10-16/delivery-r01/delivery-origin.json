@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "status": "reused_guarded_delivery_pattern_with_second10_scope_adaptation",
+  "source_package": "build/professional-english/foundation-module01-language-review/first10/delivery-r02/",
+  "source_raw_sha256": {
+    "build/professional-english/foundation-module01-language-review/first10/delivery-r02/delivery-lib.cjs": "d00c8aeef136d9e8c1e6dcc0f64bbb356948232e4f4b4ed1a70a930b2f0ec074",
+    "build/professional-english/foundation-module01-language-review/first10/delivery-r02/prepare-delivery.cjs": "6204af71b013c89fdd9bf032c85ae707d891b4a6e2e675f022d11dc838a2609f",
+    "build/professional-english/foundation-module01-language-review/first10/delivery-r02/bind-current-baseline.cjs": "52fbf36d5564ad93359efdf2ac918296f0946668eaa97b12ea672355ae207291",
+    "build/professional-english/foundation-module01-language-review/first10/delivery-r02/integrate-reviewed.cjs": "ee0bd1d2e39bb79968944dc2fbe4725a797f5381b89cc2fdf42122bf9fd9de85",
+    "build/professional-english/foundation-module01-language-review/first10/delivery-r02/update-persisted-tests.cjs": "688acb59afce8d66c14052810e3d499140d3de96ea3d60c4a425fad14e773035",
+    "build/professional-english/foundation-module01-language-review/first10/delivery-r02/persisted-test-transforms.cjs": "2a1a4a7dc73aef0933915a5ca6a75fe9736c92fa600a4dc6e20e473b50133d2e"
+  },
+  "adaptations": [
+    "Ten exact root-accepted candidates and thirteen sources; literal difficulty evidence and one exact coordinator spelling addition.",
+    "Root acceptance and immutable separate spelling proposal are both pinned.",
+    "Full second10 scope and historical assertion reversals; late test-preview capture after Retail second10 and R20.",
+    "No copied bound baseline, integration receipt or transaction state."
+  ],
+  "helper_and_adapter": "Byte-identical to helper-origin.json; no fault-test rerun."
+}

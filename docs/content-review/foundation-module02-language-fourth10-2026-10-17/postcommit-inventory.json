@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "status": "committed_evidence_copied_no_persisted_suite_claim",
+  "files": [
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-2026-10-17/execution-start.json",
+      "sha256": "f8a6b86868baae8b3b2dcc1760e40b1b3abea20acd21f4e1eeed92040096c4fc",
+      "bytes": 1881
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-2026-10-17/transaction-intent.json",
+      "sha256": "7ffd36a0b5e2e8ff1d307277d8a43422e97272b19f7be7f5724972944b8ba2f6",
+      "bytes": 76617
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-2026-10-17/commit-receipt.json",
+      "sha256": "96fff4c1ac94147e99efcb8f18ff07711a5c2e53729fa07695d7d2296ae037f8",
+      "bytes": 2685
+    }
+  ],
+  "transaction_plan_sha256": "e43a7c5c40facfefc4874669d85aa404cc0a47ea8979645306768dfff491eab1"
+}

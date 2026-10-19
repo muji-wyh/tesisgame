@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "status": "frozen_preparation_pending_independent_technical_review",
+  "recorded_at": "2026-10-16T17:53:57.857Z",
+  "baseline_bound": true,
+  "production_mutated": false,
+  "files": [
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/delivery-lib.cjs",
+      "raw_sha256": "f1b0d51212725ee22f4ac8ceaa16c0488262773e3bf986b03695a585fe7ec576"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/test-transforms.cjs",
+      "raw_sha256": "b39074f78f83c69d433562f95fe7c41e5d1139a1bef66da3d69331faa9c9218b"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/prepare.cjs",
+      "raw_sha256": "bda7ff59f06a0e47ec0d22e3c5dabbbd95302d2ef80171438aea13d62a5b5422"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/deliver.cjs",
+      "raw_sha256": "9c2365efc8de342d6bbd1ac0d15be49d4f091827b219aec8deb37b2bfb93cc38"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/HANDOFF.md",
+      "raw_sha256": "352d4fea670ad06c087e848ac5087a3752f7131fe5a32f7c866036a77a55acc2"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/accepted-language.json",
+      "raw_sha256": "a9bf1381c51d01784bff7f6fdd62e7cc050be038d3143f43ada8ed38f163dace"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/professional-content.test.cjs.before",
+      "raw_sha256": "6cc20ad953645ecf4961dfff2fd22f9cdd2ed5c4d6e3c9d100e938902fd3e9f0"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/professional-content.test.cjs.after",
+      "raw_sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/professional-retail-morphology.test.cjs.before",
+      "raw_sha256": "5344e7ab7c62e62640f3c9047f602f0434be6d584430c08e65ae50dbeb9c210c"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/professional-retail-morphology.test.cjs.after",
+      "raw_sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/test-patches.json",
+      "raw_sha256": "3a22bc5357b48c352c5e4fcb9ea8d678416cdc530d99e88d0f07c639fd8a1a31"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/scratch-validation.json",
+      "raw_sha256": "adb1bd4c1f21250f67eff8f61118d7df9c79abffd979730257b135ffc691ebb5"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/binding.json",
+      "raw_sha256": "92c1567cc080001f6f549342fdca6a49d43ec4bfd6657b6d101d2f2ace0511bd"
+    }
+  ],
+  "projected_callbacks": 42,
+  "excluded_persisted_callbacks": 1
+}

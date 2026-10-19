@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "attempt": 1,
+  "started_at": "2026-10-16T20:27:49.419Z",
+  "source_sha256": "6313310db8ef55a7619276b5e6a0b0cd6f8289ab88cb3e774d3d51a56237e62e",
+  "activity": "Static source copying, narrow proposal editing, retained JSON comparison and hashing only.",
+  "native_or_runner_dispatch": false
+}

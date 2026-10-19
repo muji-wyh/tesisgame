@@ -1,0 +1,38 @@
+{
+  "status": "unaccepted_not_appended",
+  "sources": [
+    {
+      "id": "foundation02-verify-resolution-oxford-ensure",
+      "title": "Oxford Advanced Learner's Dictionary: ensure outcome sense",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/ensure",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Selected ensure_sng_1 has fkcefr=b2; selected certainty topic renders B2. Outcome meaning and ensure-that pattern consulted. The separate footer level is excluded. No independent term, morphology, image, audio, expression or curriculum acceptance.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-verify-resolution-collins-ensure",
+      "title": "Collins COBUILD Dictionary: ensure outcome verb",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/ensure",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Selected COBUILD outcome verb explicitly shows B2 and formal register. Original proposed wording is not copied from dictionary examples. No independent term, morphology, image, audio, expression or curriculum acceptance.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-verify-resolution-cefrj-ensure-v15",
+      "title": "The CEFR-J Wordlist Version 1.5: ensure verb",
+      "publisher": "Tono Laboratory, Tokyo University of Foreign Studies; hosted by Open Language Profiles",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Exact ensure verb row is B1 at physical line 2270. This headword/POS placement is not selected-sense certification and is not rewritten as B2. Citation: The CEFR-J Wordlist Version 1.5. Compiled by Yukio Tono, Tokyo University of Foreign Studies. Accessed October 17, 2026 via Open Language Profiles. Research and commercial use require proper citation; copyright Tono Laboratory at TUFS. The separate Octanove CC BY-SA license is not applied. No v1.6 workbook was acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    }
+  ]
+}

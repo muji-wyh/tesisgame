@@ -20,7 +20,7 @@ were added on October 7 and expanded to 330 on October 9. The approved preview s
 - **Voice provider / creator:** Microsoft, Ava Neural, English (United States).
 - **Original source:** Microsoft Edge online text-to-speech service,
   `speech.platform.bing.com/consumer/speech/synthesize/readaloud`.
-- **Generation client:** [edge-tts 7.2.8](https://github.com/rany2/edge-tts),
+- **Original catalog generation client:** [edge-tts 7.2.8](https://github.com/rany2/edge-tts),
   maintained by rany, licensed under LGPLv3. It is a development dependency;
   the Python client is not shipped in the game.
 - **Speech terms:** Microsoft service terms apply to the synthesis service;
@@ -44,6 +44,16 @@ The historical [Jungle and Candy manifest](jungle-candy-audio.json) retains the
 original Jenny hashes instead of relabeling them as Ava.
 
 ## Regeneration
+
+New acquisitions pin **edge-tts 7.3.1**. The maintainer resolved the service
+handshake failure in [7.3.0](https://github.com/rany2/edge-tts/issues/490);
+[7.3.1](https://github.com/rany2/edge-tts/releases/tag/7.3.1) also fixes locale-dependent
+server-date parsing. This tooling update does not regenerate the existing catalog
+or change its historical manifest. Missing-only generation verifies the original
+profile, text and byte hashes, retains documented 7.2.8 recordings, and records
+the acquisition client on each file when producing a mixed-version manifest.
+The top-level client identifies the new batch's generator. Client changes are
+included in cache keys, so new synthesis never reuses an older client's cache.
 
 Install Python, FFmpeg, and the pinned generation dependency, then run:
 

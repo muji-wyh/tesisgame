@@ -7,6 +7,7 @@ static func install(app, directory: String, filename: String = "growth.cfg") -> 
 	app.coin_wallet = preload("res://scripts/coin_wallet.gd").new(directory + "/coins.cfg")
 	app.pop_reward_save_path = directory + "/pop-rewards.cfg"
 	app.jelly_reward_save_path = directory + "/jelly-rewards.cfg"
+	app.professional_save_path = directory + "/professional.json"
 	app.growth = State.new(directory + "/" + filename)
 
 

@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "prepared_static_inspection_only_execution_deferred",
+  "recorded_at": "2026-10-16T19:35:03.445Z",
+  "api": {
+    "close": "Idempotent terminal disposal; also called by _exit_tree.",
+    "is_closed": "Returns terminal state.",
+    "configure_after_close": false,
+    "request_after_close": "Returns 0 and schedules no completion or dispatch.",
+    "transact_native_after_close": {
+      "ok": false,
+      "retryable": false,
+      "reason": "closed",
+      "error": "Professional storage is closed."
+    }
+  },
+  "preservation": "close clears only in-memory callback/timer/request ownership. It never deletes or rolls back primary, previous, pending, event or outbox records. Policy and selection cancellation paths were not edited.",
+  "changes": [
+    {
+      "path": "scripts/professional_store.gd",
+      "sha256": "671fe81e308241e976d2307d1dc3ed7544226314b5d12f5e4215754f90197c2f",
+      "bytes": 13762
+    },
+    {
+      "path": "tests/godot/professional_store_tests.gd",
+      "sha256": "40a896ea2e1862dee9a050ddb80e88ae6c2bc9a2906ea85fcdd7ee242056b4d2",
+      "bytes": 10336
+    }
+  ],
+  "static_checks": {
+    "preimages_unchanged": true,
+    "existing_progress_suite_unchanged": true,
+    "scope": "Manual source/diff inspection and SHA256 comparisons only.",
+    "diff_command": "git diff --no-index between preserved store preimage and current store; exit 1 is expected because changes exist.",
+    "native_test_dispatch": false,
+    "native_parser_dispatch": false,
+    "build_dispatch": false,
+    "test_run_count": 0
+  },
+  "prepared_tests": [
+    "Queued valid host delivery then close; late host reply and timeout remain silent.",
+    "Tree exit closes immediately; reattachment cannot reopen.",
+    "Native deferred record is revoked before disk access.",
+    "Real native transaction lock creates a retry; close disconnects timer and blocks an already deferred retry after lock release.",
+    "Committed answer/outbox and all primary/previous/pending bytes survive close; new store loads and deduplicates event, then explicitly acknowledges reward.",
+    "before_commit closing the store prevents the remaining native write."
+  ],
+  "coordination": "Root owns Play/session and game_ui terminal disposal. Loader agent owns loader close. New dedicated suite is not added to tools/run-tests.cjs; root must coordinate its explicit execution and any group wiring.",
+  "limitations": [
+    "Not parsed or executed in Godot; runtime verification is pending.",
+    "A host operation dispatched before close may already have committed externally. Close revokes local delivery, not durable work; later store recovery remains authoritative.",
+    "There is no cancellation-to-close change."
+  ]
+}

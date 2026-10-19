@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "status": "write_once_independent_review_inventory",
+  "files": [
+    {
+      "name": "HANDOFF.md",
+      "bytes": 4159,
+      "raw_sha256": "47fdcd37a0684f0ae84949c7165cef4efbfd28fa69162cd87d019a2a58cec318"
+    },
+    {
+      "name": "review-notes.cjs",
+      "bytes": 19433,
+      "raw_sha256": "8e2890580daf7dd138f0b646b0f85095315f6042244c7dc371c53c18b9a55ff7"
+    },
+    {
+      "name": "run-review.cjs",
+      "bytes": 26558,
+      "raw_sha256": "10b4bbf5c825b39ae5f9198a744a21c29cc01512718169ef6ac1550432f83547"
+    },
+    {
+      "name": "source-provenance.json",
+      "bytes": 9690,
+      "raw_sha256": "1e6fb834d16620d1f412c96da3b7faf6eaee38c3f8861412c0a50fc524710a0b",
+      "json_sha256": "69df7d7099314bd68ac8b3f3f40737748f3115addbf6cd693b49a80bfcdce243"
+    },
+    {
+      "name": "language-review-proposal.json",
+      "bytes": 83886,
+      "raw_sha256": "849fb6af65055e74802af8ad24ade1740dc4a9e75f7cfce38d205d2e06911202",
+      "json_sha256": "04fa8aa0c3f831e0aea367475f8fa8b2a9a5927281e482df979fc28e2f865fa7"
+    },
+    {
+      "name": "context-scope-audit.json",
+      "bytes": 252989,
+      "raw_sha256": "45f907526bb3ba1642bbb2f18582fd62cd6f6aa7971acd2a62309f98b252990f",
+      "json_sha256": "3b0e907d4155642fe5f197a70ea3d4879e781a7a70a230791dae95df7011bc6b"
+    },
+    {
+      "name": "machine-audit.json",
+      "bytes": 4541,
+      "raw_sha256": "efb1476ca26d8243a323f972e6b4196563cff4dd931737b51c249501cbb40b24",
+      "json_sha256": "26ae2887dd8a7d4d0bdfc9a40135bd4231fe56d4087874d3ca395fbd77e626e3"
+    }
+  ],
+  "inventory_excludes_itself": true
+}

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "kind": "professional_domain_package_handoff_v1",
+  "documented_at": "2026-10-16T19:09:38.550Z",
+  "root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "scope": "Node-only package implementation and verification; parent owns actual application build",
+  "original_run": {
+    "exit_code": 1,
+    "reported_tests": 22,
+    "passed": 20,
+    "failed": 2,
+    "failed_leaf_cases": 1,
+    "duration_ms": 280351.6004,
+    "original_run_remains_failed": true
+  },
+  "affected_supplement": {
+    "exit_code": 0,
+    "reported_tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "duration_ms": 379034.8873
+  },
+  "production_implementation_changed_between_runs": false,
+  "source_files": 407,
+  "source_inventory_sha256": "99c90edda341f88b6b6ce63b80b8f2dc170f7eb6cdf918d8d844c4296c46f2a4",
+  "contracts_sha256": "1349a42c807b10260e5456af0df8419f7ff363435ed295d3c19c5e5acfee3b45",
+  "handoff": {
+    "production_sources_and_shared_test_frozen": true,
+    "test_processes_absent": true,
+    "real_generated_directory_absent": true,
+    "real_pin_absent": true,
+    "observed_before_parent_actual_build": true
+  },
+  "real_generation_by_this_task": false,
+  "native_execution_by_this_task": false,
+  "web_export_by_this_task": false,
+  "deployment_by_this_task": false,
+  "production_files": [
+    {
+      "path": "tools/professional-domain/audit.cjs",
+      "bytes": 24733,
+      "sha256": "ad35adb9e82f42003568e11118a4f59064bfb510335d4259d76690d614c4fc4a"
+    },
+    {
+      "path": "tools/professional-domain/codec.cjs",
+      "bytes": 10419,
+      "sha256": "e4a92e81f4882d37105792526ebf8415d848a06e0f24ab244c939583a2dc9587"
+    },
+    {
+      "path": "tools/professional-domain/compiler.cjs",
+      "bytes": 6613,
+      "sha256": "dea40cba27f75860180a43858711139179f2aed497725c7238ad102e2f3373af"
+    },
+    {
+      "path": "tools/professional-domain/contract.cjs",
+      "bytes": 4499,
+      "sha256": "d7de4bbc01347f2e91c0fedcc7efbd9cf7cbad343c9ce126e0d7cbf0e97832ba"
+    },
+    {
+      "path": "tools/professional-domain/inputs.cjs",
+      "bytes": 6374,
+      "sha256": "7542c46925b133a864a9d4cf8edf6dd2a4e023e71d71d545e767cd655334ad4e"
+    },
+    {
+      "path": "tools/professional-domain/package.cjs",
+      "bytes": 7133,
+      "sha256": "7f0ae386b9b6b0d561026908628e0bb611475f3087473c747687a33fa2e92629"
+    },
+    {
+      "path": "tools/professional-domain/release-gates.cjs",
+      "bytes": 3912,
+      "sha256": "39f468c828b8cdecc7245c7e04d2995e5bf7250247a93ed7251193e18f2d44be"
+    },
+    {
+      "path": "tools/professional-domain/snapshot.cjs",
+      "bytes": 4586,
+      "sha256": "a64ed84edfb80bbba9954805b7443f18184f76adaef4850cfe38e9b36302c71e"
+    },
+    {
+      "path": "tools/professional-domain/source-model.cjs",
+      "bytes": 8620,
+      "sha256": "59844f5dae1dd9b3955dfcd5b7e8f7f76e983a9db3c1d924f976f275e38f19e3"
+    },
+    {
+      "path": "data/professional/domain-policy/decisions.json",
+      "bytes": 133,
+      "sha256": "8f6d7e3e384eb65874338fca54a8d6576fb7903e664c49c52b142857ce407e57"
+    },
+    {
+      "path": "tests/professional-domain-release.test.cjs",
+      "bytes": 24633,
+      "sha256": "6490439f777a7430246b52c2dc42edf082b52496cc3d2a61ad0fe0239e51defd"
+    }
+  ],
+  "copied_evidence": [
+    {
+      "path": "docs/qa/professional-domain-package-r01/initial-node-run.log",
+      "bytes": 3817,
+      "sha256": "6176828acd15fee8be957633e6591f281aacde0cd5c206c6e7455d92e82beb06",
+      "copied_from": "build/professional-english/domain-application-release-r01/node-focused-r01.log"
+    },
+    {
+      "path": "docs/qa/professional-domain-package-r01/initial-node-receipt.json",
+      "bytes": 553,
+      "sha256": "0ef6a182009296d0abbbaa4e405bf6adfd02f7ce04bf6422474b6048a025758b",
+      "copied_from": "build/professional-english/domain-application-release-r01/node-focused-r01-receipt.json"
+    },
+    {
+      "path": "docs/qa/professional-domain-package-r01/initial-test-preimage.cjs",
+      "bytes": 23333,
+      "sha256": "7bdaa7cdcd1e40a6c882c0515522c6bf4045de2a1a25afde33d5d366c7552794",
+      "copied_from": "build/professional-english/domain-application-release-r01/node-focused-r01-test-preimage.cjs"
+    },
+    {
+      "path": "docs/qa/professional-domain-package-r01/initial-source-capture.json",
+      "bytes": 128785,
+      "sha256": "bf81dd5b08d9a9ffa6a1d615af8eef1a9aa1407ed4742038a260c2a46b5b88a4",
+      "copied_from": "build/professional-english/domain-application-release-r01/node-attempt-c5qvIC/source-capture.json"
+    },
+    {
+      "path": "docs/qa/professional-domain-package-r01/initial-static-verification.json",
+      "bytes": 330,
+      "sha256": "4c3751017e604aa06eb69f221016e23de826c222add54f804e1cfe9c9ebac6ea",
+      "copied_from": "build/professional-english/domain-application-release-r01/node-attempt-c5qvIC/static-verification.json"
+    },
+    {
+      "path": "docs/qa/professional-domain-package-r01/package-supplement.log",
+      "bytes": 409,
+      "sha256": "0a9107160714d480c04d60c319d7c5389c23d7e160d38191ce435e19a8141060",
+      "copied_from": "build/professional-english/domain-application-release-r01/node-package-supplement-r01.log"
+    },
+    {
+      "path": "docs/qa/professional-domain-package-r01/package-supplement-receipt.json",
+      "bytes": 721,
+      "sha256": "abf0ec04b25e54513bab4e14e584df1c1a2dd79f73439e546173f3b935130527",
+      "copied_from": "build/professional-english/domain-application-release-r01/node-package-supplement-r01-receipt.json"
+    },
+    {
+      "path": "docs/qa/professional-domain-package-r01/supplement-source-capture.json",
+      "bytes": 128785,
+      "sha256": "bf81dd5b08d9a9ffa6a1d615af8eef1a9aa1407ed4742038a260c2a46b5b88a4",
+      "copied_from": "build/professional-english/domain-application-release-r01/package-attempt-hvBH6O/source-capture.json"
+    },
+    {
+      "path": "docs/qa/professional-domain-package-r01/supplement-static-verification.json",
+      "bytes": 330,
+      "sha256": "4c3751017e604aa06eb69f221016e23de826c222add54f804e1cfe9c9ebac6ea",
+      "copied_from": "build/professional-english/domain-application-release-r01/package-attempt-hvBH6O/static-verification.json"
+    },
+    {
+      "path": "docs/qa/professional-domain-package-r01/corrected-test-snapshot.cjs",
+      "bytes": 24633,
+      "sha256": "6490439f777a7430246b52c2dc42edf082b52496cc3d2a61ad0fe0239e51defd",
+      "copied_from": "tests/professional-domain-release.test.cjs"
+    }
+  ],
+  "documentation": {
+    "path": "docs/qa/professional-domain-package-r01/README.md",
+    "bytes": 7016,
+    "sha256": "44e8bcb5e8e45e38eec7f9e79355b60f4c083f62008d4a3ee3275a9b2ef03674"
+  },
+  "scratch_attempts": [
+    "build/professional-english/domain-application-release-r01/node-attempt-c5qvIC",
+    "build/professional-english/domain-application-release-r01/package-attempt-hvBH6O"
+  ]
+}

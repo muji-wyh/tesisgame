@@ -1,0 +1,143 @@
+{
+  "schema": 1,
+  "status": "frozen_unexecuted_browser_only_supplement",
+  "created_at": "2026-10-16T20:56:11.940Z",
+  "reason": "The actual r04 boot and pack proof passed; the first accessible cold button click timed out because the full-window canvas covered the controls.",
+  "inherited_fixture": "build/professional-english/domain-runtime-web-fixture-r04",
+  "inherited_export_receipt": {
+    "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/export-receipt.json",
+    "bytes": 175806,
+    "sha256": "6af2c3e988b0cec313f8ff73d51d2416618d4cca3ca5302b7a0e8d3198c452bb"
+  },
+  "inherited_browser_failure": {
+    "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/browser/receipt.json",
+    "bytes": 11630,
+    "sha256": "79e7c9ddb6efff1fbbc17201bc20029fbf92379b138f62d50bb920ad90021e6f"
+  },
+  "shell_change": {
+    "file": "index.html",
+    "byte_offset": 4139,
+    "before": {
+      "bytes": 4869,
+      "sha256": "49d50d73655a10c8ce93045d2d491e0740d31837742032bc690989dd879b5177"
+    },
+    "after": {
+      "bytes": 4869,
+      "sha256": "5cd253ab1dc2a2b3deb96fa4cbd383edcfe501aabb5d683c919883a6845847ce"
+    },
+    "exact_before": "\"canvasResizePolicy\":2",
+    "exact_after": "\"canvasResizePolicy\":1",
+    "changed_bytes": 1
+  },
+  "planned_outputs": [
+    {
+      "path": "index.audio.position.worklet.js",
+      "bytes": 2973,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+    },
+    {
+      "path": "index.audio.worklet.js",
+      "bytes": 7298,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+    },
+    {
+      "path": "index.html",
+      "bytes": 4869,
+      "sha256": "5cd253ab1dc2a2b3deb96fa4cbd383edcfe501aabb5d683c919883a6845847ce"
+    },
+    {
+      "path": "index.js",
+      "bytes": 281121,
+      "sha256": "3e39bb03d73bdfbf927ffb0b58d4a07ef3359c436ae6dca9add84076865cebaf"
+    },
+    {
+      "path": "index.pck",
+      "bytes": 1526148,
+      "sha256": "2ddb1228eaf5126e5983a849edfa2a7be42a2a61f1bdeefe586c15995fc9c01f"
+    },
+    {
+      "path": "index.png",
+      "bytes": 21443,
+      "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+    },
+    {
+      "path": "index.wasm",
+      "bytes": 39509339,
+      "sha256": "7eda98958eb09135a1acb54a4323a00b1a55af1997f15fa1cdc2b93e3df46656"
+    },
+    {
+      "path": "professional-media.js",
+      "bytes": 11851,
+      "sha256": "db9ac8f3aeaaafb8f1ac411a56d56f0bfd6d8ad2862348868d42666d3021630a"
+    },
+    {
+      "path": "professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png",
+      "bytes": 357001,
+      "sha256": "202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+    },
+    {
+      "path": "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+      "bytes": 82598,
+      "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3"
+    },
+    {
+      "path": "professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png",
+      "bytes": 79563,
+      "sha256": "8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8"
+    },
+    {
+      "path": "professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png",
+      "bytes": 120608,
+      "sha256": "afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c"
+    },
+    {
+      "path": "professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png",
+      "bytes": 91063,
+      "sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae"
+    },
+    {
+      "path": "professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+      "bytes": 148338,
+      "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe"
+    },
+    {
+      "path": "professional-progress.js",
+      "bytes": 19082,
+      "sha256": "e1b1ae3f2045c3bfaa4fde84703f30617547817a9409d602444d2c2e4f1ec8c9"
+    }
+  ],
+  "diagnosis": {
+    "engine_setup": "switch(GodotConfig.canvas_resize_policy){case 0:GodotDisplayScreen.desired_size=[canvas.width,canvas.height];break;case 1:GodotDisplayScreen.desired_size=[p_width,p_height];break;default:canvas.style.position=\"absolute\";canvas.style.top=0;canvas.style.left=0;break}",
+    "engine_size_update": "if(isFullscreen||wantsFullWindow){width=Math.floor(window.innerWidth*scale);height=Math.floor(window.innerHeight*scale)}",
+    "policy_1": "Uses the project viewport size (960 by 640) without applying absolute positioning; the existing block canvas stays after the header.",
+    "css_changed": false,
+    "real_clicks_required": true
+  },
+  "browser_preservation": {
+    "source": {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/browser.cjs",
+      "bytes": 10662,
+      "sha256": "275de78a9848f12aea3f4f2fa1536407ab6f19078cfa36e20c2699c57eaf2e87"
+    },
+    "scenario_tail_sha256": "e55e2e6f1a5f300afd3c3dfe54d3aefea66407c9ada4244bb5e8f436ffb8eb54",
+    "scenario_tail_unchanged_after_removing_receipt_wiring_and_added_integrity_checks": true,
+    "original_assertions_unchanged": true,
+    "click_options_unchanged": true,
+    "forced_clicks_added": false,
+    "command_injection_added": false,
+    "additions": [
+      "Prelude binds inherited export and separate copied-output receipt.",
+      "Both result receipts add the shell supplement and inherited input bindings.",
+      "Success rechecks inherited inputs and copied-shell receipt."
+    ]
+  },
+  "not_run": [
+    "project preparation",
+    "Godot import",
+    "Web export",
+    "native proof",
+    "browser scenario",
+    "tests"
+  ],
+  "preserved_scope": "Phrase-only synthetic technical fixture. No production content approval, full GameUI/six-mode completion, settlement, audibility, device performance, or heap reclamation claim."
+}

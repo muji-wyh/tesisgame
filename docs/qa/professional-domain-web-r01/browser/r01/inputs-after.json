@@ -1,0 +1,37 @@
+[
+  {
+    "path": "tests/browser/learning-paths.spec.cjs",
+    "bytes": 8393,
+    "sha256": "4ec5d63a8847dbbd203651cc01ed74e255c34c11c30b976ba1d1d320560280f1"
+  },
+  {
+    "path": "tests/browser/game-ui.cjs",
+    "bytes": 27869,
+    "sha256": "a411d1755c77a673990a3d3edc28aaa9767399b88b56f83ea56c62a56639baba"
+  },
+  {
+    "path": "playwright.config.cjs",
+    "bytes": 1489,
+    "sha256": "6d5b94658d08bffe98452309f80d632338f2fa87168f773424b553d2c7a524a7"
+  },
+  {
+    "path": "tools/serve-web.cjs",
+    "bytes": 2442,
+    "sha256": "d9a748c62c300b5c79cb80c3de70f61ce3646ea604fc00dc39f32c54f5632bf5"
+  },
+  {
+    "path": "package.json",
+    "bytes": 2252,
+    "sha256": "034615128abbb9403d0b6ec2747c2ed52a2e65dccb3d8f597c7e82ebe4ca77ce"
+  },
+  {
+    "path": "package-lock.json",
+    "bytes": 23994,
+    "sha256": "e18b9297199440aee319b92a1895e8c6b8f5825c9396d065cbdfddbe5c25a3d8"
+  },
+  {
+    "path": "build/web-build.json",
+    "bytes": 2437866,
+    "sha256": "2c9ad5292d4a5bd87d9631138d6206121172af1615d2deed5b563de233e9c232"
+  }
+]

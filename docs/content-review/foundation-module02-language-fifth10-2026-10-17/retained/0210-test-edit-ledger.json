@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "status": "prepared_not_executed",
+  "files": [
+    {
+      "path": "tests/professional-content.test.cjs",
+      "edits": [
+        {
+          "name": "one strict image reversal before fifth-ten history",
+          "occurrences": 1,
+          "before": "function beforeFifth10(entry) {",
+          "after": "const shoppingBagImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-shopping-bag-image-2026-10-17.json'), 'utf8'));\nfunction beforeShoppingBagImage(entry) {\n  const patches = shoppingBagImageRecord.patches.filter(item => item.id === entry.id);\n  if (!patches.length) return entry;\n  assert.equal(patches.length, 1);\n  const patch = patches[0];\n  assert.equal(patch.id, 'shopping-bag.goods-carrier.n');\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later shopping-bag image and three note clauses');\n  return structuredClone(patch.before);\n}\nconst shoppingBagHistoryLexemes = () => source.lexemes.map(beforeShoppingBagImage);\nfunction beforeFifth10(entry) {\n  entry = beforeShoppingBagImage(entry);"
+        },
+        {
+          "name": "live image total only",
+          "occurrences": 1,
+          "before": "assert.equal(result.summary.integrated_word_images, 8);",
+          "after": "assert.equal(result.summary.integrated_word_images, 9);"
+        },
+        {
+          "name": "full-registry history boundary beforeAttendanceLanguage",
+          "occurrences": 1,
+          "before": "source.lexemes.map(beforeAttendanceLanguage)",
+          "after": "shoppingBagHistoryLexemes().map(beforeAttendanceLanguage)"
+        },
+        {
+          "name": "full-registry history boundary beforeFoundation02SecondLanguage",
+          "occurrences": 2,
+          "before": "source.lexemes.map(beforeFoundation02SecondLanguage)",
+          "after": "shoppingBagHistoryLexemes().map(beforeFoundation02SecondLanguage)"
+        },
+        {
+          "name": "full-registry history boundary beforeFoundation02ThirdLanguage",
+          "occurrences": 4,
+          "before": "source.lexemes.map(beforeFoundation02ThirdLanguage)",
+          "after": "shoppingBagHistoryLexemes().map(beforeFoundation02ThirdLanguage)"
+        },
+        {
+          "name": "full-registry history boundary beforeFoundation02FourthLanguage",
+          "occurrences": 6,
+          "before": "source.lexemes.map(beforeFoundation02FourthLanguage)",
+          "after": "shoppingBagHistoryLexemes().map(beforeFoundation02FourthLanguage)"
+        },
+        {
+          "name": "fourth-ten all-other-lexeme historical hash",
+          "occurrences": 1,
+          "before": "hash(source.lexemes.filter(entry=>!ids.has(entry.id))),c.all_other_lexemes_json_sha256",
+          "after": "hash(shoppingBagHistoryLexemes().filter(entry=>!ids.has(entry.id))),c.all_other_lexemes_json_sha256"
+        }
+      ],
+      "appended_tests": 0
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "edits": [
+        {
+          "name": "one strict image reversal before fifth-ten history",
+          "occurrences": 1,
+          "before": "function beforeFifth10(entry) {",
+          "after": "const shoppingBagImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-shopping-bag-image-2026-10-17.json'), 'utf8'));\nfunction beforeShoppingBagImage(entry) {\n  const patches = shoppingBagImageRecord.patches.filter(item => item.id === entry.id);\n  if (!patches.length) return entry;\n  assert.equal(patches.length, 1);\n  const patch = patches[0];\n  assert.equal(patch.id, 'shopping-bag.goods-carrier.n');\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later shopping-bag image and three note clauses');\n  return structuredClone(patch.before);\n}\nfunction beforeFifth10(entry) {\n  entry = beforeShoppingBagImage(entry);"
+        },
+        {
+          "name": "disjoint live counter-history boundary",
+          "occurrences": 1,
+          "before": "function beforeCounterImage(entry) {",
+          "after": "function beforeCounterImage(entry) {\n  entry = beforeShoppingBagImage(entry);"
+        },
+        {
+          "name": "direct fifth-ten afterimage comparison",
+          "occurrences": 1,
+          "before": "for (const patch of fifthRecord.patches) {\n    const entry = data.lexemes.find(item => item.id === patch.id);",
+          "after": "for (const patch of fifthRecord.patches) {\n    const entry = beforeShoppingBagImage(data.lexemes.find(item => item.id === patch.id));"
+        }
+      ],
+      "appended_tests": 0
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "edits": [
+        {
+          "name": "one strict image reversal before fifth-ten history",
+          "occurrences": 1,
+          "before": "function beforeFifth10(entry) {",
+          "after": "const shoppingBagImageRecord=read('data/professional/provenance/retail-shopping-bag-image-2026-10-17.json');\nfunction beforeShoppingBagImage(entry) {\n  const patches = shoppingBagImageRecord.patches.filter(item => item.id === entry.id);\n  if (!patches.length) return entry;\n  assert.equal(patches.length, 1);\n  const patch = patches[0];\n  assert.equal(patch.id, 'shopping-bag.goods-carrier.n');\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later shopping-bag image and three note clauses');\n  return structuredClone(patch.before);\n}\nfunction beforeFifth10(entry) {\n  entry = beforeShoppingBagImage(entry);"
+        },
+        {
+          "name": "live media image total only",
+          "occurrences": 1,
+          "before": "assert.equal(data.lexemes.filter(e=>e.media.image.status==='integrated').length,8);",
+          "after": "assert.equal(data.lexemes.filter(e=>e.media.image.status==='integrated').length,9);"
+        }
+      ],
+      "appended_tests": 5
+    }
+  ]
+}

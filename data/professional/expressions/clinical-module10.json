@@ -1,0 +1,1607 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.clinical_medicine.module10.01",
+      "text": "The patient will speak with the physician and pharmacist, with an interpreter arranged for the discussion.",
+      "meaning": "Identify participants and communication support.",
+      "context": "Coordinating an accessible consultation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "speak",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "with",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "physician",
+          "start": 32,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "pharmacist",
+          "start": 46,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "with",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "an",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "interpreter",
+          "start": 66,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "arranged",
+          "start": 78,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "for",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": "discussion",
+          "start": 95,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 105,
+          "end": 106
+        }
+      ],
+      "focus_lexeme_ids": [
+        "patient.person-receiving-healthcare.n",
+        "physician.medical-practitioner.n",
+        "pharmacist.medicines-professional.n",
+        "interpreter.spoken-language-communication-professional.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module10.02",
+      "text": "The surgeon and anesthesiologist will explain their roles and the planned assessment.",
+      "meaning": "Clarify professional roles without prescribing care.",
+      "context": "Preparing a planned clinical discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "surgeon",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "anesthesiologist",
+          "start": 16,
+          "end": 32
+        },
+        {
+          "index": 4,
+          "text": "will",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "explain",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "their",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "roles",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "planned",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "assessment",
+          "start": 74,
+          "end": 84
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "surgeon.medical-practitioner-specializing-in-surgical-care.n",
+        "anesthesiologist.physician-specializing-in-anesthesia-and-related-care.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module10.03",
+      "text": "The cardiologist, neurologist and respiratory physician contributed different expertise to the case conference.",
+      "meaning": "Identify distinct specialist contributions.",
+      "context": "Summarizing a multidisciplinary discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "cardiologist",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "neurologist",
+          "start": 18,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "respiratory",
+          "start": 34,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "physician",
+          "start": 46,
+          "end": 55
+        },
+        {
+          "index": 7,
+          "text": "contributed",
+          "start": 56,
+          "end": 67
+        },
+        {
+          "index": 8,
+          "text": "different",
+          "start": 68,
+          "end": 77
+        },
+        {
+          "index": 9,
+          "text": "expertise",
+          "start": 78,
+          "end": 87
+        },
+        {
+          "index": 10,
+          "text": "to",
+          "start": 88,
+          "end": 90
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 12,
+          "text": "case",
+          "start": 95,
+          "end": 99
+        },
+        {
+          "index": 13,
+          "text": "conference",
+          "start": 100,
+          "end": 110
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 110,
+          "end": 111
+        }
+      ],
+      "focus_lexeme_ids": [
+        "cardiologist.physician-specializing-in-heart-and-circulation-conditions.n",
+        "neurologist.physician-specializing-in-nervous-system-conditions.n",
+        "respiratory-physician.physician-specializing-in-breathing-system-conditions.n",
+        "case-conference.coordinated-care-case-meeting.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module10.04",
+      "text": "The dermatologist, radiologist and pathologist discussed the available findings within their respective roles.",
+      "meaning": "Describe specialist collaboration.",
+      "context": "Coordinating a fictional assessment review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "dermatologist",
+          "start": 4,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "radiologist",
+          "start": 19,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "pathologist",
+          "start": 35,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": "discussed",
+          "start": 47,
+          "end": 56
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 8,
+          "text": "available",
+          "start": 61,
+          "end": 70
+        },
+        {
+          "index": 9,
+          "text": "findings",
+          "start": 71,
+          "end": 79
+        },
+        {
+          "index": 10,
+          "text": "within",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 11,
+          "text": "their",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 12,
+          "text": "respective",
+          "start": 93,
+          "end": 103
+        },
+        {
+          "index": 13,
+          "text": "roles",
+          "start": 104,
+          "end": 109
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "dermatologist.physician-specializing-in-skin-hair-and-nail-conditions.n",
+        "radiologist.physician-specializing-in-medical-imaging-and-related-care.n",
+        "pathologist.physician-specializing-in-disease-assessment-through-samples-and-other-evidence.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module10.05",
+      "text": "The psychiatrist and pediatrician discussed the relevant referral and communication support.",
+      "meaning": "Describe collaboration and referral information.",
+      "context": "Preparing a coordinated consultation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "psychiatrist",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "pediatrician",
+          "start": 21,
+          "end": 33
+        },
+        {
+          "index": 4,
+          "text": "discussed",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "relevant",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 7,
+          "text": "referral",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 9,
+          "text": "communication",
+          "start": 70,
+          "end": 83
+        },
+        {
+          "index": 10,
+          "text": "support",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "psychiatrist.physician-specializing-in-mental-health-conditions.n",
+        "pediatrician.physician-specializing-in-healthcare-of-children-and-young-people.n",
+        "referral.request-for-other-service-assessment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module10.06",
+      "text": "The oncologist, endocrinologist and gastroenterologist each reviewed the question addressed to their service.",
+      "meaning": "Identify responsibility for separate specialist questions.",
+      "context": "Coordinating requested specialist opinions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "oncologist",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 14,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "endocrinologist",
+          "start": 16,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "gastroenterologist",
+          "start": 36,
+          "end": 54
+        },
+        {
+          "index": 6,
+          "text": "each",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 7,
+          "text": "reviewed",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 9,
+          "text": "question",
+          "start": 73,
+          "end": 81
+        },
+        {
+          "index": 10,
+          "text": "addressed",
+          "start": 82,
+          "end": 91
+        },
+        {
+          "index": 11,
+          "text": "to",
+          "start": 92,
+          "end": 94
+        },
+        {
+          "index": 12,
+          "text": "their",
+          "start": 95,
+          "end": 100
+        },
+        {
+          "index": 13,
+          "text": "service",
+          "start": 101,
+          "end": 108
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "oncologist.physician-specializing-in-cancer-care.n",
+        "endocrinologist.physician-specializing-in-hormone-related-conditions.n",
+        "gastroenterologist.physician-specializing-in-digestive-system-conditions.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module10.07",
+      "text": "The urologist and ophthalmologist received separate requests, and triage will follow the relevant service arrangements.",
+      "meaning": "Clarify distinct specialist requests and prioritization context.",
+      "context": "Checking referral coordination.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "urologist",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "ophthalmologist",
+          "start": 18,
+          "end": 33
+        },
+        {
+          "index": 4,
+          "text": "received",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 5,
+          "text": "separate",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 6,
+          "text": "requests",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "triage",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "will",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 11,
+          "text": "follow",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": "relevant",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": "service",
+          "start": 98,
+          "end": 105
+        },
+        {
+          "index": 15,
+          "text": "arrangements",
+          "start": 106,
+          "end": 118
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 118,
+          "end": 119
+        }
+      ],
+      "focus_lexeme_ids": [
+        "urologist.specialist-in-urinary-tract-and-male-reproductive-system-care.n",
+        "ophthalmologist.physician-specializing-in-eye-care.n",
+        "triage.care-priority-assessment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module10.08",
+      "text": "The obstetrician and gynecologist confirmed who would discuss the findings with the patient.",
+      "meaning": "Clarify responsibility for communicating findings.",
+      "context": "Coordinating a clinical discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "obstetrician",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "gynecologist",
+          "start": 21,
+          "end": 33
+        },
+        {
+          "index": 4,
+          "text": "confirmed",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 5,
+          "text": "who",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "would",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 7,
+          "text": "discuss",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "findings",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 10,
+          "text": "with",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": "patient",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "obstetrician.physician-specializing-in-pregnancy-and-childbirth-care.n",
+        "gynecologist.physician-specializing-in-female-reproductive-system-care.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module10.09",
+      "text": "Please clarify whether the plan concerns admission, discharge or transfer, and identify who coordinates rehabilitation.",
+      "meaning": "Distinguish care transitions and coordination responsibility.",
+      "context": "Reviewing a care-transition plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "clarify",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "whether",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "plan",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "concerns",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "admission",
+          "start": 41,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "discharge",
+          "start": 52,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "or",
+          "start": 62,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "transfer",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "identify",
+          "start": 79,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "who",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "coordinates",
+          "start": 92,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "rehabilitation",
+          "start": 104,
+          "end": 118
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 118,
+          "end": 119
+        }
+      ],
+      "focus_lexeme_ids": [
+        "admission.entry-into-care-service.n",
+        "discharge.conclusion-of-care-episode.n",
+        "transfer.move-between-care-settings.n",
+        "rehabilitation.function-and-participation-support.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module10.10",
+      "text": "The handover should identify the supervision arrangements, scope of practice and responsibility for the follow-up appointment.",
+      "meaning": "Request clear responsibilities for continuing care.",
+      "context": "Preparing a clinical handover.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "handover",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "should",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "identify",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "supervision",
+          "start": 33,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "arrangements",
+          "start": 45,
+          "end": 57
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 8,
+          "text": "scope",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": "of",
+          "start": 65,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "practice",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "responsibility",
+          "start": 81,
+          "end": 95
+        },
+        {
+          "index": 13,
+          "text": "for",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 100,
+          "end": 103
+        },
+        {
+          "index": 15,
+          "text": "follow-up",
+          "start": 104,
+          "end": 113
+        },
+        {
+          "index": 16,
+          "text": "appointment",
+          "start": 114,
+          "end": 125
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 125,
+          "end": 126
+        }
+      ],
+      "focus_lexeme_ids": [
+        "handover.responsibility-transfer.n",
+        "supervision.oversight-and-professional-support.n",
+        "scope-of-practice.professional-role-boundaries.n",
+        "follow-up-appointment.later-care-review-meeting.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

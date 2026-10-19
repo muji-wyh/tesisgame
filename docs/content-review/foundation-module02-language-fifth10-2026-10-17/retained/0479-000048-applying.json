@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 48,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "4771501edeab540a204be71d8806c8d10b7d9a80d7331e480e2bcc23f7c91181",
+  "recorded_at": "2026-10-16T22:48:04.184Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/integration-plan.md",
+  "work": "work/f5d3b13e-9d2b-4f91-9ca9-02848b4743ef.bin"
+}

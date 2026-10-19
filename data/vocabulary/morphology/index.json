@@ -1,0 +1,1624 @@
+{
+  "schema": 1,
+  "revision": "growth-morphology-v1",
+  "inventory_sha256": "5a255c8afb15e7592c656236d537a6c33dc048699a6f6b8451bc81b8d876b24b",
+  "total": 1550,
+  "context_only": 265,
+  "ages": {
+    "3": {
+      "total": 80,
+      "reviewed": 80,
+      "pending": 0
+    },
+    "4": {
+      "total": 99,
+      "reviewed": 99,
+      "pending": 0
+    },
+    "5": {
+      "total": 188,
+      "reviewed": 188,
+      "pending": 0
+    },
+    "6": {
+      "total": 272,
+      "reviewed": 272,
+      "pending": 0
+    },
+    "7": {
+      "total": 284,
+      "reviewed": 284,
+      "pending": 0
+    },
+    "8": {
+      "total": 184,
+      "reviewed": 184,
+      "pending": 0
+    },
+    "9": {
+      "total": 177,
+      "reviewed": 177,
+      "pending": 0
+    },
+    "10": {
+      "total": 101,
+      "reviewed": 101,
+      "pending": 0
+    },
+    "11": {
+      "total": 76,
+      "reviewed": 76,
+      "pending": 0
+    },
+    "12": {
+      "total": 89,
+      "reviewed": 89,
+      "pending": 0
+    }
+  },
+  "sources": {
+    "anderson-morphology": {
+      "title": "Essentials of Linguistics, sections 6.1-6.4 and 7.1-7.3",
+      "author": "Catherine Anderson, McMaster University",
+      "url": "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html",
+      "consulted": "2026-10-16",
+      "evidence": "Framework for free bases, bound affixes, allomorphy, compounds and function words. Individual corpus decisions are the named reviewer's analysis, not a dictionary-wide endorsement."
+    },
+    "cambridge-adjective-y": {
+      "title": "PLEASE DON'T SHOUT!",
+      "author": "Colin McIntosh, Cambridge Dictionary",
+      "url": "https://dictionaryblog.cambridge.org/2016/02/09/please-dont-shout/",
+      "consulted": "2026-10-16",
+      "evidence": "Published discussion of adjectival -y, with cloudy as an explicit example."
+    },
+    "wiktionary-notebook": {
+      "title": "Wiktionary: notebook, English etymology and noun",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/notebook#English",
+      "consulted": "2026-10-16",
+      "evidence": "Explicit note + book formation; the writing-book sense selected."
+    },
+    "mw-angry": {
+      "title": "Merriam-Webster: angry",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/angry",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-thirsty": {
+      "title": "Merriam-Webster: thirsty",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/thirsty",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-dirty": {
+      "title": "Merriam-Webster: dirty",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/dirty",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-closed": {
+      "title": "Merriam-Webster: closed",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/closed",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-rainbow": {
+      "title": "Merriam-Webster: rainbow",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/rainbow",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-classroom": {
+      "title": "Merriam-Webster: classroom",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/classroom",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-playground": {
+      "title": "Merriam-Webster: playground",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/playground",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-afternoon": {
+      "title": "Merriam-Webster: afternoon",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/afternoon",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-inside": {
+      "title": "Merriam-Webster: inside",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/inside",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-outside": {
+      "title": "Merriam-Webster: outside",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/outside",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-breakfast": {
+      "title": "Merriam-Webster: breakfast",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/breakfast",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-triangle": {
+      "title": "Merriam-Webster: triangle",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/triangle",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-dinosaur": {
+      "title": "Merriam-Webster: dinosaur",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/dinosaur",
+      "consulted": "2026-10-16",
+      "evidence": "Dictionary sense and word history consulted; no definition text copied."
+    },
+    "mw-tractor": {
+      "title": "Merriam-Webster: tractor",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/tractor",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-wardrobe": {
+      "title": "Merriam-Webster: wardrobe",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/wardrobe",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-today": {
+      "title": "Merriam-Webster: today",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/today",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-sunglasses": {
+      "title": "Merriam-Webster: sunglasses",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/sunglasses",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-forward": {
+      "title": "Merriam-Webster: forward",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/forward",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-drawer": {
+      "title": "Merriam-Webster: drawer",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/drawer",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-microwave": {
+      "title": "Merriam-Webster: microwave",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/microwave",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-rectangle": {
+      "title": "Merriam-Webster: rectangle",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/rectangle",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-enjoy": {
+      "title": "Merriam-Webster: enjoy",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/enjoy",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-easy": {
+      "title": "Merriam-Webster: easy",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/easy",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-different": {
+      "title": "Merriam-Webster: different",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/different",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "mw-celebration": {
+      "title": "Merriam-Webster: celebration",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/celebration",
+      "consulted": "2026-10-16",
+      "evidence": "The selected dictionary sense or word history was consulted for this individual decision; review wording is original."
+    },
+    "wiktionary-teen": {
+      "title": "Wiktionary: -teen, English suffix",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/-teen#English",
+      "consulted": "2026-10-16",
+      "evidence": "English numeric suffix and explicit thirteen-through-nineteen family checked; irregular spellings are individually authored."
+    },
+    "wiktionary-numeric-ty": {
+      "title": "Wiktionary: -ty, English numeric suffix",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/-ty#English",
+      "consulted": "2026-10-16",
+      "evidence": "The numeric multiples-of-ten suffix was distinguished from the unrelated abstract-noun suffix."
+    },
+    "wiktionary-tractor": {
+      "title": "Wiktionary: tractor, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/tractor#English",
+      "consulted": "2026-10-16",
+      "evidence": "The explicit pulling-root and agent -or formation is recorded, distinct from the unrelated land-area tract noun."
+    },
+    "mw-slippery": {
+      "title": "Merriam-Webster: slippery",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/slippery",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "mw-passport": {
+      "title": "Merriam-Webster: passport",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/passport",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "mw-sweater": {
+      "title": "Merriam-Webster: sweater",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/sweater",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "mw-unicycle": {
+      "title": "Merriam-Webster: unicycle",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/unicycle",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "mw-decorate": {
+      "title": "Merriam-Webster: decorate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/decorate",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "mw-return": {
+      "title": "Merriam-Webster: return",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/return",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "mw-subtract": {
+      "title": "Merriam-Webster: subtract",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/subtract",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "mw-dentist": {
+      "title": "Merriam-Webster: dentist",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/dentist",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "mw-aquarium": {
+      "title": "Merriam-Webster: aquarium",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/aquarium",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "mw-email": {
+      "title": "Merriam-Webster: email",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/email",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "mw-sometimes": {
+      "title": "Merriam-Webster: sometimes",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/sometimes",
+      "consulted": "2026-10-16",
+      "evidence": "Selected sense and relevant formation or lexicalization checked for the individual authored decision; no definition text copied."
+    },
+    "wiktionary-aquarium": {
+      "title": "Wiktionary: aquarium, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/aquarium#English",
+      "consulted": "2026-10-16",
+      "evidence": "Explicit aqua- and -arium formation checked alongside the dictionary account of the aquatic-vivarium contraction."
+    },
+    "wiktionary-internet": {
+      "title": "Wiktionary: Internet, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/Internet#English",
+      "consulted": "2026-10-16",
+      "evidence": "The documented shortening of internetwork supports the retained inter- and network-net analysis; original vocabulary case remains unchanged."
+    },
+    "wiktionary-sometimes": {
+      "title": "Wiktionary: sometimes, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/sometimes#English",
+      "consulted": "2026-10-16",
+      "evidence": "The sometime plus adverbial -s formation distinguishes the ending from an ordinary noun plural."
+    },
+    "mw-receive-new": {
+      "title": "Merriam-Webster: receive",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/receive",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The current sense includes getting something given or sent. The history traces French receivre to Latin re- plus capere, take; the children's history distinguishes the historical back sense."
+    },
+    "mw-conceive-new": {
+      "title": "Merriam-Webster: conceive",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/conceive",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The companion history traces French conceivre to Latin com- plus capere, take. This supports the ceive family correspondence without making ceive a free English verb."
+    },
+    "mw-re-prefix-new": {
+      "title": "Merriam-Webster: re-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/re-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Prefix entry, senses 1 and 2",
+      "evidence": "The prefix distinguishes again from back/backward. The revised receive and reflect candidates select the historical back identity, not a productive repetition claim."
+    },
+    "pbs-bound-ceive-new": {
+      "title": "Crash Course Linguistics, episode 2: Morphology",
+      "author": "Crash Course Linguistics, published by PBS",
+      "url": "https://www.pbs.org/video/morphology-j8k5re/",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Transcript, bound-root discussion",
+      "evidence": "The transcript explicitly uses receive, deceive, perceive, and conceive to illustrate the bound root ceive. It distinguishes structural recurrence from an independently usable English meaning. The take gloss in the proposal is historical evidence from the dictionary, not a claim that ceive is a standalone word."
+    },
+    "anderson-2e-roots-new": {
+      "title": "Essentials of Linguistics, 2nd edition, section 5.2: Roots, bases, and affixes",
+      "author": "Catherine Anderson, Bronwyn Bjorkman, Derek Denis, Julianne Doner, Margaret Grant, Nathan Sanders, and Ai Taniguchi",
+      "url": "https://socialsci.libretexts.org/Bookshelves/Linguistics/Essentials_of_Linguistics_2e_(Anderson_et_al.)/05:_Morphology/5.02:_Roots_bases_and_affixes",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Affixes vs roots; Free and bound morphemes",
+      "evidence": "The author text distinguishes roots from bases and affixes and recognizes bound roots. It also separates historical source-language complexity from a contemporary speaker's analysis, using library and nation as examples. Neither free-base absence nor historical complexity alone decides a teaching graph."
+    },
+    "mw-explore-new": {
+      "title": "Merriam-Webster: explore",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/explore",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies ex- plus plorare cry out. The selected examining/learning sense is semantically distant; historical segmentation alone does not settle an appropriate modern teaching graph."
+    },
+    "mw-separate-new": {
+      "title": "Merriam-Webster: separate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/separate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies se- apart plus parare prepare/procure. That prepare root differs from the equal par root in compare; a spelling-only shared canonical identity would be wrong."
+    },
+    "mw-ate-suffix-new": {
+      "title": "Merriam-Webster: -ate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/-ate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Verb suffix and Word History",
+      "evidence": "The dictionary distinguishes a verb-forming suffix and traces it to Latin participial morphology. This is background evidence for investigate, separate, and estimate research, not term-level authorization for automatic splitting."
+    },
+    "etym-explore-hold9": {
+      "title": "Online Etymology Dictionary: explore",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/explore",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry offers back-formation from exploration or borrowing via French. It discusses the historical plorare cry-out account but also a competing pluere flow account. That uncertainty and the established explore/exploration base argue against presenting one deep historical split as the uniquely settled learner graph."
+    },
+    "etym-separate-hold9": {
+      "title": "Online Etymology Dictionary: separate",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/separate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The verb derives from the Latin participial form separatus, with se- apart and parare prepare/procure. The adjective has related borrowing/conversion history. This evidence supports the selected verb graph while keeping par.prepare distinct from compare par.equal."
+    },
+    "etym-se-hold9": {
+      "title": "Online Etymology Dictionary: se-",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/se-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry records the apart/away prefix in Latin-derived English words. This is the specific se- identity selected for separate, not an arbitrary opening syllable."
+    },
+    "mw-prepare-hold9": {
+      "title": "Merriam-Webster: prepare",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/prepare",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Relevant sense and Word History",
+      "evidence": "The history identifies prae- plus parare supply/provide/make ready, providing a companion family for the prepare/procure element of separate. It is unrelated to compare par equal."
+    },
+    "michigan-ate-hold9": {
+      "title": "ELI 538: Rules and Practices, Rule 6-3",
+      "author": "University of Michigan English Language Institute; page cites Linda Grant, Well Said, 2nd edition",
+      "url": "https://www.lrc.lsa.umich.edu/eli-538/pg-014.html",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Rule 6-3 and Exercise 2",
+      "evidence": "This teaching resource explicitly treats estimate as a verb with -ate and contrasts its noun/verb pronunciations. Its exercise also places separate in the -ate family. This is term-level evidence for an English suffix boundary, not just a Latin derivation."
+    },
+    "mw-escalator": {
+      "title": "Merriam-Webster: escalator",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/escalator",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-pineapple": {
+      "title": "Merriam-Webster: pineapple",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/pineapple",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-strawberry": {
+      "title": "Merriam-Webster: strawberry",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/strawberry",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-helicopter": {
+      "title": "Merriam-Webster: helicopter",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/helicopter",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-octopus": {
+      "title": "Merriam-Webster: octopus",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/octopus",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-microphone": {
+      "title": "Merriam-Webster: microphone",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/microphone",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-florist": {
+      "title": "Merriam-Webster: florist",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/florist",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-transport": {
+      "title": "Merriam-Webster: transport",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/transport",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-thermometer": {
+      "title": "Merriam-Webster: thermometer",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/thermometer",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-geography": {
+      "title": "Merriam-Webster: geography",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/geography",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-technology": {
+      "title": "Merriam-Webster: technology",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/technology",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "mw-discover": {
+      "title": "Merriam-Webster: discover",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/discover",
+      "consulted": "2026-10-16",
+      "evidence": "The selected sense and source formation were checked; conventional or historical naming does not override the stored modern meaning."
+    },
+    "wiktionary-coconut": {
+      "title": "Wiktionary: coconut, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/coconut#English",
+      "consulted": "2026-10-16",
+      "evidence": "The explicit English formation was consulted, with ambiguous origin stories excluded from the authored teaching claim."
+    },
+    "wiktionary-butterfly": {
+      "title": "Wiktionary: butterfly, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/butterfly#English",
+      "consulted": "2026-10-16",
+      "evidence": "The explicit English formation was consulted, with ambiguous origin stories excluded from the authored teaching claim."
+    },
+    "wiktionary-shuttlecock": {
+      "title": "Wiktionary: shuttlecock, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/shuttlecock#English",
+      "consulted": "2026-10-16",
+      "evidence": "The explicit English formation was consulted, with ambiguous origin stories excluded from the authored teaching claim."
+    },
+    "wiktionary-pottery": {
+      "title": "Wiktionary: pottery, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/pottery#English",
+      "consulted": "2026-10-16",
+      "evidence": "The explicit English formation was consulted, with ambiguous origin stories excluded from the authored teaching claim."
+    },
+    "wiktionary-assembly": {
+      "title": "Wiktionary: assembly, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/assembly#English",
+      "consulted": "2026-10-16",
+      "evidence": "The explicit English formation was consulted, with ambiguous origin stories excluded from the authored teaching claim."
+    },
+    "wiktionary-archery": {
+      "title": "Wiktionary: archery, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/archery#English",
+      "consulted": "2026-10-16",
+      "evidence": "The explicit English formation was consulted, with ambiguous origin stories excluded from the authored teaching claim."
+    },
+    "mw-connect-new": {
+      "title": "Merriam-Webster: connect",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/connect",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The dictionary includes both joining physical things and establishing communications. Its history identifies com- plus Latin nectere, bind."
+    },
+    "mw-com-prefix-new": {
+      "title": "Merriam-Webster: com-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/com-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Prefix entry and listed variants",
+      "evidence": "The prefix expresses with/together and explicitly lists con- as a variant. This supports com-/con in connect."
+    },
+    "mw-compare-new": {
+      "title": "Merriam-Webster: compare",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/compare",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The current comparison sense matches the target. The history identifies com- plus par equal through comparare; this is distinct from English pare trim and the prepare root in separate."
+    },
+    "mw-multiply-new": {
+      "title": "Merriam-Webster: multiply",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/multiply",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The arithmetic verb is traced through French multiplier and Latin multiplicare to multiplex. This establishes the multiple family but not a direct English multi plus the layer verb ply exercise."
+    },
+    "mw-multiple-new": {
+      "title": "Merriam-Webster: multiple",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/multiple",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies Latin multi- plus -plex meaning fold. The relationship to multiply is documented, while the exact English plex/plic/ply realization remains to be authored."
+    },
+    "mw-divide-new": {
+      "title": "Merriam-Webster: divide",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/divide",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The arithmetic sense is explicit. The history identifies dis- plus a Latin -videre separate root, distinct from Latin videre see. No free English vide is needed for a possible bound-root analysis."
+    },
+    "etym-compare-hold9": {
+      "title": "Online Etymology Dictionary: compare",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/compare",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry identifies com- with par equal through Latin comparare and French comparer. It dates the comparison of similarities and differences as a conventional extension of the earlier equality relation; current comparison does not assert that the compared objects are equal."
+    },
+    "mw-par-hold9": {
+      "title": "Merriam-Webster: par",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/par",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Relevant sense and Word History",
+      "evidence": "The equality noun is traced to Latin par equal and the child-oriented history explicitly connects it to compare. This supports par.equal, not pare trimming or parare preparation."
+    },
+    "etym-multiply-hold9": {
+      "title": "Online Etymology Dictionary: multiply",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/multiply",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry traces the verb through French multiplier to Latin multiplicare and multiplex, linking the many element and fold family. The arithmetic sense is explicitly historical; no adverbial -ly analysis is licensed."
+    },
+    "mw-multi-hold9": {
+      "title": "Merriam-Webster: multi-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/multi-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Relevant sense and Word History",
+      "evidence": "The combining form supplies the many/multiple contribution and is traced to Latin multus. This is the numeric element in multiply rather than an arbitrary multi syllable sequence."
+    },
+    "pearson-ply-hold9": {
+      "title": "Vocabulary Their Way, chapter 6: Teaching Content-Specific Academic Vocabulary",
+      "author": "Shane Templeton, Donald R. Bear, Francine Johnston, and Marcia Invernizzi",
+      "url": "https://ptgmedia.pearsoncmg.com/images/9780131555358/samplechapter/ch06.pdf",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Printed pages 110 and 130; mathematics root table and Origin of Multiply",
+      "evidence": "The publisher-hosted chapter explicitly associates plic/ply with the fold family in multiply/multiplication and discusses this family as vocabulary instruction. The game retains the actual mathematical definition rather than teaching that every multiplication makes a number larger or requires physical folding."
+    },
+    "etym-divide-hold9": {
+      "title": "Online Etymology Dictionary: divide",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/divide",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry identifies the assimilated dis- prefix plus a separate-root -videre, with an arithmetic extension. The separate root is not the Latin sight root used in video and vision."
+    },
+    "mw-dis-hold9": {
+      "title": "Merriam-Webster: dis-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/dis-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Relevant sense and Word History",
+      "evidence": "The prefix history explicitly gives Latin di- before v among the variants of dis- apart/asunder. This supports the exact di surface in divide and distinguishes it from the numeral di- two."
+    },
+    "mw-astronaut": {
+      "title": "Merriam-Webster: astronaut",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/astronaut",
+      "consulted": "2026-10-16",
+      "evidence": "The entry explicitly gives astro- and -naut and the modern space-traveller sense."
+    },
+    "mw-shepherd": {
+      "title": "Merriam-Webster: shepherd",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/shepherd",
+      "consulted": "2026-10-16",
+      "evidence": "The sheep-tender sense and historical sheep plus herd keeper components support the exact contracted spelling."
+    },
+    "mw-cranberry": {
+      "title": "Merriam-Webster: cranberry",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/cranberry",
+      "consulted": "2026-10-16",
+      "evidence": "The source records a historical crane relation, not a free modern English cran stem."
+    },
+    "mw-saucer": {
+      "title": "Merriam-Webster: saucer",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/saucer",
+      "consulted": "2026-10-16",
+      "evidence": "The current cup-supporting dish and historical sauce-container meanings are distinct."
+    },
+    "mw-hippopotamus": {
+      "title": "Merriam-Webster: hippopotamus",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/hippopotamus",
+      "consulted": "2026-10-16",
+      "evidence": "The entry identifies a Latin borrowing of a Greek river-and-horse name; no free potamus base is asserted."
+    },
+    "mw-seedling": {
+      "title": "Merriam-Webster: seedling",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/seedling",
+      "consulted": "2026-10-16",
+      "evidence": "The source confirms the young plant sense used with the diminutive analysis."
+    },
+    "mw-dresser": {
+      "title": "Merriam-Webster: dresser",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/dresser",
+      "consulted": "2026-10-16",
+      "evidence": "The separate furniture and one-who-dresses entries prevent selecting the wrong agent sense."
+    },
+    "mw-flexible": {
+      "title": "Merriam-Webster: flexible",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/flexible",
+      "consulted": "2026-10-16",
+      "evidence": "The definition relates flexible to flexing; the history identifies the -ible suffix."
+    },
+    "mw-solution": {
+      "title": "Merriam-Webster: solution",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/solution",
+      "consulted": "2026-10-16",
+      "evidence": "The solving-result sense and solvere family support an explicitly authored base allomorph."
+    },
+    "mw-imagination": {
+      "title": "Merriam-Webster: imagination",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/imagination",
+      "consulted": "2026-10-16",
+      "evidence": "The history connects the action noun to imagining; the current mental-picture sense is preserved."
+    },
+    "mw-chestnut": {
+      "title": "Merriam-Webster: chestnut",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/chestnut",
+      "consulted": "2026-10-16",
+      "evidence": "The history traces chesten to a plant name; modern body chest is not its component sense."
+    },
+    "mw-retire": {
+      "title": "Merriam-Webster: retire",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/retire",
+      "consulted": "2026-10-16",
+      "evidence": "The source traces a withdrawal verb rather than a repeated-fatigue construction."
+    },
+    "mw-predict": {
+      "title": "Merriam-Webster: predict",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/predict",
+      "consulted": "2026-10-16",
+      "evidence": "The entry explicitly connects pre- with the say root of Latin dicere and dict-."
+    },
+    "mw-reindeer": {
+      "title": "Merriam-Webster: reindeer",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/reindeer",
+      "consulted": "2026-10-16",
+      "evidence": "The historical first element is an animal name, not a modern harness rein."
+    },
+    "mw-environ": {
+      "title": "Merriam-Webster: environ",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/environ",
+      "consulted": "2026-10-16",
+      "evidence": "The source confirms the current, less common surround verb underlying environment."
+    },
+    "mw-attract-new": {
+      "title": "Merriam-Webster: attract",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/attract",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The attention-drawing sense is explicit. The history identifies Latin ad- plus trahere and the participial form attractus, supporting at- plus the tract pull family."
+    },
+    "mw-subtract-new": {
+      "title": "Merriam-Webster: subtract",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/subtract",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history gives subtractus from subtrahere, with sub- and the same trahere draw base. This confirms the shared historical tract identity with attract."
+    },
+    "mw-ad-prefix-new": {
+      "title": "Merriam-Webster: ad-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/ad-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Prefix entry and listed variants",
+      "evidence": "The prefix means to/toward and explicitly has an at- variant before t. This supports ad-/at in attract and ad- in adapt."
+    },
+    "mw-include-new": {
+      "title": "Merriam-Webster: include",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/include",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies Latin in- plus claudere, close. The current membership sense and include spelling support the inherited clude realization rather than a free English word."
+    },
+    "mw-exclude-new": {
+      "title": "Merriam-Webster: exclude",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/exclude",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The companion history identifies ex- plus the same Latin claudere close base. The include/exclude family supports a shared bound clude realization."
+    },
+    "mw-suggest-new": {
+      "title": "Merriam-Webster: suggest",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/suggest",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The proposing sense is explicit. The history identifies sub- plus gerere carry via the participial form suggestus. The sug-/gest realization is a valid research lead, not evidence for unrelated modern sug or gest words."
+    },
+    "mw-retire-new": {
+      "title": "Merriam-Webster: retire",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/retire",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies French re- plus tirer draw. The career-ending sense must not be analyzed using modern tire fatigue; a draw-root proposal needs explicit treatment of the historical tire/tir realization."
+    },
+    "etym-suggest-hold9": {
+      "title": "Online Etymology Dictionary: suggest",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/suggest",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The history and linked suggestion discussion give sub- with gerere through suggestus. They trace the transition from supplying or bringing forward to proposing an idea; the modern proposal sense is not a literal carrying task."
+    },
+    "etym-sub-hold9": {
+      "title": "Online Etymology Dictionary: sub-",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/sub-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "Latin sub- assimilates to following g and other consonants. The entry explicitly includes suggest among borrowed words whose historical prefix contribution is no longer transparent."
+    },
+    "collins-sug-hold9": {
+      "title": "Collins: sug-",
+      "author": "Webster's New World College Dictionary editors; HarperCollins",
+      "url": "https://www.collinsdictionary.com/us/dictionary/english/sug",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "American English prefix entry",
+      "evidence": "The entry explicitly identifies sug- as the before-g form of sub- and uses suggest as its example. The unrelated sales acronym is not selected."
+    },
+    "mw-ingest-hold9": {
+      "title": "Merriam-Webster: ingest",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/ingest",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Relevant sense and Word History",
+      "evidence": "The history gives ingestus from in- plus gerere bear/carry, corroborating the recurring gest realization independently of the unrelated modern noun gest."
+    },
+    "etym-retire-hold9": {
+      "title": "Online Etymology Dictionary: retire",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/retire",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry gives French re- back plus tirer draw and explicitly traces withdrawal from employment as an extension of drawing back. It supports the career sense without substituting English tire weary."
+    },
+    "etym-tire-hold9": {
+      "title": "Online Etymology Dictionary: tire",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/tire",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The fatigue verb comes from Old English teorian, a different history from the French drawing element in retire. The wheel noun has a separate equipment/attire history and is also excluded."
+    },
+    "mw-earwig": {
+      "title": "Merriam-Webster: earwig",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/earwig",
+      "consulted": "2026-10-16",
+      "evidence": "The source word history distinguishes the historical constituent from tempting unrelated modern senses."
+    },
+    "mw-walnut": {
+      "title": "Merriam-Webster: walnut",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/walnut",
+      "consulted": "2026-10-16",
+      "evidence": "The source word history distinguishes the historical constituent from tempting unrelated modern senses."
+    },
+    "mw-raspberry": {
+      "title": "Merriam-Webster: raspberry",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/raspberry",
+      "consulted": "2026-10-16",
+      "evidence": "The source word history distinguishes the historical constituent from tempting unrelated modern senses."
+    },
+    "wiktionary-gooseberry": {
+      "title": "Wiktionary: gooseberry, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/gooseberry#English",
+      "consulted": "2026-10-16",
+      "evidence": "The English formation or explicitly labeled surface analysis was consulted; the stored contemporary sense is retained."
+    },
+    "wiktionary-marshmallow": {
+      "title": "Wiktionary: marshmallow, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/marshmallow#English",
+      "consulted": "2026-10-16",
+      "evidence": "The English formation or explicitly labeled surface analysis was consulted; the stored contemporary sense is retained."
+    },
+    "wiktionary-submarine": {
+      "title": "Wiktionary: submarine, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/submarine#English",
+      "consulted": "2026-10-16",
+      "evidence": "The English formation or explicitly labeled surface analysis was consulted; the stored contemporary sense is retained."
+    },
+    "wiktionary-cauliflower": {
+      "title": "Wiktionary: cauliflower, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/cauliflower#English",
+      "consulted": "2026-10-16",
+      "evidence": "The English formation or explicitly labeled surface analysis was consulted; the stored contemporary sense is retained."
+    },
+    "wiktionary-responsible": {
+      "title": "Wiktionary: responsible, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/responsible#English",
+      "consulted": "2026-10-16",
+      "evidence": "The English formation or explicitly labeled surface analysis was consulted; the stored contemporary sense is retained."
+    },
+    "wiktionary-independent": {
+      "title": "Wiktionary: independent, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/independent#English",
+      "consulted": "2026-10-16",
+      "evidence": "The English formation or explicitly labeled surface analysis was consulted; the stored contemporary sense is retained."
+    },
+    "wiktionary-information": {
+      "title": "Wiktionary: information, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/information#English",
+      "consulted": "2026-10-16",
+      "evidence": "The English formation or explicitly labeled surface analysis was consulted; the stored contemporary sense is retained."
+    },
+    "wiktionary-curiosity": {
+      "title": "Wiktionary: curiosity, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/curiosity#English",
+      "consulted": "2026-10-16",
+      "evidence": "The English formation or explicitly labeled surface analysis was consulted; the stored contemporary sense is retained."
+    },
+    "wiktionary-communication": {
+      "title": "Wiktionary: communication, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/communication#English",
+      "consulted": "2026-10-16",
+      "evidence": "The English formation or explicitly labeled surface analysis was consulted; the stored contemporary sense is retained."
+    },
+    "mw-investigate-new": {
+      "title": "Merriam-Webster: investigate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/investigate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history derives the word through investigatus/investigare from in- and vestigium, footprint or track. It establishes a real historical family but does not by itself settle the intended English three-part graph."
+    },
+    "mw-vestige-new": {
+      "title": "Merriam-Webster: vestige",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/vestige",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history independently traces vestige to Latin vestigium, footprint or trace. The relation is real; the precise vestig/vestige realization and English investigate suffix analysis still require a decision."
+    },
+    "mw-estimate-new": {
+      "title": "Merriam-Webster: estimate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/estimate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history gives Latin aestimatus/aestimare value or estimate. It confirms a historical verbal formation but does not settle whether the intended English lesson should expose estim plus -ate."
+    },
+    "etym-investigate-hold9": {
+      "title": "Online Etymology Dictionary: investigate",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/investigate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "Two routes into English are offered: back-formation from investigation or borrowing of the Latin participial form. Both retain the in- and vestigium track family. The entry distinguishes vestigium from the unrelated clothing root vestis."
+    },
+    "thoughtful-vestig-hold9": {
+      "title": "Prefixes, Roots, and Suffixes",
+      "author": "Thoughtful Learning editorial team",
+      "url": "https://thoughtfullearning.com/inquirehsbook/pg166",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Root list: vestig",
+      "evidence": "The educational root list explicitly identifies vestig trace in investigate, vestige, and vestigial. This supports the retained vestig teaching unit while the dictionary establishes the in- and verbal formation."
+    },
+    "etym-ate-hold9": {
+      "title": "Online Etymology Dictionary: -ate",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/-ate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry distinguishes the inherited noun/adjective ending from the English verbal -ate formation based on Latin participial stems. Separate is a named related form. This licenses an inherited verbal ending, not automatic stripping of every final ate string."
+    },
+    "etym-estimate-hold9": {
+      "title": "Online Etymology Dictionary: estimate",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/estimate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The verb is traced to Latin aestimatus/aestimare, valuing or appraising. Its current approximate-judgment meaning developed later. The esteem relation is historical; the target remains approximation rather than respectful admiration."
+    },
+    "mw-rhinoceros": {
+      "title": "Merriam-Webster: rhinoceros",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/rhinoceros",
+      "consulted": "2026-10-16",
+      "evidence": "The specific source roots and modern sense were checked; historical literal meanings do not replace the original Growth definition."
+    },
+    "mw-cerat-": {
+      "title": "Merriam-Webster: cerat-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/cerat-",
+      "consulted": "2026-10-16",
+      "evidence": "The specific source roots and modern sense were checked; historical literal meanings do not replace the original Growth definition."
+    },
+    "mw-centipede": {
+      "title": "Merriam-Webster: centipede",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/centipede",
+      "consulted": "2026-10-16",
+      "evidence": "The specific source roots and modern sense were checked; historical literal meanings do not replace the original Growth definition."
+    },
+    "mw-paramedic": {
+      "title": "Merriam-Webster: paramedic",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/paramedic",
+      "consulted": "2026-10-16",
+      "evidence": "The specific source roots and modern sense were checked; historical literal meanings do not replace the original Growth definition."
+    },
+    "mw-porter": {
+      "title": "Merriam-Webster: porter",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/porter",
+      "consulted": "2026-10-16",
+      "evidence": "The specific source roots and modern sense were checked; historical literal meanings do not replace the original Growth definition."
+    },
+    "mw-stethoscope": {
+      "title": "Merriam-Webster: stethoscope",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/stethoscope",
+      "consulted": "2026-10-16",
+      "evidence": "The specific source roots and modern sense were checked; historical literal meanings do not replace the original Growth definition."
+    },
+    "mw-empathy": {
+      "title": "Merriam-Webster: empathy",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/empathy",
+      "consulted": "2026-10-16",
+      "evidence": "The specific source roots and modern sense were checked; historical literal meanings do not replace the original Growth definition."
+    },
+    "wiktionary-carbohydrate": {
+      "title": "Wiktionary: carbohydrate, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/carbohydrate#English",
+      "consulted": "2026-10-16",
+      "evidence": "The source English formation was consulted and the particular sense or allomorph is explicitly recorded in the authored decision."
+    },
+    "wiktionary-therapist": {
+      "title": "Wiktionary: therapist, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/therapist#English",
+      "consulted": "2026-10-16",
+      "evidence": "The source English formation was consulted and the particular sense or allomorph is explicitly recorded in the authored decision."
+    },
+    "wiktionary-research": {
+      "title": "Wiktionary: research, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/research#English",
+      "consulted": "2026-10-16",
+      "evidence": "The source English formation was consulted and the particular sense or allomorph is explicitly recorded in the authored decision."
+    },
+    "wiktionary-responsibility": {
+      "title": "Wiktionary: responsibility, English formation",
+      "author": "Wiktionary contributors",
+      "url": "https://en.wiktionary.org/wiki/responsibility#English",
+      "consulted": "2026-10-16",
+      "evidence": "The source English formation was consulted and the particular sense or allomorph is explicitly recorded in the authored decision."
+    },
+    "etymonline-research": {
+      "title": "Online Etymology Dictionary: research",
+      "author": "Online Etymology Dictionary",
+      "url": "https://www.etymonline.com/word/research",
+      "consulted": "2026-10-16",
+      "evidence": "The close-search history is documented; the source explicitly presents the historical intensive interpretation of re- as tentative."
+    },
+    "mw-reflect-new": {
+      "title": "Merriam-Webster: reflect",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/reflect",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The dictionary includes careful thought as well as physical reflection. Its history identifies re- plus flectere, bend; the mental sense remains the whole target meaning."
+    },
+    "mw-deflect-new": {
+      "title": "Merriam-Webster: deflect",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/deflect",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The companion history identifies de- plus flectere, bend. It supplies a second current English member of the flect family."
+    },
+    "mw-adapt-new": {
+      "title": "Merriam-Webster: adapt",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/adapt",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies ad- plus aptare, related to aptus suitable or prepared. This supports the fitting root family rather than the unrelated advertisement noun ad."
+    },
+    "mw-apt-new": {
+      "title": "Merriam-Webster: apt",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/apt",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Adjective senses, especially suitability",
+      "evidence": "The current adjective includes suitability for a purpose, confirming the fit/suitable identity selected for apt rather than its likely or quick-learning senses."
+    },
+    "mw-meteor": {
+      "title": "Merriam-Webster: meteor",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/meteor",
+      "consulted": "2026-10-16",
+      "evidence": "The modern astronomical sense and historical Greek elevated-in-the-air formation were checked."
+    },
+    "mw-galaxy": {
+      "title": "Merriam-Webster: galaxy",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/galaxy",
+      "consulted": "2026-10-16",
+      "evidence": "The stellar-system sense and historical Greek milk-related source were checked."
+    },
+    "mw-satellite": {
+      "title": "Merriam-Webster: satellite",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/satellite",
+      "consulted": "2026-10-16",
+      "evidence": "The orbiting-object sense and Latin attendant origin were checked."
+    },
+    "mw-telescope": {
+      "title": "Merriam-Webster: telescope",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/telescope",
+      "consulted": "2026-10-16",
+      "evidence": "The distant-viewing instrument and tele plus observing-root history were checked."
+    },
+    "mw-asteroid": {
+      "title": "Merriam-Webster: asteroid",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/asteroid",
+      "consulted": "2026-10-16",
+      "evidence": "The small celestial body and historical star-resemblance formation were checked."
+    },
+    "mw-saxophone": {
+      "title": "Merriam-Webster: saxophone",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/saxophone",
+      "consulted": "2026-10-16",
+      "evidence": "The instrument name is traced to the inventor Sax and the sound element; modern sax is not its original independent base."
+    },
+    "mw-xylophone": {
+      "title": "Merriam-Webster: xylophone",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/xylophone",
+      "consulted": "2026-10-16",
+      "evidence": "The wooden-bar instrument and the explicitly described wood plus sound-instrument formation were checked."
+    },
+    "mw-peninsula": {
+      "title": "Merriam-Webster: peninsula",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/peninsula",
+      "consulted": "2026-10-16",
+      "evidence": "The landform sense and Latin almost-island history were checked."
+    },
+    "mw-stalactite": {
+      "title": "Merriam-Webster: stalactite",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/stalactite",
+      "consulted": "2026-10-16",
+      "evidence": "The cave-deposit sense and historical dripping-root source were checked."
+    },
+    "mw-supernova": {
+      "title": "Merriam-Webster: supernova",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/supernova",
+      "consulted": "2026-10-16",
+      "evidence": "The stellar explosion is distinguished from a nova by its much greater energy."
+    },
+    "mw-accordion": {
+      "title": "Merriam-Webster: accordion",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/accordion",
+      "consulted": "2026-10-16",
+      "evidence": "The bellows instrument and German formation from musical accord plus a naming ending were checked."
+    },
+    "mw-metronome": {
+      "title": "Merriam-Webster: metronome",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/metronome",
+      "consulted": "2026-10-16",
+      "evidence": "The tempo device is traced to measure and regulating elements."
+    },
+    "mw-harmonica": {
+      "title": "Merriam-Webster: harmonica",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/harmonica",
+      "consulted": "2026-10-16",
+      "evidence": "The free-reed instrument and Italian harmonious-adjective origin were checked."
+    },
+    "mw-microscope": {
+      "title": "Merriam-Webster: microscope",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/microscope",
+      "consulted": "2026-10-16",
+      "evidence": "The magnifying instrument and small plus observing-instrument history were checked."
+    },
+    "mw-binocular": {
+      "title": "Merriam-Webster: binocular",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/binocular",
+      "consulted": "2026-10-16",
+      "evidence": "The two-eye adjective and normally plural viewing-instrument noun were checked."
+    },
+    "mw-ocular": {
+      "title": "Merriam-Webster: ocular",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/ocular",
+      "consulted": "2026-10-16",
+      "evidence": "The eye-related adjective and eye-root history were checked."
+    },
+    "mw-refrigerate": {
+      "title": "Merriam-Webster: refrigerate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/refrigerate",
+      "consulted": "2026-10-16",
+      "evidence": "The cooling verb is traced to a Latin cooling formation with re-."
+    },
+    "mw-permeable": {
+      "title": "Merriam-Webster: permeable",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/permeable",
+      "consulted": "2026-10-16",
+      "evidence": "The definition relates the adjective to being permeated, including passage through pores."
+    },
+    "mw-permeate": {
+      "title": "Merriam-Webster: permeate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/permeate",
+      "consulted": "2026-10-16",
+      "evidence": "The current verb includes passage through pores or openings."
+    },
+    "mw-transparent": {
+      "title": "Merriam-Webster: transparent",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/transparent",
+      "consulted": "2026-10-16",
+      "evidence": "The light-transmitting sense and historical appear-root were checked, excluding the family-parent noun."
+    },
+    "mw-diagonal": {
+      "title": "Merriam-Webster: diagonal",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/diagonal",
+      "consulted": "2026-10-16",
+      "evidence": "The slanting geometric sense and Greek angle-related history were checked."
+    },
+    "mw-horizontal": {
+      "title": "Merriam-Webster: horizontal",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/horizontal",
+      "consulted": "2026-10-16",
+      "evidence": "The level adjective is related to the horizon; the recorded spelling includes the extended horizont stem."
+    },
+    "mw-parallel": {
+      "title": "Merriam-Webster: parallel",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/parallel",
+      "consulted": "2026-10-16",
+      "evidence": "The equal-distance sense and historical beside-one-another formation were checked."
+    },
+    "mw-vertical": {
+      "title": "Merriam-Webster: vertical",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/vertical",
+      "consulted": "2026-10-16",
+      "evidence": "The up-and-down sense and historical summit-related vertex source were checked."
+    },
+    "mw-isosceles": {
+      "title": "Merriam-Webster: isosceles",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/isosceles",
+      "consulted": "2026-10-16",
+      "evidence": "The equal-sided triangle adjective is traced to equal and leg elements."
+    },
+    "mw-scalene": {
+      "title": "Merriam-Webster: scalene",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/scalene",
+      "consulted": "2026-10-16",
+      "evidence": "The triangle with unequal side lengths and the Greek uneven source were checked."
+    },
+    "mw-atom": {
+      "title": "Merriam-Webster: atom",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/atom",
+      "consulted": "2026-10-16",
+      "evidence": "The chemical-unit sense and historical uncut formation were checked without asserting modern indivisibility."
+    },
+    "mw-atmosphere": {
+      "title": "Merriam-Webster: atmosphere",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/atmosphere",
+      "consulted": "2026-10-16",
+      "evidence": "The gaseous envelope and vapor plus sphere formation were checked."
+    },
+    "mw-pipette": {
+      "title": "Merriam-Webster: pipette",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/pipette",
+      "consulted": "2026-10-16",
+      "evidence": "The narrow liquid-transfer instrument is traced to French pipe with a diminutive ending."
+    },
+    "mw-tripod": {
+      "title": "Merriam-Webster: tripod",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/tripod",
+      "consulted": "2026-10-16",
+      "evidence": "The three-legged stand is traced to three and foot elements."
+    },
+    "mw-scales": {
+      "title": "Merriam-Webster: scales",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/scales",
+      "consulted": "2026-10-16",
+      "evidence": "The weighing-instrument scale noun and its plural usage were checked."
+    },
+    "mw-hexagon": {
+      "title": "Merriam-Webster: hexagon",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/hexagon",
+      "consulted": "2026-10-16",
+      "evidence": "The six-angle figure and its six plus angle formation were checked."
+    },
+    "mw-heptagon": {
+      "title": "Merriam-Webster: heptagon",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/heptagon",
+      "consulted": "2026-10-16",
+      "evidence": "The seven-angle figure and its seven plus angle formation were checked."
+    },
+    "mw-octagon": {
+      "title": "Merriam-Webster: octagon",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/octagon",
+      "consulted": "2026-10-16",
+      "evidence": "The eight-angle figure and its eight plus angle formation were checked."
+    },
+    "mw-pentagon": {
+      "title": "Merriam-Webster: pentagon",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/pentagon",
+      "consulted": "2026-10-16",
+      "evidence": "The five-angle figure and its five plus angle formation were checked."
+    },
+    "mw-quadrilateral": {
+      "title": "Merriam-Webster: quadrilateral",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/quadrilateral",
+      "consulted": "2026-10-16",
+      "evidence": "The four-sided sense and four plus side-related formation were checked."
+    },
+    "mw-lateral": {
+      "title": "Merriam-Webster: lateral",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/lateral",
+      "consulted": "2026-10-16",
+      "evidence": "The side-related adjective and Latin side-root source were checked."
+    },
+    "mw-parallelogram": {
+      "title": "Merriam-Webster: parallelogram",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/parallelogram",
+      "consulted": "2026-10-16",
+      "evidence": "The opposite-parallel-side shape and historical parallel plus line formation were checked."
+    },
+    "mw-trapezoid": {
+      "title": "Merriam-Webster: trapezoid",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/trapezoid",
+      "consulted": "2026-10-16",
+      "evidence": "The selected quadrilateral sense and the historical table-related source were checked."
+    },
+    "mw-percent": {
+      "title": "Merriam-Webster: percent",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/percent",
+      "consulted": "2026-10-16",
+      "evidence": "The out-of-one-hundred sense is traced to per plus the Latin hundred word."
+    },
+    "mw-photocopier": {
+      "title": "Merriam-Webster: photocopier",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/photocopier",
+      "consulted": "2026-10-16",
+      "evidence": "The copying machine is explicitly related to photocopy plus the agent or instrument ending."
+    },
+    "mw-photocopy": {
+      "title": "Merriam-Webster: photocopy",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/photocopy",
+      "consulted": "2026-10-16",
+      "evidence": "The document-copy sense is associated with a light-based copying process."
+    },
+    "mw-athletics": {
+      "title": "Merriam-Webster: athletics",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/athletics",
+      "consulted": "2026-10-16",
+      "evidence": "The noun covers sports and the practice or principles of athletic activities."
+    },
+    "mw-athletic": {
+      "title": "Merriam-Webster: athletic",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/athletic",
+      "consulted": "2026-10-16",
+      "evidence": "The adjective relates to athletes and their activities."
+    },
+    "mw-rosette": {
+      "title": "Merriam-Webster: rosette",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/rosette",
+      "consulted": "2026-10-16",
+      "evidence": "The rose-shaped ribbon badge and French rose plus diminutive history were checked."
+    },
+    "mw-stirrup": {
+      "title": "Merriam-Webster: stirrup",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/stirrup",
+      "consulted": "2026-10-16",
+      "evidence": "The saddle foot support and its lexicalized historical formation were checked."
+    },
+    "mw-petticoat": {
+      "title": "Merriam-Webster: petticoat",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/petticoat",
+      "consulted": "2026-10-16",
+      "evidence": "The modern underskirt and historical small-coat naming relation were checked."
+    },
+    "mw-evaluate": {
+      "title": "Merriam-Webster: evaluate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/evaluate",
+      "consulted": "2026-10-16",
+      "evidence": "The judgment verb is described as a back-formation from evaluation."
+    },
+    "mw-justify": {
+      "title": "Merriam-Webster: justify",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/justify",
+      "consulted": "2026-10-16",
+      "evidence": "The verb includes showing something to be just, right or reasonable."
+    },
+    "mw-analyze": {
+      "title": "Merriam-Webster: analyze",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/analyze",
+      "consulted": "2026-10-16",
+      "evidence": "The parts-examining verb has a documented probable back-formation from analysis, not a simple current suffix join."
+    },
+    "mw-sustainable": {
+      "title": "Merriam-Webster: sustainable",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/sustainable",
+      "consulted": "2026-10-16",
+      "evidence": "The adjective means capable of being sustained and includes resource-preserving practice."
+    },
+    "mw-conclusion": {
+      "title": "Merriam-Webster: conclusion",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/conclusion",
+      "consulted": "2026-10-16",
+      "evidence": "The reasoned judgment noun is related to conclude, with the Latin conclus stem recorded in its history."
+    },
+    "mw-conclude": {
+      "title": "Merriam-Webster: conclude",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/conclude",
+      "consulted": "2026-10-16",
+      "evidence": "The current verb includes reaching a judgment by reasoning from evidence."
+    },
+    "mw--oid": {
+      "title": "Merriam-Webster: -oid",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/-oid",
+      "consulted": "2026-10-16",
+      "evidence": "The suffix denotes resemblance or the appearance of a specified object."
+    },
+    "mw--ette": {
+      "title": "Merriam-Webster: -ette",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/-ette",
+      "consulted": "2026-10-16",
+      "evidence": "The suffix has a diminutive sense and a documented French origin."
+    },
+    "mw--gon": {
+      "title": "Merriam-Webster: -gon",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/-gon",
+      "consulted": "2026-10-16",
+      "evidence": "The angle-figure combining form is distinguished from the separate generative-root homograph."
+    },
+    "mw--ics": {
+      "title": "Merriam-Webster: -ics",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/-ics",
+      "consulted": "2026-10-16",
+      "evidence": "The noun suffix denotes a field of practice or characteristic activities, with -ic plus -s in its history."
+    }
+  }
+}

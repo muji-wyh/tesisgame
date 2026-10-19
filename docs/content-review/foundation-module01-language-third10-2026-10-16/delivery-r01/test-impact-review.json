@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "status": "read_only_test_impact_review_no_test_changes_or_execution",
+  "inspected_files": {
+    "tests/professional-content.test.cjs": "fa09083e7759c279a1d02a0c39e8eb7706f84a9d153ac2574a2cc9f489d82960",
+    "tests/professional-retail-morphology.test.cjs": "4ad35b84a3a18661b467a697389965f5a55055d82e8bd72df2d13685b48b5a7b",
+    "tests/godot/professional_retail_morphology_tests.gd": "ef28a77e66cb14ffffa34d5434645b92bfb8882aa4bfe74cf1ce042f30313d99"
+  },
+  "historical_snapshot_overlaps": [
+    {
+      "path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "raw_sha256": "c6c6083fe03324ac5ea5d1e7c5ec7cf2bad92559616d8437ce32d572fe1b3d92",
+      "hits": [
+        {
+          "id": "deadline.final-time.n",
+          "path": "/protected_context/lexemes/10/entry"
+        },
+        {
+          "id": "break.work-pause.n",
+          "path": "/protected_context/lexemes/11/entry"
+        },
+        {
+          "id": "overtime.additional-work-time.n",
+          "path": "/protected_context/lexemes/12/entry"
+        },
+        {
+          "id": "availability.free-time.n",
+          "path": "/protected_context/lexemes/14/entry"
+        },
+        {
+          "id": "calendar.date-organizer.n",
+          "path": "/protected_context/lexemes/15/entry"
+        },
+        {
+          "id": "agenda.meeting-plan.n",
+          "path": "/protected_context/lexemes/16/entry"
+        },
+        {
+          "id": "invitation.attendance-request.n",
+          "path": "/protected_context/lexemes/17/entry"
+        },
+        {
+          "id": "update.current-information.n",
+          "path": "/protected_context/lexemes/18/entry"
+        },
+        {
+          "id": "reminder.memory-prompt.n",
+          "path": "/protected_context/lexemes/19/entry"
+        }
+      ]
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "raw_sha256": "528267cabf4ef12daa9977da23267131c3b69d223f76d1a4a83fcac9ba9973e7",
+      "hits": [
+        {
+          "id": "deadline.final-time.n",
+          "path": "/protected_context/lexemes/10/entry"
+        },
+        {
+          "id": "break.work-pause.n",
+          "path": "/protected_context/lexemes/11/entry"
+        },
+        {
+          "id": "overtime.additional-work-time.n",
+          "path": "/protected_context/lexemes/12/entry"
+        },
+        {
+          "id": "availability.free-time.n",
+          "path": "/protected_context/lexemes/14/entry"
+        },
+        {
+          "id": "calendar.date-organizer.n",
+          "path": "/protected_context/lexemes/15/entry"
+        },
+        {
+          "id": "agenda.meeting-plan.n",
+          "path": "/protected_context/lexemes/16/entry"
+        },
+        {
+          "id": "invitation.attendance-request.n",
+          "path": "/protected_context/lexemes/17/entry"
+        },
+        {
+          "id": "update.current-information.n",
+          "path": "/protected_context/lexemes/18/entry"
+        },
+        {
+          "id": "reminder.memory-prompt.n",
+          "path": "/protected_context/lexemes/19/entry"
+        }
+      ]
+    },
+    {
+      "path": "data/professional/provenance/retail-module03-morphology-fourth10-2026-10-16.json",
+      "raw_sha256": "34f16c20451400665939ab8c7f97e3317f61a9821b59317c8567800fd8edab4d",
+      "hits": [
+        {
+          "id": "update.current-information.n",
+          "path": "/protected_related_entries/49/entry"
+        },
+        {
+          "id": "reminder.memory-prompt.n",
+          "path": "/protected_related_entries/50/entry"
+        }
+      ]
+    }
+  ],
+  "required_root_followup": [
+    {
+      "file": "tests/professional-content.test.cjs",
+      "changes": [
+        "Load the new third10 provenance and include only its nine patches in foundationLanguageAcceptedIds.",
+        "On this inspected input, reviewed_lexemes increases from 81 to 90. Recalculate against the final current baseline if unrelated accepted content changes.",
+        "For first10 and second10 protected-context lexemes, reverse the exact later third10 patch before comparing the old full snapshot. Require full equality to patch.after before returning patch.before; never strip arbitrary fields.",
+        "Add assertions for exact nine candidates, sixteen sources, whole-entry attendance preservation and absent attendance-only sources, literal versus editorial levels, unchanged forms/regions/morphology/media, all five expression holds and exact references/notes.",
+        "Exercise rejection of unexpected later definition, review, reference, form, morphology and media drift in any historical reversal."
+      ]
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "changes": [
+        "The fourth10 protected-related snapshots overlap update.current-information.n and reminder.memory-prompt.n. Reverse only exact later third10 full entries before their historical comparison.",
+        "Preserve strict graph and source identity; no ignored-field comparison or pending-graph admission change is needed."
+      ]
+    },
+    {
+      "file": "tests/godot/professional_retail_morphology_tests.gd",
+      "changes": [
+        "The inspected native legacy donor uses attendance, which remains entirely unchanged. No third10 native source change is identified by this review. Root must still run its required native validation after integration."
+      ]
+    }
+  ],
+  "baseline_bound": false,
+  "limits": "These are read-only findings on inspected files, not applied tests or passing suite results. Root must remeasure and review exact test transforms against its latest successful baseline."
+}

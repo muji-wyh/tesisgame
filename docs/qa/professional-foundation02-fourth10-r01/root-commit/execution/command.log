@@ -1,0 +1,7 @@
+{
+  "committed": true,
+  "transaction": "build/professional-english/transactions/foundation02-fourth10-language-r01",
+  "receipt": "build/professional-english/foundation02-fourth10-commit-proposal-r01/execution-r01/commit-receipt.json",
+  "persisted_test": "docs/content-review/foundation-module02-language-fourth10-2026-10-17/committed-evidence.test.cjs",
+  "persisted_checks_still_required": true
+}

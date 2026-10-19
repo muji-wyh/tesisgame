@@ -1,0 +1,35 @@
+'use strict';
+const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto');
+const {spawnSync} = require('node:child_process');
+const assert = require('node:assert/strict');
+const root = path.resolve(__dirname, '../../..');
+assert.equal(root.replaceAll('\\', '/').toLowerCase(), 'q:/.codex/worktrees/current-age-vocabulary/tesisgame');
+const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+const proposal = 'build/professional-english/foundation02-third10-delivery-preparation-r01';
+const review = 'build/professional-english/foundation02-third10-delivery-static-review-r01/report.md';
+assert.equal(hash(fs.readFileSync(path.join(root, proposal, 'author-inventory.json'))), '86e566de767f23aa074db5c1fa276efec30a053674af9ca9791af4fe5498c653');
+assert.equal(hash(fs.readFileSync(path.join(root, review))), '3474eda1dd4142ccaedaa9a0673ae3a60b28fccead26a64278ce6b07ff23bee7');
+const output = path.join(__dirname, 'execution');
+assert(!fs.existsSync(output), 'Preserve the one-shot root witness.');
+fs.mkdirSync(output);
+const files = fs.readdirSync(path.join(root, proposal)).filter(name => fs.statSync(path.join(root, proposal, name)).isFile());
+const bind = () => files.map(name => ({path: proposal + '/' + name, sha256: hash(fs.readFileSync(path.join(root, proposal, name)))}));
+const before = bind();
+const commands = ['projection.cjs', 'test-transforms.cjs', 'prepare.cjs'].map(name => ['--check', proposal + '/' + name]);
+commands.push([proposal + '/prepare.cjs', '--root-dispatch', 'confirmed-by-root']);
+const results = [], started = new Date().toISOString();
+for (const [index, args] of commands.entries()) {
+  const began = new Date().toISOString();
+  const run = spawnSync(process.execPath, args, {cwd: root, windowsHide: true, encoding: 'utf8', timeout: 600000, maxBuffer: 32 * 1024 * 1024});
+  const log = Buffer.from((run.stdout || '') + (run.stderr || ''));
+  fs.writeFileSync(path.join(output, `command-${index + 1}.log`), log, {flag: 'wx'});
+  results.push({command: [process.execPath, ...args], started_at: began, finished_at: new Date().toISOString(), exit_code: run.status, signal: run.signal, error: run.error?.message || null, log_sha256: hash(log)});
+  if (run.status !== 0 || run.error) break;
+}
+const after = bind();
+const ok = results.length === 4 && results.every(row => row.exit_code === 0 && !row.error) && JSON.stringify(before) === JSON.stringify(after);
+const receipt = {schema: 1, ok, started_at: started, finished_at: new Date().toISOString(), before, after, static_review: {path: review, sha256: hash(fs.readFileSync(path.join(root, review)))}, commands: results, scope: 'Scratch preparation and projected callbacks only; no production mutation or native dispatch.'};
+const raw = Buffer.from(JSON.stringify(receipt, null, 2) + '\n');
+fs.writeFileSync(path.join(output, 'receipt.json'), raw, {flag: 'wx'});
+console.log(JSON.stringify({ok,commands:results,receipt_sha256:hash(raw)},null,2));
+process.exitCode = ok ? 0 : 1;

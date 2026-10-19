@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T20:10:58.312Z",
+  "source": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/invoke.cjs",
+    "bytes": 6633,
+    "sha256": "38b8936ad6a325fb9c4078e7ef977010fa5a3cc5ce18631d01b1998288bb98fd"
+  },
+  "wrapper": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/run-candidate.cjs",
+    "bytes": 3766,
+    "sha256": "02d30688ef3f5387abb965249c30f3ed9200d1fb6ebb468cf96709d31d1be234"
+  },
+  "baseline_receipt": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/baseline/receipt.json",
+    "bytes": 85988,
+    "sha256": "3a2873b6be182b117e83ff516d2aae68b8d8603462ff921c196a5f9c5c69a687"
+  },
+  "source_observation": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/source-observation.json",
+    "bytes": 883,
+    "sha256": "04d08c0191d2aa2c49a6354938b8105ff473a8c95dc1c7a735047af3f21b716d"
+  },
+  "candidate_command": [
+    "C:\\nvm4w\\nodejs\\node.exe",
+    "build/professional-english/foundation02-third10-scoped-validation-r01/invoke.cjs",
+    "candidate"
+  ]
+}

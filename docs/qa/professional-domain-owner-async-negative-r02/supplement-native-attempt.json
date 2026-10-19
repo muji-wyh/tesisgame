@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T18:23:41.436Z",
+  "timeout_ms": 60000,
+  "input_count": 52,
+  "absent_input_count": 0,
+  "input_inventory_sha256": "b016d8d2e5ff05f5f2ff4c9662604badc3e9009ec8c00ac16a2202706ccaa5c0"
+}

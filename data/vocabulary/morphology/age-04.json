@@ -1,0 +1,3805 @@
+{
+  "schema": 1,
+  "revision": "growth-morphology-v1",
+  "age": 4,
+  "entries": [
+    {
+      "id": "hen",
+      "text": "hen",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The adult female-bird noun is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.hen.analysis.v1",
+        "lexeme_id": "hen",
+        "text": "hen",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.hen",
+            "canonical": "hen",
+            "surface": "hen",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "horse",
+      "text": "horse",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The animal noun is one stem, without a detachable ending.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.horse.analysis.v1",
+        "lexeme_id": "horse",
+        "text": "horse",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.horse",
+            "canonical": "horse",
+            "surface": "horse",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "goat",
+      "text": "goat",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The animal noun is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.goat.analysis.v1",
+        "lexeme_id": "goat",
+        "text": "goat",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.goat",
+            "canonical": "goat",
+            "surface": "goat",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "mouse",
+      "text": "mouse",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The animal noun is its whole singular form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.mouse.analysis.v1",
+        "lexeme_id": "mouse",
+        "text": "mouse",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.mouse",
+            "canonical": "mouse",
+            "surface": "mouse",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bear",
+      "text": "bear",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The animal sense is a single base, not the carrying verb.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bear.analysis.v1",
+        "lexeme_id": "bear",
+        "text": "bear",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bear",
+            "canonical": "bear",
+            "surface": "bear",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "lion",
+      "text": "lion",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The animal name is a single modern stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.lion.analysis.v1",
+        "lexeme_id": "lion",
+        "text": "lion",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.lion",
+            "canonical": "lion",
+            "surface": "lion",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "frog",
+      "text": "frog",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The animal noun is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.frog.analysis.v1",
+        "lexeme_id": "frog",
+        "text": "frog",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.frog",
+            "canonical": "frog",
+            "surface": "frog",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bee",
+      "text": "bee",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The insect noun is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bee.analysis.v1",
+        "lexeme_id": "bee",
+        "text": "bee",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bee",
+            "canonical": "bee",
+            "surface": "bee",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "ant",
+      "text": "ant",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The insect noun is a single base, not a noun suffix in this word.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.ant.analysis.v1",
+        "lexeme_id": "ant",
+        "text": "ant",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.ant",
+            "canonical": "ant",
+            "surface": "ant",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "orange",
+      "text": "orange",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The fruit sense is an unsegmented borrowed base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.orange.analysis.v1",
+        "lexeme_id": "orange",
+        "text": "orange",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.orange",
+            "canonical": "orange",
+            "surface": "orange",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pear",
+      "text": "pear",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The fruit noun is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pear.analysis.v1",
+        "lexeme_id": "pear",
+        "text": "pear",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.pear",
+            "canonical": "pear",
+            "surface": "pear",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "carrot",
+      "text": "carrot",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The vegetable noun is one stem; car is not a component meaning vehicle.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.carrot.analysis.v1",
+        "lexeme_id": "carrot",
+        "text": "carrot",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.carrot",
+            "canonical": "carrot",
+            "surface": "carrot",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "corn",
+      "text": "corn",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The food-plant noun is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.corn.analysis.v1",
+        "lexeme_id": "corn",
+        "text": "corn",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.corn",
+            "canonical": "corn",
+            "surface": "corn",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "cake",
+      "text": "cake",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The food noun is one base, with no detachable final e.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.cake.analysis.v1",
+        "lexeme_id": "cake",
+        "text": "cake",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.cake",
+            "canonical": "cake",
+            "surface": "cake",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "juice",
+      "text": "juice",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The liquid-food noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.juice.analysis.v1",
+        "lexeme_id": "juice",
+        "text": "juice",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.juice",
+            "canonical": "juice",
+            "surface": "juice",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "rice",
+      "text": "rice",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The food-grain noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.rice.analysis.v1",
+        "lexeme_id": "rice",
+        "text": "rice",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.rice",
+            "canonical": "rice",
+            "surface": "rice",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "arm",
+      "text": "arm",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The body-part noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.arm.analysis.v1",
+        "lexeme_id": "arm",
+        "text": "arm",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.arm",
+            "canonical": "arm",
+            "surface": "arm",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "leg",
+      "text": "leg",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The body-part noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.leg.analysis.v1",
+        "lexeme_id": "leg",
+        "text": "leg",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.leg",
+            "canonical": "leg",
+            "surface": "leg",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "head",
+      "text": "head",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The body-part noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.head.analysis.v1",
+        "lexeme_id": "head",
+        "text": "head",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.head",
+            "canonical": "head",
+            "surface": "head",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "tooth",
+      "text": "tooth",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The body-part noun is a whole singular form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.tooth.analysis.v1",
+        "lexeme_id": "tooth",
+        "text": "tooth",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.tooth",
+            "canonical": "tooth",
+            "surface": "tooth",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "coat",
+      "text": "coat",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The outerwear noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.coat.analysis.v1",
+        "lexeme_id": "coat",
+        "text": "coat",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.coat",
+            "canonical": "coat",
+            "surface": "coat",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "sock",
+      "text": "sock",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The clothing noun is a singular base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.sock.analysis.v1",
+        "lexeme_id": "sock",
+        "text": "sock",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.sock",
+            "canonical": "sock",
+            "surface": "sock",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "glove",
+      "text": "glove",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The hand-clothing noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.glove.analysis.v1",
+        "lexeme_id": "glove",
+        "text": "glove",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.glove",
+            "canonical": "glove",
+            "surface": "glove",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "moon",
+      "text": "moon",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The celestial-body noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.moon.analysis.v1",
+        "lexeme_id": "moon",
+        "text": "moon",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.moon",
+            "canonical": "moon",
+            "surface": "moon",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "star",
+      "text": "star",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The celestial-body noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.star.analysis.v1",
+        "lexeme_id": "star",
+        "text": "star",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.star",
+            "canonical": "star",
+            "surface": "star",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "rain",
+      "text": "rain",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The weather noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.rain.analysis.v1",
+        "lexeme_id": "rain",
+        "text": "rain",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.rain",
+            "canonical": "rain",
+            "surface": "rain",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "snow",
+      "text": "snow",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The frozen-weather noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.snow.analysis.v1",
+        "lexeme_id": "snow",
+        "text": "snow",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.snow",
+            "canonical": "snow",
+            "surface": "snow",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "leaf",
+      "text": "leaf",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The plant-part noun is a whole singular form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.leaf.analysis.v1",
+        "lexeme_id": "leaf",
+        "text": "leaf",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.leaf",
+            "canonical": "leaf",
+            "surface": "leaf",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "flower",
+      "text": "flower",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The plant noun is not the agent of the verb flow.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.flower.analysis.v1",
+        "lexeme_id": "flower",
+        "text": "flower",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.flower",
+            "canonical": "flower",
+            "surface": "flower",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "train",
+      "text": "train",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The vehicle noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.train.analysis.v1",
+        "lexeme_id": "train",
+        "text": "train",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.train",
+            "canonical": "train",
+            "surface": "train",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "truck",
+      "text": "truck",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The vehicle noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.truck.analysis.v1",
+        "lexeme_id": "truck",
+        "text": "truck",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.truck",
+            "canonical": "truck",
+            "surface": "truck",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "plane",
+      "text": "plane",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The shortened aircraft noun is a whole modern stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.plane.analysis.v1",
+        "lexeme_id": "plane",
+        "text": "plane",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.plane",
+            "canonical": "plane",
+            "surface": "plane",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "boat",
+      "text": "boat",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The water-vehicle noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.boat.analysis.v1",
+        "lexeme_id": "boat",
+        "text": "boat",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.boat",
+            "canonical": "boat",
+            "surface": "boat",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bike",
+      "text": "bike",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The clipped bicycle noun remains a whole form, not bi plus ke.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bike.analysis.v1",
+        "lexeme_id": "bike",
+        "text": "bike",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bike",
+            "canonical": "bike",
+            "surface": "bike",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "kite",
+      "text": "kite",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The flying-toy noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.kite.analysis.v1",
+        "lexeme_id": "kite",
+        "text": "kite",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.kite",
+            "canonical": "kite",
+            "surface": "kite",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "block",
+      "text": "block",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The play-piece noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.block.analysis.v1",
+        "lexeme_id": "block",
+        "text": "block",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.block",
+            "canonical": "block",
+            "surface": "block",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "table",
+      "text": "table",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The furniture noun is not tab plus an adjective suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.table.analysis.v1",
+        "lexeme_id": "table",
+        "text": "table",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.table",
+            "canonical": "table",
+            "surface": "table",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "door",
+      "text": "door",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The building-part noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.door.analysis.v1",
+        "lexeme_id": "door",
+        "text": "door",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.door",
+            "canonical": "door",
+            "surface": "door",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "lamp",
+      "text": "lamp",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The lighting-object noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.lamp.analysis.v1",
+        "lexeme_id": "lamp",
+        "text": "lamp",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.lamp",
+            "canonical": "lamp",
+            "surface": "lamp",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bowl",
+      "text": "bowl",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The food-container noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bowl.analysis.v1",
+        "lexeme_id": "bowl",
+        "text": "bowl",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bowl",
+            "canonical": "bowl",
+            "surface": "bowl",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "plate",
+      "text": "plate",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The food-serving noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.plate.analysis.v1",
+        "lexeme_id": "plate",
+        "text": "plate",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.plate",
+            "canonical": "plate",
+            "surface": "plate",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "soap",
+      "text": "soap",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The washing-substance noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.soap.analysis.v1",
+        "lexeme_id": "soap",
+        "text": "soap",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.soap",
+            "canonical": "soap",
+            "surface": "soap",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bag",
+      "text": "bag",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The container noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bag.analysis.v1",
+        "lexeme_id": "bag",
+        "text": "bag",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bag",
+            "canonical": "bag",
+            "surface": "bag",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pen",
+      "text": "pen",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The writing-tool noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pen.analysis.v1",
+        "lexeme_id": "pen",
+        "text": "pen",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.pen",
+            "canonical": "pen",
+            "surface": "pen",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "come",
+      "text": "come",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Move toward the person calling",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The motion verb is an uninflected stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.come.analysis.v1",
+        "lexeme_id": "come",
+        "text": "come",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.come",
+            "canonical": "come",
+            "surface": "come",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "give",
+      "text": "give",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Hand something to another person",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The transfer verb is an uninflected stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.give.analysis.v1",
+        "lexeme_id": "give",
+        "text": "give",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.give",
+            "canonical": "give",
+            "surface": "give",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "hear",
+      "text": "hear",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Notice a sound with your ears",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The hearing verb is an uninflected stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.hear.analysis.v1",
+        "lexeme_id": "hear",
+        "text": "hear",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.hear",
+            "canonical": "hear",
+            "surface": "hear",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "laugh",
+      "text": "laugh",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Make happy sounds when amused",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The amusement action is a whole verb stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.laugh.analysis.v1",
+        "lexeme_id": "laugh",
+        "text": "laugh",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.laugh",
+            "canonical": "laugh",
+            "surface": "laugh",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "look",
+      "text": "look",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Use your eyes to see something",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The seeing action is a whole verb stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.look.analysis.v1",
+        "lexeme_id": "look",
+        "text": "look",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.look",
+            "canonical": "look",
+            "surface": "look",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "smile",
+      "text": "smile",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Turn your mouth upward when happy",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The facial-expression action is an uninflected verb stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.smile.analysis.v1",
+        "lexeme_id": "smile",
+        "text": "smile",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.smile",
+            "canonical": "smile",
+            "surface": "smile",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "wash",
+      "text": "wash",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Clean your hands with soap and water",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The cleaning action is an uninflected verb stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.wash.analysis.v1",
+        "lexeme_id": "wash",
+        "text": "wash",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.wash",
+            "canonical": "wash",
+            "surface": "wash",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "angry",
+      "text": "angry",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "Feeling upset and cross",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The anger adjective uses the attested anger plus -y relation; the authored result explicitly omits the unstressed e.",
+        "references": [
+          "anderson-morphology",
+          "mw-angry"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.angry.analysis.v1",
+        "lexeme_id": "angry",
+        "text": "angry",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.anger",
+            "canonical": "anger",
+            "surface": "anger",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.y.adjective",
+            "canonical": "-y",
+            "surface": "y",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "angry",
+            "rule": "anger-plus-y-with-authored-e-loss",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "hungry",
+      "text": "hungry",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "Wanting some food to eat",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The present-day adjective is kept whole; Anderson explicitly classifies hungry as monomorphemic.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.hungry.analysis.v1",
+        "lexeme_id": "hungry",
+        "text": "hungry",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.hungry",
+            "canonical": "hungry",
+            "surface": "hungry",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "thirsty",
+      "text": "thirsty",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "Wanting something to drink",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The adjective links the thirst noun with adjectival -y; the base spelling stays unchanged.",
+        "references": [
+          "anderson-morphology",
+          "mw-thirsty"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.thirsty.analysis.v1",
+        "lexeme_id": "thirsty",
+        "text": "thirsty",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.thirst",
+            "canonical": "thirst",
+            "surface": "thirst",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.y.adjective",
+            "canonical": "-y",
+            "surface": "y",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "thirsty",
+            "rule": "thirst-plus-adjective-y",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "hot",
+      "text": "hot",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "Having a lot of heat",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The temperature adjective is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.hot.analysis.v1",
+        "lexeme_id": "hot",
+        "text": "hot",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.hot",
+            "canonical": "hot",
+            "surface": "hot",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "cold",
+      "text": "cold",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "Having very little heat",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The temperature adjective is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.cold.analysis.v1",
+        "lexeme_id": "cold",
+        "text": "cold",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.cold",
+            "canonical": "cold",
+            "surface": "cold",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "soft",
+      "text": "soft",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "Easy to press or bend",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The texture adjective is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.soft.analysis.v1",
+        "lexeme_id": "soft",
+        "text": "soft",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.soft",
+            "canonical": "soft",
+            "surface": "soft",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "clean",
+      "text": "clean",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "Having no dirt on it",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The cleanliness adjective is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.clean.analysis.v1",
+        "lexeme_id": "clean",
+        "text": "clean",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.clean",
+            "canonical": "clean",
+            "surface": "clean",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "green",
+      "text": "green",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "The color of fresh grass",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The color adjective is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.green.analysis.v1",
+        "lexeme_id": "green",
+        "text": "green",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.green",
+            "canonical": "green",
+            "surface": "green",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pink",
+      "text": "pink",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "A light color made with red",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The color adjective is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pink.analysis.v1",
+        "lexeme_id": "pink",
+        "text": "pink",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.pink",
+            "canonical": "pink",
+            "surface": "pink",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "white",
+      "text": "white",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "The color of fresh snow",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The color adjective is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.white.analysis.v1",
+        "lexeme_id": "white",
+        "text": "white",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.white",
+            "canonical": "white",
+            "surface": "white",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "black",
+      "text": "black",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "The darkest color you can see",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The color adjective is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.black.analysis.v1",
+        "lexeme_id": "black",
+        "text": "black",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.black",
+            "canonical": "black",
+            "surface": "black",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "four",
+      "text": "four",
+      "min_age": 4,
+      "part_of_speech": "number",
+      "meaning": "The number after three",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The cardinal numeral is a whole lexical form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.four.analysis.v1",
+        "lexeme_id": "four",
+        "text": "four",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.four",
+            "canonical": "four",
+            "surface": "four",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "five",
+      "text": "five",
+      "min_age": 4,
+      "part_of_speech": "number",
+      "meaning": "The number after four",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The cardinal numeral is a whole lexical form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.five.analysis.v1",
+        "lexeme_id": "five",
+        "text": "five",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.five",
+            "canonical": "five",
+            "surface": "five",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "house",
+      "text": "house",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "A building where people live",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The dwelling noun is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.house.analysis.v1",
+        "lexeme_id": "house",
+        "text": "house",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.house",
+            "canonical": "house",
+            "surface": "house",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bath",
+      "text": "bath",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "A large tub for washing yourself",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The washing-container noun is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bath.analysis.v1",
+        "lexeme_id": "bath",
+        "text": "bath",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bath",
+            "canonical": "bath",
+            "surface": "bath",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "toilet",
+      "text": "toilet",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "A seat used when you need to go",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The borrowed bathroom noun has no productive English toi base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.toilet.analysis.v1",
+        "lexeme_id": "toilet",
+        "text": "toilet",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.toilet",
+            "canonical": "toilet",
+            "surface": "toilet",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "teddy",
+      "text": "teddy",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "A soft toy shaped like a bear",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The toy noun is a lexicalized name-based form, not a general ted plus y construction.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.teddy.analysis.v1",
+        "lexeme_id": "teddy",
+        "text": "teddy",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.teddy",
+            "canonical": "teddy",
+            "surface": "teddy",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "family",
+      "text": "family",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "People related to and caring for each other",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The relationship noun has no productive famil base in this curriculum.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.family.analysis.v1",
+        "lexeme_id": "family",
+        "text": "family",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.family",
+            "canonical": "family",
+            "surface": "family",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "brother",
+      "text": "brother",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "A boy with the same parent",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The kinship noun is not an agent or comparative construction.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.brother.analysis.v1",
+        "lexeme_id": "brother",
+        "text": "brother",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.brother",
+            "canonical": "brother",
+            "surface": "brother",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "sister",
+      "text": "sister",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "A girl with the same parent",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The kinship noun is not sist plus an agent suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.sister.analysis.v1",
+        "lexeme_id": "sister",
+        "text": "sister",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.sister",
+            "canonical": "sister",
+            "surface": "sister",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "face",
+      "text": "face",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "The front part of your head",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The body-part noun is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.face.analysis.v1",
+        "lexeme_id": "face",
+        "text": "face",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.face",
+            "canonical": "face",
+            "surface": "face",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "we",
+      "text": "we",
+      "min_age": 4,
+      "part_of_speech": "pronoun",
+      "meaning": "The speaker and other people together",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The first-person plural pronoun is a whole grammatical form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.we.analysis.v1",
+        "lexeme_id": "we",
+        "text": "we",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.we",
+            "canonical": "we",
+            "surface": "we",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "he",
+      "text": "he",
+      "min_age": 4,
+      "part_of_speech": "pronoun",
+      "meaning": "A male person already mentioned",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The third-person pronoun is a whole grammatical form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.he.analysis.v1",
+        "lexeme_id": "he",
+        "text": "he",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.he",
+            "canonical": "he",
+            "surface": "he",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "she",
+      "text": "she",
+      "min_age": 4,
+      "part_of_speech": "pronoun",
+      "meaning": "A female person already mentioned",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The third-person pronoun is a whole grammatical form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.she.analysis.v1",
+        "lexeme_id": "she",
+        "text": "she",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.she",
+            "canonical": "she",
+            "surface": "she",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "it",
+      "text": "it",
+      "min_age": 4,
+      "part_of_speech": "pronoun",
+      "meaning": "An animal, object, or idea already mentioned",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The reference pronoun is a whole grammatical form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.it.analysis.v1",
+        "lexeme_id": "it",
+        "text": "it",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.it",
+            "canonical": "it",
+            "surface": "it",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "your",
+      "text": "your",
+      "min_age": 4,
+      "part_of_speech": "determiner",
+      "meaning": "Belonging to the person spoken to",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The possessive determiner has no separately spelled suffix to join.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.your.analysis.v1",
+        "lexeme_id": "your",
+        "text": "your",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.your",
+            "canonical": "your",
+            "surface": "your",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "an",
+      "text": "an",
+      "min_age": 4,
+      "part_of_speech": "determiner",
+      "meaning": "One of something, before a vowel sound",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The article allomorph stays whole; n is not an independent meaning component.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.an.analysis.v1",
+        "lexeme_id": "an",
+        "text": "an",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.an",
+            "canonical": "an",
+            "surface": "an",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "the",
+      "text": "the",
+      "min_age": 4,
+      "part_of_speech": "determiner",
+      "meaning": "Points to a particular person or thing",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The definite article is one functional form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.the.analysis.v1",
+        "lexeme_id": "the",
+        "text": "the",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.the",
+            "canonical": "the",
+            "surface": "the",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "and",
+      "text": "and",
+      "min_age": 4,
+      "part_of_speech": "conjunction",
+      "meaning": "Joins words or ideas together",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The conjunction is one functional form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.and.analysis.v1",
+        "lexeme_id": "and",
+        "text": "and",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.and",
+            "canonical": "and",
+            "surface": "and",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "this",
+      "text": "this",
+      "min_age": 4,
+      "part_of_speech": "determiner",
+      "meaning": "Points to something near the speaker",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The demonstrative is a whole singular form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.this.analysis.v1",
+        "lexeme_id": "this",
+        "text": "this",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.this",
+            "canonical": "this",
+            "surface": "this",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "that",
+      "text": "that",
+      "min_age": 4,
+      "part_of_speech": "determiner",
+      "meaning": "Points to something farther away",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The demonstrative is a whole singular form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.that.analysis.v1",
+        "lexeme_id": "that",
+        "text": "that",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.that",
+            "canonical": "that",
+            "surface": "that",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "what",
+      "text": "what",
+      "min_age": 4,
+      "part_of_speech": "pronoun",
+      "meaning": "Asks which thing or kind",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The interrogative pronoun is one functional form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.what.analysis.v1",
+        "lexeme_id": "what",
+        "text": "what",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.what",
+            "canonical": "what",
+            "surface": "what",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "am",
+      "text": "am",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "The form of be used with I",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The suppletive be form stays whole, without invented segments.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.am.analysis.v1",
+        "lexeme_id": "am",
+        "text": "am",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.am",
+            "canonical": "am",
+            "surface": "am",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "have",
+      "text": "have",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Own or hold something",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The possession verb is its whole uninflected base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.have.analysis.v1",
+        "lexeme_id": "have",
+        "text": "have",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.have",
+            "canonical": "have",
+            "surface": "have",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "here",
+      "text": "here",
+      "min_age": 4,
+      "part_of_speech": "adverb",
+      "meaning": "In or at this place",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The place adverb is one modern form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.here.analysis.v1",
+        "lexeme_id": "here",
+        "text": "here",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.here",
+            "canonical": "here",
+            "surface": "here",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "goodbye",
+      "text": "goodbye",
+      "min_age": 4,
+      "part_of_speech": "interjection",
+      "meaning": "A word used when leaving",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The conventional farewell is retained whole; its historical contraction is not a productive compound exercise.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.goodbye.analysis.v1",
+        "lexeme_id": "goodbye",
+        "text": "goodbye",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.goodbye",
+            "canonical": "goodbye",
+            "surface": "goodbye",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "thanks",
+      "text": "thanks",
+      "min_age": 4,
+      "part_of_speech": "interjection",
+      "meaning": "A short way to express gratitude",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The fixed gratitude interjection is retained whole, rather than teaching an active plural reading in this sense.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.thanks.analysis.v1",
+        "lexeme_id": "thanks",
+        "text": "thanks",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.thanks",
+            "canonical": "thanks",
+            "surface": "thanks",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "sorry",
+      "text": "sorry",
+      "min_age": 4,
+      "part_of_speech": "interjection",
+      "meaning": "A word used to apologize",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The apology interjection is retained whole; its historical sorrow relation is not a transparent spelling join.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.sorry.analysis.v1",
+        "lexeme_id": "sorry",
+        "text": "sorry",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.sorry",
+            "canonical": "sorry",
+            "surface": "sorry",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "want",
+      "text": "want",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Wish to have or do something",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The desire verb is an uninflected base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.want.analysis.v1",
+        "lexeme_id": "want",
+        "text": "want",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.want",
+            "canonical": "want",
+            "surface": "want",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "like",
+      "text": "like",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Enjoy or feel pleased about something",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The enjoyment verb is an uninflected base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.like.analysis.v1",
+        "lexeme_id": "like",
+        "text": "like",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.like",
+            "canonical": "like",
+            "surface": "like",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "see",
+      "text": "see",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Notice something with your eyes",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The perception verb is an uninflected base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.see.analysis.v1",
+        "lexeme_id": "see",
+        "text": "see",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.see",
+            "canonical": "see",
+            "surface": "see",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "listen",
+      "text": "listen",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Pay attention to a sound",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The attention-to-sound verb is not list plus a productive en suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.listen.analysis.v1",
+        "lexeme_id": "listen",
+        "text": "listen",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.listen",
+            "canonical": "listen",
+            "surface": "listen",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "say",
+      "text": "say",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Speak a word or words",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The speech verb is an uninflected base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.say.analysis.v1",
+        "lexeme_id": "say",
+        "text": "say",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.say",
+            "canonical": "say",
+            "surface": "say",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "make",
+      "text": "make",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Create or prepare something",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The creation verb is an uninflected base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.make.analysis.v1",
+        "lexeme_id": "make",
+        "text": "make",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.make",
+            "canonical": "make",
+            "surface": "make",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "put",
+      "text": "put",
+      "min_age": 4,
+      "part_of_speech": "verb",
+      "meaning": "Move something to a particular place",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The placement verb is an uninflected base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.put.analysis.v1",
+        "lexeme_id": "put",
+        "text": "put",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.put",
+            "canonical": "put",
+            "surface": "put",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "kind",
+      "text": "kind",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "Caring and helpful toward others",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The caring adjective is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.kind.analysis.v1",
+        "lexeme_id": "kind",
+        "text": "kind",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.kind",
+            "canonical": "kind",
+            "surface": "kind",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "little",
+      "text": "little",
+      "min_age": 4,
+      "part_of_speech": "adjective",
+      "meaning": "Small in size or amount",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The size adjective is a whole modern form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.little.analysis.v1",
+        "lexeme_id": "little",
+        "text": "little",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.little",
+            "canonical": "little",
+            "surface": "little",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "chicken",
+      "text": "chicken",
+      "min_age": 4,
+      "part_of_speech": "noun",
+      "meaning": "Meat from a farm bird",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The food sense is retained whole; chick plus a productive en suffix does not describe this meat sense.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.chicken.analysis.v1",
+        "lexeme_id": "chicken",
+        "text": "chicken",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.chicken",
+            "canonical": "chicken",
+            "surface": "chicken",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "reviewer": "Codex runtime_recovery independent AI language reviewer; not a human or subject-matter reviewer",
+  "consultation_date_local": "2026-10-17",
+  "timezone": "Asia/Shanghai",
+  "scope": "Independent selected-sense, definition, example and editorial placement review for three narrow proposals. No source, media, morphology, domain, expression or whole-entry acceptance is granted.",
+  "fresh_evidence": {
+    "direct_http_receipt": "fresh-independent-http.json",
+    "direct_http_receipt_sha256": "ec0925018bc4a19645c6e1b7c1c0695acc6f05241d373d884f5815e322d1ba84",
+    "successful_direct_http_requests": 6,
+    "preserved_direct_http_failures": 1,
+    "rendered_web_consultation": "The reviewer independently opened and inspected the selected Oxford and Collins sections for all three terms, the CEFR-J profile and attribution/methodology pages, and the British Council lesson. These observations were made during this review, separately from the author's frozen captures.",
+    "body_retention": "Complete remote response bodies were transient and were not retained. The direct receipt records response hashes, sizes, selected attributes and profile rows; these are observations, not a retained-body archive. Rendered web observations have no locally retained body hash.",
+    "oxford_hash_difference": "The fresh Oxford body hashes differ from the author's earlier hashes. Selected-sense metadata agrees; fresh observations are not represented as byte-identical copies of the author capture."
+  },
+  "frozen_author_evidence": {
+    "directory": "build/professional-english/foundation02-held-six-research-r01",
+    "inventory_sha256": "68813f88a92eefba3ac1f03921ce2080c65cec6f989d8988f14e4a6958923d22",
+    "use": "Frozen proposal, context, historic hold records and source ledger were read as author evidence. Rechecking hashes does not turn those captures into fresh independent source retrieval."
+  },
+  "sources": [
+    {
+      "id": "O-postpone",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/postpone",
+      "publisher": "Oxford University Press",
+      "fresh_access": ["rendered web", "direct HTTP metadata"],
+      "selected_section": "postpone_sng_1; moving a planned event or action to a later time",
+      "literal_selected_attributes": {"cefr": null, "fkcefr": "c1"},
+      "rendered_level": "Working life C1",
+      "observation": "The selected meaning supports the planned-review example and the postpone something until a later time pattern. The C1 source placement is retained as contrary placement evidence.",
+      "excluded": ["cancellation", "general rescheduling to either an earlier or a later time", "legal or financial priority arrangements"]
+    },
+    {
+      "id": "C-postpone",
+      "url": "https://www.collinsdictionary.com/dictionary/english/postpone",
+      "publisher": "HarperCollins Publishers",
+      "fresh_access": ["rendered web"],
+      "selected_section": "Planned-event sense in the learner entry",
+      "literal_selected_level": "B1+",
+      "observation": "The selected event sense and postponing a planned activity agree with the draft. B1+ is recorded literally and is not converted to B2."
+    },
+    {
+      "id": "O-unsafe",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/unsafe",
+      "publisher": "Oxford University Press",
+      "fresh_access": ["rendered web", "direct HTTP metadata"],
+      "selected_section": "unsafe_sng_1, sense 1: dangerous place, thing or activity",
+      "literal_selected_attributes": {"cefr": null, "fkcefr": null},
+      "rendered_selected_level": null,
+      "observation": "The selected danger sense supports unsafe storage area. Personal vulnerability and the British legal-evidence/conviction sense are separate and excluded. A missing level supplies neither B1 nor B2 evidence."
+    },
+    {
+      "id": "C-unsafe",
+      "url": "https://www.collinsdictionary.com/dictionary/english/unsafe",
+      "publisher": "HarperCollins Publishers",
+      "fresh_access": ["rendered web"],
+      "selected_section": "Sense 1: dangerous buildings, machines, activities or areas",
+      "literal_selected_level": null,
+      "observation": "The dangerous-area sense agrees with the storage-area example. The selected section has no observed level. Personal danger and legal-evidence uses remain outside the decision."
+    },
+    {
+      "id": "O-hazard",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/hazard_1",
+      "publisher": "Oxford University Press",
+      "fresh_access": ["rendered web", "direct HTTP metadata"],
+      "selected_section": "hazard_sng_1, noun: possible danger, damage or cause of harm",
+      "literal_selected_attributes": {"cefr": null, "fkcefr": "c1"},
+      "rendered_level": "Danger C1",
+      "observation": "The potential-cause noun supports the draft definition and loose-cable example. The C1 source placement remains visible as contrary placement evidence."
+    },
+    {
+      "id": "C-hazard",
+      "url": "https://www.collinsdictionary.com/dictionary/english/hazard",
+      "publisher": "HarperCollins Publishers",
+      "fresh_access": ["rendered web"],
+      "selected_section": "Count noun for a potential danger or risk",
+      "literal_selected_level": null,
+      "observation": "The noun agrees with potential harm. The verb senses involving guessing or risking, and golf or gambling uses, do not support this entry and are excluded."
+    },
+    {
+      "id": "P-CSV",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "original_creator": "Yukio Tono, Tono Laboratory, Tokyo University of Foreign Studies",
+      "hosting_copy": "Open Language Profiles GitHub repository",
+      "fresh_access": ["rendered web", "direct HTTP selected rows"],
+      "actual_file_version": "1.5",
+      "rows": [
+        {"line_number_1_based": 5160, "csv": "postpone,verb,B2,,,"},
+        {"line_number_1_based": 7341, "csv": "unsafe,adjective,B2,,,"},
+        {"line_number_1_based": 3155, "csv": "hazard,noun,B1,,,"}
+      ],
+      "evidence_scope": "Headword/POS recognition-vocabulary placement. Rows contain no selected-sense identifiers and do not certify productive mastery or this course's contexts.",
+      "citation": "Tono, Yukio / Tokyo University of Foreign Studies. CEFR-J Vocabulary Profile, version 1.5. Consulted through the Open Language Profiles hosting copy on 17 October 2026."
+    },
+    {
+      "id": "P-TERMS",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "fresh_access": ["rendered web", "direct HTTP"],
+      "observation": "The README attributes the CEFR-J profile to Tono Laboratory/TUFS and requires proper attribution for research or commercial use. Its CC BY-SA 4.0 statement applies to the separate Octanove C1/C2 dataset; that label is not assigned here to the CEFR-J CSV.",
+      "acquisition": "Reference consultation only. No complete profile body or new game asset is packaged."
+    },
+    {
+      "id": "P-METHOD",
+      "url": "https://www.cefr-j.org/download.html",
+      "publisher": "CEFR-J / Tono Laboratory, Tokyo University of Foreign Studies",
+      "fresh_access": ["rendered web", "direct HTTP"],
+      "observation": "The methodology describes textbook-corpus vocabulary arranged by broadly CEFR-aligned materials and supplemented with English Vocabulary Profile evidence. Its scope is recognition vocabulary through B2. The official download page advertises version 1.6 dated 24 March 2020; the independently checked hosting file is version 1.5. No assumption is made that version 1.6 contains unchanged rows.",
+      "retention": "English reviewer paraphrase only; no full page text is copied."
+    },
+    {
+      "id": "L-HAZARD",
+      "url": "https://www.teachingenglish.org.uk/teaching-resources/teaching-secondary/uk-history-and-literature/first-world-war/joining-british",
+      "publisher": "British Council TeachingEnglish",
+      "credited_author": "TeachingEnglish editorial team",
+      "fresh_access": ["rendered web succeeded", "direct HTTP timed out and is preserved as a failure"],
+      "rendered_web_reference_ids": ["turn507947view6", "turn693492view3", "turn693492view4"],
+      "observed_level": "B2, ages 13 to adult",
+      "selected_section": "Task 2B asks learners to infer highlighted vocabulary and explicitly includes hazard as a potential cause of accidents.",
+      "evidence_scope": "Lesson-level teaching evidence for the broad potential-cause noun; not an official per-word CEFR certificate and not support for every specialized hazard compound.",
+      "content_scope": "No lesson prose, war content, artwork or media is imported into the game."
+    }
+  ],
+  "global_limits": [
+    "Oxford's footer Word of the Day B2 label belongs to reasonably and supplies no evidence for these target senses.",
+    "Source disagreement is retained. Editorial B2 is an independent bounded teaching judgment, not a conversion or correction of the publishers' labels.",
+    "The web observations and response receipts document this consultation only; remote pages may change.",
+    "No media was acquired. Reference consultation grants no game-media license, image suitability decision or animation approval."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "status": "prepared-not-executed",
+  "date": "2026-10-17",
+  "scope": "Real scene terminal disposal with synthetic curriculum and media",
+  "inputs": [
+    {
+      "path": "tests/godot/professional_scene_disposal_tests.gd",
+      "sha256": "eaf0c87b4f928a2b81c01ed80b7dcf822d5b3e19abbf8a5c5aa73e53631eb8ab"
+    },
+    {
+      "path": "scripts/professional_play.gd",
+      "sha256": "1841fb1b60d6a0b576d352d50221202c94611ec9832f8f5b039e4fe13a078489"
+    },
+    {
+      "path": "scripts/professional_store.gd",
+      "sha256": "671fe81e308241e976d2307d1dc3ed7544226314b5d12f5e4215754f90197c2f"
+    },
+    {
+      "path": "scripts/professional_round_loader.gd",
+      "sha256": "83186aeb5c993e6dcd544f71e6939de8a3b08ab60b3fc610987b22bf94d3182d"
+    },
+    {
+      "path": "scripts/professional_session.gd",
+      "sha256": "a6d5115d6e65a74c97cd129be4a3613358295566ac2065d046ac440560be8616"
+    },
+    {
+      "path": "scripts/game_ui.gd",
+      "sha256": "6348a813929d530bd1332a096f3eb43b7f95be7c87b391e2a76dc37143c40aef"
+    },
+    {
+      "path": "tests/godot/professional_application_flow_tests.gd",
+      "sha256": "0e78000274fa10800ea9eb368d56cb1d30b6a96eba8879422411afdbb4d95ffd"
+    },
+    {
+      "path": "tests/godot/professional_round_loader_tests.gd",
+      "sha256": "99904fff2e23cd83976647c89990a76c7786f91ba51feb2108983833a01ae96d"
+    },
+    {
+      "path": "tests/godot/player_flow_fixture.gd",
+      "sha256": "9052606c885bd1f5fdac10a38f10ef014c2ba11e56f9c2d59193a0acd89cb1c7"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T13:26:53.898Z",
+  "status": "exact_presented_pair_user_approved",
+  "authority": "Direct human reply recovered from tesis-iter-4 by the continuing root agent",
+  "source_thread_id": "01a14325-e5ce-72a2-8b1a-b746c89e20c6",
+  "source_turn_id": "01a144de-9fa7-7b03-808c-2d0aa3cfc73c",
+  "question_item_id": [
+    "request_user_input_async",
+    "call_7xvby6MgGR1DNVzcwIkhjACI",
+    0
+  ],
+  "question_english": "After listening to card reader and barcode, are both pronunciations, speaking rates and voice qualities suitable for the game?",
+  "response_english": "Both are acceptable.",
+  "translation_note": "The direct human response is recorded as an English translation; original conversation identifiers preserve its provenance.",
+  "scope": "Pronunciation, speaking rate and voice quality of the exact presented card reader and barcode WAVs. Future recordings and the game mix are outside this approval.",
+  "listening_request_raw_sha256": "7b1591b528cec135cd75ac23d7405790412966a08b67587ae3c399bc0b131793",
+  "technical_qa_raw_sha256": "ef75d3504e385ef1c4037a30609d35658cfeca5636af363d76edccd27d4c49f1",
+  "profile": {
+    "voice": "en-US-AvaNeural",
+    "rate": "-15%",
+    "pitch": "+8Hz",
+    "volume": "+0%"
+  },
+  "postprocessing": false,
+  "outputs": [
+    {
+      "sense_id": "card-reader.payment-device.n",
+      "text": "card reader",
+      "presented_path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/build/professional-english/retail-audio-review/card-reader-barcode-acquired-r01/19828e080da31bb83699bf4d3edbdae62d22b224cd63e11f8e78da2325ee544f.wav",
+      "wav_sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45",
+      "source_mp3_sha256": "9e3453188f94f38caccc62ab68f0da749616bc98ad1ea68b66acd98deacf89b3",
+      "acquisition_receipt_raw_sha256": "5db120ed2b029063433e5564104a0d288dfbf25820a5103f51be9a007a40a3df"
+    },
+    {
+      "sense_id": "barcode.product-code.n",
+      "text": "barcode",
+      "presented_path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/build/professional-english/retail-audio-review/card-reader-barcode-acquired-r01/ccf9e3b96b5eacbf116bc7c1c3441c295760ec0a6249009f76bc59e6c32fbb23.wav",
+      "wav_sha256": "01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5",
+      "source_mp3_sha256": "adb4a7eaf862f2c65a028ec6074c8bc9df7b633af14a16098d15917a83098fd7",
+      "acquisition_receipt_raw_sha256": "8e822a038c3186c29642d42a1184016297d8b63e82e6eab3b3bf81c2ec55748f"
+    }
+  ],
+  "production_integrated": false
+}

@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "status": "unexecuted_reporter_parser_correction",
+  "author": "/root",
+  "prior_source": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r01/invoke.cjs",
+    "sha256": "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f"
+  },
+  "source": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r02/invoke.cjs",
+    "sha256": "6e138489e51f4789c1f2fd6a4039aa7e2f1af44ec435ff4309c33e568053bac5"
+  },
+  "input_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f",
+  "original_failed_receipt": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/receipt.json",
+    "sha256": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d"
+  },
+  "changed_lines": [
+    {
+      "one_based_line": 72,
+      "before": "      const number = label => Number(result.stdout.match(new RegExp('^# ' + label + ' (\\\\d+)$', 'm'))?.[1]);",
+      "after": "      const number = label => { const matches = [...result.stdout.matchAll(new RegExp('^(?:#|ℹ) ' + label + ' (\\\\d+)\\\\r?$', 'gm'))]; assert.equal(matches.length, 1, 'Missing or ambiguous Node test summary: ' + label); return Number(matches[0][1]); };"
+    }
+  ],
+  "reason": "The original Node commands exited successfully with 255 passed tests, but the default spec reporter uses an information symbol instead of TAP # prefixes. The original wrapper could not parse its summary. This new one-shot source accepts either exact prefix, requires one unambiguous numeric line for each required field and preserves every other source byte.",
+  "original_attempt_replayed": false,
+  "project_tests_run": false,
+  "production_mutated": false
+}

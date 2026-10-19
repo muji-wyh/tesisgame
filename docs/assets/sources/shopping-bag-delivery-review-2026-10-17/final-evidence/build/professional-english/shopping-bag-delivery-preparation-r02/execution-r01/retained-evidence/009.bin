@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "status": "exact_asset_and_entry_proposal_accepted_for_final_rebase_only",
+  "reviewer": "Codex root independent integration proposal reviewer",
+  "time": "2026-10-16T21:12:53.800Z",
+  "proposal_inventory": {
+    "path": "build/professional-english/shopping-bag-delivery-proposal-r01/inventory.json",
+    "bytes": 2795,
+    "sha256": "5289682bdc2ebe875adac1f70b7985fe2dd665d4ade232b89b4386f26341716e"
+  },
+  "files_checked": 16,
+  "evidence_files_checked": 21,
+  "protected_image_count": 8,
+  "protected_audio_count": 12,
+  "before_json_sha256": "ba96e5d4ba9911b68ddb630d3413cac52d155a3d27c7452aaee97ba5284f7e07",
+  "after_json_sha256": "25300b5f9d78a6327c16c27143f1aeddd9dba1c41bdd4e42c20f30d36148cc85",
+  "protected_projection_sha256": "091cb33bb94c158215dc8db8c4198482b0c2f991ce4b964786321d5114c51d69",
+  "resource": {
+    "id": "sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+    "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+    "path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+    "kind": "image",
+    "format": "png",
+    "compressed_bytes": 135843,
+    "decoded_bytes": 1695744,
+    "width": 414,
+    "height": 512
+  },
+  "findings": [
+    "Exact accepted source-derived PNG and revised brief; no new rendering, audio or human claim.",
+    "Only complete media.image and three obsolete note clauses differ; all lexical, forms, modes, review, audio and morphology fields remain exact.",
+    "No source-registry or module-manifest delta. Seven proposed target families require final individual-file allowlist.",
+    "Shared test reversal plan is sensible but not executable approval: actual post-fourth10 helpers must be inspected to avoid double reversal.",
+    "Source/candidate records retain historical pending states; separate production provenance must record actual integration and verification."
+  ],
+  "requirements": [
+    "Successful actual fourth10 committed and persisted receipts before final rebase.",
+    "Exact final shared-test afterimages and source/transaction review.",
+    "Fresh persisted schema/hash/dimensions/budget and protected-state checks after guarded installation."
+  ],
+  "limitations": [
+    "No production integration or readiness grant.",
+    "Gift bags can share the form; no new isolated recognition, participant, full-board or browser approval.",
+    "Only narrow static JSON/raw-file checks performed; no old author, candidate, tests, engine or browser replay."
+  ]
+}

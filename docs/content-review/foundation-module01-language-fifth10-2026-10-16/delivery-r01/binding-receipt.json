@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "status": "ten_language_current_baseline_bound_no_production_writes",
+  "checks": 6727,
+  "preimages_raw_sha256": "dc21b8800a2e2d8e04a32bc9fd210d8ba6e9e0d86482c5b735ecf88cc631a789",
+  "preparation_receipt_raw_sha256": "3ee3e22c1e7d08ce875eab3e24b1b4d03fb0f705091ea81d76bc900256cfb30b",
+  "delivery_proposal_raw_sha256": "f674e7db69d9f0be5d238513703ad7ae1dd5b8d25604ef2d15f6d7798fa47ea0",
+  "baseline_registry_sha256": "58acf6fbf52810707fa5e57dadc23e42b73b2cf7171144a9cdbf2650258c0d50",
+  "proposed_registry_sha256": "4ad48ae53f0fb028b95d063611c2ad95409e8e20716b65b0227b17d2f61b717f",
+  "validation_raw_sha256": "ff2753a293782475ba8732ae6a03a984bd29bbf07cc4568e2c1e13530d18bca1",
+  "serializer_raw_sha256": "8e739b586df0aad462ea90f9106f92a508fefd5c07f8fdff7f3c78ddae03a77b",
+  "production_content_written": false
+}

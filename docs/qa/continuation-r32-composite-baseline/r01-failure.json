@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "status": "failed_before_baseline_creation",
+  "recorded_at": "2026-10-16T18:17:01.606Z",
+  "command": "node build/professional-english/continuation-baseline-r32-composite-r01/build-baseline.cjs",
+  "exit_code": 1,
+  "tool_output_chunk": "031a3a",
+  "error": "Strict retained FAIL-line equality found an additional terminal carriage return in the existing Godot wrapper log. The pinned original log is unchanged; line splitting must consume all CR characters immediately before LF.",
+  "observed_actual_failure_line": "FAIL: Persisted legacy entry equals its protected preimage: attendance.presence-record.n\r",
+  "expected_failure_line": "FAIL: Persisted legacy entry equals its protected preimage: attendance.presence-record.n",
+  "baseline_created": false,
+  "new_test_execution": false,
+  "production_mutated": false,
+  "files": [
+    {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r01/verify.cjs",
+      "sha256": "0931067900fd9af432c395b04d3a6767484dc313a64c96b26522754e46c66262"
+    },
+    {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r01/build-baseline.cjs",
+      "sha256": "ef7639b9fee10fb391671a867c0d534286768602be025306bcd5eaddc972480a"
+    }
+  ]
+}

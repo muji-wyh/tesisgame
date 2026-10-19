@@ -1,0 +1,578 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common.schema.json",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]*$"
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "reviewed"
+          ]
+        },
+        "language": {
+          "enum": [
+            "pending",
+            "reviewed"
+          ]
+        },
+        "domain": {
+          "enum": [
+            "not_required",
+            "pending",
+            "reviewed"
+          ]
+        },
+        "reviewer": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "reviewed_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      },
+      "required": [
+        "status",
+        "language",
+        "domain",
+        "reviewer",
+        "reviewed_at"
+      ],
+      "additionalProperties": false
+    },
+    "media": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "acquired",
+            "integrated"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "creator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "license": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "acquisition_status": {
+          "enum": [
+            "not_started",
+            "acquired",
+            "integrated"
+          ]
+        },
+        "review": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "reviewed"
+              ]
+            },
+            "reviewer": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "reviewed_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "additionalProperties": false
+        },
+        "brief": {
+          "type": "string",
+          "minLength": 1
+        },
+        "picture_suitable": {
+          "type": "boolean"
+        },
+        "available_animations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "adaptations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "voice": {
+          "const": "ava-sweet"
+        },
+        "voice_settings": {
+          "type": "object",
+          "properties": {
+            "voice": {
+              "const": "en-US-AvaNeural"
+            },
+            "rate": {
+              "const": "-15%"
+            },
+            "pitch": {
+              "const": "+8Hz"
+            },
+            "volume": {
+              "const": "+0%"
+            },
+            "postprocessing": {
+              "const": false
+            }
+          },
+          "required": [
+            "voice",
+            "rate",
+            "pitch",
+            "volume",
+            "postprocessing"
+          ],
+          "additionalProperties": false
+        },
+        "existing_asset_reference": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "status",
+        "path",
+        "sha256",
+        "source",
+        "creator",
+        "license",
+        "acquisition_status",
+        "review"
+      ],
+      "additionalProperties": false
+    },
+    "reference": {
+      "type": "object",
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]*$"
+        },
+        "status": {
+          "enum": [
+            "pending_term_check",
+            "verified"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "source_id",
+        "status",
+        "scope"
+      ],
+      "additionalProperties": false
+    },
+    "references": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common.schema.json#/$defs/reference"
+      }
+    },
+    "practice_modes": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "match",
+          "memory",
+          "pop",
+          "phrase",
+          "jelly",
+          "word_jelly"
+        ]
+      }
+    },
+    "resource_path": {
+      "type": "string",
+      "pattern": "^res://data/professional/[a-zA-Z0-9_./-]+\\.json$"
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "acquired",
+            "integrated"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "creator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "license": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "acquisition_status": {
+          "enum": [
+            "not_started",
+            "acquired",
+            "integrated"
+          ]
+        },
+        "review": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "reviewed"
+              ]
+            },
+            "reviewer": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "reviewed_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "additionalProperties": false
+        },
+        "brief": {
+          "type": "string",
+          "minLength": 1
+        },
+        "picture_suitable": {
+          "type": "boolean"
+        },
+        "available_animations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "adaptations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "voice": {
+          "const": "ava-sweet"
+        },
+        "voice_settings": {
+          "type": "object",
+          "properties": {
+            "voice": {
+              "const": "en-US-AvaNeural"
+            },
+            "rate": {
+              "const": "-15%"
+            },
+            "pitch": {
+              "const": "+8Hz"
+            },
+            "volume": {
+              "const": "+0%"
+            },
+            "postprocessing": {
+              "const": false
+            }
+          },
+          "required": [
+            "voice",
+            "rate",
+            "pitch",
+            "volume",
+            "postprocessing"
+          ],
+          "additionalProperties": false
+        },
+        "existing_asset_reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confusable_with": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_.-]*$"
+          },
+          "uniqueItems": true,
+          "description": "Canonical senses that must not share an image-assessment round with this sense. Either side declaring the pair excludes it; this does not mark an image as reviewed."
+        }
+      },
+      "required": [
+        "status",
+        "path",
+        "sha256",
+        "source",
+        "creator",
+        "license",
+        "acquisition_status",
+        "review",
+        "brief",
+        "picture_suitable",
+        "available_animations",
+        "adaptations"
+      ],
+      "additionalProperties": false
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "acquired",
+            "integrated"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "creator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "license": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "acquisition_status": {
+          "enum": [
+            "not_started",
+            "acquired",
+            "integrated"
+          ]
+        },
+        "review": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "reviewed"
+              ]
+            },
+            "reviewer": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "reviewed_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "additionalProperties": false
+        },
+        "brief": {
+          "type": "string",
+          "minLength": 1
+        },
+        "picture_suitable": {
+          "type": "boolean"
+        },
+        "available_animations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "adaptations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "voice": {
+          "const": "ava-sweet"
+        },
+        "voice_settings": {
+          "type": "object",
+          "properties": {
+            "voice": {
+              "const": "en-US-AvaNeural"
+            },
+            "rate": {
+              "const": "-15%"
+            },
+            "pitch": {
+              "const": "+8Hz"
+            },
+            "volume": {
+              "const": "+0%"
+            },
+            "postprocessing": {
+              "const": false
+            }
+          },
+          "required": [
+            "voice",
+            "rate",
+            "pitch",
+            "volume",
+            "postprocessing"
+          ],
+          "additionalProperties": false
+        },
+        "existing_asset_reference": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "status",
+        "path",
+        "sha256",
+        "source",
+        "creator",
+        "license",
+        "acquisition_status",
+        "review",
+        "voice",
+        "voice_settings"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

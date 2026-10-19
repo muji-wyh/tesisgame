@@ -227,8 +227,9 @@ func _run() -> void:
 	check(view.memory.phase == "stopped" and endings.size() == 1, "Stop cancels a pending timer without a stale result")
 	view.start_round(words, Data.theme("spring"), 71)
 	view.card_buttons[0].pressed.emit()
+	var stopped_button: Button = view.card_buttons[1]
 	view.stop()
-	view.card_buttons[1].pressed.emit()
+	stopped_button.pressed.emit()
 	view.begin_peek()
 	view.end_peek()
 	check(view.memory.phase == "stopped" and view.memory.selected_indices.is_empty() and view.controls().is_empty(), "Stop cancels transient selections and rejects every input")

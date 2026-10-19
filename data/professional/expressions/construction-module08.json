@@ -1,0 +1,1723 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.construction_trades.module08.01",
+      "text": "The risk assessment needs to address the reported dust concern and the possible presence of silica or asbestos in the relevant materials.",
+      "meaning": "Request assessment of reported material-related concerns.",
+      "context": "Communication that makes no visual identification or exposure-limit claim.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "risk",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "assessment",
+          "start": 9,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "needs",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 26,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "address",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "reported",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "dust",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "concern",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "possible",
+          "start": 71,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "presence",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "of",
+          "start": 89,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "silica",
+          "start": 92,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": "or",
+          "start": 99,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": "asbestos",
+          "start": 102,
+          "end": 110
+        },
+        {
+          "index": 18,
+          "text": "in",
+          "start": 111,
+          "end": 113
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 114,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "relevant",
+          "start": 118,
+          "end": 126
+        },
+        {
+          "index": 21,
+          "text": "materials",
+          "start": 127,
+          "end": 136
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 136,
+          "end": 137
+        }
+      ],
+      "focus_lexeme_ids": [
+        "risk-assessment.hazard-evaluation.n",
+        "dust.fine-solid-particles-in-air-or-on-surfaces.n",
+        "silica.silicon-dioxide-present-in-rocks-and-materials.n",
+        "asbestos.group-of-fibrous-minerals-used-in-some-older-products.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module08.02",
+      "text": "The incident form records fatigue as a reported concern and notes the noise and vibration observations separately.",
+      "meaning": "Keep distinct observations clear in an event record.",
+      "context": "Recording information without diagnosing a condition or judging exposure.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "incident",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "form",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "records",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "fatigue",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "as",
+          "start": 34,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "reported",
+          "start": 39,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "concern",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "notes",
+          "start": 60,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "noise",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "vibration",
+          "start": 80,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "observations",
+          "start": 90,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": "separately",
+          "start": 103,
+          "end": 113
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 113,
+          "end": 114
+        }
+      ],
+      "focus_lexeme_ids": [
+        "incident-form.event-report-document.n",
+        "fatigue.marked-tiredness.n",
+        "noise.unwanted-or-potentially-harmful-sound.n",
+        "vibration.repeated-oscillating-movement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module08.03",
+      "text": "The PPE review includes the specified safety footwear and protective glove requirements for this task.",
+      "meaning": "Refer protective-equipment selection to the task's actual review.",
+      "context": "Discussing requirements without treating any item as universally suitable.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "PPE",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "review",
+          "start": 8,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "includes",
+          "start": 15,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "specified",
+          "start": 28,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "safety",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "footwear",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "protective",
+          "start": 58,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "glove",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "requirements",
+          "start": 75,
+          "end": 87
+        },
+        {
+          "index": 12,
+          "text": "for",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 13,
+          "text": "this",
+          "start": 92,
+          "end": 96
+        },
+        {
+          "index": 14,
+          "text": "task",
+          "start": 97,
+          "end": 101
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "ppe.personal-protective-equipment.n",
+        "safety-footwear.protective-work-shoes.n",
+        "protective-glove.hand-protection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module08.04",
+      "text": "The safety data sheet is available, but respirator suitability still requires qualified review.",
+      "meaning": "Distinguish available product information from a selection decision.",
+      "context": "Requesting professional review of respiratory protection.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "safety",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "data",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "sheet",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "is",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "available",
+          "start": 25,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "but",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "respirator",
+          "start": 40,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "suitability",
+          "start": 51,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "still",
+          "start": 63,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "requires",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "qualified",
+          "start": 78,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "review",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "safety-data-sheet.chemical-hazard-document.n",
+        "respirator.device-intended-to-reduce-inhalation-of-specified-contaminants.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module08.05",
+      "text": "The building evacuation briefing identifies the assembly point, while the task briefing addresses manual handling.",
+      "meaning": "Distinguish evacuation information from task-specific handling information.",
+      "context": "A site-building briefing without evacuation or lifting instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "building",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "evacuation",
+          "start": 13,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "briefing",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 4,
+          "text": "identifies",
+          "start": 33,
+          "end": 43
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "assembly",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 7,
+          "text": "point",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "while",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "task",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "briefing",
+          "start": 79,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "addresses",
+          "start": 88,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": "manual",
+          "start": 98,
+          "end": 104
+        },
+        {
+          "index": 15,
+          "text": "handling",
+          "start": 105,
+          "end": 113
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 113,
+          "end": 114
+        }
+      ],
+      "focus_lexeme_ids": [
+        "assembly-point.designated-meeting-place.n",
+        "manual-handling.human-load-movement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module08.06",
+      "text": "The inspection record distinguishes a leak from corrosion and notes the crack location without drawing a structural conclusion.",
+      "meaning": "Describe separate observed conditions.",
+      "context": "Reporting evidence for specialist assessment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "inspection",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "distinguishes",
+          "start": 22,
+          "end": 35
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "leak",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "from",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "corrosion",
+          "start": 48,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "notes",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "crack",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "location",
+          "start": 78,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "without",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 14,
+          "text": "drawing",
+          "start": 95,
+          "end": 102
+        },
+        {
+          "index": 15,
+          "text": "a",
+          "start": 103,
+          "end": 104
+        },
+        {
+          "index": 16,
+          "text": "structural",
+          "start": 105,
+          "end": 115
+        },
+        {
+          "index": 17,
+          "text": "conclusion",
+          "start": 116,
+          "end": 126
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 126,
+          "end": 127
+        }
+      ],
+      "focus_lexeme_ids": [
+        "leak.unintended-escape.n",
+        "corrosion.material-deterioration-through-chemical-or-electrochemical-action.n",
+        "crack.narrow-break-or-split-in-material.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module08.07",
+      "text": "The quality check identified a nonconformity against a stated requirement.",
+      "meaning": "Link a quality concern to the requirement it failed to meet.",
+      "context": "Discussing a fictional quality finding without prescribing a repair.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "quality",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "identified",
+          "start": 18,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "nonconformity",
+          "start": 31,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "against",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "stated",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "requirement",
+          "start": 62,
+          "end": 73
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "quality-check.standard-conformity-check.n",
+        "nonconformity.failure-to-meet-stated-requirement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module08.08",
+      "text": "The hard hat, safety glasses, and hearing protection specifications need confirmation for the assigned work.",
+      "meaning": "Request task-specific confirmation of protective-equipment information.",
+      "context": "A communication exercise without equipment-selection advice.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "hard",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "hat",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 12,
+          "end": 13
+        },
+        {
+          "index": 4,
+          "text": "safety",
+          "start": 14,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "glasses",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": "hearing",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "protection",
+          "start": 42,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "specifications",
+          "start": 53,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "need",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "confirmation",
+          "start": 73,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": "for",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "assigned",
+          "start": 94,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": "work",
+          "start": 103,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hard-hat.protective-headgear-for-specified-workplace-hazards.n",
+        "safety-glasses.eyewear-protecting-against-specified-workplace-hazards.n",
+        "hearing-protection.equipment-reducing-exposure-to-sound-at-ear.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module08.09",
+      "text": "The hot work record names the fire watch responsibility, and the electrical hazard has been referred to qualified personnel.",
+      "meaning": "Report responsibilities and a referred hazard.",
+      "context": "Reading actual controlled-work arrangements without operating instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "hot",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "work",
+          "start": 8,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "record",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "names",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "fire",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "watch",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "responsibility",
+          "start": 41,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "electrical",
+          "start": 65,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "hazard",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "has",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "been",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "referred",
+          "start": 92,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 101,
+          "end": 103
+        },
+        {
+          "index": 18,
+          "text": "qualified",
+          "start": 104,
+          "end": 113
+        },
+        {
+          "index": 19,
+          "text": "personnel",
+          "start": 114,
+          "end": 123
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 123,
+          "end": 124
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hot-work.work-producing-heat-sparks-or-flame-that-may-ignite-material.n",
+        "fire-watch.designated-monitoring-for-fire-related-risks.n",
+        "electrical-hazard.condition-presenting-risk-from-electrical-energy.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module08.10",
+      "text": "The confined space and excavation collapse concerns require specialist assessment; the working at height plan and fall protection arrangements are also under review.",
+      "meaning": "Report several unresolved planning reviews.",
+      "context": "A coordination update that supplies no entry, rescue, excavation, or height-work method.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "confined",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "space",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "excavation",
+          "start": 23,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "collapse",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "concerns",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "require",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 8,
+          "text": "specialist",
+          "start": 60,
+          "end": 70
+        },
+        {
+          "index": 9,
+          "text": "assessment",
+          "start": 71,
+          "end": 81
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 12,
+          "text": "working",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 13,
+          "text": "at",
+          "start": 95,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": "height",
+          "start": 98,
+          "end": 104
+        },
+        {
+          "index": 15,
+          "text": "plan",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 110,
+          "end": 113
+        },
+        {
+          "index": 17,
+          "text": "fall",
+          "start": 114,
+          "end": 118
+        },
+        {
+          "index": 18,
+          "text": "protection",
+          "start": 119,
+          "end": 129
+        },
+        {
+          "index": 19,
+          "text": "arrangements",
+          "start": 130,
+          "end": 142
+        },
+        {
+          "index": 20,
+          "text": "are",
+          "start": 143,
+          "end": 146
+        },
+        {
+          "index": 21,
+          "text": "also",
+          "start": 147,
+          "end": 151
+        },
+        {
+          "index": 22,
+          "text": "under",
+          "start": 152,
+          "end": 157
+        },
+        {
+          "index": 23,
+          "text": "review",
+          "start": 158,
+          "end": 164
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 164,
+          "end": 165
+        }
+      ],
+      "focus_lexeme_ids": [
+        "confined-space.enclosed-space-subject-to-specific-serious-risk-controls.n",
+        "excavation-collapse.failure-of-ground-at-excavated-opening.n",
+        "working-at-height.work-where-fall-could-cause-injury.n",
+        "fall-protection.arrangements-intended-to-prevent-or-limit-harm-from-falls.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

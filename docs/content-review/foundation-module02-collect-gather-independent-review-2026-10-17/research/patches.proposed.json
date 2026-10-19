@@ -1,0 +1,578 @@
+{
+  "schema": 1,
+  "status": "unaccepted_coordinated_repair_proposal_only",
+  "lexeme": {
+    "id": "collect.gather.v",
+    "file": "data/professional/lexemes/foundation-module02.json",
+    "before_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+    "after_sha256": "7e192777256f224040f45d70c4421e1eb2dc15234b82f712a1af1e585d48f004",
+    "changed_fields": [
+      "definition",
+      "example",
+      "difficulty",
+      "media.image.brief",
+      "references",
+      "editorial_notes"
+    ],
+    "protected_projection_sha256": "a1784509e550361ca02aad74b30440d9be925c0b1db1737f8b1e642a7db050ad",
+    "before": {
+      "id": "collect.gather.v",
+      "text": "collect",
+      "display_text": "collect",
+      "pos": "verb",
+      "definition": "To gather items together or pick them up from a place.",
+      "example": "Please collect the documents from reception.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "collect"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly worker picking up an agreed set of fictional documents from reception; show the pickup context clearly, with no money collection or private information.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "collect.gather.v.analysis.v1",
+        "lexeme_id": "collect.gather.v",
+        "text": "collect",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "type": "atomic",
+            "canonical": "collect",
+            "surface": "collect",
+            "canonical_id": "morph.collect"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Workplace communication context only; this original definition and example await term-level review."
+        }
+      ],
+      "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The assessment explicitly uses picking up items from a place. The general gathering identity is retained; collection of money is outside this example."
+    },
+    "after": {
+      "id": "collect.gather.v",
+      "text": "collect",
+      "display_text": "collect",
+      "pos": "verb",
+      "definition": "To bring items from several people or places into one group.",
+      "example": "Please collect one completed form from each team.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "collect"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a friendly worker gathering fictional completed forms from three separate teams into one folder. Keep the separate sources and the one growing set clear: one colleague hands over a form while forms from the other teams are already together. Use ordinary workplace characters, a folder and full-size form props from suitable sourced assets. Exclude a reception pickup of a preassembled bundle, money, hobby collections and private information. Do not depend on tiny labels or arrows to explain the action. This is a pending art brief; source selection and actual-size picture suitability still require review.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "collect.gather.v.analysis.v1",
+        "lexeme_id": "collect.gather.v",
+        "text": "collect",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "type": "atomic",
+            "canonical": "collect",
+            "surface": "collect",
+            "canonical_id": "morph.collect"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Workplace communication context only; this original definition and example await term-level review."
+        },
+        {
+          "source_id": "foundation02-collect-repair-oxford-collect",
+          "status": "pending_term_check",
+          "scope": "Consulted selected gathering sense and source-specific level evidence for this unaccepted coordinated repair. B1 is proposed editorial placement; source consultation does not release the historical whole-entry hold or approve the new example, image brief or dependent expression."
+        },
+        {
+          "source_id": "foundation02-collect-repair-collins-collect",
+          "status": "pending_term_check",
+          "scope": "Consulted selected gathering sense and source-specific level evidence for this unaccepted coordinated repair. B1 is proposed editorial placement; source consultation does not release the historical whole-entry hold or approve the new example, image brief or dependent expression."
+        }
+      ],
+      "editorial_notes": "Shared workplace foundation. This unaccepted coordinated repair retains collect.gather.v for intentionally gathering items from several people or places into one group. The example uses one completed form from each team, replacing the former reception-pickup example. Proposed editorial difficulty is B1: Oxford gathering A2 and Collins gathering B1 are kept distinct, with no level borrowed from pickup, hobby collecting or a page footer. The general region is retained for the gathering use; pickup regional guidance does not restrict this sense. The revised pending image brief must show multiple sources becoming one set. The exact whole-entry hold remains historical; independent language/context, picture-suitability, morphology and audio decisions remain pending. Retaining declared practice modes is not release or visual acceptance. Source consultation does not approve the dependent expression, a complete module or any professional procedure."
+    }
+  },
+  "expression": {
+    "id": "expr.foundation.module02.08",
+    "file": "data/professional/expressions/foundation-module02.json",
+    "before_sha256": "f3cc73cccd14dbbe07ccf7c14632119e81107907529721fb626c8c914eb5e6d3",
+    "after_sha256": "df463c8f619cda04d38d32014f640e6cc721f7d7b24e1ab2fac4dc76b9775d54",
+    "changed_fields": [
+      "text",
+      "meaning",
+      "context",
+      "tokens",
+      "references"
+    ],
+    "protected_projection_sha256": "41cd875020c32df1cfbf8a960405ccf9c55764de24a1ce236410fe93c4cd2049",
+    "before": {
+      "id": "expr.foundation.module02.08",
+      "text": "Could you assist me while I collect the documents from reception and return the key?",
+      "meaning": "Ask for help with picking up documents and giving a key back.",
+      "context": "A worker coordinates routine errands with a colleague.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "assist",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "me",
+          "start": 17,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "while",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "I",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "collect",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "documents",
+          "start": 40,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "from",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "reception",
+          "start": 55,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "return",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "key",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "?",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "assist.help.v",
+        "collect.gather.v",
+        "return.send-back.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    "after": {
+      "id": "expr.foundation.module02.08",
+      "text": "Could you assist me while I collect one form from each team and return the borrowed key?",
+      "meaning": "Ask a colleague to help gather forms from several teams and give a borrowed key back.",
+      "context": "A worker gathers one fictional workshop form from each of three teams and gives a borrowed meeting-room key back to reception.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "assist",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "me",
+          "start": 17,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "while",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "I",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "collect",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "one",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "form",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "from",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "each",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "team",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "return",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": "borrowed",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "key",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "?",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "assist.help.v",
+        "collect.gather.v",
+        "return.send-back.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        },
+        {
+          "source_id": "foundation02-collect-repair-oxford-collect",
+          "status": "pending_term_check",
+          "scope": "The proposed form-from-each-team clause assesses gathering, not reception pickup. This source consultation does not independently approve the exact sentence, tokenization, focus binding, courtesy/register or context."
+        },
+        {
+          "source_id": "foundation02-collect-repair-collins-collect",
+          "status": "pending_term_check",
+          "scope": "The proposed form-from-each-team clause assesses gathering, not reception pickup. This source consultation does not independently approve the exact sentence, tokenization, focus binding, courtesy/register or context."
+        },
+        {
+          "source_id": "foundation02-language-third10-oxford-assist",
+          "status": "pending_term_check",
+          "scope": "The separately accepted assist.help.v sense is helping a person with an activity. Fresh Oxford assist sense 1 also supports assist plus a person and marks the verb formal. The exact new expression still awaits independent review."
+        },
+        {
+          "source_id": "foundation02-language-second10-collins-return",
+          "status": "pending_term_check",
+          "scope": "The separately accepted return.send-back.v sense is giving a borrowed item back. Fresh Collins COBUILD return sense 3 supports this selected use; the new borrowed-key wording and reception context exclude purchased-goods returns and intransitive travel. The exact expression is unaccepted."
+        }
+      ]
+    }
+  },
+  "membership_changes": [],
+  "canonical_identity_changes": [],
+  "progress_aliases": [],
+  "gate_changes": [],
+  "final_production_source_test_registry_binding": null
+}

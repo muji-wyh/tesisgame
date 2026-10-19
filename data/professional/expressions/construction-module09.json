@@ -1,0 +1,1595 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.construction_trades.module09.01",
+      "text": "The purchase order reference differs from the delivery note and packing list.",
+      "meaning": "Report inconsistent commercial and delivery references.",
+      "context": "Reconciling records without accepting the goods automatically.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "purchase",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "order",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "reference",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "differs",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "from",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "delivery",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "note",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "packing",
+          "start": 64,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "list",
+          "start": 72,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "purchase-order.buyer-order-document.n",
+        "delivery-note.delivered-goods-document.n",
+        "packing-list.package-contents-list.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module09.02",
+      "text": "The invoice amount needs checking against the agreed quotation and the recorded change order.",
+      "meaning": "Request verification of commercial records.",
+      "context": "A project-record query without a legal or payment decision.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "invoice",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "amount",
+          "start": 12,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "needs",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "checking",
+          "start": 25,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "against",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "agreed",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "quotation",
+          "start": 53,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "recorded",
+          "start": 71,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "change",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "order",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 92,
+          "end": 93
+        }
+      ],
+      "focus_lexeme_ids": [
+        "invoice.commercial-document-itemizing-amounts-due.n",
+        "quotation.statement-of-proposed-price.n",
+        "change-order.formal-record-authorizing-project-change.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module09.03",
+      "text": "The transmittal lists the drawing issue and its revision status.",
+      "meaning": "Identify the information accompanying a formal document release.",
+      "context": "Checking which drawings and revisions were transmitted.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "transmittal",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "lists",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "drawing",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "issue",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "its",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "revision",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "status",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 63,
+          "end": 64
+        }
+      ],
+      "focus_lexeme_ids": [
+        "transmittal.record-accompanying-formal-transfer-of-documents.n",
+        "drawing-issue.formal-release-of-drawing-for-stated-purpose.n",
+        "revision-status.state-of-document-revision-and-its-validity-for-use.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module09.04",
+      "text": "The inspection report and test report need the correct material certificate reference.",
+      "meaning": "Connect quality records to the relevant material evidence.",
+      "context": "Checking document identity and scope.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "inspection",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "report",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "test",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "report",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "need",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "correct",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "material",
+          "start": 55,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "certificate",
+          "start": 64,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": "reference",
+          "start": 76,
+          "end": 85
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "inspection-report.record-of-inspection-findings.n",
+        "test-report.record-of-test-method-conditions-and-results.n",
+        "material-certificate.document-stating-material-identity-or-specified-properties.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module09.05",
+      "text": "The daily report and site diary both record the delay, but only one includes the progress photograph reference.",
+      "meaning": "Compare evidence links in two site records.",
+      "context": "Reconciling factual records of a site event.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "daily",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "report",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "site",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "diary",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "both",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "record",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "delay",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "but",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "only",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "one",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": "includes",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 16,
+          "text": "progress",
+          "start": 81,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "photograph",
+          "start": 90,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": "reference",
+          "start": 101,
+          "end": 110
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 110,
+          "end": 111
+        }
+      ],
+      "focus_lexeme_ids": [
+        "daily-report.summary-of-events-during-day.n",
+        "site-diary.chronological-record-of-site-activities-and-events.n",
+        "progress-photograph.image-recording-work-progress-at-stated-time.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module09.06",
+      "text": "The request for information asks for clarification, while the technical submittal presents the proposed product details for review.",
+      "meaning": "Distinguish a clarification request from a submission for review.",
+      "context": "Coordinating two different document purposes.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "request",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "for",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "information",
+          "start": 16,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "asks",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "for",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "clarification",
+          "start": 37,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "while",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "technical",
+          "start": 62,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "submittal",
+          "start": 72,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "presents",
+          "start": 82,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 14,
+          "text": "proposed",
+          "start": 95,
+          "end": 103
+        },
+        {
+          "index": 15,
+          "text": "product",
+          "start": 104,
+          "end": 111
+        },
+        {
+          "index": 16,
+          "text": "details",
+          "start": 112,
+          "end": 119
+        },
+        {
+          "index": 17,
+          "text": "for",
+          "start": 120,
+          "end": 123
+        },
+        {
+          "index": 18,
+          "text": "review",
+          "start": 124,
+          "end": 130
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 130,
+          "end": 131
+        }
+      ],
+      "focus_lexeme_ids": [
+        "request-for-information.formal-request-clarifying-project-information.n",
+        "technical-submittal.information-submitted-for-technical-review.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module09.07",
+      "text": "The maintenance manual and operation manual must match the installed equipment identified in the asset register.",
+      "meaning": "Check that handover references identify the correct equipment.",
+      "context": "Reviewing document identity without demonstrating equipment use.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "maintenance",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "manual",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "operation",
+          "start": 27,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "manual",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "must",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "match",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "installed",
+          "start": 59,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "equipment",
+          "start": 69,
+          "end": 78
+        },
+        {
+          "index": 11,
+          "text": "identified",
+          "start": 79,
+          "end": 89
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 90,
+          "end": 92
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 14,
+          "text": "asset",
+          "start": 97,
+          "end": 102
+        },
+        {
+          "index": 15,
+          "text": "register",
+          "start": 103,
+          "end": 111
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "maintenance-manual.reference-describing-maintenance-requirements-for-asset.n",
+        "operation-manual.reference-describing-intended-operation-of-equipment.n",
+        "asset-register.record-of-organizations-tracked-equipment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module09.08",
+      "text": "The material approval and sample approval apply only to the products and finishes stated in each record.",
+      "meaning": "Clarify the scope of two acceptance records.",
+      "context": "Discussing recorded decisions without implying broader approval.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "material",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "approval",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "sample",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "approval",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "apply",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "only",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "products",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "finishes",
+          "start": 73,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "stated",
+          "start": 82,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "in",
+          "start": 89,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "each",
+          "start": 92,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "record",
+          "start": 97,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "material-approval.acceptance-of-material-for-defined-project-use.n",
+        "sample-approval.acceptance-of-submitted-sample-under-defined-criteria.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module09.09",
+      "text": "The bill of quantities and cost estimate need review against the revised measurement record.",
+      "meaning": "Connect quantity and cost information to its stated basis.",
+      "context": "Reviewing records without calculating a price or contractual entitlement.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "bill",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "of",
+          "start": 9,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "quantities",
+          "start": 12,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "cost",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "estimate",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "need",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "review",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "against",
+          "start": 53,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "revised",
+          "start": 65,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "measurement",
+          "start": 73,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "record",
+          "start": 85,
+          "end": 91
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bill-of-quantities.itemized-document-of-measured-construction-work.n",
+        "cost-estimate.assessment-of-expected-cost-under-stated-assumptions.n",
+        "measurement-record.record-of-measured-values-and-relevant-conditions.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module09.10",
+      "text": "The clash report identifies a conflict in the building information model, and the related sign-off is still pending.",
+      "meaning": "Report a coordination issue and its review status.",
+      "context": "Discussing model evidence without assuming a design decision.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "clash",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "report",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "identifies",
+          "start": 17,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "conflict",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "in",
+          "start": 39,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "building",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "information",
+          "start": 55,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "model",
+          "start": 67,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 72,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "related",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "sign-off",
+          "start": 90,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": "is",
+          "start": 99,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": "still",
+          "start": 102,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": "pending",
+          "start": 108,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 115,
+          "end": 116
+        }
+      ],
+      "focus_lexeme_ids": [
+        "clash-report.record-of-identified-conflicts-between-design-elements.n",
+        "building-information-model.digital-representation-of-built-asset-and-associated-information.n",
+        "sign-off.recorded-acceptance-or-authorization-with-stated-scope.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

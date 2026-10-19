@@ -1,0 +1,1351 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.it_support.module04.01",
+      "text": "The application uses memory while its process is running.",
+      "meaning": "A program uses working storage during execution.",
+      "context": "Describing application resources",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "application",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "uses",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "memory",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "while",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "its",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "process",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "is",
+          "start": 46,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "running",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": ".",
+          "start": 56,
+          "end": 57
+        }
+      ],
+      "focus_lexeme_ids": [
+        "application.task-oriented-software.n",
+        "memory.working-data-storage.n",
+        "process.running-program-instance.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module04.02",
+      "text": "The firmware version and peripheral model are recorded in the device specification.",
+      "meaning": "The equipment record identifies embedded software and the connected device.",
+      "context": "Checking equipment details",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "firmware",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "version",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "peripheral",
+          "start": 25,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "model",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "recorded",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "in",
+          "start": 55,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "device",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "specification",
+          "start": 69,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "firmware.software-embedded-in-hardware-device.n",
+        "peripheral.device-connected-to-computer-for-additional-function.n",
+        "device-specification.documented-characteristics-of-device.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module04.03",
+      "text": "This service uses a cache, but its storage requirements still need review.",
+      "meaning": "The background component reuses stored results and has data-retention requirements.",
+      "context": "Discussing a system component",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "service",
+          "start": 5,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "uses",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "cache",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "but",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "its",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 8,
+          "text": "storage",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "requirements",
+          "start": 43,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "still",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "need",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "review",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "service.background-system-program.n",
+        "cache.reusable-result-store.n",
+        "storage.capacity-or-system-for-retaining-digital-data.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module04.04",
+      "text": "The Wi-Fi connection works locally, but the internet and intranet are unavailable.",
+      "meaning": "Local wireless connectivity does not establish access to either external or internal services.",
+      "context": "Reporting connectivity scope",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "Wi-Fi",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "connection",
+          "start": 10,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "works",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "locally",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "but",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "internet",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "intranet",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "are",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "unavailable",
+          "start": 70,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "wi-fi.wireless-networking-technology-for-local-connections.n",
+        "internet.global-system-of-interconnected-networks.n",
+        "intranet.private-organizational-network-or-information-site.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module04.05",
+      "text": "The report identifies Bluetooth and DHCP as separate communication and configuration technologies.",
+      "meaning": "The two terms describe different technical functions.",
+      "context": "Clarifying technical terms",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "identifies",
+          "start": 11,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "Bluetooth",
+          "start": 22,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "DHCP",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "as",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "separate",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "communication",
+          "start": 53,
+          "end": 66
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": "configuration",
+          "start": 71,
+          "end": 84
+        },
+        {
+          "index": 11,
+          "text": "technologies",
+          "start": 85,
+          "end": 97
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bluetooth.short-range-wireless-device-communication-technology.n",
+        "dhcp.automatic-network-configuration-protocol.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module04.06",
+      "text": "The protocol details and DNS records are for the network team's review.",
+      "meaning": "The responsible team will review communication rules and name-system information.",
+      "context": "Referring network information",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "protocol",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "details",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "DNS",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "records",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "for",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "network",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "team's",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "review",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "protocol.communication-rules.n",
+        "dns.domain-name-system.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module04.07",
+      "text": "The diagnostic summary records a lost packet and unusually high latency.",
+      "meaning": "The observations concern a missing data unit and a measured delay.",
+      "context": "Describing network observations",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "diagnostic",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "summary",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "records",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "lost",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "packet",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "unusually",
+          "start": 49,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "high",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "latency",
+          "start": 64,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 71,
+          "end": 72
+        }
+      ],
+      "focus_lexeme_ids": [
+        "packet.unit-of-data-transmitted-on-network.n",
+        "latency.operation-completion-delay.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module04.08",
+      "text": "The record identifies the volume, partition, and file system without assuming a one-to-one relationship.",
+      "meaning": "The record distinguishes logical storage, a storage division, and file organization.",
+      "context": "Describing recorded storage structure",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "record",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "identifies",
+          "start": 11,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "volume",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "partition",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "file",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "system",
+          "start": 54,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "without",
+          "start": 61,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "assuming",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "a",
+          "start": 78,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "one-to-one",
+          "start": 80,
+          "end": 90
+        },
+        {
+          "index": 15,
+          "text": "relationship",
+          "start": 91,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "volume.storage-region.n",
+        "partition.defined-division-of-storage-device.n",
+        "file-system.method-of-organizing-and-storing-files.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module04.09",
+      "text": "The virtual machine has a different display resolution from the host.",
+      "meaning": "The simulated computer uses different display pixel dimensions.",
+      "context": "Comparing computing environments",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "virtual",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "machine",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "has",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "different",
+          "start": 26,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "display",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "resolution",
+          "start": 44,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "from",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "host",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 68,
+          "end": 69
+        }
+      ],
+      "focus_lexeme_ids": [
+        "virtual-machine.simulated-computer.n",
+        "resolution.display-pixel-count.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module04.10",
+      "text": "Compatibility depends on the processor architecture and the stated system requirement.",
+      "meaning": "The relevant designs and conditions determine whether the components work together.",
+      "context": "Reviewing compatibility",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Compatibility",
+          "start": 0,
+          "end": 13
+        },
+        {
+          "index": 1,
+          "text": "depends",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 2,
+          "text": "on",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "processor",
+          "start": 29,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": "architecture",
+          "start": 39,
+          "end": 51
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 8,
+          "text": "stated",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 9,
+          "text": "system",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 10,
+          "text": "requirement",
+          "start": 74,
+          "end": 85
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "compatibility.ability-of-components-to-work-together-as-intended.n",
+        "architecture.processor-design-family.n",
+        "system-requirement.condition-needed-for-software-or-system-operation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

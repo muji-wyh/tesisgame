@@ -1,0 +1,1819 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.warehouse_logistics.module05.01",
+      "text": "Who is authorized to receive this shipment, count and inspect the items, and record the delivery?",
+      "meaning": "Clarify responsibility for receiving and checking goods.",
+      "context": "A worker confirms assigned receiving tasks.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Who",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "is",
+          "start": 4,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "authorized",
+          "start": 7,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "receive",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "this",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "shipment",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "count",
+          "start": 44,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "inspect",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "items",
+          "start": 66,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "record",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "delivery",
+          "start": 88,
+          "end": 96
+        },
+        {
+          "index": 18,
+          "text": "?",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "receive.take-delivery-of-incoming-goods.v",
+        "record.store-observed-information.v",
+        "count.find-number.v",
+        "inspect.examine-visually.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module05.02",
+      "text": "Please select the order to pick, retrieve its task record, and confirm where to store the remaining stock.",
+      "meaning": "Clarify the selected picking task and storage destination.",
+      "context": "A worker checks the current order instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "select",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "order",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 24,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "pick",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "retrieve",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "its",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "task",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "record",
+          "start": 51,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "confirm",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "where",
+          "start": 71,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "to",
+          "start": 77,
+          "end": 79
+        },
+        {
+          "index": 16,
+          "text": "store",
+          "start": 80,
+          "end": 85
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 18,
+          "text": "remaining",
+          "start": 90,
+          "end": 99
+        },
+        {
+          "index": 19,
+          "text": "stock",
+          "start": 100,
+          "end": 105
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 105,
+          "end": 106
+        }
+      ],
+      "focus_lexeme_ids": [
+        "pick.select-stock-for-an-order.v",
+        "store.keep-goods-in-suitable-location.v",
+        "select.choose-option.v",
+        "retrieve.find-and-obtain-stored-item.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module05.03",
+      "text": "The task record identifies where the authorized team will stow and load the goods, and who will tidy and clean the area.",
+      "meaning": "Describe assigned handling and housekeeping responsibilities.",
+      "context": "A team checks the task record without receiving equipment-use instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "task",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 9,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "identifies",
+          "start": 16,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "where",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "authorized",
+          "start": 37,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "team",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "will",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "stow",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "load",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "goods",
+          "start": 76,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "who",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "will",
+          "start": 91,
+          "end": 95
+        },
+        {
+          "index": 18,
+          "text": "tidy",
+          "start": 96,
+          "end": 100
+        },
+        {
+          "index": 19,
+          "text": "and",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 20,
+          "text": "clean",
+          "start": 105,
+          "end": 110
+        },
+        {
+          "index": 21,
+          "text": "the",
+          "start": 111,
+          "end": 114
+        },
+        {
+          "index": 22,
+          "text": "area",
+          "start": 115,
+          "end": 119
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 119,
+          "end": 120
+        }
+      ],
+      "focus_lexeme_ids": [
+        "stow.place-goods-in-assigned-storage-position.v",
+        "load.put-goods-for-transport.v",
+        "tidy.put-things-in-order.v",
+        "clean.remove-dirt-or-unwanted-material.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module05.04",
+      "text": "Ask which orders to consolidate, which incoming shipment the team must deconsolidate, and how to sort the separated items.",
+      "meaning": "Clarify grouping and separation of goods.",
+      "context": "A worker asks for the approved order-handling plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "which",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "orders",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 17,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "consolidate",
+          "start": 20,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "which",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "incoming",
+          "start": 39,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "shipment",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "team",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "must",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "deconsolidate",
+          "start": 71,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "how",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 94,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": "sort",
+          "start": 97,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 102,
+          "end": 105
+        },
+        {
+          "index": 19,
+          "text": "separated",
+          "start": 106,
+          "end": 115
+        },
+        {
+          "index": 20,
+          "text": "items",
+          "start": 116,
+          "end": 121
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 121,
+          "end": 122
+        }
+      ],
+      "focus_lexeme_ids": [
+        "consolidate.combine-goods-or-orders-into-group.v",
+        "deconsolidate.separate-grouped-shipment-into-parts.v",
+        "sort.group-by-kind.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module05.05",
+      "text": "The trained team will compare the approved instructions, document any discrepancy, and confirm whether to palletize or depalletize this load.",
+      "meaning": "Check instructions and record a discrepancy before handling.",
+      "context": "An authorized team confirms the required activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "trained",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "team",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "will",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "compare",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "approved",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "instructions",
+          "start": 43,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "document",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "any",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "discrepancy",
+          "start": 70,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "confirm",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "whether",
+          "start": 95,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 103,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": "palletize",
+          "start": 106,
+          "end": 115
+        },
+        {
+          "index": 18,
+          "text": "or",
+          "start": 116,
+          "end": 118
+        },
+        {
+          "index": 19,
+          "text": "depalletize",
+          "start": 119,
+          "end": 130
+        },
+        {
+          "index": 20,
+          "text": "this",
+          "start": 131,
+          "end": 135
+        },
+        {
+          "index": 21,
+          "text": "load",
+          "start": 136,
+          "end": 140
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 140,
+          "end": 141
+        }
+      ],
+      "focus_lexeme_ids": [
+        "palletize.arrange-goods-on-pallet.v",
+        "depalletize.remove-goods-from-pallet.v",
+        "compare.examine-differences.v",
+        "document.make-care-record.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module05.06",
+      "text": "Ask the responsible specialist to review how to secure this load before transport, and escalate any unresolved concern.",
+      "meaning": "Seek qualified guidance and refer unresolved concerns.",
+      "context": "A worker asks the responsible specialist about load security.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "responsible",
+          "start": 8,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "specialist",
+          "start": 20,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 31,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "review",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "how",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "secure",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "load",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "before",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "transport",
+          "start": 72,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "escalate",
+          "start": 87,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "any",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 17,
+          "text": "unresolved",
+          "start": 100,
+          "end": 110
+        },
+        {
+          "index": 18,
+          "text": "concern",
+          "start": 111,
+          "end": 118
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 118,
+          "end": 119
+        }
+      ],
+      "focus_lexeme_ids": [
+        "secure.fasten-load-under-required-arrangements.v",
+        "review.reconsider-care-information.v",
+        "escalate.refer-for-higher-or-specialist-attention.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module05.07",
+      "text": "Please identify the damaged package and confirm the approved instruction before the authorized team decides whether to seal or repack it.",
+      "meaning": "Identify a package and seek an authorized handling decision.",
+      "context": "A worker checks the instruction for damaged packaging.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "identify",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "damaged",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "package",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "confirm",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "approved",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "instruction",
+          "start": 61,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 73,
+          "end": 79
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": "authorized",
+          "start": 84,
+          "end": 94
+        },
+        {
+          "index": 13,
+          "text": "team",
+          "start": 95,
+          "end": 99
+        },
+        {
+          "index": 14,
+          "text": "decides",
+          "start": 100,
+          "end": 107
+        },
+        {
+          "index": 15,
+          "text": "whether",
+          "start": 108,
+          "end": 115
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 116,
+          "end": 118
+        },
+        {
+          "index": 17,
+          "text": "seal",
+          "start": 119,
+          "end": 123
+        },
+        {
+          "index": 18,
+          "text": "or",
+          "start": 124,
+          "end": 126
+        },
+        {
+          "index": 19,
+          "text": "repack",
+          "start": 127,
+          "end": 133
+        },
+        {
+          "index": 20,
+          "text": "it",
+          "start": 134,
+          "end": 136
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 136,
+          "end": 137
+        }
+      ],
+      "focus_lexeme_ids": [
+        "seal.close-package-with-specified-seal.v",
+        "repack.pack-goods-again.v",
+        "identify.establish-identity-or-nature.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module05.08",
+      "text": "The quality team will decide whether to segregate or quarantine the affected stock.",
+      "meaning": "Refer stock separation and controlled-hold decisions to the responsible team.",
+      "context": "Reporting a possible stock-quality issue.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "quality",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "team",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "will",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "decide",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "whether",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 37,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "segregate",
+          "start": 40,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "or",
+          "start": 50,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "quarantine",
+          "start": 53,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "affected",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "stock",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "segregate.keep-specified-goods-separate.v",
+        "quarantine.hold-goods-apart-pending-decision.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module05.09",
+      "text": "Confirm which stock the planner may allocate or release, who will replenish the picking area, and when the team may dispatch the held items.",
+      "meaning": "Clarify stock allocation, replenishment, and dispatch authority.",
+      "context": "A team confirms responsibility before changing held stock.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "which",
+          "start": 8,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "stock",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "planner",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "may",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "allocate",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "or",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "release",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "who",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "will",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "replenish",
+          "start": 66,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "picking",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "area",
+          "start": 88,
+          "end": 92
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 92,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "when",
+          "start": 98,
+          "end": 102
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 103,
+          "end": 106
+        },
+        {
+          "index": 20,
+          "text": "team",
+          "start": 107,
+          "end": 111
+        },
+        {
+          "index": 21,
+          "text": "may",
+          "start": 112,
+          "end": 115
+        },
+        {
+          "index": 22,
+          "text": "dispatch",
+          "start": 116,
+          "end": 124
+        },
+        {
+          "index": 23,
+          "text": "the",
+          "start": 125,
+          "end": 128
+        },
+        {
+          "index": 24,
+          "text": "held",
+          "start": 129,
+          "end": 133
+        },
+        {
+          "index": 25,
+          "text": "items",
+          "start": 134,
+          "end": 139
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 139,
+          "end": 140
+        }
+      ],
+      "focus_lexeme_ids": [
+        "allocate.assign-stock-to-specified-demand.v",
+        "release.remove-controlled-hold-under-authority.v",
+        "replenish.restore-supply.v",
+        "dispatch.send-item-toward-destination.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module05.10",
+      "text": "The supervisor asked the authorized team to recount the stock, reweigh the shipment, and reconcile any differences in the records.",
+      "meaning": "Check quantities and investigate differences between records.",
+      "context": "A supervisor assigns follow-up checks.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "supervisor",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "asked",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "authorized",
+          "start": 25,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "team",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "recount",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "stock",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "reweigh",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "shipment",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 83,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "reconcile",
+          "start": 89,
+          "end": 98
+        },
+        {
+          "index": 17,
+          "text": "any",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 18,
+          "text": "differences",
+          "start": 103,
+          "end": 114
+        },
+        {
+          "index": 19,
+          "text": "in",
+          "start": 115,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 118,
+          "end": 121
+        },
+        {
+          "index": 21,
+          "text": "records",
+          "start": 122,
+          "end": 129
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 129,
+          "end": 130
+        }
+      ],
+      "focus_lexeme_ids": [
+        "recount.count-items-again.v",
+        "reweigh.weigh-goods-again.v",
+        "reconcile.match-financial-records.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-stockers-order-fillers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

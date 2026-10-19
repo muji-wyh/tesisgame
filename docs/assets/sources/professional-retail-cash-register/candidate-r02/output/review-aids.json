@@ -1,0 +1,121 @@
+{
+  "scope": "Static review-aid assembly only; candidate PNG and native crops are unchanged.",
+  "candidate_acceptance": false,
+  "cue_visibility_acceptance": false,
+  "historical_inputs": [
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\cash-register-r04\\candidate-r02\\output\\match-unmatched.png",
+      "sha256": "dbe7d62c3a1a2060f261fe8bd57ade724da013a66158db6ef0c7c540b0de61cb"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\cash-register-r04\\candidate-r02\\output\\match-matched.png",
+      "sha256": "620e636eafd3138e50d22fb8f415ec13e4d136dfa5645222db1bad9ee7708f5a"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\cash-register-r04\\candidate-r02\\output\\memory-unmatched.png",
+      "sha256": "061f44ac132a8fb5b9b7cfc5c1bd3cef35c0521dac7f382ea4d77ce9530d147a"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\cash-register-r04\\candidate-r02\\output\\memory-matched.png",
+      "sha256": "15f257e70cc015128b8f94d98288bd075a26ea5a93d1c6a7b25f0ab7b79886e3"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\shopping-cart\\candidate\\match-unmatched.png",
+      "sha256": "f5c678d7ca08af308022518ddfecb7cbf70bd44b017b4f7001f55ad20a7664bd"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\shopping-cart\\candidate\\match-matched.png",
+      "sha256": "c7d468da7bfd675d9c70819a3f9d9c2e8bcfad627e6ccb96ba6f9ddab4f63d25"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\shopping-cart\\candidate\\memory-unmatched.png",
+      "sha256": "0da3064336403592ab1fc6b548a2bc5ba86fd5aa992902694b1ed4e63df28774"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\shopping-cart\\candidate\\memory-matched.png",
+      "sha256": "a63eb551207dbc6b977058826783fab4255f65d1a634409c0bd94bb468b0a782"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\shopping-basket\\candidate\\match-unmatched.png",
+      "sha256": "fc39c372a23a33e1c2663e503ed20fb055e093f1c834d255706df6bfb9deb83b"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\shopping-basket\\candidate\\match-matched.png",
+      "sha256": "564c443bcd54dd9b1c212b827f38f82b56d09d24285d9d44fc16bb73ce16e9c0"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\shopping-basket\\candidate\\memory-unmatched.png",
+      "sha256": "9aad34703dd9102b8bb27e937ebaba3c630c5b4f7e44914b0cc53f32994505cd"
+    },
+    {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\shopping-basket\\candidate\\memory-matched.png",
+      "sha256": "07f2bfdbd992edb09b25f2881b4b76046520e922caea3202e48ddefc0ea8128b"
+    }
+  ],
+  "source_render": {
+    "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\cash-register-r04\\candidate-r02\\output\\render-raw.png",
+    "sha256": "cd3c9ba5bd9ae299d48384a63300cde2ee619e7e7704bbe3d444634eef6f7e89"
+  },
+  "source_region_basis": "Manually observed rectangles in the exact inspected 768 x 768 positive-z-right-low source capture. Same camera/centering is used by the candidate.",
+  "regions": [
+    {
+      "cue": "Main display face",
+      "box": [
+        249,
+        249,
+        519,
+        386
+      ]
+    },
+    {
+      "cue": "Physical key bank",
+      "box": [
+        307,
+        380,
+        480,
+        520
+      ]
+    },
+    {
+      "cue": "Drawer front and handle",
+      "box": [
+        138,
+        515,
+        483,
+        699
+      ]
+    },
+    {
+      "cue": "Secondary receipt",
+      "box": [
+        214,
+        359,
+        350,
+        489
+      ]
+    },
+    {
+      "cue": "Upper display face",
+      "box": [
+        442,
+        91,
+        607,
+        224
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "path": "style-comparison-native-crops.png",
+      "sha256": "d68c0763b31e36ff1ff580e250dc42eeb421904c370cc756cb4fd7e3989a9b55"
+    },
+    {
+      "path": "style-comparison-native-crops-2x.png",
+      "sha256": "b0b1c00ddd6c4b34db5612329a627819665b4feb5bd7d7af0d0db7afa23c0af2"
+    },
+    {
+      "path": "source-cue-review.png",
+      "sha256": "ba2cf851864ec1b59269334dc258e0b599e0f9ba304031947d57e2883c7cf462"
+    }
+  ]
+}

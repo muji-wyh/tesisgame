@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "status": "failed_raw_pack_verification_retained",
+  "files": [
+    {
+      "path": "inventory.json",
+      "sha256": "1798f43cf2c1880f4df5f8f1e8fcadcb92cae50228f7c40dc7ac319c12bfccde",
+      "bytes": 2764
+    },
+    {
+      "path": "attempt-001/preparation.json",
+      "sha256": "a23209acbb9751e14dbcea0b593f58b5ed72833cfab45102ee4b9d2396fda305",
+      "bytes": 89329
+    },
+    {
+      "path": "attempt-001/export-receipt.json",
+      "sha256": "2d1b300b6fb66ab6148392783b54b9fd997b16560094197530f461f42c3e3f54",
+      "bytes": 3635
+    },
+    {
+      "path": "attempt-001/import.log",
+      "sha256": "4120301933c404c10c77614619669aee4f21f6c7b86b2175d9126078ebd985b5",
+      "bytes": 16495
+    },
+    {
+      "path": "attempt-001/export.log",
+      "sha256": "82d81db6b7cdf5d54e09ae6b176d7c1cbc99df0010fb1e06a95646fc7a11791e",
+      "bytes": 5033
+    },
+    {
+      "path": "attempt-001/raw-pack.log",
+      "sha256": "5118436f2fc81503cf91a4e718a95b54eba1727f83e74e71dbfe553d4f319542",
+      "bytes": 1535
+    }
+  ],
+  "retained_source_count": 390,
+  "retained_source_still_exact": true,
+  "build_gdignore_remains_empty": true,
+  "dispatched_commands": [
+    [
+      "--headless",
+      "--path",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\project",
+      "--import"
+    ],
+    [
+      "--headless",
+      "--path",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\project",
+      "--export-release",
+      "Web",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\web\\index.html"
+    ],
+    [
+      "--headless",
+      "--path",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\web",
+      "--main-pack",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\web\\index.pck",
+      "--script",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\project\\fixture\\verify_pack.gd",
+      "--",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\web-pack-manifest.json",
+      "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-runtime-web-fixture-r03\\attempt-001\\web-pack-proof.json"
+    ]
+  ],
+  "browser_dispatched": false,
+  "diagnosis": "The raw verifier fails to preload res://fixture/professional_domain_pack_verifier.gd from the exported PCK. Export/dependency closure is under separate review; no proof or browser success is claimed."
+}

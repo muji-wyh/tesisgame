@@ -1,0 +1,1954 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.software_data.module05.01",
+      "text": "Please implement the change, compile the project, build the test package, execute it, and log the result.",
+      "meaning": "Describe implementation and verification actions.",
+      "context": "A developer outlines the agreed local work.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "implement",
+          "start": 7,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "change",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "compile",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "project",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "build",
+          "start": 50,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "test",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "package",
+          "start": 65,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 72,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "execute",
+          "start": 74,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "it",
+          "start": 82,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 18,
+          "text": "log",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 20,
+          "text": "result",
+          "start": 98,
+          "end": 104
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 104,
+          "end": 105
+        }
+      ],
+      "focus_lexeme_ids": [
+        "implement.write-working-solution.v",
+        "compile.translate-source-program.v",
+        "build.produce-software-output.v",
+        "execute.carry-out-program-instructions.v",
+        "log.record-system-event.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module05.02",
+      "text": "Please clone the repository and configure the local environment before you install the package or deploy the service.",
+      "meaning": "Prepare a local project environment.",
+      "context": "A developer checks the sequence of setup tasks.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "clone",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "repository",
+          "start": 17,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "configure",
+          "start": 32,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "local",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "environment",
+          "start": 52,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "before",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": "you",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "install",
+          "start": 75,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "package",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 14,
+          "text": "or",
+          "start": 95,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": "deploy",
+          "start": 98,
+          "end": 104
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 105,
+          "end": 108
+        },
+        {
+          "index": 17,
+          "text": "service",
+          "start": 109,
+          "end": 116
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 116,
+          "end": 117
+        }
+      ],
+      "focus_lexeme_ids": [
+        "configure.set-system-options.v",
+        "install.set-up-software.v",
+        "deploy.make-software-available.v",
+        "clone.copy-repository.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module05.03",
+      "text": "Declare and initialize the variable, assign its value, and explain how we hash the stored identifier.",
+      "meaning": "Discuss variable setup and a hashing operation.",
+      "context": "A developer explains code under review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Declare",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "and",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "initialize",
+          "start": 12,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "variable",
+          "start": 27,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "assign",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "its",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "value",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "explain",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "how",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "we",
+          "start": 71,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "hash",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": "stored",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "identifier",
+          "start": 90,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "declare.introduce-program-name.v",
+        "initialize.set-starting-state.v",
+        "assign.set-variable-value.v",
+        "hash.compute-data-digest.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module05.04",
+      "text": "Invoke the function, pass the identifier, and return the result; then map the inputs to new values and reduce them to a total.",
+      "meaning": "Describe a function call and collection transformations.",
+      "context": "A developer explains how values are passed and combined.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Invoke",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "function",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 19,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "pass",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "identifier",
+          "start": 30,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "return",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "result",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": ";",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "then",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "map",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 16,
+          "text": "inputs",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 85,
+          "end": 87
+        },
+        {
+          "index": 18,
+          "text": "new",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 19,
+          "text": "values",
+          "start": 92,
+          "end": 98
+        },
+        {
+          "index": 20,
+          "text": "and",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 21,
+          "text": "reduce",
+          "start": 103,
+          "end": 109
+        },
+        {
+          "index": 22,
+          "text": "them",
+          "start": 110,
+          "end": 114
+        },
+        {
+          "index": 23,
+          "text": "to",
+          "start": 115,
+          "end": 117
+        },
+        {
+          "index": 24,
+          "text": "a",
+          "start": 118,
+          "end": 119
+        },
+        {
+          "index": 25,
+          "text": "total",
+          "start": 120,
+          "end": 125
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 125,
+          "end": 126
+        }
+      ],
+      "focus_lexeme_ids": [
+        "invoke.call-operation.v",
+        "pass.supply-call-input.v",
+        "return.send-call-result.v",
+        "map.transform-each-element.v",
+        "reduce.combine-elements-to-result.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module05.05",
+      "text": "The worker will iterate over the records, traverse each nested structure, and recurse through child nodes.",
+      "meaning": "Describe repeated and recursive processing.",
+      "context": "A developer explains a traversal of nested data.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "worker",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "iterate",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "over",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "records",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "traverse",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "each",
+          "start": 51,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "nested",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "structure",
+          "start": 63,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 72,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "recurse",
+          "start": 78,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "through",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "child",
+          "start": 94,
+          "end": 99
+        },
+        {
+          "index": 17,
+          "text": "nodes",
+          "start": 100,
+          "end": 105
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 105,
+          "end": 106
+        }
+      ],
+      "focus_lexeme_ids": [
+        "iterate.repeat-over-sequence.v",
+        "traverse.visit-structure-elements.v",
+        "recurse.call-self-on-subproblem.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module05.06",
+      "text": "Parse the message, deserialize its contents, split the text into fields, and serialize the final result.",
+      "meaning": "Describe parsing and data-conversion operations.",
+      "context": "A developer explains a message-processing step.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Parse",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "message",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "deserialize",
+          "start": 19,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "its",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "contents",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "split",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "text",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "into",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "fields",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "serialize",
+          "start": 77,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "final",
+          "start": 91,
+          "end": 96
+        },
+        {
+          "index": 18,
+          "text": "result",
+          "start": 97,
+          "end": 103
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "parse.analyze-structured-input.v",
+        "deserialize.reconstruct-transferred-data.v",
+        "serialize.encode-data-for-transfer.v",
+        "split.separate-data-parts.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module05.07",
+      "text": "Encode and compress the text before you encrypt it for transfer; then decrypt, decompress, and decode the received content in the corresponding reverse order.",
+      "meaning": "Distinguish reversible representation and cryptographic operations.",
+      "context": "A team describes a particular message-processing pipeline.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Encode",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "and",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "compress",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "text",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "you",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "encrypt",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "it",
+          "start": 48,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "for",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "transfer",
+          "start": 55,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "then",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "decrypt",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "decompress",
+          "start": 79,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 89,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "decode",
+          "start": 95,
+          "end": 101
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 102,
+          "end": 105
+        },
+        {
+          "index": 20,
+          "text": "received",
+          "start": 106,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": "content",
+          "start": 115,
+          "end": 122
+        },
+        {
+          "index": 22,
+          "text": "in",
+          "start": 123,
+          "end": 125
+        },
+        {
+          "index": 23,
+          "text": "the",
+          "start": 126,
+          "end": 129
+        },
+        {
+          "index": 24,
+          "text": "corresponding",
+          "start": 130,
+          "end": 143
+        },
+        {
+          "index": 25,
+          "text": "reverse",
+          "start": 144,
+          "end": 151
+        },
+        {
+          "index": 26,
+          "text": "order",
+          "start": 152,
+          "end": 157
+        },
+        {
+          "index": 27,
+          "text": ".",
+          "start": 157,
+          "end": 158
+        }
+      ],
+      "focus_lexeme_ids": [
+        "encode.represent-by-code.v",
+        "decode.interpret-coded-data.v",
+        "decompress.expand-compressed-data.v",
+        "compress.reduce-representation-size.v",
+        "encrypt.protect-with-cryptographic-transformation.v",
+        "decrypt.recover-encrypted-data.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module05.08",
+      "text": "Query the view, join the related records, filter and sort the results, and aggregate the values for the report.",
+      "meaning": "Describe data selection and transformation for a report.",
+      "context": "An analyst explains the planned query.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Query",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "view",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 14,
+          "end": 15
+        },
+        {
+          "index": 4,
+          "text": "join",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 6,
+          "text": "related",
+          "start": 25,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "records",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "filter",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "sort",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "results",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 16,
+          "text": "aggregate",
+          "start": 75,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 18,
+          "text": "values",
+          "start": 89,
+          "end": 95
+        },
+        {
+          "index": 19,
+          "text": "for",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 100,
+          "end": 103
+        },
+        {
+          "index": 21,
+          "text": "report",
+          "start": 104,
+          "end": 110
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 110,
+          "end": 111
+        }
+      ],
+      "focus_lexeme_ids": [
+        "query.request-stored-data.v",
+        "filter.select-matching-data.v",
+        "aggregate.combine-data-for-summary.v",
+        "join.combine-related-data.v",
+        "sort.order-data-values.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module05.09",
+      "text": "Fetch the remote information, stash unfinished work, and decide whether to pull, rebase, or merge; then stage reviewed changes and push the agreed update.",
+      "meaning": "Discuss distinct version-control actions.",
+      "context": "A developer confirms the agreed workflow before updating a shared repository.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Fetch",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "remote",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "information",
+          "start": 17,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "stash",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "unfinished",
+          "start": 36,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "work",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "decide",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "whether",
+          "start": 64,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 72,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "pull",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "rebase",
+          "start": 81,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 87,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": "or",
+          "start": 89,
+          "end": 91
+        },
+        {
+          "index": 18,
+          "text": "merge",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 19,
+          "text": ";",
+          "start": 97,
+          "end": 98
+        },
+        {
+          "index": 20,
+          "text": "then",
+          "start": 99,
+          "end": 103
+        },
+        {
+          "index": 21,
+          "text": "stage",
+          "start": 104,
+          "end": 109
+        },
+        {
+          "index": 22,
+          "text": "reviewed",
+          "start": 110,
+          "end": 118
+        },
+        {
+          "index": 23,
+          "text": "changes",
+          "start": 119,
+          "end": 126
+        },
+        {
+          "index": 24,
+          "text": "and",
+          "start": 127,
+          "end": 130
+        },
+        {
+          "index": 25,
+          "text": "push",
+          "start": 131,
+          "end": 135
+        },
+        {
+          "index": 26,
+          "text": "the",
+          "start": 136,
+          "end": 139
+        },
+        {
+          "index": 27,
+          "text": "agreed",
+          "start": 140,
+          "end": 146
+        },
+        {
+          "index": 28,
+          "text": "update",
+          "start": 147,
+          "end": 153
+        },
+        {
+          "index": 29,
+          "text": ".",
+          "start": 153,
+          "end": 154
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fetch.retrieve-remote-data.v",
+        "pull.retrieve-and-integrate-changes.v",
+        "rebase.reapply-commits-on-base.v",
+        "merge.combine-change-sets.v",
+        "stash.temporarily-save-working-changes.v",
+        "stage.select-next-commit-content.v",
+        "push.send-version-control-changes.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module05.10",
+      "text": "Please debug the failure, trace the request, and profile the slow operation before you refactor it, optimize its performance, or cache its results.",
+      "meaning": "Investigate behavior before choosing a performance change.",
+      "context": "A developer reviews a slow operation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "debug",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "failure",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "trace",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "request",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "profile",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "slow",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "operation",
+          "start": 66,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "before",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "you",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "refactor",
+          "start": 87,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "it",
+          "start": 96,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": ",",
+          "start": 98,
+          "end": 99
+        },
+        {
+          "index": 19,
+          "text": "optimize",
+          "start": 100,
+          "end": 108
+        },
+        {
+          "index": 20,
+          "text": "its",
+          "start": 109,
+          "end": 112
+        },
+        {
+          "index": 21,
+          "text": "performance",
+          "start": 113,
+          "end": 124
+        },
+        {
+          "index": 22,
+          "text": ",",
+          "start": 124,
+          "end": 125
+        },
+        {
+          "index": 23,
+          "text": "or",
+          "start": 126,
+          "end": 128
+        },
+        {
+          "index": 24,
+          "text": "cache",
+          "start": 129,
+          "end": 134
+        },
+        {
+          "index": 25,
+          "text": "its",
+          "start": 135,
+          "end": 138
+        },
+        {
+          "index": 26,
+          "text": "results",
+          "start": 139,
+          "end": 146
+        },
+        {
+          "index": 27,
+          "text": ".",
+          "start": 146,
+          "end": 147
+        }
+      ],
+      "focus_lexeme_ids": [
+        "debug.investigate-code-problems.v",
+        "trace.follow-execution-path.v",
+        "profile.measure-program-behavior.v",
+        "refactor.reorganize-code-without-intended-behavior-change.v",
+        "optimize.improve-resource-or-performance-use.v",
+        "cache.store-for-reuse.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    }
+  ]
+}

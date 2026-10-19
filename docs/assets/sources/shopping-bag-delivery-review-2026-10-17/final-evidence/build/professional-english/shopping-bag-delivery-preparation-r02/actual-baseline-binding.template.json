@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "status": "template_only_waiting_for_root_confirmation_of_actual_fourth10_persisted_delivery",
+  "root_confirmation": null,
+  "fourth10": {
+    "actual_commit_confirmed": false,
+    "actual_persisted_validation_confirmed": false,
+    "committed_receipt": null,
+    "committed_journal": null,
+    "persisted_validation_receipt": null
+  },
+  "input_files": null,
+  "input_scope": "Read and hash actual current files only after root confirms successful fourth10 commit and persisted validation. Include all catalog-listed content, source registry, schemas, current three target tests, validator dependencies, runtime/Growth/media/old failure and review evidence required by the guarded transaction, and this preparation's source files. Each row is path, bytes and raw_sha256. Do not copy a projected baseline as current.",
+  "receipt_shape": "Each receipt/journal binding must contain path, bytes, raw_sha256, and success_assertions as nonempty arrays of {keys: [nested field names], expected: actual successful value}. Root chooses the assertions from the inspected real records, including committed state and successful persisted checks.",
+  "guards": {
+    "production_writers_yielded": false,
+    "new_production_targets_absent": false,
+    "final_inputs_frozen": false
+  }
+}

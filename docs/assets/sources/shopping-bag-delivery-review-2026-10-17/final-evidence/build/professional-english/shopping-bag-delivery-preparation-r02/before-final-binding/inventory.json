@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "exact_unexecuted_sources_before_actual_final_binding",
+  "files": [
+    {
+      "path": "prepare.cjs",
+      "bytes": 13736,
+      "raw_sha256": "43df78cfc9bc34320bbade08f993c3bd4ed5f2d81be8213ed0a11c42a38f6da2"
+    },
+    {
+      "path": "test-transforms.cjs",
+      "bytes": 12710,
+      "raw_sha256": "a7762bbac0e687baf26aa784d7c0fb9533d834b309406ae98759b88aa5b619a7"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3764,
+      "raw_sha256": "392edee62ba4e1491e3a78d964c955d35d1c15a67db09728f4770b9100a21dc8"
+    },
+    {
+      "path": "CALL-GRAPH.md",
+      "bytes": 4647,
+      "raw_sha256": "e3153c70f50a20f34de6cfd1f4e70c7ca247f1c969f8580484fd85d857b1f6e8"
+    },
+    {
+      "path": "TRANSACTION.md",
+      "bytes": 7811,
+      "raw_sha256": "1e995292f284bb94d361e58f6c46ffabb5c6f19b94bd21e903805d1745456d65"
+    },
+    {
+      "path": "actual-baseline-binding.template.json",
+      "bytes": 1296,
+      "raw_sha256": "ffc634dea77443f1e716b1e13588c6b54a560e4e8f1c79f6e024f5320e60b8dd"
+    }
+  ],
+  "project_or_test_execution": false,
+  "production_mutated": false
+}

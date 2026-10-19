@@ -1,0 +1,580 @@
+{
+  "schema": 1,
+  "sequence": 192,
+  "status": "committed",
+  "prepared_sha256": "4ff81d81880204adf70ccaff5a02d51217f591bc03c366cd1cf500998c053bd6",
+  "previous_state_sha256": "e36ba32f0531594a35a792286a4e122371139d9c4c98c7688511799c44d6ac1f",
+  "recorded_at": "2026-10-16T11:59:01.072Z",
+  "targets": [
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/acquire-inspect.py",
+      "bytes": 6174,
+      "sha256": "e4a9a76f3e44918689cec6dbb4ff9541608daa704b0c8ca3859ae2c00a9ecc75",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/archive-inventory.json",
+      "bytes": 165962,
+      "sha256": "4f064bef95e9e8b66a5d35c95cf3f7ad8c9bb767452c081ca338a13c22844565",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/README.md",
+      "bytes": 3772,
+      "sha256": "879e5da801e181708f6a563903a40586e7586c4819a9aeffd71ae609d3fb532a",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/candidate-receipt.json",
+      "bytes": 3967,
+      "sha256": "f7cc9e98592d8fda688ec9bc6bf0f67215fb1540c7bdf6b3a56d72f28a429af0",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/entry-preimage.json",
+      "bytes": 7197,
+      "sha256": "8399da42142941b27cdb7b869d316fbdb504c47454f01ff630d05dfa13b99515",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/frozen-inputs.json",
+      "bytes": 137479,
+      "sha256": "776de6c40196f895ff85907aca0d711f827805f4232a1996fa93ac7436088998",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/make-review-aids.py",
+      "bytes": 3926,
+      "sha256": "91f7e8eeb04790bafba518dd87b558ce96c947afb8b5e63b0b9a2a61e277db5e",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/native-attempt-start.json",
+      "bytes": 563,
+      "sha256": "28003c28d6732f0ee73088d5cf5ba98219b2afb87b37a4ed7cf5490309e08838",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/native.log",
+      "bytes": 1814,
+      "sha256": "e0428fa91c9f7d5b3e4a78de94696ee75e916066a13f3eeef50e289de4e91825",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/preparation-receipt.json",
+      "bytes": 853,
+      "sha256": "9548bf4045793f883686c94f3ca4ca0903eeffa30e00bcddc86de23171f40a0e",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/prepare-candidate.cjs",
+      "bytes": 8365,
+      "sha256": "c958f92677a17b40771a196b13b63f51a61e8fc15905b17f52af74078962a4f8",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/render-and-check.gd",
+      "bytes": 18669,
+      "sha256": "f67176238f8a6d0d70650c45a88fa78702af92eabe6ddd7b8e536b3cf31c3e71",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/root-source-review.json",
+      "bytes": 1522,
+      "sha256": "5f80ae93194889c53514c6840c87e54dbc920f2505c3d563637ef688042bc74d",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r01/run-candidate.cjs",
+      "bytes": 8226,
+      "sha256": "31b06c45046f5018beeb7b6193f60220f91be517902389d63b50849d49aee6ca",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/README.md",
+      "bytes": 4745,
+      "sha256": "d907375fb399bde23a4f75b525ecaeec9d6b5f479f4af2d595d2c03654c794ea",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/candidate-receipt.json",
+      "bytes": 4065,
+      "sha256": "8242ae2aaa7947b14d09da55bd1b080358418bab5acb0f9cee09af715fca67f2",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/entry-preimage.json",
+      "bytes": 7197,
+      "sha256": "8399da42142941b27cdb7b869d316fbdb504c47454f01ff630d05dfa13b99515",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/frozen-inputs.json",
+      "bytes": 223475,
+      "sha256": "5392fcd6c7d5313ce24b62ed9f01944ca8d85c8a6fc70a03ec9309f4f11e6357",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/make-review-aids.py",
+      "bytes": 3926,
+      "sha256": "91f7e8eeb04790bafba518dd87b558ce96c947afb8b5e63b0b9a2a61e277db5e",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/native-attempt-start.json",
+      "bytes": 563,
+      "sha256": "7b8080a52a783a87d2bbfe6038023e8b9beccb3dcd714b3a4ac84bc2218d1119",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/native.log",
+      "bytes": 556,
+      "sha256": "8ea9093998a31936dd06f792ea36ed9bca195cf99d9f0ce43fd3665279401a6a",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/actual-word-card-contact-3x.png",
+      "bytes": 68052,
+      "sha256": "3af002d872f80395dd9ced97791c21c98245b94083321ab74b9ddf382b72062b",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/actual-word-card-contact.png",
+      "bytes": 48488,
+      "sha256": "5c131c5fc8c77aafb6d046875b0180bb414cb1867ad32e3f670e09f9749e692f",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/cash-register.png",
+      "bytes": 172442,
+      "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/fixture/professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+      "bytes": 172442,
+      "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/manifest.json",
+      "bytes": 571,
+      "sha256": "0cc9bfe68bbe25d74170b6ae416666f5d2f74f859c7c02f8d05a5052805caf48",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/match-matched.png",
+      "bytes": 5465,
+      "sha256": "620e636eafd3138e50d22fb8f415ec13e4d136dfa5645222db1bad9ee7708f5a",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/match-unmatched.png",
+      "bytes": 4913,
+      "sha256": "dbe7d62c3a1a2060f261fe8bd57ade724da013a66158db6ef0c7c540b0de61cb",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/memory-matched.png",
+      "bytes": 5100,
+      "sha256": "15f257e70cc015128b8f94d98288bd075a26ea5a93d1c6a7b25f0ab7b79886e3",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/memory-unmatched.png",
+      "bytes": 4804,
+      "sha256": "061f44ac132a8fb5b9b7cfc5c1bd3cef35c0521dac7f382ea4d77ce9530d147a",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/render-raw.png",
+      "bytes": 110884,
+      "sha256": "cd3c9ba5bd9ae299d48384a63300cde2ee619e7e7704bbe3d444634eef6f7e89",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/report.json",
+      "bytes": 14110,
+      "sha256": "1ed30fc6fbe96ff1acf5a484c83301accfddd681f4c2634a05ed5f8bfe9d116e",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/resource.json",
+      "bytes": 387,
+      "sha256": "73bafa7015860c32666e577a86f2d9f4161cc9f7423bb1ef0b9017637ff0423b",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/review-aids.json",
+      "bytes": 5048,
+      "sha256": "35b830f4cfc2dfab34d6d55acdb9c5ad59b2883d8bde9ea4b61c06368533b730",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/source-cue-review.png",
+      "bytes": 93324,
+      "sha256": "ba2cf851864ec1b59269334dc258e0b599e0f9ba304031947d57e2883c7cf462",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/style-comparison-native-crops-2x.png",
+      "bytes": 98191,
+      "sha256": "b0b1c00ddd6c4b34db5612329a627819665b4feb5bd7d7af0d0db7afa23c0af2",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/output/style-comparison-native-crops.png",
+      "bytes": 74800,
+      "sha256": "d68c0763b31e36ff1ff580e250dc42eeb421904c370cc756cb4fd7e3989a9b55",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/preparation-receipt.json",
+      "bytes": 854,
+      "sha256": "50ce4e38c8a3665048c230ff646dd3ee9e5d65751b4466f66863017b04b7b434",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/prepare-candidate.cjs",
+      "bytes": 10562,
+      "sha256": "189d86baae618e533a520155112ba262db68b2afbdfeacf5fa22a211d556e526",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/recovery-note.json",
+      "bytes": 1489,
+      "sha256": "c53eff4acace2a4646f882dceb961974171140371c59ad7d5b8ee25c0ba50f96",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/render-and-check.gd",
+      "bytes": 18765,
+      "sha256": "38e323ae30d3312f8ba1fcb6b3cf58cb1fdb22094a40d813ad6cd884417b8441",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/review-aids.log",
+      "bytes": 41,
+      "sha256": "550a1d1e983bf64aee5c9836f6abe352fe7ca8dcfa08b3543cdc1b25d7558a98",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/root-source-review.json",
+      "bytes": 1522,
+      "sha256": "2257d23084446da92dc5b7ea14952a2f423a343e12dc915419f73572a892ba56",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/candidate-r02/run-candidate.cjs",
+      "bytes": 8226,
+      "sha256": "feaef5eb7aab508836c5ee1547e7ab83e045f136f9672f66ae804112be555ea4",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/creator-post.html",
+      "bytes": 5627,
+      "sha256": "c33e6a9e431005edbd6e5cfe9a9930406e0cf63de09a08773f9d5ff12a1e16ab",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/inspect-source.gd",
+      "bytes": 5298,
+      "sha256": "cbc572d48d465601c5d502d6343c8300c3473007f80d7bc52a4cdd1954f886a6",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/inspection-receipt.json",
+      "bytes": 935,
+      "sha256": "37ad32ab7877e8cc8b30f598fbc7df3e8d96ca6d60874fdd92052b6fc6742abe",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/inspection.log",
+      "bytes": 573,
+      "sha256": "048dc9289bfa2e3c99b39cec65617ab1a68b46684b88b5fe576397fbb315cdfa",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/native-inspection-r01/negative-z-left-high.png",
+      "bytes": 59191,
+      "sha256": "9f8e1dc896672ab5c29c735423779097c57fa21329b602f6dff7909b06bb119d",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/native-inspection-r01/negative-z-right-high.png",
+      "bytes": 51532,
+      "sha256": "0a1de9f2ffc2f00617562443532dc08f7ba4aef970240b6110088f2332f36e0d",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/native-inspection-r01/positive-z-front.png",
+      "bytes": 73870,
+      "sha256": "214288be98c51dfe980f21366216d8dc6394439fafeb1f4714017b5299c4de2a",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/native-inspection-r01/positive-z-left-high.png",
+      "bytes": 111945,
+      "sha256": "335322fd4780c514e79e6fd5d0d2eed5b0070b46f36e0bca3a6cd0ad4e71696d",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/native-inspection-r01/positive-z-right-high.png",
+      "bytes": 112096,
+      "sha256": "c04718b1019efcc51752e2e16e7f022273390c3e0b19dee0fdd968089d5d17cb",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/native-inspection-r01/positive-z-right-low.png",
+      "bytes": 110065,
+      "sha256": "7b90fe5375e245c81c4297e246febbff42a8f85f231d56d9f60315d263fd34f8",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/native-inspection-r01/report.json",
+      "bytes": 3017,
+      "sha256": "57ac8c3ad5da2ff28ad86b15017137bda4ce47509543c46a80da2b8885412976",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/primary-capture-receipt.json",
+      "bytes": 1160,
+      "sha256": "db93e8f6affcd90cd9c7307212e27f5f5ae31f0d2ba090a76e8f287ce54acd3d",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/r02-source-repair-receipt.json",
+      "bytes": 1496,
+      "sha256": "c07373815a970f96623f00834c59d49a550ec8587c5578e993248e2ccd494fce",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/root-picture-acceptance-r01.json",
+      "bytes": 7760,
+      "sha256": "70f7d183dee631642befddff9f3ebf0a9a7f8401c9ee69c826c48478f08f57c4",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/run-inspection.cjs",
+      "bytes": 4281,
+      "sha256": "286d39a673ea856ec69dd9b66f21f574859f065e83bd336e57ec49d78a842bfc",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/source-page.html",
+      "bytes": 32660,
+      "sha256": "039009326c7e45b318cabc8692f1ae905ea21eb4aae6954ce25e4ab55f527591",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/source-record.json",
+      "bytes": 7087,
+      "sha256": "3e6184da75cd0fa51efaad7a47369c291b8ed920f1659a3c0d5b891e691149f0",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/source/Tiny_Treats_Bakery_Interior_1.1_FREE.zip",
+      "bytes": 7734063,
+      "sha256": "1754373c399dd9b7eb074cc12367ea8f31ffc2cf7d1a9f8027b9661a0aafb562",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/source/original/Assets/gltf/cash_register.bin",
+      "bytes": 75392,
+      "sha256": "137696f23abff07b2feb2342663174594a3cec7a6dadf691b7c365fcb6edca5e",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/source/original/Assets/gltf/cash_register.gltf",
+      "bytes": 6340,
+      "sha256": "43aed74637cf10432d996a18f03ed580f6cbc346b5f91d9592473370ed8ea1cc",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/source/original/Assets/gltf/tiny_treats_texture_1.png",
+      "bytes": 20974,
+      "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/source/original/License.txt",
+      "bytes": 907,
+      "sha256": "af97867b174afc18500d5c79c3d49b9e8d97e3aefe10ca748cdfa0cadaa0121a",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/source/original/overview.png",
+      "bytes": 829765,
+      "sha256": "347f10426c787e2d2ada39ec7eb12a60756d072126096c43a17efe598506272f",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/source/original/overview_1.1.png",
+      "bytes": 919409,
+      "sha256": "32c4f2d00d2ce29537692c56992f1b7868f5cdd9f5e3339fef7be6bd7e510687",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/source/original/sample.png",
+      "bytes": 1268549,
+      "sha256": "2a2e2e18888658cde9c594ceb362d507157317455c658325ba0e1679584ee85c",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/review-receipt.json",
+      "bytes": 33594,
+      "sha256": "76dc57f2dfde062857cd91636ef9fa1dbcd407a4089c17f0eede8d2f0566c301",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/delivery-lib.cjs",
+      "bytes": 16661,
+      "sha256": "96807a265245e6d00a3ef7488ef99a60a727f674c75551eba02cd46e0e9a0520",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/bind-current-baseline.cjs",
+      "bytes": 4615,
+      "sha256": "311b853b223613e55354217b721d6e5815f33cb345e2fd362a01c49c589f6d83",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/integrate-reviewed.cjs",
+      "bytes": 6087,
+      "sha256": "2334821d643869b8b67057518f85343e4b0a74fa30d6fecf03e53a35accc9381",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/transaction-plan.cjs",
+      "bytes": 4251,
+      "sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/guarded-transaction.cjs",
+      "bytes": 21544,
+      "sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/helper-origin.json",
+      "bytes": 1218,
+      "sha256": "f73c9f382a9dd25d6c1dc85e69021926d3ffa8c8925f7c15ca122aaa17e33d3d",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/persisted-test-transforms.cjs",
+      "bytes": 9487,
+      "sha256": "19bb156bc9ad954cdcaf8680b839989109a670b99ee1f872fbecf12a21d1b892",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/update-persisted-tests.cjs",
+      "bytes": 4847,
+      "sha256": "f16703cc9ba5def1c10615018f6547a30df1b760cbb9c38f23da533414956090",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/prepare-delivery.cjs",
+      "bytes": 5401,
+      "sha256": "b146801666f0f54fd815cd00fc260707cd37b31c1d7030acab2cd5b697c4774d",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/HANDOFF.md",
+      "bytes": 2206,
+      "sha256": "8c50b09d83fed0884423956d136c24d90aa8102773eb544ad1a89bdf79472a11",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/source-doc-draft.md",
+      "bytes": 1682,
+      "sha256": "fba62497831f009c3903ffaafdc63017b15d387c6941689435cae950a7b9a275",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/integration-impact.md",
+      "bytes": 2510,
+      "sha256": "3535c80c765fad825b0a5246d0fc7f3a72cf8de02e9c49105d236329c3933f5a",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/production-scaffold-inventory.json",
+      "bytes": 1432,
+      "sha256": "223c4dc99739d514df9e7e2ab674b65cd52ef02cf3e9618a049aaefe670a881a",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/preparation-receipt.json",
+      "bytes": 166543,
+      "sha256": "38d8c95bd0211da7c714a62a88ca9a56fb347eb962c8a2c22b2c527aa75bb0c8",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/scratch-preview-receipt.json",
+      "bytes": 5298,
+      "sha256": "0f5a343a4c03f9d78c0375028029bfd19894f1b2b1caed45fcef8bf3872a4072",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/preview/tests/professional-content.test.cjs",
+      "bytes": 266094,
+      "sha256": "37d469c627c45fb76414267c4b94a244589ea31fcf72d5275c4394002693fd5a",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/preview/tests/professional-retail-morphology.test.cjs",
+      "bytes": 74529,
+      "sha256": "75e6db92598a676560ce4cc92fb931bc219178db28988b7f8985061f69f3521d",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/preview/tests/professional-retail-media.test.cjs",
+      "bytes": 37116,
+      "sha256": "7cda7edce2ec79e8ab2ac645729b56db1f71841680119befc56d14c53f87c7c5",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/preview/tests/professional-approved-audio.test.cjs",
+      "bytes": 4063,
+      "sha256": "172e6fd20c931657fd804369efa45cabf209c9171dfcb1ca58df9a1a090076c4",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/preimages.json",
+      "bytes": 653453,
+      "sha256": "0317cb2c1238b74daf12999164ca6d7fada8c8310f1579722bf79e42096cccc8",
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-cash-register/delivery-r01/binding-receipt.json",
+      "bytes": 832,
+      "sha256": "2f2db138cffb2d8c05bfba8059f6738b292b8674c6261ff0f88eab9a18e82d43",
+      "noop": false
+    },
+    {
+      "path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+      "bytes": 172442,
+      "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+      "noop": false
+    },
+    {
+      "path": "data/professional/lexemes/retail-pilot.json",
+      "bytes": 357628,
+      "sha256": "2182105fee2bc23207a773063f4c6434b74c00064e6ba89146783c3bed03e8cc",
+      "noop": false
+    },
+    {
+      "path": "data/professional/provenance/retail-cash-register-image-2026-10-16.json",
+      "bytes": 64391,
+      "sha256": "5e63276edb93d1f61bd605d44bbaa47736e9bfa97835a2729f175d42d23ba065",
+      "noop": false
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/integration-receipt.json",
+      "bytes": 1821,
+      "sha256": "fec1c80d92bb4ab14e904811e46819ad72dba42a6f91f3abe39f0d3e86fb7c99",
+      "noop": false
+    }
+  ]
+}

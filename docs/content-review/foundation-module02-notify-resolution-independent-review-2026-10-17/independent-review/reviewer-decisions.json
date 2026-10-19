@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "status": "independent_bounded_language_acceptance_not_activation",
+  "reviewer": "Codex runtime_recovery, independent AI reviewer of language_delivery research; not human or subject-matter approval",
+  "reviewed_on": "2026-10-17",
+  "author_inventory_sha256": "6a07be9bca42e4972208889afc7bb3da91e214bc651ddaf4bb8c3a6f8e41e010",
+  "lexical_decision": {
+    "decision": "accept_exact_projection",
+    "artifact": "accepted-lexical-fields.json",
+    "fields": [
+      "id",
+      "text",
+      "display_text",
+      "pos",
+      "definition",
+      "example",
+      "difficulty",
+      "accepted_forms",
+      "regions"
+    ],
+    "reason": "The recipient-information definition and original conditional meeting-time example express the selected ordinary inform verb. The base-form accepted spelling and general region are appropriate. Inform is broader than the held formal notify sense and receives a separate canonical sense ID, not an alias, rename or inherited review.",
+    "difficulty_basis": "Editorial B2 is accepted for this selected workplace giving-information sense using freshly confirmed Oxford selected-sense B2, literal Collins B1+ and the CEFR-J headword/POS B1 row. These are distinct observations, not a calculated average, a conversion of B1+ or a universal level for every inform sense.",
+    "exclusions": [
+      "inform on",
+      "inform oneself",
+      "influence or characterize a plan or decision",
+      "informed adjective",
+      "clinical informed consent",
+      "inflected-answer expansion beyond the exact accepted_forms array"
+    ]
+  },
+  "complete_expression_decision": {
+    "decision": "accept_exact_complete_language_projection",
+    "artifact": "accepted-expression-language-projection.json",
+    "reason": "The complete request is grammatical and natural in the stated delivery-coordination context. It asks the addressee to communicate with the supplier to make the delivery arrangement definite and report any lateness to the speaker's team. The retained meaning is an acceptable concise contextual summary; it does not authorize other kinds of timing change as scored delay evidence. The comma separates two coordinated requests and is permissible.",
+    "focus_interpretation": [
+      {
+        "id": "contact.communicate-with.v",
+        "decision": "communication with the supplier, matching the current independently accepted ordinary contact verb"
+      },
+      {
+        "id": "confirm.verify-arrangement.v",
+        "decision": "making the delivery-time arrangement definite, matching the current selected arrangement sense; this is not a new truth-checking or diagnostic sense approval"
+      },
+      {
+        "id": "inform.give-information.v",
+        "decision": "telling the recipient us about any delay, the selected inform somebody of something construction"
+      },
+      {
+        "id": "delay.late-occurrence.n",
+        "decision": "delivery lateness causing waiting, matching the accepted fourth10 language candidate; its actual installation is a separate root-owned delivery fact"
+      }
+    ],
+    "token_result": "All seventeen tokens, including comma and period, match their slices. Only token index 11 changes text; every token index and offset stays exact. Only the notify focus ID is replaced, in the same focus position.",
+    "not_granted": [
+      "expression audio",
+      "pronunciation acceptance",
+      "curriculum difficulty for the entire expression",
+      "domain or specialist instruction",
+      "ready module or release acceptance",
+      "carry-over of stored completion to the new requirements namespace"
+    ]
+  },
+  "identity_and_substitution_decision": {
+    "decision": "accept_conditional_architecture_only",
+    "conditions": [
+      "Use the new inform.give-information.v identity; never replace the language behind notify.inform.v, alias IDs or copy its skills.",
+      "Apply exactly twenty one-for-one module02 substitutions at index 18, preserving fifty unique terms and the other membership order; keep modules draft.",
+      "Retire the old notify entry from catalog-loaded envelopes only in coordinated activation, because a loaded orphan fails validation. Preserve the exact held entry and its source/history records outside loaded envelopes.",
+      "Choose a genuinely fresh revision namespace after final integration composition. The current validator couples catalog, all twenty courses and all two hundred module requirements revisions; twenty substitutions are not the full revision scope.",
+      "Preserve all historical skills, requirements, expression dictionaries, module receipts, event fingerprints, outbox records and wallet receipts. Do not seed new expression completion from an old requirements key.",
+      "Revalidate source/context/token/focus/current revision/media/domain-policy dependencies on the actual integrated state. This packet is not a final live binding."
+    ]
+  },
+  "pending_gates": {
+    "morphology": "pending; the one-part atomic proposal is not accepted",
+    "canonical_family": "pending; the provisional canonical ID does not decide the relationship to the existing pending clinical morph.inform stem",
+    "clinical_and_specialist": "pending; no inferred approval of related identities or contexts",
+    "image": "pending, not acquired; picture_suitable remains false",
+    "word_audio": "pending, not acquired or played",
+    "expression_audio": "pending, not acquired or played",
+    "voice_configuration": "Ava Sweet settings are preserved as configuration only: en-US-AvaNeural, rate -15%, pitch +8Hz, volume +0%, no postprocessing",
+    "populated_profile_and_runtime": "pending; no new execution or save inspection in this review",
+    "module_and_release": "pending; no readiness acceptance"
+  },
+  "scope": {
+    "production_changed": false,
+    "author_packet_changed": false,
+    "project_imports": false,
+    "tests_dispatched": false,
+    "native_runs": false,
+    "live_saves_opened": false,
+    "revision_assigned": false,
+    "final_live_binding": false
+  }
+}

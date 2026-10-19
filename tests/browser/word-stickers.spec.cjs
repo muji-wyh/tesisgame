@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, rendered, enterGame, openGame, boardPoint, observeAudio,
-  openRewards, chooseTheme } = require('./game-ui.cjs');
+  openRewards, openModeMenu, activateLibraryControl } = require('./game-ui.cjs');
 
 const KEY = 'wordBuddies.playroom';
 
@@ -51,7 +51,7 @@ test('Match card taps pronounce and Match no longer creates runtime word sticker
   expect(errors).toEqual([]);
 });
 
-test('saved word sticker records survive the library, Home themes and reload', async ({ page }, testInfo) => {
+test('saved word sticker records survive the library, career browsing and reload', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await page.addInitScript(({ key }) => {
     if (!localStorage.getItem(key)) localStorage.setItem(key, '[playroom]\nversion=1\ntoy="toy-ball"\nbackdrop="backdrop-home"\nfavorite=""\n\n[stickers]\nword_ids=["cat", "apple", "rocket", "bell"]\ndisplay_word_id="cat"\n');
@@ -64,7 +64,15 @@ test('saved word sticker records survive the library, Home themes and reload', a
   await page.screenshot({ path: testInfo.outputPath('saved-stickers-library-320.png'), scale: 'css' });
   await page.keyboard.press('Escape');
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
-  await chooseTheme(page, 5);
+  await openModeMenu(page);
+  await activateLibraryControl(page, 'ChangeLearningPath');
+  await activateLibraryControl(page, 'ProfessionalPath');
+  await activateLibraryControl(page, 'Career_retail');
+  expect((await metrics(page)).library.learning).toMatchObject({ screen: 'modules', course_id: 'retail' });
+  expect(await record(page), 'Browsing another career preserves historical stickers').toEqual(saved);
+  await activateLibraryControl(page, 'ContinueCurrentRound');
+  await expect.poll(async () => (await metrics(page)).library.visible).toBe(false);
+  await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(await record(page)).toEqual(saved);
   await page.reload();
   await enterGame(page);

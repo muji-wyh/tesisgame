@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "supports_exact_definition_refinement_scoped_ai_review",
+  "recorded_at": "2026-10-16T09:09:46.035Z",
+  "sense_id": "client.service-customer.n",
+  "author_ledger_raw_sha256": "ae141726bb134d922ca46e54c2bc2810a73b78e39927f82f0bc36f688771ebb0",
+  "author_candidate_entry_json_sha256": "456dda670c94371d3f89976cc6776da953f681dc72ab77ba19763a2c1a3b3c3b",
+  "author_definition": "A person or organization that uses professional advice or services from a person or business.",
+  "exact_refined_definition": "A person or organization that receives professional advice or services.",
+  "refined_candidate_entry_json_sha256": "3398bc0c6d8967a57cb2c23cdefe3d0082b03e0b8095092878140edf0652177a",
+  "refinement_scope": [
+    "definition only; existing candidate B1 retained"
+  ],
+  "decision": "Accept this exact replacement for the ordinary professional-services sense.",
+  "meaning": "Receives professional advice or services preserves the selected service relationship without requiring ongoing support, payment, or a provider that is specifically a business. Person or organization is supported by the head sense together with corporate-client examples.",
+  "grammar": "The singular person or organization correctly takes that receives. Professional can modify the coordinated advice or services. The wording is concise, grammatical and suitable as a learner definition.",
+  "course_breadth": "Removing from a person or business avoids unnecessarily excluding professional services offered by public or nonprofit organizations. This is a bounded editorial inference from the source organization wording and social-work examples, not an assertion that the dictionary lists every provider sector.",
+  "difficulty": {
+    "candidate": "B1",
+    "fresh_selected_source_label": "Business B1",
+    "excluded": "Computing C2 and unrelated page-footer levels are not transferred."
+  },
+  "example": {
+    "text": "The client requested an update on the project.",
+    "decision": "Still natural for the selected service relationship; no change required by this definition refinement."
+  },
+  "boundaries": [
+    "The computing-client sense is excluded.",
+    "Customer and client remain overlapping usage categories; no goods-versus-services partition is introduced.",
+    "This finding concerns the exact definition refinement only and does not approve other author candidates, morphology, media, professional relationship classification or module readiness."
+  ],
+  "author_inputs_before_sha256": {
+    "capture-preimages.cjs": "3467ff0460058a114a1951330fb811b917441aa116c6cb8e74625fe677b0fe5a",
+    "decision-notes.cjs": "f2a1c18f012e5c80d86b264006d89737abb23930fa157f8eada944326b862bf7",
+    "expression-notes.cjs": "aa9175186256c1603bb884cef009e584a3a0deb42be806440b3e42dcfc845e48",
+    "expression-use-review.json": "1b5c19f9776352882abfcfe91727655d00292d62b8e211aaa2409c30b5d99cb7",
+    "HANDOFF.md": "587f713907c8f9a1e76ee128f1b6bcf44a21397c30ce0a98574628c468817868",
+    "language-ledger.json": "ae141726bb134d922ca46e54c2bc2810a73b78e39927f82f0bc36f688771ebb0",
+    "preimages.json": "07fb0682ff86c5a8a52c971ea89d1320d0024efce4ef2eb16e2cdfee595d0ec7",
+    "prepare-ledger.cjs": "cbe8a92f07d8f0a365701498bfdf8df3a24836f4f9726e940ee2a63096c445b6",
+    "source-consultations.json": "2857963a531c9bae1bf6690ca17766e40b7ba259de105466570606136b9476df",
+    "source-notes.cjs": "e257af3b8a99371a0427f271873f1a6c1c3142606a977195693cbcea338ab55e",
+    "structural-audit.json": "0668419df2a465081c02d2f9503aa375493269f11c0855ffc688e64fa53d8e38"
+  },
+  "author_inputs_unchanged": true,
+  "production_content_written": false,
+  "author_ledger_modified": false,
+  "tests_executed": false,
+  "native_executed": false,
+  "source_consultation": {
+    "path": "source-consultation.json",
+    "raw_sha256": "813a736b52dadabc160d93b349c43523a44168529c2453edb40e29a03ced0e24"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "status": "root_source_inspected_before_dispatch",
+  "reviewer": "Codex root; also author, not independent approval",
+  "recorded_at": "2026-10-16T21:40:34.055Z",
+  "source": {
+    "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/invoke.cjs",
+    "sha256": "ec257f224e091177f1f8b7193bd3f96ec5773cc96e975377c8d6c276cfb7b491"
+  },
+  "scope": "Root source inspection only: exact actual commit receipt and fixed prepared binding; five replacements and new provenance produce 865 pinned inputs. Four sequential affected commands, preserved logs, source/receipt/input checks before and after each command, exclusive attempt. Actual committed journal inspection and independent source-review handoff are pending.",
+  "executed": false
+}

@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 241,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "29c6dff3556a54824330d05aba26c199bf555ca660efbb45f86efcc1e46f1fb4",
+  "recorded_at": "2026-10-16T22:48:46.646Z",
+  "index": 119,
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r03-recursive-dependency-supplement.json"
+}

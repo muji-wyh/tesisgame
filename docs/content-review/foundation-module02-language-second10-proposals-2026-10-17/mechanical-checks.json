@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "reviewer": "Codex recover_delivery independent AI reviewer",
+  "checked_at": "2026-10-16T18:08:56.090Z",
+  "scope": "Read-only frozen candidate and context verification; no integration preparation or production writes.",
+  "ledger_sha256": "2e1e09b0d3c602b1da4d163159a8482154df0ce819ba361d2d04a699e44a19ed",
+  "deliver_correction_sha256": "5b5d09430ef76b504616c1510a6c44ec4ab8b311be5c24d24a9233cca73d38e4",
+  "context_screen_sha256": "592b2a4f7c7bc37127763a9ebd7b1852e453a89227a8e4f27817e875260ab86e",
+  "counts": {
+    "exact_entry_preimages": 10,
+    "exact_content_projections": 10,
+    "corrected_deliver_projections": 1,
+    "unchanged_held_entries": 2,
+    "source_consultation_pointers": 20,
+    "source_file_hashes": 354,
+    "memberships": 200,
+    "containing_modules": 20,
+    "expressions_scanned": 1620,
+    "text_hit_expressions": 245,
+    "lexeme_expression_pairs": 256,
+    "exact_focus_expressions": 6,
+    "related_lexical_identities": 66,
+    "inherited_exact_expression_holds": 17
+  },
+  "interpretation": "Checks bind snapshots and language candidate context only. Every expression, related lexeme, identity, form, region, historical reference, morphology, media, domain and review gate remains unchanged; no broad acceptance follows from surface matches."
+}

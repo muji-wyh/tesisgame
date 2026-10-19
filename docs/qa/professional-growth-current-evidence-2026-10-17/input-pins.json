@@ -1,0 +1,572 @@
+{
+  "schema": 1,
+  "scope": "Observed raw inputs; all rehashed unchanged immediately before this evidence write.",
+  "count": 113,
+  "files": [
+    {
+      "path": "build/professional-english/growth-morphology-release-audit.json",
+      "bytes": 2862,
+      "sha256": "2f694a1d89eb42562023535e6d3f35541e927c00f0ec9738f499eb116a768350"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/growth-final-native-regression.json",
+      "bytes": 1295,
+      "sha256": "f842b33492372f4ca17b8ce63d322a5ecdf2366bbe2841fb2f4df2a6613f3ff0"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/growth-final-node-validation.json",
+      "bytes": 1288,
+      "sha256": "a6158c0c21c9fa701af82166b4ca101089d29f7b451db55c55740ca537c037d6"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/growth-final-runtime-validation.json",
+      "bytes": 3802,
+      "sha256": "4f9379dcc72e934f08b1bda13286aeb185894ceafd7d809557fae5c66e6abd7c"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-checks-validation.json",
+      "bytes": 879,
+      "sha256": "03c3120b905ff26abbdaf8864ac62f07407b48f8ceab3fd44a874ec0b5dd3190"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-final-author-replay.log",
+      "bytes": 698,
+      "sha256": "288554e7276f611289a56b7dba4588d9a6169e6ed8ace8b555a056c836bdc3d7"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-final-learning_content_tests.log",
+      "bytes": 114,
+      "sha256": "af1e60297e632862f5a5beed8c59aff06ab8adfc9c0477a75f0e0d0032e154bd"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-final-learning_context_flow_tests.log",
+      "bytes": 119,
+      "sha256": "488b85f32210bc276c2b6387f911428e230b6cd223d8aaddac0feda5f3bad7ab"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-final-morphology_tests.log",
+      "bytes": 123,
+      "sha256": "5cff538f7bb8d8e7134b99b296e26327efaac1afaa6072d7866d508c53105c99"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-final-native-growth.log",
+      "bytes": 122,
+      "sha256": "758a3d34244b873648e6e08a9796c4ebefdbfdc163866ad0a296dd72ce84c492"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-final-node.log",
+      "bytes": 2459,
+      "sha256": "daa7fecebbdccd5c2c69f39e54d649dc4538e818fecd8f58e39060ecfe53b5de"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-final-runtime-validation.json",
+      "bytes": 8125,
+      "sha256": "733e5b5851c9f1f12e41dccc919baad965684a800a56b8b60a90ff77b239b2ab"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-final-word_jelly_morphology_tests.log",
+      "bytes": 124,
+      "sha256": "645d1bf133cbd474ec0121ede60a2fd3d0410aaa05b842832109a95095a4a400"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-final-word_jelly_morphology_view_tests.log",
+      "bytes": 125,
+      "sha256": "a5efbd15b444cadae063f8c573f92cf39b78e2bd72c4d971a13698e9cc2e7366"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/age-03.json",
+      "bytes": 86158,
+      "sha256": "0901f4f5845451a5195b0ba347052304dcec17cd8aad842225dd8f65c3257c1c"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/age-04.json",
+      "bytes": 107574,
+      "sha256": "0f0926f7f845372f9648cad790f311c4d4edf682442926a54031d69a46a59dcf"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/age-05.json",
+      "bytes": 214078,
+      "sha256": "cf29cf0c1d4a4fa1a528c2954d615d45c123073a335d949a29f5538fd905719a"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/age-06.json",
+      "bytes": 316607,
+      "sha256": "9286ccefd45751d02dfe48448d72019432b0f6ed1ac8b8593b59447fbc6cc50e"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/age-07.json",
+      "bytes": 356742,
+      "sha256": "0a5b68fb84a9b0fa7f9a8d5523699e1a02eb7ec9dfd34d9539289ec092601afc"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/age-08.json",
+      "bytes": 247190,
+      "sha256": "f7da5e85f339bebd472d42ca7060e766013b8658d4fd5850680c946363e37ce6"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/age-09.json",
+      "bytes": 229459,
+      "sha256": "0042f4ef43a0c932360f8a1c0998b6a9d164984cbbf7fd960b4d9168e3e0dbba"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/age-10.json",
+      "bytes": 130839,
+      "sha256": "b02c37bc5f1a84e55d8aa50dc3a08e9dc02f8fd9009e3312bfc0369ce497b0a3"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/age-11.json",
+      "bytes": 107297,
+      "sha256": "2118745f6884b7ac8fcf0aa52d71b440f7283202e6d71c8a98b95fe9a45497ec"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/age-12.json",
+      "bytes": 125608,
+      "sha256": "6bb848a51bfd21f8d85646a06372de2b50085ebd55d56f98b915be0977cd2ced"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/data/vocabulary/morphology/index.json",
+      "bytes": 84262,
+      "sha256": "9f680945eac49d4b4ff471b9b214a1b5851b1999a64adab18d2ed74f0aa8fd5e"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/tools/author-growth-morphology.cjs",
+      "bytes": 31341,
+      "sha256": "af597489164c496b0eec761fcd7a2ed0b1b6156bb00c0d610ca843aa04435136"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/tools/growth-morphology/age-06.cjs",
+      "bytes": 24345,
+      "sha256": "f0e4a5a970a1dfa038d596c7edd55b320d886ccaf879a0dc6ee6a45960c4bb0f"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/tools/growth-morphology/age-07.cjs",
+      "bytes": 45504,
+      "sha256": "59f2663f7355e92135c5f11d79926f223905a907963d8f58d5ef21d422a4022d"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/tools/growth-morphology/age-08.cjs",
+      "bytes": 44031,
+      "sha256": "d3f1d53445c7b6a8e74087dfa9e6459638252621075643d926cf6ec00a5785af"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/tools/growth-morphology/age-09.cjs",
+      "bytes": 38827,
+      "sha256": "9638cc86ce9ed9a3dc78e26e6150a8fe45f80d30fdb324432956cd2e2cbea1bd"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/tools/growth-morphology/age-10.cjs",
+      "bytes": 25907,
+      "sha256": "8203c89531cc198b5d9887652d76df2f0dcba058f6a8877f21446ffb6be3c2e1"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/tools/growth-morphology/age-11.cjs",
+      "bytes": 20204,
+      "sha256": "87815cd478e4fd475be1e5cf6961ec271a604df322a3f524b4d4fa113a23dec2"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/tools/growth-morphology/age-12.cjs",
+      "bytes": 24269,
+      "sha256": "b84ea3bce652adbbf102082540732642fd39834a9a9875aedb1dd6d1555ce28c"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/tools/validate-growth-morphology.cjs",
+      "bytes": 9253,
+      "sha256": "7303793ac9aab4e58d9d03d083645cb7f27cccd59a4c93b49e61b8eebabe43d3"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-candidate/words.json",
+      "bytes": 645989,
+      "sha256": "81809bf9d2c810aaee4f5a5aabf9f0f1b48a4f822dc2325a1c6b714ec4e92be0"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-growth-persisted-validation.json",
+      "bytes": 3898,
+      "sha256": "7a8437e1dc9d51b1ee38f1e4f0876b0c4a6d0780a87b20991043c9cc6e73e626"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/hold9-proposal.json",
+      "bytes": 85926,
+      "sha256": "e9f0b021ad117862d6636cfae612e3b07ad55e110911a45938af036dadfcb119"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/independent-hold9.json",
+      "bytes": 1128,
+      "sha256": "ed10bfb9d7618e3a53685199e0e0a2d72d72230d6585f308924c0508d0be4057"
+    },
+    {
+      "path": "build/professional-english/morphology-null-review/integrate-hold9-growth.cjs",
+      "bytes": 4928,
+      "sha256": "579ad858fb8cc97fdcbede61410d2f2d72f359f13e5184e65aa1185c34431f23"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-report.json",
+      "bytes": 27503,
+      "sha256": "cb77b427d7fe99245f33eab90faac00d4879eba45e5b60a8330c9696018c1363"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/after.json",
+      "bytes": 3062,
+      "sha256": "f7524bc9fa26a6cc4c4d11a6d4d148ae07415e5f8dab21668b52c06d9dc16b3a"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/before.json",
+      "bytes": 3063,
+      "sha256": "7ef1ae6980792c0d6a7ba745af0fa95cd5c4f8b27898b51eb5b70f1c28a5f1e5"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/build/tests/jelly-r2/playwright.config.cjs",
+      "bytes": 1164,
+      "sha256": "fb545b86582c2ab8de3e679bd01dd8ef16394e03634830403e4f6c6496d11448"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/build/tests/jelly-r2/serve.cjs",
+      "bytes": 179,
+      "sha256": "369df70344ec0892416dfc18886ad12e5a60fe494b6c0a49b4e6535435cb1f3e"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/data/vocabulary/morphology/age-03.json",
+      "bytes": 86158,
+      "sha256": "0901f4f5845451a5195b0ba347052304dcec17cd8aad842225dd8f65c3257c1c"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/data/vocabulary/morphology/age-04.json",
+      "bytes": 107574,
+      "sha256": "0f0926f7f845372f9648cad790f311c4d4edf682442926a54031d69a46a59dcf"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/data/vocabulary/morphology/age-05.json",
+      "bytes": 214078,
+      "sha256": "cf29cf0c1d4a4fa1a528c2954d615d45c123073a335d949a29f5538fd905719a"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/data/vocabulary/morphology/age-06.json",
+      "bytes": 316607,
+      "sha256": "9286ccefd45751d02dfe48448d72019432b0f6ed1ac8b8593b59447fbc6cc50e"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/data/vocabulary/morphology/age-07.json",
+      "bytes": 353243,
+      "sha256": "be2191dfe66a8b6988156c206df49ac7eafccc8c79eaed1c7cad540ce8f0a87a"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/data/vocabulary/morphology/age-08.json",
+      "bytes": 243101,
+      "sha256": "b55bad32c9f7b371d8de82906dc9ce9588889bd86d2f32ce64c5aa14b3f7c69c"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/data/vocabulary/morphology/age-09.json",
+      "bytes": 225650,
+      "sha256": "2d818529af1ddb01326c2f95d784d3f37f5e63c3334817e53310748c78da2aad"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/data/vocabulary/morphology/age-10.json",
+      "bytes": 128002,
+      "sha256": "fd3ef343dc817c02f5d98c0dbabc83fbbf8a9e97cdee09d7ffbbd42fe1cf36c8"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/data/vocabulary/morphology/age-11.json",
+      "bytes": 105552,
+      "sha256": "bda96423ca993d91b66d98aa1347cd37eb77eae668d886b4d5971fccc5a4ca2d"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/data/vocabulary/morphology/age-12.json",
+      "bytes": 125608,
+      "sha256": "6bb848a51bfd21f8d85646a06372de2b50085ebd55d56f98b915be0977cd2ced"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/tests/browser/bundled-audio.cjs",
+      "bytes": 6470,
+      "sha256": "6820b9202c24f5baed64b43952f0c137131d314db5bd78923c07d1719e058f14"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/tests/browser/game-ui.cjs",
+      "bytes": 27869,
+      "sha256": "a411d1755c77a673990a3d3edc28aaa9767399b88b56f83ea56c62a56639baba"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/tests/browser/word-jelly-rewards.cjs",
+      "bytes": 700,
+      "sha256": "a0cd1b812c84d75adc60f77c1c9b0266d4ea73dcf59cdd7855f72fc5dacf60e0"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/tests/browser/word-jelly.spec.cjs",
+      "bytes": 144977,
+      "sha256": "08204ffb02801ea06910aad0058c98c7fa95397abe33d5f5115d1b656a33a6f4"
+    },
+    {
+      "path": "build/tests/jelly-r2/core-desktop-source/words.json",
+      "bytes": 645989,
+      "sha256": "81809bf9d2c810aaee4f5a5aabf9f0f1b48a4f822dc2325a1c6b714ec4e92be0"
+    },
+    {
+      "path": "build/tests/jelly-r2/playwright.config.cjs",
+      "bytes": 1164,
+      "sha256": "fb545b86582c2ab8de3e679bd01dd8ef16394e03634830403e4f6c6496d11448"
+    },
+    {
+      "path": "build/tests/jelly-r2/serve.cjs",
+      "bytes": 179,
+      "sha256": "369df70344ec0892416dfc18886ad12e5a60fe494b6c0a49b4e6535435cb1f3e"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-03.json",
+      "bytes": 86158,
+      "sha256": "0901f4f5845451a5195b0ba347052304dcec17cd8aad842225dd8f65c3257c1c"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-04.json",
+      "bytes": 107574,
+      "sha256": "0f0926f7f845372f9648cad790f311c4d4edf682442926a54031d69a46a59dcf"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-05.json",
+      "bytes": 214078,
+      "sha256": "cf29cf0c1d4a4fa1a528c2954d615d45c123073a335d949a29f5538fd905719a"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-06.json",
+      "bytes": 316607,
+      "sha256": "9286ccefd45751d02dfe48448d72019432b0f6ed1ac8b8593b59447fbc6cc50e"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-07.json",
+      "bytes": 356742,
+      "sha256": "0a5b68fb84a9b0fa7f9a8d5523699e1a02eb7ec9dfd34d9539289ec092601afc"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-08.json",
+      "bytes": 247190,
+      "sha256": "f7da5e85f339bebd472d42ca7060e766013b8658d4fd5850680c946363e37ce6"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-09.json",
+      "bytes": 229459,
+      "sha256": "0042f4ef43a0c932360f8a1c0998b6a9d164984cbbf7fd960b4d9168e3e0dbba"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-10.json",
+      "bytes": 130839,
+      "sha256": "b02c37bc5f1a84e55d8aa50dc3a08e9dc02f8fd9009e3312bfc0369ce497b0a3"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-11.json",
+      "bytes": 107297,
+      "sha256": "2118745f6884b7ac8fcf0aa52d71b440f7283202e6d71c8a98b95fe9a45497ec"
+    },
+    {
+      "path": "data/vocabulary/morphology/age-12.json",
+      "bytes": 125608,
+      "sha256": "6bb848a51bfd21f8d85646a06372de2b50085ebd55d56f98b915be0977cd2ced"
+    },
+    {
+      "path": "data/vocabulary/morphology/index.json",
+      "bytes": 84262,
+      "sha256": "9f680945eac49d4b4ff471b9b214a1b5851b1999a64adab18d2ed74f0aa8fd5e"
+    },
+    {
+      "path": "docs/plans/2026-10-15-professional-english-and-morphology.md",
+      "bytes": 23482,
+      "sha256": "2248f6b2ce2cc2bf62940535ff150c0af72a18149ac05dd5036ba163ccf1a476"
+    },
+    {
+      "path": "docs/plans/history/2026-10-16-tesis-iter-4-checkpoint.md",
+      "bytes": 68160,
+      "sha256": "4b88a377279656f4043e096845c0d5cdfbd15ca696034d84017c0c56d4bf6779"
+    },
+    {
+      "path": "docs/qa/2026-10-16-growth-morphology.md",
+      "bytes": 6440,
+      "sha256": "fe40225514f16dde7ed12c65a8fdc3019c8ed7faf37aca244fcb0146759c4db9"
+    },
+    {
+      "path": "docs/vocabulary/growth-morphology.md",
+      "bytes": 7222,
+      "sha256": "a32fb8f39d186938b6b9cb7d700d74b63aa4aab8f7c8a5e2f5a0c4515d28554d"
+    },
+    {
+      "path": "docs/vocabulary/review-history/2026-10-16-bound-family-corrections.json",
+      "bytes": 60601,
+      "sha256": "df439fbdee266a495d183f4bb8eb0dd3f9b344251dc9a55a7542455079a233c4"
+    },
+    {
+      "path": "docs/vocabulary/review-history/2026-10-16-nine-bound-family-resolutions.json",
+      "bytes": 53474,
+      "sha256": "da40980420f9879f06428422710a4960b8d82e16adab7ae9081f5c851b4b4e0c"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "bytes": 20942,
+      "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+    },
+    {
+      "path": "scripts/game_model.gd",
+      "bytes": 13328,
+      "sha256": "a82af00944d17e182a746e144c14cceaf12f8d8466b1138888117bc251a3faad"
+    },
+    {
+      "path": "scripts/growth_morphology.gd",
+      "bytes": 4976,
+      "sha256": "cf5140ffff2ca4ac2f9bfa7368d07617fa4d2200659f7dbf47a95eeb3f6f4b8f"
+    },
+    {
+      "path": "scripts/jelly_footprint.gd",
+      "bytes": 3982,
+      "sha256": "3f2652eb72b1e7830b27b85e682157b7f2466b06f6331138e998f477e3836f2e"
+    },
+    {
+      "path": "scripts/learning_content_resolver.gd",
+      "bytes": 17119,
+      "sha256": "d491e2641ee37c201cdb7f132cb472e6f4f18fa31a367bd5d9aa75d0aacedad3"
+    },
+    {
+      "path": "scripts/learning_context.gd",
+      "bytes": 2446,
+      "sha256": "f7099fa50517a593b2adc95a52566905b3b27b0dde010ed4c834ab96ff3497e5"
+    },
+    {
+      "path": "scripts/morphology_analysis.gd",
+      "bytes": 7877,
+      "sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b"
+    },
+    {
+      "path": "scripts/morphology_resolver.gd",
+      "bytes": 10233,
+      "sha256": "bbd22c8fb11f96d7dcc4a8d534ba80bc63f0c2ed1b2cc1578e7656c06d7d67e8"
+    },
+    {
+      "path": "scripts/professional_catalog.gd",
+      "bytes": 7570,
+      "sha256": "a80f9f847e515f882bc2ef94c2a284d6938ea811b4a7ac64882f90223909467b"
+    },
+    {
+      "path": "scripts/ui_style.gd",
+      "bytes": 8872,
+      "sha256": "5991ec95ba399174d3f207f6a16d3fdd4e614938093c1cb42a6a7768b5de9221"
+    },
+    {
+      "path": "scripts/word_jelly_model.gd",
+      "bytes": 88126,
+      "sha256": "4d3bf6b496b04c8f7de251b099881a6b3a44166f18a0ad3f751c7a3dd8863a6e"
+    },
+    {
+      "path": "scripts/word_jelly.gd",
+      "bytes": 65285,
+      "sha256": "5a91ceb5bf2cbf4a067a3f66bd114fd1c488c0b2d585bf4eb4b4f44e7aced5f8"
+    },
+    {
+      "path": "tests/browser/bundled-audio.cjs",
+      "bytes": 6470,
+      "sha256": "6820b9202c24f5baed64b43952f0c137131d314db5bd78923c07d1719e058f14"
+    },
+    {
+      "path": "tests/browser/game-ui.cjs",
+      "bytes": 27869,
+      "sha256": "a411d1755c77a673990a3d3edc28aaa9767399b88b56f83ea56c62a56639baba"
+    },
+    {
+      "path": "tests/browser/word-jelly-rewards.cjs",
+      "bytes": 700,
+      "sha256": "a0cd1b812c84d75adc60f77c1c9b0266d4ea73dcf59cdd7855f72fc5dacf60e0"
+    },
+    {
+      "path": "tests/browser/word-jelly.spec.cjs",
+      "bytes": 144977,
+      "sha256": "08204ffb02801ea06910aad0058c98c7fa95397abe33d5f5115d1b656a33a6f4"
+    },
+    {
+      "path": "tests/godot/growth_morphology_tests.gd",
+      "bytes": 14813,
+      "sha256": "aa6bab2e11099a8a10244a99b61beff7c9478802c8848cd6b9b5d846cdb9d2f7"
+    },
+    {
+      "path": "tests/godot/learning_content_tests.gd",
+      "bytes": 11723,
+      "sha256": "a1af5bc3b9b349de864884649310bf3da51e5ba4f8ab8fb6c28cb6e9596607ce"
+    },
+    {
+      "path": "tests/godot/learning_context_flow_tests.gd",
+      "bytes": 2996,
+      "sha256": "cbb70e752a9e7d17e57270cbcfbcdc167bdff42665884696121c5463102a5165"
+    },
+    {
+      "path": "tests/godot/morphology_tests.gd",
+      "bytes": 16891,
+      "sha256": "4a1449384260dc1899a0e7bcc196750c1b37e2ae06c2e89acede5bc7d86f2579"
+    },
+    {
+      "path": "tests/godot/word_jelly_morphology_tests.gd",
+      "bytes": 34225,
+      "sha256": "3fe8fdaa8a5976c3bc5e35f70c6910fa5e9356e2268e5c7fa2dd1a1cadefa1d8"
+    },
+    {
+      "path": "tests/godot/word_jelly_morphology_view_tests.gd",
+      "bytes": 7144,
+      "sha256": "be81122243f170b48cd19f44041840d8b923ce95dccaefe3e682783ea96e6351"
+    },
+    {
+      "path": "tests/growth-host.test.cjs",
+      "bytes": 9262,
+      "sha256": "ab2b3997dbff798d7fccc2c931ed50d97cba05f2d609b8c419f9062402bb723c"
+    },
+    {
+      "path": "tests/growth-morphology.test.cjs",
+      "bytes": 13253,
+      "sha256": "5fe1b5a5a01e591f7d4da6b601fd91f894ebda288fded91e4b5a9351d0c92767"
+    },
+    {
+      "path": "tests/growth-vocabulary.test.cjs",
+      "bytes": 2529,
+      "sha256": "d69f299dd181a83dd3a55a2c76f2840f8ba2b765d7f1933f849b0c9d3c4940eb"
+    },
+    {
+      "path": "tools/author-growth-morphology.cjs",
+      "bytes": 31341,
+      "sha256": "af597489164c496b0eec761fcd7a2ed0b1b6156bb00c0d610ca843aa04435136"
+    },
+    {
+      "path": "tools/growth-morphology/age-06.cjs",
+      "bytes": 24345,
+      "sha256": "f0e4a5a970a1dfa038d596c7edd55b320d886ccaf879a0dc6ee6a45960c4bb0f"
+    },
+    {
+      "path": "tools/growth-morphology/age-07.cjs",
+      "bytes": 45504,
+      "sha256": "59f2663f7355e92135c5f11d79926f223905a907963d8f58d5ef21d422a4022d"
+    },
+    {
+      "path": "tools/growth-morphology/age-08.cjs",
+      "bytes": 44031,
+      "sha256": "d3f1d53445c7b6a8e74087dfa9e6459638252621075643d926cf6ec00a5785af"
+    },
+    {
+      "path": "tools/growth-morphology/age-09.cjs",
+      "bytes": 38827,
+      "sha256": "9638cc86ce9ed9a3dc78e26e6150a8fe45f80d30fdb324432956cd2e2cbea1bd"
+    },
+    {
+      "path": "tools/growth-morphology/age-10.cjs",
+      "bytes": 25907,
+      "sha256": "8203c89531cc198b5d9887652d76df2f0dcba058f6a8877f21446ffb6be3c2e1"
+    },
+    {
+      "path": "tools/growth-morphology/age-11.cjs",
+      "bytes": 20204,
+      "sha256": "87815cd478e4fd475be1e5cf6961ec271a604df322a3f524b4d4fa113a23dec2"
+    },
+    {
+      "path": "tools/growth-morphology/age-12.cjs",
+      "bytes": 24269,
+      "sha256": "b84ea3bce652adbbf102082540732642fd39834a9a9875aedb1dd6d1555ce28c"
+    },
+    {
+      "path": "tools/validate-growth-morphology.cjs",
+      "bytes": 9253,
+      "sha256": "7303793ac9aab4e58d9d03d083645cb7f27cccd59a4c93b49e61b8eebabe43d3"
+    },
+    {
+      "path": "words.json",
+      "bytes": 645989,
+      "sha256": "81809bf9d2c810aaee4f5a5aabf9f0f1b48a4f822dc2325a1c6b714ec4e92be0"
+    }
+  ]
+}

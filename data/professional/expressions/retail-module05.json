@@ -1,0 +1,1950 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.retail.module05.01",
+      "text": "We can scan the labels, weigh the loose produce, and bag the items you purchase; I will confirm what to charge.",
+      "meaning": "Describe purchase handling and clarify the amount due.",
+      "context": "A worker explains available checkout actions to a customer and checks the applicable price.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "scan",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 4,
+          "text": "labels",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 6,
+          "text": "weigh",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": "loose",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": "produce",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 12,
+          "text": "bag",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 14,
+          "text": "items",
+          "start": 61,
+          "end": 66
+        },
+        {
+          "index": 15,
+          "text": "you",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 16,
+          "text": "purchase",
+          "start": 71,
+          "end": 79
+        },
+        {
+          "index": 17,
+          "text": ";",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 18,
+          "text": "I",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 19,
+          "text": "will",
+          "start": 83,
+          "end": 87
+        },
+        {
+          "index": 20,
+          "text": "confirm",
+          "start": 88,
+          "end": 95
+        },
+        {
+          "index": 21,
+          "text": "what",
+          "start": 96,
+          "end": 100
+        },
+        {
+          "index": 22,
+          "text": "to",
+          "start": 101,
+          "end": 103
+        },
+        {
+          "index": 23,
+          "text": "charge",
+          "start": 104,
+          "end": 110
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 110,
+          "end": 111
+        }
+      ],
+      "focus_lexeme_ids": [
+        "scan.read-with-device.v",
+        "weigh.measure-weight.v",
+        "bag.put-in-bag.v",
+        "purchase.buy-item.v",
+        "charge.ask-payment.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-retail-sales",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "r05-oald-scan",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 3, computing. The selected computing sense covers making a digital copy of a picture or document with a scanner. Barcode reading is separately supported by GS1. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-gs1-barcode",
+          "status": "verified",
+          "scope": "Selected passage consulted: opening barcode and optical-scanner explanation. Barcodes encode machine-readable information and can be read optically or from images using software. This supports the code-reading use of scan. No particular scanner compatibility, calibration or data-handling procedure is certified. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release. Verified scope: Only machine-readable encoded information and the lexical use of optical or image-based scan. Device compatibility, calibration, standards compliance and data-handling procedure remain excluded."
+        },
+        {
+          "source_id": "r05-oald-weigh",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 2. The transitive measurement sense determines heaviness, commonly using scales; the entry distinguishes it from considering options. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-bag",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1, put into bags. The selected physical verb puts things in bags; it is not restricted to items already purchased. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-purchase",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. Purchase is the formal verb for buying; product, ticket and equipment examples support the chosen retail usage. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-charge",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1, money. The retail sense asks a price for goods or a service. It does not itself specify payment-network authorization or settlement. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module05.02",
+      "text": "Please unpack the box, sort the shirts, tag each one, fold them, and display them.",
+      "meaning": "Prepare and identify clothing for a display.",
+      "context": "A worker follows the agreed merchandise-preparation task.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "unpack",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "box",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "sort",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "shirts",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": "tag",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 10,
+          "text": "each",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 11,
+          "text": "one",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 13,
+          "text": "fold",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 14,
+          "text": "them",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 17,
+          "text": "display",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 18,
+          "text": "them",
+          "start": 77,
+          "end": 81
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "unpack.remove-from-container.v",
+        "sort.group-by-kind.v",
+        "fold.bend-cloth-neatly.v",
+        "display.present-for-view.v",
+        "tag.attach-small-marker.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-retail-sales",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "r05-oald-unpack",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. The physical action removes contents from luggage or another container. Arrival is a possible context, not a defining condition. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-sort",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. Sorting separates or arranges items by a type or other criterion. It is not the act of finding their number. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-tag",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. The physical sense attaches a tag to an item. Electronic tracking, social-media tagging and describing a person are separate senses. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-fold",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. Paper or cloth is bent so sections lie over other sections. The clothes examples support the selected physical action. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-display",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. Objects are placed so people can view them. Showing goods is supported without implying that a sale has occurred. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module05.03",
+      "text": "Compare the two models before you recommend one, demonstrate how it works, or bundle it with an accessory.",
+      "meaning": "Compare items before suggesting or grouping an offer.",
+      "context": "A worker reviews approved product options.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Compare",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "two",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "models",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "before",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "you",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "recommend",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "one",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "demonstrate",
+          "start": 49,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "how",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "it",
+          "start": 65,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "works",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "or",
+          "start": 75,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "bundle",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "it",
+          "start": 85,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "with",
+          "start": 88,
+          "end": 92
+        },
+        {
+          "index": 18,
+          "text": "an",
+          "start": 93,
+          "end": 95
+        },
+        {
+          "index": 19,
+          "text": "accessory",
+          "start": 96,
+          "end": 105
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 105,
+          "end": 106
+        }
+      ],
+      "focus_lexeme_ids": [
+        "compare.examine-differences.v",
+        "recommend.suggest-suitable-choice.v",
+        "demonstrate.show-how-it-works.v",
+        "bundle.combine-for-sale.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-retail-sales",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "r05-oald-compare",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. Comparison considers similarities as well as differences and can concern people, reports, results or prices. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-recommend",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb senses 1 and 2. A recommendation can identify a useful thing, a suitable person or a proposed action. The entry includes both a candidate and a that-clause advising an action. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-demonstrate",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 3. The selected teaching sense shows and explains how something functions or how an action is performed, distinct from proving a claim. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-shopify-bundles",
+          "status": "verified",
+          "scope": "Selected passage consulted: Product bundles introduction. A retail bundle groups multiple related products for sale; a discount is common rather than essential. The project does not adopt platform configuration, eligibility rules or return policies. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release. Verified scope: Only the selected meaning of a retail group of products; the source explicitly does not make a discount essential. Platform configuration, eligibility, returns and customer entitlements remain excluded."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module05.04",
+      "text": "Please count the cartons and confirm the approved method before asking the team to lift, load, or unload them.",
+      "meaning": "Confirm quantities and arrangements before handling goods.",
+      "context": "A worker checks the assigned handling arrangements without prescribing a lifting technique.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "count",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "cartons",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "confirm",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "approved",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "method",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "before",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "asking",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "team",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "to",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "lift",
+          "start": 83,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 87,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "load",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 93,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "or",
+          "start": 95,
+          "end": 97
+        },
+        {
+          "index": 19,
+          "text": "unload",
+          "start": 98,
+          "end": 104
+        },
+        {
+          "index": 20,
+          "text": "them",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "count.find-number.v",
+        "unload.remove-carried-goods.v",
+        "lift.raise-item.v",
+        "load.put-goods-for-transport.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-retail-sales",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "r05-oald-count",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 2, find total. The selected action determines how many people or things a group contains, distinct from reciting number names. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-lift",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1, raise. The physical sense moves someone or something to a higher position. It specifies no safe technique or authorized worker role. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-load",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1, give/receive load. Goods are put onto or into something; vehicle and truck examples support the transport sense selected here. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-unload",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. The transport sense takes carried items out of a vehicle or vessel. It differs from taking products out of an ordinary package. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module05.05",
+      "text": "The supervisor can authorize or decline the change, void the duplicate entry, and process the order.",
+      "meaning": "Describe approval and refusal within assigned responsibility.",
+      "context": "A worker refers a transaction change to the supervisor.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "supervisor",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "can",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "authorize",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "or",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "decline",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "change",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "void",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "duplicate",
+          "start": 61,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "entry",
+          "start": 71,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "process",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "order",
+          "start": 94,
+          "end": 99
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 99,
+          "end": 100
+        }
+      ],
+      "focus_lexeme_ids": [
+        "authorize.give-transaction-permission.v",
+        "void.cancel-transaction-entry.v",
+        "process.handle-through-steps.v",
+        "decline.refuse-transaction.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-retail-sales",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "r05-oald-authorize",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1 and spelling label. The verb gives official permission for an action. The entry explicitly recognizes the British alternative authorise. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-decline",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 2. The refusal sense covers offers and invitations as well as refusing to act. The falling-value sense is separate. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-void",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. The invalidation sense supplies the general lexical basis; Square supplies the narrower cancelled-entry context. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-square-void",
+          "status": "pending_term_check",
+          "scope": "Selected passage consulted: About comp and void; before you begin; permissions audience. The documented system distinguishes voiding an open ticket or item from collecting payment and retains a record of the cancellation. Access depends on permissions. An example of payment-system terminology, not a universal processor rule or project workflow approval. Independent acceptance of the exact editorial proposal remains pending. Domain, morphology and media gates remain unchanged."
+        },
+        {
+          "source_id": "r05-collins-process",
+          "status": "verified",
+          "scope": "Selected passage consulted: British English 1, transitive verb sense 10. The selected verb handles something through a routine procedure. This supports processing a request or order without specifying system steps. Manufacturing, legal service and intransitive procession senses are excluded. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module05.06",
+      "text": "Can you reserve this item while I browse and select a matching bag?",
+      "meaning": "Ask to hold a product while choosing another item.",
+      "context": "A shopper wants more time to decide.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Can",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "reserve",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "this",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "item",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "while",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "I",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "browse",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "select",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "matching",
+          "start": 54,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "bag",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "?",
+          "start": 66,
+          "end": 67
+        }
+      ],
+      "focus_lexeme_ids": [
+        "reserve.hold-for-customer.v",
+        "browse.look-without-fixed-choice.v",
+        "select.choose-option.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-retail-sales",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "r05-oald-reserve",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 2. The selected holding sense keeps something available for a specified person or use, rather than making it generally available. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-browse",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. The shop sense describes looking among goods without concentrating on one particular purchase; browsing shelves is an explicit pattern. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-select",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. Selection chooses from available people or things; candidate selection is an explicit use, so a goods-only definition is too narrow. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module05.07",
+      "text": "Please calculate the charges and total them. If the voucher is accepted, we can redeem it and deduct its amount.",
+      "meaning": "Work out the charges and apply a voucher only if it is accepted.",
+      "context": "A worker checks the actual conditions of a fictional voucher with a stated money value.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "calculate",
+          "start": 7,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "charges",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "total",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "them",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ".",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "If",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "voucher",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "is",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "accepted",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "we",
+          "start": 73,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "can",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 16,
+          "text": "redeem",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 17,
+          "text": "it",
+          "start": 87,
+          "end": 89
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 19,
+          "text": "deduct",
+          "start": 94,
+          "end": 100
+        },
+        {
+          "index": 20,
+          "text": "its",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 21,
+          "text": "amount",
+          "start": 105,
+          "end": 111
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "calculate.work-out-number.v",
+        "deduct.subtract-amount.v",
+        "total.add-amounts.v",
+        "redeem.use-value-or-offer.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-retail-sales",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "r05-oald-calculate",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. Calculation uses numerical operations to determine an amount or other quantity. It is broader than adding alone. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-total",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 2 and verb forms. The selected transitive action adds amounts to obtain a sum. It differs from the noun total and from the verb meaning amount to. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-redeem",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 5. The selected transaction sense exchanges a voucher or similar instrument for value or goods. Debt repayment and moral redemption are separate. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-deduct",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. Deduction removes an amount from a total. Source examples do not authorize any particular deduction in the project scenario. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module05.08",
+      "text": "Ask the supervisor to reconcile the records before deciding whether we can refund the payment or exchange the item.",
+      "meaning": "Ask for a review of a payment discrepancy before considering a refund or exchange.",
+      "context": "A worker seeks authorized review of a payment discrepancy in a particular return case.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "supervisor",
+          "start": 8,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "reconcile",
+          "start": 22,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "records",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "before",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "deciding",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "whether",
+          "start": 60,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "we",
+          "start": 68,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "can",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "refund",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "payment",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "or",
+          "start": 94,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "exchange",
+          "start": 97,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 106,
+          "end": 109
+        },
+        {
+          "index": 18,
+          "text": "item",
+          "start": 110,
+          "end": 114
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "refund.give-payment-back.v",
+        "exchange.swap-bought-item.v",
+        "reconcile.match-financial-records.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "pending",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-retail-sales",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "r05-collins-reconcile-account",
+          "status": "verified",
+          "scope": "Selected passage consulted: Accounting: Commerce definition. Accounting reconciliation compares statements with internal entries and addresses differences. This supports comparing records rather than merely doing arithmetic. Lexical accounting evidence, not approval of a project financial procedure. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-acca-reconciliation",
+          "status": "pending_term_check",
+          "scope": "Selected passage consulted: Reasons for differences; illustrative example 1; summary. A discrepancy may be a timing difference rather than an error. Reconciliation identifies and investigates discrepancies, so agreement must not be obtained by arbitrary editing. Only the conceptual distinction is used. Example rates, postings, accounting rules and professional approval are not transferred. Independent acceptance of the exact editorial proposal remains pending. Domain, morphology and media gates remain unchanged."
+        },
+        {
+          "source_id": "r05-oald-refund",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. The verb returns money previously paid. The source supports the meaning but does not determine when a particular merchant must refund. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-exchange",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 3, goods. The goods sense gives back an item for a replacement, including a different size. Dictionary examples do not establish a universal entitlement. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module05.09",
+      "text": "We need to label the boxes, restock and face the shelf, and replenish the wrapping supplies.",
+      "meaning": "Describe stock preparation and shelf presentation tasks.",
+      "context": "A team coordinates the agreed display and supply work.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "need",
+          "start": 3,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "to",
+          "start": 8,
+          "end": 10
+        },
+        {
+          "index": 3,
+          "text": "label",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "boxes",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 7,
+          "text": "restock",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": "face",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 11,
+          "text": "shelf",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 14,
+          "text": "replenish",
+          "start": 60,
+          "end": 69
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 16,
+          "text": "wrapping",
+          "start": 74,
+          "end": 82
+        },
+        {
+          "index": 17,
+          "text": "supplies",
+          "start": 83,
+          "end": 91
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "label.attach-information.v",
+        "restock.replace-sold-stock.v",
+        "replenish.restore-supply.v",
+        "face.align-shelf-fronts.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-retail-sales",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "r05-oald-label",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1 and verb forms. Identifying information can be attached or written on an object. British and American inflections differ, but share the lemma label. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-restock",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1 and collocations. A place or supply receives replacement goods after use or sale; shelf and supply are listed objects. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-shopify-facing",
+          "status": "verified",
+          "scope": "Selected passage consulted: What is facing; facing as a verb; facing versus fronting. The retail action brings products forward and presents labels outward. The guide distinguishes this action from the noun counting shelf facings. Retail-provider terminology only; merchandising performance claims and procedural tips are not adopted. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release. Verified scope: Only the selected definition of retail face/facing and its verb/noun distinction. Merchandising performance claims, operational tips and visual suitability remain excluded."
+        },
+        {
+          "source_id": "r05-oald-replenish",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1 and collocations. A depleted supply is restored by adding replacements; inventory, stock and supply are listed objects. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module05.10",
+      "text": "The team will advertise the event and promote the offer, but it cannot discount every item.",
+      "meaning": "Explain the scope of a planned promotion.",
+      "context": "A supervisor briefs the retail team on an event.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "team",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "advertise",
+          "start": 14,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "event",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "promote",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "offer",
+          "start": 50,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "but",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "it",
+          "start": 61,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "cannot",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "discount",
+          "start": 71,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "every",
+          "start": 80,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "item",
+          "start": 86,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "advertise.publicize-offer.v",
+        "promote.encourage-product-interest.v",
+        "discount.reduce-selling-price.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-retail-sales",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "r05-oald-advertise",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. Advertising communicates an offering to the public to encourage buying or use. Public communication distinguishes it from any private mention. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-promote",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. Commercial promotion supports interest or sales through publicity and other activities; advertising can be one such activity. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        },
+        {
+          "source_id": "r05-oald-discount",
+          "status": "verified",
+          "scope": "Selected passage consulted: verb sense 1. The sales sense lowers a usual price. The unrelated sense of dismissing an idea is outside this entry. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+        }
+      ]
+    }
+  ]
+}

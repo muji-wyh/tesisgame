@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T18:40:27.432Z",
+  "scope": "Exact technical-review execution evidence, completed delivery receipts, and frozen superseded r01 preparation. r01 was not integrated.",
+  "copies": [
+    {
+      "file": "independent-technical-evidence/inspect.cjs",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r02-independent-technical-r01/inspect.cjs",
+      "sha256": "93e0fce61f2ae924eb5414a8d0441082dfaad72eb1ca701d152f9562dbbc049a"
+    },
+    {
+      "file": "independent-technical-evidence/checks.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r02-independent-technical-r01/checks.json",
+      "sha256": "6ee20a29da7cc7b152c0ab1a71d61c69744705a72ef3e86557a09cdfb975d2a7"
+    },
+    {
+      "file": "independent-technical-evidence/guard-probes.cjs",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r02-independent-technical-r01/guard-probes.cjs",
+      "sha256": "fe5e0b9af450166e3484aa5e7d2e371e861ea9e01e378ee56d0e391ce2862ef3"
+    },
+    {
+      "file": "independent-technical-evidence/guard-probes.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r02-independent-technical-r01/guard-probes.json",
+      "sha256": "da463ae330aaaf3c58e1be5beba7545d6a6e2127f9d091d40e94621d84afa866"
+    },
+    {
+      "file": "commit-receipt.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/commit-receipt.json",
+      "sha256": "4673aa680e00725996db86e377c4bbdf8df928ccad0ec9713c2373233e2af903"
+    },
+    {
+      "file": "transaction-intent.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/transaction-intent.json",
+      "sha256": "fbf96f4c2f26626ad6e7f0518915a569340bbf6685b7b7203de54ee38fe902c6"
+    },
+    {
+      "file": "superseded-r01/delivery-lib.cjs",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/delivery-lib.cjs",
+      "sha256": "1bf53b6cb9aa31e46716fd382faa104069712e89e5495290c10306f9fc00dc0c"
+    },
+    {
+      "file": "superseded-r01/test-transforms.cjs",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/test-transforms.cjs",
+      "sha256": "dd85a6a26fd0f21cdfb3447e5fb1c03060cb702728a2ae82d951f74335f9202d"
+    },
+    {
+      "file": "superseded-r01/prepare.cjs",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/prepare.cjs",
+      "sha256": "c3e902078d34033a89be5af6aa4b43afe817d63b9096e017aa166ccf76ef0729"
+    },
+    {
+      "file": "superseded-r01/deliver.cjs",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/deliver.cjs",
+      "sha256": "696ba8cecfaeb57d73c0f124a417d286fa34b9e9df7e3a53b4cb66e3c51e151d"
+    },
+    {
+      "file": "superseded-r01/baseline-config.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/baseline-config.json",
+      "sha256": "d3eb180e31c07370640cc1ac3b60f7fe5d7a71aa17b66219bb3637d9efb8d665"
+    },
+    {
+      "file": "superseded-r01/HANDOFF.md",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/HANDOFF.md",
+      "sha256": "8b2259ca15f2f835689d17a75ac8e1157b625655ed77db69183027368cd48838"
+    },
+    {
+      "file": "superseded-r01/accepted-language.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/accepted-language.json",
+      "sha256": "97413b3675115ffe5102768e93ec146ec8c6d8d88dcc3d652fa28d284b7548bc"
+    },
+    {
+      "file": "superseded-r01/professional-content.test.cjs.before",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional-content.test.cjs.before",
+      "sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19"
+    },
+    {
+      "file": "superseded-r01/professional-content.test.cjs.after",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional-content.test.cjs.after",
+      "sha256": "4bf6f5139de27edb44156e33a8e2cdab96d8c1aca82bc5b864244edd67909d1a"
+    },
+    {
+      "file": "superseded-r01/professional-retail-morphology.test.cjs.before",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional-retail-morphology.test.cjs.before",
+      "sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459"
+    },
+    {
+      "file": "superseded-r01/professional-retail-morphology.test.cjs.after",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional-retail-morphology.test.cjs.after",
+      "sha256": "c7bc3e1448ee006c6441c9cf1eb0fb3be875efc9c762f1a78d9c0c478a62135f"
+    },
+    {
+      "file": "superseded-r01/professional_retail_morphology_tests.gd.before",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional_retail_morphology_tests.gd.before",
+      "sha256": "f0bd041c0c50413b9f0b399df1abb89aea7d66062c5f4ad5fcbc30290e4208f1"
+    },
+    {
+      "file": "superseded-r01/professional_retail_morphology_tests.gd.after",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/professional_retail_morphology_tests.gd.after",
+      "sha256": "7cd10db267b373fea44ac287924ef67de0d47fa13d4a5c4e2c299afaeea6008c"
+    },
+    {
+      "file": "superseded-r01/test-patches.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/test-patches.json",
+      "sha256": "385ac1d5512e7e65406dc271debf335cd043ae674c2633e169260296cd53f78f"
+    },
+    {
+      "file": "superseded-r01/scratch-validation.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/scratch-validation.json",
+      "sha256": "68de87e2247416021574954de26a32ce7f42d1fe336eeadb7b816bbf7ba768e6"
+    },
+    {
+      "file": "superseded-r01/binding.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/binding.json",
+      "sha256": "e87f376881431fb88ebd8356c3d963e899803eedca5da9733ca33d0317dd3fc2"
+    },
+    {
+      "file": "superseded-r01/preparation-receipt.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/preparation-receipt.json",
+      "sha256": "e3a132e1c161993428689d8d6c946aee3449d1014bec0c0319e35b27c5dca812"
+    },
+    {
+      "file": "superseded-r01/preparation-attempt-001.json",
+      "source": "build/professional-english/foundation-module02-language-review/second10-delivery-r01/preparation-attempt-001.json",
+      "sha256": "f71e64f374019e6e467ab9ea587ea8e5836732deb0d5a02658b64074e2cb0456"
+    }
+  ]
+}

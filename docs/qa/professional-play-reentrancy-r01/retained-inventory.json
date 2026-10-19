@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "retained_at": "2026-10-16T14:19:02.222Z",
+  "kind": "exact_focused_reentrancy_evidence_copies",
+  "files": [
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/README.md",
+      "path": "README.md",
+      "bytes": 4292,
+      "sha256": "9da0ed7d12d9f5c726d391c53c6edfb59e3ad5be528721084da1a74bdfd946d6"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/change-journal.json",
+      "path": "change-journal.json",
+      "bytes": 885,
+      "sha256": "fd224457cf41465fd247fa6125319e541e5f814830eb2332698366737257fee4"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/completion.json",
+      "path": "completion.json",
+      "bytes": 1294,
+      "sha256": "9b9fc4f176219eb603dc685dad082e28b9c9a1245ad2cf5ad86719edb619ac3e"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/review.diff",
+      "path": "review.diff",
+      "bytes": 17144,
+      "sha256": "06f15b8a7dd83924b8290ee0803aa2c23e69cead37243268032c6115a71ea2cb"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/execution-input-inventory.json",
+      "path": "execution-input-inventory.json",
+      "bytes": 4260,
+      "sha256": "36e6c8ac536f79d651f92d003d18d1775f68c08209a6bf050d7b5531c1495371"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/native-attempt.json",
+      "path": "native-attempt.json",
+      "bytes": 471,
+      "sha256": "cc0df49da11adff966df0ab4e71d8993ad61404c119ce102c0df2447264ec5e1"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/original-reproduction.json",
+      "path": "original-reproduction.json",
+      "bytes": 2334,
+      "sha256": "b1ed0602eedf5af480006b0a7bb81166f837b49cf5e286e74d08d1059e6d3ade"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/current-report.json",
+      "path": "current-report.json",
+      "bytes": 3857,
+      "sha256": "79e3dacc26279031e616288047f4451bfe481fe6d64f15ef245bafc636599647"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/native.log",
+      "path": "native.log",
+      "bytes": 207,
+      "sha256": "266692858acf72ed1826211949d49055293174a60caab5c7369eeebf0619f984"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/validation-receipt.json",
+      "path": "validation-receipt.json",
+      "bytes": 771,
+      "sha256": "8b8f1f8cb4b317a250167968b7a58e6a0809895875f35989aba7b03bba0bac78"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/root-static-review-r01.json",
+      "path": "root-static-review-r01.json",
+      "bytes": 2544,
+      "sha256": "906b7d41d583a63664437666552ecfd099915d61f2cca91b5eccaa9cf60bf7a5"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/preimages/scripts/professional_play.gd",
+      "path": "preimages/scripts/professional_play.gd",
+      "bytes": 5977,
+      "sha256": "80d0f36bcf6f1c245faa981d194d824ccd64b9ab02ece75db716539348727d91"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/preimages/tests/godot/professional_play_tests.gd",
+      "path": "preimages/tests/godot/professional_play_tests.gd",
+      "bytes": 2479,
+      "sha256": "62fdbbb8bc8325d182cc834c10dbe7390c1928e28a198e2f5a51d15c96ea06e8"
+    },
+    {
+      "source": "scripts/professional_play.gd",
+      "path": "current-sources/scripts/professional_play.gd",
+      "bytes": 7234,
+      "sha256": "348431e211ca691aa873e201d8a5688e3e8f1cc63bc2fda6b8851b3c41a22db0"
+    },
+    {
+      "source": "tests/godot/professional_play_tests.gd",
+      "path": "current-sources/tests/godot/professional_play_tests.gd",
+      "bytes": 13576,
+      "sha256": "c6fea401bb2eea0e0399aec939ec5e84f0c31e308a5bdc4554dc25acecb9c7f6"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/native_entry.gd",
+      "path": "harness/native_entry.gd",
+      "bytes": 1691,
+      "sha256": "2f01df0aba92e9557dcded19badc87881acb1187133d752141fe2124079bb8b1"
+    },
+    {
+      "source": "build/professional-english/professional-play-reentrancy-r01/run-native.cjs",
+      "path": "harness/run-native.cjs",
+      "bytes": 4623,
+      "sha256": "187c13ed8b62ebbcffc435bc231d408323cc42f8b6fec5a8e1f5986c91bedd52"
+    }
+  ]
+}

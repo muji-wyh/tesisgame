@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_static_review_and_unexecuted_probes",
+  "directory": "build/professional-english/foundation02-third10-commit-review-r01",
+  "recorded_at": "2026-10-16T20:26:32.6940822Z",
+  "execution_performed": false,
+  "files": [
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/README.md",
+      "sha256": "b2f278380172c6d01253838bada2f83fc6cc91fe0bffb23b605966e3d1c6199b",
+      "bytes": 4886
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/review.json",
+      "sha256": "e599598db023bd1d34448e07010917647a62c2aee6a62844543f956ea5fb7cae",
+      "bytes": 2822
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/probe.cjs",
+      "sha256": "3625a6202b7a22b95f19982ec84ee74839acb437ea92975eaa8f6d9f14c94ec2",
+      "bytes": 20961
+    }
+  ],
+  "inputs": [
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/guarded-transaction.cjs",
+      "sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "bytes": 21544
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/author-inventory.json",
+      "sha256": "2b4531d1b1a715bca3f165d6af94c4328aecd249ae1b68707b4e2a6c6b8f631d",
+      "bytes": 1074
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/commit.cjs",
+      "sha256": "20ff01bea2ea5027abbe7d02459a9e6caf24e74ea85d22e678bc813545476824",
+      "bytes": 8705
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/committed-evidence.test.cjs",
+      "sha256": "7b3bb20de53ac5cc50f3632ae7f5a6e945abfaabe91ab76a762b78be8fd5219a",
+      "bytes": 477
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/evidence-contract.cjs",
+      "sha256": "42ea4433e46a0f0bff0ebfa26f7deb95b7a252a47cc3ad45a1ddbffe8c5d7f3c",
+      "bytes": 20649
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/INPUTS.md",
+      "sha256": "6c05aa35eb28cc74f807b05911c826bba18d12e05e03829fdd349515e93a8d45",
+      "bytes": 7106
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r01/root-commit-input.example.json",
+      "sha256": "331fdae7123187ee3578c62dbde96889ccf57cb047d1ec2f99ed5cacdef6ca11",
+      "bytes": 1259
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/projection.cjs",
+      "sha256": "ad1143ca6951aa7851a0991fd7fc61711cfe7fc13516557f99b07c99e5b7a4f5",
+      "bytes": 16981
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-delivery-preparation-r01/test-transforms.cjs",
+      "sha256": "f311764bac315212c3e24f22fe799c69bd151ff96331192187d4988fd80cd52f",
+      "bytes": 19215
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-prepared-review-r01/binding.json",
+      "sha256": "3139e35a051f9fd4eb38dfca0b122fedc87bf602784c621ce56415006c37ad44",
+      "bytes": 166547
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-scoped-validation-r01/candidate/copied-inputs.json",
+      "sha256": "2ec12fad03e5d40aa23864c686a7910856916e44bd0e3de50474c136f2e338a5",
+      "bytes": 108961
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-scoped-validation-r01/root-witness.json",
+      "sha256": "8751130cf9903e8fee5641f4ab679528944332bdc479b28620b2f1a7630f215e",
+      "bytes": 2614
+    },
+    {
+      "path": "tools/professional-picture-pools.cjs",
+      "sha256": "ca37e39c0987fb4d2738fec4b951bc2646464c36aa8acd9827173542e08e3629",
+      "bytes": 3496
+    },
+    {
+      "path": "tools/validate-professional-content.cjs",
+      "sha256": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd",
+      "bytes": 31243
+    },
+    {
+      "path": "tools/validate-theme-motion.cjs",
+      "sha256": "bb2a9c07829a3b60616c663662875ba0cdbdf6af9fe9b607517ebf89ff721b04",
+      "bytes": 2288
+    },
+    {
+      "path": "web/professional-media.js",
+      "sha256": "db9ac8f3aeaaafb8f1ac411a56d56f0bfd6d8ad2862348868d42666d3021630a",
+      "bytes": 11851
+    }
+  ],
+  "module_paths": [
+    "build/professional-english/foundation02-third10-delivery-preparation-r01/projection.cjs",
+    "build/professional-english/foundation02-third10-delivery-preparation-r01/test-transforms.cjs",
+    "build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/guarded-transaction.cjs",
+    "tools/validate-professional-content.cjs",
+    "tools/validate-theme-motion.cjs",
+    "tools/professional-picture-pools.cjs",
+    "web/professional-media.js"
+  ],
+  "dynamic_proposal_contract": "Root supplies the reviewed canonical proposal revision path and exact author-inventory hash. Its members are independently hashed before any memory-only module execution."
+}

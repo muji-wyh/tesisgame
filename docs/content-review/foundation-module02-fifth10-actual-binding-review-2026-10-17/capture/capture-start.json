@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "status": "started",
+  "started_at": "2026-10-16T23:13:49.459Z",
+  "root_capture_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-capture-r02/input.json",
+    "bytes": 11856,
+    "raw_sha256": "9e6dd6fd5afa6f230dc79331bfbb94cf2b5c81d622aee4758c6ea466d7a01c1c"
+  },
+  "helper_source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/source-inventory.json",
+    "bytes": 1826,
+    "raw_sha256": "b52fea9c2181064d024d35a05f599ad3b24897e2402927031f13e449e5a10993"
+  },
+  "independent_helper_source_review": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r02/review.json",
+    "bytes": 8919,
+    "raw_sha256": "43173b9061e326e27a60e87d54f5d0c72527b14e70c6df6c490a456f0eb53c78"
+  }
+}

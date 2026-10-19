@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "status": "accepted_for_root_owned_one_shot_guard_source_only",
+  "reviewer": "/root/recover_delivery",
+  "reviewed_guard_author": "/root",
+  "inherited_guard_author": "/root/runtime_recovery",
+  "scope": "Independent source review of the separate guard revision; actual input selection, binding acceptance, guard execution result, and preparation acceptance are excluded.",
+  "independence_disclosure": {
+    "reviewer_authored_root_binding_helper": true,
+    "reviewer_authored_frozen_preparation": true,
+    "reviewer_authored_reviewed_guard": false,
+    "independent_scope": "Separately authored guard source only.",
+    "actual_binding_and_preparation_acceptance_owners": [
+      "/root",
+      "/root/morph_review"
+    ],
+    "corroborating_raw_source_reviewer": "/root/recover_delivery/guard_assertion_review"
+  },
+  "guard_source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/source-inventory.json",
+    "bytes": 1546,
+    "raw_sha256": "e3b9cd630ccb4edfc3985ba8e5925029911f853616d2730935c944cfab8c1c78"
+  },
+  "guard_source": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/guard.cjs",
+    "bytes": 45818,
+    "raw_sha256": "e34fd6419b8904f936d54253360b7a3d60681391624a54385545a9980d4659bf"
+  },
+  "prior_review": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-independent-review-r01/review.json",
+    "bytes": 9819,
+    "raw_sha256": "b38a0ce1bd4338c8abf4509cad1c63ae31798228cf9c6762d73e0380e7e81d38"
+  },
+  "evidence": {
+    "inputs": {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-independent-review-r02/inputs.json",
+      "bytes": 11582,
+      "raw_sha256": "7791e55a2176791d145616e048508c018972462a06af3466bb697b2046255567"
+    },
+    "inspection": {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-independent-review-r02/inspection.json",
+      "bytes": 10622,
+      "raw_sha256": "299b43b4d22ab75467c2a164e1c3c13c953a85caf7746544475b80f510c5d471"
+    }
+  },
+  "resolved_findings": [
+    {
+      "id": "r01/F01",
+      "resolution": "The first frozen binding frame is checked against both line and column span; unique marker fragments contain exactly one assertion. Binding-path/bytes variants select actual_binding, inventory variants select source_inventory, persisted_state_mismatch selects the SHA comparison, and command variants select their own field assertion. Other multi-assertion markers are narrowed to the intended single assertion.",
+      "source_lines": [
+        245,
+        246,
+        248,
+        251,
+        252,
+        290,
+        294,
+        298,
+        473,
+        538,
+        546
+      ]
+    },
+    {
+      "id": "r01/F02",
+      "resolution": "The mismatch fixture chooses between two valid distinct canonical identities according to the actual binding reviewer. The selected identity always differs; both identities avoid the prohibited authors and dispatcher.",
+      "source_lines": [
+        467,
+        468
+      ]
+    }
+  ],
+  "findings": [],
+  "lineage": {
+    "recorded_textual_edits": 14,
+    "all_edit_occurrence_counts_match": true,
+    "exact_reconstruction_after_newline_normalization": true,
+    "raw_reconstruction_equal": false,
+    "additional_raw_byte_change": "LF to CRLF across 584 lines; captured by exact source pins and recorded in inspection.json.",
+    "prior_proposal_and_rejection_retained": true,
+    "dependency_pins": 41,
+    "unique_reviewed_input_pins": 49
+  },
+  "source_observations": {
+    "assertion_sites": "37 unique complete marker fragments, including the three command-field forms, each occur once in the frozen binding, contain one assertion, and span one line. Static evidence verifies source placement only; V8 frame output is not claimed observed.",
+    "role_identity": "The root revision author is explicit, and the separate inherited /root/runtime_recovery exclusion remains present.",
+    "unchanged_boundary": "The fourteen textual edits leave the r01 trusted frozen binding VM and read-only cached filesystem interface, fixture relinking and isolation, actual-only dependencies, and one-shot/recheck logic intact. Unknown VM boundaries cannot satisfy ERR_ASSERTION coverage. No preparation, projection, test transformer, project, validator, test, native process, transaction, or production writer is invoked.",
+    "actual_inputs": "A real successful helper capture, actual preparation root input, exact independent actual-binding acceptance, frozen source inventory and source-only review remain mandatory separately pinned prerequisites. This review neither supplies nor accepts those inputs.",
+    "planned_cases": {
+      "positives": 2,
+      "negative_variants": 48,
+      "negative_specifications": 29,
+      "hash_controls": 3,
+      "total": 53,
+      "execution_observed": false
+    },
+    "original_rechecks": "Disk file pins, cached original bytes, journal directory snapshots and known absences remain checked after success or failure; admission and recheck cover latest journal state.",
+    "one_shot": "Output remains proposal-r02/attempt-001 with exclusive creation and stop at first unexpected outcome. Preparation output must remain absent."
+  },
+  "method": {
+    "raw_text_json_and_hash_inspection_only": true,
+    "all_49_original_pins_rechecked_unchanged": true,
+    "source_modules_imported": false,
+    "syntax_checks_run": false,
+    "source_or_vm_executed": false,
+    "guard_cases_run": false,
+    "actual_binding_inspected_or_accepted": false,
+    "preparation_or_project_executed": false,
+    "production_mutated": false
+  },
+  "decision": {
+    "guard_source_accepted_for_execution": true,
+    "guard_execution_accepted": false,
+    "actual_binding_accepted": false,
+    "preparation_execution_accepted": false,
+    "afterimages_accepted": false,
+    "scope": "Root may consider one dispatch of the exact frozen r02 guard only with separately accepted actual inputs and explicit exact source/input hashes. Root must inspect its actual passing receipt and unchanged originals before considering preparation.",
+    "qualification": "This is source-only acceptance, not an actual guard result or a substitute for root and /root/morph_review actual-binding/preparation acceptance."
+  }
+}

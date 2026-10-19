@@ -1,0 +1,103 @@
+{
+  "sense_id": "shopping-basket.store-container.n",
+  "source": "https://kenney.nl/assets/mini-market",
+  "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+  "license": "CC0 1.0",
+  "acquired_source_files": [
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shopping-basket.glb",
+      "sha256": "a7704926cb56c5a9ab74488230fc7c4d7b914387c59e9c1b6f62376965c0ea7d",
+      "bytes": 25864
+    },
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/Textures/colormap.png",
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+      "bytes": 8706
+    },
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/License.txt",
+      "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+      "bytes": 767
+    }
+  ],
+  "available_animations": [],
+  "accepted_png": {
+    "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/shopping-basket.png",
+    "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "bytes": 105604
+  },
+  "acceptance": {
+    "date": "2026-10-16",
+    "reviewer": "Independent root agent",
+    "accepted_sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "scope": "Physical-sense basket picture in actual minimum Match/Memory card states and cart/basket comparison; no participant recognition claim or module release.",
+    "decision": "Raised handle, rim and rigid small basket are readable, no wheels, and clearly distinct from the accepted cart in these rendered states. Empty-basket brief adjustment accepted."
+  },
+  "original_and_revised_brief": {
+    "before": "Use a three-quarter view of a compact rigid store basket with raised carrying handles and a few recognizable groceries below the rim. Handles and the small handheld scale should remain obvious. Reject wheels, fabric sides, a giant trolley, or a picnic-lid design. Inspect the Mini Market shopping-basket lead before rendering.",
+    "after": "Show an empty compact rigid retail shopping basket in a three-quarter view, with its raised hand-carry handle and open basket clearly visible at the actual minimum card size. Keep the handheld basket distinct from a wheeled shopping cart. Exclude wheels, fabric sides, a lid, and groceries that obscure the handle or opening. Use the inspected original Mini Market shopping-basket mesh without geometry or material changes.",
+    "reason": "Root accepted the narrow empty-basket adjustment after source inspection: the raised hand-carry handle, opening and absence of wheels should stay readable at minimum card size. Added groceries would obscure these cues. The original brief is preserved here and in the source record."
+  },
+  "suitability": {
+    "reviewer": "Codex source and native-card inspection plus completed independent root physical-sense picture review; no participant recognition claim",
+    "source_views": 4,
+    "selected_source_view": "source-inspection/rear-three-quarter.png",
+    "camera": {
+      "orthographic_size": 0.7,
+      "position": [
+        3,
+        2.4,
+        -4
+      ],
+      "target": [
+        0,
+        0.125,
+        0
+      ]
+    },
+    "findings": [
+      "The original mesh is a rigid green basket with a raised light-colored handle, an open top and no wheels, fabric sides or lid.",
+      "The chosen rear three-quarter view shades the broad handle face, preserving contrast against the actual light card surface without changing materials.",
+      "At minimum Match and Memory sizes, the handle and open basket remain visible in both unmatched and matched states.",
+      "The adjacent accepted cart has a taller body, a rear push handle and visible wheels; the basket has an arching carrying handle and no wheels. The comparison does not depend solely on color."
+    ],
+    "limitations": [
+      "The source is stylized and has no independent human scale cue.",
+      "The eight-card comparison is an agent visual inspection, not a participant recognition test.",
+      "Native candidate textures were assigned directly to actual WordCard controls for isolated artwork QA; this does not establish production delivery."
+    ],
+    "status": "reviewed_scoped_physical_sense_picture"
+  },
+  "candidate_review_proposal": {
+    "path": "build/professional-english/retail-term-art-review/shopping-basket/review-proposal.json",
+    "sha256": "2fc70d1d71710dbba65552de51712c83c31f754f0889173e2cc15435bdaa43a4",
+    "bytes": 8963
+  },
+  "candidate_review_receipt": {
+    "path": "build/professional-english/retail-term-art-review/shopping-basket/review-receipt.json",
+    "sha256": "0d7aa8f8ce232983cb44eb8368672f8d894d25ec007b63da9ff88ffe9ec4c592",
+    "bytes": 6502
+  },
+  "native_qa": {
+    "process_exit_code": 0,
+    "checks": 32,
+    "failures": 0,
+    "report": {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/report.json",
+      "sha256": "e936d5be3c9a811b3a15778b8b85f2a79b773cb10d241502682402ee3483d5ea",
+      "bytes": 5316
+    },
+    "four_state_contact": {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/actual-word-card-contact.png",
+      "sha256": "fa56ff23bcd34bc2c8596da0c660808ec17945d9d26f26195c6ada9f78a6969b",
+      "bytes": 51030
+    },
+    "confusability_contact": {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/cart-basket-confusability-contact.png",
+      "sha256": "4c2c31cd6f29eaea32334b3bf5a9cb4db12b076e86b41711796f0ce82cfddc5a",
+      "bytes": 70585
+    },
+    "actual_dimensions": "Match 126 x 72 with 102 x 52 picture area; Memory 144 x 74 with 120 x 54 picture area; actual matched badge and 0.68 picture alpha retained."
+  },
+  "production_delivery_verification": "Pending exact descriptor/brief/note acceptance, serialized integration and native production-path check."
+}

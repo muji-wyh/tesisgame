@@ -1,0 +1,78 @@
+{
+	"bounds": [
+		-0.211428567767143,
+		-0.0000000000000129470087130651,
+		-0.211428567767143,
+		0.422857165336609,
+		0.13400000333786,
+		0.422857135534287
+	],
+	"captures": [
+		{
+			"camera": [
+				3.0,
+				2.40000009536743,
+				4.0
+			],
+			"file": "front-three-quarter.png"
+		},
+		{
+			"camera": [
+				-3.0,
+				2.40000009536743,
+				4.0
+			],
+			"file": "front-other-side.png"
+		},
+		{
+			"camera": [
+				3.0,
+				2.40000009536743,
+				-4.0
+			],
+			"file": "rear-three-quarter.png"
+		},
+		{
+			"camera": [
+				2.70000004768372,
+				1.60000002384186,
+				4.0
+			],
+			"file": "front-low.png"
+		},
+		{
+			"camera": [
+				0.300000011920929,
+				2.40000009536743,
+				4.0
+			],
+			"file": "front-center-high.png"
+		},
+		{
+			"camera": [
+				-2.5,
+				1.79999995231628,
+				4.0
+			],
+			"file": "front-left-low.png"
+		},
+		{
+			"camera": [
+				2.70000004768372,
+				0.800000011920929,
+				4.0
+			],
+			"file": "front-eye-level.png"
+		},
+		{
+			"camera": [
+				3.0,
+				-2.40000009536743,
+				4.0
+			],
+			"file": "underside.png"
+		}
+	],
+	"model_sha256": "90312cbba080e0852f4ab92a50744fa0349ddf4683f48ce92f24f29a2bcb2e75",
+	"scope": "Original static source mesh inspection only; not a final word image or approval."
+}

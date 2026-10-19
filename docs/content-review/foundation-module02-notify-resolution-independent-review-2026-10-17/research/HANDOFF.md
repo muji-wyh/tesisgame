@@ -1,0 +1,13 @@
+# Root handoff
+
+Research-only notify resolution is ready for independent review. The source packet recommends a distinct `inform.give-information.v`, editorial B2, and the exact seventeen-token shared phrase in `expression.proposed.json`. Retain current notify as a held historical identity; the candidate is not a rename, alias or skill migration.
+
+Fresh evidence: selected Oxford notify `fkcefr=c1`, inform sense 1 `cefr=b2`; rendered Collins inform B1+; CEFR-J v1.5 inform verb B1 at physical line 3499, with no notify verb row. The Oxford word-list rows independently show inform B2/notify C1. Cambridge/EVP retrieval failures remain disclosed. No media or publisher material was imported.
+
+Captured all 20 notify module02 memberships and 20 shared-expression memberships, 15 lexical contexts, 16 expression contexts and 76 related headword records. The catalog has no inform headword. All 365 distinct measured curriculum/provenance/runtime/review files remained exact from their capture through the integrity observation. Original held notify object content matches current notify, including its recorded object hash `7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc`.
+
+Review the ordinary giving-information language fields and the complete expression separately. Delay's focus remains pending. The proposed atomic classification and source rows are drafts, with no morphology/media/whole-expression acceptance. Existing `morph.inform` occurs in the unreviewed clinical informed-consent graph. The candidate uses a provisional separate atomic family and requires independent family judgment; runtime deliberately allows stem/atomic canonical sharing, so no type-based safeguard is assumed.
+
+Inspect `PROGRESS-AND-REVISION.md` before proposing delivery. New sense ID prevents old skill transfer; coordinated new curriculum and requirements namespaces prevent old expression completion reuse. Retain all old progress/events/rewards and historical completion. Retired lexical content must live outside catalog-loaded envelopes to avoid an active orphan. No real save was opened, no empty-profile assumption is made, and no runtime or migration test is claimed.
+
+This directory is the only active notify write scope. The shopping-bag preparation remains unchanged, unexecuted and unbound while waiting for root's actual fourth-ten persisted-success notice. No project import, syntax check, shared test, native/browser scenario, revision mutation, production edit or integration dispatch occurred for this research. Preserve the frozen inventory and use a new revision for later amendments. Root owns independent review and all final baseline binding/delivery.

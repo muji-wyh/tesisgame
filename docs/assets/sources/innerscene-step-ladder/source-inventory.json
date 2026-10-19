@@ -1,0 +1,84 @@
+{
+  "folder": "innerscene-step-ladder",
+  "source_url": "https://www.innerscene.com/tools/library/3d-parts/step-fold-step-ladder-acbe7baf",
+  "download_url": "https://www.innerscene.com/api/library/step-fold-step-ladder-acbe7baf/download",
+  "filename": "folding-step-ladder.glb",
+  "bytes": 204976,
+  "sha256": "1c196d7859478418772faae83c836793e0af598cd622484cd6f9f5e6d7922005",
+  "creator": "Innerscene",
+  "acquired_on": "2026-10-16",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "terms_url": "https://www.innerscene.com/tools/library/terms",
+  "acquisition_status": "downloaded_from_original_source_for_review",
+  "conversion_status": "original_GLB_loaded_without_geometry_or_material_substitution",
+  "integration_status": "source_used_in_integrated_static_home_preview",
+  "review_status": "actual_source_and_composition_renders_inspected_at_phone_size",
+  "mesh_count": 17,
+  "node_count": 18,
+  "triangle_count": 5100,
+  "vertex_count": 3648,
+  "material_count": 3,
+  "image_count": 4,
+  "external_dependencies": [],
+  "available_animations": [],
+  "skin_count": 0,
+  "asset_metadata": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0"
+  },
+  "extras": {},
+  "node_names": [
+    "Folding side spreader",
+    "Folding side spreader.001",
+    "Front ladder rail",
+    "Front ladder rail.001",
+    "Ladder protective shoe",
+    "Ladder protective shoe.001",
+    "Ladder protective shoe.002",
+    "Ladder protective shoe.003",
+    "Ladder upper platform",
+    "Rear folding leg",
+    "Rear folding leg.001",
+    "Step traction tread",
+    "Step traction tread.001",
+    "Step traction tread.002",
+    "Wide ladder step",
+    "Wide ladder step.001",
+    "Wide ladder step.002",
+    "Step Fold"
+  ],
+  "material_names": [
+    "Charcoal fine-textured powdercoat",
+    "Satin galvanized steel",
+    "Black felt floor glides"
+  ],
+  "source_sha256_verified": true,
+  "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+  "review": {
+    "original_model_views": [
+      "ladder-source-front-phone.png",
+      "ladder-source-rear-phone.png"
+    ],
+    "derived_composition": [
+      "construction-trades-full.png",
+      "construction-trades-preview.png",
+      "construction-trades-phone.png"
+    ],
+    "source_resolution": [
+      1280,
+      800
+    ],
+    "preview_resolution": [
+      512,
+      320
+    ],
+    "phone_resolution": [
+      296,
+      185
+    ],
+    "visual_observation": "The open A-frame, individual treads, braces and feet form a coherent ladder in both source views.",
+    "limitations": "Static illustration source; no rig or animation clips. Full course and theme readiness is not implied."
+  },
+  "integration_scope": "Original GLB retained outside Web export; the reviewed static Home PNG derivative is integrated. Full theme and course readiness remain separate."
+}

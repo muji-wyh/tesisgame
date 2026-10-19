@@ -1,0 +1,72 @@
+{
+  "status": "research_only_unaccepted",
+  "records": [
+    {
+      "id": "oxford-verify",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/verify",
+      "retrieved_at": "2026-10-16T21:22:27.893Z",
+      "status": 200,
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/verify",
+      "bytes": 79373,
+      "sha256": "6e0e9fb771eb1fb2fbc63719dc2b995ff6af7d08ff865ab921aaf0541cd4c599",
+      "full_body_retained": false,
+      "selected_sense_tags": [
+        {
+          "tag": "<li class=\"sense\" ox5000=\"y\" htag=\"li\" sensenum=\"1\" cefr=\"c1\" id=\"verify_sng_1\" hclass=\"sense\">",
+          "html_offset": 59527
+        },
+        {
+          "tag": "<li class=\"sense\" id=\"verify_sng_2\" cefr=\"c1\" sensenum=\"2\" hclass=\"sense\" ox5000=\"y\" htag=\"li\">",
+          "html_offset": 62149
+        }
+      ]
+    },
+    {
+      "id": "oxford-ensure",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/ensure",
+      "retrieved_at": "2026-10-16T21:22:27.992Z",
+      "status": 200,
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/ensure",
+      "bytes": 84634,
+      "sha256": "4a4018edd71bedb345568cef2de71a59a023604b5502807fe44282317b068185",
+      "full_body_retained": false,
+      "selected_sense_tags": [
+        {
+          "tag": "<li class=\"sense\" htag=\"li\" hclass=\"sense\" fkcefr=\"b2\" fkox3000=\"y\" id=\"ensure_sng_1\">",
+          "html_offset": 62539
+        }
+      ]
+    },
+    {
+      "id": "cefrj-v15",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "retrieved_at": "2026-10-16T21:22:27.994Z",
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "bytes": 233214,
+      "sha256": "b0dd3c635f1c9a4fdf1490c7e5b7c48e8bbe55b652ad0c9860a95f98e10ae498",
+      "full_body_retained": false,
+      "header": "headword,pos,CEFR,CoreInventory 1,CoreInventory 2,Threshold",
+      "exact_headword_rows": [
+        {
+          "line": "ensure,verb,B1,,,",
+          "physical_line": 2270
+        }
+      ],
+      "absent_exact_headwords": [
+        "verify"
+      ]
+    },
+    {
+      "id": "cefrj-readme",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "retrieved_at": "2026-10-16T21:22:27.996Z",
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "bytes": 1956,
+      "sha256": "8b69f7366fa3c7be328cb9ba02ceb7b3725697f36125bb75b85131d664b5e359",
+      "full_body_retained": false,
+      "terms_observation": "The CEFR-J vocabulary and grammar profiles allow research and commercial use without charge with proper citation; copyright Tono Laboratory at TUFS. The separate Octanove dataset has CC BY-SA 4.0 terms, which are not assigned to the CEFR-J v1.5 file."
+    }
+  ]
+}

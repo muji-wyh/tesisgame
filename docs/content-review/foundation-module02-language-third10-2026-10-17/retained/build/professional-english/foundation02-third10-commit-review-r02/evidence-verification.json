@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "status": "independent_probe_evidence_verified",
+  "reviewer": "Codex disposal_test_review",
+  "verified_at": "2026-10-16T20:38:04.3767273Z",
+  "probe_result": {
+    "path": "build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r02/result.json",
+    "sha256": "7abb85e5c5b6e2a8cb38d344655198176e2eb7a2e532ecbf8a462ac34d20bf6c"
+  },
+  "probe_start": {
+    "path": "build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r02/start.json",
+    "sha256": "43a47a7098f8f4b4148ce287bb02690e42b5cdcd9c42cb3274372fc79c738af2"
+  },
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-third10-commit-proposal-r02/author-inventory.json",
+    "sha256": "174d4f9e7b1570a6199361f5fd3ab8e750e9bf3619ca0080b22653d1ba52bd35"
+  },
+  "probe_source": {
+    "path": "build/professional-english/foundation02-third10-commit-review-r01/probe.cjs",
+    "sha256": "3625a6202b7a22b95f19982ec84ee74839acb437ea92975eaa8f6d9f14c94ec2"
+  },
+  "probe_review_inventory": {
+    "path": "build/professional-english/foundation02-third10-commit-review-r01/inventory.json",
+    "sha256": "827b5cdfd2fc2ca486734b4713c306aedee34159d3f7ec4e81705e7d121ea0d3"
+  },
+  "all_case_names_exact": true,
+  "all_18_cases_passed": true,
+  "start_end_observations_equal": true,
+  "real_files_compared_by_root": 707,
+  "same_current_files_independently_rehashed": 707,
+  "four_live_destinations_still_absent": true,
+  "five_exact_prepared_before_after_pairs_rehashed": true,
+  "live_five_replacements_still_equal_preimages": true,
+  "virtual_operations": 907,
+  "reconstruction": {
+    "ok": true,
+    "plan_sha256": "cc978bc517a9c9f4a53e8f45138c54c6edb7eb0a6eac165f3aeeb807a24331a9",
+    "prepared_journal_sha256": "edd531658fd0fbc6866d109b559a1a6448b9db312aea0015db4b5365e4471d9c",
+    "committed_state_sha256": "066adad4252dbac4d2b4ce54f3bae874358fae3879be83f68834294c1169bdeb",
+    "retained_files": 59,
+    "current_inputs": 680,
+    "additional_candidate_inputs": 5,
+    "scope": "Persisted transaction evidence only; separate root persisted audit/Node/native results remain required."
+  },
+  "regression_rejections": [
+    {
+      "name": "missing_reviewer_rejected",
+      "passed": true,
+      "method": "Diagnostic: contract should reject independent review without reviewer identity",
+      "detail": {
+        "rejection": "Independent reviewer identity is required.\n+ actual - expected\n\n+ 'undefined'\n- 'string'\n"
+      }
+    },
+    {
+      "name": "empty_reviewer_rejected",
+      "passed": true,
+      "method": "Diagnostic: contract should reject empty independent reviewer identity",
+      "detail": {
+        "rejection": "Independent reviewer identity cannot be empty."
+      }
+    },
+    {
+      "name": "empty_source_witness_rejected",
+      "passed": true,
+      "method": "Diagnostic: exact persisted contract should reject mutually empty source witness arrays even if the untrusted postinventory hashes are refreshed",
+      "detail": {
+        "rejection": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   {\n-     path: 'build/professional-english/foundation02-third10-commit-proposal-r02/commit.cjs',\n-     sha256: '20ff01bea2ea5027abbe7d02459a9e6caf24e74ea85d22e678bc813545476824'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-third10-commit-proposal-r02/evidence-contract.cjs',\n-     sha256: '6ab049a0544a0b5cc6e2db711bbdc91b6c84f9ec4ef68846c9180b355504e18c'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-third10-commit-proposal-r02/committed-evidence.test.cjs',\n-     sha256: '7b3bb20de53ac5cc50f3632ae7f5a6e945abfaabe91ab76a762b78be8fd5219a'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-third10-commit-proposal-r02/INPUTS.md',\n-     sha256: 'f737e4cfcc3596d746eea48dcc819998c87d81e49c1eb84d2124f292f12b9081'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-third10-commit-proposal-r02/root-commit-input.example.json',\n-     sha256: '809ed1296b0221fad47fc8cc1383d87bb07f4c703fb0e34a39ee0cecb48c353c'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-third10-commit-proposal-r02/author-inventory.json',\n-     sha256: '174d4f9e7b1570a6199361f5fd3ab8e750e9bf3619ca0080b22653d1ba52bd35'\n-   }\n- ]\n"
+      }
+    }
+  ],
+  "overlap_observation": {
+    "rejection": "Transaction failed (recovery-required): Ancestor must be a directory: Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-third10-commit-review-r01\\virtual-helper-target",
+    "planning_accepted_absent_overlap": true,
+    "plan_sha256": "32cc665f86d87ad5f9eacd01f7ae8c9cd80177614773376da0f3382eea0aabc3",
+    "target_bytes_remain_absent": true
+  },
+  "inherited_case_results": [],
+  "execution_by_reviewer": false,
+  "verification_method": "Read retained root start/result JSON, compare exact case names and start/end observations, hash 707 current files plus frozen evidence refs and five before/after artifact pairs. No author module imports, test dispatch, native or transaction execution."
+}

@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "status": "accepted_exact_persisted_validator_source_and_input_for_one_root_dispatch",
+  "accepted": true,
+  "dispatch_approval": true,
+  "reviewer": "Codex runtime_recovery",
+  "author": "Codex root",
+  "recorded_at": "2026-10-16T22:54:55.6920910Z",
+  "source": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r01/invoke.cjs",
+    "bytes": 5772,
+    "sha256": "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f"
+  },
+  "input": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r01/input.json",
+    "bytes": 1808178,
+    "sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+  },
+  "prior_source_review": {
+    "path": "build/professional-english/shopping-bag-preparation-source-review-r02/persisted-validator-source-review-r01.json",
+    "bytes": 1329,
+    "sha256": "a812be090c0019743fa673defd1a8377ec9392b2a2316487b6d8f17dc167e35f"
+  },
+  "inspection": {
+    "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-inspection.json",
+    "bytes": 5124,
+    "sha256": "6c5eb8791d18f9c2523d3ec7db324463237bfd13c458ba89066781d284cd7042"
+  },
+  "preserved_inspection_authoring_failure": {
+    "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-inspection-authoring-failure-r01.json",
+    "bytes": 1542,
+    "sha256": "be0769d96bea1c7e8955d69d6af85b632a8d184a640fa98b7f921af10864a13a"
+  },
+  "blocking_findings": [],
+  "actual_commit": {
+    "verified": true,
+    "receipt": {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+      "bytes": 59877,
+      "sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+    },
+    "root_receipt": {
+      "path": "build/professional-english/shopping-bag-root-commit-r01/execution-r01/receipt.json",
+      "bytes": 59877,
+      "sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+    },
+    "command_witness": {
+      "path": "build/professional-english/shopping-bag-root-commit-r01/command-witness.json",
+      "bytes": 523,
+      "sha256": "6b28432c772853529450959c26f9f25395cbe5729124276eb2201f5b03c7d84a"
+    },
+    "guard_receipt": {
+      "path": "build/professional-english/shopping-bag-root-guard-r01/attempt-001/receipt.json",
+      "bytes": 4160638,
+      "sha256": "85b6c2259d0b19fb4977fad8b7b3d83ae7c9e0dd6ed4a4def7d7e47be90148ee"
+    },
+    "contract": {
+      "path": "build/professional-english/shopping-bag-root-commit-r01/contract.json",
+      "bytes": 58680,
+      "sha256": "94d2dd3c166a57f4dc5ec7e456944edf4f131e6769ebce4385b4977414f9ee0b"
+    },
+    "plan_sha256": "28c763178d2247e7e1fdce7290fa11799d8cce05709d3da696e2f7aeec9dfeb6",
+    "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+    "final_state": {
+      "path": "build/professional-english/transactions/shopping-bag-image-r01/states/000308-committed.json",
+      "sha256": "6734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150"
+    },
+    "target_count": 153,
+    "committed": true,
+    "persisted_validation_completed": false
+  },
+  "verified": {
+    "after_state_input_pins": 11740,
+    "after_state_pin_map_sha256": "4ccb7f217bb9b7a948b138c0580b8f51d50975e5722c4769ada75bf8bc79fac3",
+    "after_state_bytes_checked": 1024576014,
+    "candidate_pins_preserved": 11569,
+    "only_four_existing_targets_substituted": true,
+    "substitutions": [
+      "data/professional/lexemes/retail-pilot.json",
+      "tests/professional-content.test.cjs",
+      "tests/professional-retail-morphology.test.cjs",
+      "tests/professional-retail-media.test.cjs"
+    ],
+    "new_committed_targets": 149,
+    "copied_evidence_files_including_copy_receipt": 22,
+    "evidence_descriptors_rehashed": 579,
+    "all_journal_files_explicitly_pinned": 467,
+    "complete_journal_transitions_and_hash_chain": 308,
+    "stages_checked": 153,
+    "backups_checked": 4,
+    "live_afterimages_checked": 153,
+    "exact_copied_source_target_pairs": 21,
+    "input_and_actual_commit_receipt_agree": true,
+    "contract_and_independent_commit_review_agree": true,
+    "source_witnesses_rehashed": true,
+    "active_lock_absent": true,
+    "persisted_attempt_absent": true,
+    "expected_tests": 255,
+    "expected_audit_summary_exactly_matches_successful_candidate": true,
+    "ready_modules": 0,
+    "release_ready": false,
+    "path_case_alias_or_link_failures": 0,
+    "hash_mismatches": 0
+  },
+  "allowed_scope": {
+    "working_directory": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+    "command": [
+      "node",
+      "build/professional-english/shopping-bag-persisted-validation-r01/invoke.cjs",
+      "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f",
+      "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+    ],
+    "child_commands": [
+      [
+        "tools/validate-professional-content.cjs",
+        "--json"
+      ],
+      [
+        "--test",
+        "tests/professional-content.test.cjs",
+        "tests/professional-retail-morphology.test.cjs",
+        "tests/professional-retail-media.test.cjs"
+      ]
+    ],
+    "output_directory": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001",
+    "invocations": 1
+  },
+  "conditions": [
+    "Keep the exact accepted source and input hashes; root owns the exclusive writer window and dispatches the single fresh attempt.",
+    "Require the actual resulting receipt to be ok true with both commands successful, exactly 255 passing tests, no failed/cancelled/skipped tests, the bound audit summary and no postcheck error.",
+    "The source rehashes all 467 journal files through its explicit evidence list. Root must separately confirm that the global active transaction lock remains absent after the run, as the runner does not check that path itself.",
+    "A failed, timed-out or consumed persisted attempt remains immutable. Preserve command logs and its receipt; do not replay it or rewrite previous commit/guard receipts.",
+    "This accepts the source and exact input for the stated fresh persisted audit and Node suites. It does not predeclare their outcome or authorize native, browser, listening or module-release claims."
+  ],
+  "reviewer_execution": {
+    "node_builtins_raw_byte_json_and_path_inspection_only": true,
+    "project_or_proposal_code_imported": false,
+    "persisted_runner_executed": false,
+    "tests_executed": false,
+    "native_executed": false,
+    "browser_executed": false,
+    "transaction_executed": false,
+    "production_mutated": false
+  }
+}

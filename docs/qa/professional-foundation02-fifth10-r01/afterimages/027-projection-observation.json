@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "status": "built_in_json_projection_only",
+  "registry_before_sha256": "dcfe28d7c7c6048206b740459a65ce9b482ba2768d388b0b29d7ab31174ed1a0",
+  "registry_after_sha256": "709b2621940b4698af615ed9c4b9a679006bfc83a877cc6f7d0f29517a3b2fd3",
+  "counts": {
+    "before": {
+      "reviewed_status": 148,
+      "reviewed_language": 335,
+      "foundation02_language": 36,
+      "sources": 949,
+      "lexemes": 4939,
+      "expressions": 1620,
+      "images": 9,
+      "audio": 12,
+      "ready_modules": 0
+    },
+    "after": {
+      "reviewed_status": 156,
+      "reviewed_language": 343,
+      "foundation02_language": 44,
+      "sources": 965,
+      "lexemes": 4939,
+      "expressions": 1620,
+      "images": 9,
+      "audio": 12,
+      "ready_modules": 0
+    }
+  },
+  "content_delta": {
+    "definition": 4,
+    "example": 1,
+    "difficulty": 5
+  },
+  "actual_validator_loaded": false,
+  "test_callbacks_executed": false,
+  "native_executed": false,
+  "production_mutated": false
+}

@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "status": "root_source_inspected_before_dispatch",
+  "reviewer": "Codex root; also author, not independent approval",
+  "recorded_at": "2026-10-16T21:40:34.053Z",
+  "source": {
+    "path": "build/professional-english/foundation02-fourth10-root-commit-r01/invoke.cjs",
+    "sha256": "7dbfa67e642b3d14135ab9cc5e4940efb99e282f517ff2ea9cf26620dbc5becd"
+  },
+  "scope": "Root source inspection only: exact frozen proposal/review hashes, read-only preflight, exclusive output paths, random token retained only as hash, exactly one child commit call and preserved command result. Independent commit review and guard success remain required before dispatch.",
+  "executed": false
+}

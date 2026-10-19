@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "status": "approved_by_user",
+  "approved_on": "2026-10-16",
+  "evidence": {
+    "source": "Direct human answer received in this continuation chat",
+    "question_item_id": [
+      "request_user_input_async",
+      "call_Zo5YL5cNGetpHbs6DGCTYU6w",
+      0
+    ],
+    "question_english": "After listening to pallet and shelf, are the pronunciation, speed and voice suitable for the game?",
+    "answer_english": "Both are acceptable.",
+    "translation_note": "English translation of the direct human response; no user-message UUID was supplied by the answer event."
+  },
+  "profile": {
+    "voice": "en-US-AvaNeural",
+    "rate": "-15%",
+    "pitch": "+8Hz",
+    "volume": "+0%",
+    "postprocessing": false
+  },
+  "technical_qa": {
+    "path": "build/professional-english/retail-audio-review/pallet-shelf-acquired-r01/technical-qa-r01.json",
+    "json_sha256": "3c8a44c7e2148797dee39c530e3fe308e5dee9c94fb5208a10cc83fe8c3bf3b2",
+    "raw_sha256": "b8b48d66933d755ec46a1ecd41b3cc422bd8dc2a5c52c91a90afea016ff88c90"
+  },
+  "scope": "Approval applies only to these exact presented WAV bytes. No approval of future recordings, alternate synthesis, expressions or game mix is inferred.",
+  "outputs": [
+    {
+      "sense_id": "pallet.goods-platform.n",
+      "text": "pallet",
+      "synthesis_identity_key": "c0d3dc8bb587833b677d9e386f6a4f88a779c0352a1f2d6005978c9e7cd42c6b",
+      "submitted_text": "pallet.",
+      "presented_path": "build/professional-english/retail-audio-review/pallet-shelf-acquired-r01/c0d3dc8bb587833b677d9e386f6a4f88a779c0352a1f2d6005978c9e7cd42c6b.wav",
+      "retained_wav": "docs/assets/sources/professional-retail-ava/pallet-shelf/c0d3dc8bb587833b677d9e386f6a4f88a779c0352a1f2d6005978c9e7cd42c6b.wav",
+      "wav_sha256": "8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f",
+      "retained_mp3": "docs/assets/sources/professional-retail-ava/pallet-shelf/c0d3dc8bb587833b677d9e386f6a4f88a779c0352a1f2d6005978c9e7cd42c6b.mp3",
+      "source_mp3_sha256": "b93e1dbecacdc534c1a56004f495e06a8e85f2e5e7ca7cb307e9c090cf29893b",
+      "acquisition_receipt": "docs/assets/sources/professional-retail-ava/pallet-shelf/c0d3dc8bb587833b677d9e386f6a4f88a779c0352a1f2d6005978c9e7cd42c6b.json",
+      "acquisition_receipt_raw_sha256": "8a5aabe326373b93024266f9111015d9efa8212c04efa69bbb4fe56a9c835a3a"
+    },
+    {
+      "sense_id": "shelf.storage-surface.n",
+      "text": "shelf",
+      "synthesis_identity_key": "3ce98b980771df347b90b8d7df30dba52a853625c4cb146edbff1f04924e91d9",
+      "submitted_text": "shelf.",
+      "presented_path": "build/professional-english/retail-audio-review/pallet-shelf-acquired-r01/3ce98b980771df347b90b8d7df30dba52a853625c4cb146edbff1f04924e91d9.wav",
+      "retained_wav": "docs/assets/sources/professional-retail-ava/pallet-shelf/3ce98b980771df347b90b8d7df30dba52a853625c4cb146edbff1f04924e91d9.wav",
+      "wav_sha256": "778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3",
+      "retained_mp3": "docs/assets/sources/professional-retail-ava/pallet-shelf/3ce98b980771df347b90b8d7df30dba52a853625c4cb146edbff1f04924e91d9.mp3",
+      "source_mp3_sha256": "7f5dcccc927e4272316f2956a9cfa27c88a28e6d76223673f4c679019dddce54",
+      "acquisition_receipt": "docs/assets/sources/professional-retail-ava/pallet-shelf/3ce98b980771df347b90b8d7df30dba52a853625c4cb146edbff1f04924e91d9.json",
+      "acquisition_receipt_raw_sha256": "ff29d9837e400e8a48d181db6a481784e0e514a9296e0b9ad9d9636b9aa9506e"
+    }
+  ]
+}

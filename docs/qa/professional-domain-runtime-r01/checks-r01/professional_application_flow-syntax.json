@@ -1,0 +1,19 @@
+{
+  "label": "professional_application_flow-syntax",
+  "command": [
+    "godot",
+    "--headless",
+    "--path",
+    "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+    "--check-only",
+    "--script",
+    "res://tests/godot/professional_application_flow_tests.gd"
+  ],
+  "started_at": "2026-10-16T19:37:11.025Z",
+  "finished_at": "2026-10-16T19:37:12.475Z",
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "log_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+  "ok": true
+}

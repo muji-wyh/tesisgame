@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "status": "actual_persisted_success_independently_inspected",
+  "receipt": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r02/attempt-001/receipt.json",
+    "sha256": "2b5675bdee6517924e260bb05e97b239d7838cd822f67ca6c35566a18833b5a9"
+  },
+  "complete_journal_states": 308,
+  "committed_state_sha256": "6734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150",
+  "installed_targets": 153,
+  "staged_files": 153,
+  "backups": 4,
+  "active_lock_absent": true,
+  "production_mutated": false,
+  "project_code_imported": false,
+  "scope": "Raw receipt/log/complete journal chain and transitions/installed target inspection after the single persisted run. No test or native replay."
+}

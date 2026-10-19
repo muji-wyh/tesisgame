@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "kind": "professional_domain_pack_verification_v1",
+  "generated_inventory": [
+    {
+      "path": "res://data/professional/domain-policy/generated/index.json",
+      "bytes": 20705,
+      "sha256": "21aa9d49135b574f12dcff2fdb2295a3fae329b0a6765ac3a914e90944994ac0"
+    },
+    {
+      "path": "res://data/professional/domain-policy/generated/release.json",
+      "bytes": 954,
+      "sha256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b"
+    },
+    {
+      "path": "res://data/professional/domain-policy/generated/themes.json",
+      "bytes": 91201,
+      "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+    }
+  ],
+  "pin_constants": {
+    "SCHEMA_VERSION": 1,
+    "POLICY_VERSION": "ordinary-lexical-v3",
+    "CONTEXT_BOUNDARY": "containing-modules-v1",
+    "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+    "DESCRIPTOR_BYTES": 954,
+    "DESCRIPTOR_SHA256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b",
+    "GENERATED_ROOT": "res://data/professional/domain-policy/generated/"
+  }
+}

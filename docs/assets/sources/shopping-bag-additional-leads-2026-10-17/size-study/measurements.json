@@ -1,0 +1,229 @@
+{
+  "scope": "Pillow image-only simulation. No Godot, native renderer, WordCard instantiation, test, or build was run.",
+  "source": {
+    "path": "acquired\\3dicons-bag-dynamic-color.png",
+    "sha256": "93065262e9028397705eb2ddcaf985942eb3ae81abf21dc5187e331ea5e004da",
+    "bytes": 2963534,
+    "format": "PNG",
+    "mode": "RGBA",
+    "size": [
+      2400,
+      2400
+    ],
+    "frames": 1,
+    "alpha_bounds": [
+      364,
+      178,
+      2033,
+      2250
+    ],
+    "source_render_metadata": {
+      "dpi": [
+        72.009,
+        72.009
+      ],
+      "File": "D:\\Workin\\blender\\3DIcons\\Final\\Release-version-draft\\bag\\bag.blend",
+      "Date": "2021/09/26 23:30:19",
+      "Time": "00:00:00:01",
+      "Frame": "001",
+      "Camera": "Main Camera",
+      "Scene": "Scene",
+      "RenderTime": "02:07.48",
+      "cycles.View Layer.samples": "800",
+      "cryptomatte/b608a45/name": "View Layer.CryptoObject",
+      "cryptomatte/b608a45/hash": "MurmurHash3_32",
+      "cryptomatte/b608a45/conversion": "uint32_to_float32",
+      "cryptomatte/b608a45/manifest": "{\"Bag-Box\":\"f0c5d548\"}",
+      "cycles.View Layer.total_time": "01:57.09",
+      "cycles.View Layer.render_time": "01:56.45",
+      "cycles.View Layer.synchronization_time": "00:00.64"
+    }
+  },
+  "study_crop": {
+    "path": "size-study/bag-crop-512-study.png",
+    "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+    "crop_ltrb": [
+      348,
+      162,
+      2049,
+      2266
+    ],
+    "source_pixel_margin": 16,
+    "size": [
+      414,
+      512
+    ],
+    "compressed_bytes": 135843,
+    "decoded_bytes": 1695744,
+    "status": "size_study_only_not_accepted_or_integrated"
+  },
+  "reference": {
+    "path": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+    "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+  },
+  "measurements": [
+    {
+      "variant": "Original 2400px",
+      "area_size": [
+        102,
+        52
+      ],
+      "image_size": [
+        52,
+        52
+      ],
+      "alpha_multiplier": 1.0,
+      "background": "#fffef9"
+    },
+    {
+      "variant": "Original 2400px",
+      "area_size": [
+        102,
+        52
+      ],
+      "image_size": [
+        52,
+        52
+      ],
+      "alpha_multiplier": 0.68,
+      "background": "#e7f5e9"
+    },
+    {
+      "variant": "Original 2400px",
+      "area_size": [
+        120,
+        54
+      ],
+      "image_size": [
+        54,
+        54
+      ],
+      "alpha_multiplier": 1.0,
+      "background": "#fffef9"
+    },
+    {
+      "variant": "Original 2400px",
+      "area_size": [
+        120,
+        54
+      ],
+      "image_size": [
+        54,
+        54
+      ],
+      "alpha_multiplier": 0.68,
+      "background": "#e7f5e9"
+    },
+    {
+      "variant": "Crop + 512px study",
+      "area_size": [
+        102,
+        52
+      ],
+      "image_size": [
+        42,
+        52
+      ],
+      "alpha_multiplier": 1.0,
+      "background": "#fffef9"
+    },
+    {
+      "variant": "Crop + 512px study",
+      "area_size": [
+        102,
+        52
+      ],
+      "image_size": [
+        42,
+        52
+      ],
+      "alpha_multiplier": 0.68,
+      "background": "#e7f5e9"
+    },
+    {
+      "variant": "Crop + 512px study",
+      "area_size": [
+        120,
+        54
+      ],
+      "image_size": [
+        44,
+        54
+      ],
+      "alpha_multiplier": 1.0,
+      "background": "#fffef9"
+    },
+    {
+      "variant": "Crop + 512px study",
+      "area_size": [
+        120,
+        54
+      ],
+      "image_size": [
+        44,
+        54
+      ],
+      "alpha_multiplier": 0.68,
+      "background": "#e7f5e9"
+    },
+    {
+      "variant": "Accepted basket reference",
+      "area_size": [
+        102,
+        52
+      ],
+      "image_size": [
+        59,
+        52
+      ],
+      "alpha_multiplier": 1.0,
+      "background": "#fffef9"
+    },
+    {
+      "variant": "Accepted basket reference",
+      "area_size": [
+        102,
+        52
+      ],
+      "image_size": [
+        59,
+        52
+      ],
+      "alpha_multiplier": 0.68,
+      "background": "#e7f5e9"
+    },
+    {
+      "variant": "Accepted basket reference",
+      "area_size": [
+        120,
+        54
+      ],
+      "image_size": [
+        61,
+        54
+      ],
+      "alpha_multiplier": 1.0,
+      "background": "#fffef9"
+    },
+    {
+      "variant": "Accepted basket reference",
+      "area_size": [
+        120,
+        54
+      ],
+      "image_size": [
+        61,
+        54
+      ],
+      "alpha_multiplier": 0.68,
+      "background": "#e7f5e9"
+    }
+  ],
+  "limitations": [
+    "Pillow Lanczos differs from runtime texture sampling.",
+    "Matched alpha is simulated; match badge, border, pair tint, and feedback motion are absent.",
+    "Background colors are WordCard's default unmatched and unpaired matched fills.",
+    "The actual matched pair can use a different tint.",
+    "No production-loader, cache, release, readiness, or participant-recognition claim."
+  ]
+}

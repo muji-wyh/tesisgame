@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 289,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "7c837d5140335a56804ed7fead5ce6bc640427b0464c6e630b4dd53c692bf51a",
+  "recorded_at": "2026-10-16T22:49:10.247Z",
+  "index": 143,
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-source-review.json"
+}

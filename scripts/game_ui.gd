@@ -35,11 +35,18 @@ const FinishConfirmation = preload("res://scripts/finish_confirmation.gd")
 const SettlementDialog = preload("res://scripts/settlement_dialog.gd")
 const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const JellyBackdrop = preload("res://scripts/jelly_backdrop.gd")
+const LearningThemeArt = preload("res://scripts/learning_theme_art.gd")
 const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
 const GrowthState = preload("res://scripts/growth_state.gd")
 const GrowthBadge = preload("res://scripts/growth_badge.gd")
 const AgeWordCatalog = preload("res://scripts/age_word_catalog.gd")
+const LearningContext = preload("res://scripts/learning_context.gd")
+const LearningContent = preload("res://scripts/learning_content_resolver.gd")
+const LearningWord = preload("res://scripts/learning_word.gd")
+const ProfessionalPlay = preload("res://scripts/professional_play.gd")
+const ProfessionalMedia = preload("res://scripts/professional_media_access.gd")
+const ProfessionalWordLibrary = preload("res://scripts/professional_word_library.gd")
 const GameLibrary = preload("res://scripts/game_library.gd")
 const PresentationPreferences = preload("res://scripts/presentation_preferences.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
@@ -293,7 +300,27 @@ var _memory_attempt: int = 0
 var _growth_published: String = ""
 var _growth_view_published: String = ""
 var _round_id: String = ""
+var _round_context: Dictionary = {}
+var professional = ProfessionalPlay.new()
+var professional_save_path: String = "user://professional-v1.json"
+var _home_context: Dictionary = {}
+var _round_content: Dictionary = {}
+var _pending_professional_round: Array = []
+var _professional_assisted: Dictionary = {}
+var _professional_collections: Dictionary = {}
+var _professional_preferences_restored := false
+var _home_course_preview: String = ""
+var _learning_theme_key: String = ""
+var _resume_professional_source: String = ""
+var _professional_library: ProfessionalWordLibrary
+var _collection_professional := false
+var _professional_button: Button
+var _professional_heading: Label
+var _professional_progress_label: Label
+var _learning_backdrop: LearningThemeArt
 var _round_result: Dictionary = {}
+var _professional_callbacks_closed := false
+var _releasing_professional_views := false
 
 
 func _ready() -> void:
@@ -335,14 +362,16 @@ func _ready() -> void:
 	audio.set_muted(_presentation.muted)
 	call_deferred("_sync_controller_accept_startup")
 	_connect_browser()
+	add_child(professional)
+	professional.round_prepared.connect(_professional_round_ready)
+	professional.changed.connect(_professional_changed)
+	professional.event_completed.connect(_professional_event_completed)
+	professional.closing.connect(_professional_closing)
+	professional.configure(_host, _credit_coins, professional_save_path)
 	_pop_rewards.save_path = pop_reward_save_path
 	_pop_rewards.connect_storage(_host)
 	_jelly_rewards.save_path = jelly_reward_save_path
 	_jelly_rewards.connect_storage(_host)
-	if _host != null:
-		var loading_theme: Variant = _host.loadingTheme()
-		if loading_theme is String and Model.THEMES.has(loading_theme):
-			_preferred_theme = loading_theme
 	process_mode = initial_process_mode
 	_vocabulary_catalog = JSON.parse_string(FileAccess.get_file_as_string("res://data/vocabulary-packs.json"))
 	add_child(vocabulary_loader)
@@ -351,7 +380,11 @@ func _ready() -> void:
 	vocabulary_loader.age_failed.connect(_on_vocabulary_failed)
 	vocabulary_loader.progress_changed.connect(_on_vocabulary_progress)
 	_vocabulary_initialized = true
-	if new_round() or _pending_vocabulary_round.is_empty():
+	# Native assets are already local. Web users reach the path chooser before
+	# downloading a curriculum they may never select.
+	if not vocabulary_loader._native:
+		_finish_vocabulary_boot()
+	elif new_round() or _pending_vocabulary_round.is_empty():
 		_finish_vocabulary_boot()
 
 
@@ -429,7 +462,7 @@ func _update_vocabulary_prompt() -> void:
 	_vocabulary_label.text = "Words could not be loaded.\nPlease try again." if state.state == "failed" else "Loading Age %s words…" % ("12+" if growth.learning_age() == 12 else str(growth.learning_age()))
 	_vocabulary_progress.value = float(state.progress) * 100.0
 	_vocabulary_retry.visible = state.state == "failed"
-	_vocabulary_back.visible = not _vocabulary_booting and not _round_id.is_empty()
+	_vocabulary_back.visible = not _vocabulary_booting
 	if _vocabulary_retry.visible:
 		_vocabulary_retry.grab_focus()
 	elif _vocabulary_back.visible:
@@ -452,7 +485,7 @@ func _close_vocabulary_prompt() -> void:
 
 
 func _cancel_vocabulary_round() -> void:
-	if _vocabulary_booting or _round_id.is_empty():
+	if _vocabulary_booting:
 		return
 	_pending_vocabulary_round.clear()
 	_close_vocabulary_prompt()
@@ -507,6 +540,8 @@ func _on_vocabulary_progress(age: int, _progress: float) -> void:
 func _prefetch_vocabulary() -> void:
 	if not _vocabulary_initialized or _vocabulary_booting or not growth.ready:
 		return
+	if _home_context.get("track") == "professional" or (not _has_entered_game and _home_context.is_empty()):
+		return
 	var age: int = growth.learning_age()
 	if str(vocabulary_loader.status(age).state) == "idle":
 		vocabulary_loader.request_age(age)
@@ -527,14 +562,10 @@ func _vocabulary_snapshot() -> Dictionary:
 		"states": states}
 
 
-func _on_loading_finished(args: Array) -> void:
+func _on_loading_finished(_args: Array) -> void:
 	if _loading_revealed:
 		return
 	_loading_revealed = true
-	if not args.is_empty() and args[0] is String and Model.THEMES.has(args[0]):
-		_preferred_theme = args[0]
-		model.set_theme(_preferred_theme)
-		_save_journey()
 	_stop_controller_actions()
 	get_tree().paused = false
 	_restore_mode_music()
@@ -550,6 +581,10 @@ func _build_controls() -> void:
 	add_child(_jelly_backdrop)
 	_jelly_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_jelly_backdrop.hide()
+	_learning_backdrop = LearningThemeArt.new()
+	_learning_backdrop.name = "WorkplaceEnvironment"
+	add_child(_learning_backdrop)
+	_learning_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var margins := MarginContainer.new()
 	margins.name = "GameArea"
 	_content_margins = margins
@@ -613,6 +648,20 @@ func _build_controls() -> void:
 	UiClick.bind_button(_growth_button)
 	_growth_button.pressed.connect(_show_collection)
 	_header_duck_slot.add_child(_growth_button)
+	_professional_button = Button.new()
+	_professional_button.name = "ProfessionalCourse"
+	UiClick.bind_button(_professional_button)
+	_professional_button.pressed.connect(_show_collection)
+	_header_duck_slot.add_child(_professional_button)
+	_professional_heading = Style.label("Professional English", 14)
+	_professional_heading.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_professional_heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_professional_button.add_child(_professional_heading)
+	_professional_progress_label = Style.label("", 12)
+	_professional_progress_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_professional_progress_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_professional_button.add_child(_professional_progress_label)
+	_professional_button.hide()
 	header.add_child(_coin_counter)
 	collection_button = _growth_button
 	_growth_bar = _growth_button.bar
@@ -904,6 +953,11 @@ func _build_mode_menu() -> void:
 	_mode_panel.mode_requested.connect(_choose_mode_from_menu)
 	_mode_panel.collection_requested.connect(_show_collection)
 	_mode_panel.sound_toggled.connect(_toggle_library_sound)
+	_mode_panel.learning_context_selected.connect(_select_learning_context)
+	_mode_panel.learning_continue_requested.connect(_continue_learning_context)
+	_mode_panel.learning_retry_requested.connect(_retry_professional)
+	_mode_panel.learning_cancel_requested.connect(_cancel_professional)
+	_mode_panel.learning_course_selected.connect(_preview_learning_course)
 
 
 func _toggle_library_sound() -> void:
@@ -917,7 +971,7 @@ func _toggle_library_sound() -> void:
 
 
 func _save_presentation() -> void:
-	_mode_panel.configure(_mode_id if _can_continue_round() else "", audio.muted, reduced_motion)
+	_mode_panel.configure(_mode_id if _home_can_continue() else "", audio.muted, reduced_motion)
 	if _host != null:
 		_host.presentationSettings(reduced_motion, audio.muted)
 	var saved: bool = _presentation.save_preferences()
@@ -1000,6 +1054,7 @@ func _show_mode_menu() -> void:
 			_mode_menu_focus_modes[control] = control.focus_mode
 			control.focus_mode = Control.FOCUS_NONE
 	_fit_mode_buttons()
+	_refresh_learning_home()
 	_update_duck()
 	_default_focus().grab_focus()
 	_restore_mode_music()
@@ -1015,7 +1070,23 @@ func _current_round_ended() -> bool:
 
 
 func _can_continue_round() -> bool:
-	return _has_entered_game and not _current_round_ended()
+	return _has_entered_game and not _round_id.is_empty() and not _current_round_ended()
+
+
+func _home_can_continue() -> bool:
+	return _can_continue_round() and LearningContext.same_round(_round_context, _desired_learning_context(_mode_id))
+
+
+func _home_mode_available() -> bool:
+	if _home_context.get("track") != "professional":
+		return true
+	if professional.phase in ["media", "storage", "restoring"]:
+		return false
+	var course: Dictionary = professional.loader.catalog.course(str(_home_context.course_id))
+	for module in course.get("modules", []):
+		if module.id == _home_context.module_id:
+			return module.get("status") == "ready"
+	return false
 
 
 func _settle_completed_round_rewards() -> bool:
@@ -1069,7 +1140,7 @@ func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> vo
 	_mode_menu_resume_pop = false
 	if resume_game and not _page_hidden and not collection_page.visible:
 		feedback_timer.paused = false
-		_memory.pause(false)
+		_memory.pause(_professional_input_blocked())
 		_resume_phrase()
 		_sync_jelly()
 		_refresh_hint_link()
@@ -1093,6 +1164,204 @@ func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> vo
 
 func _choose_mode_from_menu(id: String) -> void:
 	choose_mode(id)
+
+
+func _desired_learning_context(mode: String) -> Dictionary:
+	var selected: Dictionary = _home_context if _mode_menu_open() else _round_context
+	if selected.get("track") == "professional":
+		var context: Dictionary = selected.duplicate(true)
+		context.mode = mode
+		return context
+	return LearningContext.growth(growth.learning_age(), mode)
+
+
+func _select_learning_context(context: Dictionary) -> void:
+	if not _mode_menu_open() or not LearningContext.validate(context).is_empty():
+		return
+	_professional_preferences_restored = true
+	_resume_professional_source = ""
+	professional.cancel()
+	_pending_professional_round.clear()
+	_home_context = context.duplicate(true)
+	_home_course_preview = str(context.get("course_id", "")) if context.track == "professional" else ""
+	if context.track == "growth":
+		_home_context = LearningContext.growth(growth.learning_age(), context.mode)
+		professional.store.request("context", _home_context)
+	_refresh_learning_home()
+	_refresh()
+
+
+func _continue_learning_context(context: Dictionary) -> void:
+	_select_learning_context(context)
+	choose_mode(str(context.get("mode", "word_jelly")))
+
+
+func _professional_round_ready(_selection: int, content: Dictionary, source: String) -> void:
+	if _professional_callbacks_closed:
+		return
+	if _pending_professional_round.size() != 6:
+		professional.cancel()
+		return
+	var arguments: Array = _pending_professional_round.duplicate()
+	arguments.append(content)
+	arguments.append(source)
+	if new_round.callv(arguments):
+		_pending_professional_round.clear()
+		_has_entered_game = true
+		_home_context = _round_context.duplicate(true)
+		_default_focus().grab_focus()
+		if _mode_id == "pop":
+			_start_pop_listening()
+		else:
+			audio.interact(model.theme_id)
+			if _mode_id == "phrase":
+				_start_phrase_prompt()
+	else:
+		_announce_status("Your current round is safe. Finish saving its rewards, then retry.")
+
+
+func _professional_input_blocked() -> bool:
+	return _round_context.get("track") == "professional" and not professional.can_play(_round_id)
+
+
+func _professional_changed(state: Dictionary) -> void:
+	if _professional_callbacks_closed or not is_inside_tree() or _rebuilding:
+		return
+	var saved: Dictionary = state.session
+	if collection_page.visible and _collection_professional:
+		_professional_library.set_progress(saved)
+	if not _professional_preferences_restored and saved.progress_loaded and saved.pending_count == 0 and not saved.blocked:
+		_professional_preferences_restored = true
+		var context: Variant = saved.saved_context
+		if context is Dictionary and LearningContext.validate(context).is_empty():
+			if context.track == "growth" or not professional.loader.catalog.course(context.course_id).is_empty():
+				_home_context = context.duplicate(true)
+	_refresh_learning_home()
+	if not _vocabulary_initialized:
+		return
+	if _professional_input_blocked():
+		feedback_timer.paused = true
+		_memory.pause(true)
+		_pause_phrase()
+		_pop.pause()
+		_stop_pop_listening()
+		_sync_jelly()
+		if not str(state.error).is_empty():
+			_announce_status(str(state.error) + " Choose Retry saving.")
+	elif not _mode_menu_open() and not _page_hidden and not collection_page.visible:
+		feedback_timer.paused = false
+		_memory.pause(false)
+	if _resume_professional_source == _round_id and not _resume_professional_source.is_empty() \
+		and professional.can_play(_round_id) and _mode_menu_open():
+		_resume_professional_source = ""
+		choose_mode.call_deferred(_mode_id)
+	_refresh.call_deferred()
+
+
+func _refresh_learning_home() -> void:
+	if is_instance_valid(_mode_panel) and _mode_panel.has_method("configure_learning"):
+		_mode_panel.configure_learning(professional.loader.catalog,
+			_home_context if not _home_context.is_empty() else _round_context if _has_entered_game else {},
+			professional.snapshot(), _round_context if _can_continue_round() else {}, _professional_library_available())
+
+
+func _professional_library_available() -> bool:
+	return _round_context.get("track") == "professional" and not professional.active.is_empty() \
+		and LearningContext.identity(_home_context, false) == LearningContext.identity(_round_context, false)
+
+
+func _preview_learning_course(id: String) -> void:
+	_home_course_preview = id
+	_refresh()
+
+
+func _selected_theme_profile() -> Dictionary:
+	if _mode_menu_open():
+		var course_id: String = _home_course_preview if not _home_course_preview.is_empty() else str(_home_context.get("course_id", ""))
+		if course_id not in ["", "growth"]:
+			var course: Dictionary = professional.loader.catalog.course(course_id)
+			return professional.loader.catalog.theme_profile(str(course.get("theme_id", "")))
+	elif _round_context.get("track") == "professional":
+		return _round_content.get("theme_profile", {})
+	return professional.loader.catalog.theme_profile("growth_garden")
+
+
+func _retry_professional() -> void:
+	if professional.phase == "ready" and not professional.pending.is_empty():
+		_professional_round_ready(professional.pending.selection, professional.pending.content, professional.pending.source)
+	else:
+		professional.retry()
+
+
+func _cancel_professional() -> void:
+	_pending_professional_round.clear()
+	professional.cancel()
+	_refresh_learning_home()
+
+
+func _record_professional(attempt_id: String, words: Array, correct: bool) -> void:
+	if _round_id.is_empty() or professional.active.get("source") != _round_id:
+		return
+	# Whole-word collection owns spelling evidence; intermediate merge feedback
+	# must never create a second correct assessment for the same composition.
+	if _mode_id == "word_jelly" and correct:
+		return
+	var distinct: Dictionary = {}
+	for sense in words:
+		if distinct.has(str(sense)):
+			continue
+		distinct[str(sense)] = true
+		if _mode_id == "word_jelly":
+			var assessed := false
+			for requirement in _round_content.get("requirements", {}).get("terms", []):
+				if requirement.sense_id == sense and requirement.skills.has("spelling"):
+					assessed = true
+					break
+			# An atomic tile involved in an invalid merge has no spelling task.
+			# Its only Word Jelly evidence comes from passive collection.
+			if not assessed:
+				continue
+		var event: Dictionary = {"id": _round_id + ":" + attempt_id + ":" + str(sense),
+			"sense_id": str(sense), "skill": LearningContent.MODE_SKILLS[_mode_id],
+			"correct": correct, "assisted": _professional_assisted.has(str(sense)), "atomic": false}
+		if _mode_id == "phrase":
+			event.expression_id = _phrase.game.current_question().id
+		var result: Dictionary = professional.session.submit(event, _round_id)
+		if not result.get("ok", false) and not result.get("pending", false):
+			professional.error = str(result.error)
+			professional.phase = "failed"
+			_professional_changed(professional.snapshot())
+
+
+func _commit_professional_collection(payload: Dictionary) -> Dictionary:
+	if _round_context.get("track") != "professional" or _mode_id != "word_jelly":
+		return {"ok": false, "error": "This round has changed."}
+	var local_id: String = str(payload.event_id)
+	var id: String = _round_id + ":" + local_id
+	var composition: Dictionary = payload.get("a", {}).get("composition", {})
+	var event: Dictionary = {"id": id, "sense_id": str(payload.word.id), "skill": "spelling",
+		"correct": true, "assisted": bool(composition.get("assisted", false)),
+		"atomic": payload.word.get("morphology", {}).get("kind") == "atomic"}
+	if int(payload.coins) > 0:
+		event.reward = {"operation": "credit", "payload": {"tier": int(payload.coins) / CoinWallet.COINS_PER_TIER}}
+	_professional_collections[id] = {"local_id": local_id, "generation": payload.generation, "source": _round_id}
+	var result: Dictionary = professional.session.submit(event, _round_id)
+	if result.get("ok", false):
+		_word_jelly_credits[local_id] = result.get("wallet", {})
+		_professional_collections.erase(id)
+	elif not result.get("pending", false):
+		_professional_collections.erase(id)
+	return result
+
+
+func _professional_event_completed(id: String, source: String, result: Dictionary) -> void:
+	if _professional_callbacks_closed or source != _round_id or not _professional_collections.has(id):
+		return
+	var pending: Dictionary = _professional_collections[id]
+	_professional_collections.erase(id)
+	if result.get("ok", false):
+		_word_jelly_credits[pending.local_id] = result.get("wallet", {})
+	_word_jelly.game.resolve_collection_commit(pending.local_id, int(pending.generation), result)
 
 
 func _build_collection_shell() -> void:
@@ -1130,7 +1399,20 @@ func _build_collection_shell() -> void:
 		if _can_browse_collection():
 			vocabulary_loader.request_age(_catalog_age))
 	_collection_column.add_child(_age_catalog)
+	_professional_library = ProfessionalWordLibrary.new()
+	_professional_library.interaction_allowed = _can_browse_collection
+	_professional_library.hear_requested.connect(_hear_professional_word)
+	_collection_column.add_child(_professional_library)
+	_professional_library.hide()
 	collection_page.hide()
+
+
+func _hear_professional_word(word: Dictionary) -> void:
+	if not _collection_professional or not _can_browse_collection():
+		return
+	audio.interact(model.theme_id)
+	audio.say(str(word.audio))
+	_announce_status(str(word.get("display_text", word.text)) + ". " + str(word.definition))
 
 
 func _build_age_choices() -> void:
@@ -1171,7 +1453,7 @@ func _can_browse_collection() -> bool:
 
 
 func _show_age_catalog() -> void:
-	if not collection_page.visible or not _vocabulary_initialized:
+	if not collection_page.visible or _collection_professional or not _vocabulary_initialized:
 		return
 	audio.stop_voice()
 	var band: Dictionary = Data.age_band(str(_catalog_age))
@@ -1217,8 +1499,9 @@ func _build_collection() -> void:
 
 
 func _can_choose_world() -> bool:
-	return _mode_menu_open() and not _page_hidden and not collection_page.visible \
-		and not _speech_debug_active and not _vocabulary_prompt.visible
+	# Learning-path selection owns the current theme. Historical preferences and
+	# reward identities remain available for save compatibility.
+	return false
 
 
 func _choose_world(id: String) -> void:
@@ -1240,7 +1523,13 @@ func _refresh_collection() -> void:
 	_sync_collected_rewards()
 	_refresh_age_choices()
 	if collection_page.visible:
-		_show_age_catalog()
+		_age_choices.visible = not _collection_professional
+		_age_catalog.visible = not _collection_professional
+		_professional_library.visible = _collection_professional
+		if _collection_professional:
+			_professional_library.set_progress(professional.session.snapshot())
+		else:
+			_show_age_catalog()
 	_layout_collection()
 
 
@@ -1266,16 +1555,42 @@ func _set_accessibility_name(control: Control, label: String) -> void:
 			return
 
 
-func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "", resume_saved_treasure: bool = true) -> bool:
+func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: String = "", next_mode: String = "", required_word_id: String = "", resume_saved_treasure: bool = true, prepared_content: Dictionary = {}, source_id: String = "") -> bool:
+	if _rebuilding:
+		return false
 	_close_finish_confirmation(true, false)
-	if not growth.ready:
+	var requested_mode: String = next_mode if not next_mode.is_empty() else _mode_id
+	if not MODES.has(requested_mode):
+		requested_mode = "match"
+	var next_context: Dictionary = _desired_learning_context(requested_mode) if prepared_content.is_empty() else prepared_content.context
+	var is_professional: bool = next_context.get("track") == "professional"
+	if is_professional and prepared_content.is_empty():
+		_pending_professional_round = [seed_value, repeat_lesson, adventure_id, requested_mode, required_word_id, resume_saved_treasure]
+		professional.request(next_context, seed_value)
+		return false
+	if not is_professional and not growth.ready:
 		_growth_save_failed = true
 		_refresh()
 		_layout()
 		return false
-	if not vocabulary_loader.is_ready(growth.learning_age()):
+	if not is_professional and not vocabulary_loader.is_ready(growth.learning_age()):
 		_wait_for_vocabulary([seed_value, repeat_lesson, adventure_id, next_mode, required_word_id, resume_saved_treasure])
 		return false
+	var phrase_dependencies: Array = _vocabulary_catalog.get("ages", {}).get(str(growth.learning_age()), {}).get("word_ids", [])
+	var content: Dictionary = prepared_content if is_professional else LearningContent.resolve_growth(next_context,
+		_learning_words(requested_mode == "phrase"), phrase_dependencies)
+	if not content.ok:
+		_show_error(content.error)
+		return false
+	if is_professional:
+		if not professional.can_claim(int(professional.pending.get("selection", -1)), source_id):
+			return false
+		var problem: String = _preflight_professional_round(content, seed_value)
+		if not problem.is_empty():
+			professional.error = problem
+			professional.phase = "failed"
+			_refresh_learning_home()
+			return false
 	_coin_flight.sync(coin_wallet.balance)
 	if not _settle_pair_reward():
 		_refresh()
@@ -1284,6 +1599,10 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		return false
 	if not _settle_pop_reward():
 		return false
+	if is_professional:
+		var state: Dictionary = professional.session.snapshot()
+		if state.source_id != source_id or not state.ready or state.blocked:
+			return false
 	if resume_saved_treasure and _is_jelly_mode() and (next_mode.is_empty() or next_mode == _mode_id) and _jelly_rewards.has_pending():
 		_hide_mode_menu(false, false)
 		_stop_round_celebration()
@@ -1303,6 +1622,16 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if (_save_error and (not _pending_fragment.is_empty() or model.chest_state == "opened")) or (model.phase == "won" and model.chest_earned and model.chest_state != "opened"):
 		_announce_status("Your progress is waiting to be saved. Choose Retry saving.")
 		return false
+	_rebuilding = true
+	if is_professional:
+		# Claim before clearing any current views. This transfers a round lease
+		# which later policy cancellation cannot revoke; the old lease remains
+		# pinned until its views and audio have dropped their references below.
+		content = professional.claim(int(professional.pending.get("selection", -1)), source_id)
+		if not content.get("ok", false):
+			_rebuilding = false
+			_show_error(str(content.get("error", "This course selection changed.")))
+			return false
 	_stop_voice()
 	_pop.stop()
 	_pop_rewards.pause()
@@ -1312,12 +1641,14 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_jelly.stop()
 	_word_jelly.stop()
 	_word_jelly_credits.clear()
+	_professional_library.clear()
+	_learning_backdrop.clear()
+	_mode_panel.apply_learning_art({}, true)
 	_jelly_rewards.pause()
 	_jelly_rewards_shown = false
 	_jelly_rewards.set_result_context({})
 	_restore_jelly_reward_host()
 	_controller_holding_jelly_chest = false
-	_rebuilding = true
 	if not next_mode.is_empty():
 		_mode_id = next_mode if MODES.has(next_mode) else "match"
 	elif not MODES.has(_mode_id):
@@ -1336,12 +1667,34 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	audio.halt()
 	_stop_feedback_animations()
 	_last_phase = ""
-	if not model.reset(_learning_words(), seed_value, repeat_lesson, adventure_id, required_word_id, str(growth.learning_age()), _mode_id in ["match", "memory"]):
+	# Drop old controls/resources before releasing the claimed media lease.
+	_match_connections.clear()
+	for button in cards.values():
+		grid.remove_child(button)
+		button.free()
+	cards.clear()
+	if is_professional:
+		ProfessionalMedia.release(str(content.get("previous_media_scope", "")))
+	else:
+		professional.leave()
+	var prepared: bool = model.reset(content.words, seed_value, repeat_lesson, adventure_id,
+		required_word_id, str(growth.learning_age()), true, next_context) if _mode_id in ["match", "memory"] \
+		else model.prepare_activity(_mode_id, str(growth.learning_age()), seed_value, repeat_lesson, next_context)
+	if not prepared:
 		_rebuilding = false
 		_show_error(model.error)
 		return false
-	_round_id = GrowthState.make_round_id()
-	if _mode_id == "word_jelly":
+	_round_context = LearningContext.freeze(next_context)
+	_round_content = content
+	if _has_entered_game or is_professional:
+		_home_context = next_context.duplicate(true)
+		if not is_professional:
+			professional.store.request("context", _home_context)
+	_round_id = source_id if is_professional else GrowthState.make_round_id()
+	_professional_assisted.clear()
+	_professional_collections.clear()
+	_word_jelly.game.commit_collection = _commit_professional_collection if is_professional else Callable()
+	if _mode_id == "word_jelly" and not is_professional:
 		_round_id = "word_jelly:" + _round_id
 	_clear_reward_confetti()
 	_pair_words.clear()
@@ -1357,8 +1710,9 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_round_result.clear()
 	_jelly_reward_saved = false
 	_jelly_reward_theme = ""
-	if not repeat_lesson and seed_value < 0 and not _preferred_theme.is_empty():
-		model.set_theme(_preferred_theme)
+	# Reward/audio compatibility stays on an existing identity; learning artwork
+	# and palette belong to the automatically selected course theme.
+	model.set_theme(str(content.get("theme_profile", {}).get("rewards", {}).get("legacy_theme_id", "spring")))
 	_match_connections.clear()
 	for button in cards.values():
 		grid.remove_child(button)
@@ -1377,18 +1731,18 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if _mode_id == "phrase":
 		_phrase.set_reduced_motion(reduced_motion)
 		_phrase.set_muted(audio.muted or not audio.available)
-		if not _phrase.configure(_learning_words(true), str(growth.learning_age()), model.theme_id, seed_value):
+		if not _phrase.configure(content.words, str(growth.learning_age()), model.theme_id, seed_value, content.expressions if is_professional else []):
 			_rebuilding = false
 			_show_error(_phrase.game.error)
 			return false
 	if _mode_id == "pop":
-		_configure_pop(seed_value)
+		_configure_pop(seed_value, content.words)
 		if resume_saved_treasure and _pop_rewards.has_pending():
 			_pop_rewards.configure_saved(data.chests, reduced_motion)
 			_pop_rewards_shown = true
 	if _is_jelly_mode():
 		_active_jelly().game.practice_weight_for = _practice_weight
-		if not _active_jelly().configure(_learning_words(), growth.learning_age(), Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
+		if not _active_jelly().configure(content.words, growth.learning_age(), Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
 			_rebuilding = false
 			_show_error(_active_jelly().game.error)
 			return false
@@ -1405,7 +1759,11 @@ func choose_mode(id: String) -> void:
 	if not _mode_menu_open() or _page_hidden or not MODES.has(id) or collection_page.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
 	_has_entered_game = true
-	if id == _mode_id and not _current_round_ended():
+	if id == _mode_id and not _current_round_ended() and LearningContext.same_round(_round_context, _desired_learning_context(id)):
+		if _professional_input_blocked():
+			_resume_professional_source = _round_id
+			professional.cancel()
+			return
 		_hide_mode_menu(false, true)
 		_refresh()
 		_default_focus().grab_focus()
@@ -1413,7 +1771,6 @@ func choose_mode(id: String) -> void:
 			audio.interact(model.theme_id)
 		return
 	# A failed reward settlement must expose the current game's save retry.
-	_hide_mode_menu(false, false)
 	if new_round(-1, id != _mode_id, "", id):
 		_default_focus().grab_focus()
 		if id == "pop":
@@ -1426,20 +1783,36 @@ func choose_mode(id: String) -> void:
 				_start_phrase_prompt()
 
 
-func _configure_pop(seed_value: int = -1) -> void:
+func _configure_pop(seed_value: int = -1, resolved_words: Array = []) -> void:
 	_stop_round_celebration()
 	_celebration_seen_id = ""
-	_round_id = GrowthState.make_round_id()
+	if _round_context.get("track") != "professional":
+		_round_id = GrowthState.make_round_id()
 	_clear_reward_confetti()
 	_round_result.clear()
 	_pop_reward_saved = false
 	_pop_reward_theme = ""
-	var pool: Array = _learning_words().filter(func(word: Dictionary) -> bool:
-		return Data.word_age(word) <= growth.learning_age() and Data.supports_mode(word, "pop"))
+	var pool: Array = (resolved_words if not resolved_words.is_empty() else _learning_words()).filter(func(word: Dictionary) -> bool:
+		return LearningWord.professional(word, "pop") if word.get("track") == "professional" else Data.word_age(word) <= growth.learning_age() and Data.supports_mode(word, "pop"))
 	_pop.game.practice_weight_for = _practice_weight
 	_pop.configure(pool, reduced_motion, seed_value)
 	_pop.apply_theme(Data.theme(model.theme_id), data.chests)
 	_pop.retry_button.text = "Play again"
+
+
+func _preflight_professional_round(content: Dictionary, seed_value: int) -> String:
+	var mode: String = content.context.mode
+	if mode in ["match", "memory"]:
+		var probe := Model.new()
+		return "" if probe.reset(content.words, seed_value, false, "", "", "", true, content.context) else probe.error
+	if mode == "phrase":
+		var probe := PhraseGame.PhraseGameModel.new()
+		return "" if probe.reset_professional(content.expressions, seed_value) else probe.error
+	if mode == "pop":
+		var probe := VoicePop.PopModel.new()
+		return "" if probe.configure(content.words, seed_value) else probe.error
+	var probe = WordJelly.WordModel.new() if mode == "word_jelly" else JellyMatch.JellyMatchModel.new()
+	return "" if probe.configure(content.words, 3, seed_value) else probe.error
 
 
 func _is_jelly_mode() -> bool:
@@ -1452,7 +1825,7 @@ func _active_jelly():
 
 func _jelly_interaction_allowed() -> bool:
 	return _is_jelly_mode() and not _jelly_rewards_shown and not _round_celebration_active() \
-		and not _rebuilding and not _page_hidden and not _speech_debug_active \
+		and not _professional_input_blocked() and not _rebuilding and not _page_hidden and not _speech_debug_active \
 		and not collection_page.visible and not _mode_menu_open() and not _finish_confirmation_open()
 
 
@@ -1537,7 +1910,13 @@ func _sync_jelly() -> void:
 	var allowed: bool = _jelly_interaction_allowed()
 	_jelly.pause(not allowed or _mode_id != "jelly")
 	_word_jelly.pause(not allowed or _mode_id != "word_jelly")
-	_jelly_backdrop.visible = _is_jelly_mode() and (_active_jelly().visible or (_jelly_rewards_shown and not _jelly_rewards._result_context.is_empty())) and not _page_hidden and not collection_page.visible
+	_jelly_backdrop.visible = _round_context.get("track") != "professional" and _is_jelly_mode() and (_active_jelly().visible or (_jelly_rewards_shown and not _jelly_rewards._result_context.is_empty())) and not _page_hidden and not collection_page.visible
+	_learning_backdrop.visible = _learning_backdrop.has_art() and not _page_hidden and not collection_page.visible and not _mode_menu_open()
+	var career_backdrop: bool = _round_context.get("track") == "professional" and _learning_backdrop.visible
+	_jelly.set_learning_backdrop(career_backdrop)
+	_word_jelly.set_learning_backdrop(career_backdrop)
+	_pop.set_learning_backdrop(career_backdrop)
+	_phrase.set_learning_backdrop(career_backdrop)
 	_jelly_backdrop.set_ambient_active(allowed and _active_jelly().game.phase == "playing")
 	if not allowed:
 		audio.stop_jelly_sounds()
@@ -1805,7 +2184,7 @@ func _restore_jelly_reward_host() -> void:
 
 
 func _publish_jelly(state: Dictionary, source_mode: String = "") -> void:
-	if _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
+	if _releasing_professional_views or _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
 		return
 	var value: Dictionary = state.duplicate(true)
 	value["visible"] = _is_jelly_mode() and _active_jelly().is_visible_in_tree() and not _jelly_rewards_shown and not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open()
@@ -1829,7 +2208,7 @@ func _publish_jelly_rewards(state: Dictionary) -> void:
 
 
 func _start_pop_listening() -> void:
-	if _mode_id != "pop" or _round_celebration_active() or _pop_rewards_shown or collection_page.visible or _page_hidden or _mode_menu_open():
+	if _professional_input_blocked() or _mode_id != "pop" or _round_celebration_active() or _pop_rewards_shown or collection_page.visible or _page_hidden or _mode_menu_open():
 		return
 	if _pop.game.phase == "finished":
 		# Replay keeps unopened rewards saved without restoring the treasure room.
@@ -1926,7 +2305,7 @@ func _settle_pop_reward() -> bool:
 
 
 func _pop_status_changed(snapshot: Dictionary) -> void:
-	if _mode_id == "pop" and _host != null:
+	if not _releasing_professional_views and _mode_id == "pop" and _host != null:
 		_host.popStatus(JSON.stringify(snapshot))
 
 
@@ -2208,7 +2587,7 @@ func _phrase_completion_requested() -> void:
 
 
 func _publish_round_celebration() -> void:
-	if _host == null or not is_instance_valid(_round_celebration):
+	if _releasing_professional_views or _host == null or not is_instance_valid(_round_celebration):
 		return
 	var state: Dictionary = _round_celebration.snapshot()
 	state["mode"] = _mode_id
@@ -2220,7 +2599,7 @@ func _publish_round_celebration() -> void:
 
 func _phrase_interaction_allowed() -> bool:
 	return _mode_id == "phrase" and not _round_celebration_active() and model.phase in ["waiting", "matching", "feedback"] \
-		and not _rebuilding and not _page_hidden and not _speech_debug_active and not collection_page.visible \
+		and not _professional_input_blocked() and not _rebuilding and not _page_hidden and not _speech_debug_active and not collection_page.visible \
 		and not _mode_menu_open()
 
 
@@ -2288,7 +2667,7 @@ func _phrase_finished() -> void:
 
 
 func _publish_phrase(state: Dictionary) -> void:
-	if _host == null or (_mode_id != "phrase" and _phrase_published.is_empty()):
+	if _releasing_professional_views or _host == null or (_mode_id != "phrase" and _phrase_published.is_empty()):
 		return
 	var value: Dictionary = state.duplicate(true)
 	value["visible"] = _phrase_interaction_allowed() and _phrase.is_visible_in_tree()
@@ -2357,6 +2736,9 @@ func _purchase_memory_peek(ordinal: int, price: int) -> Dictionary:
 
 
 func _memory_peek_feedback(success: bool, price: int) -> void:
+	if success and _round_context.get("track") == "professional":
+		for word in model.lesson_words:
+			_professional_assisted[str(word.id)] = true
 	if _mode_id != "memory" or _page_hidden or _mode_menu_open() or collection_page.visible:
 		return
 	if not success or price > 0:
@@ -2410,9 +2792,18 @@ func _refresh() -> void:
 	if _mode_id in ["match", "memory"] and model.phase == "won" and model.chest_state == "closed" and not _settling_chest and not pair_revealing and not _pair_save_failed:
 		_begin_round_celebration(1 if model.chest_earned else 0)
 	var celebrating: bool = _round_celebration_active()
-	var theme_changed: bool = str(_active_palette.get("id", "")) != model.theme_id
+	var profile: Dictionary = _selected_theme_profile()
+	_mode_panel.apply_learning_art(profile, reduced_motion)
+	if not _mode_menu_open() and _round_context.get("track") == "professional":
+		_learning_backdrop.show_profile(profile, "environment", reduced_motion)
+	var theme_key: String = model.theme_id + ":" + str(profile.get("id", ""))
+	var theme_changed: bool = _learning_theme_key != theme_key
 	if theme_changed:
+		_learning_theme_key = theme_key
 		_active_palette = Data.theme(model.theme_id)
+		for key in profile.get("palette", {}):
+			_active_palette[key] = Color(str(profile.palette[key]))
+		_mode_panel.apply_learning_palette(_active_palette)
 		audio.prepare_chest(model.theme_id)
 		# Multi-chest modes keep the theme of their already saved reward batch.
 		if _round_celebration_active() and not _mode_id in ["pop", "jelly", "word_jelly"]:
@@ -2424,10 +2815,10 @@ func _refresh() -> void:
 	_mode_panel.configure_theme(model.theme_id,
 		model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()), _journey_save_failed)
 	var mode_changed: bool = theme_changed or _styled_mode_id != _mode_id
-	var current_mode_button: Button = _mode_panel.button_for_mode(_mode_id) if _can_continue_round() else null
+	var current_mode_button: Button = _mode_panel.button_for_mode(_mode_id) if _home_can_continue() else null
 	for button: Button in _mode_buttons:
 		button.set_pressed_no_signal(button == current_mode_button)
-		button.disabled = model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty())
+		button.disabled = not _home_mode_available() or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty())
 		if mode_changed:
 			Style.quiet_button(button, palette.accent)
 			button.add_theme_font_size_override("font_size", 16)
@@ -2447,7 +2838,7 @@ func _refresh() -> void:
 		Style.button(_storage_retry_button, palette.accent)
 	if mode_changed:
 		_styled_mode_id = _mode_id
-	_voice_button.disabled = not growth.ready or _host == null or not bool(_host.speechAvailable())
+	_voice_button.disabled = (_round_context.get("track") != "professional" and not growth.ready) or _host == null or not bool(_host.speechAvailable())
 	_voice_button.focus_mode = Control.FOCUS_NONE if _voice_button.disabled else Control.FOCUS_ALL
 	var voice_description: String = "Voice on: click to stop" if _voice_mode else "Voice: click to listen. Browser speech may process audio remotely."
 	if _voice_button.disabled:
@@ -2461,6 +2852,9 @@ func _refresh() -> void:
 	_storage_retry_button.text = "Retry rewards" if _save_error else "Retry saving"
 	_storage_retry_button.set("accessibility_description", coin_wallet.error if not coin_wallet.error.is_empty() else medal_progress.error if _save_error else growth.error)
 	_storage_retry_button.visible = (_save_error or _journey_save_failed or _growth_save_failed or not coin_wallet.ready or not coin_wallet.error.is_empty())
+	if professional.phase == "failed":
+		_storage_retry_button.visible = true
+		_storage_retry_button.set("accessibility_description", professional.error)
 	_refresh_growth()
 	if model.phase not in ["waiting", "matching", "feedback"] and _voice_mode:
 		_stop_voice()
@@ -2582,7 +2976,7 @@ func _hear_word(word: Dictionary) -> void:
 
 func _refresh_match_cards() -> void:
 	var palette: Dictionary = _active_palette if not _active_palette.is_empty() else Data.theme(model.theme_id)
-	var locked: bool = not model.phase in ["waiting", "matching"] and not (_mode_id == "match" and model.phase == "feedback" and not _voice_mode)
+	var locked: bool = _professional_input_blocked() or (not model.phase in ["waiting", "matching"] and not (_mode_id == "match" and model.phase == "feedback" and not _voice_mode))
 	_refresh_match_connections()
 	var pair_styles: Dictionary = {}
 	for pair in _match_connections.connections:
@@ -2857,7 +3251,7 @@ func _fit_mode_buttons() -> void:
 	_mode_heading.text = str(MODES[_mode_id])
 	_mode_heading.add_theme_font_size_override("font_size", ceili((20 if size.x * css_scale >= 680 else 16) / css_scale))
 	_layout_game_heading()
-	_mode_panel.configure(_mode_id if _can_continue_round() else "", audio.muted if audio != null else false, reduced_motion)
+	_mode_panel.configure(_mode_id if _home_can_continue() else "", audio.muted if audio != null else false, reduced_motion)
 	_mode_panel.configure_growth(growth.snapshot())
 	_mode_panel.coin_counter.available = coin_wallet.ready and coin_wallet.error.is_empty()
 	_mode_panel.set_home_coins(coin_wallet.balance)
@@ -2895,6 +3289,14 @@ func _layout_game_heading() -> void:
 	_header_duck_art_slot.size = Vector2.ONE * pip_side
 	_growth_button.position = Vector2(pip_side + 6.0 / scale, (row - 44.0 / scale) * 0.5)
 	_growth_button.size = Vector2(profile_width - _growth_button.position.x, 44.0 / scale)
+	_professional_button.position = Vector2(0, (row - 44.0 / scale) * 0.5)
+	_professional_button.size = Vector2(profile_width, 44.0 / scale)
+	_professional_heading.position = Vector2(6, 3) / scale
+	_professional_heading.size = Vector2(profile_width - 12.0 / scale, 20.0 / scale)
+	_professional_progress_label.position = Vector2(6, 24) / scale
+	_professional_progress_label.size = Vector2(profile_width - 12.0 / scale, 17.0 / scale)
+	_professional_heading.add_theme_font_size_override("font_size", ceili(14.0 / scale))
+	_professional_progress_label.add_theme_font_size_override("font_size", ceili(12.0 / scale))
 	_layout_coin_counter()
 	_toolbar.reset_size()
 	_toolbar.position = Vector2(_header.size.x - _toolbar.size.x, 44.0 / scale) if stacked else Vector2(_coin_counter.position.x - gap - _toolbar.size.x, (row - _toolbar.size.y) * 0.5)
@@ -2981,8 +3383,9 @@ func _layout_collection() -> void:
 		return
 	var scale: float = Style.ui_scale(self)
 	var compact: bool = size.y * scale < 500
-	_growth_summary.visible = not compact
-	_age_notice.visible = not compact
+	_growth_summary.visible = not compact and not _collection_professional
+	_age_notice.visible = not compact and not _collection_professional
+	_professional_library.fit(scale)
 	_age_catalog.meaning_label.visible = not compact or _age_catalog.meaning_label.text != "Tap a word to hear it."
 	var padding: int = ceili((8 if compact else 14) / scale)
 	for edge in ["left", "right"]:
@@ -3004,7 +3407,7 @@ func _layout_collection() -> void:
 
 
 func _can_request_hint() -> bool:
-	if _rebuilding or _page_hidden or _mode_menu_open() or collection_page.visible or _round_id.is_empty():
+	if _professional_input_blocked() or _rebuilding or _page_hidden or _mode_menu_open() or collection_page.visible or _round_id.is_empty():
 		return false
 	if _mode_id != "match" or not model.hint_ids.is_empty() or not model.error.is_empty():
 		return false
@@ -3088,6 +3491,8 @@ func _request_hint() -> void:
 		or _page_hidden or _mode_menu_open() or collection_page.visible or model.hint_ids.size() != 2:
 		_hint_purchasing = false
 		return
+	for card_id in model.hint_ids:
+		_professional_assisted[str(model.card_by_id(card_id).word.id)] = true
 	duck.react("happy")
 	audio.stop_pair_feedback()
 	audio.interact(model.theme_id, not _voice_mode)
@@ -3106,7 +3511,7 @@ func _request_hint() -> void:
 
 
 func _select_card(id: String) -> void:
-	if _hint_purchasing or _mode_id != "match" or collection_page.visible or _mode_menu_open():
+	if _professional_input_blocked() or _hint_purchasing or _mode_id != "match" or collection_page.visible or _mode_menu_open():
 		return
 	if not cards.has(id) or model.card_by_id(id).is_empty():
 		return
@@ -3473,7 +3878,7 @@ func on_page_visible() -> void:
 	_mode_panel.pip.set_idle_paused(false)
 	_mode_panel.resume_previews()
 	feedback_timer.paused = collection_page.visible or _mode_menu_open()
-	_memory.pause(collection_page.visible or _mode_menu_open())
+	_memory.pause(collection_page.visible or _mode_menu_open() or _professional_input_blocked())
 	_resume_phrase()
 	_sync_jelly()
 	if resume_music:
@@ -3481,6 +3886,10 @@ func on_page_visible() -> void:
 
 
 func _restore_mode_music() -> void:
+	# Building Home happens behind the Web loader; its first music belongs to
+	# the accepted Enter gesture, after the host reveals the game.
+	if OS.has_feature("web") and not _loading_revealed:
+		return
 	if _page_hidden or _voice_mode or _pop_speech_active or (is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible):
 		return
 	if _mode_id == "pop" and not collection_page.visible and not _mode_menu_open():
@@ -3906,7 +4315,7 @@ func _default_focus() -> Control:
 		return _vocabulary_retry if _vocabulary_retry.visible else _vocabulary_back
 	if _mode_menu_open():
 		var current_mode_button: Button = _mode_panel.button_for_mode(_mode_id) if _can_continue_round() else null
-		return current_mode_button if current_mode_button != null else _mode_buttons[0]
+		return current_mode_button if current_mode_button != null and current_mode_button.is_visible_in_tree() else _mode_panel.learning_focus()
 	if collection_page.visible:
 		return _collection_back
 	if _round_celebration_active():
@@ -4154,9 +4563,41 @@ func _close_speech_debug(restore_audio: bool = true) -> bool:
 
 
 func _exit_tree() -> void:
+	_releasing_professional_views = true
 	_clear_reward_confetti()
 	_stop_round_celebration()
 	_close_speech_debug(false)
+
+
+func _professional_closing() -> void:
+	_professional_callbacks_closed = true
+	_pending_professional_round.clear()
+	_resume_professional_source = ""
+	if _round_context.get("track") != "professional":
+		return
+	# Play may exit before its UI/audio siblings. Clear their actual references
+	# synchronously; waiting for queued node deletion would outlive the lease.
+	var was_rebuilding: bool = _rebuilding
+	_rebuilding = true
+	_releasing_professional_views = true
+	feedback_timer.stop()
+	_stop_feedback_animations()
+	_stop_round_celebration()
+	_memory.stop()
+	_phrase.stop()
+	_pop.stop()
+	_jelly.stop()
+	_word_jelly.stop()
+	_professional_library.clear()
+	_learning_backdrop.clear()
+	_mode_panel.apply_learning_art({}, true)
+	for card in cards.values():
+		card.clear_feedback()
+		card.picture.texture = null
+		card.card_data.clear()
+	audio.halt()
+	_releasing_professional_views = false
+	_rebuilding = was_rebuilding
 
 
 func _on_input_canceled(_arguments: Array = []) -> void:
@@ -4250,7 +4691,7 @@ func _on_voice_state(arguments: Array) -> void:
 
 
 func _on_voice_result(arguments: Array) -> void:
-	if _speech_debug_active or _mode_menu_open() or arguments.size() < 2:
+	if _professional_input_blocked() or _speech_debug_active or _mode_menu_open() or arguments.size() < 2:
 		return
 	if _mode_id == "pop":
 		if not collection_page.visible:
@@ -4267,7 +4708,7 @@ func _on_voice_result(arguments: Array) -> void:
 
 
 func _consume_spoken_word() -> void:
-	if not _voice_mode or not model.phase in ["waiting", "matching"]:
+	if _professional_input_blocked() or not _voice_mode or not model.phase in ["waiting", "matching"]:
 		return
 	while not _speech_queue.is_empty():
 		var id: String = _speech_queue.pop_front()
@@ -4544,6 +4985,8 @@ func _save_journey() -> void:
 func _retry_storage() -> void:
 	if collection_page.visible:
 		return
+	if professional.phase == "failed" or _professional_input_blocked():
+		_retry_professional()
 	if not coin_wallet.ready or not coin_wallet.error.is_empty():
 		coin_wallet.load_state()
 		_coin_counter.available = coin_wallet.ready
@@ -4556,7 +4999,7 @@ func _retry_storage() -> void:
 		_growth_save_failed = not growth.load_state()
 	else:
 		_growth_save_failed = not bool(growth.retry_pending().save_ok)
-	if growth.ready and model.cards.is_empty():
+	if growth.ready and model.cards.is_empty() and _round_context.get("track") != "professional":
 		new_round()
 	_refresh_growth()
 	_refresh()
@@ -4567,6 +5010,11 @@ func _retry_storage() -> void:
 func _show_collection() -> void:
 	if collection_page.visible or _finish_confirmation_open():
 		return
+	var from_home: bool = _mode_menu_open()
+	var selected_professional: bool = (_home_context if from_home else _round_context).get("track") == "professional"
+	if selected_professional and from_home and not _professional_library_available():
+		return
+	_collection_professional = selected_professional
 	_coin_flight.sync(coin_wallet.balance)
 	# Preserve prepared and hard-error gates; only an interrupted live or pending
 	# recognizer needs paused wording. Capture this before host stop callbacks.
@@ -4602,6 +5050,10 @@ func _show_collection() -> void:
 			control.focus_mode = Control.FOCUS_NONE
 	_catalog_age = growth.learning_age()
 	collection_page.show()
+	if _collection_professional:
+		_professional_library.show()
+		_professional_library.configure(_round_content, professional.session.snapshot())
+		_collection_title.text = "Word library"
 	_sync_jelly()
 	_publish_jelly_rewards(_jelly_rewards.snapshot())
 	_refresh_collection()
@@ -4618,6 +5070,7 @@ func _show_collection() -> void:
 func _hide_collection() -> void:
 	audio.stop_voice()
 	_cancel_collection_rails()
+	_professional_library.clear()
 	collection_page.hide()
 	for control in _collection_focus_modes:
 		if is_instance_valid(control):
@@ -4627,7 +5080,7 @@ func _hide_collection() -> void:
 		_collection_from_home = false
 		_show_mode_menu()
 	feedback_timer.paused = _page_hidden or _mode_menu_open()
-	_memory.pause(_page_hidden or _mode_menu_open())
+	_memory.pause(_page_hidden or _mode_menu_open() or _professional_input_blocked())
 	_refresh()
 	if _mode_id == "pop" and _pop_rewards_shown and not _page_hidden and not _mode_menu_open():
 		_pop_rewards.resume()
@@ -4638,6 +5091,9 @@ func _hide_collection() -> void:
 
 
 func _announce_collection_state() -> void:
+	if _collection_professional:
+		_announce_status("Professional word library. " + str(_round_content.get("course_title", "")) + ". " + str(_round_content.get("module_title", "")))
+		return
 	var announcement := _collection_title.text + ". " + _growth_summary.text + " " + _age_notice.text
 	if _journey_save_failed:
 		announcement += " Theme preference not saved. Return Home to retry."
@@ -4676,7 +5132,7 @@ func _update_duck() -> void:
 		return
 	_header_duck_slot.show()
 	var in_collection: bool = collection_page.visible
-	var visible_here: bool = not in_collection and not _mode_menu_open()
+	var visible_here: bool = not in_collection and not _mode_menu_open() and _round_context.get("track") != "professional"
 	var phrase_speaking: bool = _phrase_interaction_allowed() and audio.available and not audio.muted and audio.voice.playing
 	_phrase.set_speaking(phrase_speaking)
 	duck.set_outfit_theme(model.theme_id)
@@ -4768,6 +5224,12 @@ func _learning_words(for_phrase: bool = false) -> Array:
 
 
 func _practice_weight(word: Dictionary) -> float:
+	if word.get("track") == "professional":
+		var skills: Dictionary = professional.session.snapshot().progress.get("skills", {}).get(str(word.id), {})
+		for evidence in skills.values():
+			if evidence.get("earned", false):
+				return WordSampler.MASTERED_WEIGHT
+		return 1.0
 	return WordSampler.MASTERED_WEIGHT if growth.is_mastered(str(word.id)) else 1.0
 
 
@@ -4912,7 +5374,10 @@ func _pop_growth_answer(id: String, words: Array[String], correct: bool) -> void
 
 
 func _record_growth(attempt_id: String, words: Array, correct: bool) -> void:
-	if _round_id.is_empty():
+	if _round_context.get("track") == "professional":
+		_record_professional(attempt_id, words, correct)
+		return
+	if _round_id.is_empty() or _round_context.get("track", "growth") != "growth":
 		return
 	var was_failed: bool = _growth_save_failed
 	var result: Dictionary = growth.record_attempt(_round_id + ":" + attempt_id, words, correct)
@@ -4928,7 +5393,7 @@ func _record_growth(attempt_id: String, words: Array, correct: bool) -> void:
 
 
 func _sync_growth_load_notice() -> void:
-	if growth.ready:
+	if growth.ready or _round_context.get("track") == "professional" or _mode_menu_open():
 		return
 	_message.text = "Your learning progress could not be loaded.\nChoose Retry saving before you play."
 	_message.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -4945,8 +5410,28 @@ func _refresh_growth() -> void:
 		if is_instance_valid(mascot):
 			mascot.set_growth_age(growth.age)
 	_growth_button.configure(state)
+	_growth_button.visible = _round_context.get("track") != "professional"
+	_professional_button.visible = not _growth_button.visible
+	if _professional_button.visible:
+		_professional_heading.text = str(_round_content.get("course_title", "Professional English"))
+		var saved: Dictionary = professional.session.snapshot()
+		var learned := 0
+		for term in _round_content.get("requirements", {}).get("terms", []):
+			for skill in term.skills:
+				if saved.progress.get("skills", {}).get(term.sense_id, {}).get(skill, {}).get("earned", false):
+					learned += 1
+					break
+		var progress_text: String = "%d / 50 learned" % learned if saved.progress_loaded and not saved.blocked else "Progress unavailable"
+		_professional_progress_label.text = progress_text
+		_professional_button.tooltip_text = "%s · %s\n%s" % [_professional_heading.text, _round_content.get("module_title", _round_context.module_id), progress_text]
+		_set_accessibility_name(_professional_button, _professional_button.tooltip_text + ". Open word library.")
+		var previous_focus: int = _professional_button.focus_mode
+		Style.quiet_button(_professional_button, _active_palette.get("accent", Style.GOOD))
+		_professional_button.focus_mode = previous_focus
 	_pip_age_description = str(state.age_label) if state.ready else ""
 	_collection_title.text = "%s · %s" % [state.label, "Baby Pip" if state.age == 0 else "Pip · " + state.age_label] if state.ready else "Grow with Pip"
+	if collection_page.visible and _collection_professional:
+		_collection_title.text = "Word library"
 	var level_summary: String = "Lv99 reached!" if state.level_completed else "%d new %s to Lv%d" % [state.level_remaining, "word" if state.level_remaining == 1 else "words", state.level + 1]
 	var age_target: String = "Age 12+" if state.learning_age == 12 else "Age %d" % state.learning_age
 	_growth_summary.text = "%s · %d words learned\n%s: %d / %d mastered%s" % [level_summary, state.lifetime_mastered, age_target, state.mastered, state.total, " · All ages unlocked!" if state.completed else " · Master this set to help Pip grow."] if state.ready else "Learning progress is unavailable. Retry saving to load it."
@@ -5006,8 +5491,8 @@ func _publish_growth_view() -> void:
 		controls.append(_growth_control(_vocabulary_retry))
 		controls.append(_growth_control(_vocabulary_back))
 	if collection_page.visible:
-		state["catalog"] = _age_catalog.snapshot()
-		state.catalog["viewport_rect"] = _growth_control(_age_catalog.scroll).rect
+		state["catalog"] = _professional_library.snapshot() if _collection_professional else _age_catalog.snapshot()
+		state.catalog["viewport_rect"] = _growth_control(_professional_library.scroll if _collection_professional else _age_catalog.scroll).rect
 		state.catalog.erase("growth")
 		state.catalog.erase("word_ids")
 		state["notice"] = _age_notice.text

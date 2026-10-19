@@ -1,0 +1,357 @@
+{
+  "status": "integrated_art_and_ready_ambient_theme_pending",
+  "files": [
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r02/delivery/professional-media/712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png",
+      "destination": "professional-media/712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png",
+      "sha256": "712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9",
+      "bytes": 132580,
+      "role": "derived_theme_media",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r02/delivery/professional-media/65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png",
+      "destination": "professional-media/65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png",
+      "sha256": "65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973",
+      "bytes": 191183,
+      "role": "derived_theme_media",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r02/delivery/professional-media/41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png",
+      "destination": "professional-media/41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png",
+      "sha256": "41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5",
+      "bytes": 189671,
+      "role": "derived_theme_media",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r02/delivery/professional-media/3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png",
+      "destination": "professional-media/3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png",
+      "sha256": "3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714",
+      "bytes": 259369,
+      "role": "derived_theme_media",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/acquisition-receipt.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/acquisition-receipt.json",
+      "sha256": "f58c79943d9e325d5209ed519735371a017c16bdc2bdd11c08bbc1c39a80eed3",
+      "bytes": 7857,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/License.txt",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/License.txt",
+      "sha256": "0ef3667d547d93dea1e3e47aa1c323eaef4913f25c0f2c2cfe31899f2ee134b7",
+      "bytes": 614,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+      "sha256": "ff33f535acdb1825c0e958a293642b39665adcae0b1317b650e83d2bb687f4e2",
+      "bytes": 22644,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+      "sha256": "fec6271639df5aff9f8ac75d6679385eab2abb7c8d2f51abeba3ed689ddb6f0d",
+      "bytes": 12200,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/chairCushion.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/chairCushion.glb",
+      "sha256": "33544228984857f2cb502b58452fed72157335f9b1caf29e96da5c9094c53fdc",
+      "bytes": 12588,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/floorFull.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/floorFull.glb",
+      "sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+      "bytes": 2260,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wall.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/wall.glb",
+      "sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+      "bytes": 3340,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wallWindow.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/wallWindow.glb",
+      "sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+      "bytes": 10744,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/License.txt",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Mini Characters/License.txt",
+      "sha256": "28358ae5accc85b572eb42507956afc8beae05acb4648bb9026a5714d421b785",
+      "bytes": 718,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/Models/GLB format/Textures/colormap.png",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Mini Characters/Models/GLB format/Textures/colormap.png",
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+      "bytes": 8706,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/Models/GLB format/wheelchair.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Mini Characters/Models/GLB format/wheelchair.glb",
+      "sha256": "cb7b6cbebc7bbe238ae926b26305661eb66e17659fafa8fa0c098f5e7955fabe",
+      "bytes": 56680,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/library-terms.html",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/library-terms.html",
+      "sha256": "8643dd0b074ba8296680498bece03e35b23fd5a9299846e03096302f6a02cd76",
+      "bytes": 35154,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/LICENSE-CC0.txt",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/LICENSE-CC0.txt",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "bytes": 7048,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/nurse-station/nurse-station-with-low-accessible-counter.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/nurse-station/nurse-station-with-low-accessible-counter.glb",
+      "sha256": "74ee89a9add892597bcb569ea6080e7c4c85b792768898648f7d91334b79ebf8",
+      "bytes": 700584,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/nurse-station/source-inventory.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/nurse-station/source-inventory.json",
+      "sha256": "4edfb30da0b0a2522d3ba9eab0dc1badac94ed8dce3d9a7dd5e26af6c59f9441",
+      "bytes": 3751,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/nurse-station/source-page.html",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/nurse-station/source-page.html",
+      "sha256": "6a217282a15ad1321dd6274df7cbd97944653af20b42c467280371d37ac4e222",
+      "bytes": 47927,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/privacy-curtain/privacy-curtain-and-ceiling-track.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/privacy-curtain/privacy-curtain-and-ceiling-track.glb",
+      "sha256": "563b648b94f5f2dc87fa734c22021a1116461ee01733eae359907839ef2d1390",
+      "bytes": 330268,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/privacy-curtain/source-inventory.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/privacy-curtain/source-inventory.json",
+      "sha256": "5103204d2f703c2a2ed43e13dbde5488e98c17b3bdeccbfeacd21429f1f4316a",
+      "bytes": 3207,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/acquired/privacy-curtain/source-page.html",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/privacy-curtain/source-page.html",
+      "sha256": "2fed1dd78486a9cc4526fcc06e9210d2ac767d4d61bff182895696dcff8f501d",
+      "bytes": 47635,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "docs/assets/sources/innerscene-hospital-bed/hospital-bed-raised-backrest.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/hospital-bed/hospital-bed-raised-backrest.glb",
+      "sha256": "2d66623eaa1162b358d404df5288ce6a29416fc506b50ffd0718d832435c1ab5",
+      "bytes": 651572,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "docs/assets/sources/innerscene-hospital-bed/LICENSE-CC0.txt",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/hospital-bed/LICENSE-CC0.txt",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "bytes": 7048,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "docs/assets/sources/innerscene-hospital-bed/source-inventory.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/hospital-bed/source-inventory.json",
+      "sha256": "ef5983371d7ce5756edcf01c2c7caa998f73c1b8529d98822c30ccf3fd84cf94",
+      "bytes": 6807,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "docs/assets/sources/innerscene-hospital-bed/SOURCE.md",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/hospital-bed/SOURCE.md",
+      "sha256": "060b3729a9bf887cbc7431be4c0c83f890f31961c736f925faed44d344414df4",
+      "bytes": 2157,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "docs/assets/sources/innerscene-medical-supply-cart/LICENSE-CC0.txt",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/supply-cart/LICENSE-CC0.txt",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "bytes": 7048,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "docs/assets/sources/innerscene-medical-supply-cart/medical-supply-cart.glb",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/supply-cart/medical-supply-cart.glb",
+      "sha256": "ecab70adf0e563f62cd27a1baf21380868c0c0e52a5c1b2e93f5873b1a8c02f6",
+      "bytes": 520972,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "docs/assets/sources/innerscene-medical-supply-cart/source-inventory.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/supply-cart/source-inventory.json",
+      "sha256": "81cdf1baa45867fb462cec57709152cc611173fce8cbd55524c81a8ae36f9a02",
+      "bytes": 3421,
+      "role": "original_source_and_license",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/existing-source-record.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/existing-source-record.json",
+      "sha256": "0a108ef273891c99da810d2f29b39b89febf7deb5c436b8f92b2ef44bb2be269",
+      "bytes": 12642,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/source-review-receipt.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/source-review-receipt.json",
+      "sha256": "480148a06b0904edd173ca733233bfce99ef7efde63cc3e6c5966323df0b75f6",
+      "bytes": 16529,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/source-visual-review.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/source-visual-review.json",
+      "sha256": "25e8426a6bdf4809ed3e6a74a6c41a9ff7dd1bc7e1aa6ca6dd49f25b6eb68ee3",
+      "bytes": 3376,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/static-r03/static-review-receipt.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/static-r03/static-review-receipt.json",
+      "sha256": "45c4c43f01ce554fe8df09631f870c118c07754299e52254034dc88842adc445",
+      "bytes": 8808,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/static-r03/independent-static-acceptance.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/static-r03/independent-static-acceptance.json",
+      "sha256": "9c79e50c2ed33773697d859d98dc3f15900000c77bd92aa435226dd425e7726a",
+      "bytes": 1360,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r01/textile-motion.gd",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/motion-r01/textile-motion.gd",
+      "sha256": "c607277a97cc99382767c41f42078400826b5883e1f6caf435adf4261ba4bba1",
+      "bytes": 6111,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r01/render-motion.gd",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/motion-r01/render-motion.gd",
+      "sha256": "a26ca24601612cea61191523ace9b737596c9fc7bd76a2e9a485e8f6ad9391c2",
+      "bytes": 8058,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r01/renders/composition-report.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/motion-r01/renders/composition-report.json",
+      "sha256": "5eacc8e129fe825df5273a10fbfe136eaf649ad92448fcb8c9d2c76e8163cbf3",
+      "bytes": 17072,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r02/build-layers.py",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/motion-r02/build-layers.py",
+      "sha256": "bd15d04351688708e18d8e92db57119420c4b269e6e08af127174ce06fd89a5e",
+      "bytes": 5744,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r02/layer-report.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/motion-r02/layer-report.json",
+      "sha256": "58afb251b68f7064789cd40e4ff370a95799f6c02d22aed6996c5ec735ee3da0",
+      "bytes": 1265,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r03-runtime/review.md",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/motion-r03-runtime/review.md",
+      "sha256": "55b7d9fa744a01c11231f73cb9bf0826b2b6d6db0b21b5f40cb06e6b51601690",
+      "bytes": 7014,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r03-runtime/motion-review-receipt.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/motion-r03-runtime/motion-review-receipt.json",
+      "sha256": "e7e07175c19d8930dc628f0acafbc9f640162a92adf875e143291f425af2e1f7",
+      "bytes": 84628,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r04-independent-review/review.md",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/motion-r04-independent-review/review.md",
+      "sha256": "be75baf58fbd2785da3da1adefcfb721615353fb76eafc938faaf7c87d7601f7",
+      "bytes": 4930,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    },
+    {
+      "source": "build/professional-english/nursing-theme-review/motion-r04-independent-review/independent-review-receipt.json",
+      "destination": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/motion-r04-independent-review/independent-review-receipt.json",
+      "sha256": "70db99c044ab12873a7ad6cc14b2fcfa30b90297e71a351beec23c03dabf9f85",
+      "bytes": 22187,
+      "role": "immutable_derivation_and_review",
+      "installed": true
+    }
+  ]
+}

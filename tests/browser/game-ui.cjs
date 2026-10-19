@@ -74,7 +74,13 @@ async function libraryControl(page, name) {
     const [x, y, w, h] = state.viewport_rect || [0, 0, bounds.width, bounds.height];
     // Godot's float coordinates can exceed the one-CSS-pixel edge by roundoff.
     const tolerance = (1 + 1e-3) / bounds.scale;
-    return left >= x - tolerance && top >= y - tolerance && left + width <= x + w + tolerance && top + height <= y + h + tolerance ? item : null;
+    if (left < x - tolerance || left + width > x + w + tolerance) return null;
+    if (top >= y - tolerance && top + height <= y + h + tolerance) return item;
+    if (height > h && item.focused) {
+      const upper = Math.max(top, y), bottom = Math.min(top + height, y + h);
+      if (bottom - upper >= Math.min(44 / bounds.scale, h)) return { ...item, rect: [left, upper, width, bottom - upper] };
+    }
+    return null;
   };
   let item = target(await metrics(page));
   if (item) return item;
@@ -97,6 +103,10 @@ async function activateLibraryControl(page, name) {
 
 async function chooseMode(page, name, options = {}) {
   await openModeMenu(page);
+  const paths = (await metrics(page)).library?.controls || [];
+  if (paths.some(item => item.name === 'GrowthPath' && item.visible !== false)) {
+    await activateLibraryControl(page, 'GrowthPath');
+  }
   modeRect(await metrics(page), name, options);
   await activateLibraryControl(page, `Mode_${name}`);
   await expect.poll(async () => (await metrics(page)).library?.visible).toBe(false);

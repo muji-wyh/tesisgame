@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-16T19:29:27.561Z",
+  "files": [
+    {
+      "path": "scripts/professional_catalog.gd",
+      "bytes": 7177,
+      "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+    },
+    {
+      "path": "scripts/professional_play.gd",
+      "bytes": 7234,
+      "sha256": "348431e211ca691aa873e201d8a5688e3e8f1cc63bc2fda6b8851b3c41a22db0"
+    },
+    {
+      "path": "scripts/game_ui.gd",
+      "bytes": 228843,
+      "sha256": "d35434106c012299a17076ae96d59cba2cb325dec43f7abbaf14825d3874e3c1"
+    },
+    {
+      "path": "tests/godot/professional_play_tests.gd",
+      "bytes": 13576,
+      "sha256": "c6fea401bb2eea0e0399aec939ec5e84f0c31e308a5bdc4554dc25acecb9c7f6"
+    },
+    {
+      "path": "tests/godot/professional_application_flow_tests.gd",
+      "bytes": 12586,
+      "sha256": "f3d08d9cf2ffc5c8b2f3b55abedada7b5fa5a831cb3bd51728e209788184709a"
+    },
+    {
+      "path": "docs/plans/professional-english-checkpoint.md",
+      "bytes": 19318,
+      "sha256": "8904b6aab8540fd241680ffe93f68acce3b51494548ddfd182ccd5e40e5bc278"
+    }
+  ],
+  "installed": [
+    {
+      "path": "scripts/professional_domain_owner.gd",
+      "sha256": "a5d38afb67e53eede47fc2a50bec1e42060c39597021d3c0774be8cd45855feb"
+    },
+    {
+      "path": "scripts/professional_domain_catalog.gd",
+      "sha256": "9b9959ecf79894abfd1f6ec279bf597987e68068bd0d3ef5f257c8237f574b19"
+    },
+    {
+      "path": "scripts/professional_catalog.gd",
+      "sha256": "a80f9f847e515f882bc2ef94c2a284d6938ea811b4a7ac64882f90223909467b"
+    }
+  ]
+}

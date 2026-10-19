@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_source_review_revision_required_actual_binding_unbound",
+  "reviewer": "Codex morph_review",
+  "source_inventory_raw_sha256": "21df8c149742cb4fc63acecb033bfb7d499e10310b5467c8ff81bd715db73598",
+  "files": [
+    {
+      "path": "capture.ps1",
+      "bytes": 11386,
+      "raw_sha256": "a3111a9a66c08350fb71c678324ef40842487cfd93e693d81f8f5acbd6b48588"
+    },
+    {
+      "path": "capture-attempt-r01/start.json",
+      "bytes": 259,
+      "raw_sha256": "287fb3515879b373c038eb33b89b0b561ba1ded6c2519ed8e98ce26310129977"
+    },
+    {
+      "path": "capture-attempt-r01/inspection.json",
+      "bytes": 48811,
+      "raw_sha256": "0440f986b2826f7df0d43f8f8cf65b91a2923fccd93e12a3ff9c2569d1a2cf96"
+    },
+    {
+      "path": "capture-attempt-r01/inputs.json",
+      "bytes": 18201,
+      "raw_sha256": "2c95ee9e07187164636730f4ffd1b108f807346a28974a1a2d228e7e25732857"
+    },
+    {
+      "path": "review.json",
+      "bytes": 8929,
+      "raw_sha256": "b5f9389ea3344d8ce84dd39af20f7b6f0a92a04b00453fca1c8c1c5c25d444c0"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1875,
+      "raw_sha256": "f3f9e1c02a71606f189203c7abd894f1909d78c6334ba4ddd329dfa30a1c9dc0"
+    }
+  ],
+  "preparation_execution_accepted": false,
+  "actual_binding": null,
+  "inventory_self_excluded": true
+}

@@ -1,0 +1,2446 @@
+{
+  "schema": 1,
+  "status": "draft_language_proposals_pending_independent_acceptance",
+  "author_role": "Codex attendance_review research author; not an independent language approver",
+  "created_on": "2026-10-17",
+  "scope": "Ten entries at file positions 21-30; definition/example/difficulty proposals only. All source records and editorial notes remain separate review material.",
+  "input": {
+    "path": "data/professional/lexemes/foundation-module02.json",
+    "raw_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41",
+    "registry_json_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+    "hash_basis": "Raw file bytes; entry hashes are SHA256 of UTF-8 JSON.stringify(entry) preserving parsed key order."
+  },
+  "selection": {
+    "method": "Explicit next block at positions 21-30 after the completed second-ten block; earlier collect/notify holds are not skipped into a new batch.",
+    "count": 10,
+    "proposals": 8,
+    "holds": 2,
+    "actual_content_changes": 7
+  },
+  "source_artifacts": [
+    "source-index.json",
+    "research-notes.json",
+    "oxford-html-metadata.json"
+  ],
+  "global_limits": [
+    "Author proposals only. Definitions, examples and editorial difficulty require a separate independent acceptance decision.",
+    "The research preserves every original review, morphology, media, region, accepted form, identity, historical reference, editorial note, membership and expression. Proposed notes are separate review material.",
+    "Oxford rendered topic labels and HTML attributes are separate observations. Unrelated Word of the Day labels are not assigned to the target. Missing levels mean not observed, not an inferred level.",
+    "Collins B1+ is retained literally. It is not silently converted to B1 or B2. Higher or missing source labels are not clamped to the current A2/B1/B2 schema.",
+    "No human, subject-matter, whole-expression, morphology, picture, audio, domain, module or release approval is claimed."
+  ],
+  "entries": [
+    {
+      "id": "correct.put-right.v",
+      "term": "correct",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "correct.put-right.v",
+        "text": "correct",
+        "display_text": "correct",
+        "pos": "verb",
+        "definition": "To change something so that an error is removed.",
+        "example": "Please correct the spelling of the company name.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "correct"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An incorrect name on a form changed to the correct spelling.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "correct.put-right.v.analysis.v1",
+          "lexeme_id": "correct.put-right.v",
+          "text": "correct",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "correct",
+              "surface": "correct",
+              "canonical_id": "morph.correct"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "4edcff620c45c2889866270d6b31315e1f7b74c173d037d80608172c1237c6f2",
+      "proposed_fields": {
+        "definition": "To change something so that an error is removed.",
+        "example": "Please correct the spelling of the company name.",
+        "difficulty": "A2"
+      },
+      "content_projection": {
+        "id": "correct.put-right.v",
+        "text": "correct",
+        "display_text": "correct",
+        "pos": "verb",
+        "definition": "To change something so that an error is removed.",
+        "example": "Please correct the spelling of the company name.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "correct"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An incorrect name on a form changed to the correct spelling.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "correct.put-right.v.analysis.v1",
+          "lexeme_id": "correct.put-right.v",
+          "text": "correct",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "correct",
+              "surface": "correct",
+              "canonical_id": "morph.correct"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "4edcff620c45c2889866270d6b31315e1f7b74c173d037d80608172c1237c6f2",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-third10-oxford-correct",
+        "foundation02-language-third10-collins-correct"
+      ],
+      "selected_sense": "Removing an error by changing the thing that contains it, represented by correcting a misspelled company name.",
+      "editorial_difficulty_rationale": "Retain editorial A2 for this narrow error-removal sense: Oxford's selected verb sense has A1 metadata. Collins labels the broader problem/fault-remedy verb B2; this disagreement remains explicit. Collins adjective A2 is not evidence for this verb.",
+      "hold_reason": null,
+      "excluded_scope": "The adjective meaning accurate, teacher marking, correcting a person, punishment, medical treatment and statistical adjustment remain outside this proposal.",
+      "media_issue": "The existing image/audio records, image brief, suitability flag and review gates remain exact and pending. This language research makes no image-suitability, acquisition, voice or media-approval decision.",
+      "expression_context_issue": "Only the ordinary error-removal verb is proposed. Correct adjective uses, corrected modifiers and specialized record-correction procedures receive no acceptance. Foundation02.04 also contains held verify and remains wholly pending.",
+      "proposed_editorial_note_for_future_review": "Proposed ordinary error-removal verb with the original spelling example and editorial A2. Oxford selected A1 and Collins selected B2 remain distinct evidence. The adjective and all expression, domain, morphology and media decisions remain separate."
+    },
+    {
+      "id": "adjust.change-slightly.v",
+      "term": "adjust",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "adjust.change-slightly.v",
+        "text": "adjust",
+        "display_text": "adjust",
+        "pos": "verb",
+        "definition": "To make a small change so that something fits or works better.",
+        "example": "We can adjust the meeting time by ten minutes.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "adjust"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A calendar event moving slightly to fit everyone's availability.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "adjust.change-slightly.v.analysis.v1",
+          "lexeme_id": "adjust.change-slightly.v",
+          "text": "adjust",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "adjust",
+              "surface": "adjust",
+              "canonical_id": "morph.adjust"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "ac149fbdd7182b706ad56408debc2527d7f860b76afdb7a8d138c869f4d57861",
+      "proposed_fields": {
+        "definition": "To make a small change so that something fits or works better.",
+        "example": "We can adjust the meeting time by ten minutes.",
+        "difficulty": "B2"
+      },
+      "content_projection": {
+        "id": "adjust.change-slightly.v",
+        "text": "adjust",
+        "display_text": "adjust",
+        "pos": "verb",
+        "definition": "To make a small change so that something fits or works better.",
+        "example": "We can adjust the meeting time by ten minutes.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "adjust"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A calendar event moving slightly to fit everyone's availability.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "adjust.change-slightly.v.analysis.v1",
+          "lexeme_id": "adjust.change-slightly.v",
+          "text": "adjust",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "adjust",
+              "surface": "adjust",
+              "canonical_id": "morph.adjust"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "5561169c1a7c733a2c17a6ae5a712f552eceee546a2ae89a4cccf313f18a57e5",
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-third10-oxford-adjust",
+        "foundation02-language-third10-collins-adjust"
+      ],
+      "selected_sense": "Making a small change to improve suitability or operation, represented by moving a meeting time by ten minutes.",
+      "editorial_difficulty_rationale": "Both Oxford selected sense 1 and Collins selected transitive sense 3 support B2. The draft A2 has no support in these selected observations; propose B2 without changing the definition or example.",
+      "hold_reason": null,
+      "excluded_scope": "Getting used to circumstances, the Indian English phrase kindly adjust, arranging clothes, eyesight adaptation and insurance-claim adjustment are separate.",
+      "media_issue": "The existing image/audio records, image brief, suitability flag and review gates remain exact and pending. This language research makes no image-suitability, acquisition, voice or media-approval decision.",
+      "expression_context_issue": "Foundation02.07 contains this time adjustment alongside held postpone and cancellation; the expression remains exact and pending.",
+      "proposed_editorial_note_for_future_review": "Proposed ordinary small-change sense with the original meeting-time example and editorial B2. Oxford and Collins selected senses support B2. Adaptation, insurance and regional idioms remain separate; no whole-expression or nonlanguage approval follows."
+    },
+    {
+      "id": "reschedule.change-time.v",
+      "term": "reschedule",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "reschedule.change-time.v",
+        "text": "reschedule",
+        "display_text": "reschedule",
+        "pos": "verb",
+        "definition": "To arrange a new time or date for a planned activity.",
+        "example": "We need to reschedule the training session.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "reschedule"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "The same training event moved to a new calendar date.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "reschedule.change-time.v.analysis.v1",
+          "lexeme_id": "reschedule.change-time.v",
+          "text": "reschedule",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "prefix",
+              "canonical": "re-",
+              "surface": "re",
+              "canonical_id": "affix.re.prefix"
+            },
+            {
+              "id": "p2",
+              "type": "stem",
+              "canonical": "schedule",
+              "surface": "schedule",
+              "canonical_id": "morph.schedule"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "reschedule",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "97f3a7691f09518d23829d5482140f153fb92e79cd0b376d3790bd2a47b040c1",
+      "proposed_fields": {
+        "definition": "To arrange a new time or date for a planned activity.",
+        "example": "We need to reschedule the training session.",
+        "difficulty": "B2"
+      },
+      "content_projection": {
+        "id": "reschedule.change-time.v",
+        "text": "reschedule",
+        "display_text": "reschedule",
+        "pos": "verb",
+        "definition": "To arrange a new time or date for a planned activity.",
+        "example": "We need to reschedule the training session.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "reschedule"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "The same training event moved to a new calendar date.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "reschedule.change-time.v.analysis.v1",
+          "lexeme_id": "reschedule.change-time.v",
+          "text": "reschedule",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "prefix",
+              "canonical": "re-",
+              "surface": "re",
+              "canonical_id": "affix.re.prefix"
+            },
+            {
+              "id": "p2",
+              "type": "stem",
+              "canonical": "schedule",
+              "surface": "schedule",
+              "canonical_id": "morph.schedule"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "reschedule",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "c9e0f504c01f71f969c8b0e7b1389829a7e5da983a11cd88baf46e8457baaed8",
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-third10-oxford-reschedule",
+        "foundation02-language-third10-collins-reschedule"
+      ],
+      "selected_sense": "Changing the assigned time or date of an activity that was already planned, represented by a training session.",
+      "editorial_difficulty_rationale": "Collins selected event sense 1 explicitly shows B2. Oxford gives the same event sense but its selected HTML element has neither cefr nor fkcefr and the rendered section has no selected level. Propose B2 from Collins, not from an invented Oxford label.",
+      "hold_reason": null,
+      "excluded_scope": "Debt repayment restructuring is a separate financial sense. Unlike postpone, event rescheduling does not require every change to be later.",
+      "media_issue": "The existing image/audio records, image brief, suitability flag and review gates remain exact and pending. This language research makes no image-suitability, acquisition, voice or media-approval decision.",
+      "expression_context_issue": "No current expression text or focus ID matches the reschedule inflections. That absence creates no expression approval or binding.",
+      "proposed_editorial_note_for_future_review": "Proposed ordinary event time/date change with the original training-session example and editorial B2 from Collins. Oxford's selected level is unobserved. Financial rescheduling remains excluded; nonlanguage gates remain pending."
+    },
+    {
+      "id": "postpone.delay-until-later.v",
+      "term": "postpone",
+      "disposition": "held_unchanged",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "postpone.delay-until-later.v",
+        "text": "postpone",
+        "display_text": "postpone",
+        "pos": "verb",
+        "definition": "To arrange for a planned activity to happen later.",
+        "example": "The team decided to postpone the review until next week.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "postpone"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An event moved from this week to a later date.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "postpone.delay-until-later.v.analysis.v1",
+          "lexeme_id": "postpone.delay-until-later.v",
+          "text": "postpone",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The history documents post- and the Latin placing root from ponere. Pone here is a bound classical root, not an ordinary modern word. The after/later relation needs a learner-facing explanation before release. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/postpone",
+              "https://www.dictionary.com/browse/postpone"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "affix.post.prefix",
+              "type": "prefix",
+              "canonical": "post",
+              "surface": "post"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.pone",
+              "type": "root",
+              "canonical": "pone",
+              "surface": "pone"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "postpone",
+              "rule": "latinate_prefix_root_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-postpone",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-postpone",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+      "proposed_fields": {},
+      "content_projection": {
+        "id": "postpone.delay-until-later.v",
+        "text": "postpone",
+        "display_text": "postpone",
+        "pos": "verb",
+        "definition": "To arrange for a planned activity to happen later.",
+        "example": "The team decided to postpone the review until next week.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "postpone"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An event moved from this week to a later date.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "postpone.delay-until-later.v.analysis.v1",
+          "lexeme_id": "postpone.delay-until-later.v",
+          "text": "postpone",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The history documents post- and the Latin placing root from ponere. Pone here is a bound classical root, not an ordinary modern word. The after/later relation needs a learner-facing explanation before release. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/postpone",
+              "https://www.dictionary.com/browse/postpone"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "affix.post.prefix",
+              "type": "prefix",
+              "canonical": "post",
+              "surface": "post"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.pone",
+              "type": "root",
+              "canonical": "pone",
+              "surface": "pone"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "postpone",
+              "rule": "latinate_prefix_root_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-postpone",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-postpone",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-third10-oxford-postpone",
+        "foundation02-language-third10-collins-postpone"
+      ],
+      "selected_sense": "Moving a planned activity to a later time, represented by a review deferred until next week.",
+      "editorial_difficulty_rationale": "Oxford selected fkcefr=c1 and the Working life C1 topic are explicit. Collins gives literal B1+. Neither supports retaining draft A2; B1+ is not a schema value, and C1 must not be silently clamped to B2.",
+      "hold_reason": "Hold the entire entry unchanged pending an independently justified course placement or schema/scope decision. The meaning/example are plausible but level reconciliation has not been accepted.",
+      "excluded_scope": "Lower-priority ranking and specialist loan-repayment arrangements are outside the ordinary meeting/review example. Postponing requires later timing, unlike general rescheduling.",
+      "media_issue": "The existing image/audio records, image brief, suitability flag and review gates remain exact and pending. This language research makes no image-suitability, acquisition, voice or media-approval decision.",
+      "expression_context_issue": "Foundation02.07 remains pending and contains this held focus ID. Language research does not approve its historically authored post/pone morphology.",
+      "proposed_editorial_note_for_future_review": "Held unchanged. Selected Oxford C1 and Collins B1+ remain literal and unresolved against the current course schema. No note, reference, review gate or other field is proposed for integration."
+    },
+    {
+      "id": "cancel.stop-arrangement.v",
+      "term": "cancel",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "cancel.stop-arrangement.v",
+        "text": "cancel",
+        "display_text": "cancel",
+        "pos": "verb",
+        "definition": "To decide that a planned activity or arrangement will not happen.",
+        "example": "Please cancel the duplicate booking.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "cancel"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "One duplicate booking removed while the original remains.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "cancel.stop-arrangement.v.analysis.v1",
+          "lexeme_id": "cancel.stop-arrangement.v",
+          "text": "cancel",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "cancel",
+              "surface": "cancel",
+              "canonical_id": "morph.cancel"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "3e29486ea31be172a6616b4b2bea4271ed123081d7b72799b371953471accd18",
+      "proposed_fields": {
+        "definition": "To decide that a planned activity or arrangement will not happen.",
+        "example": "Please cancel the duplicate booking.",
+        "difficulty": "B2"
+      },
+      "content_projection": {
+        "id": "cancel.stop-arrangement.v",
+        "text": "cancel",
+        "display_text": "cancel",
+        "pos": "verb",
+        "definition": "To decide that a planned activity or arrangement will not happen.",
+        "example": "Please cancel the duplicate booking.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "cancel"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "One duplicate booking removed while the original remains.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "cancel.stop-arrangement.v.analysis.v1",
+          "lexeme_id": "cancel.stop-arrangement.v",
+          "text": "cancel",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "cancel",
+              "surface": "cancel",
+              "canonical_id": "morph.cancel"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "6e647b39ff985830f47621315604f5f1c1e6ca979b87301913b6df22bc10a590",
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-third10-oxford-cancel",
+        "foundation02-language-third10-collins-cancel"
+      ],
+      "selected_sense": "Stopping an ordinary planned activity or arrangement from going ahead, represented by cancelling a duplicate booking.",
+      "editorial_difficulty_rationale": "Oxford planned-event sense 1 and stopping-an-arrangement sense 2 both carry B2. Collins combines ordinary planned events and orders/services in its B1+ sense 1. Propose editorial B2 with that literal disagreement retained; B1+ is not rounded.",
+      "hold_reason": null,
+      "excluded_scope": "Legal validity, debt relief, insurance-policy consequences, stamp/ticket invalidation, social exclusion and mathematical cancel-out meanings are excluded. The booking example claims no authority or cancellation policy.",
+      "media_issue": "The existing image/audio records, image brief, suitability flag and review gates remain exact and pending. This language research makes no image-suitability, acquisition, voice or media-approval decision.",
+      "expression_context_issue": "The existing duplicate booking belongs to ordinary arrangements. Oxford separates event cancellation from ending agreements; the proposal does not merge all their legal consequences. Foundation02.07 remains pending and still includes held postpone.",
+      "proposed_editorial_note_for_future_review": "Proposed ordinary planned-arrangement cancellation with the original duplicate-booking example and editorial B2. Oxford senses 1 and 2 are separately recorded at B2; Collins sense 1 remains B1+. No legal cancellation consequence, inflected-form admission, expression or other gate is approved."
+    },
+    {
+      "id": "resolve.solve-problem.v",
+      "term": "resolve",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "resolve.solve-problem.v",
+        "text": "resolve",
+        "display_text": "resolve",
+        "pos": "verb",
+        "definition": "To deal successfully with a problem or disagreement.",
+        "example": "The support team helped resolve the login problem.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "resolve"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A blocked login becoming usable after a support conversation.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "resolve.solve-problem.v.analysis.v1",
+          "lexeme_id": "resolve.solve-problem.v",
+          "text": "resolve",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The history documents re- and the solving/loosening family. In the selected settle-a-problem sense, resolve must not be explained as simply solving again. This historically grounded candidate needs semantic review of the prefix and lexicalized sense. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/resolve"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "affix.re.prefix",
+              "type": "prefix",
+              "canonical": "re",
+              "surface": "re"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.solve",
+              "type": "stem",
+              "canonical": "solve",
+              "surface": "solve"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "resolve",
+              "rule": "historical_prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-resolve",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "47e7a02f3ee04124047d13ef6fdcdbf0c03b0b41fb811e7481a1d9b532d2c04c",
+      "proposed_fields": {
+        "definition": "To deal successfully with a problem or disagreement.",
+        "example": "The support team helped resolve the login problem.",
+        "difficulty": "B2"
+      },
+      "content_projection": {
+        "id": "resolve.solve-problem.v",
+        "text": "resolve",
+        "display_text": "resolve",
+        "pos": "verb",
+        "definition": "To deal successfully with a problem or disagreement.",
+        "example": "The support team helped resolve the login problem.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "resolve"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A blocked login becoming usable after a support conversation.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "resolve.solve-problem.v.analysis.v1",
+          "lexeme_id": "resolve.solve-problem.v",
+          "text": "resolve",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The history documents re- and the solving/loosening family. In the selected settle-a-problem sense, resolve must not be explained as simply solving again. This historically grounded candidate needs semantic review of the prefix and lexicalized sense. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/resolve"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "affix.re.prefix",
+              "type": "prefix",
+              "canonical": "re",
+              "surface": "re"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.solve",
+              "type": "stem",
+              "canonical": "solve",
+              "surface": "solve"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "resolve",
+              "rule": "historical_prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-resolve",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "ec22c9dbe842be313991780a07b31f61fc4b559f52df39e5afd58adbef6c9150",
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-third10-oxford-resolve",
+        "foundation02-language-third10-collins-resolve"
+      ],
+      "selected_sense": "Successfully dealing with a problem or disagreement, represented by solving a login problem with support.",
+      "editorial_difficulty_rationale": "Oxford selected sense 1 carries B2 metadata and a B2 discussion/agreement topic. Collins corroborates the problem-solving meaning but shows no selected CEFR label. Propose B2 without inventing a Collins level.",
+      "hold_reason": null,
+      "excluded_scope": "Making a firm personal decision, formal votes, determination as a noun, technical decomposition, musical resolution and resolving again are excluded.",
+      "media_issue": "The existing image/audio records, image brief, suitability flag and review gates remain exact and pending. This language research makes no image-suitability, acquisition, voice or media-approval decision.",
+      "expression_context_issue": "Foundation02.05 and surface uses involving software merging, room conflicts and construction decisions remain exact and pending. Lexical approval would not endorse technical procedures or the authored re/solve analysis.",
+      "proposed_editorial_note_for_future_review": "Proposed formal problem-solving verb with the retained login-problem example and editorial B2 supported by Oxford. Collins supplies meaning/register evidence without a displayed selected level. Morphology, specialized contexts and every other gate remain separate."
+    },
+    {
+      "id": "assist.help.v",
+      "term": "assist",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "assist.help.v",
+        "text": "assist",
+        "display_text": "assist",
+        "pos": "verb",
+        "definition": "To help someone carry out an activity.",
+        "example": "Could you assist the visitor with the sign-in form?",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "assist"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A staff member helping a visitor complete a form.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "assist.help.v.analysis.v1",
+          "lexeme_id": "assist.help.v",
+          "text": "assist",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "assist",
+              "surface": "assist",
+              "canonical_id": "morph.assist"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "fbe20f09cea87913fb259b5c1fabfb7010001df0fbf0465ee384655d351b8443",
+      "proposed_fields": {
+        "definition": "To help someone carry out an activity.",
+        "example": "Could you assist the visitor with the sign-in form?",
+        "difficulty": "B1"
+      },
+      "content_projection": {
+        "id": "assist.help.v",
+        "text": "assist",
+        "display_text": "assist",
+        "pos": "verb",
+        "definition": "To help someone carry out an activity.",
+        "example": "Could you assist the visitor with the sign-in form?",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "assist"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A staff member helping a visitor complete a form.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "assist.help.v.analysis.v1",
+          "lexeme_id": "assist.help.v",
+          "text": "assist",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "assist",
+              "surface": "assist",
+              "canonical_id": "morph.assist"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "131ed10b7a7e51fada1e452b671a34879b7ce80622ed6277440f79200a5b750e",
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-third10-oxford-assist",
+        "foundation02-language-third10-collins-assist"
+      ],
+      "selected_sense": "Helping a person carry out an activity, represented by helping a visitor with a sign-in form.",
+      "editorial_difficulty_rationale": "Oxford selected helping-a-person sense 1 has B1 metadata and topic evidence. Collins selected task-help sense 1 is B2. Propose editorial B1 for the bounded visitor-help example while preserving the formal register and B2 disagreement.",
+      "hold_reason": null,
+      "excluded_scope": "Sports assists as nouns, assisted-living services, clinical or personal-care procedures, financial aid and a thing facilitating a process are not accepted under this ordinary verb proposal.",
+      "media_issue": "The existing image/audio records, image brief, suitability flag and review gates remain exact and pending. This language research makes no image-suitability, acquisition, voice or media-approval decision.",
+      "expression_context_issue": "Foundation02.08 remains pending because its collect pickup binding is held and its return use has no inferred borrowed-key acceptance. Assisted living remains a separate scored noun compound.",
+      "proposed_editorial_note_for_future_review": "Proposed formal ordinary help-with-an-activity verb with the original visitor/form example and editorial B1. Oxford B1 and Collins B2 remain explicit. Assisted living, held neighboring expressions and all nonlanguage gates remain separate."
+    },
+    {
+      "id": "verify.establish-accuracy.v",
+      "term": "verify",
+      "disposition": "held_unchanged",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "verify.establish-accuracy.v",
+        "text": "verify",
+        "display_text": "verify",
+        "pos": "verb",
+        "definition": "To establish that information is accurate by checking suitable evidence.",
+        "example": "Please verify the reference number against the order record.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "verify"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A reference number compared with an authoritative order record.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "verify.establish-accuracy.v.analysis.v1",
+          "lexeme_id": "verify.establish-accuracy.v",
+          "text": "verify",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The source explicitly gives the true-related veri- combining form and -fy family. Preserve those constituents rather than syllable cuts, and review their relationship to checking accuracy. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/verify",
+              "https://www.dictionary.com/browse/verify"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.veri",
+              "type": "combining_form",
+              "canonical": "veri",
+              "surface": "veri"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.fy.suffix",
+              "type": "suffix",
+              "canonical": "fy",
+              "surface": "fy"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "verify",
+              "rule": "latinate_combining_form_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-verify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-verify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "proposed_fields": {},
+      "content_projection": {
+        "id": "verify.establish-accuracy.v",
+        "text": "verify",
+        "display_text": "verify",
+        "pos": "verb",
+        "definition": "To establish that information is accurate by checking suitable evidence.",
+        "example": "Please verify the reference number against the order record.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "verify"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A reference number compared with an authoritative order record.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "verify.establish-accuracy.v.analysis.v1",
+          "lexeme_id": "verify.establish-accuracy.v",
+          "text": "verify",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The source explicitly gives the true-related veri- combining form and -fy family. Preserve those constituents rather than syllable cuts, and review their relationship to checking accuracy. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/verify",
+              "https://www.dictionary.com/browse/verify"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.veri",
+              "type": "combining_form",
+              "canonical": "veri",
+              "surface": "veri"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.fy.suffix",
+              "type": "suffix",
+              "canonical": "fy",
+              "surface": "fy"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "verify",
+              "rule": "latinate_combining_form_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-verify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-verify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-third10-oxford-verify",
+        "foundation02-language-third10-collins-verify"
+      ],
+      "selected_sense": "Checking truth or accuracy against evidence, represented by comparing a reference number with an order record.",
+      "editorial_difficulty_rationale": "Oxford checking sense 1 and confirming sense 2 both carry C1. The selected checking sense also has a C1 scientific-research topic. Collins shows no selected level. No inspected evidence justifies draft A2 or a B2 clamp.",
+      "hold_reason": "Hold the full entry pending independent level and selected-sense confirmation. The current establish-accuracy wording should be considered against the source distinction between checking and asserting/confirming truth; no rewrite is silently accepted.",
+      "excluded_scope": "Legal verification, scientific validation, authentication/security guarantees and confirming a statement without the selected checking activity are not approved.",
+      "media_issue": "The existing image/audio records, image brief, suitability flag and review gates remain exact and pending. This language research makes no image-suitability, acquisition, voice or media-approval decision.",
+      "expression_context_issue": "Preserve every verify surface context, including the inherited verified-status-page hold, privacy, legal, account and security contexts. Foundation02.04 and the authored veri/fy analysis remain pending.",
+      "proposed_editorial_note_for_future_review": "Held unchanged. The selected Oxford C1 level and absent Collins label do not support draft A2. Checking versus confirming scope needs independent consideration. No note, source reference, gate or other field is proposed for integration."
+    },
+    {
+      "id": "locate.find-position.v",
+      "term": "locate",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "locate.find-position.v",
+        "text": "locate",
+        "display_text": "locate",
+        "pos": "verb",
+        "definition": "To find where someone or something is.",
+        "example": "I am trying to locate the original document.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "locate"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A person finding the correct document among organized files.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "locate.find-position.v.analysis.v1",
+          "lexeme_id": "locate.find-position.v",
+          "text": "locate",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "locate",
+              "surface": "locate",
+              "canonical_id": "morph.locate"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "50d1695b419138e56ba0f88bbda2276819de8e9829ee29ddb1da67f3120c8a2e",
+      "proposed_fields": {
+        "definition": "To find where someone or something is.",
+        "example": "I am trying to locate the original document.",
+        "difficulty": "B1"
+      },
+      "content_projection": {
+        "id": "locate.find-position.v",
+        "text": "locate",
+        "display_text": "locate",
+        "pos": "verb",
+        "definition": "To find where someone or something is.",
+        "example": "I am trying to locate the original document.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "locate"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A person finding the correct document among organized files.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "locate.find-position.v.analysis.v1",
+          "lexeme_id": "locate.find-position.v",
+          "text": "locate",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "locate",
+              "surface": "locate",
+              "canonical_id": "morph.locate"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "6c8b5f7eaeffe8cecadb25a348e8c8430a476d7b901588ab988b4937207be00a",
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-third10-oxford-locate",
+        "foundation02-language-third10-collins-locate"
+      ],
+      "selected_sense": "Finding where a person or thing is, represented by searching for an original document.",
+      "editorial_difficulty_rationale": "Oxford selected find-position sense 1 has B1 metadata. Collins selected sense 1 is B2 and formal. Propose editorial B1 for the retained document-finding example while recording the level/register disagreement; Collins separate siting sense B1+ is not used.",
+      "hold_reason": null,
+      "excluded_scope": "Putting or building something in a location, establishing a business, located as an adjective, localization and technical identification procedures remain outside this selected finding sense.",
+      "media_issue": "The existing image/audio records, image brief, suitability flag and review gates remain exact and pending. This language research makes no image-suitability, acquisition, voice or media-approval decision.",
+      "expression_context_issue": "Four expression surface uses concern locating things or records; none currently scores this selected ID. Keep all focus lists and domain gates exact, with no new bindings.",
+      "proposed_editorial_note_for_future_review": "Proposed find-position verb with the original document example and editorial B1 from Oxford. Collins selected B2 and formal register remain explicit. Business siting, adjective uses, other expressions and nonlanguage approval remain separate."
+    },
+    {
+      "id": "attach.add-to-message.v",
+      "term": "attach",
+      "disposition": "proposed",
+      "independent_acceptance": "pending",
+      "before_entry": {
+        "id": "attach.add-to-message.v",
+        "text": "attach",
+        "display_text": "attach",
+        "pos": "verb",
+        "definition": "To include a file with an electronic message.",
+        "example": "Please attach the completed form to your email.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "attach"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A file being added to an email before sending.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "attach.add-to-message.v.analysis.v1",
+          "lexeme_id": "attach.add-to-message.v",
+          "text": "attach",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "attach",
+              "surface": "attach",
+              "canonical_id": "morph.attach"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "before_entry_sha256": "6791206dc01c63a9f0c99697655749bfa0a4ad72cc084b991026a3c1613e9091",
+      "proposed_fields": {
+        "definition": "To include a file with an electronic message.",
+        "example": "Please attach the completed form to your email.",
+        "difficulty": "B1"
+      },
+      "content_projection": {
+        "id": "attach.add-to-message.v",
+        "text": "attach",
+        "display_text": "attach",
+        "pos": "verb",
+        "definition": "To include a file with an electronic message.",
+        "example": "Please attach the completed form to your email.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "attach"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A file being added to an email before sending.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "attach.add-to-message.v.analysis.v1",
+          "lexeme_id": "attach.add-to-message.v",
+          "text": "attach",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "attach",
+              "surface": "attach",
+              "canonical_id": "morph.attach"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "content_projection_sha256": "cffb31c9766e001619f5a8b7816bd305701eb49b7daf1ccdda4d76e5278f4264",
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-third10-oxford-attach",
+        "foundation02-language-third10-collins-attach"
+      ],
+      "selected_sense": "Including a separate file with an electronic message, represented by attaching a form to an email.",
+      "editorial_difficulty_rationale": "Oxford email sense 2, attach_sng_6, has B1 metadata. Collins computing sense 5 also shows B1. Propose B1 using those exact electronic-file senses; physical joining levels and the unrelated B2 footer are not evidence.",
+      "hold_reason": null,
+      "excluded_scope": "Physical fastening, joining someone, emotional attachment, attributing importance or blame, attaching contractual conditions and legal seizure remain separate.",
+      "media_issue": "The existing image/audio records, image brief, suitability flag and review gates remain exact and pending. This language research makes no image-suitability, acquisition, voice or media-approval decision.",
+      "expression_context_issue": "The five matching expression texts do not expressly identify email/message attachment and must not acquire this scored ID. The completed form in the example grants no acceptance to complete's separate form-filling sense.",
+      "proposed_editorial_note_for_future_review": "Proposed electronic-file attachment sense only, retaining the form/email example with editorial B1. Oxford sense 2 and Collins sense 5 support B1. Physical attachments, ambiguous expression uses, completed-form sense transfer and all other gates remain excluded."
+    }
+  ]
+}

@@ -17,12 +17,18 @@ what ships. Private source packs remain subject to their own licenses.
 | [Complete animated vocabulary library](word-library.md) | All 1,285 pictured words: eight articulated Blender clips, 1,277 illustration motions, source rights, reproduction and local review; 265 words remain context-only |
 | [Articulated teaching clips](lv3-motion-studies.md) | Eight cheerful action performances, Blender authoring, frame checks and the local comparison gallery |
 | [Growth vocabulary artwork](growth-vocabulary.md) | 35 new sourced pictures and contextual vocabulary without invented images |
+| [Professional workplace artwork](professional-themes.md) | Reviewed Retail and Software Home previews, acquired Kenney model sources, exact conversion records, and pending full-theme artwork |
+| [Professional Retail counter](professional-retail-counter.md) | Dual-source CC0 counter image, exact installed pixels, actual minimum-card delivery and complete resource release |
+| [Professional Retail checkout](professional-retail-checkout.md) | Staffed payment-area scene from three CC0 packs, exact installed pixels, four minimum-card states and complete resource release |
+| [Professional Retail barcode](professional-retail-barcode.md) | Sourced CC0 barcode on a parcel, exact installed pixels, four minimum-card states and complete resource release |
+| [Professional Retail cash register](professional-retail-cash-register.md) | Complete Tiny Treats CC0 register, exact installed pixels, four minimum-card states and complete resource release |
 | [Lv3 vocabulary refresh](lv3-vocabulary.md) | Original 69-picture source record, retained compositions, Blender scenes and source rights |
 | [Expanded vocabulary artwork](mulberry-vocabulary.md) | 900 sourced Mulberry illustrations, license, curriculum manifests, and reproducible import |
 | [Casual background music](casual-bgm.md) | Eight active CC0 tracks, theme assignments, source licenses, level processing, and restoration |
 | [Chest feel](chest-feel.md) | Current chest art, motion, timing, and previews |
 | [Kenney chest audio](chest-kenney-audio.md) | Active CC0 wood/latch/hinge bank, opening flourish, source processing, and review limitations |
 | [Jelly chest fragments](jelly-fragments.md) | One upgradable chest per round, milestone motion reference, acquired confetti atlas, source rights and restoration |
+| [Jelly collection notes](jelly-collection-audio.md) | Seven sourced, diatonic collection cues shared by Jelly Words and Jelly Match, generation and verification |
 | [Reference pair feedback](pair-feedback-audio.md) | Match, Memory, and Phrase Builder right/wrong excerpts, source provenance, extraction and required build assets |
 | [Reference menu click](ui-click-audio.md) | Shared native and loading-screen selection cue, source provenance, extraction, and required build asset |
 | [Reference Voice Pop audio](voice-pop-reference-audio.md) | Preferred hit bank, separate launch cue, import checks, and recording limitations |

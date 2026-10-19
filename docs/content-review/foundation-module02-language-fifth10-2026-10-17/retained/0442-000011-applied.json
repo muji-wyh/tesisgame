@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 11,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "b0e4035d0c7e0216b8e2cd7edf43281d554a99c8a6b0d21f095e9fcceeb2ad4e",
+  "recorded_at": "2026-10-16T22:48:02.135Z",
+  "index": 4,
+  "path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png"
+}

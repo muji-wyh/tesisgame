@@ -1,0 +1,72 @@
+# Professional English continuation checkpoint
+
+Updated 2026-10-17. Work only in `Q:/.codex/worktrees/current-age-vocabulary/tesisgame`, branch `codex/current-age-vocabulary`. Never modify `C:/uworks/tesisgame`. Root owns production edits and serialized compiler/native execution. Preserve all uncommitted work, frozen proposals, failed attempts and original approval evidence. No deployment/publication or messages to other chats.
+
+The full specification remains Growth plus twenty 500-word/100-expression courses, professional media and twenty-one complete automatic themes. Representative work does not reduce scope. Zero modules are ready; keep the existing heartbeat active. Repository content is English; meaningful user updates are Chinese. Preserve the twelve approved Ava Sweet recordings and collection sequence 1-2-3-4-5-6-7-1.
+
+## Installed state
+
+| Item | Count |
+| --- | ---: |
+| Courses / modules / declared themes | 20 / 200 / 21 |
+| Unique senses / vocabulary memberships | 4,939 / 10,000 |
+| Unique expressions / expression memberships | 1,620 / 2,000 |
+| Overall-reviewed / language-reviewed entries | 156 / 349 |
+| Foundation01 / Foundation02 language | 50/50 / 50/50 |
+| Authored / reviewed Professional morphology | 4,045 / 142 |
+| Integrated pictures / approved recordings | 9 / 12 |
+| Ready full themes | 2: Retail, Nursing |
+| Ready modules | 0 |
+
+Foundation01 is installed and freshly verified. The prior checkpoint is preserved byte-for-byte at `history/2026-10-17-before-foundation01-install-checkpoint.md`; it retains earlier source pins and preparation details. Older held-six/fifth-ten evidence remains in the history chain. Paths below are relative to `build/professional-english/` unless stated otherwise.
+
+## Active execution: poll, never replay
+
+- No compiler/native execution is currently active. Foundation01 installed verifier session76480 completed with terminal7baa6a/exit0. Gift r03 source preparation is active below.
+- Root installed through the existing guarded transaction helper. Do not replay any consumed preparation, overlay, compiler, correction, validation or installer.
+
+## Foundation01: installed and verified
+
+Base: `foundation01-morphology-work-r01`.
+
+- Exact independently reviewed fifty-entry morphology: 16 atomic teaching units, 30 morphological analyses, 2 compounds, 2 phrases. All nonmorphology fields unchanged. Seventy-six consulted-only source additions yield 1,068 rows. Signature uses sign + -ate + -ure with bound signate and authored final-e loss. Original accepted provenance stays byte-identical.
+- Candidate preparation r02: session86755, terminal022e65, exit0, 24,533 files / 1,773,269,480 bytes. Baseline receipt `b5655469e3b0d78e36712f627355a94fe27484f13c011c3536d1f48135c52f82`; baseline inputs `bc6e15c5dc07702c62b3ed56930e380d222700515e92a122faa822ad2e4e24a5`. Failed preparation r01 stopped before copying because Godot rewrote one .import file; it remains preserved.
+- Nine-target overlay applied once, chunk1fb417. Actual compiler session3172, terminal9abeab, exit0. Descriptor `11621806aea1ff0cda7142f739c41cf04b0d74de956b7769d9503d8b72febb0f`; only morphology summary changed 92 to142, with zero ready modules.
+- Validation-r01: session88664, terminalacaba0, exit1. Probe/import/audit/three native check-only commands passed. Node241 total,238 passed,3 failed. Failures: responsibility canonical suffix expected ity instead of -ity; obsolete92 count; fifth-ten donor loop comparing approved current Foundation01 entries directly with early drafts. No native behavior suite ran. Complete logs/receipt/outer-completion remain immutable.
+- `test-correction-r01/receipt.json` records exactly three assertion edits across two candidate test files, preserving before/after bytes and current whole-entry/provenance guards. Original correction preflight (chunka61b50) failed on CRLF matching before mkdir or writes. Corrected `correct-current-tests-r02.cjs` applied once, chunka0587b. No data correction or recompilation.
+- Validation-r02: actual session21615, initialab2ef1, terminal1e76d6, exit0. Twelve successful outcomes combine six retained r01 commands and six fresh commands. Fresh Node241/241, no skips; native Retail morphology4356, Jelly morphology577, merge speech194, progress362, held-six routes155: **5,644 checks / zero failures**. Audit zero errors /29,320 warnings. Pre/post bindings813 source files,408 closure files,13 contracts matched. Dummy audio; no listening/device acceptance. Actual outer result saved.
+- Independent execution review r02 accepted exact sources, inventory `631006d521dd08313a1210efab78b5cbef72f1fe77b78832c1f0777f1ed4e344`, review JSON `d4a03c29cc90966e5c40b7a30d99a853a5eadf9b985c638b4b6e98f10e6154e2`. Installer source `b9b08929919e15a208a9596466ce73f1f5f7bd1c29b7a66a1d15ddaffc848233`. Rejected execution review r01 remains frozen because it depended on failed validation-r01.
+- **Actual installation:** session78002, initial862a2b, terminalb37858, exit0. Thirteen targets: nine overlay files, three changed generated files, one QA record. Generated themes.json was identical and not rewritten. Plan `6985994cfa5f3e0b459e0b771c03fed9d9af424c9047af63fc9953bc42e6d00d`; terminal `transactions/foundation01-morphology-r01/states/000028-committed.json`, SHA256 `bba99c47fbad5d06b7116ec38dfd5aee1e4d7462d947f102b0174e23561a47b6`. Installation receipt and actual outer completion saved. Installed acceptance: `docs/qa/professional-foundation01-morphology-r01/candidate-acceptance.json`.
+- **Fresh installed verification:** session76480, initial612e0a, terminal7baa6a, exit0. Eight successful commands; Node9/9 and four native suites total5,489 checks/zero failures. Audit zero errors/29,320warnings. All13 installed targets,408closure files,13contracts and22protected paths matched before/after; transaction lock absent. Actual outer completion saved. Installation receipt SHA256 `0e35053f2cfc6a29f3ef27678b1491d6c0ba66ee389af96d0fb92587df646622`; cumulative validation receipt `82330a32ffffb3b34723d68087179741f8d5dc546596ec6ad7ebcd78829ad419`; persisted receipt `087dfa1406f05575e3ff9a276ea81e15f3297c90ed26e2a50184c7d00a8f6010`. Recount confirms349language/156overall/142morphology/9images/12audio/0ready. Never replay installer or verifier.
+
+## Held-six: installed and verified, preserve
+
+Held-six introduced collect.bring-together.v, inform.give-information.v and ensure.make-certain.v, sixty membership substitutions and two hundred requirements revisions. Existing skills/events/expressions/completions/outbox/wallet records remain intact without evidence transfer. Home separates current completion from earlier achievements.
+
+Actual installation session12174/terminal32e6fe/exit0 committed42targets; receipt `38c8b788564d76f9c254b034402a665f8a2f51465b45a9a1fa710ee69466b7d7`. Installed verifier session30629/terminal18e971/exit0: Node12/12 and native906/0,408closure/13contracts/protected audio matched; receipt `fd241b6a495a8480426301036db6d5b513f496dacf4489f3c979dfe5d5423dba`. Independent installed review `aae11a84542ace8004363ffc12fa48acab3d89521758602ace291c5fe204f084`. All24 Home history images accepted for scoped presentation; disabled Preparing remains. Prior three failed validations, source corrections and cumulative candidate5,305/0 evidence remain historical and must not be replayed.
+
+## Gift wrap: actual images inspected, native acceptance pending
+
+- Acquired FreeSVG Wraping Paper by j4p4n, CC0 raster only. Exact600x173 padding-only crop SHA256 `c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789`, zero pixel mismatches. Word Jelly/library only; picture_suitable=false. Approved recording unchanged. No production installation.
+- Native r01 session85184/terminal79ebf7/exit1: probe/import/check-only passed, renderer115rows/1failure/0captures. Raw JSON numeric-array equality caused the boundary failure. Failed packet/results remain immutable.
+- Native r02 session74480, initial68e8ca, terminal35209b, exit1. Exact numeric boundary helper fixes both comparisons and checks seven cases. Probe/check-only passed; actual render produced **455 result rows /4failures /24captures** (report.checks454 plus report-writer row). Failures are solely collected-reveal isotropic-scale checks at0.45s, all four sizes. Original successful r01 import evidence was reused explicitly; r01 overall remains failed.
+- Results: `foundation02-held-six-work-r01/historical-runtime/build/professional-english/gift-wrap-render-results-native-r02`. Native receipt/logs/actual outer saved under `gift-wrap-native-work-r02/execution-r02`.
+- Independent reviewer inspected all24 actual PNGs at original resolution: no scoped static crop/readability/control blocker. Smallest completed tile image is23x6.63pixels, so isolated picture scoring remains excluded. Root inspected representative actual library/reveal images. At0.45s all four cards have scale[0.99889212846756,1.00249266624451], matching the pinned existing settle animation ending at0.47s. No production animation defect established. Native failure remains failed.
+- Independent failed-r02 review `gift-wrap-native-independent-review-r02/review.md`, SHA256 `d0c0d3e917f91afb19c4efa0fdaadaa2ec899ad7bf8b3edf7ada5fa5dfbb110b`; inventory `eef57f2b6466608bcbfbdb29605ce61497e0d36abc588730130ff230375a09f3`. Raw225 checks/0 cover78 source pins,24 PNGs and4 delivery files. Dummy/ANGLE; no new listening/device/motion acceptance.
+- **Active author commit_review** owns only `gift-wrap-render-proposal-r03` and `gift-wrap-native-work-r03`. Narrow proposal: explicit normal-motion setup after app readiness, capture0.50s settled pose, exact elapsed/uniform-scale checks, retain original isotropy/source-fit checks,24captures and all media/routes guards. Earlier pre-ready reduced_motion assignment was not persisted because presentation preferences persist only theme/muted. No r03 native execution yet. Root reviews and executes serially.
+
+## Foundation02 remaining morphology and ownership
+
+All author/reviewer packets below are source-only; none promotes production status. Live module baseline482,753bytes/SHA256 `6cf78346c223e65bb3c4b30af10d2a564f03c10ba1f4593836f8ccbeea2e2576`. Exclude reviewed collect/inform/ensure.
+
+- Part A author packet frozen: `foundation02-morphology-part-a-proposal-r01`, inventory `6ce5623018d1e5c4b37e28d1c3dbe4cae5beb343e08ba772da5cf0e7f3305877`. First24request-through-resolve,21intact/3multipart, all pending. Independent Part A review frozen: inventory `ea99f3b81d83f827df17eeb09bd1e733102c7445c688fb563867865b370155cf`, review `e112af552a44186cd304b25b58f483c9874886f174e43aa22eb66140d11ca64e`. **Accept23 exact graphs; hold replace** because sources support contemporary re- + place, including anew/substitution. Raw2,098/0 checks. Nineteen pending tax/yield/computing return occurrences remain unapproved; physical return reuse alone was accepted.
+- Part B author packet frozen: `foundation02-morphology-part-b-proposal-r01`, inventory `4f126c122ef6d4c98174fc848776ec455dd9b93f9e16f9bfc9cb0ac9d31e0bcc`; proposed-morphology `99afa72816769fef6db293ecd2bc8f5911c875d81e643cd665efcd5a89b5703e`. Last23assist-through-procedure,17intact/6multipart, all pending. **Active reviewer recover_delivery** owns `foundation02-morphology-part-b-independent-review-r01`; preliminary18accept/fiveholds(error,reject,submit,urgent,procedure), not yet a frozen final verdict. Sources support explicit alternatives; bound or inherited structure alone is insufficient to suppress them.
+- **Active author morph_review** now owns `growth-break-family-correction-proposal-r01`, source-only. Follow-up discovered after the completed Growth audit: age05 breakfast uses growth.break for ending a fast; age07 broken uses the same ID for damaged/nonworking. Part signature ignores contextual role, so identity separation needs review and focused runtime proof. Prepare minimal data+author-source changes and tests without altering lexical IDs or saves. No observed scoring failure is claimed and no live correction has occurred.
+
+## Other remaining delivery
+
+Growth's earlier content audit is complete:1,550 reviewed/zero pending,1,206atomic/114compound/230morphological,265context-only gaps,209sources. `docs/qa/professional-growth-current-evidence-2026-10-17` preserves strict audit,23Node tests and21,324native/0. The new break-family finding is a specific follow-up; do not erase or reinterpret that historical result.
+
+Digital Studio has fourteen acquired CC0 GLBs with no baked animation. Preserve r01 WASAPI wrapper failure and separate successful Dummy motion run. Placement-r02 moves only plant to[1.50,0.05,0.35], preserving camera/scale1.4/yaw0/0.6-degree motion. Crop math passes; actual Main action-column occlusion is unresolved. No r02 render, atlas or installed theme acceptance. Card-reader model remains login-gated/unacquired; approved audio remains exact.
+
+Still required: remaining Professional language/expressions/morphology and specialist reviews, missing pictures/recordings, nineteen full themes, and complete game/storage/loading/accessibility/device acceptance at four target sizes plus undersized pause. Preserve accepted domain runtime, scene disposal, final-claim r02 and web r05 evidence. No release-completion claim or reason to pause the heartbeat.

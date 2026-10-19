@@ -1,0 +1,4335 @@
+{
+  "schema": 1,
+  "status": "frozen_foundation01_fourth10_language_candidates_awaiting_independent_review",
+  "date": "2026-10-16",
+  "author": "Codex foundation_review (AI source consultation and original fourth10 author; not independent reviewer)",
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "native_runtime_executed": false,
+  "baseline_bound": false,
+  "scope": "Foundation01 positions31-40 in twenty courses. Proposed fields are definition, example, editorial difficulty, additive pending references and notes only. All identity, forms, region, morphology, media, domain, review, curriculum and release fields stay exact.",
+  "selection": {
+    "ids": [
+      "announcement.public-message.n",
+      "message.communication.n",
+      "email.electronic-message.n",
+      "phone-call.telephone-conversation.n",
+      "voicemail.recorded-message.n",
+      "extension.internal-phone-number.n",
+      "introduction.first-acquaintance.n",
+      "greeting.welcome-message.n",
+      "conversation.spoken-exchange.n",
+      "discussion.consideration-talk.n"
+    ],
+    "positions": "31-40",
+    "course_count": 20,
+    "all_course_fourth10_identical": true
+  },
+  "selected_memberships": 200,
+  "preimages_json_sha256": "8561aac1ac5f64688f74d10694bc7063b7e8e57c099809a260fc1b463293179f",
+  "source_ledger_json_sha256": "22307715bfa6c08eebcb81a2731e3d0c08b0cb10774d1facbc0a3c91707f59ba",
+  "expression_review_json_sha256": "8f02831121d93c88510cac103298479bc5fd5214e06c3bbaa26b00aac245b560",
+  "input_raw_sha256": {
+    "build/professional-english/foundation-module01-language-review/fourth10/capture-preimages.cjs": "d35d4bbbad4529db303c9f57edddff34208ac0347d0a3f08c875485e6c0667b3",
+    "build/professional-english/foundation-module01-language-review/fourth10/preimages.json": "5d0627d8092018c16b8603b2187a2e1fb8e30507d06d8baeb5065dfd077d7673",
+    "build/professional-english/foundation-module01-language-review/fourth10/source-notes.cjs": "c02056eda6eab79e7b8f2fb318dd3319ec55faeb58408b4b97129dd101465b25",
+    "build/professional-english/foundation-module01-language-review/fourth10/decision-notes.cjs": "2950c6383d2f4a41fc342d4c31bc63173e16e161fa19435fd5f35e02153184c9",
+    "build/professional-english/foundation-module01-language-review/fourth10/context-notes.cjs": "f886648e89a349ffff656fba94deb0a39cd97f3e554000d18fbe116753cb7a7a",
+    "build/professional-english/foundation-module01-language-review/fourth10/prepare-ledger.cjs": "dbd00e88f31f59ac7b308089bae340fc9fa51a3cf2beaad29f45b83db87652e5"
+  },
+  "proposals": [
+    {
+      "ordinal": 31,
+      "id": "announcement.public-message.n",
+      "text": "announcement",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "c52e8659db528a87bf0b360fccd9aa98115127be6bee7a08cd7cc574e25513e0",
+      "before_entry": {
+        "id": "announcement.public-message.n",
+        "text": "announcement",
+        "display_text": "announcement",
+        "pos": "noun",
+        "definition": "A message that gives information to a group of people.",
+        "example": "The announcement explained the new opening hours.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "announcement"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Staff reading an announcement about a workplace change.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "announcement.public-message.n.analysis.v1",
+          "lexeme_id": "announcement.public-message.n",
+          "text": "announcement",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "announce",
+              "surface": "announce",
+              "canonical_id": "morph.announce"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ment",
+              "surface": "ment",
+              "canonical_id": "affix.ment.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "announcement",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "announcement.public-message.n",
+        "text": "announcement",
+        "display_text": "announcement",
+        "pos": "noun",
+        "definition": "A spoken or written statement that gives information to a group of people.",
+        "example": "The announcement explained the new opening hours.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "announcement"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Staff reading an announcement about a workplace change.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "announcement.public-message.n.analysis.v1",
+          "lexeme_id": "announcement.public-message.n",
+          "text": "announcement",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "announce",
+              "surface": "announce",
+              "canonical_id": "morph.announce"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ment",
+              "surface": "ment",
+              "canonical_id": "affix.ment.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "announcement",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-oxford-announcement",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary announcement noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-collins-announcement",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary announcement noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal; independent acceptance remains pending. Propose B2 as an independent editorial placement for understanding and producing a public-information statement in workplace communication, including distinction from a private message or notification. Collins B1+ remains the observed label; it has not been converted, rounded or claimed as B2 certification. The original A2 is not source-supported by the inspected passages."
+      },
+      "candidate_entry_json_sha256": "0080ac6e10e469b6bbb3b37c42e4fc9b2a7f135d381b46fef1cd1ff2d4e1f059",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "definition": "A spoken or written statement that gives information to a group of people.",
+        "difficulty": "B2"
+      },
+      "protected_nonlanguage_fields_json_sha256": "99663e8ea40b48c83fd89ff558b2b481ea2b13d9e8aa10f27083c041f6c50226",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Specify speech or writing and the information-giving statement, distinguishing the message from the act of announcing.",
+      "example_decision": "Retain the opening-hours announcement; it clearly gives a group practical news.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "announcement"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing canonical headword and general region. No new spelling or synonym is proposed as an exercise answer.",
+        "new_forms_proposed": [],
+        "limits": "The act of announcing, a printed invitation, promotional authority and the truth or approval of an announcement are outside this selected noun."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B2",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": "B1+"
+        },
+        "status": "editorial_course_placement_with_literal_out_of_enum_source_label",
+        "notes": "Propose B2 as an independent editorial placement for understanding and producing a public-information statement in workplace communication, including distinction from a private message or notification. Collins B1+ remains the observed label; it has not been converted, rounded or claimed as B2 certification. The original A2 is not source-supported by the inspected passages.",
+        "dictionary_level_certification": false,
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-fourth10-oxford-announcement",
+        "foundation01-language-fourth10-collins-announcement"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-fourth10-oxford-announcement",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary announcement noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-fourth10-collins-announcement",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary announcement noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 32,
+      "id": "message.communication.n",
+      "text": "message",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "59bba185780049f7cabc86fed771f49b0984ba3c69d13f6681c77b10ff9310fc",
+      "before_entry": {
+        "id": "message.communication.n",
+        "text": "message",
+        "display_text": "message",
+        "pos": "noun",
+        "definition": "Information sent or left for another person.",
+        "example": "There is a message from the delivery team.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "message"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A short workplace message arriving on a device.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "message.communication.n.analysis.v1",
+          "lexeme_id": "message.communication.n",
+          "text": "message",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "message",
+              "surface": "message",
+              "canonical_id": "morph.message"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "message.communication.n",
+        "text": "message",
+        "display_text": "message",
+        "pos": "noun",
+        "definition": "Information sent or left for another person.",
+        "example": "There is a message from the delivery team.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "message"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A short workplace message arriving on a device.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "message.communication.n.analysis.v1",
+          "lexeme_id": "message.communication.n",
+          "text": "message",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "message",
+              "surface": "message",
+              "canonical_id": "morph.message"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-oxford-message",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary message noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-collins-message",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary message noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal; independent acceptance remains pending. Both sources visibly label the selected noun A1. Retain A2 solely as the current A2-B2 course floor, not as a reported dictionary label or a claim that the noun is intrinsically A2."
+      },
+      "candidate_entry_json_sha256": "29ef1c2dd01c6151c647babd463d706240aa2a284fd01b57cf88e83ee6890e56",
+      "changed_fields": [
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {},
+      "protected_nonlanguage_fields_json_sha256": "48710e99b819e85b6f6df1013232965edf85e9257a68f5025305c907e9e3f3ba",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain recipient-directed information. It can be spoken, written or electronic without becoming a literary theme or a program data packet.",
+      "example_decision": "Retain the delivery-team message; the sender and communication purpose are ordinary.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "message"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing canonical headword and general region. No new spelling or synonym is proposed as an exercise answer.",
+        "new_forms_proposed": [],
+        "limits": "Messaging verbs, the central idea of a work, physiological signals, advertisements and structured machine messages are separate senses or uses."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": "A1",
+          "collins": "A1"
+        },
+        "status": "editorial_A2_course_floor_with_literal_A1_sources",
+        "notes": "Both sources visibly label the selected noun A1. Retain A2 solely as the current A2-B2 course floor, not as a reported dictionary label or a claim that the noun is intrinsically A2.",
+        "dictionary_level_certification": false,
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-fourth10-oxford-message",
+        "foundation01-language-fourth10-collins-message"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-fourth10-oxford-message",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary message noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-fourth10-collins-message",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary message noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 33,
+      "id": "email.electronic-message.n",
+      "text": "email",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "da3d6ab21b8caa142a3b21daaff34ede5e7c4657616b510695d39ef876666a6a",
+      "before_entry": {
+        "id": "email.electronic-message.n",
+        "text": "email",
+        "display_text": "email",
+        "pos": "noun",
+        "definition": "A message sent electronically between email addresses.",
+        "example": "I sent the details in an email.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "email"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A clear email interface showing sender, subject, and message.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "email.electronic-message.n.analysis.v1",
+          "lexeme_id": "email.electronic-message.n",
+          "text": "email",
+          "kind": "compound",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The source expands email to electronic mail and identifies electronic e- as a combining form. Keep e as an authored clipped constituent; it is not an arbitrary initial-letter cut. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/email",
+              "https://www.merriam-webster.com/dictionary/e-"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.e",
+              "type": "combining_form",
+              "canonical": "e",
+              "surface": "e"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.mail",
+              "type": "stem",
+              "canonical": "mail",
+              "surface": "mail"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "email",
+              "rule": "closed_compound"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-email",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-mw-e-combining-form",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "email.electronic-message.n",
+        "text": "email",
+        "display_text": "email",
+        "pos": "noun",
+        "definition": "A message sent electronically between email addresses.",
+        "example": "I sent the details in an email.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "email"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A clear email interface showing sender, subject, and message.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "email.electronic-message.n.analysis.v1",
+          "lexeme_id": "email.electronic-message.n",
+          "text": "email",
+          "kind": "compound",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The source expands email to electronic mail and identifies electronic e- as a combining form. Keep e as an authored clipped constituent; it is not an arbitrary initial-letter cut. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/email",
+              "https://www.merriam-webster.com/dictionary/e-"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.e",
+              "type": "combining_form",
+              "canonical": "e",
+              "surface": "e"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.mail",
+              "type": "stem",
+              "canonical": "mail",
+              "surface": "mail"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "email",
+              "rule": "closed_compound"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-email",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-mw-e-combining-form",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-oxford-email",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary email noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-collins-email",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary email noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal; independent acceptance remains pending. Collins displays A1 for the combined variable-noun entry, including a message example. Oxford separately defines the message but its visible A1 topic is under the system sense. Retain A2 as the course floor; do not use the verb A2 as noun evidence. Email, e-mail and E-mail are observed variants. Preserve the existing canonical email answer and general region; adding accepted spellings is a separate exercise-design decision. Mail and electronic mail are not added answers."
+      },
+      "candidate_entry_json_sha256": "23e1ac482bd4737543aef8cdbbfb066823ca4e0beacd21864cdf3f0290630d8c",
+      "changed_fields": [
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {},
+      "protected_nonlanguage_fields_json_sha256": "920aea3f6a1a10ee929d152cc27a0308eb3a31bd14f9f652e3569235bc53f17e",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain one electronic message, distinct from the service, account, address or sending verb.",
+      "example_decision": "Retain the details sent in an email; the article makes the message sense clear.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "email"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Email, e-mail and E-mail are observed variants. Preserve the existing canonical email answer and general region; adding accepted spellings is a separate exercise-design decision. Mail and electronic mail are not added answers.",
+        "new_forms_proposed": [],
+        "limits": "The email service or channel, accounts, addresses, campaigns and the email verb do not automatically inherit this single-message sense."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": "A1"
+        },
+        "status": "editorial_A2_course_floor_with_combined_noun_A1_evidence",
+        "notes": "Collins displays A1 for the combined variable-noun entry, including a message example. Oxford separately defines the message but its visible A1 topic is under the system sense. Retain A2 as the course floor; do not use the verb A2 as noun evidence.",
+        "dictionary_level_certification": false,
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-fourth10-oxford-email",
+        "foundation01-language-fourth10-collins-email"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-fourth10-oxford-email",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary email noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-fourth10-collins-email",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary email noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 34,
+      "id": "phone-call.telephone-conversation.n",
+      "text": "phone call",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "d78744964ecf89785ef8575bf006f5a24c9b385cf30b476a6b724c09991ea736",
+      "before_entry": {
+        "id": "phone-call.telephone-conversation.n",
+        "text": "phone call",
+        "display_text": "phone call",
+        "pos": "noun",
+        "definition": "A conversation conducted through a telephone connection.",
+        "example": "I will make a phone call to confirm the booking.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "phone call"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Two people connected by a telephone conversation.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "phone-call.telephone-conversation.n.analysis.v1",
+          "lexeme_id": "phone-call.telephone-conversation.n",
+          "text": "phone call",
+          "kind": "phrase",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "word",
+              "canonical": "phone",
+              "surface": "phone",
+              "canonical_id": "morph.phone"
+            },
+            {
+              "id": "p2",
+              "type": "word",
+              "canonical": "call",
+              "surface": "call",
+              "canonical_id": "morph.call"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "phone call",
+              "rule": "preserve_word_boundary",
+              "break_offsets": [
+                6
+              ]
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "phone-call.telephone-conversation.n",
+        "text": "phone call",
+        "display_text": "phone call",
+        "pos": "noun",
+        "definition": "A conversation conducted through a telephone connection.",
+        "example": "I will make a phone call to confirm the booking.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "phone call"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Two people connected by a telephone conversation.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "phone-call.telephone-conversation.n.analysis.v1",
+          "lexeme_id": "phone-call.telephone-conversation.n",
+          "text": "phone call",
+          "kind": "phrase",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "word",
+              "canonical": "phone",
+              "surface": "phone",
+              "canonical_id": "morph.phone"
+            },
+            {
+              "id": "p2",
+              "type": "word",
+              "canonical": "call",
+              "surface": "call",
+              "canonical_id": "morph.call"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "phone call",
+              "rule": "preserve_word_boundary",
+              "break_offsets": [
+                6
+              ]
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-oxford-phone-call",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary phone call noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-collins-phone-call",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary phone call noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal; independent acceptance remains pending. Both selected sources show A1. The stored A2 is retained only as the course floor and is not a dictionary-level claim. Retain the two-word canonical phone call and general region. Oxford gives the more formal telephone call as a lexical alternative; it is not automatically another accepted exercise form."
+      },
+      "candidate_entry_json_sha256": "d65518cd935694a3d2044e0b79e61a8c899277bdfb85b86e58f7aa3043a12328",
+      "changed_fields": [
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {},
+      "protected_nonlanguage_fields_json_sha256": "a5c06f76d78e856de30a061ebf65964f55e58cf7892f19f2ed5be999cf3a1dbc",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain the telephone conversation. The connection may use current phone technology and is not limited to a desk telephone.",
+      "example_decision": "Retain the booking-confirmation call as an ordinary communicative purpose without guaranteeing a booking.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "phone call"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the two-word canonical phone call and general region. Oxford gives the more formal telephone call as a lexical alternative; it is not automatically another accepted exercise form.",
+        "new_forms_proposed": [],
+        "limits": "Unanswered dialing attempts, assistance buttons, computing callbacks, duty availability and calls for action remain distinct."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": "A1",
+          "collins": "A1"
+        },
+        "status": "editorial_A2_course_floor_with_literal_A1_sources",
+        "notes": "Both selected sources show A1. The stored A2 is retained only as the course floor and is not a dictionary-level claim.",
+        "dictionary_level_certification": false,
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-fourth10-oxford-phone-call",
+        "foundation01-language-fourth10-collins-phone-call"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-fourth10-oxford-phone-call",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary phone call noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-fourth10-collins-phone-call",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary phone call noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 35,
+      "id": "voicemail.recorded-message.n",
+      "text": "voicemail",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "5a10975b9d98065aa677eb511cc2d27f06cb42a988eeceb1c21703dab6fdcac6",
+      "before_entry": {
+        "id": "voicemail.recorded-message.n",
+        "text": "voicemail",
+        "display_text": "voicemail",
+        "pos": "noun",
+        "definition": "A recorded spoken message left when a telephone call is not answered.",
+        "example": "The caller left a voicemail with a contact number.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "voicemail"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A missed call followed by a recorded voice message.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "voicemail.recorded-message.n.analysis.v1",
+          "lexeme_id": "voicemail.recorded-message.n",
+          "text": "voicemail",
+          "kind": "compound",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "compound",
+              "canonical": "voice",
+              "surface": "voice",
+              "canonical_id": "morph.voice"
+            },
+            {
+              "id": "p2",
+              "type": "compound",
+              "canonical": "mail",
+              "surface": "mail",
+              "canonical_id": "morph.mail"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "voicemail",
+              "rule": "closed_compound"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "voicemail.recorded-message.n",
+        "text": "voicemail",
+        "display_text": "voicemail",
+        "pos": "noun",
+        "definition": "A spoken message recorded in a phone messaging system for someone to hear later.",
+        "example": "The caller left a voicemail with a contact number.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "voicemail"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A missed call followed by a recorded voice message.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "voicemail.recorded-message.n.analysis.v1",
+          "lexeme_id": "voicemail.recorded-message.n",
+          "text": "voicemail",
+          "kind": "compound",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "compound",
+              "canonical": "voice",
+              "surface": "voice",
+              "canonical_id": "morph.voice"
+            },
+            {
+              "id": "p2",
+              "type": "compound",
+              "canonical": "mail",
+              "surface": "mail",
+              "canonical_id": "morph.mail"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "voicemail",
+              "rule": "closed_compound"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-oxford-voicemail",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary voicemail noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-collins-voicemail",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary voicemail noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-mw-voicemail",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary voicemail noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal; independent acceptance remains pending. Propose B1 as an editorial judgment for handling familiar recorded telephone messages and distinguishing the message from the recording service. No consulted source labels the selected message sense. Oxford B1 is a system-sense observation only and is not transferred. Retain voicemail and general region. Merriam-Webster also recognizes the less common voice mail and voice-mail; these are recorded without changing accepted exercise forms. V-mail is a trademark alternative, not an added answer."
+      },
+      "candidate_entry_json_sha256": "e741895f021f75a2bd7bac0b2c9bb7844f9e4ff4b5e81c6a676c034daf33fb7a",
+      "changed_fields": [
+        "definition",
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "definition": "A spoken message recorded in a phone messaging system for someone to hear later.",
+        "difficulty": "B1"
+      },
+      "protected_nonlanguage_fields_json_sha256": "a333eca7254868bf0d63e125e262be66ddc02aabe1e6cfd98802783c2f9d4c81",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Make the recorded message explicit and remove the absolute condition that every voicemail must follow an unanswered call. Merriam-Webster sense2b supports the countable message; Oxford and Collins system passages are contrast evidence.",
+      "example_decision": "Retain the caller leaving a voicemail with a contact number; this uses one recorded message.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "voicemail"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain voicemail and general region. Merriam-Webster also recognizes the less common voice mail and voice-mail; these are recorded without changing accepted exercise forms. V-mail is a trademark alternative, not an added answer.",
+        "new_forms_proposed": [],
+        "limits": "The recording system, a collection of messages, a generic live voice call and a voice note outside a telephone messaging system are not the selected single recorded message."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B1",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": null,
+          "mw": null
+        },
+        "status": "independent_editorial_placement_without_selected_source_CEFR",
+        "notes": "Propose B1 as an editorial judgment for handling familiar recorded telephone messages and distinguishing the message from the recording service. No consulted source labels the selected message sense. Oxford B1 is a system-sense observation only and is not transferred.",
+        "dictionary_level_certification": false,
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-fourth10-oxford-voicemail",
+        "foundation01-language-fourth10-collins-voicemail",
+        "foundation01-language-fourth10-mw-voicemail"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-fourth10-oxford-voicemail",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary voicemail noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-fourth10-collins-voicemail",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary voicemail noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-fourth10-mw-voicemail",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary voicemail noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 36,
+      "id": "extension.internal-phone-number.n",
+      "text": "extension",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "428dccaef1eed178421776cb6513e8ca0af49c57e7183f7d7d1c82f0ab77e6dc",
+      "before_entry": {
+        "id": "extension.internal-phone-number.n",
+        "text": "extension",
+        "display_text": "extension",
+        "pos": "noun",
+        "definition": "An internal telephone number used within an organization's phone system.",
+        "example": "The reception extension is two hundred.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "extension"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An office phone directory with one internal extension highlighted.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "extension.internal-phone-number.n.analysis.v1",
+          "lexeme_id": "extension.internal-phone-number.n",
+          "text": "extension",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The extensional noun family uses the documented Latin extens- allomorph related to extend. The phone-number sense is lexicalized and requires separate semantic review; this graph does not derive the meaning of an internal number from stretching alone. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/extension",
+              "https://www.dictionary.com/browse/extension"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.extend",
+              "type": "stem",
+              "canonical": "extend",
+              "surface": "extens"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.ion.suffix",
+              "type": "suffix",
+              "canonical": "ion",
+              "surface": "ion"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "extension",
+              "rule": "latinate_stem_extend_to_extens_before_ion"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-extension",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-extension",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "extension.internal-phone-number.n",
+        "text": "extension",
+        "display_text": "extension",
+        "pos": "noun",
+        "definition": "An internal telephone number used within an organization's phone system.",
+        "example": "The reception extension is two hundred.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "extension"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An office phone directory with one internal extension highlighted.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "extension.internal-phone-number.n.analysis.v1",
+          "lexeme_id": "extension.internal-phone-number.n",
+          "text": "extension",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The extensional noun family uses the documented Latin extens- allomorph related to extend. The phone-number sense is lexicalized and requires separate semantic review; this graph does not derive the meaning of an internal number from stretching alone. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/extension",
+              "https://www.dictionary.com/browse/extension"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.extend",
+              "type": "stem",
+              "canonical": "extend",
+              "surface": "extens"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.ion.suffix",
+              "type": "suffix",
+              "canonical": "ion",
+              "surface": "ion"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "extension",
+              "rule": "latinate_stem_extend_to_extens_before_ion"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-extension",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-extension",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-oxford-extension",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary extension noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-collins-extension",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary extension noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal; independent acceptance remains pending. Propose B2 for the narrow practical task of recognizing and using an internal telephone number. Collins labels that selected phone sense B2, while Oxford labels it C1. Preserve both observations; this is an independent scope judgment, not a conversion of C1 or a claim of agreement. Other extension senses are excluded. Retain extension and general region. Ext. is an observed abbreviation, not an accepted exercise form. Regional labels for electrical leads or house additions do not apply to the phone-number sense."
+      },
+      "candidate_entry_json_sha256": "3a9609b3e19a4d47d8895cb3743ab40a1fe0e9bf2242fc5cee4ce4f6cdb1fdef",
+      "changed_fields": [
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "difficulty": "B2"
+      },
+      "protected_nonlanguage_fields_json_sha256": "887ecdc0fb0fe038c56b269b1f3a1c82880d566e1c3999e0607a4a1cb4f47f80",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain the internal phone number, supported by numbered-line definitions and the sources examples of requesting a numbered extension.",
+      "example_decision": "Retain the reception extension of two hundred. Reading the number as a whole is possible; this is no universal dialing or spoken-digit rule.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "extension"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain extension and general region. Ext. is an observed abbreviation, not an accepted exercise form. Regional labels for electrical leads or house additions do not apply to the phone-number sense.",
+        "new_forms_proposed": [],
+        "limits": "Additional time, physical enlargement, hair, building additions, software, file suffixes, electrical leads and extension activities are separate."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B2",
+        "observed_selected_source_labels": {
+          "oxford": "C1",
+          "collins": "B2"
+        },
+        "status": "editorial_B2_proposal_with_C1_B2_source_disagreement",
+        "notes": "Propose B2 for the narrow practical task of recognizing and using an internal telephone number. Collins labels that selected phone sense B2, while Oxford labels it C1. Preserve both observations; this is an independent scope judgment, not a conversion of C1 or a claim of agreement. Other extension senses are excluded.",
+        "dictionary_level_certification": false,
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-fourth10-oxford-extension",
+        "foundation01-language-fourth10-collins-extension"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-fourth10-oxford-extension",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary extension noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-fourth10-collins-extension",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary extension noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 37,
+      "id": "introduction.first-acquaintance.n",
+      "text": "introduction",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "6af2bd2dc3f6631d1d7fa54e9e27ceb103743e6ae5e2a04ef2760d8d8144249c",
+      "before_entry": {
+        "id": "introduction.first-acquaintance.n",
+        "text": "introduction",
+        "display_text": "introduction",
+        "pos": "noun",
+        "definition": "The act of making people known to one another for the first time.",
+        "example": "The meeting began with a brief introduction.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "introduction"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A colleague introducing two people who have not met.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "introduction.first-acquaintance.n.analysis.v1",
+          "lexeme_id": "introduction.first-acquaintance.n",
+          "text": "introduction",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "introduce",
+              "surface": "introduce",
+              "canonical_id": "morph.introduce"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-tion",
+              "surface": "tion",
+              "canonical_id": "affix.tion.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "introduction",
+              "rule": "drop_final_e_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "introduction.first-acquaintance.n",
+        "text": "introduction",
+        "display_text": "introduction",
+        "pos": "noun",
+        "definition": "The act of making people known to one another for the first time.",
+        "example": "The manager made an introduction so that the two new colleagues could meet.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "introduction"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A colleague introducing two people who have not met.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "introduction.first-acquaintance.n.analysis.v1",
+          "lexeme_id": "introduction.first-acquaintance.n",
+          "text": "introduction",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "introduce",
+              "surface": "introduce",
+              "canonical_id": "morph.introduce"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-tion",
+              "surface": "tion",
+              "canonical_id": "affix.tion.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "introduction",
+              "rule": "drop_final_e_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-oxford-introduction",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary introduction noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-collins-introduction",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary introduction noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal; independent acceptance remains pending. Propose B1 as an editorial judgment for describing a social introduction and distinguishing it from an introductory talk or course. No selected people-sense label was visible. Oxford A2 and Collins B2 concern other introduction senses and are not transferred."
+      },
+      "candidate_entry_json_sha256": "fa8ac5461cb2c8fc98df9b21fd401ee86d838c19d179a2f6c9666926e2f957b8",
+      "changed_fields": [
+        "example",
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "example": "The manager made an introduction so that the two new colleagues could meet.",
+        "difficulty": "B1"
+      },
+      "protected_nonlanguage_fields_json_sha256": "95873cf48687d44f35b591286f9c159b573e844bd8c41db89e728dd4a20e9cf5",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain the act of making people known to one another; the sense is a social event rather than an opening section.",
+      "example_decision": "Replace the brief meeting introduction, which could be an introductory talk, with a sentence explicitly connecting two new colleagues.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "introduction"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing canonical headword and general region. No new spelling or synonym is proposed as an exercise answer.",
+        "new_forms_proposed": [],
+        "limits": "Opening text or speech, beginner course or book, first experience, a product launch and bringing something into use remain separate. Existing ambiguous expression bindings are preserved but not accepted by this candidate."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B1",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": null
+        },
+        "status": "independent_editorial_placement_without_selected_source_CEFR",
+        "notes": "Propose B1 as an editorial judgment for describing a social introduction and distinguishing it from an introductory talk or course. No selected people-sense label was visible. Oxford A2 and Collins B2 concern other introduction senses and are not transferred.",
+        "dictionary_level_certification": false,
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-fourth10-oxford-introduction",
+        "foundation01-language-fourth10-collins-introduction"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-fourth10-oxford-introduction",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary introduction noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-fourth10-collins-introduction",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary introduction noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 38,
+      "id": "greeting.welcome-message.n",
+      "text": "greeting",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "20d690ff65424e8f1bbb6db7fc26bb17e17ad84e23977ea7687371f184cbcf89",
+      "before_entry": {
+        "id": "greeting.welcome-message.n",
+        "text": "greeting",
+        "display_text": "greeting",
+        "pos": "noun",
+        "definition": "Words or actions used to welcome someone or acknowledge their arrival.",
+        "example": "A friendly greeting helps visitors feel welcome.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "greeting"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A friendly workplace greeting between arriving colleagues.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "greeting.welcome-message.n.analysis.v1",
+          "lexeme_id": "greeting.welcome-message.n",
+          "text": "greeting",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "greet",
+              "surface": "greet",
+              "canonical_id": "morph.greet"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ing",
+              "surface": "ing",
+              "canonical_id": "affix.ing.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "greeting",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "greeting.welcome-message.n",
+        "text": "greeting",
+        "display_text": "greeting",
+        "pos": "noun",
+        "definition": "Words or actions used to welcome someone or acknowledge their arrival.",
+        "example": "A friendly greeting helps visitors feel welcome.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "greeting"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A friendly workplace greeting between arriving colleagues.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "greeting.welcome-message.n.analysis.v1",
+          "lexeme_id": "greeting.welcome-message.n",
+          "text": "greeting",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "greet",
+              "surface": "greet",
+              "canonical_id": "morph.greet"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ing",
+              "surface": "ing",
+              "canonical_id": "affix.ing.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "greeting",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-oxford-greeting",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary greeting noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-collins-greeting",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary greeting noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal; independent acceptance remains pending. Propose B2 as an independent editorial placement for describing and comparing workplace greeting choices, distinguishing the noun from a memorized hello and from written seasonal wishes. Collins B1+ stays literal and is not converted to B2. This course choice does not assert that all greetings require B2 proficiency."
+      },
+      "candidate_entry_json_sha256": "ed0ec9800a462ff9bc64fc75fe87bbf801bd25a719b1d920cfd69414d8c66cf7",
+      "changed_fields": [
+        "difficulty",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "difficulty": "B2"
+      },
+      "protected_nonlanguage_fields_json_sha256": "3c7a7e52b4115b76a34e20fb3f73e10afb2402ce5edd9c8187261fdda24368c5",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain a spoken or gestural welcome or acknowledgment on meeting; it names the act or expression rather than prescribing one formula.",
+      "example_decision": "Retain the friendly visitor greeting; it illustrates the intended meeting sense without requiring a handshake or culture-specific behavior.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "greeting"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing canonical headword and general region. No new spelling or synonym is proposed as an exercise answer.",
+        "new_forms_proposed": [],
+        "limits": "Plural good wishes sent to an absent person, seasonal formulas, letter salutations and the greeting participle are separately bounded; no cultural or accessibility rule is imposed."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "B2",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": "B1+"
+        },
+        "status": "editorial_course_placement_with_literal_out_of_enum_source_label",
+        "notes": "Propose B2 as an independent editorial placement for describing and comparing workplace greeting choices, distinguishing the noun from a memorized hello and from written seasonal wishes. Collins B1+ stays literal and is not converted to B2. This course choice does not assert that all greetings require B2 proficiency.",
+        "dictionary_level_certification": false,
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-fourth10-oxford-greeting",
+        "foundation01-language-fourth10-collins-greeting"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-fourth10-oxford-greeting",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary greeting noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-fourth10-collins-greeting",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary greeting noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 39,
+      "id": "conversation.spoken-exchange.n",
+      "text": "conversation",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "34ed0082420e48ef4ffd2841605f950569b46e7eece0ce16fa0ee67cf063ae6e",
+      "before_entry": {
+        "id": "conversation.spoken-exchange.n",
+        "text": "conversation",
+        "display_text": "conversation",
+        "pos": "noun",
+        "definition": "An exchange of spoken information or ideas between people.",
+        "example": "We had a short conversation about the schedule.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "conversation"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Two colleagues taking turns in a workplace conversation.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "conversation.spoken-exchange.n.analysis.v1",
+          "lexeme_id": "conversation.spoken-exchange.n",
+          "text": "conversation",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "converse",
+              "surface": "converse",
+              "canonical_id": "morph.converse"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ation",
+              "surface": "ation",
+              "canonical_id": "affix.ation.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "conversation",
+              "rule": "drop_final_e_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "conversation.spoken-exchange.n",
+        "text": "conversation",
+        "display_text": "conversation",
+        "pos": "noun",
+        "definition": "A usually informal exchange of spoken information or ideas between people.",
+        "example": "We had a short conversation about the schedule.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "conversation"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Two colleagues taking turns in a workplace conversation.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "conversation.spoken-exchange.n.analysis.v1",
+          "lexeme_id": "conversation.spoken-exchange.n",
+          "text": "conversation",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "converse",
+              "surface": "converse",
+              "canonical_id": "morph.converse"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ation",
+              "surface": "ation",
+              "canonical_id": "affix.ation.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "conversation",
+              "rule": "drop_final_e_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-oxford-conversation",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary conversation noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-collins-conversation",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary conversation noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal; independent acceptance remains pending. Retain A2, supported by the selected Collins talking sense. No separate Oxford selected label was visible; the footer B2 word is excluded. Retain conversation and general region. Oxford regional article preferences concern get into (a) conversation, not the noun itself or new accepted forms."
+      },
+      "candidate_entry_json_sha256": "72e3df5e5b0424449b52b9b8765b830adc5f9f07a91e2d2f208720850f2e6308",
+      "changed_fields": [
+        "definition",
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {
+        "definition": "A usually informal exchange of spoken information or ideas between people."
+      },
+      "protected_nonlanguage_fields_json_sha256": "46d3fafd0a50eb4270cdf01f83824e4be744fd818cc2a7c4b8df87129d17cbea",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Add the usual informal character while preserving the spoken-exchange sense. A more formal exchange remains possible; text-only live chat is not silently folded into this stored sense.",
+      "example_decision": "Retain the short spoken exchange about a schedule.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "conversation"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain conversation and general region. Oxford regional article preferences concern get into (a) conversation, not the noun itself or new accepted forms.",
+        "new_forms_proposed": [],
+        "limits": "Text-only conversation, software messaging, archaic senses and specialized legal meanings remain outside the selected spoken noun."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": null,
+          "collins": "A2"
+        },
+        "status": "selected_source_A2_support",
+        "notes": "Retain A2, supported by the selected Collins talking sense. No separate Oxford selected label was visible; the footer B2 word is excluded.",
+        "dictionary_level_certification": false,
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-fourth10-oxford-conversation",
+        "foundation01-language-fourth10-collins-conversation"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-fourth10-oxford-conversation",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary conversation noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        },
+        {
+          "source_id": "foundation01-language-fourth10-collins-conversation",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary conversation noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    },
+    {
+      "ordinal": 40,
+      "id": "discussion.consideration-talk.n",
+      "text": "discussion",
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "status": "pending_original_language_candidate_not_acceptance",
+      "before_entry_json_sha256": "b2cf2107d7568450353727c0852e63d8e2d222b68be30c8f95d0da127ce0f886",
+      "before_entry": {
+        "id": "discussion.consideration-talk.n",
+        "text": "discussion",
+        "display_text": "discussion",
+        "pos": "noun",
+        "definition": "A conversation in which people consider a topic in some detail.",
+        "example": "The discussion focused on delivery problems.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "discussion"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Colleagues weighing two options around a shared planning board.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "discussion.consideration-talk.n.analysis.v1",
+          "lexeme_id": "discussion.consideration-talk.n",
+          "text": "discussion",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "discuss",
+              "surface": "discuss",
+              "canonical_id": "morph.discuss"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ion",
+              "surface": "ion",
+              "canonical_id": "affix.ion.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "discussion",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "candidate_entry": {
+        "id": "discussion.consideration-talk.n",
+        "text": "discussion",
+        "display_text": "discussion",
+        "pos": "noun",
+        "definition": "A conversation in which people consider a topic in some detail.",
+        "example": "The discussion focused on delivery problems.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "discussion"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Colleagues weighing two options around a shared planning board.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "discussion.consideration-talk.n.analysis.v1",
+          "lexeme_id": "discussion.consideration-talk.n",
+          "text": "discussion",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "discuss",
+              "surface": "discuss",
+              "canonical_id": "morph.discuss"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ion",
+              "surface": "ion",
+              "canonical_id": "affix.ion.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "discussion",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-language-fourth10-oxford-discussion",
+            "status": "pending_term_check",
+            "scope": "Selected ordinary discussion noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. Language-only author proposal; independent acceptance remains pending. Retain A2 from Oxford selected conversation sense1. The separate written/speech-treatment sense also carries A2, but matching levels do not make the senses interchangeable."
+      },
+      "candidate_entry_json_sha256": "f685aad08b178f4432544f6b47c58ab875b04b2134f2f642716c5d8d8055dacb",
+      "changed_fields": [
+        "references",
+        "editorial_notes"
+      ],
+      "substantive_changes": {},
+      "protected_nonlanguage_fields_json_sha256": "765662a6e0e50dff1cbf8e5ac8bb213b752410bf8e261607d57574387bb308a2",
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "meaning_decision": "Retain a topic-focused conversation with some detail; a written treatment of a topic is separately defined.",
+      "example_decision": "Retain the exchange focused on delivery problems; it makes no operational finding or instruction.",
+      "spelling_and_region_decision": {
+        "accepted_forms": [
+          "discussion"
+        ],
+        "regions": [
+          "general"
+        ],
+        "decision": "Retain the existing canonical headword and general region. No new spelling or synonym is proposed as an exercise answer.",
+        "new_forms_proposed": [],
+        "limits": "A written analytical treatment, proof of agreement, valid consent, specialist advice or authority to act cannot be inferred from the ordinary discussion noun."
+      },
+      "difficulty_evidence": {
+        "before": "A2",
+        "candidate": "A2",
+        "observed_selected_source_labels": {
+          "oxford": "A2"
+        },
+        "status": "selected_source_A2_support",
+        "notes": "Retain A2 from Oxford selected conversation sense1. The separate written/speech-treatment sense also carries A2, but matching levels do not make the senses interchangeable.",
+        "dictionary_level_certification": false,
+        "independent_acceptance": false
+      },
+      "source_record_ids": [
+        "foundation01-language-fourth10-oxford-discussion"
+      ],
+      "added_references": [
+        {
+          "source_id": "foundation01-language-fourth10-oxford-discussion",
+          "status": "pending_term_check",
+          "scope": "Selected ordinary discussion noun evidence or explicitly identified contrast sense consulted for this original author candidate. Independent language acceptance, morphology, domain and media gates remain unchanged."
+        }
+      ],
+      "review_gates_unchanged": true
+    }
+  ],
+  "proposed_additive_source_records": [
+    {
+      "id": "foundation01-language-fourth10-oxford-announcement",
+      "title": "Oxford Advanced Learner's Dictionary: announcement",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/announcement",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-announcement",
+      "title": "Collins English Dictionary / COBUILD: announcement",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/announcement",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-message",
+      "title": "Oxford Advanced Learner's Dictionary: message",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/message_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-message",
+      "title": "Collins English Dictionary / COBUILD: message",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/message",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-email",
+      "title": "Oxford Advanced Learner's Dictionary: email",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/email_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-email",
+      "title": "Collins English Dictionary / COBUILD: email",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/email",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-phone-call",
+      "title": "Oxford Advanced Learner's Dictionary: phone call",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/phone-call",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-phone-call",
+      "title": "Collins English Dictionary / COBUILD: phone call",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/phone-call",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-voicemail",
+      "title": "Oxford Advanced Learner's Dictionary: voicemail",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/voicemail",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-voicemail",
+      "title": "Collins English Dictionary / COBUILD: voicemail",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/voicemail",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-mw-voicemail",
+      "title": "Merriam-Webster Dictionary: voicemail",
+      "publisher": "Merriam-Webster, Incorporated",
+      "url": "https://www.merriam-webster.com/dictionary/voice%20mail",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-extension",
+      "title": "Oxford Advanced Learner's Dictionary: extension",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/extension",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-extension",
+      "title": "Collins English Dictionary / COBUILD: extension",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/extension",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-introduction",
+      "title": "Oxford Advanced Learner's Dictionary: introduction",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/introduction",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-introduction",
+      "title": "Collins English Dictionary / COBUILD: introduction",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/introduction",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-greeting",
+      "title": "Oxford Advanced Learner's Dictionary: greeting",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/greeting",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-greeting",
+      "title": "Collins English Dictionary / COBUILD: greeting",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/greeting",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-conversation",
+      "title": "Oxford Advanced Learner's Dictionary: conversation",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/conversation",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-collins-conversation",
+      "title": "Collins English Dictionary / COBUILD: conversation",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/conversation",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-fourth10-oxford-discussion",
+      "title": "Oxford Advanced Learner's Dictionary: discussion",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/discussion",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Ordinary selected noun meaning, source-specific spelling/region observations, and literal visible level evidence or explicit other-sense contrast. AI author consultation only; independent acceptance and all morphology, media and specialist gates remain pending. No entries or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    }
+  ],
+  "prior_entry_holds": [
+    {
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "json_sha256": "4a2ae571f902632d58bb7d81ea7c5151c1132cd21a52885921eb30071d217583",
+      "entry": {
+        "id": "supervisor.work-overseer.n",
+        "text": "supervisor",
+        "display_text": "supervisor",
+        "pos": "noun",
+        "definition": "A person who oversees other people's work and gives guidance.",
+        "example": "The supervisor checked the team's progress.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "supervisor"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A supervisor giving practical guidance to a small work team.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "supervisor.work-overseer.n.analysis.v1",
+          "lexeme_id": "supervisor.work-overseer.n",
+          "text": "supervisor",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "supervise",
+              "surface": "supervise",
+              "canonical_id": "morph.supervise"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-or",
+              "surface": "or",
+              "canonical_id": "affix.or.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "supervisor",
+              "rule": "drop_final_e_before_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    },
+    {
+      "resource": "res://data/professional/lexemes/foundation-module01.json",
+      "json_sha256": "a7699c3e58649791eaee79817f87879c2ce6b2418e729768c6f1a43c19b3594e",
+      "entry": {
+        "id": "attendance.presence-record.n",
+        "text": "attendance",
+        "display_text": "attendance",
+        "pos": "noun",
+        "definition": "Being present at work, a meeting, or another scheduled activity.",
+        "example": "The trainer recorded attendance at the session.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "attendance"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A small group present at a fictional workplace meeting beside its corresponding attendance record. The concept is being present, not the sheet by itself; use invented names and no biometric or private data.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "attendance.presence-record.n.analysis.v1",
+          "lexeme_id": "attendance.presence-record.n",
+          "text": "attendance",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "attend",
+              "surface": "attend",
+              "canonical_id": "morph.attend"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ance",
+              "surface": "ance",
+              "canonical_id": "affix.ance.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "attendance",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The legacy canonical ID is retained for progress continuity. The definition concerns presence, while the image connects presence with its record; the ID wording does not create a second record-object sense."
+      }
+    }
+  ],
+  "review_boundary": {
+    "language": "All ten candidates retain every original review field, including pending language. No acceptance supplied.",
+    "difficulty": "Announcement/greeting B2 are explicit editorial course placements with literal B1+ observations. Extension B2 preserves Oxford C1/Collins B2 disagreement. Voicemail-message B1 and people-introduction B1 are editorial judgments without selected-source CEFR. Message/email/phone-call A2 are course-floor decisions with scoped A1 evidence; conversation/discussion retain A2 with selected source support.",
+    "spelling": "Actual e-mail/E-mail and voice mail/voice-mail variants, telephone call alternative and ext. abbreviation are recorded without changing accepted exercise forms or regions.",
+    "context": "Four expression ambiguity holds, all three existing selected-focus expressions and five prior third10 holds remain exact. No new scored binding.",
+    "morphology": "Every graph, source reference and pending/reviewed morphology field remains exact, including email and extension author history.",
+    "media": "Every image, audio field and approved Ava Sweet setting stays exact. No asset or pronunciation acceptance.",
+    "domain": "No specialist, consent, safety, marketing, privacy, security or employment approval.",
+    "runtime": "Only scratch syntax, source consistency, schema, in-memory content and preservation audits. No suite, native runtime or probe executed."
+  },
+  "structural_checks": {
+    "candidate_entries": 10,
+    "schema_errors": 0,
+    "current_content_audit_errors": 0,
+    "candidate_content_audit_errors": 0,
+    "expression_mutations": 0,
+    "accepted_form_changes": 0,
+    "review_gate_changes": 0
+  },
+  "registry_json_sha256_informational": {
+    "capture": "784dfec2e72848254fc8e75ce1ab5b4a783d16ef89c1a7a2456ac8dad2c6a777",
+    "start": "8243457dd1908bf4f5c6fc8d7e23419c63a687edfe7f355d14612db3d0e18899",
+    "end": "8243457dd1908bf4f5c6fc8d7e23419c63a687edfe7f355d14612db3d0e18899"
+  },
+  "remaining": [
+    "Root must independently assess exact candidate hashes, source-specific observations, course placements and expression limits.",
+    "Keep literal B1+, C1/B2 disagreement and other-sense labels separate from editorial course values.",
+    "Preserve supervisor/attendance and every prior expression hold; lexeme decisions do not resolve expression ambiguity.",
+    "Retail04 third10 may integrate independently. Do not freeze shared-test previews or bind a global baseline until root supplies the later successful validation."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "observed_at": "2026-10-16T20:10:22.467Z",
+  "source": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/invoke.cjs",
+    "bytes": 6633,
+    "sha256": "38b8936ad6a325fb9c4078e7ef977010fa5a3cc5ce18631d01b1998288bb98fd"
+  },
+  "retained_copy": "build/professional-english/foundation02-third10-scoped-validation-r01/executed-source-observed.cjs",
+  "baseline_dispatch": {
+    "session_id": 22236,
+    "command": [
+      "node",
+      "build/professional-english/foundation02-third10-scoped-validation-r01/invoke.cjs",
+      "baseline"
+    ],
+    "source_observation_timing": "after dispatch; not a pre-dispatch witness",
+    "root_authorship": "Created by root through the recorded apply_patch tool call immediately before dispatch; root is the only authorized writer and has not changed it."
+  },
+  "candidate_dispatched": false
+}

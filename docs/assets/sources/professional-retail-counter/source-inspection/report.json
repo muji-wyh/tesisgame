@@ -1,0 +1,163 @@
+{
+	"captures": [
+		{
+			"camera": [
+				1.16100001335144,
+				0.940999984741211,
+				1.61500000953674
+			],
+			"file": "kitchenBar-front.png",
+			"orthographic_size": 0.623499989509583,
+			"target": [
+				0.215000003576279,
+				0.209999993443489,
+				-0.104999996721745
+			]
+		},
+		{
+			"camera": [
+				-0.731000065803528,
+				0.940999984741211,
+				-1.82500004768372
+			],
+			"file": "kitchenBar-rear.png",
+			"orthographic_size": 0.623499989509583,
+			"target": [
+				0.215000003576279,
+				0.209999993443489,
+				-0.104999996721745
+			]
+		},
+		{
+			"camera": [
+				0.974781215190887,
+				0.923999965190887,
+				1.57499992847443
+			],
+			"file": "kitchenBarEnd-front.png",
+			"orthographic_size": 0.608999967575073,
+			"target": [
+				0.05078125,
+				0.209999993443489,
+				-0.104999996721745
+			]
+		},
+		{
+			"camera": [
+				-0.873218715190887,
+				0.923999965190887,
+				-1.7849999666214
+			],
+			"file": "kitchenBarEnd-rear.png",
+			"orthographic_size": 0.608999967575073,
+			"target": [
+				0.05078125,
+				0.209999993443489,
+				-0.104999996721745
+			]
+		},
+		{
+			"camera": [
+				0.724449992179871,
+				0.6182000041008,
+				1.01774990558624
+			],
+			"file": "cardboardBoxClosed-front.png",
+			"orthographic_size": 0.407449990510941,
+			"target": [
+				0.106249995529652,
+				0.140499994158745,
+				-0.106249995529652
+			]
+		},
+		{
+			"camera": [
+				-0.511950016021729,
+				0.6182000041008,
+				-1.23025000095367
+			],
+			"file": "cardboardBoxClosed-rear.png",
+			"orthographic_size": 0.407449990510941,
+			"target": [
+				0.106249995529652,
+				0.140499994158745,
+				-0.106249995529652
+			]
+		}
+	],
+	"models": [
+		{
+			"bounds": [
+				0.0,
+				0.0,
+				-0.209999993443489,
+				0.430000007152557,
+				0.419999986886978,
+				0.209999993443489
+			],
+			"model": "kitchenBar",
+			"nodes": [
+				{
+					"name": "kitchenBar(Clone)",
+					"path": "kitchenBar(Clone)",
+					"position": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"type": "MeshInstance3D"
+				}
+			],
+			"sha256": "792c3d31e60c8a8d8c7a28cf7d1efe004c5a601adc1b163a8799dde32c1b559d"
+		},
+		{
+			"bounds": [
+				0.0,
+				0.0,
+				-0.209999993443489,
+				0.1015625,
+				0.419999986886978,
+				0.209999993443489
+			],
+			"model": "kitchenBarEnd",
+			"nodes": [
+				{
+					"name": "kitchenBarEnd(Clone)",
+					"path": "kitchenBarEnd(Clone)",
+					"position": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"type": "MeshInstance3D"
+				}
+			],
+			"sha256": "410c6d83defe4ed248a8ec32f81553b56c8b610372d02ecf0e547e3f52cdc0a1"
+		},
+		{
+			"bounds": [
+				0.0,
+				0.0,
+				-0.212499991059303,
+				0.212499991059303,
+				0.28099998831749,
+				0.212499991059303
+			],
+			"model": "cardboardBoxClosed",
+			"nodes": [
+				{
+					"name": "cardboardBoxClosed(Clone)",
+					"path": "cardboardBoxClosed(Clone)",
+					"position": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"type": "MeshInstance3D"
+				}
+			],
+			"sha256": "4af079dca52960912764574950f0549ff2ae1224b3db1528718629473a2d5d81"
+		}
+	],
+	"scope": "Six original acquired source views before candidate composition. Every source geometry, material, node and transform preserved. No production edits."
+}

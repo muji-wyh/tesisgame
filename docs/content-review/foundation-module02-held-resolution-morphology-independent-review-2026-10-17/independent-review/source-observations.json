@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "fresh_independent_rendered_source_consultation",
+  "reviewer": "Codex morph_review, independent AI morphology reviewer; not human or subject-matter approval",
+  "consulted_on": "2026-10-17",
+  "observations": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/en_1",
+      "section": "Prefix sense 2 and word origin",
+      "observation": "The current verb-forming prefix has a causative reading. Sense 1 separately covers placement into a location or condition. The entry identifies French/Latin ancestry and a spelling relationship with in-. This supports a causative en- constituent; it does not turn negative in- or the suffix -en into this same morpheme."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/sure_1",
+      "section": "Adjective sense 3; make sure senses 1 and 2",
+      "observation": "Sure can describe an event certain to occur. The make-sure entry distinguishes bringing about an outcome from checking whether something is true or done. The accepted ensure item selects the former reading. This is a current semantic basis for the free adjective stem, rather than reliance on personal confidence alone."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/ensure",
+      "section": "Whole verb, variant and word origin",
+      "observation": "The selected verb concerns making an event or condition definite; the entry explicitly admits insure especially in North American English. Its origin describes Anglo-Norman/French developments. Modern decomposition is the reviewer's inference from the current prefix, current base and whole meaning, corroborated by the history, rather than a quoted publisher analysis."
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/ensure",
+      "section": "British sense 1 and American English history",
+      "observation": "The current outcome meaning matches the accepted ensure projection. The British heading admits the US insure alternative. American historical information connects an en- element and the predecessor of sure. Protection and financial insurance senses are outside the accepted target."
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/en",
+      "section": "American en- 1; en- 2; -en entries",
+      "observation": "The page describes a productive English causative prefix modeled on French loans and applicable to adjective/noun bases. It separately identifies a Greek location prefix and several suffix functions. Similar letters or broadly causative meanings do not alone justify one canonical identity across these distinct entries."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/inform",
+      "section": "Recipient-information sense, forms and word origin",
+      "observation": "The current giving-information sense is distinct from informing oneself and influencing something. Listed informed/informing forms preserve inform as a base. The recorded historical shaping formation does not establish a transparent negative-prefix plus document-form lesson for the selected modern meaning."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/informed",
+      "section": "Adjective senses 1 and 2",
+      "observation": "The adjective can describe possession of knowledge or decisions grounded in understanding. Its plausible derivative relation to inform does not establish that telling a person something suffices for clinical informed consent. Clinical meaning, specialist review and the complete clinical graph remain outside this review."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "section": "Bring-together and take-away senses; forms; word origin",
+      "observation": "Gathering from multiple people or places and taking something away are distinguished. Collected and collecting preserve the whole collect base. The historical account connects Latin together/gather material; it is not by itself a present-day teaching graph with col and lect."
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/collect",
+      "section": "Gathering, pickup and payment readings; verb word history",
+      "observation": "The gathering reading is distinguishable from pickup and receiving payment. The historical development includes Latin prefix/root and participial material. A deeper classical analysis would need its own treatment of allomorphs and selected meaning. No such lesson is approved by retaining collect as the intact teaching base."
+    }
+  ],
+  "limits": "Fresh rendered pages only. No new raw-HTML or CEFR-J retrieval, copied dictionary definitions/examples, full-page archive, pronunciation playback, acquired media or redistribution license. Source consultation supports the bounded independent AI decision, not human specialist approval or evidence of learning effectiveness."
+}

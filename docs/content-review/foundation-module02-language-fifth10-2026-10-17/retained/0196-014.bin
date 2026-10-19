@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "status": "proposal_artifacts_authored_only",
+  "sense_id": "shopping-bag.goods-carrier.n",
+  "accepted_preimage_matches_observed_live_bag": true,
+  "proposed_before_entry_json_sha256": "ba96e5d4ba9911b68ddb630d3413cac52d155a3d27c7452aaee97ba5284f7e07",
+  "proposed_after_entry_json_sha256": "25300b5f9d78a6327c16c27143f1aeddd9dba1c41bdd4e42c20f30d36148cc85",
+  "protected_fields_json_sha256": "091cb33bb94c158215dc8db8c4198482b0c2f991ce4b964786321d5114c51d69",
+  "image_descriptor_json_sha256": "2e57c33ffe329c33c29ec8d3d9a2a2acdfecdd5283c94ff7fe591bc0ac22139b",
+  "exact_note_replacements": 3,
+  "copied_png_sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+  "production_writes": [],
+  "test_dispatches": [],
+  "engine_or_browser_dispatches": [],
+  "actual_post_fourth10_registry_baseline_bound": false,
+  "completed_production_integration": false
+}

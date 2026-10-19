@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T19:58:12.850Z",
+  "script_raw_sha256": "7a7b227efc5f648ec3d59ea9f846fa48023ea1529cfd2eb079e61d05268811ff",
+  "scope": "Evidence only; no production or historical writes."
+}

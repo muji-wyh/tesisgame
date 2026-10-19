@@ -1,0 +1,60 @@
+{
+  "scope": "Exact selected candidate and four actual native WordCard crops; not production loader delivery.",
+  "files": [
+    {
+      "file": "candidate-broad-return/counter.png",
+      "size": [
+        512,
+        293
+      ],
+      "png_bytes": 31426,
+      "png_sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+      "pixel_encoding": "Unpremultiplied RGBA8, row-major, top-to-bottom; hash covers pixel bytes only; dimensions recorded separately.",
+      "rgba_pixel_sha256": "342eb324b6655d4fb2437974a1dbcc8e83d7d37875459e54c0f6926102be9a98"
+    },
+    {
+      "file": "candidate-broad-return/match-unmatched.png",
+      "size": [
+        126,
+        72
+      ],
+      "png_bytes": 3612,
+      "png_sha256": "a0eab47555a0150a4d3b83848cec2cb44f3894fb6ad4837c0fa8fec6683498ee",
+      "pixel_encoding": "Unpremultiplied RGBA8, row-major, top-to-bottom; hash covers pixel bytes only; dimensions recorded separately.",
+      "rgba_pixel_sha256": "0a0dab31dceb9e28e5db6ea66c0a8715e52e4325bd70164c3ee1032351e0433c"
+    },
+    {
+      "file": "candidate-broad-return/match-matched.png",
+      "size": [
+        126,
+        72
+      ],
+      "png_bytes": 4094,
+      "png_sha256": "3e9c35d09a474c131b0c4ad5c7d16c4ae0947ec5303e4c100e19b4ec51af91ed",
+      "pixel_encoding": "Unpremultiplied RGBA8, row-major, top-to-bottom; hash covers pixel bytes only; dimensions recorded separately.",
+      "rgba_pixel_sha256": "32d3d390d460b122eb9970702ea78b6da15287991a7e50476a738f05110e6668"
+    },
+    {
+      "file": "candidate-broad-return/memory-unmatched.png",
+      "size": [
+        144,
+        74
+      ],
+      "png_bytes": 3468,
+      "png_sha256": "84c0e81111513dcfed8279439b95a90a58034e6f87f0c7ee4ddb06d2e6aa70b5",
+      "pixel_encoding": "Unpremultiplied RGBA8, row-major, top-to-bottom; hash covers pixel bytes only; dimensions recorded separately.",
+      "rgba_pixel_sha256": "f4973fa8fe4d2644e03a10383052fd0fc96cee24b9a7fdf211c10dfb0ae49442"
+    },
+    {
+      "file": "candidate-broad-return/memory-matched.png",
+      "size": [
+        144,
+        74
+      ],
+      "png_bytes": 3831,
+      "png_sha256": "ab30bfeeeece8468293a4ec1439cc3d5e58837ece3930e157dc877c2dcd6f0b8",
+      "pixel_encoding": "Unpremultiplied RGBA8, row-major, top-to-bottom; hash covers pixel bytes only; dimensions recorded separately.",
+      "rgba_pixel_sha256": "bec00058a5f9ad062b604624184f03df8ab65d0afc50f34861f767830d31d270"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T21:48:48.871Z",
+  "method": "Built-in raw reads, SHA256 and JSON comparisons only",
+  "process_id": 12464,
+  "capture_source_sha256": "651ba393c6bdccb93b21f0f4f256031449c1b0ea601ead03a25266dfcf00a34f",
+  "rerun_permitted": false
+}

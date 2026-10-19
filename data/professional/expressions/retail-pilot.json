@@ -1,0 +1,1093 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.retail.equipment.01",
+      "text": "Where can I find the fitting room?",
+      "meaning": "Ask where customers can try on clothes.",
+      "context": "A shopper asks a staff member for directions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Where",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "I",
+          "start": 10,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "find",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "fitting",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "room",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "?",
+          "start": 33,
+          "end": 34
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fitting-room.clothes-try-on.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.equipment.02",
+      "text": "Please place your shopping basket on the counter.",
+      "meaning": "Ask a shopper to put their basket on a service surface.",
+      "context": "A cashier helps a shopper prepare for payment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "place",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "your",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "shopping",
+          "start": 18,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "basket",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "on",
+          "start": 34,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "counter",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": ".",
+          "start": 48,
+          "end": 49
+        }
+      ],
+      "focus_lexeme_ids": [
+        "counter.service-surface.n",
+        "shopping-basket.store-container.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.equipment.03",
+      "text": "You can use the card reader here.",
+      "meaning": "Point out where a customer can pay by card.",
+      "context": "A cashier indicates a payment device.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "You",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "use",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 4,
+          "text": "card",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "reader",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "here",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": ".",
+          "start": 32,
+          "end": 33
+        }
+      ],
+      "focus_lexeme_ids": [
+        "card-reader.payment-device.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.equipment.04",
+      "text": "The receipt printer is out of paper.",
+      "meaning": "Report that the printer needs another paper roll.",
+      "context": "A staff member reports a checkout equipment issue.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "receipt",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "printer",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "out",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 27,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "paper",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": ".",
+          "start": 35,
+          "end": 36
+        }
+      ],
+      "focus_lexeme_ids": [
+        "receipt-printer.sales-device.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.equipment.05",
+      "text": "The extra stock is in the stockroom.",
+      "meaning": "Explain where goods that are not on display are stored.",
+      "context": "Two colleagues locate extra goods.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "extra",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "stock",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 16,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "in",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 6,
+          "text": "stockroom",
+          "start": 26,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": ".",
+          "start": 35,
+          "end": 36
+        }
+      ],
+      "focus_lexeme_ids": [
+        "stockroom.goods-storage.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.equipment.06",
+      "text": "This shopping cart has a damaged wheel.",
+      "meaning": "Report a problem with a cart.",
+      "context": "A shopper tells a staff member about faulty equipment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "shopping",
+          "start": 5,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "cart",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "has",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "damaged",
+          "start": 25,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "wheel",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ".",
+          "start": 38,
+          "end": 39
+        }
+      ],
+      "focus_lexeme_ids": [
+        "shopping-cart.store-trolley.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.equipment.07",
+      "text": "The elevator is between the customer service desk and the returns counter.",
+      "meaning": "Locate the elevator between two service counters in this store.",
+      "context": "A staff member gives directions in a fictional store with separate help and returns counters.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "elevator",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 13,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "between",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "customer",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "service",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "desk",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "returns",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "counter",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "elevator.vertical-transport.n",
+        "customer-service-desk.help-counter.n",
+        "returns-counter.return-point.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        },
+        {
+          "source_id": "retail03-mw-elevator",
+          "status": "verified",
+          "scope": "Selected passage consulted: Noun sense 1b. The building transport compartment/platform carries people or things between levels. Selected lexical sense only; pronunciation recordings and images were not acquired. Headword syllable dots do not establish morphology. This editorial proposal does not approve language, morphology, domain practice, or media."
+        },
+        {
+          "source_id": "retail03-target-pickup",
+          "status": "verified",
+          "scope": "Selected passage consulted: What is Order Pickup?; pickup-location passages. Previously placed orders can be collected at an Order Pickup or Guest Services desk; one physical desk can serve multiple functions. Retailer-specific location evidence only. Identity rules, timing, eligibility, fees and store policies are not curriculum claims. This editorial proposal does not approve language, morphology, domain practice, or media."
+        },
+        {
+          "source_id": "retail03-walmart-returns",
+          "status": "verified",
+          "scope": "Selected passage consulted: Choose how to return: in-store Customer Service desk. The retailer directs in-store returns to its Customer Service desk, demonstrating functional overlap with a returns counter. Only the location wording is used. Return deadlines, eligibility and entitlements are not generalized or taught. This editorial proposal does not approve language, morphology, domain practice, or media."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.equipment.08",
+      "text": "Please take the parcel from this counter to the pickup counter.",
+      "meaning": "Ask a colleague to move a parcel from the current service surface to the order-collection counter.",
+      "context": "A colleague coordinates an order collection between two counters in a fictional store.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "take",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "parcel",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "from",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "this",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "counter",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "pickup",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "counter",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 62,
+          "end": 63
+        }
+      ],
+      "focus_lexeme_ids": [
+        "counter.service-surface.n",
+        "pickup-counter.collection-point.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        },
+        {
+          "source_id": "retail03-collins-counter",
+          "status": "verified",
+          "scope": "Selected passage consulted: COBUILD countable noun sense 1. The customer-service noun denotes the shop or cafe serving surface, not the opposing prefix or a counting person. Selected noun sense only; no artwork, recordings, or historical analysis approved. This editorial proposal does not approve language, morphology, domain practice, or media."
+        },
+        {
+          "source_id": "retail03-target-pickup",
+          "status": "verified",
+          "scope": "Selected passage consulted: What is Order Pickup?; pickup-location passages. Previously placed orders can be collected at an Order Pickup or Guest Services desk; one physical desk can serve multiple functions. Retailer-specific location evidence only. Identity rules, timing, eligibility, fees and store policies are not curriculum claims. This editorial proposal does not approve language, morphology, domain practice, or media."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.equipment.09",
+      "text": "There is a spare receipt roll under the counter.",
+      "meaning": "Explain where replacement printer paper is stored.",
+      "context": "A colleague answers a question about checkout supplies.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "There",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "is",
+          "start": 6,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "a",
+          "start": 9,
+          "end": 10
+        },
+        {
+          "index": 3,
+          "text": "spare",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "receipt",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "roll",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "under",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "counter",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": ".",
+          "start": 47,
+          "end": 48
+        }
+      ],
+      "focus_lexeme_ids": [
+        "counter.service-surface.n",
+        "receipt-roll.printer-paper.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.equipment.10",
+      "text": "The waste bin is beside the packing table.",
+      "meaning": "Describe the location of a rubbish container.",
+      "context": "A staff member gives directions within a work area.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "waste",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "bin",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "beside",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "packing",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "table",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": ".",
+          "start": 41,
+          "end": 42
+        }
+      ],
+      "focus_lexeme_ids": [
+        "waste-bin.rubbish-container.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    }
+  ]
+}

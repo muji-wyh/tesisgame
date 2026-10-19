@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "status": "fresh_independent_selected_passage_review_complete",
+  "reviewer": "Codex nursing_theme (independent AI editorial language review; not human or subject-matter approval)",
+  "date": "2026-10-16",
+  "method": "The reviewer freshly opened all twelve supporting pages with the web tool and inspected the selected meanings, grammar and topic labels. Only original concise paraphrases are saved. Root and art evidence was separately hash-bound and crosschecked, not substituted for direct reading.",
+  "sources": [
+    {
+      "key": "colleague",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/colleague",
+      "publisher": "Oxford University Press",
+      "section": "Workmate noun and Working life label",
+      "observed_selected_sense_level": "A2",
+      "finding": "The head sense and cross-organization examples support colleagues working in a shared profession without a common employer."
+    },
+    {
+      "key": "employee",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/employee",
+      "publisher": "Oxford University Press",
+      "section": "Paid-worker noun and Working life label",
+      "observed_selected_sense_level": "A2",
+      "finding": "Ordinary paid work for another person supports the noun; this is distinct from legal employment classification."
+    },
+    {
+      "key": "employer",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/employer",
+      "publisher": "Oxford University Press",
+      "section": "Paying-person or organization noun, Business and Working life labels",
+      "observed_selected_sense_level": "A2",
+      "finding": "Individuals as well as organizations can be employers. The lexical relationship does not create universal training obligations."
+    },
+    {
+      "key": "supervisor",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/supervisor",
+      "publisher": "Oxford University Press",
+      "section": "Supervising-person noun, Working life and Jobs labels",
+      "observed_selected_sense_level": "C1",
+      "finding": "The relevant noun points to supervision and is labelled C1. This conflicts with acceptance of the stored A2 field."
+    },
+    {
+      "key": "manager",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/manager",
+      "publisher": "Oxford University Press",
+      "section": "Work-role sense 1, Jobs, Business and Shopping labels",
+      "observed_selected_sense_level": "A2",
+      "finding": "Responsibility may cover an organization or part of one. The selected person sense is distinct from software tools and other role senses."
+    },
+    {
+      "key": "team",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/team_1",
+      "publisher": "Oxford University Press",
+      "section": "Working-group sense 2 and collective-noun grammar heading",
+      "observed_selected_sense_level": null,
+      "finding": "The working group has no separately observed CEFR topic label. Singular and plural agreement are allowed. Sports A1 and animal C2 concern other senses."
+    },
+    {
+      "key": "department",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/department",
+      "publisher": "Oxford University Press",
+      "section": "Organizational-section sense and topic labels",
+      "observed_selected_sense_level": "A2",
+      "finding": "The ordinary section can belong to a business or another institution. The displayed abbreviation does not become a complete headword spelling."
+    },
+    {
+      "key": "customer",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/customer",
+      "publisher": "Oxford University Press",
+      "section": "Buyer sense 1, Shopping and Business labels",
+      "observed_selected_sense_level": "A1",
+      "finding": "Both individuals and organizations buy goods or services. The selected label is A1 and cannot be reported as A2."
+    },
+    {
+      "key": "client",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/client",
+      "publisher": "Oxford University Press",
+      "section": "Professional-services sense 1, Business label and associated usage",
+      "observed_selected_sense_level": "B1",
+      "finding": "Professional advice or services need not be ongoing. Corporate recipients and organization providers support the refinement; social-work examples inform the bounded provider-scope inference. Computing is separate."
+    },
+    {
+      "key": "visitor",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/visitor",
+      "publisher": "Oxford University Press",
+      "section": "Physical-visit sense 1, Holidays label",
+      "observed_selected_sense_level": "A1",
+      "finding": "Visiting people or places is the physical sense. A different sense covers website visits, so reporting populations must not be silently assigned to the physical noun."
+    },
+    {
+      "key": "supervise",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/supervise",
+      "publisher": "Oxford University Press",
+      "section": "Oversight verb and Jobs label",
+      "observed_selected_sense_level": "C1",
+      "finding": "Being in charge and checking work supports the proposed supervisor wording; the selected C1 label reinforces the difficulty hold."
+    },
+    {
+      "key": "collins-supervisor",
+      "url": "https://www.collinsdictionary.com/dictionary/english/supervisor",
+      "publisher": "Collins / HarperCollins; contributing dictionary labels distinguished on the page",
+      "section": "Ordinary British and American supervising-worker noun definitions",
+      "observed_selected_sense_level": null,
+      "finding": "The ordinary oversight meaning supports the wording. Academic and public-office senses are distinct; the displayed frequency band is not a CEFR rating and supplies no difficulty clearance."
+    }
+  ],
+  "root_crosscheck": {
+    "path": "build/professional-english/foundation-module01-language-review/first10/root-review-r01/source-crosschecks.json",
+    "raw_sha256": "44b1aaa7eca4e28a4f2ae81fc0092848bba25a1e14f21b9f48b5ac32817f954a",
+    "pages": 11
+  },
+  "client_refinement": {
+    "decision_path": "build/professional-english/foundation-module01-language-review/first10/client-refinement-review-r01/decision.json",
+    "decision_raw_sha256": "18100efe6daca59ac0119c63789e688c6476ae9763f2faa7055e2c670aab7cce",
+    "source_path": "build/professional-english/foundation-module01-language-review/first10/client-refinement-review-r01/source-consultation.json",
+    "source_raw_sha256": "813a736b52dadabc160d93b349c43523a44168529c2453edb40e29a03ced0e24",
+    "scope": "Exact definition refinement only in that prior independent record; this review separately decides the complete selected language candidate."
+  },
+  "failed_author_accesses_excluded": 4,
+  "rights": "No full dictionary entries, examples, recordings, images or exercises acquired or integrated. Consultation conveys no asset license.",
+  "difficulty_boundary": "Observed source labels are recorded independently of editorial curriculum placement. No frequency-to-CEFR conversion or transfer from another sense or footer occurs."
+}

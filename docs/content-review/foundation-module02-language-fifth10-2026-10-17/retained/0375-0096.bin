@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "status": "author_binding_parse_failure_before_execution_preserved",
+  "source": "build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding.cjs",
+  "raw_sha256": "d5a2a00ca9be2afb26f3b0b09525088e86ab1cebf56f4b0191beed775c227d11",
+  "command": "node build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding.cjs",
+  "exit_code": 1,
+  "error": "SyntaxError: Unexpected token '}' at author-final-binding.cjs:104; missing closing array and descriptor-call delimiters after persisted command success assertions.",
+  "source_executed": false,
+  "binding_outputs_created": false,
+  "preparation_executed": false,
+  "project_or_test_execution": false,
+  "production_mutated": false,
+  "correction_source": "author-final-binding-r02.cjs"
+}

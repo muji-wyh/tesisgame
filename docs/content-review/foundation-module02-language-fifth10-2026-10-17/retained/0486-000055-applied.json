@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 55,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "f84256d666d0819194cc4a501293dead82bf227607563948c3d4fb938abca3a4",
+  "recorded_at": "2026-10-16T22:48:04.755Z",
+  "index": 26,
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/patch.proposed.json"
+}

@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "ok": true,
+  "started_at": "2026-10-16T22:15:22.910Z",
+  "finished_at": "2026-10-16T22:16:17.327Z",
+  "source_sha256": "cb32743b45ffc74e3256b51d31449db26f5b34b2a1f9d89b388d3cdeaa74e0a7",
+  "input_sha256": "1faaad6c220269ed2ea618f0d7cc7cba1a5f02d2513932252c85be1b28294a5f",
+  "commands": [
+    {
+      "args": [
+        "--check",
+        "build/professional-english/shopping-bag-delivery-preparation-r02/test-transforms.cjs"
+      ],
+      "started_at": "2026-10-16T22:15:40.664Z",
+      "finished_at": "2026-10-16T22:15:40.898Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-1.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "--check",
+        "build/professional-english/shopping-bag-delivery-preparation-r02/prepare.cjs"
+      ],
+      "started_at": "2026-10-16T22:15:49.906Z",
+      "finished_at": "2026-10-16T22:15:50.117Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-2.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "build/professional-english/shopping-bag-delivery-preparation-r02/prepare.cjs",
+        "--root-dispatch",
+        "confirmed-actual-fourth10-persisted"
+      ],
+      "started_at": "2026-10-16T22:16:01.163Z",
+      "finished_at": "2026-10-16T22:16:12.915Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-3.log",
+      "log_sha256": "79eb9fa313549d3148159aef67eccf4d449442b9885a00f1eb29d0832f278473"
+    }
+  ],
+  "error": null,
+  "scope": "Syntax checks and scratch afterimage preparation only. No production mutation, project test, native or browser dispatch."
+}

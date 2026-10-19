@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-16",
+  "reviewer": "Codex finish_difficulty source inspection; independent root source/brief review pending",
+  "scope": "Actual original source renders at 800 x 600 and 296 x 222, plus read-only GLB structure. No final composition, animation, occupational approval or readiness claim.",
+  "render_process_exit_code": 0,
+  "source_views": 8,
+  "individual_pngs": 16,
+  "contact": "source-inspection/source-contact.png",
+  "findings": [
+    {
+      "id": "privacy-curtain",
+      "sha256": "563b648b94f5f2dc87fa734c22021a1116461ee01733eae359907839ef2d1390",
+      "observed": "A seafoam pleated textile hangs from thirteen separate rings beneath a straight pale rail, with two visible ceiling brackets. Front/rear/level views show the textile and its top attachments; the side view confirms a narrow depth. No markings or patients are depicted.",
+      "concerns": "Current directional lighting makes angular dark bands in the folds. This needs a softer-light source check before full composition. The ceiling brackets must meet a visible source wall/ceiling support; do not leave the track floating.",
+      "animation": "No clips or skins. The separate textile has only top/bottom height levels. Any slight hem sway would be newly authored and must preserve the source transform, top contacts and fixed hardware; curved flutter is unsupported without new topology.",
+      "recommendation": "Candidate for further static composition/light exploration only; no motion or final-art approval."
+    },
+    {
+      "id": "nurse-station",
+      "sha256": "74ee89a9add892597bcb569ea6080e7c4c85b792768898648f7d91334b79ebf8",
+      "observed": "The original model has a warm wood front, pale high counter, lower side counter, rear cabinets and two monitor assemblies. The low front view mostly reads as a reception counter; the work-side view exposes the desk and monitors. The lowered surface is distinct from the tall front.",
+      "concerns": "The front counter occludes the monitors from low angles. Use an elevated work-side composition and verify that it remains distinct from a generic empty counter at the target display size. Source dimensions and the accessible name do not establish clinical compliance.",
+      "animation": "No clips or skins. All displays, counters and cabinets remain static; do not animate medical readings or add monitor sounds.",
+      "recommendation": "Candidate for further static composition exploration, retaining original geometry/materials and exact source provenance."
+    }
+  ],
+  "previously_acquired_review": {
+    "hospital_bed": "Re-inspected saved three-quarter, rear and side phone renders plus current Home preview. Raised backrest, split rails, blue panels and wheeled base are visible. No source animation or rig.",
+    "supply_cart": "Re-inspected saved front/rear phone renders. Three empty dark shelves, push handles and casters are visible. Do not invent medical supplies or source animation.",
+    "kenney_support": "Existing Home provenance was reused and copied sources/dependencies/licenses were hash-checked. Original pack preview images of bedside cabinet, chair, storage and wheelchair were inspected only as source references; they are not scene artwork."
+  },
+  "production_mutated": false,
+  "preserve": "All twenty Home preview files and exact Retail/Nursing theme metadata remain unchanged."
+}

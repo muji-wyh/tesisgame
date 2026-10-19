@@ -1,0 +1,1504 @@
+{
+  "schema": 1,
+  "status": "reviewed_image_integrated_pending_production_delivery_validation",
+  "independent_approval": {
+    "schema": 1,
+    "recorded_at": "2026-10-16T08:21:05.116Z",
+    "status": "accepted_exact_counter_image_and_scoped_adaptations_for_integration",
+    "reviewer": "Codex root independent AI source, physical-sense and minimum-card picture review",
+    "sense_id": "counter.service-surface.n",
+    "approved_brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+    "image_sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+    "review_receipt_raw_sha256": "c06028630c91070f11d42a3eb57349b294b9d9331f0881faf31fc6c00bce7fd0",
+    "evidence_files": [
+      {
+        "path": "README.md",
+        "bytes": 4241,
+        "sha256": "af4ffa538a881a10f37b5021af993a8381369f09c40573a025324321af7073ba"
+      },
+      {
+        "path": "candidate-broad-return/actual-word-card-contact-3x.png",
+        "bytes": 62823,
+        "sha256": "c6a21d935e41464d2c2b72fa35569977eec6049aae7b5cd2e2ad3681dba1af34"
+      },
+      {
+        "path": "candidate-broad-return/actual-word-card-contact.png",
+        "bytes": 44313,
+        "sha256": "77a3712500e0689df0e1c936987afa21e5e61ae99c712ad3c7691415dcfb6443"
+      },
+      {
+        "path": "candidate-broad-return/counter.png",
+        "bytes": 31426,
+        "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a"
+      },
+      {
+        "path": "candidate-broad-return/match-matched.png",
+        "bytes": 4094,
+        "sha256": "3e9c35d09a474c131b0c4ad5c7d16c4ae0947ec5303e4c100e19b4ec51af91ed"
+      },
+      {
+        "path": "candidate-broad-return/match-unmatched.png",
+        "bytes": 3612,
+        "sha256": "a0eab47555a0150a4d3b83848cec2cb44f3894fb6ad4837c0fa8fec6683498ee"
+      },
+      {
+        "path": "candidate-broad-return/memory-matched.png",
+        "bytes": 3831,
+        "sha256": "ab30bfeeeece8468293a4ec1439cc3d5e58837ece3930e157dc877c2dcd6f0b8"
+      },
+      {
+        "path": "candidate-broad-return/memory-unmatched.png",
+        "bytes": 3468,
+        "sha256": "84c0e81111513dcfed8279439b95a90a58034e6f87f0c7ee4ddb06d2e6aa70b5"
+      },
+      {
+        "path": "candidate-broad-return/render-r01.log",
+        "bytes": 577,
+        "sha256": "cb4770faa4ca51b99441f81b5aa20fdcece00a5cce0f9d42ae3547aa862a2c37"
+      },
+      {
+        "path": "candidate-broad-return/render-raw.png",
+        "bytes": 14266,
+        "sha256": "bfd48800767944fa4f3f60f6deff430de2b829439e88fc9cfaea43b3a6f87a83"
+      },
+      {
+        "path": "candidate-broad-return/report.json",
+        "bytes": 6624,
+        "sha256": "6f4f04b8cc27d97ff3d642b7b321610b2459735d1b8325af8ff232180e4821ef"
+      },
+      {
+        "path": "candidate-return/actual-word-card-contact-3x.png",
+        "bytes": 59962,
+        "sha256": "8e52d9a244243c0f6f4248ceb1d9ae2ef76e1c76f941f01b2361f9246c027028"
+      },
+      {
+        "path": "candidate-return/actual-word-card-contact.png",
+        "bytes": 42127,
+        "sha256": "ffaa0949045c2c66f82a641e6095d34ce159e70696a63a794bb79b67f355f549"
+      },
+      {
+        "path": "candidate-return/counter.png",
+        "bytes": 56236,
+        "sha256": "49a8374e755b02c2e9df315cacccae22701d9cdead28d6f292b223434b05769c"
+      },
+      {
+        "path": "candidate-return/match-matched.png",
+        "bytes": 3751,
+        "sha256": "f8a5327f59158d8929036e47cd2132d14f33e6f9503c639bf4c391a27dcc41b0"
+      },
+      {
+        "path": "candidate-return/match-unmatched.png",
+        "bytes": 3053,
+        "sha256": "c6dc15333b7cbb3c14888f23281961c764a1bd329bd9d909fec64eda51fe2aad"
+      },
+      {
+        "path": "candidate-return/memory-matched.png",
+        "bytes": 3317,
+        "sha256": "a95822b10403c37a80b8114021c11a5321e4ff34aca09e2672b61794a53a3e2f"
+      },
+      {
+        "path": "candidate-return/memory-unmatched.png",
+        "bytes": 2931,
+        "sha256": "5a9981ed399a4688e2cf15e2770e4dd61a4d7f733cda06785a960b25af0115b2"
+      },
+      {
+        "path": "candidate-return/render-r01.log",
+        "bytes": 571,
+        "sha256": "45df45a84e167239e959a67a660f091719e9af54dc885b7a1caacbdcb48f613e"
+      },
+      {
+        "path": "candidate-return/render-raw.png",
+        "bytes": 23240,
+        "sha256": "e8eb39d60187a557d076858904b66b88585bd3f604f8d9c64ff274ed06c7445c"
+      },
+      {
+        "path": "candidate-return/report.json",
+        "bytes": 6198,
+        "sha256": "2aa28b659ff7b396ce20f86448ff9183a712d4f8eddaf5f8098f4043c117fbb7"
+      },
+      {
+        "path": "candidate-straight/actual-word-card-contact-3x.png",
+        "bytes": 62224,
+        "sha256": "9c518bac8598af490e22a7826d066447e4d27c0e7a219f4cd9721cf247c20bad"
+      },
+      {
+        "path": "candidate-straight/actual-word-card-contact.png",
+        "bytes": 43981,
+        "sha256": "25a997e27cd6fb00427ec43b911fe0bb10de24e27e5d917a134dabc8c832c4c2"
+      },
+      {
+        "path": "candidate-straight/counter.png",
+        "bytes": 44603,
+        "sha256": "10e3b1d7846063c7c0c274ce534eaf6d02144efe2b2dc2b85be4ea60c2f4fe79"
+      },
+      {
+        "path": "candidate-straight/match-matched.png",
+        "bytes": 3945,
+        "sha256": "c9f7c199ce0b80dee1c62d075e5190c42e01b9454d55444b8cacf4621e10d7e0"
+      },
+      {
+        "path": "candidate-straight/match-unmatched.png",
+        "bytes": 3319,
+        "sha256": "e87c9a80c27db12034e69c452e4bcb749e32506c523d046d6cdb0db19dc3bd22"
+      },
+      {
+        "path": "candidate-straight/memory-matched.png",
+        "bytes": 3547,
+        "sha256": "fc755a13fd1a85dc2ba7a57525c5da488f0ab640c65024077e0d39d03c3c6791"
+      },
+      {
+        "path": "candidate-straight/memory-unmatched.png",
+        "bytes": 3150,
+        "sha256": "b17e21029197619cf6c0137659264e7fc464dce1ca92170bfdfd7b0e22895e4b"
+      },
+      {
+        "path": "candidate-straight/render-r01.log",
+        "bytes": 573,
+        "sha256": "a27f78c1aa2e95d68e184e8bbefb44bff9d7dcc0453b905f15c4b4e7f50aa8d8"
+      },
+      {
+        "path": "candidate-straight/render-raw.png",
+        "bytes": 17651,
+        "sha256": "88fff9f57906a406d70f4b982301f957b9a7c21df54f6de6421d73169aef256a"
+      },
+      {
+        "path": "candidate-straight/report.json",
+        "bytes": 5780,
+        "sha256": "92fbed0fb495f448bb7905dcd9eacc6899c361e837cceb15703b96548739337f"
+      },
+      {
+        "path": "image-integrity.json",
+        "bytes": 502,
+        "sha256": "8447fa08768111bdc67c489c9e521db3579f28f195bdadf1d060ec67d3b429be"
+      },
+      {
+        "path": "inspect-parcel-source.gd",
+        "bytes": 4206,
+        "sha256": "f20d0038fa5223fbbe559cd190075f452235dcf3c12dc5a0868b5ac65023ba97"
+      },
+      {
+        "path": "inspect-source.gd",
+        "bytes": 4102,
+        "sha256": "47438196f97c01a63fc827612489c10c99d2a6ed587fb75716fb414d46f096c2"
+      },
+      {
+        "path": "native-source-contact.png",
+        "bytes": 115427,
+        "sha256": "86259eff8be080fc23840f0b309be729af69c728b4b400082756755096b302a3"
+      },
+      {
+        "path": "package-review.cjs",
+        "bytes": 8458,
+        "sha256": "216b685321754fb1d682ccdf9e985c25a9cbe342ebddafd88e6d871ab2295d84"
+      },
+      {
+        "path": "parcel-source-record.json",
+        "bytes": 4267,
+        "sha256": "2c3ca62cb730c23c00ef93e04b284bef91fadc833fe59287150e903e3f7268de"
+      },
+      {
+        "path": "prepare-candidate-renderers.cjs",
+        "bytes": 5013,
+        "sha256": "4039f99bec2326e5cd77be524472570c63ee64dc251adbac8063ad03a693ce75"
+      },
+      {
+        "path": "render-broad-return.gd",
+        "bytes": 10030,
+        "sha256": "de0877f706bf8a2685d31d213695d8b20c11bfce8618bd71b4a091930a133ab7"
+      },
+      {
+        "path": "render-return.gd",
+        "bytes": 9940,
+        "sha256": "bf44fef9ff866b640f7f3cc73a7925cf4d18d6f831fcaec481269de232cb78d8"
+      },
+      {
+        "path": "render-straight.gd",
+        "bytes": 9885,
+        "sha256": "3a733640b8b6757fe28e6855179534d3510ccc66e7a7b2afcbdad7dced999328"
+      },
+      {
+        "path": "selected-pixel-hashes.json",
+        "bytes": 2517,
+        "sha256": "0ab666ad2a1332e61feacc7e0c444a29c1e58611edd746945e26343b9a8cea57"
+      },
+      {
+        "path": "source-inspection-parcel/box-front.png",
+        "bytes": 46917,
+        "sha256": "bb0624832fe0cefc05b3d46e5259b48ded1e2bc6f26b5a5d0e7840b67b19e0f2"
+      },
+      {
+        "path": "source-inspection-parcel/box-rear.png",
+        "bytes": 45735,
+        "sha256": "0779e174d9c1f0f9be29ff202d7f4adfc085e58c8b41503d65e6bdb189ccae9a"
+      },
+      {
+        "path": "source-inspection-parcel/kitchenBar-front.png",
+        "bytes": 6933,
+        "sha256": "7ac8880264f6d044a7d25836c1a08782f7e65d6783d04b8db4ef6b7d6fbec42a"
+      },
+      {
+        "path": "source-inspection-parcel/kitchenBar-rear.png",
+        "bytes": 7838,
+        "sha256": "ebe63010513aeb7e1b2339fd17bc538bf566c0903d30f12882781632a95df245"
+      },
+      {
+        "path": "source-inspection-parcel/render-r01.log",
+        "bytes": 597,
+        "sha256": "634b6fe5809e63e9e8fde0a5fba39b61578f58c7a5e76a7a9ba1408febf39a30"
+      },
+      {
+        "path": "source-inspection-parcel/report.json",
+        "bytes": 2038,
+        "sha256": "f92a668e47d9851735fa75e403fd9a0c9007470c84684b8141210fdda9036eb9"
+      },
+      {
+        "path": "source-inspection/cardboardBoxClosed-front.png",
+        "bytes": 6315,
+        "sha256": "a537a10c5a93a94473b535c4ee31c4f5ca616f22ffca18c8d5251c2b68f6a80a"
+      },
+      {
+        "path": "source-inspection/cardboardBoxClosed-rear.png",
+        "bytes": 7468,
+        "sha256": "05d07094c3e513e4c31432c07636f9e9cf1e61585f4ac90717b174d5ece116fa"
+      },
+      {
+        "path": "source-inspection/kitchenBar-front.png",
+        "bytes": 5339,
+        "sha256": "17c76c02cd6613db1cff2e8ff6542e3edeafb211c047c923e76bf14091996fb4"
+      },
+      {
+        "path": "source-inspection/kitchenBar-rear.png",
+        "bytes": 6115,
+        "sha256": "31e396a3619eb8b4eb475dacf462a7025d63cf506e5c6ae4192ad930e8a43b3b"
+      },
+      {
+        "path": "source-inspection/kitchenBarEnd-front.png",
+        "bytes": 4065,
+        "sha256": "c801d64836f47a49252f54e68964977cfc8806fbdd68acac5138d3fd2d50fa79"
+      },
+      {
+        "path": "source-inspection/kitchenBarEnd-rear.png",
+        "bytes": 4862,
+        "sha256": "0959a3be066b999d29859476a564e1690df434f19781c52e60a4c05754c5a6bb"
+      },
+      {
+        "path": "source-inspection/render-r01.log",
+        "bytes": 554,
+        "sha256": "8da382de8b44c2064de5e8e69feae8bbbb1566eb6d10d09670a882954b30465a"
+      },
+      {
+        "path": "source-inspection/report.json",
+        "bytes": 3117,
+        "sha256": "d7264fb3693231f2dd98493a9a48a60631de31c196a24e5d9054935ca415c303"
+      },
+      {
+        "path": "source-preview-contact.png",
+        "bytes": 20205,
+        "sha256": "f33fb5e54983444229de2e8ebeb238bcec0c5e297c8baef18b3095cbaeba552a"
+      },
+      {
+        "path": "source-record.json",
+        "bytes": 16021,
+        "sha256": "edb234925afd17d496484103e4823dfe4eb680b557ab356da5db6476205a242d"
+      },
+      {
+        "path": "source-web-review.json",
+        "bytes": 1051,
+        "sha256": "36b5d64665b3df7639422ccb52cc163b444b275c3682234229c4cd0101b6daf1"
+      },
+      {
+        "path": "source/License.txt",
+        "bytes": 614,
+        "sha256": "0ef3667d547d93dea1e3e47aa1c323eaef4913f25c0f2c2cfe31899f2ee134b7"
+      },
+      {
+        "path": "source/original/cardboardBoxClosed.glb",
+        "bytes": 5400,
+        "sha256": "4af079dca52960912764574950f0549ff2ae1224b3db1528718629473a2d5d81"
+      },
+      {
+        "path": "source/original/kitchenBar.glb",
+        "bytes": 6004,
+        "sha256": "792c3d31e60c8a8d8c7a28cf7d1efe004c5a601adc1b163a8799dde32c1b559d"
+      },
+      {
+        "path": "source/original/kitchenBarEnd.glb",
+        "bytes": 11084,
+        "sha256": "410c6d83defe4ed248a8ec32f81553b56c8b610372d02ecf0e547e3f52cdc0a1"
+      },
+      {
+        "path": "source/parcel/License.txt",
+        "bytes": 696,
+        "sha256": "c33b7f6453d134deae7b1b8493717d9ccfa754c25ab97f6de89b88f8fda19b00"
+      },
+      {
+        "path": "source/parcel/original/Textures/colormap.png",
+        "bytes": 12371,
+        "sha256": "f3622a03a20c6696065cae9cbe391351be873508af190c2ebd1d420c055787a5"
+      },
+      {
+        "path": "source/parcel/original/box.glb",
+        "bytes": 14108,
+        "sha256": "b773815c791d2708a2a70f1a9bb6d197d7211269ad96e273f9e364ea536c1b18"
+      },
+      {
+        "path": "source/parcel/previews/box.png",
+        "bytes": 2167,
+        "sha256": "09f15ddc812880968ec354f09c8cdd03adc95c407471ba5d3cf32734562c1d73"
+      },
+      {
+        "path": "source/previews/cardboardBoxClosed_NE.png",
+        "bytes": 2922,
+        "sha256": "77d272d27d6f04f9e076c8206343704df9b7b2cf17471157ec04f762fb2645c9"
+      },
+      {
+        "path": "source/previews/cardboardBoxClosed_NW.png",
+        "bytes": 2473,
+        "sha256": "a72e1005c17a5ae4ec541f85147f42f073a92b09cf35fe7589396554dad57717"
+      },
+      {
+        "path": "source/previews/cardboardBoxClosed_SE.png",
+        "bytes": 2629,
+        "sha256": "ba14375a0997a51318194b667616e4172ff88ffdeee68e1ee4cc84e4da552f25"
+      },
+      {
+        "path": "source/previews/cardboardBoxClosed_SW.png",
+        "bytes": 2837,
+        "sha256": "90e8bd70736bcaed62f233068d2b97c357e1d04229712ac682090c56dd5167f6"
+      },
+      {
+        "path": "source/previews/kitchenBarEnd_NE.png",
+        "bytes": 1514,
+        "sha256": "fdd50c40655ef4b35c1be562b54339728ee82e209cd81286d4452f68d84cce10"
+      },
+      {
+        "path": "source/previews/kitchenBarEnd_NW.png",
+        "bytes": 1798,
+        "sha256": "7c64accdc2f8c3a66ed0f4caa1cb23bd04a56e6257b121f1a27d2f174c59f2fc"
+      },
+      {
+        "path": "source/previews/kitchenBarEnd_SE.png",
+        "bytes": 1846,
+        "sha256": "45fe0fb31bcacace2454b08dfdbf72f0b862aa65961d25e2cead1fc0147c8dd1"
+      },
+      {
+        "path": "source/previews/kitchenBarEnd_SW.png",
+        "bytes": 1438,
+        "sha256": "516d4d4e7e69bd7c6e7a878ed97c15b1184951cfa9bf71d735e8456302a645b7"
+      },
+      {
+        "path": "source/previews/kitchenBar_NE.png",
+        "bytes": 4815,
+        "sha256": "e0c7b842670c963fbb8f3ef7bb2a7067c4ccf79d13f58e23079af6e4dc114192"
+      },
+      {
+        "path": "source/previews/kitchenBar_NW.png",
+        "bytes": 4896,
+        "sha256": "7410800762f2c1990a39aac4ac07afbe33e89befc89e44315c28c834e1a92b43"
+      },
+      {
+        "path": "source/previews/kitchenBar_SE.png",
+        "bytes": 4796,
+        "sha256": "3495f168a701c4f7d36817e0b1890d036d58fbce8298b60cedfba454a8be1fe0"
+      },
+      {
+        "path": "source/previews/kitchenBar_SW.png",
+        "bytes": 4955,
+        "sha256": "d414ebd7492f51fe7c527c8bf2e82583e77f43e399c9b4cf15e31c22f2c144e3"
+      }
+    ],
+    "render_dependencies": [
+      {
+        "path": "scripts/word_card.gd",
+        "sha256": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+      },
+      {
+        "path": "scripts/game_data.gd",
+        "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+      },
+      {
+        "path": "scripts/ui_style.gd",
+        "sha256": "5991ec95ba399174d3f207f6a16d3fdd4e614938093c1cb42a6a7768b5de9221"
+      },
+      {
+        "path": "scripts/professional_catalog.gd",
+        "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+      },
+      {
+        "path": "tools/run-godot.cjs",
+        "sha256": "a411f937acd304761e0ac9f6513f45e0f2a6aa886856e3b32a537a04ff5189be"
+      }
+    ],
+    "verified_evidence_files": 79,
+    "verified_original_and_retained_source_files": 20,
+    "source_findings": "The retained Kenney Furniture Kit 2.1 kitchenBar and Car Kit 3.1 sealed taped box match their acquired originals and both retained CC0 licenses. Complete source geometry, materials, textures and child transforms are preserved; four counter roots and one uniformly scaled parcel root form the scene. Neither source has animation clips.",
+    "visual_findings": [
+      "The broad pale raised surface, solid paneled front and L return identify a generic customer service counter. The staff-side recess is visible; the unobstructed foreground leaves room for customers.",
+      "The small sealed parcel supports the current example without dominating the counter or indicating payment, refunds or order handoff. No register, text, logo or payment credentials appear.",
+      "Root inspected the original counter rear view, sealed parcel front view, final 512x293 image and both native-scale and enlarged contacts covering all four actual minimum WordCard states.",
+      "At the real 126x72 and144x74 card sizes, the front and L silhouette remain readable under the matched alpha/badge. The near-white top loses some edge contrast against white, but the complete service surface remains identifiable."
+    ],
+    "accepted_adaptations": [
+      "Place and rotate complete counter model roots to form a broad three-section front and one return.",
+      "Uniformly scale and place one complete licensed sealed parcel model on the surface.",
+      "Use orthographic camera, restrained lighting, transparent rendering and content crop; preserve source geometry and materials."
+    ],
+    "production_delivery": "Pending exact approved-byte copy and production media-loader/crop/cache verification; scratch WordCard assignment is not production delivery.",
+    "exclusions": [
+      "Other counter service functions or accepted answers",
+      "Participant recognition study",
+      "Audio or acoustic mix",
+      "Morphology or domain review",
+      "Module or release readiness"
+    ]
+  },
+  "source_records": [
+    "docs/assets/sources/professional-retail-counter/source-record.json",
+    "docs/assets/sources/professional-retail-counter/parcel-source-record.json"
+  ],
+  "retained_evidence": "docs/assets/sources/professional-retail-counter",
+  "retained_files": [
+    {
+      "path": "README.md",
+      "bytes": 4241,
+      "sha256": "af4ffa538a881a10f37b5021af993a8381369f09c40573a025324321af7073ba",
+      "destination": "docs/assets/sources/professional-retail-counter/README.md",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-broad-return/actual-word-card-contact-3x.png",
+      "bytes": 62823,
+      "sha256": "c6a21d935e41464d2c2b72fa35569977eec6049aae7b5cd2e2ad3681dba1af34",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-broad-return/actual-word-card-contact-3x.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-broad-return/actual-word-card-contact.png",
+      "bytes": 44313,
+      "sha256": "77a3712500e0689df0e1c936987afa21e5e61ae99c712ad3c7691415dcfb6443",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-broad-return/actual-word-card-contact.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-broad-return/counter.png",
+      "bytes": 31426,
+      "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-broad-return/counter.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-broad-return/match-matched.png",
+      "bytes": 4094,
+      "sha256": "3e9c35d09a474c131b0c4ad5c7d16c4ae0947ec5303e4c100e19b4ec51af91ed",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-broad-return/match-matched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-broad-return/match-unmatched.png",
+      "bytes": 3612,
+      "sha256": "a0eab47555a0150a4d3b83848cec2cb44f3894fb6ad4837c0fa8fec6683498ee",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-broad-return/match-unmatched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-broad-return/memory-matched.png",
+      "bytes": 3831,
+      "sha256": "ab30bfeeeece8468293a4ec1439cc3d5e58837ece3930e157dc877c2dcd6f0b8",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-broad-return/memory-matched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-broad-return/memory-unmatched.png",
+      "bytes": 3468,
+      "sha256": "84c0e81111513dcfed8279439b95a90a58034e6f87f0c7ee4ddb06d2e6aa70b5",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-broad-return/memory-unmatched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-broad-return/render-r01.log",
+      "bytes": 577,
+      "sha256": "cb4770faa4ca51b99441f81b5aa20fdcece00a5cce0f9d42ae3547aa862a2c37",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-broad-return/render-r01.log",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-broad-return/render-raw.png",
+      "bytes": 14266,
+      "sha256": "bfd48800767944fa4f3f60f6deff430de2b829439e88fc9cfaea43b3a6f87a83",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-broad-return/render-raw.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-broad-return/report.json",
+      "bytes": 6624,
+      "sha256": "6f4f04b8cc27d97ff3d642b7b321610b2459735d1b8325af8ff232180e4821ef",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-broad-return/report.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-return/actual-word-card-contact-3x.png",
+      "bytes": 59962,
+      "sha256": "8e52d9a244243c0f6f4248ceb1d9ae2ef76e1c76f941f01b2361f9246c027028",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-return/actual-word-card-contact-3x.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-return/actual-word-card-contact.png",
+      "bytes": 42127,
+      "sha256": "ffaa0949045c2c66f82a641e6095d34ce159e70696a63a794bb79b67f355f549",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-return/actual-word-card-contact.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-return/counter.png",
+      "bytes": 56236,
+      "sha256": "49a8374e755b02c2e9df315cacccae22701d9cdead28d6f292b223434b05769c",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-return/counter.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-return/match-matched.png",
+      "bytes": 3751,
+      "sha256": "f8a5327f59158d8929036e47cd2132d14f33e6f9503c639bf4c391a27dcc41b0",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-return/match-matched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-return/match-unmatched.png",
+      "bytes": 3053,
+      "sha256": "c6dc15333b7cbb3c14888f23281961c764a1bd329bd9d909fec64eda51fe2aad",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-return/match-unmatched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-return/memory-matched.png",
+      "bytes": 3317,
+      "sha256": "a95822b10403c37a80b8114021c11a5321e4ff34aca09e2672b61794a53a3e2f",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-return/memory-matched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-return/memory-unmatched.png",
+      "bytes": 2931,
+      "sha256": "5a9981ed399a4688e2cf15e2770e4dd61a4d7f733cda06785a960b25af0115b2",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-return/memory-unmatched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-return/render-r01.log",
+      "bytes": 571,
+      "sha256": "45df45a84e167239e959a67a660f091719e9af54dc885b7a1caacbdcb48f613e",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-return/render-r01.log",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-return/render-raw.png",
+      "bytes": 23240,
+      "sha256": "e8eb39d60187a557d076858904b66b88585bd3f604f8d9c64ff274ed06c7445c",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-return/render-raw.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-return/report.json",
+      "bytes": 6198,
+      "sha256": "2aa28b659ff7b396ce20f86448ff9183a712d4f8eddaf5f8098f4043c117fbb7",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-return/report.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-straight/actual-word-card-contact-3x.png",
+      "bytes": 62224,
+      "sha256": "9c518bac8598af490e22a7826d066447e4d27c0e7a219f4cd9721cf247c20bad",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-straight/actual-word-card-contact-3x.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-straight/actual-word-card-contact.png",
+      "bytes": 43981,
+      "sha256": "25a997e27cd6fb00427ec43b911fe0bb10de24e27e5d917a134dabc8c832c4c2",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-straight/actual-word-card-contact.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-straight/counter.png",
+      "bytes": 44603,
+      "sha256": "10e3b1d7846063c7c0c274ce534eaf6d02144efe2b2dc2b85be4ea60c2f4fe79",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-straight/counter.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-straight/match-matched.png",
+      "bytes": 3945,
+      "sha256": "c9f7c199ce0b80dee1c62d075e5190c42e01b9454d55444b8cacf4621e10d7e0",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-straight/match-matched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-straight/match-unmatched.png",
+      "bytes": 3319,
+      "sha256": "e87c9a80c27db12034e69c452e4bcb749e32506c523d046d6cdb0db19dc3bd22",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-straight/match-unmatched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-straight/memory-matched.png",
+      "bytes": 3547,
+      "sha256": "fc755a13fd1a85dc2ba7a57525c5da488f0ab640c65024077e0d39d03c3c6791",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-straight/memory-matched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-straight/memory-unmatched.png",
+      "bytes": 3150,
+      "sha256": "b17e21029197619cf6c0137659264e7fc464dce1ca92170bfdfd7b0e22895e4b",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-straight/memory-unmatched.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-straight/render-r01.log",
+      "bytes": 573,
+      "sha256": "a27f78c1aa2e95d68e184e8bbefb44bff9d7dcc0453b905f15c4b4e7f50aa8d8",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-straight/render-r01.log",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-straight/render-raw.png",
+      "bytes": 17651,
+      "sha256": "88fff9f57906a406d70f4b982301f957b9a7c21df54f6de6421d73169aef256a",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-straight/render-raw.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "candidate-straight/report.json",
+      "bytes": 5780,
+      "sha256": "92fbed0fb495f448bb7905dcd9eacc6899c361e837cceb15703b96548739337f",
+      "destination": "docs/assets/sources/professional-retail-counter/candidate-straight/report.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "image-integrity.json",
+      "bytes": 502,
+      "sha256": "8447fa08768111bdc67c489c9e521db3579f28f195bdadf1d060ec67d3b429be",
+      "destination": "docs/assets/sources/professional-retail-counter/image-integrity.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "inspect-parcel-source.gd",
+      "bytes": 4206,
+      "sha256": "f20d0038fa5223fbbe559cd190075f452235dcf3c12dc5a0868b5ac65023ba97",
+      "destination": "docs/assets/sources/professional-retail-counter/inspect-parcel-source.gd",
+      "policy": "immutable"
+    },
+    {
+      "path": "inspect-source.gd",
+      "bytes": 4102,
+      "sha256": "47438196f97c01a63fc827612489c10c99d2a6ed587fb75716fb414d46f096c2",
+      "destination": "docs/assets/sources/professional-retail-counter/inspect-source.gd",
+      "policy": "immutable"
+    },
+    {
+      "path": "native-source-contact.png",
+      "bytes": 115427,
+      "sha256": "86259eff8be080fc23840f0b309be729af69c728b4b400082756755096b302a3",
+      "destination": "docs/assets/sources/professional-retail-counter/native-source-contact.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "package-review.cjs",
+      "bytes": 8458,
+      "sha256": "216b685321754fb1d682ccdf9e985c25a9cbe342ebddafd88e6d871ab2295d84",
+      "destination": "docs/assets/sources/professional-retail-counter/package-review.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "parcel-source-record.json",
+      "bytes": 4267,
+      "sha256": "2c3ca62cb730c23c00ef93e04b284bef91fadc833fe59287150e903e3f7268de",
+      "destination": "docs/assets/sources/professional-retail-counter/parcel-source-record.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "prepare-candidate-renderers.cjs",
+      "bytes": 5013,
+      "sha256": "4039f99bec2326e5cd77be524472570c63ee64dc251adbac8063ad03a693ce75",
+      "destination": "docs/assets/sources/professional-retail-counter/prepare-candidate-renderers.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "render-broad-return.gd",
+      "bytes": 10030,
+      "sha256": "de0877f706bf8a2685d31d213695d8b20c11bfce8618bd71b4a091930a133ab7",
+      "destination": "docs/assets/sources/professional-retail-counter/render-broad-return.gd",
+      "policy": "immutable"
+    },
+    {
+      "path": "render-return.gd",
+      "bytes": 9940,
+      "sha256": "bf44fef9ff866b640f7f3cc73a7925cf4d18d6f831fcaec481269de232cb78d8",
+      "destination": "docs/assets/sources/professional-retail-counter/render-return.gd",
+      "policy": "immutable"
+    },
+    {
+      "path": "render-straight.gd",
+      "bytes": 9885,
+      "sha256": "3a733640b8b6757fe28e6855179534d3510ccc66e7a7b2afcbdad7dced999328",
+      "destination": "docs/assets/sources/professional-retail-counter/render-straight.gd",
+      "policy": "immutable"
+    },
+    {
+      "path": "selected-pixel-hashes.json",
+      "bytes": 2517,
+      "sha256": "0ab666ad2a1332e61feacc7e0c444a29c1e58611edd746945e26343b9a8cea57",
+      "destination": "docs/assets/sources/professional-retail-counter/selected-pixel-hashes.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection-parcel/box-front.png",
+      "bytes": 46917,
+      "sha256": "bb0624832fe0cefc05b3d46e5259b48ded1e2bc6f26b5a5d0e7840b67b19e0f2",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection-parcel/box-front.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection-parcel/box-rear.png",
+      "bytes": 45735,
+      "sha256": "0779e174d9c1f0f9be29ff202d7f4adfc085e58c8b41503d65e6bdb189ccae9a",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection-parcel/box-rear.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection-parcel/kitchenBar-front.png",
+      "bytes": 6933,
+      "sha256": "7ac8880264f6d044a7d25836c1a08782f7e65d6783d04b8db4ef6b7d6fbec42a",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection-parcel/kitchenBar-front.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection-parcel/kitchenBar-rear.png",
+      "bytes": 7838,
+      "sha256": "ebe63010513aeb7e1b2339fd17bc538bf566c0903d30f12882781632a95df245",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection-parcel/kitchenBar-rear.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection-parcel/render-r01.log",
+      "bytes": 597,
+      "sha256": "634b6fe5809e63e9e8fde0a5fba39b61578f58c7a5e76a7a9ba1408febf39a30",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection-parcel/render-r01.log",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection-parcel/report.json",
+      "bytes": 2038,
+      "sha256": "f92a668e47d9851735fa75e403fd9a0c9007470c84684b8141210fdda9036eb9",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection-parcel/report.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection/cardboardBoxClosed-front.png",
+      "bytes": 6315,
+      "sha256": "a537a10c5a93a94473b535c4ee31c4f5ca616f22ffca18c8d5251c2b68f6a80a",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection/cardboardBoxClosed-front.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection/cardboardBoxClosed-rear.png",
+      "bytes": 7468,
+      "sha256": "05d07094c3e513e4c31432c07636f9e9cf1e61585f4ac90717b174d5ece116fa",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection/cardboardBoxClosed-rear.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection/kitchenBar-front.png",
+      "bytes": 5339,
+      "sha256": "17c76c02cd6613db1cff2e8ff6542e3edeafb211c047c923e76bf14091996fb4",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection/kitchenBar-front.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection/kitchenBar-rear.png",
+      "bytes": 6115,
+      "sha256": "31e396a3619eb8b4eb475dacf462a7025d63cf506e5c6ae4192ad930e8a43b3b",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection/kitchenBar-rear.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection/kitchenBarEnd-front.png",
+      "bytes": 4065,
+      "sha256": "c801d64836f47a49252f54e68964977cfc8806fbdd68acac5138d3fd2d50fa79",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection/kitchenBarEnd-front.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection/kitchenBarEnd-rear.png",
+      "bytes": 4862,
+      "sha256": "0959a3be066b999d29859476a564e1690df434f19781c52e60a4c05754c5a6bb",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection/kitchenBarEnd-rear.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection/render-r01.log",
+      "bytes": 554,
+      "sha256": "8da382de8b44c2064de5e8e69feae8bbbb1566eb6d10d09670a882954b30465a",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection/render-r01.log",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-inspection/report.json",
+      "bytes": 3117,
+      "sha256": "d7264fb3693231f2dd98493a9a48a60631de31c196a24e5d9054935ca415c303",
+      "destination": "docs/assets/sources/professional-retail-counter/source-inspection/report.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-preview-contact.png",
+      "bytes": 20205,
+      "sha256": "f33fb5e54983444229de2e8ebeb238bcec0c5e297c8baef18b3095cbaeba552a",
+      "destination": "docs/assets/sources/professional-retail-counter/source-preview-contact.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-record.json",
+      "bytes": 16021,
+      "sha256": "edb234925afd17d496484103e4823dfe4eb680b557ab356da5db6476205a242d",
+      "destination": "docs/assets/sources/professional-retail-counter/source-record.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "source-web-review.json",
+      "bytes": 1051,
+      "sha256": "36b5d64665b3df7639422ccb52cc163b444b275c3682234229c4cd0101b6daf1",
+      "destination": "docs/assets/sources/professional-retail-counter/source-web-review.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/License.txt",
+      "bytes": 614,
+      "sha256": "0ef3667d547d93dea1e3e47aa1c323eaef4913f25c0f2c2cfe31899f2ee134b7",
+      "destination": "docs/assets/sources/professional-retail-counter/source/License.txt",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/original/cardboardBoxClosed.glb",
+      "bytes": 5400,
+      "sha256": "4af079dca52960912764574950f0549ff2ae1224b3db1528718629473a2d5d81",
+      "destination": "docs/assets/sources/professional-retail-counter/source/original/cardboardBoxClosed.glb",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/original/kitchenBar.glb",
+      "bytes": 6004,
+      "sha256": "792c3d31e60c8a8d8c7a28cf7d1efe004c5a601adc1b163a8799dde32c1b559d",
+      "destination": "docs/assets/sources/professional-retail-counter/source/original/kitchenBar.glb",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/original/kitchenBarEnd.glb",
+      "bytes": 11084,
+      "sha256": "410c6d83defe4ed248a8ec32f81553b56c8b610372d02ecf0e547e3f52cdc0a1",
+      "destination": "docs/assets/sources/professional-retail-counter/source/original/kitchenBarEnd.glb",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/parcel/License.txt",
+      "bytes": 696,
+      "sha256": "c33b7f6453d134deae7b1b8493717d9ccfa754c25ab97f6de89b88f8fda19b00",
+      "destination": "docs/assets/sources/professional-retail-counter/source/parcel/License.txt",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/parcel/original/Textures/colormap.png",
+      "bytes": 12371,
+      "sha256": "f3622a03a20c6696065cae9cbe391351be873508af190c2ebd1d420c055787a5",
+      "destination": "docs/assets/sources/professional-retail-counter/source/parcel/original/Textures/colormap.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/parcel/original/box.glb",
+      "bytes": 14108,
+      "sha256": "b773815c791d2708a2a70f1a9bb6d197d7211269ad96e273f9e364ea536c1b18",
+      "destination": "docs/assets/sources/professional-retail-counter/source/parcel/original/box.glb",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/parcel/previews/box.png",
+      "bytes": 2167,
+      "sha256": "09f15ddc812880968ec354f09c8cdd03adc95c407471ba5d3cf32734562c1d73",
+      "destination": "docs/assets/sources/professional-retail-counter/source/parcel/previews/box.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/cardboardBoxClosed_NE.png",
+      "bytes": 2922,
+      "sha256": "77d272d27d6f04f9e076c8206343704df9b7b2cf17471157ec04f762fb2645c9",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/cardboardBoxClosed_NE.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/cardboardBoxClosed_NW.png",
+      "bytes": 2473,
+      "sha256": "a72e1005c17a5ae4ec541f85147f42f073a92b09cf35fe7589396554dad57717",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/cardboardBoxClosed_NW.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/cardboardBoxClosed_SE.png",
+      "bytes": 2629,
+      "sha256": "ba14375a0997a51318194b667616e4172ff88ffdeee68e1ee4cc84e4da552f25",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/cardboardBoxClosed_SE.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/cardboardBoxClosed_SW.png",
+      "bytes": 2837,
+      "sha256": "90e8bd70736bcaed62f233068d2b97c357e1d04229712ac682090c56dd5167f6",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/cardboardBoxClosed_SW.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/kitchenBarEnd_NE.png",
+      "bytes": 1514,
+      "sha256": "fdd50c40655ef4b35c1be562b54339728ee82e209cd81286d4452f68d84cce10",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/kitchenBarEnd_NE.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/kitchenBarEnd_NW.png",
+      "bytes": 1798,
+      "sha256": "7c64accdc2f8c3a66ed0f4caa1cb23bd04a56e6257b121f1a27d2f174c59f2fc",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/kitchenBarEnd_NW.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/kitchenBarEnd_SE.png",
+      "bytes": 1846,
+      "sha256": "45fe0fb31bcacace2454b08dfdbf72f0b862aa65961d25e2cead1fc0147c8dd1",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/kitchenBarEnd_SE.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/kitchenBarEnd_SW.png",
+      "bytes": 1438,
+      "sha256": "516d4d4e7e69bd7c6e7a878ed97c15b1184951cfa9bf71d735e8456302a645b7",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/kitchenBarEnd_SW.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/kitchenBar_NE.png",
+      "bytes": 4815,
+      "sha256": "e0c7b842670c963fbb8f3ef7bb2a7067c4ccf79d13f58e23079af6e4dc114192",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/kitchenBar_NE.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/kitchenBar_NW.png",
+      "bytes": 4896,
+      "sha256": "7410800762f2c1990a39aac4ac07afbe33e89befc89e44315c28c834e1a92b43",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/kitchenBar_NW.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/kitchenBar_SE.png",
+      "bytes": 4796,
+      "sha256": "3495f168a701c4f7d36817e0b1890d036d58fbce8298b60cedfba454a8be1fe0",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/kitchenBar_SE.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "source/previews/kitchenBar_SW.png",
+      "bytes": 4955,
+      "sha256": "d414ebd7492f51fe7c527c8bf2e82583e77f43e399c9b4cf15e31c22f2c144e3",
+      "destination": "docs/assets/sources/professional-retail-counter/source/previews/kitchenBar_SW.png",
+      "policy": "immutable"
+    },
+    {
+      "path": "review-receipt.json",
+      "bytes": 29029,
+      "sha256": "c06028630c91070f11d42a3eb57349b294b9d9331f0881faf31fc6c00bce7fd0",
+      "destination": "docs/assets/sources/professional-retail-counter/review-receipt.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "root-image-review.json",
+      "bytes": 16972,
+      "sha256": "ea82b3f6d34b192268bda35332f749870d18608201e22a87e41a5288739bec88",
+      "destination": "docs/assets/sources/professional-retail-counter/root-image-review.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r01/delivery-lib.cjs",
+      "bytes": 13865,
+      "sha256": "3804509f911cab166b684b4d49d718645e11f6ad8ba56790285f4a696c7659ff",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r01/delivery-lib.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r01/bind-current-baseline.cjs",
+      "bytes": 4424,
+      "sha256": "56feef12ae796b5b65c47c912763604f9bf2b50875336ca4358909acffb2f92c",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r01/bind-current-baseline.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r01/integrate-reviewed.cjs",
+      "bytes": 7830,
+      "sha256": "9ae9d52973ef739529d0edbf7626591af9dcfd1b8f17fffbf625d318dce2c0f2",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r01/integrate-reviewed.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r01/HANDOFF.md",
+      "bytes": 3975,
+      "sha256": "77af31dcf4b283c8d5e0c1ebe11abdd20fbb4a524fda003cc01cf106e5b6b95f",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r01/HANDOFF.md",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r01/source-doc-draft.md",
+      "bytes": 4114,
+      "sha256": "a775937b650c9c30965a64190bb63531949e5f31b3f85e0976fbcfb1ae473fc0",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r01/source-doc-draft.md",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r01/preparation-receipt.json",
+      "bytes": 17009,
+      "sha256": "4d47646097a23f4d2a8fe49e6755e7e2847d0fb086931f5cb75a29721400723f",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r01/preparation-receipt.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/delivery-lib.cjs",
+      "bytes": 18130,
+      "sha256": "c89fd75564499596030a704e976c8c78aceab291c2b2ba340faab5f4688e0f69",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/delivery-lib.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/bind-current-baseline.cjs",
+      "bytes": 5973,
+      "sha256": "d03f2fa865330e1b88a5c3b6d3f98285ec0eaee375fdb15d0b36eef10d7b86c8",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/bind-current-baseline.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/integrate-reviewed.cjs",
+      "bytes": 13429,
+      "sha256": "f467192789b149b5ff5e7520defff3e27fec2601d8204e86e5df9d8deeef5935",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/integrate-reviewed.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/transaction-plan.cjs",
+      "bytes": 4251,
+      "sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/transaction-plan.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/guarded-transaction.cjs",
+      "bytes": 21544,
+      "sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/guarded-transaction.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/helper-origin.json",
+      "bytes": 848,
+      "sha256": "76c0acf0ad2f0f8db3a5b0e50be2da0ba1cfd502d8c2d4f65f5541f065be0dbb",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/helper-origin.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/adapter-tests.cjs",
+      "bytes": 9411,
+      "sha256": "c0c66ea977ea4468c4ade8b3c7b6de6e1e239f4bbf937ead77a85dc618338da0",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/adapter-tests.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/persisted-test-transforms.cjs",
+      "bytes": 7007,
+      "sha256": "541b964851e14fe2014b03c7a9698398c9eb05770a0c32915affe67c8a0a2b93",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/persisted-test-transforms.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/update-persisted-tests.cjs",
+      "bytes": 5037,
+      "sha256": "1cc0c9669be17fc8cf8d307a8968a59aba5f9bbacd09731598ec38458af02229",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/update-persisted-tests.cjs",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/HANDOFF.md",
+      "bytes": 6756,
+      "sha256": "48ed5e5236bf691df77387635b5046b74e5e691943157315cd6e561df556552b",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/HANDOFF.md",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/source-doc-draft.md",
+      "bytes": 4114,
+      "sha256": "a775937b650c9c30965a64190bb63531949e5f31b3f85e0976fbcfb1ae473fc0",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/source-doc-draft.md",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/v1-risk-review.json",
+      "bytes": 2838,
+      "sha256": "3948b3d95b7cd2c4c26a9952047399535e85834c363d28245c1637ccfd6ecf27",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/v1-risk-review.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/preparation-receipt.json",
+      "bytes": 23462,
+      "sha256": "622f2614e970ba5dfb662df967fade7420c7f94a6dc873fe00536cb3d71602a6",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/preparation-receipt.json",
+      "policy": "immutable"
+    },
+    {
+      "path": "delivery-r02/preimages.json",
+      "bytes": 644001,
+      "sha256": "e9a081b4478cd4c8bc2f9e00bce790f5153fe82f03bfb7f2cda8454e832d72ff",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/preimages.json",
+      "policy": "create"
+    },
+    {
+      "path": "delivery-r02/binding-receipt.json",
+      "bytes": 730,
+      "sha256": "2be8228970d09e825bdaf1a5ae92370c54517d9680bfde387d8d2dbc0143f56f",
+      "destination": "docs/assets/sources/professional-retail-counter/delivery-r02/binding-receipt.json",
+      "policy": "create"
+    }
+  ],
+  "resource": {
+    "id": "sha256:c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+    "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+    "path": "professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png",
+    "kind": "image",
+    "format": "png",
+    "compressed_bytes": 31426,
+    "decoded_bytes": 1200128,
+    "width": 512,
+    "height": 293
+  },
+  "patches": [
+    {
+      "id": "counter.service-surface.n",
+      "origin": "res://data/professional/lexemes/retail-pilot.json",
+      "before": {
+        "id": "counter.service-surface.n",
+        "text": "counter",
+        "display_text": "counter",
+        "pos": "noun",
+        "definition": "A raised work surface used to serve customers.",
+        "example": "Please place the parcel on the counter.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "counter"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.counter.service-surface.n.morphology.retail03.proposal.v2",
+          "lexeme_id": "counter.service-surface.n",
+          "text": "counter",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.counter",
+              "canonical": "counter",
+              "type": "atomic",
+              "surface": "counter",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+            "notes": "Deliberate current-base teaching depth after examining the service-table derivation through counting plus a place/object formative descended from -atorium. The source distinguishes this from count plus agent -er. This scope preserves the modern counter stem and does not deny that history or manufacture a count/person-er graph. Atomic collection is exposure only, not composition mastery. The same service-surface sense is retained in Retail and Food Service; no counting-person or opposing-prefix sense is included.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/counter"
+            ],
+            "source_record_ids": [
+              "retail03-morph-mw-counter"
+            ],
+            "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+            "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "retail03-collins-counter",
+            "status": "verified",
+            "scope": "Selected passage consulted: COBUILD countable noun sense 1. The customer-service noun denotes the shop or cafe serving surface, not the opposing prefix or a counting person. Selected noun sense only; no artwork, recordings, or historical analysis approved. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the customer-serving surface noun. The surface is shared across different store functions; it does not specify payment, pickup, or returns. Retain counter; a desk, table, or checkout is not automatically the same sense. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-media production remain pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "after": {
+        "id": "counter.service-surface.n",
+        "text": "counter",
+        "display_text": "counter",
+        "pos": "noun",
+        "definition": "A raised work surface used to serve customers.",
+        "example": "Please place the parcel on the counter.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "counter"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "integrated",
+            "path": "res://professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png",
+            "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+            "source": "Kenney Furniture Kit 2.1: https://kenney.nl/assets/furniture-kit; Kenney Car Kit 3.1: https://kenney.nl/assets/car-kit",
+            "creator": "Kenney",
+            "license": "CC0 1.0",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root independent AI source, physical-sense and minimum-card picture review",
+              "reviewed_at": "2026-10-16"
+            },
+            "brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [
+              "Four complete acquired Furniture Kit 2.1 kitchenBar models form a broad raised surface with a solid front and a perpendicular staff-side return. Original geometry, materials, textures and source child transforms are preserved; only complete model roots are placed and rotated, then the common assembly is recentered.",
+              "One complete acquired Car Kit 3.1 box model supplies the small sealed parcel. Its original geometry, materials, texture and child transforms are preserved; the root is uniformly scaled to 0.16, rotated -10 degrees and placed at the countertop height of 0.42. No added register, refund receipt, printed label or service-function prop is used.",
+              "The orthographic camera is at [-1.1,1.8,4], aimed at [0,0.24,0], size 1.55. Ambient energy 0.18 and directional energy 0.38 illuminate a transparent 768 by 768 render. The complete alpha bounds remain within the frame; a 16-pixel margin and proportional Lanczos downscale produce 512 by 293.",
+              "Independent root review covers the exact broad-return image and actual Match 126 by 72 and Memory 144 by 74 cards, including the real badge and matched alpha. The pale top has reduced contour contrast on white and the badge overlaps the far-right return, while the solid front and staff-side recess remain readable. This scoped AI picture review is not a participant recognition study, service-function classification, domain approval or module-readiness claim."
+            ]
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.counter.service-surface.n.morphology.retail03.proposal.v2",
+          "lexeme_id": "counter.service-surface.n",
+          "text": "counter",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.counter",
+              "canonical": "counter",
+              "type": "atomic",
+              "surface": "counter",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+            "notes": "Deliberate current-base teaching depth after examining the service-table derivation through counting plus a place/object formative descended from -atorium. The source distinguishes this from count plus agent -er. This scope preserves the modern counter stem and does not deny that history or manufacture a count/person-er graph. Atomic collection is exposure only, not composition mastery. The same service-surface sense is retained in Retail and Food Service; no counting-person or opposing-prefix sense is included.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/counter"
+            ],
+            "source_record_ids": [
+              "retail03-morph-mw-counter"
+            ],
+            "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+            "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "retail03-collins-counter",
+            "status": "verified",
+            "scope": "Selected passage consulted: COBUILD countable noun sense 1. The customer-service noun denotes the shop or cafe serving surface, not the opposing prefix or a counting person. Selected noun sense only; no artwork, recordings, or historical analysis approved. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the customer-serving surface noun. The surface is shared across different store functions; it does not specify payment, pickup, or returns. Retain counter; a desk, table, or checkout is not automatically the same sense. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The counter image has completed scoped physical-sense picture review and integration; word audio remains pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "before_sha256": "2c315d1471ea04a398b9a643ba6836c01d1a22aaa5512a9ac3441299cef75604",
+      "protected_fields_sha256": "fe8b3c65c3b8391f7024d59d9b3fb37a2d195e1c1814a16ef9a8b087d2dbd9cd"
+    }
+  ],
+  "before_registry_sha256": "44555c97ae8aba9730248d0182723a5543dcfbb765dbeb26d0cf030499b79ffd",
+  "after_registry_sha256": "284918768ad2df30585d0efa3ab099a1bfa58ee22d9fc71afa00ae334f81042d",
+  "integration_guards": {
+    "serializer_raw_sha256": "f467192789b149b5ff5e7520defff3e27fec2601d8204e86e5df9d8deeef5935",
+    "delivery_library_raw_sha256": "c89fd75564499596030a704e976c8c78aceab291c2b2ba340faab5f4688e0f69",
+    "preimages_raw_sha256": "e9a081b4478cd4c8bc2f9e00bce790f5153fe82f03bfb7f2cda8454e832d72ff",
+    "binding_receipt_raw_sha256": "2be8228970d09e825bdaf1a5ae92370c54517d9680bfde387d8d2dbc0143f56f",
+    "baseline_registry_sha256": "44555c97ae8aba9730248d0182723a5543dcfbb765dbeb26d0cf030499b79ffd",
+    "validation": {
+      "path": "build/professional-english/continuation-validation-r11.json",
+      "raw_sha256": "9e3f5c75e0d021f887d1ca5f3b891ebe65b03fc2fa74aaedc21454f563652932",
+      "measured_input_count": 650
+    },
+    "fifth10": {
+      "provenance_path": "data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json",
+      "provenance_raw_sha256": "14c6cf6d25085f8df8efdf96ad4a9be3699e14016f00b5ddb58303d2b0eac4d3",
+      "receipt_path": "build/professional-english/retail-module03-morphology-review/fifth10/integration-receipt.json",
+      "receipt_raw_sha256": "b5e820be9546ae1301f0253a522c63e4df40dd6dff8bcaa3b9cfff07303cf276"
+    },
+    "transaction_path": "build/professional-english/transactions/counter-image-delivery-r02",
+    "helper": {
+      "source": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/guarded-transaction.cjs",
+      "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "validation": {
+        "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+        "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+        "tests": 20,
+        "pass": 20,
+        "fail": 0
+      },
+      "adapter_contract": "Synchronous commitTransaction/recoverTransaction/describePlan; exact absolute paths; shared parent build/professional-english/transactions; recovery binds expectedPlanSha256.",
+      "boundaries": "Process-interruption recovery and guarded rollback; not multi-file atomic visibility or power-loss durability."
+    }
+  },
+  "audit": {
+    "errors": 0,
+    "warnings": 29605,
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 62,
+      "morphology_authored": 4039,
+      "morphology_reviewed": 59,
+      "integrated_word_images": 5,
+      "integrated_word_audio": 8,
+      "release_ready": false
+    }
+  }
+}

@@ -1,0 +1,1382 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hr_recruitment.module04.01",
+      "text": "The recruiter will explain the next stage to each applicant and candidate.",
+      "meaning": "Identify who communicates with people in the hiring process.",
+      "context": "Discussing candidate communication responsibilities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "recruiter",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "explain",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "next",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "stage",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "each",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "applicant",
+          "start": 50,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "candidate",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "recruiter.person-who-finds-and-engages-job-candidates.n",
+        "applicant.person-who-has-applied-for-role-or-opportunity.n",
+        "candidate.person-being-considered-for-role.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module04.02",
+      "text": "The intern and apprentice will meet the trainer tomorrow.",
+      "meaning": "Explain a planned introduction to training support.",
+      "context": "Coordinating workplace learning.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "intern",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "apprentice",
+          "start": 15,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "will",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "meet",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "trainer",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "tomorrow",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": ".",
+          "start": 56,
+          "end": 57
+        }
+      ],
+      "focus_lexeme_ids": [
+        "intern.person-in-short-term-work-learning-placement.n",
+        "apprentice.person-learning-occupation-through-structured-work-and-training.n",
+        "trainer.person-who-teaches-work-related-skills-or-knowledge.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module04.03",
+      "text": "The facilitator will introduce the mentor and mentee.",
+      "meaning": "Explain the roles joining a development discussion.",
+      "context": "Opening a mentoring program meeting.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "facilitator",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "introduce",
+          "start": 21,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "mentor",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "mentee",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": ".",
+          "start": 52,
+          "end": 53
+        }
+      ],
+      "focus_lexeme_ids": [
+        "facilitator.person-helping-group-discuss-or-work-together.n",
+        "mentor.experienced-person-supporting-anothers-development.n",
+        "mentee.person-supported-by-mentor.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module04.04",
+      "text": "The interviewer and hiring manager will discuss the vacancy.",
+      "meaning": "Identify who will discuss an unfilled role.",
+      "context": "Preparing a recruitment discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "interviewer",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "hiring",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "manager",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "will",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "discuss",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "vacancy",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": ".",
+          "start": 59,
+          "end": 60
+        }
+      ],
+      "focus_lexeme_ids": [
+        "interviewer.person-who-asks-questions-in-interview.n",
+        "hiring-manager.manager-involved-in-filling-position-in-their-team.n",
+        "vacancy.unfilled-job-position.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module04.05",
+      "text": "The workforce report gives the headcount for each department.",
+      "meaning": "Explain what a staffing report measures.",
+      "context": "Reviewing the scope of a workforce report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "workforce",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "report",
+          "start": 14,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "gives",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "headcount",
+          "start": 31,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "each",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "department",
+          "start": 50,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": ".",
+          "start": 60,
+          "end": 61
+        }
+      ],
+      "focus_lexeme_ids": [
+        "workforce.people-working-for-organization-or-sector.n",
+        "headcount.number-of-people-in-defined-workforce-group.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module04.06",
+      "text": "Which qualification, skill, competency, and work experience are relevant to this role?",
+      "meaning": "Ask which capabilities and evidence the role actually needs.",
+      "context": "Clarifying role-related criteria.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Which",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "qualification",
+          "start": 6,
+          "end": 19
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 19,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "skill",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "competency",
+          "start": 28,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "work",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "experience",
+          "start": 49,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "are",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "relevant",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 73,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "this",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "role",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "?",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "qualification.credential-or-condition-showing-suitability.n",
+        "skill.ability-to-perform-particular-task.n",
+        "competency.combination-of-capabilities-applied-to-work-standard.n",
+        "work-experience.knowledge-or-practice-gained-through-work.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module04.07",
+      "text": "Could you explain the salary, benefit, and allowance, and how the bonus and commission are described?",
+      "meaning": "Request clarification of separate employment reward terms.",
+      "context": "Reading proposed employment information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "explain",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "salary",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "benefit",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "allowance",
+          "start": 43,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "how",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 14,
+          "text": "bonus",
+          "start": 66,
+          "end": 71
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "commission",
+          "start": 76,
+          "end": 86
+        },
+        {
+          "index": 17,
+          "text": "are",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 18,
+          "text": "described",
+          "start": 91,
+          "end": 100
+        },
+        {
+          "index": 19,
+          "text": "?",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "salary.regular-fixed-payment-for-employment.n",
+        "benefit.employment-provision-in-addition-to-pay.n",
+        "allowance.payment-for-specified-purpose-or-cost.n",
+        "bonus.additional-payment-under-specified-arrangement.n",
+        "commission.payment-linked-to-sales-or-other-agreed-results.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module04.08",
+      "text": "Who can explain probation, the pension information, and leave entitlement?",
+      "meaning": "Ask for the appropriate source of employment information.",
+      "context": "Seeking clarification without assuming eligibility.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Who",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "explain",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "probation",
+          "start": 16,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "pension",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "information",
+          "start": 39,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "leave",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "entitlement",
+          "start": 62,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "?",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "probation.initial-employment-period-for-assessing-suitability.n",
+        "pension.arrangement-or-payment-providing-retirement-income.n",
+        "leave-entitlement.amount-or-type-of-authorized-leave-available-under-rules.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module04.09",
+      "text": "The employee representative and union representative have different roles in these arrangements.",
+      "meaning": "Distinguish two representative roles in the stated context.",
+      "context": "Explaining who is involved in a workplace discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "employee",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "representative",
+          "start": 13,
+          "end": 27
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "union",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "representative",
+          "start": 38,
+          "end": 52
+        },
+        {
+          "index": 6,
+          "text": "have",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 7,
+          "text": "different",
+          "start": 58,
+          "end": 67
+        },
+        {
+          "index": 8,
+          "text": "roles",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 9,
+          "text": "in",
+          "start": 74,
+          "end": 76
+        },
+        {
+          "index": 10,
+          "text": "these",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 11,
+          "text": "arrangements",
+          "start": 83,
+          "end": 95
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "employee-representative.person-speaking-on-behalf-of-employees.n",
+        "union-representative.person-representing-trade-union-members.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module04.10",
+      "text": "The person specification separates each essential requirement from a desirable requirement.",
+      "meaning": "Explain the structure of role criteria.",
+      "context": "Reviewing the information given to applicants.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "person",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "specification",
+          "start": 11,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "separates",
+          "start": 25,
+          "end": 34
+        },
+        {
+          "index": 4,
+          "text": "each",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "essential",
+          "start": 40,
+          "end": 49
+        },
+        {
+          "index": 6,
+          "text": "requirement",
+          "start": 50,
+          "end": 61
+        },
+        {
+          "index": 7,
+          "text": "from",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 9,
+          "text": "desirable",
+          "start": 69,
+          "end": 78
+        },
+        {
+          "index": 10,
+          "text": "requirement",
+          "start": 79,
+          "end": 90
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "person-specification.description-of-attributes-and-qualifications-needed-for-role.n",
+        "essential-requirement.requirement-designated-necessary-for-role.n",
+        "desirable-requirement.preferred-attribute-not-designated-essential.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

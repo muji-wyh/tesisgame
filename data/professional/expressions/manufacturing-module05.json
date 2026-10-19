@@ -1,0 +1,1858 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.manufacturing_maintenance.module05.01",
+      "text": "Please inspect these parts, measure the marked dimensions, compare the results, and record any differences.",
+      "meaning": "Request examination, measurement, comparison, and a record of findings.",
+      "context": "An inspection communication exercise using an already defined inspection scope.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "inspect",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "these",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "parts",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "measure",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "marked",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "dimensions",
+          "start": 47,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "compare",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "results",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 78,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "record",
+          "start": 84,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "any",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "differences",
+          "start": 95,
+          "end": 106
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 106,
+          "end": 107
+        }
+      ],
+      "focus_lexeme_ids": [
+        "inspect.examine-visually.v",
+        "measure.find-dimensions.v",
+        "compare.examine-differences.v",
+        "record.store-observed-information.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.manufacturing_maintenance.module05.02",
+      "text": "Could you help identify the symptom and interpret the readings? Who will diagnose the fault, test the unit, and monitor its condition?",
+      "meaning": "Ask for technical interpretation and clarify assigned diagnostic roles.",
+      "context": "Coordinating specialist investigation without a test method.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "help",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "identify",
+          "start": 15,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "symptom",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "interpret",
+          "start": 40,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "readings",
+          "start": 54,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "?",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "Who",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "will",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "diagnose",
+          "start": 73,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "fault",
+          "start": 86,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 91,
+          "end": 92
+        },
+        {
+          "index": 17,
+          "text": "test",
+          "start": 93,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 98,
+          "end": 101
+        },
+        {
+          "index": 19,
+          "text": "unit",
+          "start": 102,
+          "end": 106
+        },
+        {
+          "index": 20,
+          "text": ",",
+          "start": 106,
+          "end": 107
+        },
+        {
+          "index": 21,
+          "text": "and",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 22,
+          "text": "monitor",
+          "start": 112,
+          "end": 119
+        },
+        {
+          "index": 23,
+          "text": "its",
+          "start": 120,
+          "end": 123
+        },
+        {
+          "index": 24,
+          "text": "condition",
+          "start": 124,
+          "end": 133
+        },
+        {
+          "index": 25,
+          "text": "?",
+          "start": 133,
+          "end": 134
+        }
+      ],
+      "focus_lexeme_ids": [
+        "identify.establish-identity-or-nature.v",
+        "interpret.understand-meaning-of-information.v",
+        "diagnose.identify-technical-cause.v",
+        "test.check-behavior-under-defined-conditions.v",
+        "monitor.follow-condition-over-time.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.manufacturing_maintenance.module05.03",
+      "text": "Who is assigned to maintain and service this unit, and who can repair the reported fault?",
+      "meaning": "Clarify maintenance and repair responsibility.",
+      "context": "Planning work within the actual competence and authorization arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Who",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "is",
+          "start": 4,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "assigned",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 16,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "maintain",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "service",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "this",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "unit",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "who",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "can",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "repair",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 15,
+          "text": "reported",
+          "start": 74,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": "fault",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": "?",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "maintain.carry-out-care-to-keep-equipment-in-required-condition.v",
+        "service.carry-out-specified-checks-and-care-on-equipment.v",
+        "repair.restore-damaged-item-to-working-condition.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.manufacturing_maintenance.module05.04",
+      "text": "Which team will dismantle this unit, assemble the revised version, and install it in the designated position?",
+      "meaning": "Clarify responsibility for defined assembly work.",
+      "context": "Discussing an existing work scope without a disassembly or installation method.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Which",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "team",
+          "start": 6,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "dismantle",
+          "start": 16,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "this",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "unit",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "assemble",
+          "start": 37,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "revised",
+          "start": 50,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "version",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 65,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "install",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "it",
+          "start": 79,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "in",
+          "start": 82,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": "designated",
+          "start": 89,
+          "end": 99
+        },
+        {
+          "index": 18,
+          "text": "position",
+          "start": 100,
+          "end": 108
+        },
+        {
+          "index": 19,
+          "text": "?",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "dismantle.take-assembly-apart-in-planned-parts.v",
+        "assemble.join-components-into-complete-unit.v",
+        "install.place-building-component-in-position.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.manufacturing_maintenance.module05.05",
+      "text": "Who will connect the components and align them? Please confirm the assigned scope to disconnect, tighten, or loosen each connection.",
+      "meaning": "Clarify responsibility and limits for connection work.",
+      "context": "Coordinating a defined work package without specifying tools or settings.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Who",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "connect",
+          "start": 9,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "components",
+          "start": 21,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "align",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "them",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "?",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "Please",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "confirm",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "assigned",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "scope",
+          "start": 76,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "to",
+          "start": 82,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "disconnect",
+          "start": 85,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 95,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": "tighten",
+          "start": 97,
+          "end": 104
+        },
+        {
+          "index": 18,
+          "text": ",",
+          "start": 104,
+          "end": 105
+        },
+        {
+          "index": 19,
+          "text": "or",
+          "start": 106,
+          "end": 108
+        },
+        {
+          "index": 20,
+          "text": "loosen",
+          "start": 109,
+          "end": 115
+        },
+        {
+          "index": 21,
+          "text": "each",
+          "start": 116,
+          "end": 120
+        },
+        {
+          "index": 22,
+          "text": "connection",
+          "start": 121,
+          "end": 131
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 131,
+          "end": 132
+        }
+      ],
+      "focus_lexeme_ids": [
+        "connect.join-physical-components.v",
+        "align.position-parts-in-required-line-or-relationship.v",
+        "disconnect.separate-physical-connection.v",
+        "tighten.make-fastening-or-connection-firmer.v",
+        "loosen.make-fastening-or-connection-less-tight.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.manufacturing_maintenance.module05.06",
+      "text": "Does the supplier's scope include work to cut, drill, grind, and weld these components?",
+      "meaning": "Check which manufacturing operations are within a supplier's scope.",
+      "context": "Reviewing a supplier work package without operating instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Does",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 5,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "supplier's",
+          "start": 9,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "scope",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "include",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "work",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 39,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "cut",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "drill",
+          "start": 47,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "grind",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 14,
+          "text": "weld",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 15,
+          "text": "these",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "components",
+          "start": 76,
+          "end": 86
+        },
+        {
+          "index": 17,
+          "text": "?",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "cut.divide-or-shape-material-with-cutting-tool.v",
+        "drill.make-hole-with-drill.v",
+        "grind.remove-material-by-abrasive-action.v",
+        "weld.join-materials-by-welding-process.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.manufacturing_maintenance.module05.07",
+      "text": "Who is assigned to lubricate the assembly and calibrate the instrument? Which surfaces need the finishing team to deburr or polish?",
+      "meaning": "Clarify responsibility for maintenance, calibration, and finishing tasks.",
+      "context": "Allocating work under the relevant task requirements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Who",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "is",
+          "start": 4,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "assigned",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 16,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "lubricate",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "assembly",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "calibrate",
+          "start": 46,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "instrument",
+          "start": 60,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "?",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "Which",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "surfaces",
+          "start": 78,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "need",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "finishing",
+          "start": 96,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": "team",
+          "start": 106,
+          "end": 110
+        },
+        {
+          "index": 18,
+          "text": "to",
+          "start": 111,
+          "end": 113
+        },
+        {
+          "index": 19,
+          "text": "deburr",
+          "start": 114,
+          "end": 120
+        },
+        {
+          "index": 20,
+          "text": "or",
+          "start": 121,
+          "end": 123
+        },
+        {
+          "index": 21,
+          "text": "polish",
+          "start": 124,
+          "end": 130
+        },
+        {
+          "index": 22,
+          "text": "?",
+          "start": 130,
+          "end": 131
+        }
+      ],
+      "focus_lexeme_ids": [
+        "lubricate.apply-lubricant-to-reduce-friction-and-wear.v",
+        "calibrate.establish-relation-between-indications-and-reference-values.v",
+        "deburr.remove-burrs-from-workpiece.v",
+        "polish.rub-or-treat-surface-to-improve-smoothness-or-shine.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.manufacturing_maintenance.module05.08",
+      "text": "Can the supplier machine this housing and fabricate its support under the released drawings?",
+      "meaning": "Ask whether specified manufacturing work is within the supplier's scope.",
+      "context": "Discussing capability and an existing design reference.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Can",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "supplier",
+          "start": 8,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "machine",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "this",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "housing",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "fabricate",
+          "start": 42,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "its",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "support",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "under",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "released",
+          "start": 74,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "drawings",
+          "start": 83,
+          "end": 91
+        },
+        {
+          "index": 14,
+          "text": "?",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "machine.shape-or-finish-workpiece-using-machine-tool.v",
+        "fabricate.make-component-or-assembly-from-materials.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.manufacturing_maintenance.module05.09",
+      "text": "Please confirm who will weigh and sort the parts, then pack and label them.",
+      "meaning": "Clarify ownership of preparation and packing tasks.",
+      "context": "Coordinating an agreed goods-handling plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "who",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "will",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "weigh",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "sort",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "parts",
+          "start": 43,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "then",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "pack",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "label",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "them",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 74,
+          "end": 75
+        }
+      ],
+      "focus_lexeme_ids": [
+        "weigh.measure-weight.v",
+        "sort.group-by-kind.v",
+        "pack.place-in-container.v",
+        "label.attach-information.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.manufacturing_maintenance.module05.10",
+      "text": "The surface preparation and dimensional inspection are separate tasks; please check the fault diagnosis assignment.",
+      "meaning": "Distinguish work scopes and request an assignment check.",
+      "context": "Reviewing the work list before scheduling.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "surface",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "preparation",
+          "start": 12,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "dimensional",
+          "start": 28,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "inspection",
+          "start": 40,
+          "end": 50
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 7,
+          "text": "separate",
+          "start": 55,
+          "end": 63
+        },
+        {
+          "index": 8,
+          "text": "tasks",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 9,
+          "text": ";",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": "please",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 11,
+          "text": "check",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": "fault",
+          "start": 88,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "diagnosis",
+          "start": 94,
+          "end": 103
+        },
+        {
+          "index": 15,
+          "text": "assignment",
+          "start": 104,
+          "end": 114
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "surface-preparation.work-preparing-surface-for-later-process.n",
+        "dimensional-inspection.examination-of-measured-dimensions-against-requirements.n",
+        "fault-diagnosis.investigation-to-identify-nature-or-cause-of-fault.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

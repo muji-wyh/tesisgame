@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-16",
+  "scope": "Original source and license consultation; exact local acquired versions come from retained local license files.",
+  "sources": [
+    {
+      "url": "https://kenney.nl/assets/furniture-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "status": "Original source page consulted; local Furniture Kit 2.1 sources already acquired and retained for scratch review.",
+      "selected_asset": "kitchenBar",
+      "animation_evidence": "Actual selected GLB has no skins or animation clips."
+    },
+    {
+      "url": "https://kenney.nl/assets/car-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "status": "Original page consulted; its 3.1 update agrees with the acquired Car Kit 3.1 local license. Selected box source already acquired and retained.",
+      "selected_asset": "box",
+      "animation_evidence": "Actual selected GLB has no skins or animation clips."
+    }
+  ],
+  "integration": "No production integration, external publication, payment, or license purchase performed."
+}

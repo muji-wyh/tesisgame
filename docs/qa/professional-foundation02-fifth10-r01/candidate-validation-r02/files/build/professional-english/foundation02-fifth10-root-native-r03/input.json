@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "status": "root_authorized_one_shot_fifth10_native_candidate",
+  "dispatcher": "/root",
+  "proposal_author": "/root/morph_review",
+  "entrypoint": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r03/run.cjs",
+  "output": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r03/execution-r01",
+  "execute_native": true,
+  "execute_project_node_tests": false,
+  "guards": {
+    "production_writers_yielded": true,
+    "source_and_output_acceptances_complete": true,
+    "isolated_destination_reviewed": true
+  },
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r03/source-inventory.json",
+    "bytes": 1547,
+    "raw_sha256": "9a6de4853a8320223edb56c8a1410af71af4871aae0f01ea9e6642ed76768e0f"
+  },
+  "independent_source_review": {
+    "path": "build/professional-english/foundation02-fifth10-native-source-root-review-r03/review.json",
+    "bytes": 2012,
+    "raw_sha256": "b456ed678e87d78d4b50347a52aef68d7234162d4254e2fcbfe902dd8ffe8334"
+  },
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "preparation": {
+    "receipt": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/preparation-receipt.json",
+      "bytes": 141586,
+      "raw_sha256": "05b647a58164deebc356e8a197506e3260850e47f9c417632c802424b11ebf0a"
+    },
+    "execution_end": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/execution-end.json",
+      "bytes": 244,
+      "raw_sha256": "23a1a3bd8ee8da89400a76924d16f1fc2c2eb34463979105f6a24cf66a037ef0"
+    },
+    "target_plan": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/target-plan.json",
+      "bytes": 376416,
+      "raw_sha256": "c91ca58e6c550a19b76b132dda4f3df01ad409235b3b164e6ad1666d47237be0"
+    },
+    "projection_observation": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/projection-observation.json",
+      "bytes": 997,
+      "raw_sha256": "8a17f3c1ed0844c749b5b52387a5e5c56ff1e4c9bdfb01f8b170d415d9c17423"
+    },
+    "root_input": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/input.json",
+      "bytes": 2659,
+      "raw_sha256": "e5533d9c5876251b97df37e3c3dd2965b91eb711ecc67dc60cc24981d3b410fc"
+    }
+  },
+  "independent_afterimage_review": {
+    "path": "build/professional-english/foundation02-fifth10-corrected-afterimage-review-r01/native-review.json",
+    "bytes": 14448,
+    "raw_sha256": "af904e1d3a48af842b4e780a4caaa3cb627b54f6f89045793efafc071ddba96b"
+  },
+  "godot_binary": {
+    "path": "C:/Users/yaohuiwang/AppData/Local/Microsoft/WinGet/Packages/GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe/Godot_v4.7-stable_win64.exe",
+    "bytes": 178485256,
+    "raw_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8"
+  },
+  "correction": {
+    "receipt": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01/correction-receipt.json",
+      "bytes": 6458,
+      "raw_sha256": "539f1ecce9a3ff4bf72c299251f4f44b3981e164ddc0105324ba2ecc498e91f8"
+    },
+    "attempt_end": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01/attempt-end.json",
+      "bytes": 202,
+      "raw_sha256": "fdefa34ad5be6d7e5f65d6a0728ec102c2578d98a9b9ad45ea7fab26b5856f7e"
+    },
+    "root_dispatch": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/dispatch-r01/witness.json",
+      "bytes": 2558,
+      "raw_sha256": "72a06095d9e8c71cad165e228e8366a5d3e80f7419457968ac79a7fa51bee405"
+    },
+    "output_manifest": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01/output-manifest.json",
+      "bytes": 209842,
+      "raw_sha256": "42f5dc0c309348e5878905f07b256963458248c6e150528329d88ef7d039a920"
+    },
+    "source_observations": {
+      "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/execution-r01/source-observations.json",
+      "bytes": 2809640,
+      "raw_sha256": "f4999368431a7d83f2366cbd543a4a0212b276c607b8da7d5ff9f78e0ab2e8c9"
+    }
+  }
+}

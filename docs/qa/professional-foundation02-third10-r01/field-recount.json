@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "scope": "Read-only field recount after successful third-ten persisted validation",
+  "overall_reviewed": 138,
+  "language_reviewed": 325,
+  "foundation02_language_reviewed": 26,
+  "unique_lexemes": 4939,
+  "registry_sha256": "fb45e1d9c7cbf479bf06ac0c00b39ec28de473c96c86cc1b071c72a572f8d437",
+  "sources_sha256": "268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58",
+  "persisted_validation_receipt_sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8",
+  "ready_modules": 0
+}

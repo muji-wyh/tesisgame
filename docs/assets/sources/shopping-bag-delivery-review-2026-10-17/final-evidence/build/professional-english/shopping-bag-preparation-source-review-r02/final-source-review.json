@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "status": "accepted_for_one_root_owned_scratch_preparation_only",
+  "reviewer": "Codex independent source reviewer recover_delivery",
+  "recorded_at": "2026-10-16T22:12:45.9354860Z",
+  "prior_frozen_source_review": {
+    "path": "build/professional-english/shopping-bag-preparation-source-review-r02/review.json",
+    "raw_sha256": "6a24d60d3bb7be0244d9b894b7602d891c3cc4a38df2d7e665f4f8cb4857da80",
+    "unchanged": true
+  },
+  "decision": {
+    "source_and_actual_binding_accepted_for_scratch_preparation": true,
+    "root_source_bound_dispatch_required": true,
+    "projected_validation_execution_approved": false,
+    "prepared_afterimages_approved": false,
+    "production_commit_approved": false,
+    "project_modules_or_tests_executed_by_reviewer": false,
+    "production_mutated_by_reviewer": false
+  },
+  "frozen_inputs": {
+    "author_inventory": {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/author-inventory.json",
+      "raw_sha256": "411183ccbbae70f854d5a1c2d5cb929d2c0f423a45e728ac49bcdf9c67ebae70",
+      "members_verified": 21
+    },
+    "actual_binding": {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/actual-baseline-binding.json",
+      "raw_sha256": "1506caf881745539b971881e978e5a5f60fc8de8640066169953f6ee45417da6",
+      "input_files_rehashed": 5085,
+      "failures": [],
+      "duplicate_paths": [],
+      "invalid_paths": [],
+      "all_865_fourth10_persisted_pins_preserved": true,
+      "all_348_catalog_resources_pinned": true
+    },
+    "prepare": {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/prepare.cjs",
+      "raw_sha256": "7bd4b4399ba9dd3eb1f7900c0b0522f717dd783246731fca3543d9965e4f2c46"
+    },
+    "test_transforms": {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/test-transforms.cjs",
+      "raw_sha256": "a7762bbac0e687baf26aa784d7c0fb9533d834b309406ae98759b88aa5b619a7",
+      "unchanged_since_initial_review": true
+    },
+    "retained_allowlist": {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/retained-evidence-allowlist.json",
+      "raw_sha256": "9a95872e5824dbfb6a6399745a5a4ba34e6c74de9c87dd7290376513bfbe9c5d"
+    },
+    "retained_pins": {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/retained-evidence-pins.json",
+      "raw_sha256": "907007cf33ba0556deea402b9251f5a9fda0ff793e1faf787857cc36497f6e4d",
+      "sources_rehashed": 27,
+      "failures": [],
+      "destination_collisions": [],
+      "destinations_already_present": [],
+      "complete_proposal_closure": 17
+    },
+    "root_preparation_wrapper": {
+      "path": "build/professional-english/shopping-bag-root-preparation-r02/invoke.cjs",
+      "raw_sha256": "cb32743b45ffc74e3256b51d31449db26f5b34b2a1f9d89b388d3cdeaa74e0a7",
+      "static_source_accepted": true,
+      "input_absent_when_reviewed": true,
+      "attempt_absent_when_reviewed": true
+    }
+  },
+  "actual_fourth10": {
+    "root_confirmation_received": true,
+    "committed_receipt_raw_sha256": "96fff4c1ac94147e99efcb8f18ff07711a5c2e53729fa07695d7d2296ae037f8",
+    "persisted_receipt_raw_sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7",
+    "committed_journal_raw_sha256": "93c800d4ed9c94c47932d0f2b807d4d13e4a0c1330bcc5ed1cf8882a235a48b1",
+    "four_persisted_command_logs_rehashed": true,
+    "node_tests": 230,
+    "node_failures": 0,
+    "native_checks": 3624,
+    "native_failures": 0,
+    "durable_evidence_tests": 1,
+    "durable_evidence_failures": 0,
+    "actual_content_source_matches_reviewed_afterimage": true,
+    "actual_morphology_source_matches_reviewed_afterimage": true
+  },
+  "findings": [
+    "The unchanged strict transform retains all fourteen aggregate anchors and disjoint content/morphology/media history paths. Complete fourth-ten donor rows and sign snapshot multiplicity remain exact.",
+    "The changed preparation source uses retainedPath for all three accepted_proposal references and direct scratch-origin lineage, while preserving exact original raw hashes. The existing fourth-ten committed receipt already has a durable docs path.",
+    "The 27 retained destinations are explicit absent individual files, with a complete seventeen-file frozen proposal closure. No directory wildcard or target collision exists. Together with four replacements and three original additions, the planned scratch target count is 34.",
+    "The binding excludes itself and later retention pins/inventory to avoid circular hashes; the root-bound author inventory pins those outputs. Historical failed authoring sources and failure records remain preserved and are never invoked by prepare.cjs.",
+    "The root wrapper records start before substantive preflight, captures two syntax commands and one fresh preparation command with logs, checks frozen inputs before and after, and does not dispatch project tests or native/browser work. Initial argument/source/input assertions precede its attempt record and need root tool-output retention on rejection.",
+    "No execution-r01 or prospective new production target existed during this review. The prepared provenance/document remain construction-stage artifacts requiring separate finalization and review."
+  ],
+  "candidate_stage_dependency_review": {
+    "runner_path": "build/professional-english/shopping-bag-projected-validation-r01/run.cjs",
+    "runner_raw_sha256": "815e2387471801fbaeb148a1c27a668265fe352a6b3875b37b381b948bf03073",
+    "source_only_observation": "No stat/read/type blocker found for inspected synchronous string-path callers. Overlay read, exists, stat/lstat size and realpath cover the added file reads. Native helper imports and schema cpSync/copyFileSync bypass observedRead and therefore require explicit pre/post expected-input pins.",
+    "supplement_path": "build/professional-english/shopping-bag-projected-validation-r01/dependency-supplement.json",
+    "supplement_raw_sha256": "08c8fbcf2d1b1427954a0e1951b216ae23e361184613e8b08c2bc874b3fa46d8",
+    "supplement_rows_rehashed": 23,
+    "supplement_failures": [],
+    "scope": "Eleven concrete historical journal reads, full four-file validator import closure and eight current schemas. The frozen author binding remains unchanged.",
+    "required": "Root candidate and commit input must merge the author binding with this frozen supplement and exact prepared artifacts/evidence. Inspect actual outputs and final input before dispatch; this source review is not candidate execution acceptance."
+  },
+  "remaining_requirements": [
+    "Root must bind this exact independent review, frozen author inventory and all author source members in its preparation input before one scratch dispatch.",
+    "Review preparation receipt, all 34 exact afterimages/targets, fourteen edit-ledger anchors and five appended media tests. Confirm actual project loader equivalence and protect unchanged inputs under the supplemental candidate pins.",
+    "Separately finalize truthful provenance/document and later durable validation lineage; review the final guarded transaction, run required guard checks, then verify persisted installed bytes. No success claim is authorized by this source-only review."
+  ]
+}

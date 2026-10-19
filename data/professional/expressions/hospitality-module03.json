@@ -1,0 +1,1429 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hospitality_tourism.module03.01",
+      "text": "The hotel and motel have different arrival arrangements.",
+      "meaning": "Compare two accommodation providers without assuming identical facilities.",
+      "context": "Helping a guest review booking information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "hotel",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "motel",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "have",
+          "start": 20,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "different",
+          "start": 25,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "arrival",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "arrangements",
+          "start": 43,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": ".",
+          "start": 55,
+          "end": 56
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hotel.business-providing-temporary-guest-accommodation.n",
+        "motel.roadside-accommodation-often-with-nearby-parking.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module03.02",
+      "text": "Ask the hostel or resort which room features are available for the requested dates.",
+      "meaning": "Request current details from the actual provider.",
+      "context": "Discussing accommodation choices.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "hostel",
+          "start": 8,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "or",
+          "start": 15,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "resort",
+          "start": 18,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "which",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "room",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "features",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "are",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "available",
+          "start": 49,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "for",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "requested",
+          "start": 67,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "dates",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hostel.accommodation-often-with-shared-rooms-or-facilities.n",
+        "resort.accommodation-facility-with-leisure-services.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module03.03",
+      "text": "The bed and breakfast has confirmed its arrival details and morning meal arrangements.",
+      "meaning": "Describe the confirmed services without adding assumptions.",
+      "context": "Reviewing a small-property booking.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "bed",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "breakfast",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "has",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "confirmed",
+          "start": 26,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "its",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "arrival",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "details",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "morning",
+          "start": 60,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "meal",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "arrangements",
+          "start": 73,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bed-and-breakfast.lodging-business-usually-including-morning-meal.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module03.04",
+      "text": "The lobby has a concierge desk; a separate desk, chair, and clock are available in the guest work area.",
+      "meaning": "Distinguish the service point from furniture in a work area.",
+      "context": "A worker describes available furnishings and the time display.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "lobby",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 14,
+          "end": 15
+        },
+        {
+          "index": 4,
+          "text": "concierge",
+          "start": 16,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "desk",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": "separate",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "desk",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 11,
+          "text": "chair",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 14,
+          "text": "clock",
+          "start": 60,
+          "end": 65
+        },
+        {
+          "index": 15,
+          "text": "are",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 16,
+          "text": "available",
+          "start": 70,
+          "end": 79
+        },
+        {
+          "index": 17,
+          "text": "in",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 19,
+          "text": "guest",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 20,
+          "text": "work",
+          "start": 93,
+          "end": 97
+        },
+        {
+          "index": 21,
+          "text": "area",
+          "start": 98,
+          "end": 102
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "lobby.main-indoor-arrival-area-of-building.n",
+        "concierge-desk.service-point-for-guest-information-and-arrangements.n",
+        "desk.work-table-with-writing-surface.n",
+        "chair.single-person-seat-with-back.n",
+        "clock.device-showing-time.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module03.05",
+      "text": "The lounge is along this corridor; ask reception about the route that meets your requirements.",
+      "meaning": "Locate a shared space and offer individual access information.",
+      "context": "Giving directions within the property.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "lounge",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 11,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "along",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "this",
+          "start": 20,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "corridor",
+          "start": 25,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "ask",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "reception",
+          "start": 39,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "about",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "route",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "that",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "meets",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "your",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "requirements",
+          "start": 81,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "lounge.shared-area-for-sitting-and-relaxing.n",
+        "corridor.passage-connecting-rooms-or-building-areas.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module03.06",
+      "text": "Ask about the staircase, ramp, and available elevator before recommending a route.",
+      "meaning": "Check different ways to move between levels.",
+      "context": "A worker checks actual route features and guest requirements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "about",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "staircase",
+          "start": 14,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "ramp",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 8,
+          "text": "available",
+          "start": 35,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "elevator",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 54,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "recommending",
+          "start": 61,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 74,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "route",
+          "start": 76,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "staircase.set-of-stairs-connecting-levels.n",
+        "elevator.vertical-transport.n",
+        "ramp.sloping-route-between-levels.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module03.07",
+      "text": "The luggage room and linen room have different access arrangements.",
+      "meaning": "Distinguish two storage functions and their permissions.",
+      "context": "Clarifying staff and guest facilities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "luggage",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "room",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "linen",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "room",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "have",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "different",
+          "start": 37,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "access",
+          "start": 47,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "arrangements",
+          "start": 54,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 66,
+          "end": 67
+        }
+      ],
+      "focus_lexeme_ids": [
+        "luggage-room.designated-room-for-temporary-luggage-storage.n",
+        "linen-room.room-for-storing-or-managing-linen.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module03.08",
+      "text": "The banquet hall booking includes a separate meeting at the conference center.",
+      "meaning": "Describe linked event spaces.",
+      "context": "Checking an event itinerary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "banquet",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "hall",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "booking",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "includes",
+          "start": 25,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "separate",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "meeting",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "at",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "conference",
+          "start": 60,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "center",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 77,
+          "end": 78
+        }
+      ],
+      "focus_lexeme_ids": [
+        "banquet-hall.large-room-for-formal-meals-or-events.n",
+        "conference-center.facility-for-meetings-and-conferences.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module03.09",
+      "text": "Confirm the current opening and access information for the fitness center, swimming pool, and spa.",
+      "meaning": "Request accurate facility information without assuming universal suitability.",
+      "context": "Answering a guest's facilities question.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "current",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "opening",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "access",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "information",
+          "start": 39,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "for",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "fitness",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "center",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "swimming",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "pool",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 88,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "spa",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fitness-center.facility-for-exercise-and-fitness-activities.n",
+        "swimming-pool.constructed-basin-for-swimming.n",
+        "spa.facility-offering-relaxation-and-personal-care-services.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ada-lodging-low-vision",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module03.10",
+      "text": "The room safe and door lock questions have been referred to the responsible team.",
+      "meaning": "Refer security-equipment questions to the authorized contact.",
+      "context": "Following up a guest-room equipment report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "room",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "safe",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "door",
+          "start": 18,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "lock",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "questions",
+          "start": 28,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "have",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "been",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "referred",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "to",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "responsible",
+          "start": 64,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "team",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "room-safe.lockable-container-for-guest-room-storage.n",
+        "door-lock.mechanism-controlling-door-opening.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}
