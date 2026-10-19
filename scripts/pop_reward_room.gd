@@ -918,7 +918,9 @@ func _layout() -> void:
 	var columns: int = mini(count, 3 if w * s >= 960 else 2 if w * s >= 620 else 1)
 	var card_w: float = minf((600 if wide_single else 480 if count == 1 else 360) / s, (_scroll.size.x - gap * (columns - 1)) / columns)
 	var art_h: float = clampf(card_w * 0.82, 240 / s if count == 1 else 220 / s, (360 if count == 1 else 300) / s)
-	if compact:
+	if compact or count == 1:
+		# A single restored chest must keep its hold hint inside the modal's
+		# viewport, including taller dialogs that use the regular heading size.
 		art_h = maxf(128 / s, minf(art_h, _scroll.size.y - heading_height - (0 if wide_single else 56 / s)))
 	var card_h: float = art_h + (0 if wide_single else 56 / s)
 	var rows: int = ceili(float(count) / columns)

@@ -3,6 +3,7 @@ extends SceneTree
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Data = preload("res://scripts/game_data.gd")
 const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
+const Feel = preload("res://scripts/chest_feel.gd")
 const COIN_REWARD_SEED: int = 208
 const RESPONSIVE_SIZES: Array[Vector2i] = [Vector2i(320, 480), Vector2i(393, 852), Vector2i(624, 1119),
 	Vector2i(768, 1024), Vector2i(834, 1194), Vector2i(568, 320), Vector2i(844, 390),
@@ -54,6 +55,14 @@ func key_event(code: Key, shift: bool = false) -> void:
 		event.pressed = pressed
 		root.push_input(event)
 		await process_frame
+
+
+func controller_back_event() -> void:
+	for pressed: bool in [true, false]:
+		var event := InputEventJoypadButton.new()
+		event.button_index = JOY_BUTTON_B
+		event.pressed = pressed
+		root.push_input(event)
 
 
 func check_tab_reachability(view, context: String) -> void:
@@ -691,6 +700,50 @@ func _run() -> void:
 	view.word_attempted.emit("hidden-words", [str(word.id)] as Array[String], true)
 	check(app.growth.snapshot().streaks == growth_before, "A stopped Jelly Words callback cannot credit Jelly Match")
 	check(app.coin_wallet.balance == 250, "Switching modes preserves every rare word bonus from the winning fixtures")
+	Fixture.enter_mode(app, "word_jelly")
+	view.set_process(false)
+	await settle()
+	var room = app._jelly_rewards
+	var restored_board_id: String = app._round_id
+	check(app._jelly_rewards_shown and app._settlement_dialog.is_visible_in_tree()
+		and app._settlement_dialog.is_ancestor_of(room) and app._settlement_dialog.snapshot().title == "Your treasure",
+		"Returning to Jelly Words restores saved treasure inside the shared modal")
+	check(view.is_visible_in_tree() and view.game.paused and view.game.phase == "playing"
+		and app._jelly_backdrop.is_visible_in_tree() and not view.finish_button.is_visible_in_tree(),
+		"The restored Jelly Words modal keeps its fresh board visible and blocks gameplay controls")
+	check(app._round_result.is_empty() and room.snapshot().result_context.is_empty()
+		and not room._result_score.is_visible_in_tree(),
+		"Restored Jelly Words treasure does not fabricate a score for the new board")
+	app.on_page_hidden()
+	check(not app._settlement_dialog.is_visible_in_tree() and room._paused,
+		"Backgrounding hides and pauses the restored Jelly Words modal")
+	app.on_page_visible()
+	check(app._settlement_dialog.is_visible_in_tree() and app._settlement_dialog.is_ancestor_of(room)
+		and app._round_id == restored_board_id and view.game.paused,
+		"Foregrounding restores the same saved modal without starting or finishing a board")
+	app.set_reduced_motion(true)
+	room.set_process(false)
+	room._cards[0].button.grab_focus()
+	app._controller_accept()
+	room.advance_hold(0.2)
+	check(room.snapshot().holding and app._controller_holding_jelly_chest,
+		"Controller Accept starts a cancellable hold on the restored chest")
+	controller_back_event()
+	check(not room.snapshot().holding and not app._controller_holding_jelly_chest
+		and app._settlement_dialog.is_visible_in_tree() and room.has_pending()
+		and app.coin_wallet.balance == 250,
+		"Controller Back cancels an incomplete restored chest hold without claiming or closing the modal")
+	room.begin_hold(room._cards[0].button)
+	room.advance_hold(Feel.HOLD_SECONDS)
+	check(not room.has_pending() and app.coin_wallet.balance == 350
+		and room.rewards.entries[0].reward_id == "jelly:" + earned_round + ":0",
+		"The restored tier-two chest keeps its original receipt and credits one hundred coins")
+	controller_back_event()
+	check(not app._settlement_dialog.is_visible_in_tree() and not app._jelly_rewards_shown
+		and not app._mode_menu_open() and view.is_visible_in_tree() and not view.game.paused
+		and app._round_id == restored_board_id and app._round_result.is_empty()
+		and view.finish_button.is_visible_in_tree(),
+		"Controller Back after claiming restores Jelly Words input on the same fresh board and closes the modal")
 	app.audio.halt()
 	app.queue_free()
 	await settle()

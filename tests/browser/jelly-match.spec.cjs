@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, rendered, headerPoint, celebrationState, visibleColorCount } = require('./game-ui.cjs');
+const { enterGame, openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, rendered, headerPoint, celebrationState, visibleColorCount } = require('./game-ui.cjs');
 
 const JELLY_REWARDS = 'growWithPip.jellyRewards.v1';
 const POP_REWARDS = 'wordBuddies.popRewards';
@@ -73,6 +73,71 @@ async function startJelly(page, options = {}) {
   }, { timeout: 20000, message: 'The real Jelly board starts with settled word and picture tiles' }).toBe(true);
   return errors;
 }
+
+test.describe('saved Jelly treasure', () => {
+  // Preserve phone geometry while keeping software WebGL rendering affordable.
+  test.use({ deviceScaleFactor: 1 });
+
+  for (const mode of ['jelly', 'word_jelly']) {
+    test(`${mode} restores saved treasure in a modal above its paused board`, async ({ page }, info) => {
+      test.setTimeout(180000);
+      if (info.project.name === 'desktop-chromium') await page.setViewportSize({ width: 1475, height: 1175 });
+      const saved = '[treasure]\nversion=1\nround_id="restored-jelly-browser"\n' +
+        'entries=[{"theme":"ocean","tier":2,"opened":false}]\nreceipts=[]\n';
+      await page.addInitScript(({ key, saved }) => {
+        if (!localStorage.getItem(key)) localStorage.setItem(key, saved);
+      }, { key: JELLY_REWARDS, saved });
+      const errors = [];
+      page.on('pageerror', error => errors.push(error.message));
+      page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await page.goto('/');
+      await enterGame(page, { home: true });
+      await chooseMode(page, mode);
+      await expect.poll(async () => (await treasure(page)).game_over?.visible).toBe(true);
+      const room = await treasure(page), bounds = await metrics(page);
+      expect(room).toMatchObject({ visible: true, pending: true, chest_count: 1, opened_count: 0,
+        result_context: {}, score_text: '', game_over: { title: 'Your treasure' } });
+      expect((await jelly(page)).paused, 'The visible board cannot advance behind restored treasure').toBe(true);
+      expect(bounds.growth.background_game.visible, 'Restoration never replaces the board with a treasure page').toBe(true);
+      expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS)).toBe(saved);
+      expect((await wallet(page)).balance).toBe(0);
+      const [panelX, panelY, panelWidth, panelHeight] = room.game_over.panel_rect;
+      expect(panelX).toBeGreaterThan(0);
+      expect(panelY).toBeGreaterThan(0);
+      expect(panelX + panelWidth).toBeLessThan(bounds.width);
+      expect(panelY + panelHeight).toBeLessThan(bounds.height);
+      const hint = room.chests[0].hint_rect;
+      expect(hint.y).toBeGreaterThanOrEqual(room.scroll_rect.y);
+      expect(hint.y + hint.height, 'The hold instruction fits without scrolling past the chest')
+        .toBeLessThanOrEqual(room.scroll_rect.y + room.scroll_rect.height + 1);
+      await page.screenshot({ path: info.outputPath(`${mode}-restored-treasure-modal.png`), scale: 'css' });
+
+      const chest = room.chests[0].rect, viewport = room.scroll_rect;
+      const left = Math.max(chest.x, viewport.x), right = Math.min(chest.x + chest.width, viewport.x + viewport.width);
+      const top = Math.max(chest.y, viewport.y), bottom = Math.min(chest.y + chest.height, viewport.y + viewport.height);
+      expect(right - left).toBeGreaterThan(20);
+      expect(bottom - top).toBeGreaterThan(20);
+      const position = center([left, top, right - left, bottom - top], bounds);
+      await page.mouse.move(position.x, position.y);
+      await page.mouse.down();
+      try {
+        await expect.poll(async () => (await treasure(page)).opened_count, { timeout: 15000 }).toBe(1);
+      } finally {
+        await page.mouse.up();
+      }
+      await expect.poll(async () => (await wallet(page)).balance).toBe(100);
+      if (mode === 'word_jelly') await page.keyboard.press('Escape');
+      else await pressControl(page, (await treasure(page)).actions.find(action => action.text === 'Back'));
+      await expect.poll(async () => (await jelly(page)).visible).toBe(true);
+      expect((await jelly(page)).paused).toBe(false);
+      expect((await treasure(page)).game_over.visible).toBe(false);
+      expect((await treasure(page)).pending).toBe(false);
+      expect((await wallet(page)).balance).toBe(100);
+      expect(errors).toEqual([]);
+    });
+  }
+});
 
 test('opening and replay wait for the first batch while manual release stays available', async ({ page }, info) => {
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });

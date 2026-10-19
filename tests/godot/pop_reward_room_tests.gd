@@ -77,6 +77,7 @@ func _run() -> void:
 	_pop_fragment_state_checks()
 	await _room_checks()
 	await _single_chest_layout_checks()
+	await _restored_single_chest_modal_layout_checks()
 	await _retained_rewards_checks()
 	await _failure_checks()
 	await _responsive_resize_checks()
@@ -1064,6 +1065,51 @@ func _single_chest_layout_checks() -> void:
 				"A single chest and its instruction are immediately visible without scrolling at %s" % dimensions + _card_geometry(room, card))
 	room.queue_free()
 	await process_frame
+	root.size = previous_size
+	await process_frame
+
+
+func _restored_single_chest_modal_layout_checks() -> void:
+	var previous_size: Vector2i = root.size
+	var previous_mode: int = root.content_scale_mode
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	root.size = Vector2i(1475, 1175)
+	await process_frame
+	var storage := Storage.new()
+	var saved = _jelly_state(storage)
+	check(saved.create_batch("restored-modal-chest", ["autumn"], [2]),
+		"Prepare a durable tier-two chest for the saved treasure modal")
+	var room = _make_jelly_room(storage)
+	check(room.configure_saved(_manifest, true) and room._result_context.is_empty(),
+		"The modal restores its saved chest without a completed-round score")
+	var modal = load("res://scripts/settlement_dialog.gd").new()
+	root.add_child(modal)
+	modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	modal.configure(room, Data.theme("autumn"), true, true, "Your treasure")
+	modal.open(false)
+	for dimensions: Vector2i in [Vector2i(1475, 1175), Vector2i(320, 568)]:
+		root.size = dimensions
+		for frame in range(8):
+			await process_frame
+		var card: Dictionary = room._cards[0]
+		var viewport: Rect2 = room._scroll.get_global_rect()
+		var context: String = "restored single-chest modal at %s" % dimensions
+		if dimensions.x == 1475:
+			check(room.size.is_equal_approx(Vector2(456, 516)),
+				"The desktop saved treasure fixture reproduces the modal's 456 by 516 content area")
+		check(card.caption.text == "Hold to open" and card.caption.is_visible_in_tree()
+			and viewport.grow(PIXEL_TOLERANCE).encloses(card.hint.get_global_rect())
+			and viewport.grow(PIXEL_TOLERANCE).encloses(card.caption.get_global_rect())
+			and viewport.grow(PIXEL_TOLERANCE).encloses(card.button.get_global_rect())
+			and room.snapshot().scroll_max == 0,
+			"The restored chest and its complete hold instruction fit without scrolling: " + context + _card_geometry(room, card))
+		_check_chest_instruction(room, card, context)
+		check(room.get_global_rect().grow(PIXEL_TOLERANCE).encloses(room._back.get_global_rect())
+			and not viewport.intersects(room._back.get_global_rect()),
+			"The restored chest instruction leaves the Back action unobstructed: " + context)
+	modal.queue_free()
+	await process_frame
+	root.content_scale_mode = previous_mode
 	root.size = previous_size
 	await process_frame
 

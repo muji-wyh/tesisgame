@@ -245,6 +245,7 @@ func _run() -> void:
 	check(app.growth.snapshot().streaks == saved_growth, "A hidden Jelly callback cannot affect the new round")
 	Fixture.enter_mode(app, "jelly")
 	check(app._jelly_rewards_shown and app._jelly.game.paused, "Returning to Jelly resumes its saved chest before gameplay")
+	_check_restored_treasure_modal(app)
 	for viewport_size in [Vector2i(390, 844), Vector2i(844, 390), Vector2i(320, 320), Vector2i(1366, 768)]:
 		root.size = viewport_size
 		await settle()
@@ -255,6 +256,30 @@ func _run() -> void:
 		for tile in app._mode_panel._tiles:
 			check(tile.preview.is_visible_in_tree() and tile.preview.size.x > 0 and tile.preview.size.y > 0, "Every mode retains its illustrated gameplay preview")
 		app._hide_mode_menu()
+		_check_restored_treasure_modal(app)
+	var restored_coins: int = app.coin_wallet.balance
+	for pressed: bool in [true, false]:
+		var escape := InputEventKey.new()
+		escape.keycode = KEY_ESCAPE
+		escape.physical_keycode = KEY_ESCAPE
+		escape.pressed = pressed
+		root.push_input(escape)
+	check(app._mode_menu_open() and not app._settlement_dialog.is_visible_in_tree()
+		and room.has_pending() and app.coin_wallet.balance == restored_coins,
+		"Escape leaves unopened restored treasure durable and closes its modal before Home")
+	app.choose_mode("memory")
+	Fixture.enter_mode(app, "jelly")
+	_check_restored_treasure_modal(app)
+	var restored_board_id: String = app._round_id
+	room.begin_hold(room._cards[0].button)
+	room.advance_hold(Feel.HOLD_SECONDS)
+	check(not room.has_pending() and app.coin_wallet.balance == restored_coins + 50,
+		"The restored modal pays its original chest exactly once")
+	room._back.pressed.emit()
+	check(not app._jelly_rewards_shown and not app._settlement_dialog.is_visible_in_tree()
+		and not app._mode_menu_open() and app._jelly.is_visible_in_tree() and not app._jelly.game.paused
+		and app._round_id == restored_board_id and app._round_result.is_empty(),
+		"Back after claiming restored treasure resumes the same fresh board without a false round result")
 	app.audio.halt()
 	app.queue_free()
 	await settle()
@@ -268,6 +293,19 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("Jelly Match flow: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_restored_treasure_modal(app) -> void:
+	var room = app._jelly_rewards
+	check(app._settlement_dialog.is_visible_in_tree() and app._settlement_dialog.is_ancestor_of(room)
+		and app._settlement_dialog.snapshot().title == "Your treasure",
+		"Saved Jelly treasure is hosted in the shared modal instead of a standalone page")
+	check(app._jelly.is_visible_in_tree() and app._jelly_backdrop.is_visible_in_tree()
+		and app._jelly.game.paused and app._jelly.game.phase == "playing",
+		"The restored treasure modal keeps its fresh board and woodland visible but paused")
+	check(app._round_result.is_empty() and room.snapshot().result_context.is_empty()
+		and not room._result_score.is_visible_in_tree(),
+		"Restoring saved treasure does not invent a round score or completion result")
 
 
 func _tap_growth_checks(directory: String) -> void:
@@ -527,6 +565,7 @@ func _reward_conflict_checks(directory: String) -> void:
 			check(app.new_round(93, false, "", next_mode) and app._mode_id == "memory", "Mode exit is safe once the combined reward is durable")
 			Fixture.enter_mode(app, "jelly")
 			check(app._jelly_rewards_shown, "Returning restores all retained treasure")
+			_check_restored_treasure_modal(app)
 			app._jelly.set_process(false)
 			check(app._jelly_rewards_shown and room.snapshot().chest_count == 2, "Both saved chests remain reachable after a mode switch")
 			for index in range(2):

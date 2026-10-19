@@ -1725,17 +1725,11 @@ func _show_jelly_rewards() -> void:
 	elif not _jelly_rewards.configure_saved(data.chests, reduced_motion) and not _jelly_rewards.has_pending():
 		return
 	_jelly_rewards.set_result_context(_round_result if _active_jelly().game.phase == "finished" else {}, _round_id)
-	if _jelly_round_ended():
-		_settlement_dialog.configure(_jelly_rewards, Data.theme(model.theme_id), reduced_motion,
-			int(_round_result.get("chest_count", 0)) > 0,
-			"Game over" if str(_round_result.get("reason", "")) == "danger" else "Round complete")
-		_stop_controller_actions()
-		_controller_accept_needs_release = _controller_accept_is_pressed()
+	_stop_controller_actions()
+	_controller_accept_needs_release = _controller_accept_is_pressed()
 	_active_jelly().cancel_input()
 	audio.halt()
 	_jelly_rewards_shown = true
-	if _jelly_round_ended() and not _mode_menu_open():
-		_settlement_dialog.open(true)
 	_refresh()
 	_default_focus().grab_focus()
 
@@ -1774,10 +1768,15 @@ func _sync_settlement_dialog() -> void:
 	if _round_celebration_active():
 		content = _round_celebration
 		has_chest = int(_round_celebration.snapshot().chest_count) > 0
-	elif _jelly_round_ended() and _jelly_rewards_shown:
+	elif _is_jelly_mode() and _jelly_rewards_shown:
 		content = _jelly_rewards
-		has_chest = int(_round_result.get("chest_count", 0)) > 0
-		title = "Game over" if str(_round_result.get("reason", "")) == "danger" else "Round complete"
+		# Restored treasure has no current-round result, but still belongs in
+		# the modal above a paused board rather than the retired treasure page.
+		has_chest = not _jelly_rewards._cards.is_empty()
+		title = "Your treasure"
+		if _jelly_round_ended():
+			has_chest = int(_round_result.get("chest_count", 0)) > 0
+			title = "Game over" if str(_round_result.get("reason", "")) == "danger" else "Round complete"
 	elif _mode_id == "pop" and _pop_rewards_shown:
 		content = _pop_rewards
 		has_chest = not _pop_rewards._cards.is_empty()
@@ -1785,7 +1784,9 @@ func _sync_settlement_dialog() -> void:
 		content = _single_result
 		has_chest = model.chest_earned
 	if content != null and not _mode_menu_open() and not collection_page.visible and not _page_hidden and not _rebuilding and not _speech_debug_active:
-		if _settlement_dialog._room != content or _settlement_dialog._has_chest != has_chest or _settlement_dialog._palette.get("id", "") != model.theme_id or _settlement_dialog._reduced_motion != reduced_motion:
+		if _settlement_dialog._room != content or content.get_parent() != _settlement_dialog.panel \
+			or _settlement_dialog._has_chest != has_chest or _settlement_dialog._palette.get("id", "") != model.theme_id \
+			or _settlement_dialog._reduced_motion != reduced_motion or _settlement_dialog._title != title:
 			_settlement_dialog.configure(content, Data.theme(model.theme_id), reduced_motion, has_chest, title)
 		content.show()
 		_settlement_dialog.open(true)
@@ -2473,9 +2474,8 @@ func _refresh() -> void:
 	_resume_phrase()
 	_pop.visible = _mode_id == "pop" and not collection_page.visible and (not _pop_rewards_shown or _pop.game.phase == "finished")
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
-	var keep_ended_board: bool = _jelly_round_ended()
-	_jelly.visible = playing and _mode_id == "jelly" and not collection_page.visible and (not _jelly_rewards_shown or keep_ended_board) and not celebrating
-	_word_jelly.visible = playing and _mode_id == "word_jelly" and not collection_page.visible and (not _jelly_rewards_shown or keep_ended_board) and not celebrating
+	_jelly.visible = playing and _mode_id == "jelly" and not collection_page.visible and not celebrating
+	_word_jelly.visible = playing and _mode_id == "word_jelly" and not collection_page.visible and not celebrating
 	_jelly_rewards.visible = playing and _is_jelly_mode() and not collection_page.visible and _jelly_rewards_shown
 	_sync_jelly()
 	_message.hide()
@@ -3552,6 +3552,8 @@ func _observe_activity(event: InputEvent) -> void:
 func _input(event: InputEvent) -> void:
 	if _settlement_dialog_open():
 		if event.is_action_pressed("ui_cancel") or (event is InputEventJoypadButton and event.button_index == JOY_BUTTON_B and event.pressed):
+			if _is_jelly_mode() and _jelly_rewards_shown and _jelly_rewards._result_context.is_empty():
+				_controller_back()
 			_stop_controller_actions()
 			_on_input_canceled()
 			get_viewport().set_input_as_handled()
